@@ -1,0 +1,643 @@
+<title>Wellenwacht Prototyp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@600&family=Alegreya+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: Kriegstisch bei Nacht – Kopfleiste mit Tageszeit-Leiste, Spielfelder im Raster, Bauleiste unten fest */
+:root{
+  color-scheme: dark;
+  --bg:#141a17; --panel:#1d2521; --line:#33403a; --fg:#e6e2d3; --muted:#9aa49c;
+  --accent:#e0b04a; --danger:#e0604a; --ok:#7cc48a;
+  --grass:#24301f; --grass2:#2a3824; --road:#5a4a35; --road2:#6b5940;
+  --display:"Grenze Gotisch", "Palatino Linotype", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:15px;padding-inline:16px;padding-block:12px 150px}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto}
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;margin-bottom:12px}
+h1{font-family:var(--display);font-weight:600;font-size:2rem;margin:0;letter-spacing:.02em;color:var(--accent)}
+h1 small{font-family:var(--body);font-size:.78rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-left:8px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.stat{display:flex;flex-direction:column}
+.stat b{font-family:var(--mono);font-size:1.2rem;font-variant-numeric:tabular-nums}
+.stat span{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat.bad b{color:var(--danger)}
+.clock{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.slot{border:1px solid var(--line);border-radius:6px;padding:6px 10px;background:var(--panel);font-size:.82rem;color:var(--muted);min-width:0}
+.slot b{font-family:var(--mono);color:var(--fg);display:block;font-size:1rem}
+.slot.now{border-color:var(--accent);color:var(--fg)}
+.slot.done{opacity:.5}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.btn{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 14px}
+.btn.primary{background:var(--accent);color:#1b1408;border-color:var(--accent);font-weight:700}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn.on{border-color:var(--accent);color:var(--accent)}
+.muted{color:var(--muted);font-size:.85rem}
+.spacer{flex:1}
+.seats{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.lanes{grid-template-columns:1fr}}
+.lane{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0}
+.lane.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.lhead{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:8px}
+.lhead .name{font-weight:700;font-size:1.05rem}
+.el{border:none;background:none;padding:0;font-weight:700}
+.el[disabled]{cursor:default}
+.meta{font-family:var(--mono);font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.meta b{color:var(--fg)}
+.meta .plus{color:var(--ok)}
+.inc{margin-left:auto;font-size:.82rem;color:var(--muted)}
+canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
+.info{font-size:.85rem;color:var(--muted);min-height:1.3em;margin-top:6px}
+.info button{margin-left:8px;padding:2px 8px;font-size:.8rem}
+.log{margin-top:16px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.log h2{font-family:var(--display);font-weight:600;color:var(--fg);font-size:1.2rem;margin:0 0 6px}
+.log ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.log li b{font-family:var(--mono);color:var(--fg);font-weight:500;margin-right:6px}
+.palette{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+.ptitle{max-width:1200px;margin:0 auto 6px;font-size:.82rem;color:var(--muted)}
+.ptitle b{color:var(--fg)}
+.prow{max-width:1200px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tw{flex:0 0 auto;width:122px;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;display:flex;flex-direction:column;gap:2px}
+.tw .n{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tw .c{font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+.tw .d{font-size:.72rem;color:var(--muted);line-height:1.2}
+.tw.sel{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.tw[disabled]{opacity:.4;cursor:default}
+.banner{margin-bottom:12px;padding:10px 14px;border-radius:6px;border:1px solid var(--accent);font-weight:500}
+.banner.bad{border-color:var(--danger)}
+.setup{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:12px;max-width:560px}
+.setup h2{font-family:var(--display);font-weight:600;margin:0;font-size:1.5rem}
+.setup label{display:flex;flex-direction:column;gap:4px;font-size:.88rem;color:var(--muted)}
+.setup select,.setup input{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.row>label{flex:1 1 160px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Wellenwacht <small id="modeTag">verbinde …</small></h1>
+    <div class="stats" id="stats" hidden>
+      <div class="stat"><b id="sDay"></b><span>Tag</span></div>
+      <div class="stat" id="passBox"><b id="sPass"></b><span>Ganz durchgebrochen</span></div>
+      <div class="stat"><b id="sNext"></b><span id="sNextL">Nächste Welle</span></div>
+    </div>
+  </header>
+
+  <section id="setup" class="setup" hidden>
+    <h2>Neues Spiel</h2>
+    <div class="row">
+      <label for="fPlayers">Spieler<select id="fPlayers"><option>2</option><option>3</option><option selected>4</option></select></label>
+      <label for="fTiming" id="lTiming">Wellen kommen<select id="fTiming">
+        <option value="test">Test: alle paar Minuten</option>
+        <option value="real">Echt: 10, 13, 16, 19 Uhr</option></select></label>
+    </div>
+    <div class="row" id="rowTest"><label for="fInterval">Abstand zwischen Wellen (Minuten)<input id="fInterval" type="number" min="1" max="120" value="3"></label></div>
+    <div class="row" id="rowReal" hidden><label for="fStart">Tag 1 ist<select id="fStart"><option value="0">heute</option><option value="1" selected>morgen</option></select></label></div>
+    <p class="muted" id="setupHint" style="margin:0"></p>
+    <div><button class="btn primary" id="fGo">Spiel starten</button></div>
+  </section>
+
+  <div id="game" hidden>
+    <div class="clock" id="clock"></div>
+    <div id="banner" class="banner" hidden></div>
+    <div class="seats" id="seats"></div>
+    <div class="controls">
+      <button class="btn primary" id="go"></button>
+      <button class="btn" id="replay">Letzte Welle ansehen</button>
+      <span class="muted">Tempo</span>
+      <button class="btn" data-speed="1">1×</button>
+      <button class="btn" data-speed="3">3×</button>
+      <button class="btn" data-speed="10">10×</button>
+      <button class="btn" id="skip">Ende zeigen</button>
+      <span class="spacer"></span>
+      <button class="btn" id="reset">Neues Spiel</button>
+    </div>
+    <main class="lanes" id="lanes"></main>
+    <section class="log"><h2>Chronik</h2><ol id="log"></ol></section>
+  </div>
+</div>
+<div class="palette" id="palette" hidden>
+  <div class="ptitle" id="ptitle"></div>
+  <div class="prow" id="prow"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* =====================================================================
+   ONLINE-SPEICHER (Firebase). Hier die Werte aus der Firebase-Konsole
+   einfügen (Projekteinstellungen → Deine Apps → Web-App → firebaseConfig).
+   Leer lassen = Ein-Gerät-Modus.
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDqKXqGho_rQveqs7ltUR_vHykgGClgL1I",
+  authDomain: "burbenoginspired.firebaseapp.com",
+  projectId: "burbenoginspired",
+  appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
+};
+const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
+
+/* =====================================================================
+   SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
+   */
+const CONFIG = {
+  days: 20,                 // Runden = Tage, jeden Tag ein neues Monster
+  lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
+  startGold: 30,
+  perWave: 10,              // Monster pro Welle (Boss: 1)
+  baseHp: 3,                // Leben Runde 1
+  hpGrowth: 1.5,            // Leben × 1,5 pro Runde
+  armorPerRound: 0.2,       // ab Runde 2: Rüstung +0,2 pro Runde (wird von jedem Treffer abgezogen)
+  slotHours: [10, 13, 16, 19],
+  darkSlots: [3],           // 19 Uhr ist es dunkel: Schatten-Türme schießen nicht
+  maxLevel: 6,              // Stufe 1 + 5 Upgrades
+  upgradeCost: 1.5,         // Upgrade kostet 1,5 × Turmpreis
+  upgradeDmg: 1.5,          // jedes Upgrade +150 % des Grundschadens
+  spawnGap: 0.8, sellRefund: 0.5
+};
+// Kopfgeld: Runde 1 = 2 Gold, dann +1 pro Runde, ab Runde 5 +2, ab Runde 10 +3, ab Runde 15 +4
+function bountyFor(r){ let b = 2; for (let k = 2; k <= r; k++) b += k >= 15 ? 4 : k >= 10 ? 3 : k >= 5 ? 2 : 1; return b; }
+
+// Türme 1–8: Preis und Gesamtschaden pro Sekunde auf Stufe 1 (Turm k schießt k Geschosse gleichzeitig)
+const TOWER_COST = [5, 12, 29, 69, 166, 398, 955, 2290];
+const TOWER_DPS  = [1, 2.5, 6.25, 15.6, 39, 98, 244, 610];
+const ELEMENTS = [
+  { name:'Feuer', color:'#e4703a', note:'brennt · wirkungslos gegen Wasser',
+    names:['Funke','Glutbecken','Flammenwerfer','Brandpfeil','Feuerball','Lavaturm','Phönix','Inferno'],
+    dmg:0.5, burn:true, costOverride:{0:3}, dmgOverride:{0:0.5} },
+  { name:'Eis', color:'#7ec8e8', note:'verlangsamt · nicht gegen Fliegende',
+    names:['Frostsplitter','Schneeball','Eiszapfen','Frosthauch','Gletscher','Eisspeer','Blizzard','Permafrost'],
+    dmg:0.8, slow:0.3 },
+  { name:'Schatten', color:'#a58ad8', note:'ignoriert Rüstung · nur bei Tageslicht',
+    names:['Schemen','Dolchgeist','Nachtauge','Fluchstein','Seelenfresser','Phantom','Leerenturm','Finsternis'],
+    dmg:1, pierce:true, dayOnly:true },
+  { name:'Stein', color:'#c2a878', note:'Flächenschaden · lädt lange · Fliegende erst ab Turm 3',
+    names:['Kiesel','Schleuder','Felsbrocken','Erdbeben','Katapult','Granitwächter','Lawine','Bergkönig'],
+    dmg:1.2, rate:0.33, splash:1, flyFrom:2 }
+];
+// 20 Monster, eins pro Runde. fly = fliegt, water = Wasserwesen, hpMul = Extra-Leben
+const MONSTERS = [
+  ['Silberfische',{speed:1.2}], ['Kellerasseln',{speed:0.9}], ['Nacktschnecken',{speed:0.6,hpMul:1.5}], ['Ohrenkneifer',{}],
+  ['Mäuse',{speed:1.4}], ['Ratten',{speed:1.3}], ['Kleine Hunde',{speed:1.5}], ['Katzen',{speed:1.6}],
+  ['Spatzen',{fly:true,speed:1.5}], ['Füchse',{speed:1.4}], ['Habichte',{fly:true,speed:1.8}], ['Dachse',{speed:0.9,hpMul:1.3}],
+  ['Oktopusse',{water:true,speed:0.8}], ['Wildschweine',{speed:1.2,hpMul:1.3}], ['Schäferhunde',{speed:1.6}], ['Besoffene Penner',{speed:0.7,hpMul:1.5}],
+  ['Wütende Partnerin',{speed:1.3}], ['Wütende Nachbarn',{speed:1.1,hpMul:1.2}], ['Uffug-Vorhut',{speed:1}], ['Uffug (Boss)',{speed:0.6,hpMul:40,count:1,boss:true}]
+].map(([name,o],k) => ({ name, speed:1, hpMul:1, ...o, round:k+1,
+  color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
+/* ===================== Ende Spieldaten ===================== */
+
+const COLS = 12, ROWS = 8, NSLOT = CONFIG.slotHours.length;
+const WP = [[-0.5,1.5],[9.5,1.5],[9.5,4.5],[2.5,4.5],[2.5,6.5],[12.5,6.5]];
+const SEG = []; let PATH_LEN = 0;
+for (let i = 0; i < WP.length - 1; i++) {
+  const [ax,ay] = WP[i], [bx,by] = WP[i+1], len = Math.hypot(bx-ax, by-ay);
+  SEG.push({ax,ay,bx,by,len,start:PATH_LEN}); PATH_LEN += len;
+}
+function posAt(d){
+  for (const s of SEG) if (d <= s.start + s.len) { const f = (d - s.start) / s.len; return [s.ax + (s.bx-s.ax)*f, s.ay + (s.by-s.ay)*f]; }
+  const s = SEG[SEG.length-1]; return [s.bx, s.by];
+}
+const PATH_CELLS = new Set();
+for (let d = 0; d < PATH_LEN; d += 0.1) { const [x,y] = posAt(d); const cx = Math.floor(x), cy = Math.floor(y); if (cx>=0&&cx<COLS&&cy>=0&&cy<ROWS) PATH_CELLS.add(cx+','+cy); }
+const hh = h => String(h).padStart(2,'0') + ':00';
+const $ = id => document.getElementById(id);
+// Turmwerte aus Element, Turmnummer (idx 0–7) und Stufe (lvl 1–6)
+function towerBase(el, idx){
+  const E = ELEMENTS[el], shots = idx + 1, rate = E.rate || 1;
+  const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
+  const dps = TOWER_DPS[idx] * E.dmg * ((E.dmgOverride && E.dmgOverride[idx]) || 1);
+  return { name:E.names[idx], cost, shots, rate, dps, range: 2 + idx * 0.2,
+    burn:!!E.burn, slow:E.slow || 0, pierce:!!E.pierce, dayOnly:!!E.dayOnly, splash:E.splash || 0,
+    hitsFly: idx >= (E.flyFrom || 0) };
+}
+function tdef(tw){ const b = towerBase(tw.el, tw.idx), lvl = tw.lvl || 1, mul = 1 + CONFIG.upgradeDmg * (lvl - 1);
+  return { ...b, lvl, dmg: b.dps * mul / b.rate / b.shots, dpsNow: b.dps * mul }; }
+const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * CONFIG.upgradeCost);
+function monsterDef(type){ const M = MONSTERS[type], r = M.round;
+  return { ...M, hp: CONFIG.baseHp * Math.pow(CONFIG.hpGrowth, r - 1) * M.hpMul, armor: CONFIG.armorPerRound * (r - 1), bounty: bountyFor(r) }; }
+
+/* ---------- Zustand ----------
+   G = Spielstand (Tag, Uhrzeit, verdientes Gold, Leaks, Chronik, letzte Welle)
+   L = Felder der Spieler (Element, Türme, ausgegebenes Gold) – jeder schreibt nur sein eigenes */
+let MODE = null, DB = null, ME = null;
+let G = null, L = [];
+let seat = 0, selTower = null, selCell = null, speed = 3;
+let replay = null, seenRun = null;
+
+/* ---------- Simulation (deterministisch, kein Zufall) ---------- */
+function makeSim(inp){
+  const towers = (inp.towers || []).map(tw => ({ ...tw, cd:0 }));
+  return { towers, dark:!!inp.dark, queue:(inp.incoming || []).map(s => ({...s})), monsters:[], fx:[], leaked:[], earned:0, kills:0, spawnT:0 };
+}
+const simBusy = s => s.queue.length || s.monsters.length;
+function kill(s, m){ m.dead = true; s.earned += m.def.bounty; s.kills++; }
+function dmgTo(s, m, raw, def){
+  if (m.dead) return;
+  if (def.burn && m.def.water) return;                       // Feuer wirkt nicht auf Wasser
+  const armor = def.pierce ? 0 : m.def.armor;
+  m.hp -= Math.max(raw * 0.25, raw - armor);
+  if (def.burn) m.burn.push({ dps:raw * 0.5, t:2 });          // Brennen: +100 % über 2 s, ohne Rüstung
+  if (def.slow && !m.def.fly && def.slow >= m.slow) { m.slow = def.slow; m.slowT = 1.5; }
+  if (m.hp <= 0) kill(s, m);
+}
+function step(s, dt){
+  if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { const sp = s.queue.shift(), d = monsterDef(sp.type);
+    s.monsters.push({ type:sp.type, def:d, hp:d.hp, d:0, slow:0, slowT:0, burn:[], hops:sp.hops }); s.spawnT = CONFIG.spawnGap; } }
+  for (const m of s.monsters) {
+    if (m.dead) continue;
+    if (m.slowT > 0) { m.slowT -= dt; if (m.slowT <= 0) m.slow = 0; }
+    m.burn = m.burn.filter(b => (b.t -= dt) > 0);
+    for (const b of m.burn) m.hp -= b.dps * dt;
+    if (m.hp <= 0) { kill(s, m); continue; }
+    m.d += m.def.speed * (1 - m.slow) * dt;
+    if (m.d >= PATH_LEN) { m.dead = true; s.leaked.push({ type:m.type, hops:m.hops + 1 }); }
+  }
+  for (const tw of s.towers) {
+    const def = tdef(tw);
+    if (def.dayOnly && s.dark) continue;
+    tw.cd -= dt; if (tw.cd > 0) continue;
+    const cx = tw.x + .5, cy = tw.y + .5;
+    const inRange = s.monsters.filter(m => { if (m.dead || (m.def.fly && !def.hitsFly)) return false;
+      const [mx,my] = posAt(m.d); return Math.hypot(mx-cx, my-cy) <= def.range; });
+    if (!inRange.length) continue;
+    inRange.sort((a,b) => b.d - a.d);
+    tw.cd = 1 / def.rate;
+    for (const m of inRange.slice(0, def.shots)) fire(s, tw, def, m);
+  }
+  for (const f of s.fx) f.t -= dt;
+  s.fx = s.fx.filter(f => f.t > 0);
+  s.monsters = s.monsters.filter(m => !m.dead);
+}
+function fire(s, tw, def, target){
+  const col = ELEMENTS[tw.el].color, [tx,ty] = posAt(target.d);
+  s.fx.push({ x1:tw.x+.5, y1:tw.y+.5, x2:tx, y2:ty, t:.12, col });
+  dmgTo(s, target, def.dmg, def);
+  if (def.splash) {
+    s.fx.push({ ring:def.splash, x2:tx, y2:ty, t:.18, col });
+    for (const o of s.monsters) { if (o === target || o.dead || (o.def.fly && !def.hitsFly)) continue; const [ox,oy] = posAt(o.d);
+      if (Math.hypot(ox-tx, oy-ty) <= def.splash) dmgTo(s, o, def.dmg * 0.6, def); }
+  }
+}
+function simulate(inp){ const s = makeSim(inp); let g = 0; while (simBusy(s) && g++ < 400000) step(s, 1/30); return s; }
+
+/* ---------- Spielregeln ---------- */
+const NP = () => G.cfg.players;
+const P_STATE = 'games/' + GAME_ID, P_LANES = 'games/' + GAME_ID + '/lanes';
+function waveSpecs(day){ const m = MONSTERS[day-1]; if (!m) return []; return [...Array(m.count || CONFIG.perWave)].map(() => ({ type:day-1, hops:0 })); }
+function incomingFor(g, i){ const n = g.cfg.players; return g.slot === 0 ? waveSpecs(g.day) : ((g.leaked || {})[(i-1+n)%n] || []); }
+function goldOf(i){ const l = L[i] || {}; return CONFIG.startGold + (G.earned[i]||0) - (l.spent||0); }
+function laneOf(i){ return L[i] || { el:i % ELEMENTS.length, towers:[], spent:0 }; }
+function newGameState(cfg){
+  return { cfg, day:1, slot:0, passed:0, over:null, earned:Array(cfg.players).fill(0),
+    leaked:{}, log:[{ when:'Tag 1', text:`Neues Spiel mit ${cfg.players} Spielern. Um ${hh(CONFIG.slotHours[0])} kommen die ersten ${MONSTERS[0].name}.` }], lastRun:null };
+}
+function resolveSlot(g, lanes){
+  g = JSON.parse(JSON.stringify(g));
+  const n = g.cfg.players, time = hh(CONFIG.slotHours[g.slot]), next = CONFIG.slotHours[g.slot+1];
+  const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] || laneOf(i); return { el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:CONFIG.darkSlots.includes(g.slot) }; });
+  const res = inputs.map(simulate);
+  const leaked = {}; let broke = 0; const log = [];
+  res.forEach((r,i) => {
+    g.earned[i] = (g.earned[i]||0) + r.earned;
+    const pass = r.leaked.filter(m => m.hops < n), out = r.leaked.length - pass.length;
+    leaked[i] = pass; broke += out;
+    if (!inputs[i].incoming.length) return;
+    log.push(`Spieler ${i+1}: ${r.kills} besiegt (+${r.earned} Gold), ${r.leaked.length} durch` +
+      (pass.length ? ` → Spieler ${(i+1)%n+1}${next ? ' um ' + hh(next) : ''}` : '') + (out ? ' → ganz durchgebrochen' : ''));
+  });
+  g.leaked = leaked; g.passed += broke;
+  log.reverse().forEach(text => g.log.unshift({ when:`Tag ${g.day} ${time}`, text }));
+  g.lastRun = { id:`${g.day}-${g.slot}-${Date.now()}`, day:g.day, slot:g.slot, inputs };
+  if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
+  else if (g.slot < NSLOT - 1) g.slot++;
+  else if (g.day >= CONFIG.days) { g.over = 'won'; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
+  else { g.day++; g.slot = 0; g.leaked = {}; g.log.unshift({ when:`Tag ${g.day}`, text:`Neuer Tag. Um 10:00 kommen ${MONSTERS[g.day-1] ? MONSTERS[g.day-1].name : 'Monster'}.` }); }
+  g.log = g.log.slice(0, 60);
+  return g;
+}
+function dueTime(g){
+  const c = g.cfg; if (c.timing === 'manual') return null;
+  if (c.timing === 'test') return c.startAt + ((g.day-1)*NSLOT + g.slot) * c.interval * 60000;
+  const d = new Date(c.day1); d.setDate(d.getDate() + g.day - 1); d.setHours(CONFIG.slotHours[g.slot], 0, 0, 0); return d.getTime();
+}
+
+/* ---------- Speichern: online (geteilte Datenbank) oder lokal (dieses Gerät) ---------- */
+function lsGet(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+let writeChain = Promise.resolve();
+function queueWrite(fn){ writeChain = writeChain.then(fn).catch(e => { console.warn(e); toast('Speichern hat nicht geklappt. Bitte Seite neu laden.'); }); return writeChain; }
+async function saveLane(i){
+  if (MODE === 'local') return lsSet('ww2-local', { G, L });
+  const body = JSON.parse(JSON.stringify(L[i])); await queueWrite(() => DB.doc(P_LANES + '/p' + i).set(body));
+}
+async function saveGame(){
+  if (MODE === 'local') return lsSet('ww2-local', { G, L });
+  const body = JSON.parse(JSON.stringify(G)); await queueWrite(() => DB.doc(P_STATE).set(body));
+}
+let resolving = false;
+async function tryResolve(force){
+  if (!G || G.over || resolving || replay) return;
+  if (MODE === 'local') { G = resolveSlot(G, L); lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return; }
+  resolving = true;
+  try {
+    const ls = await DB.collection(P_LANES).get();
+    const lanes = []; ls.docs.forEach(d => { const k = +d.id.slice(1); lanes[k] = d.data(); });
+    const advance = g => { let n = 0;
+      while (!g.over && n < 30) { const due = dueTime(g); if (!(force && n === 0) && !(due && Date.now() >= due)) break; g = resolveSlot(g, lanes); n++; }
+      return n ? g : null; };
+    const ref = DB.doc(P_STATE);
+    if (DB.tx) {            // Firebase: Transaktion verhindert doppelte Auswertung
+      await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists) return;
+        const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) tr.set(ref, g); });
+    } else {                // Claude-Artifact: kurze Sperre statt Transaktion
+      const lease = await ref.acquire({ holder: ME, ttlMs: 15000 });
+      if (!lease.acquired) return;
+      const snap = await ref.get(); if (!snap.exists) return;
+      const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) await ref.set(g);
+    }
+  } catch(e) { console.warn(e); }
+  finally { resolving = false; }
+}
+
+/* ---------- Wiedergabe der letzten Welle ---------- */
+function startReplay(run){
+  if (!run) return;
+  seenRun = run.id; lsSet('ww2-seen', seenRun);
+  replay = { run, sims: run.inputs.map(makeSim) };
+  selCell = null; render(); replay.last = performance.now(); requestAnimationFrame(loop);
+}
+function loop(now){
+  if (!replay) return;
+  let sim = Math.min(0.1, (now - replay.last) / 1000) * speed; replay.last = now;
+  while (sim > 0) { const dt = Math.min(sim, 1/30); replay.sims.forEach(s => step(s, dt)); sim -= dt; }
+  drawAll(); updateLaneHeads();
+  if (!replay.sims.some(simBusy)) { replay = null; render(); return; }
+  requestAnimationFrame(loop);
+}
+function endReplay(){ if (!replay) return; replay.sims.forEach(s => { let g = 0; while (simBusy(s) && g++ < 300000) step(s, 1/30); }); replay = null; render(); }
+
+/* ---------- Bauen ---------- */
+const mayBuild = i => !replay && G && !G.over && (MODE === 'local' || i === seat);
+function clickCell(i, x, y){
+  if (!G || replay) return;
+  if (MODE === 'local' && seat !== i) { seat = i; selTower = null; }
+  if (PATH_CELLS.has(x+','+y)) { selCell = null; return render(); }
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y);
+  if (tw || selTower === null || !mayBuild(i)) { selCell = { i, x, y }; return render(); }
+  const def = towerBase(l.el, selTower);
+  if (goldOf(i) < def.cost) { toast('Zu wenig Gold.'); return; }
+  L[i] = { ...l, towers:[...l.towers, { x, y, el:l.el, idx:selTower, lvl:1, invested:def.cost }], spent:(l.spent||0) + def.cost };
+  selCell = { i, x, y }; render(); saveLane(i);
+}
+function sell(i, x, y){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
+  L[i] = { ...l, towers:l.towers.filter(t => t !== tw), spent:(l.spent||0) - Math.floor((tw.invested || towerBase(tw.el, tw.idx).cost) * CONFIG.sellRefund) };
+  selCell = null; render(); saveLane(i);
+}
+function upgrade(i, x, y){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
+  const lvl = tw.lvl || 1, cost = upgradeCost(tw);
+  if (lvl >= CONFIG.maxLevel) return;
+  if (goldOf(i) < cost) { toast('Zu wenig Gold.'); return; }
+  const inv = (tw.invested || towerBase(tw.el, tw.idx).cost) + cost;
+  L[i] = { ...l, towers:l.towers.map(t => t === tw ? { ...t, lvl:lvl + 1, invested:inv } : t), spent:(l.spent||0) + cost };
+  render(); saveLane(i);
+}
+const canSwitchEl = i => mayBuild(i) && G.day === 1 && G.slot === 0 && !laneOf(i).towers.length;
+
+/* ---------- Darstellung ---------- */
+const num = v => v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1).replace('.0','') : v.toFixed(2).replace(/0$/,'');
+function fxText(d){
+  const p = [];
+  if (d.shots > 1) p.push(`${d.shots} Geschosse`);
+  if (d.burn) p.push('brennt');
+  if (d.slow) p.push(`bremst ${Math.round(d.slow*100)} %`);
+  if (d.pierce) p.push('ignoriert Rüstung');
+  if (d.splash) p.push('Fläche');
+  if (d.dayOnly) p.push('nicht um 19 Uhr');
+  if (!d.hitsFly) p.push('keine Fliegenden');
+  return p.join(', ');
+}
+let toastT;
+function toast(msg){ const b = $('banner'); b.hidden = false; b.className = 'banner'; b.textContent = msg; clearTimeout(toastT); toastT = setTimeout(render, 2500); }
+let lanesBuilt = 0;
+function buildLanes(){
+  const n = NP(); lanesBuilt = n;
+  $('lanes').innerHTML = [...Array(n)].map((_,i) => `
+    <section class="lane" id="lane${i}">
+      <div class="lhead">
+        <span class="name">Spieler ${i+1}</span>
+        <button class="el" id="el${i}" title="Element wechseln (nur vor dem ersten Turm an Tag 1)"></button>
+        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span></span>
+        <span class="inc" id="inc${i}"></span>
+      </div>
+      <canvas id="cv${i}"></canvas>
+      <div class="info" id="info${i}"></div>
+    </section>`).join('');
+  for (let i = 0; i < n; i++) {
+    const cv = $('cv'+i);
+    cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), cs = r.width / COLS;
+      clickCell(i, Math.floor((e.clientX - r.left) / cs), Math.floor((e.clientY - r.top) / cs)); });
+    $('el'+i).addEventListener('click', () => { if (!canSwitchEl(i)) return; const l = laneOf(i);
+      L[i] = { ...l, el:(l.el + 1) % ELEMENTS.length }; selTower = null; render(); saveLane(i); });
+  }
+}
+function updateLaneHeads(){
+  for (let i = 0; i < NP(); i++) {
+    const s = replay && replay.sims[i];
+    $('p'+i).textContent = s && s.earned ? `+${s.earned}` : '';
+    if (s) $('inc'+i).textContent = `${s.queue.length + s.monsters.length} unterwegs`;
+  }
+}
+function fmtLeft(ms){ if (ms <= 0) return 'jetzt'; const m = Math.ceil(ms/60000); return m < 60 ? `in ${m} min` : `in ${Math.floor(m/60)} h ${m%60} min`; }
+function renderClock(){
+  if (!G) return;
+  const due = dueTime(G);
+  $('sNext').textContent = G.over ? '–' : (due ? fmtLeft(due - Date.now()) : 'per Knopf');
+  $('sNextL').textContent = G.over ? 'Spiel vorbei' : `Welle ${hh(CONFIG.slotHours[G.slot])}`;
+}
+function render(){
+  $('modeTag').textContent = MODE === 'online' ? 'Prototyp 2 · online' : (MODE === 'local' ? 'Prototyp 2 · ein Gerät' : 'verbinde …');
+  const has = !!G;
+  $('setup').hidden = has || !MODE; $('game').hidden = !has; $('stats').hidden = !has; $('palette').hidden = !has;
+  if (!has) { renderSetup(); return; }
+  if (lanesBuilt !== NP()) buildLanes();
+  const n = NP();
+  $('sDay').textContent = `${Math.min(G.day, CONFIG.days)}/${CONFIG.days}`;
+  $('sPass').textContent = `${G.passed}/${CONFIG.lossLimit}`;
+  $('passBox').classList.toggle('bad', G.passed > CONFIG.lossLimit * 0.6);
+  renderClock();
+  const showSlot = replay ? replay.run.slot : G.slot;
+  $('clock').innerHTML = CONFIG.slotHours.map((h,k) => `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}"><b>${hh(h)}</b>${k===0?'Welle für alle':(k<n?'Leaks vom Nachbarn':'(nichts bei '+n+' Spielern)')}${CONFIG.darkSlots.includes(k)?' · dunkel':''}</div>`).join('');
+  const b = $('banner');
+  b.hidden = !G.over; b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
+  if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`;
+  $('seats').innerHTML = MODE === 'online'
+    ? `<span class="muted">Ich spiele:</span>` + [...Array(n)].map((_,i) => `<button class="btn ${seat===i?'on':''}" data-seat="${i}">Spieler ${i+1}</button>`).join('')
+    : `<span class="muted">Ein Gerät für alle: Feld antippen, um für diesen Spieler zu bauen.</span>`;
+  $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
+  const go = $('go');
+  go.textContent = replay ? 'Welle läuft …' : (MODE === 'local' ? `Welle ${hh(CONFIG.slotHours[G.slot])} starten` : `Welle ${hh(CONFIG.slotHours[G.slot])} jetzt auslösen`);
+  go.disabled = !!replay || !!G.over;
+  $('replay').disabled = !!replay || !G.lastRun;
+  $('skip').disabled = !replay;
+  document.querySelectorAll('[data-speed]').forEach(x => x.classList.toggle('on', +x.dataset.speed === speed));
+  for (let i = 0; i < n; i++) {
+    const l = laneOf(i), E = ELEMENTS[l.el];
+    $('lane'+i).classList.toggle('active', seat === i);
+    const eb = $('el'+i); eb.textContent = E.name + (canSwitchEl(i) ? ' ⇄' : ''); eb.style.color = E.color; eb.disabled = !canSwitchEl(i);
+    $('g'+i).textContent = goldOf(i);
+    if (!replay) { const inc = incomingFor(G, i); $('inc'+i).textContent = G.over ? '' : (inc.length ? `${hh(CONFIG.slotHours[G.slot])}: ${inc.length} ${MONSTERS[inc[0].type].name}` : `${hh(CONFIG.slotHours[G.slot])}: nichts im Anmarsch`); }
+    const info = $('info'+i);
+    const tw = selCell && selCell.i === i ? l.towers.find(t => t.x === selCell.x && t.y === selCell.y) : null;
+    if (tw) { const d = tdef(tw), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
+      info.innerHTML = `<b style="color:var(--fg)">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel} · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}${fxText(d) ? ' · ' + fxText(d) : ''}` +
+        (mayBuild(i) ? (maxed ? '' : `<button class="btn" id="up${i}" ${goldOf(i) < uc ? 'disabled' : ''}>Upgrade (${uc} Gold)</button>`) +
+          `<button class="btn" id="sell${i}">Verkaufen (+${Math.floor((tw.invested || d.cost) * CONFIG.sellRefund)})</button>` : '');
+      const sb = $('sell'+i); if (sb) sb.onclick = e => { e.stopPropagation(); sell(i, tw.x, tw.y); };
+      const ub = $('up'+i); if (ub) ub.onclick = e => { e.stopPropagation(); upgrade(i, tw.x, tw.y); };
+    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. So oft, wie das Gold reicht.' : '';
+  }
+  updateLaneHeads();
+  const l = laneOf(seat), E = ELEMENTS[l.el], gold = goldOf(seat), can = mayBuild(seat);
+  $('ptitle').innerHTML = `Bauen für <b>Spieler ${seat+1}</b> · <span style="color:${E.color}">${E.name}</span> (${E.note}) · <b>${gold}</b> Gold`;
+  $('prow').innerHTML = E.names.map((_,k) => towerBase(l.el, k)).map((d,k) => `<button class="tw ${selTower===k?'sel':''}" data-k="${k}" ${!can||gold<d.cost?'disabled':''}>
+      <span class="n" style="color:${E.color}">${k+1}. ${d.name}</span><span class="c">${d.cost} Gold</span>
+      <span class="d">${num(d.dps)} Schaden/s${fxText(d) ? '<br>' + fxText(d) : ''}</span></button>`).join('');
+  $('prow').querySelectorAll('.tw').forEach(x => x.onclick = () => { const k = +x.dataset.k; selTower = selTower === k ? null : k; render(); });
+  $('log').innerHTML = G.log.map(e => `<li><b>${e.when}</b>${e.text}</li>`).join('');
+  drawAll();
+}
+function renderSetup(){
+  const online = MODE === 'online';
+  $('fTiming').disabled = !online; $('lTiming').hidden = !online;
+  const tm = online ? $('fTiming').value : 'manual';
+  $('rowTest').hidden = tm !== 'test'; $('rowReal').hidden = tm !== 'real';
+  $('setupHint').textContent = online
+    ? 'Alle Mitspieler öffnen diesen Link, wählen oben ihren Spieler und bauen auf dem eigenen Handy. Die Wellen laufen automatisch, sobald jemand die Seite offen hat.'
+    : 'Lokaler Modus: Alle spielen an diesem einen Gerät, die Welle startet per Knopf.';
+}
+
+function drawAll(){ if (G) for (let i = 0; i < NP(); i++) draw(i, $('cv'+i)); }
+function draw(i, cv){
+  if (!cv) return;
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth; if (!W) return;
+  const cs = W / COLS, H = cs * ROWS;
+  if (cv.width !== Math.round(W*dpr)) { cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); cv.style.height = H + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+  const css = getComputedStyle(document.documentElement), v = n => css.getPropertyValue(n).trim();
+  for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
+    const road = PATH_CELLS.has(x+','+y);
+    c.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : ((x+y)%2 ? v('--grass') : v('--grass2'));
+    c.fillRect(x*cs, y*cs, cs, cs);
+  }
+  c.fillStyle = v('--danger'); c.fillRect(0, 1*cs+cs*.2, 3, cs*.6);
+  c.fillStyle = v('--accent'); c.fillRect(W-3, 6*cs+cs*.2, 3, cs*.6);
+  const s = replay && replay.sims[i];
+  const towers = s ? s.towers : laneOf(i).towers;
+  if (!s && selCell && selCell.i === i) {
+    const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
+    c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.strokeRect(selCell.x*cs+1, selCell.y*cs+1, cs-2, cs-2);
+    if (tw) { const r = tdef(tw).range;
+      c.beginPath(); c.arc((tw.x+.5)*cs, (tw.y+.5)*cs, r*cs, 0, Math.PI*2); c.setLineDash([4,4]); c.stroke(); c.setLineDash([]); }
+  }
+  for (const tw of towers) {
+    const E = ELEMENTS[tw.el], px = tw.x*cs, py = tw.y*cs, p = cs*.14;
+    c.fillStyle = E.color; c.globalAlpha = .9; c.beginPath(); c.roundRect(px+p, py+p, cs-2*p, cs-2*p, cs*.12); c.fill(); c.globalAlpha = 1;
+    c.fillStyle = '#16120a'; c.font = `700 ${cs*.42}px ${v('--mono')}`; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(tw.idx+1, px+cs/2, py+cs/2+1);
+    for (let k = 1; k < (tw.lvl || 1); k++) { c.fillStyle = '#16120a'; c.fillRect(px + p + 2 + (k-1)*cs*.13, py + cs - p - cs*.11, cs*.09, cs*.07); }
+  }
+  if (!s) return;
+  for (const m of s.monsters) {
+    const [x,y] = posAt(m.d), r = m.def.size*cs;
+    c.fillStyle = m.def.color; c.beginPath(); c.arc(x*cs, y*cs, r, 0, Math.PI*2); c.fill();
+    if (m.slow) { c.strokeStyle = '#9fdcf5'; c.lineWidth = 2; c.stroke(); }
+    else if (m.burn.length) { c.strokeStyle = '#ff9a4a'; c.lineWidth = 2; c.stroke(); }
+    if (m.hops) { c.fillStyle = '#16120a'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.textAlign='center'; c.textBaseline='middle'; c.fillText(m.hops, x*cs, y*cs+1); }
+    const f = Math.max(0, m.hp / m.def.hp);
+    c.fillStyle = '#00000088'; c.fillRect(x*cs-r, y*cs-r-6, 2*r, 3);
+    c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(x*cs-r, y*cs-r-6, 2*r*f, 3);
+  }
+  for (const f of s.fx) {
+    c.strokeStyle = f.col; c.globalAlpha = Math.min(1, f.t * 8); c.lineWidth = 2; c.beginPath();
+    if (f.ring) c.arc(f.x2*cs, f.y2*cs, f.ring*cs, 0, Math.PI*2); else { c.moveTo(f.x1*cs, f.y1*cs); c.lineTo(f.x2*cs, f.y2*cs); }
+    c.stroke(); c.globalAlpha = 1;
+  }
+}
+
+/* ---------- Start ---------- */
+async function newGame(){
+  const players = +$('fPlayers').value, timing = MODE === 'online' ? $('fTiming').value : 'manual';
+  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now() };
+  if (timing === 'real') { const d = new Date(); d.setDate(d.getDate() + (+$('fStart').value)); d.setHours(0,0,0,0); cfg.day1 = d.getTime(); }
+  G = newGameState(cfg);
+  L = [...Array(players)].map((_,i) => ({ el:i % ELEMENTS.length, towers:[], spent:0 }));
+  seat = 0; selTower = null; selCell = null; replay = null; lanesBuilt = 0;
+  if (MODE === 'local') lsSet('ww2-local', { G, L });
+  else { await queueWrite(async () => { for (let i = 0; i < 4; i++) await DB.doc(P_LANES + '/p' + i).set(L[i] || { el:i, towers:[], spent:0 }); await DB.doc(P_STATE).set(JSON.parse(JSON.stringify(G))); }); }
+  render();
+}
+function onGame(g){
+  const prevPlayers = G && G.cfg.players;
+  G = g;
+  if (!G) { lanesBuilt = 0; render(); return; }
+  if (seat >= NP()) seat = 0;
+  if (prevPlayers !== G.cfg.players) lanesBuilt = 0;
+  if (G.lastRun && G.lastRun.id !== seenRun && !replay) { if (seenRun) startReplay(G.lastRun); else { seenRun = G.lastRun.id; lsSet('ww2-seen', seenRun); } }
+  render();
+}
+
+$('fTiming').onchange = renderSetup;
+$('fGo').onclick = newGame;
+$('go').onclick = () => tryResolve(true);
+$('replay').onclick = () => G && startReplay(G.lastRun);
+$('skip').onclick = endReplay;
+document.querySelectorAll('[data-speed]').forEach(x => x.onclick = () => { speed = +x.dataset.speed; render(); });
+$('reset').onclick = () => {
+  const r = $('reset');
+  if (!r.dataset.confirm) { r.dataset.confirm = 1; r.textContent = 'Wirklich? Nochmal tippen'; setTimeout(() => { delete r.dataset.confirm; r.textContent = 'Neues Spiel'; }, 3000); return; }
+  delete r.dataset.confirm; r.textContent = 'Neues Spiel'; replay = null;
+  if (MODE === 'local') { try { localStorage.removeItem('ww2-local'); } catch(e){} onGame(null); }
+  else queueWrite(() => DB.doc(P_STATE).delete());
+};
+window.addEventListener('resize', () => { for (let i = 0; i < 4; i++) { const cv = $('cv'+i); if (cv) cv.width = 0; } drawAll(); });
+setInterval(() => { renderClock(); if (MODE === 'online' && G && !G.over) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
+
+function startLocal(){
+  MODE = 'local';
+  const s = lsGet('ww2-local');
+  if (s && s.G) { L = s.L || []; seenRun = s.G.lastRun && s.G.lastRun.id; onGame(s.G); } else render();
+}
+async function startOnline(db){
+  MODE = 'online'; DB = db;
+  if (!DB.tx) { try { const u = await window.claude.use('user'); ME = u && await u.id(); } catch(e){} }
+  if (!ME) { ME = lsGet('ww2-holder') || ('h' + Math.random().toString(36).slice(2)); lsSet('ww2-holder', ME); }
+  seat = lsGet('ww2-seat') || 0; seenRun = lsGet('ww2-seen');
+  DB.collection(P_LANES).onSnapshot(snap => {
+    snap.docs.forEach(d => { const k = +d.id.slice(1); if (!d.metadata.hasPendingWrites || !L[k]) L[k] = d.data(); });
+    if (G) render();
+  }, e => console.warn(e));
+  DB.doc(P_STATE).onSnapshot(snap => onGame(snap.exists ? snap.data() : null), e => { console.warn(e); toast('Verbindung verloren. Bitte Seite neu laden.'); });
+  render();
+}
+(async () => {
+  render();
+  if (FIREBASE_CONFIG.projectId && window.firebase) {
+    try { firebase.initializeApp(FIREBASE_CONFIG); const fs = firebase.firestore();
+      return startOnline({ doc:p => fs.doc(p), collection:p => fs.collection(p), tx:fn => fs.runTransaction(fn) });
+    } catch(e) { console.warn(e); }
+  }
+  if (!window.claude || !window.claude.use) return startLocal();
+  let db = null; try { db = await window.claude.use('db'); } catch(e){}
+  if (db) startOnline(db); else startLocal();
+})();
+document.fonts && document.fonts.ready.then(drawAll);
+</script>
