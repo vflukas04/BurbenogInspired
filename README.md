@@ -36,5 +36,12 @@ Alles steckt in einer Datei: `index.html`.
 - „Jetzt auslösen“ startet die nächste Welle sofort (zum Testen).
 - Ein zweites Spiel parallel: `GAME_ID` in `index.html` ändern.
 
+## Aufs Handy installieren
+Link im Handy-Browser öffnen, dann:
+- **Android (Chrome):** Menü ⋮ → „App installieren“ bzw. „Zum Startbildschirm hinzufügen“
+- **iPhone (Safari):** Teilen-Symbol → „Zum Home-Bildschirm“
+
+Danach startet das Spiel wie eine App mit eigenem Symbol, ohne Browserleiste.
+
 ## Inhalte ändern
 Im Block **SPIELDATEN** oben im Skript stehen Elemente, Türme, Monster und Wellen. Effekte: `burn`, `slow`, `pierce`, `splash`, `chain`, `gold`, `aura`.

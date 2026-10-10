@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>BurbenogInspired</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" content="#141a17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@600&family=Alegreya+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
@@ -38,6 +44,7 @@ h1 small{font-family:var(--body);font-size:.78rem;color:var(--muted);letter-spac
 .slot b{font-family:var(--mono);color:var(--fg);display:block;font-size:1rem}
 .slot.now{border-color:var(--accent);color:var(--fg)}
 .slot.done{opacity:.5}
+.slot .wx{font-family:var(--body);font-weight:500;font-size:.8rem;color:var(--muted);margin-left:4px}
 .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
 .btn{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 14px}
 .btn.primary{background:var(--accent);color:#1b1408;border-color:var(--accent);font-weight:700}
@@ -172,15 +179,37 @@ const CONFIG = {
   hpGrowth: 1.5,            // Leben × 1,5 pro Runde
   armorPerRound: 0.2,       // Rüstung ab Runde 2: 0,2 × (Runde − 1) …
   armorGrowth: 1.3,         // … × 1,3 pro Runde, damit Rüstung auch später zählt (Vorschlag)
-  slotHours: [10, 13, 16, 19],
-  darkSlots: [3],           // 19 Uhr ist es dunkel: Schatten-Türme schießen nicht
+  // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
+  slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
+  darkFrom: 19,             // ab 19 Uhr ist es dunkel: Schatten-Türme schießen nicht
+  firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
   maxLevel: 6,              // Stufe 1 + 5 Upgrades
   upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
   upgrade: { dmg:1.8, range:0.2, dur:1.3, eff:1.15 },  // pro Upgrade: Schaden ×1,8, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
-  giftFee: 0.10, giftStep: 10,                          // Gold verschenken: 10er-Schritte, 10 % Gebühr
+  giftFee: 0.10, giftStep: 10,
+  weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt                          // Gold verschenken: 10er-Schritte, 10 % Gebühr
   spawnGap: 0.5, sellRefund: 0.5
 };
-const DAY = 'Tag';          // Effektdauer „ganzer Tag“: hält über alle vier Wellen
+const DAY = 'Tag';
+// Gelände: Bauen kostet je nach Feld mehr. Stein zahlt keinen Aufschlag.
+const TERRAIN = [
+  { name:'Wiese', cost:1,   col:['#24301f','#2a3824'] },
+  { name:'Wald',  cost:1.5, col:['#17271a','#1b2e1e'] },
+  { name:'Sumpf', cost:2,   col:['#25302f','#2b3735'] }
+];
+/* Wetter: wechselt im Lauf des Tages (Chance je Welle: CONFIG.weatherChange). Stein ist wetterfest.
+   el: je Element [Feuer, Eis, Schatten] → dmg = Schaden, eff = Effektstärke, dur = Effektdauer
+   range = Reichweite aller Türme außer Stein, burnDecay = Brennen erlischt schneller, flySpeed = Fliegende schneller/langsamer */
+const WEATHER = [
+  { name:'Sonnig',   sym:'☀', w:3,   el:{ 0:{dmg:1.25, eff:1.25}, 1:{dur:0.7}, 2:{dmg:1.15} } },
+  { name:'Bewölkt',  sym:'☁', w:3,   el:{ 1:{dur:1.15}, 2:{dmg:0.7, eff:0.8} } },
+  { name:'Regen',    sym:'☂', w:2,   el:{ 0:{dmg:0.8, dur:0.4}, 1:{eff:1.25, dmg:1.1}, 2:{dmg:0.85} }, burnDecay:2.5 },
+  { name:'Gewitter', sym:'ϟ', w:1,   el:{ 0:{dmg:0.8, dur:0.4}, 1:{eff:1.15}, 2:{dmg:0.6} }, burnDecay:2, flySpeed:0.7 },
+  { name:'Nebel',    sym:'≡', w:1.5, el:{ 2:{dmg:1.3, eff:1.3} }, range:0.75 },
+  { name:'Frost',    sym:'❄', w:1,   el:{ 0:{dmg:0.85}, 1:{eff:1.3, dur:1.5, dmg:1.1} } },
+  { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.5, eff:1.3}, 1:{eff:0.7, dur:0.5} } },
+  { name:'Wind',     sym:'≋', w:1.5, el:{ 0:{dmg:0.9, eff:1.4} }, flySpeed:1.4 }
+];          // Effektdauer „ganzer Tag“: hält über alle vier Wellen
 // Kopfgeld: Runde 1 = 2 Gold, dann +1 pro Runde, ab Runde 5 +2, ab Runde 10 +3, ab Runde 15 +4
 function bountyFor(r){ let b = 2; for (let k = 2; k <= r; k++) b += k >= 15 ? 4 : k >= 10 ? 3 : k >= 5 ? 2 : 1; return b; }
 
@@ -193,7 +222,8 @@ const TOWER_POWER = [1, 2.5, 6.25, 15.6, 39, 98, 244, 610];
      Feuer    Brennen: Stärke = Brennschaden als Anteil der Turmkraft, ignoriert Rüstung
      Eis      Verlangsamen: Stärke = Anteil (0,4 = 40 % langsamer), wirkt nicht auf Fliegende
      Schatten Fluch: Ziel nimmt +Stärke mehr Schaden von allen Türmen. Schatten-Geschosse ignorieren Rüstung.
-     Stein    Betäuben: Stärke = Sekunden Stillstand. Fläche groß, lädt lange. */
+     Stein    Betäuben: Stärke = Sekunden Stillstand. Fläche groß, lädt lange.
+   Optionales 10. Feld: {effect, rateUp} überschreibt den Effekt bzw. erhöht die Feuerrate pro Upgrade. */
 const ELEMENTS = [
   { name:'Feuer', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:3}, towers:[
     ['Funke',        'Schaden',   2.0, 1,   1, 0.5, 0.3, 3],
@@ -209,7 +239,7 @@ const ELEMENTS = [
     ['Schneeball',   'Fläche',    2.3, 1,   2, 0.7, 0.2, 4, 0.6],
     ['Eiszapfen',    'Reichweite',3.4, 0.7, 1, 1.2, 0.15, 3],
     ['Frosthauch',   'Effekt',    1.6, 2,   3, 0.5, 0.45, 8],
-    ['Gletscher',    'Fläche',    2.0, 0.8, 2, 1.0, 0.35, 8, 1.0],
+    ['Frostnova',    'Effekt',    2.0, 1/8, 1, 0.6, 3,    0, 1.6, {effect:'stun', rateUp:Math.pow(8/6, 1/5)}],  // friert alles im Umkreis 3 s ein, schießt alle 8 s (Stufe 6: alle 6 s)
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 1.6, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 0.8, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.3, 0.55, DAY] ]},
@@ -222,7 +252,7 @@ const ELEMENTS = [
     ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
     ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
     ['Ewige Nacht',  'Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
-  { name:'Stein', color:'#c2a878', note:'Fläche · betäubt · lädt lange · Fliegende erst ab Turm 3', effect:'stun', flyFrom:2, towers:[
+  { name:'Stein', color:'#c2a878', note:'Fläche · betäubt · wetterfest · kein Geländeaufschlag · Fliegende erst ab Turm 3', effect:'stun', flyFrom:2, weatherproof:true, terrainFree:true, towers:[
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 1.2, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 1.2, 0.2, 0, 0.9],
     ['Felsbrocken',  'Fläche',    2.5, 0.25,1, 1.5, 0.5, 0, 1.1],
@@ -233,7 +263,8 @@ const ELEMENTS = [
     ['Bergkönig',    'Effekt',    3.2, 0.2, 2, 1.4, 1.5, 0, 2.5] ]}
 ];
 /* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
-   (2 = doppelt, 0,5 = halb, 0 = immun; wirkt auch auf die Effektstärke). fly = fliegt, hpMul = Extra-Leben */
+   (2 = doppelt, 0,5 = halb, 0 = immun; wirkt auch auf die Effektstärke). fly = fliegt, hpMul = Extra-Leben,
+   lives = so viele „Durchbrüche“ zählt das Monster (Boss: 3) */
 const MONSTERS = [
   ['Silberfische',      {speed:1.2, weak:[2,   1,   1,   0.5]}],
   ['Kellerasseln',      {speed:0.9, weak:[0.5, 1,   1.5, 2  ]}],
@@ -254,24 +285,59 @@ const MONSTERS = [
   ['Wütende Partnerin', {speed:1.3, weak:[0.5, 3,   0.25,1  ]}],
   ['Wütende Nachbarn',  {speed:1.1, hpMul:1.2, weak:[1, 1, 0.5, 2]}],
   ['Uffug-Vorhut',      {weak:[1.5, 1.5, 1.5, 1.5]}],
-  ['Uffug (Boss)',      {speed:0.6, hpMul:40, count:1, boss:true, weak:[1, 1, 1, 1]}]
+  ['Uffug (Boss)',      {speed:0.6, hpMul:40, count:1, boss:true, lives:3, weak:[1, 1, 1, 1]}]
 ].map(([name,o],k) => ({ name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:k+1,
   color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
 /* ===================== Ende Spieldaten ===================== */
 
-const COLS = 12, ROWS = 8, NSLOT = CONFIG.slotHours.length;
-const WP = [[-0.5,1.5],[9.5,1.5],[9.5,4.5],[2.5,4.5],[2.5,6.5],[12.5,6.5]];
-const SEG = []; let PATH_LEN = 0;
-for (let i = 0; i < WP.length - 1; i++) {
-  const [ax,ay] = WP[i], [bx,by] = WP[i+1], len = Math.hypot(bx-ax, by-ay);
-  SEG.push({ax,ay,bx,by,len,start:PATH_LEN}); PATH_LEN += len;
+const COLS = 12, ROWS = 8;
+// Jeder Spieler hat eine eigene Karte: Wegpunkte (Zellmitte = x,5) und zufälliges, aber festes Gelände
+const MAP_WPS = [
+  [[-0.5,1.5],[9.5,1.5],[9.5,4.5],[2.5,4.5],[2.5,6.5],[12.5,6.5]],
+  [[-0.5,6.5],[3.5,6.5],[3.5,1.5],[7.5,1.5],[7.5,6.5],[10.5,6.5],[10.5,2.5],[12.5,2.5]],
+  [[5.5,-0.5],[5.5,2.5],[1.5,2.5],[1.5,6.5],[6.5,6.5],[6.5,4.5],[10.5,4.5],[10.5,1.5],[12.5,1.5]],
+  [[-0.5,3.5],[3.5,3.5],[3.5,0.5],[10.5,0.5],[10.5,3.5],[6.5,3.5],[6.5,6.5],[12.5,6.5]]
+];
+function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function buildMap(k){
+  const wp = MAP_WPS[k], seg = []; let len = 0;
+  for (let i = 0; i < wp.length - 1; i++) { const [ax,ay] = wp[i], [bx,by] = wp[i+1], l = Math.hypot(bx-ax, by-ay); seg.push({ax,ay,bx,by,len:l,start:len}); len += l; }
+  const map = { k, wp, seg, len, cells:new Set(), terrain:[] };
+  for (let d = 0; d < len; d += 0.1) { const [x,y] = posAt(map, d); const cx = Math.floor(x), cy = Math.floor(y); if (cx>=0&&cx<COLS&&cy>=0&&cy<ROWS) map.cells.add(cx+','+cy); }
+  const r = rng(1000 + k * 77), blobs = [...Array(6)].map((_,j) => ({ x:r()*COLS, y:r()*ROWS, rad:1.2 + r()*1.6, t: j < 3 ? 1 : 2 }));
+  for (let y = 0; y < ROWS; y++) { map.terrain[y] = []; for (let x = 0; x < COLS; x++) {
+    let t = 0; for (const b of blobs) if (Math.hypot(x + .5 - b.x, y + .5 - b.y) < b.rad) t = b.t;
+    map.terrain[y][x] = t; } }
+  return map;
 }
-function posAt(d){
-  for (const s of SEG) if (d <= s.start + s.len) { const f = (d - s.start) / s.len; return [s.ax + (s.bx-s.ax)*f, s.ay + (s.by-s.ay)*f]; }
-  const s = SEG[SEG.length-1]; return [s.bx, s.by];
+function posAt(map, d){
+  for (const s of map.seg) if (d <= s.start + s.len) { const f = (d - s.start) / s.len; return [s.ax + (s.bx-s.ax)*f, s.ay + (s.by-s.ay)*f]; }
+  const s = map.seg[map.seg.length-1]; return [s.bx, s.by];
 }
-const PATH_CELLS = new Set();
-for (let d = 0; d < PATH_LEN; d += 0.1) { const [x,y] = posAt(d); const cx = Math.floor(x), cy = Math.floor(y); if (cx>=0&&cx<COLS&&cy>=0&&cy<ROWS) PATH_CELLS.add(cx+','+cy); }
+const MAPS = [0,1,2,3].map(buildMap);
+function buildCost(el, idx, lane, x, y){
+  const b = towerBase(el, idx); if (ELEMENTS[el].terrainFree) return b.cost;
+  return Math.round(b.cost * TERRAIN[MAPS[lane].terrain[y][x]].cost);
+}
+// Wellenzeiten und Wetter eines Spiels
+const slotsOf = g => (g && g.cfg.slots) || CONFIG.slotPlan[4];
+const isDark = h => h >= CONFIG.darkFrom;
+function pickWeather(r){ const tot = WEATHER.reduce((a,w) => a + w.w, 0); let x = r() * tot; for (let k = 0; k < WEATHER.length; k++) { x -= WEATHER[k].w; if (x < 0) return k; } return 0; }
+function weatherDay(g, day){
+  const r = rng(Math.floor((g.cfg.startAt || 1) / 1000) + day * 7919), out = [pickWeather(r)];
+  for (let k = 1; k < slotsOf(g).length; k++) out.push(r() < CONFIG.weatherChange ? pickWeather(r) : out[k-1]);
+  return out;
+}
+function weatherText(W){
+  const p = [], pct = v => (v > 1 ? '+' : '−') + Math.round(Math.abs(v - 1) * 100) + ' %';
+  ['Feuer','Eis','Schatten'].forEach((n,k) => { const e = W.el[k]; if (!e) return;
+    const q = []; if (e.dmg) q.push('Schaden ' + pct(e.dmg)); if (e.eff) q.push('Effekt ' + pct(e.eff)); if (e.dur) q.push('Dauer ' + pct(e.dur));
+    p.push(n + ' ' + q.join(', ')); });
+  if (W.range) p.push('Reichweite ' + pct(W.range));
+  if (W.burnDecay) p.push('Brennen erlischt schneller');
+  if (W.flySpeed) p.push('Fliegende ' + (W.flySpeed > 1 ? 'schneller' : 'langsamer'));
+  return p.join(' · ');
+}
 const hh = h => String(h).padStart(2,'0') + ':00';
 const $ = id => document.getElementById(id);
 
@@ -285,10 +351,10 @@ let replay = null, seenRun = null;
 
 // Turmwerte aus Element, Turmnummer (idx 0–7) und Stufe (lvl 1–6)
 function towerBase(el, idx){
-  const E = ELEMENTS[el], [name, role, range, rate, shots, share, eff, dur, splash] = E.towers[idx];
+  const E = ELEMENTS[el], [name, role, range, rate, shots, share, eff, dur, splash, opt = {}] = E.towers[idx];
   const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
   return { name, role, cost, range, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: splash || 0,
-    effect:E.effect, pierce:!!E.pierce, dayOnly:!!E.dayOnly, hitsFly: idx >= (E.flyFrom || 0), el };
+    effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, pierce:!!E.pierce, dayOnly:!!E.dayOnly, hitsFly: idx >= (E.flyFrom || 0), el };
 }
 function tdef(tw){
   const b = towerBase(tw.el, tw.idx), n = (tw.lvl || 1) - 1, U = CONFIG.upgrade;
@@ -296,7 +362,9 @@ function tdef(tw){
   let eff = b.eff * Math.pow(U.eff, n);
   if (b.effect === 'slow') eff = Math.min(0.85, eff);
   if (b.effect === 'curse') eff = Math.min(1.5, eff);
-  return { ...b, lvl:n + 1, dpsNow, dmg: dpsNow / b.rate / b.shots, eff,
+  if (b.effect === 'stun') eff = Math.min(4, eff);
+  const rate = b.rate * Math.pow(b.rateUp, n);
+  return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
     dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * n };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1));
@@ -310,9 +378,18 @@ const fmtFactor = f => f === 0 ? 'immun' : '×' + String(f).replace('.', ',');
 const FOREVER = 1e6;
 function makeSim(inp){
   const towers = (inp.towers || []).map(tw => ({ ...tw, cd:0 }));
-  return { towers, dark:!!inp.dark, queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), monsters:[], fx:[], leaked:[], earned:0, kills:0, spawnT:0 };
+  return { towers, dark:!!inp.dark, map:MAPS[inp.lane || 0], W:WEATHER[inp.weather || 0], queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), monsters:[], fx:[], leaked:[], earned:0, kills:0, spawnT:0 };
 }
 const simBusy = s => s.queue.length || s.monsters.length;
+function wdef(def, W){                    // Turmwerte unter dem aktuellen Wetter
+  if (!W || ELEMENTS[def.el].weatherproof) return def;
+  const e = W.el[def.el] || {}, d = { ...def };
+  if (e.dmg) { d.dpsNow *= e.dmg; d.dmg *= e.dmg; }
+  if (e.eff) { d.eff *= e.eff; if (d.effect === 'slow') d.eff = Math.min(0.85, d.eff); }
+  if (e.dur && d.dur !== DAY) d.dur *= e.dur;
+  if (W.range) d.range *= W.range;
+  return d;
+}
 function kill(s, m){ m.dead = true; s.earned += m.def.bounty; s.kills++; }
 function addFx(m, kind, val, t){           // stärkerer Wert gewinnt, längere Dauer gewinnt
   if (!(val > 0) || !(t > 0)) return;
@@ -331,7 +408,7 @@ function hit(s, m, def, dmg){
   if (def.effect === 'burn') addFx(m, 'burn', def.eff * def.dpsNow / def.shots * f, t);
   if (def.effect === 'slow' && !m.def.fly) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);
   if (def.effect === 'curse') addFx(m, 'curse', def.eff * f, t);
-  if (def.effect === 'stun') addFx(m, 'stun', 1, def.eff * f);
+  if (def.effect === 'stun' && !(m.def.fly && ELEMENTS[def.el].effect === 'slow')) addFx(m, 'stun', 1, Math.min(4, def.eff * f));
   if (m.hp <= 0) kill(s, m);
 }
 function step(s, dt){
@@ -339,25 +416,25 @@ function step(s, dt){
     s.monsters.push({ type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, d:0, fx: sp.fx || {}, hops:sp.hops }); s.spawnT = CONFIG.spawnGap; } }
   for (const m of s.monsters) {
     if (m.dead) continue;
-    for (const k in m.fx) m.fx[k].t -= dt;
+    for (const k in m.fx) m.fx[k].t -= dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1);
     const fx = m.fx, on = k => fx[k] && fx[k].t > 0;
     if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0)) * dt;
     if (m.hp <= 0) { kill(s, m); continue; }
     const slow = on('stun') ? 1 : on('slow') ? fx.slow.v : 0;
-    m.d += m.def.speed * (1 - slow) * dt;
-    if (m.d >= PATH_LEN) {
+    m.d += m.def.speed * (m.def.fly && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
+    if (m.d >= s.map.len) {
       m.dead = true;
       const keep = {}; for (const k in fx) if (fx[k].t > 0 && k !== 'stun') keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };
       s.leaked.push({ type:m.type, hops:m.hops + 1, hp:+m.hp.toFixed(2), fx:keep });
     }
   }
   for (const tw of s.towers) {
-    const def = tdef(tw);
+    const def = wdef(tdef(tw), s.W);
     if (def.dayOnly && s.dark) continue;
     tw.cd -= dt; if (tw.cd > 0) continue;
     const cx = tw.x + .5, cy = tw.y + .5;
     const inRange = s.monsters.filter(m => { if (m.dead || (m.def.fly && !def.hitsFly)) return false;
-      const [mx,my] = posAt(m.d); return Math.hypot(mx-cx, my-cy) <= def.range; });
+      const [mx,my] = posAt(s.map, m.d); return Math.hypot(mx-cx, my-cy) <= def.range; });
     if (!inRange.length) continue;
     inRange.sort((a,b) => b.d - a.d);
     tw.cd = 1 / def.rate;
@@ -368,12 +445,12 @@ function step(s, dt){
   s.monsters = s.monsters.filter(m => !m.dead);
 }
 function fire(s, tw, def, target){
-  const col = ELEMENTS[tw.el].color, [tx,ty] = posAt(target.d);
+  const col = ELEMENTS[tw.el].color, [tx,ty] = posAt(s.map, target.d);
   s.fx.push({ x1:tw.x+.5, y1:tw.y+.5, x2:tx, y2:ty, t:.12, col });
   hit(s, target, def, def.dmg);
   if (def.splash) {
     s.fx.push({ ring:def.splash, x2:tx, y2:ty, t:.18, col });
-    for (const o of s.monsters) { if (o === target || o.dead || (o.def.fly && !def.hitsFly)) continue; const [ox,oy] = posAt(o.d);
+    for (const o of s.monsters) { if (o === target || o.dead || (o.def.fly && !def.hitsFly)) continue; const [ox,oy] = posAt(s.map, o.d);
       if (Math.hypot(ox-tx, oy-ty) <= def.splash) hit(s, o, def, def.dmg * 0.6); }
   }
 }
@@ -385,33 +462,38 @@ const P_STATE = 'games/' + GAME_ID, P_LANES = 'games/' + GAME_ID + '/lanes';
 function waveSpecs(day){ const m = MONSTERS[day-1]; if (!m) return []; return [...Array(m.count || CONFIG.perWave)].map(() => ({ type:day-1, hops:0 })); }
 function incomingFor(g, i){ const n = g.cfg.players; return g.slot === 0 ? waveSpecs(g.day) : ((g.leaked || {})[(i-1+n)%n] || []); }
 // Gold = Start + Kopfgeld − Ausgaben − verschenkt + erhalten (nach Gebühr). Geschenke stehen im Feld des Schenkenden.
-function giftsIn(i){ let x = 0; L.forEach(l => (l && l.gifts || []).forEach(g => { if (g.to === i) x += Math.floor(g.amt * (1 - CONFIG.giftFee)); })); return x; }
-function giftsOut(i){ return ((L[i] && L[i].gifts) || []).reduce((a,g) => a + g.amt, 0); }
-function goldOf(i){ const l = L[i] || {}; return CONFIG.startGold + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i); }
-function laneOf(i){ return L[i] || { el:i % ELEMENTS.length, towers:[], spent:0 }; }
+function giftsIn(i){ let x = 0; L.forEach((_,k) => (laneOf(k).gifts || []).forEach(g => { if (g.to === i) x += Math.floor(g.amt * (1 - CONFIG.giftFee)); })); return x; }
+function giftsOut(i){ return (laneOf(i).gifts || []).reduce((a,g) => a + g.amt, 0); }
+function goldOf(i){ const l = laneOf(i); return CONFIG.startGold + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i); }
+// Ein Feld gehört nur zum aktuellen Spiel (gid). Alte Felder aus früheren Spielen zählen nicht – sonst wäre Minus-Gold möglich.
+const gidOf = g => g ? g.cfg.startAt : 0;
+function laneOf(i){ const l = L[i];
+  if (!l || (G && l.gid !== gidOf(G))) return { el:i % ELEMENTS.length, towers:[], spent:0, gifts:[], gid:gidOf(G) };
+  return l; }
 function newGameState(cfg){
   return { cfg, day:1, slot:0, passed:0, over:null, earned:Array(cfg.players).fill(0),
-    leaked:{}, log:[{ when:'Tag 1', text:`Neues Spiel mit ${cfg.players} Spielern. Um ${hh(CONFIG.slotHours[0])} kommen die ersten ${MONSTERS[0].name}.` }], lastRun:null };
+    leaked:{}, log:[{ when:'Tag 1', text:`Neues Spiel mit ${cfg.players} Spielern. Wellen um ${cfg.slots.map(hh).join(', ')}. Zuerst kommen ${MONSTERS[0].name}.` }], lastRun:null };
 }
 function resolveSlot(g, lanes){
   g = JSON.parse(JSON.stringify(g));
-  const n = g.cfg.players, time = hh(CONFIG.slotHours[g.slot]), next = CONFIG.slotHours[g.slot+1];
-  const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] || laneOf(i); return { el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:CONFIG.darkSlots.includes(g.slot) }; });
+  const n = g.cfg.players, SL = slotsOf(g), time = hh(SL[g.slot]), next = SL[g.slot+1], weather = weatherDay(g, g.day)[g.slot];
+  const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : { el:i % ELEMENTS.length, towers:[] };
+    return { lane:i, el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:isDark(SL[g.slot]), weather }; });
   const res = inputs.map(simulate);
   const leaked = {}; let broke = 0; const log = [];
   res.forEach((r,i) => {
     g.earned[i] = (g.earned[i]||0) + r.earned;
-    const pass = r.leaked.filter(m => m.hops < n), out = r.leaked.length - pass.length;
-    leaked[i] = pass; broke += out;
+    const pass = r.leaked.filter(m => m.hops < n), outs = r.leaked.filter(m => m.hops >= n), out = outs.length;
+    leaked[i] = pass; broke += outs.reduce((a,m) => a + (MONSTERS[m.type].lives || 1), 0);
     if (!inputs[i].incoming.length) return;
     log.push(`Spieler ${i+1}: ${r.kills} besiegt (+${r.earned} Gold), ${r.leaked.length} durch` +
       (pass.length ? ` → Spieler ${(i+1)%n+1}${next ? ' um ' + hh(next) : ''}` : '') + (out ? ' → ganz durchgebrochen' : ''));
   });
   g.leaked = leaked; g.passed += broke;
-  log.reverse().forEach(text => g.log.unshift({ when:`Tag ${g.day} ${time}`, text }));
+  log.reverse().forEach(text => g.log.unshift({ when:`Tag ${g.day} ${time} ${WEATHER[weather].sym}`, text }));
   g.lastRun = { id:`${g.day}-${g.slot}-${Date.now()}`, day:g.day, slot:g.slot, inputs };
   if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
-  else if (g.slot < NSLOT - 1) g.slot++;
+  else if (g.slot < SL.length - 1) g.slot++;
   else if (g.day >= CONFIG.days) { g.over = 'won'; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
   else { g.day++; g.slot = 0; g.leaked = {}; g.log.unshift({ when:`Tag ${g.day}`, text:`Neuer Tag. Um 10:00 kommen ${MONSTERS[g.day-1] ? MONSTERS[g.day-1].name : 'Monster'}.` }); }
   g.log = g.log.slice(0, 60);
@@ -419,8 +501,8 @@ function resolveSlot(g, lanes){
 }
 function dueTime(g){
   const c = g.cfg; if (c.timing === 'manual') return null;
-  if (c.timing === 'test') return c.startAt + ((g.day-1)*NSLOT + g.slot) * c.interval * 60000;
-  const d = new Date(c.day1); d.setDate(d.getDate() + g.day - 1); d.setHours(CONFIG.slotHours[g.slot], 0, 0, 0); return d.getTime();
+  if (c.timing === 'test') return c.startAt + (c.slots ? CONFIG.firstWaveDelay * 60000 : 0) + ((g.day-1)*slotsOf(g).length + g.slot) * c.interval * 60000;
+  const d = new Date(c.day1); d.setDate(d.getDate() + g.day - 1); d.setHours(slotsOf(g)[g.slot], 0, 0, 0); return d.getTime();
 }
 
 /* ---------- Speichern: online (geteilte Datenbank) oder lokal (dieses Gerät) ---------- */
@@ -430,7 +512,7 @@ let writeChain = Promise.resolve();
 function queueWrite(fn){ writeChain = writeChain.then(fn).catch(e => { console.warn(e); toast('Speichern hat nicht geklappt. Bitte Seite neu laden.'); }); return writeChain; }
 async function saveLane(i){
   if (MODE === 'local') return lsSet('ww2-local', { G, L });
-  const body = JSON.parse(JSON.stringify(L[i])); await queueWrite(() => DB.doc(P_LANES + '/p' + i).set(body));
+  const body = JSON.parse(JSON.stringify({ ...laneOf(i), gid:gidOf(G) })); await queueWrite(() => DB.doc(P_LANES + '/p' + i).set(body));
 }
 async function saveGame(){
   if (MODE === 'local') return lsSet('ww2-local', { G, L });
@@ -479,16 +561,17 @@ function loop(now){
 function endReplay(){ if (!replay) return; replay.sims.forEach(s => { let g = 0; while (simBusy(s) && g++ < 300000) step(s, 1/30); }); replay = null; render(); }
 
 /* ---------- Bauen ---------- */
-const mayBuild = i => !replay && G && !G.over && (MODE === 'local' || i === seat);
+// Bauen und Upgraden geht jederzeit, auch während eine Welle abgespielt wird (wirkt ab der nächsten Welle)
+const mayBuild = i => G && !G.over && (MODE === 'local' || i === seat);
 function clickCell(i, x, y){
-  if (!G || replay) return;
+  if (!G) return;
   if (MODE === 'local' && seat !== i) { seat = i; selTower = null; }
-  if (PATH_CELLS.has(x+','+y)) { selCell = null; return render(); }
+  if (MAPS[i].cells.has(x+','+y)) { selCell = null; return render(); }
   const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y);
   if (tw || selTower === null || !mayBuild(i)) { selCell = { i, x, y }; return render(); }
-  const def = towerBase(l.el, selTower);
-  if (goldOf(i) < def.cost) { toast('Zu wenig Gold.'); return; }
-  L[i] = { ...l, towers:[...l.towers, { x, y, el:l.el, idx:selTower, lvl:1, invested:def.cost }], spent:(l.spent||0) + def.cost };
+  const cost = buildCost(l.el, selTower, i, x, y);
+  if (goldOf(i) < cost) { toast(`Zu wenig Gold (hier ${cost}).`); return; }
+  L[i] = { ...l, towers:[...l.towers, { x, y, el:l.el, idx:selTower, lvl:1, invested:cost }], spent:(l.spent||0) + cost };
   selCell = { i, x, y }; render(); saveLane(i);
 }
 function sell(i, x, y){
@@ -566,10 +649,10 @@ function renderClock(){
   if (!G) return;
   const due = dueTime(G);
   $('sNext').textContent = G.over ? '–' : (due ? fmtLeft(due - Date.now()) : 'per Knopf');
-  $('sNextL').textContent = G.over ? 'Spiel vorbei' : `Welle ${hh(CONFIG.slotHours[G.slot])}`;
+  $('sNextL').textContent = G.over ? 'Spiel vorbei' : `Welle ${hh(slotsOf(G)[G.slot])}`;
 }
 function render(){
-  $('modeTag').textContent = MODE === 'online' ? 'Prototyp 2 · online' : (MODE === 'local' ? 'Prototyp 2 · ein Gerät' : 'verbinde …');
+  $('modeTag').textContent = MODE === 'online' ? 'Prototyp 3 · online' : (MODE === 'local' ? 'Prototyp 3 · ein Gerät' : 'verbinde …');
   const has = !!G;
   $('setup').hidden = has || !MODE; $('game').hidden = !has; $('stats').hidden = !has; $('palette').hidden = !has;
   if (!has) { renderSetup(); return; }
@@ -580,7 +663,10 @@ function render(){
   $('passBox').classList.toggle('bad', G.passed > CONFIG.lossLimit * 0.6);
   renderClock();
   const showSlot = replay ? replay.run.slot : G.slot;
-  $('clock').innerHTML = CONFIG.slotHours.map((h,k) => `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}"><b>${hh(h)}</b>${k===0?'Welle für alle':(k<n?'Leaks vom Nachbarn':'(nichts bei '+n+' Spielern)')}${CONFIG.darkSlots.includes(k)?' · dunkel':''}</div>`).join('');
+  const SL = slotsOf(G), wd = weatherDay(G, Math.min(G.day, CONFIG.days));
+  $('clock').style.gridTemplateColumns = `repeat(${SL.length}, minmax(0,1fr))`;
+  $('clock').innerHTML = SL.map((h,k) => { const W = WEATHER[wd[k]];
+    return `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}" title="${W.name}: ${weatherText(W)}"><b>${hh(h)} <span class="wx">${W.sym} ${W.name}</span></b>${k===0?'Welle für alle':'Leaks vom Nachbarn'}${isDark(h)?' · dunkel':''}</div>`; }).join('');
   const b = $('banner');
   b.hidden = !G.over; b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
   if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`;
@@ -590,7 +676,9 @@ function render(){
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1];
   $('today').innerHTML = G.over ? '' : `Heute: <b>${M.name}</b>${M.fly ? ' (fliegen)' : ''} · Leben ${num(monsterDef(M.round-1).hp)} · Rüstung ${num(monsterDef(M.round-1).armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
-    ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('');
+    ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
+    (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
+    `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;
   const others = [...Array(n)].map((_,k) => k).filter(k => k !== seat);
   $('gift').hidden = !mayBuild(seat) || !others.length;
   if (!$('gift').hidden && !$('gAmt')) {
@@ -607,7 +695,7 @@ function render(){
     $('gAmt').oninput();
   }
   const go = $('go');
-  go.textContent = replay ? 'Welle läuft …' : (MODE === 'local' ? `Welle ${hh(CONFIG.slotHours[G.slot])} starten` : `Welle ${hh(CONFIG.slotHours[G.slot])} jetzt auslösen`);
+  go.textContent = replay ? 'Welle läuft …' : (MODE === 'local' ? `Welle ${hh(SL[G.slot])} starten` : `Welle ${hh(SL[G.slot])} jetzt auslösen`);
   go.disabled = !!replay || !!G.over;
   $('replay').disabled = !!replay || !G.lastRun;
   $('skip').disabled = !replay;
@@ -617,7 +705,7 @@ function render(){
     $('lane'+i).classList.toggle('active', seat === i);
     const eb = $('el'+i); eb.textContent = E.name + (canSwitchEl(i) ? ' ⇄' : ''); eb.style.color = E.color; eb.disabled = !canSwitchEl(i);
     $('g'+i).textContent = goldOf(i);
-    if (!replay) { const inc = incomingFor(G, i); $('inc'+i).textContent = G.over ? '' : (inc.length ? `${hh(CONFIG.slotHours[G.slot])}: ${inc.length} ${MONSTERS[inc[0].type].name}` : `${hh(CONFIG.slotHours[G.slot])}: nichts im Anmarsch`); }
+    if (!replay) { const inc = incomingFor(G, i); $('inc'+i).textContent = G.over ? '' : (inc.length ? `${hh(SL[G.slot])}: ${inc.length} ${MONSTERS[inc[0].type].name}` : `${hh(SL[G.slot])}: nichts im Anmarsch`); }
     const info = $('info'+i);
     const tw = selCell && selCell.i === i ? l.towers.find(t => t.x === selCell.x && t.y === selCell.y) : null;
     if (tw) { const d = tdef(tw), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
@@ -626,7 +714,9 @@ function render(){
           `<button class="btn" id="sell${i}">Verkaufen (+${Math.floor((tw.invested || d.cost) * CONFIG.sellRefund)})</button>` : '');
       const sb = $('sell'+i); if (sb) sb.onclick = e => { e.stopPropagation(); sell(i, tw.x, tw.y); };
       const ub = $('up'+i); if (ub) ub.onclick = e => { e.stopPropagation(); upgrade(i, tw.x, tw.y); };
-    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. So oft, wie das Gold reicht.' : '';
+    } else if (selCell && selCell.i === i) { const T = TERRAIN[MAPS[i].terrain[selCell.y][selCell.x]];
+      info.textContent = `${T.name}: Bauen ${T.cost === 1 ? 'zum normalen Preis' : '×' + String(T.cost).replace('.', ',')}${ELEMENTS[l.el].terrainFree ? ' (Stein zahlt keinen Aufschlag)' : ''}.` + (selTower === null && mayBuild(i) ? ' Erst unten einen Turm wählen.' : '');
+    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. Wald ×1,5 und Sumpf ×2 kosten mehr.' : '';
   }
   updateLaneHeads();
   const l = laneOf(seat), E = ELEMENTS[l.el], gold = goldOf(seat), can = mayBuild(seat);
@@ -654,18 +744,21 @@ function draw(i, cv){
   const dpr = window.devicePixelRatio || 1, W = cv.clientWidth; if (!W) return;
   const cs = W / COLS, H = cs * ROWS;
   if (cv.width !== Math.round(W*dpr)) { cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); cv.style.height = H + 'px'; }
-  const c = cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+  const c = cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); const map = MAPS[i];
   const css = getComputedStyle(document.documentElement), v = n => css.getPropertyValue(n).trim();
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
-    const road = PATH_CELLS.has(x+','+y);
-    c.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : ((x+y)%2 ? v('--grass') : v('--grass2'));
+    const road = map.cells.has(x+','+y), T = TERRAIN[map.terrain[y][x]];
+    c.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : T.col[(x+y)%2];
     c.fillRect(x*cs, y*cs, cs, cs);
+    if (!road && map.terrain[y][x] === 1) { c.fillStyle = '#2f4a2c'; for (const [dx,dy] of [[.3,.35],[.68,.3],[.5,.7]]) { c.beginPath(); c.arc((x+dx)*cs, (y+dy)*cs, cs*.12, 0, Math.PI*2); c.fill(); } }
+    if (!road && map.terrain[y][x] === 2) { c.strokeStyle = '#4a6260'; c.lineWidth = 1; for (const dy of [.35,.65]) { c.beginPath(); c.moveTo((x+.2)*cs, (y+dy)*cs); c.lineTo((x+.8)*cs, (y+dy)*cs); c.stroke(); } }
   }
-  c.fillStyle = v('--danger'); c.fillRect(0, 1*cs+cs*.2, 3, cs*.6);
-  c.fillStyle = v('--accent'); c.fillRect(W-3, 6*cs+cs*.2, 3, cs*.6);
+  const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
+  c.fillStyle = v('--danger'); c.beginPath(); c.arc(ex*cs, ey*cs, cs*.18, 0, Math.PI*2); c.fill();
+  c.fillStyle = v('--accent'); c.beginPath(); c.arc(ox*cs, oy*cs, cs*.18, 0, Math.PI*2); c.fill();
   const s = replay && replay.sims[i];
-  const towers = s ? s.towers : laneOf(i).towers;
-  if (!s && selCell && selCell.i === i) {
+  const towers = laneOf(i).towers;
+  if (selCell && selCell.i === i) {
     const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
     c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.strokeRect(selCell.x*cs+1, selCell.y*cs+1, cs-2, cs-2);
     if (tw) { const r = tdef(tw).range;
@@ -680,7 +773,7 @@ function draw(i, cv){
   }
   if (!s) return;
   for (const m of s.monsters) {
-    const [x,y] = posAt(m.d), r = m.def.size*cs;
+    const [x,y] = posAt(map, m.d), r = m.def.size*cs;
     c.fillStyle = m.def.color; c.beginPath(); c.arc(x*cs, y*cs, r, 0, Math.PI*2); c.fill();
     const rings = [['slow','#9fdcf5'],['burn','#ff9a4a'],['curse','#b48cff'],['stun','#ffffff']].filter(([k]) => m.fx[k] && m.fx[k].t > 0);
     rings.forEach(([,col], j) => { c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); c.arc(x*cs, y*cs, r + 1.5 + j*2.5, 0, Math.PI*2); c.stroke(); });
@@ -699,13 +792,13 @@ function draw(i, cv){
 /* ---------- Start ---------- */
 async function newGame(){
   const players = +$('fPlayers').value, timing = MODE === 'online' ? $('fTiming').value : 'manual';
-  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now() };
+  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), slots: CONFIG.slotPlan[players] };
   if (timing === 'real') { const d = new Date(); d.setDate(d.getDate() + (+$('fStart').value)); d.setHours(0,0,0,0); cfg.day1 = d.getTime(); }
   G = newGameState(cfg);
-  L = [...Array(players)].map((_,i) => ({ el:i % ELEMENTS.length, towers:[], spent:0 }));
+  L = [...Array(players)].map((_,i) => ({ el:i % ELEMENTS.length, towers:[], spent:0, gifts:[], gid:cfg.startAt }));
   seat = 0; selTower = null; selCell = null; replay = null; lanesBuilt = 0;
   if (MODE === 'local') lsSet('ww2-local', { G, L });
-  else { await queueWrite(async () => { for (let i = 0; i < 4; i++) await DB.doc(P_LANES + '/p' + i).set(L[i] || { el:i, towers:[], spent:0 }); await DB.doc(P_STATE).set(JSON.parse(JSON.stringify(G))); }); }
+  else { await queueWrite(async () => { for (let i = 0; i < 4; i++) await DB.doc(P_LANES + '/p' + i).set(L[i] || { el:i, towers:[], spent:0, gifts:[], gid:cfg.startAt }); await DB.doc(P_STATE).set(JSON.parse(JSON.stringify(G))); }); }
   render();
 }
 function onGame(g){
