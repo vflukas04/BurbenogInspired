@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -703,7 +703,7 @@ function loop(now){
   // feste Schritte wie bei der Auswertung, sonst weicht die Wiedergabe ab
   replay.acc += Math.min(0.1, (now - replay.last) / 1000) * speed; replay.last = now;
   while (replay.acc >= DT) { stepWorld(replay.w, DT); replay.acc -= DT; }
-  drawAll(); updateLaneHeads();
+  try { drawAll(); updateLaneHeads(); } catch(e) { console.warn(e); }   // Zeichenfehler dürfen die Wiedergabe nicht anhalten
   if (!worldBusy(replay.w)) { replay = null; render(); return; }
   requestAnimationFrame(loop);
 }
@@ -1087,6 +1087,7 @@ function drawTower(c, tw, px, py, cs, aim, glow){
 function drawShot(c, p, cs, time){
   const dx = p.tx - p.x, dy = p.ty - p.y, dir = Math.atan2(dy, dx);
   const tot = Math.hypot(p.tx - p.x0, p.ty - p.y0) || 1, left = Math.hypot(dx, dy);
+  const k = cs * GRID * .7;                 // Geschosse in alter Feldgröße
   let x = p.x*cs, y = p.y*cs, h = 0;
   if (p.lob) {                              // Wurf: Bogen nach oben, Schatten am Boden
     const tAll = Math.hypot(p.x - p.x0, p.y - p.y0) + left, prog = tAll ? 1 - left / tAll : 1;
@@ -1094,7 +1095,7 @@ function drawShot(c, p, cs, time){
     c.fillStyle = '#0006'; c.beginPath(); c.ellipse(x, y, k*.12, k*.06, 0, 0, Math.PI*2); c.fill();
   }
   y -= h;
-  const def = p.def, k = cs * GRID * .7, sz = k * (p.lob ? .42 : .3);   // Geschosse in alter Feldgröße
+  const def = p.def, sz = k * (p.lob ? .42 : .3);
   if (p.el === 0 && def.air) {               // Brandpfeil: Pfeil mit Glut
     c.save(); c.translate(x, y); c.rotate(dir); c.strokeStyle = '#f3d9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(-k*.22, 0); c.lineTo(k*.12, 0); c.stroke();
     c.fillStyle = '#ff9a4a'; c.beginPath(); c.moveTo(k*.18, 0); c.lineTo(k*.08, -k*.05); c.lineTo(k*.08, k*.05); c.fill(); c.restore(); return;
