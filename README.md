@@ -2,7 +2,7 @@
 
 Kooperatives Tower-Defense über mehrere Tage für 2–4 Spieler. Jeden Tag kommt um 10 Uhr eine Welle bei allen gleichzeitig. Was einer durchlässt, läuft um 13, 16 und 19 Uhr beim Nachbarn weiter. Sind mehr als 30 Monster bei allen durchgebrochen, ist das Spiel verloren.
 
-Alles steckt in einer Datei: `index.html`.
+Das Spiel steckt in `index.html`, die Grafiken liegen in `assets/`.
 
 ## Einmal einrichten (ca. 15 Minuten)
 
@@ -23,7 +23,7 @@ Alles steckt in einer Datei: `index.html`.
 
 ### 2. Link zum Teilen: GitHub Pages (kostenlos)
 1. Auf https://github.com ein Konto anlegen und ein neues **öffentliches** Repository anlegen, `BurbenogInspired`.
-2. **Add file → Upload files**: `index.html` (und diese README) hochladen, „Commit changes“.
+2. **Add file → Upload files**: `index.html`, den Ordner `assets` (und diese README) hochladen, „Commit changes“.
 3. **Settings → Pages**: Source „Deploy from a branch“, Branch `main`, Ordner `/ (root)`, speichern.
 4. Nach 1–2 Minuten läuft das Spiel unter `https://vflukas04.github.io/BurbenogInspired/`. Diesen Link per WhatsApp verschicken.
 
@@ -44,4 +44,9 @@ Link im Handy-Browser öffnen, dann:
 Danach startet das Spiel wie eine App mit eigenem Symbol, ohne Browserleiste.
 
 ## Inhalte ändern
-Im Block **SPIELDATEN** oben im Skript stehen Elemente, Türme, Monster und Wellen. Effekte: `burn`, `slow`, `pierce`, `splash`, `chain`, `gold`, `aura`.
+Im Block **SPIELDATEN** oben im Skript stehen Elemente, Türme, Monster und Wellen. Die Turm-Optionen (`fly`, `air`, `chance`, `nova`, `light`) sind dort direkt über `ELEMENTS` erklärt.
+
+Balance prüfen: `node tools/balance.js schnell` (alles), `node tools/balance.js bedarf` (Stärke je Element und Runde) oder `node tools/balance.js elemente`.
+
+## Grafik und Lizenz
+Türme, Geschosse, Effekte und Gelände-Deko stammen aus dem Paket **„Tower Defense (top-down)“ von Kenney** (www.kenney.nl), Lizenz **CC0 / Public Domain** (siehe `assets/kenney/License.txt`). Danke, Kenney! Die Monster sind vorerst Emojis.
