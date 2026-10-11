@@ -30,6 +30,11 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] „Bereit“-Knopf online: Wenn alle bereit sind, startet die nächste Welle. „Jetzt auslösen“ bleibt als „Sofort auslösen“.
 - [x] Frostnova (Eis Turm 5) friert nur mit 45–65 % Wahrscheinlichkeit (je Stufe +4 %).
 
+### 11.10. abends (Stein wirkt zu schwach, Faktoren zu extrem)
+- [x] Flächenschaden weniger extrem: Rand 70 % statt 40 %, Stein-Würfe schneller (5,5 statt 4,5 Felder/s), treffen also öfter mittig. Hinweis: Die Stein-Türme haben seit der Balance nur noch halben Grundschaden – falls Stein weiter schwach wirkt, dort ansetzen (z. B. ×1,25).
+- [x] Monster-Faktoren auf 0,6–1,75 gestaucht, „immun“ = 50 % statt 25 % Schaden.
+- [x] Irrlicht: Wirkt nicht mehr auf Nachbartürme. Nachts treffen Schatten-Türme nur Monster im Lichtkreis. Der Wettermalus gilt jetzt auch im Licht.
+
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [x] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.

@@ -196,7 +196,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-11e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-11f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -221,7 +221,8 @@ const CONFIG = {
   giftFee: 0.10, giftStep: 10,
   weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt
   spawnGap: 0.9,            // Sekunden zwischen zwei Monstern (früher 0,5: Flächenschaden war zu stark)
-  splashEdge: 0.4,          // Flächenschaden fällt nach außen ab: Mitte 100 %, Rand 40 %
+  immune: 0.5,              // Schadensfaktor bei weak = 0 (war 0,25)
+  splashEdge: 0.7,          // Flächenschaden fällt nach außen ab: Mitte 100 %, Rand 70 % (11.10. abends: war 40 %)
   shotSpeed: 9, lobSpeed: 6.5,  // Geschosse in Feldern/s: gezielte fliegen dem Ziel nach, Flächen-Geschosse (Wurf) fliegen auf den Punkt, wo das Ziel beim Abschuss war
   stunMax: 5,               // Betäubung höchstens 5 s
   bountyMul: 0.8,           // Kopfgeld × 0,8
@@ -302,7 +303,7 @@ const ELEMENTS = [
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
-  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · braucht Licht (Irrlicht) im Dunkeln', effect:'curse', pierce:true, dayOnly:true, towers:[
+  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts nur Monster im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.0, 0.1, 4],
     ['Irrlicht',     'Licht',     1.8, 1,   1, 0.5, 0.1, 3, 0, {light:2.2}],
     ['Nachtauge',    'Reichweite',3.8, 0.6, 1, 1.2, 0.15, 5],
@@ -311,7 +312,7 @@ const ELEMENTS = [
     ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
     ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
     ['Ewige Nacht',  'Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
-  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 4, 6, 8', effect:'stun', noFly:true, lobSpeed:4.5, weatherproof:true, terrainFree:true, towers:[
+  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 4, 6, 8', effect:'stun', noFly:true, lobSpeed:5.5, weatherproof:true, terrainFree:true, towers:[
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.7, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.7, 0,   0, 0.9],
     ['Felsbrocken',  'Fläche',    2.5, 0.25,1, 0.85, 0,   0, 1.1],
@@ -322,28 +323,29 @@ const ELEMENTS = [
     ['Bergkönig',    'Effekt',    3.2, 0.2, 2, 0.5, 3.0, 0, 2.5, {fly:true, chance:0.25, chanceUp:0.03}] ]}
 ];
 /* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
-   (2 = doppelt, 0,5 = halb, 0 = immun; wirkt auch auf die Effektstärke). fly = fliegt, hpMul = Extra-Leben,
+   Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und kein Effekt-Brennen.
+   Wirkt auch auf die Effektstärke. fly = fliegt, hpMul = Extra-Leben,
    lives = so viele „Durchbrüche“ zählt das Monster (Boss: 3) */
 const MONSTERS = [
-  ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1.5, 1,   1,   1  ]}],
-  ['Kellerasseln',      {emo:'🪲', speed:0.9, weak:[0.5, 1,   1.5, 2  ]}],
-  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[3, 0.5, 1, 0.5]}],
-  ['Ohrenkneifer',      {emo:'🦗', weak:[1,   2,   0.5, 1  ]}],
-  ['Mäuse',             {emo:'🐭', speed:1.4, weak:[1,   0.5, 1,   2  ]}],
-  ['Ratten',            {emo:'🐀', speed:1.3, weak:[2,   1,   0.5, 1  ]}],
-  ['Kleine Hunde',      {emo:'🐕', speed:1.5, weak:[1,   2,   1,   0.5]}],
-  ['Katzen',            {emo:'🐈', speed:1.6, weak:[1,   3,   0.25,1  ]}],
-  ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[2, 1, 1, 0.5]}],
-  ['Füchse',            {emo:'🦊', speed:1.4, weak:[1,   0.5, 0.5, 2  ]}],
-  ['Habichte',          {emo:'🦅', fly:true, speed:1.8, weak:[1, 1, 2, 0.5]}],
-  ['Dachse',            {emo:'🦡', speed:0.9, hpMul:1.3, weak:[2, 1, 1.5, 0.5]}],
-  ['Oktopusse',         {emo:'🐙', water:true, speed:0.8, weak:[0, 3, 1, 1]}],
-  ['Wildschweine',      {emo:'🐗', speed:1.2, hpMul:1.3, weak:[1, 0.5, 2, 1]}],
-  ['Schäferhunde',      {emo:'🐕‍🦺', speed:1.6, weak:[2,   1,   1,   0.5]}],
-  ['Besoffene Penner',  {emo:'🍺', speed:0.7, hpMul:1.5, weak:[0.5, 2, 1.5, 1]}],
-  ['Wütende Partnerin', {emo:'😠', speed:1.3, weak:[0.5, 3,   0.25,1  ]}],
-  ['Wütende Nachbarn',  {emo:'😡', speed:1.1, hpMul:1.2, weak:[1, 1.5, 0.5, 1]}],
-  ['Uffug-Vorhaut',     {emo:'👺', fly:true, weak:[1.5, 1.5, 1.5, 1.5]}],
+  ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1.25, 1, 1, 1]}],
+  ['Kellerasseln',      {emo:'🪲', speed:0.9, weak:[0.75, 1, 1.25, 1.5]}],
+  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.75, 0.75, 1, 0.75]}],
+  ['Ohrenkneifer',      {emo:'🦗', weak:[1, 1.5, 0.75, 1]}],
+  ['Mäuse',             {emo:'🐭', speed:1.4, weak:[1, 0.75, 1, 1.5]}],
+  ['Ratten',            {emo:'🐀', speed:1.3, weak:[1.5, 1, 0.75, 1]}],
+  ['Kleine Hunde',      {emo:'🐕', speed:1.5, weak:[1, 1.5, 1, 0.75]}],
+  ['Katzen',            {emo:'🐈', speed:1.6, weak:[1, 1.75, 0.6, 1]}],
+  ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1.5, 1, 1, 0.75]}],
+  ['Füchse',            {emo:'🦊', speed:1.4, weak:[1, 0.75, 0.75, 1.5]}],
+  ['Habichte',          {emo:'🦅', fly:true, speed:1.8, weak:[1, 1, 1.5, 0.75]}],
+  ['Dachse',            {emo:'🦡', speed:0.9, hpMul:1.3, weak:[1.5, 1, 1.25, 0.75]}],
+  ['Oktopusse',         {emo:'🐙', water:true, speed:0.8, weak:[0, 1.75, 1, 1]}],
+  ['Wildschweine',      {emo:'🐗', speed:1.2, hpMul:1.3, weak:[1, 0.75, 1.5, 1]}],
+  ['Schäferhunde',      {emo:'🐕‍🦺', speed:1.6, weak:[1.5, 1, 1, 0.75]}],
+  ['Besoffene Penner',  {emo:'🍺', speed:0.7, hpMul:1.5, weak:[0.75, 1.5, 1.25, 1]}],
+  ['Wütende Partnerin', {emo:'😠', speed:1.3, weak:[0.75, 1.75, 0.6, 1]}],
+  ['Wütende Nachbarn',  {emo:'😡', speed:1.1, hpMul:1.2, weak:[1, 1.25, 0.75, 1]}],
+  ['Uffug-Vorhaut',     {emo:'👺', fly:true, weak:[1.25, 1.25, 1.25, 1.25]}],
   ['Uffug (Boss)',      {emo:'👹', speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]
 ].map(([name,o],k) => ({ name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:k+1,
   color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
@@ -434,7 +436,7 @@ const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CO
 function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
   return { ...M, hp: CONFIG.baseHp * Math.pow(CONFIG.hpGrowth, r - 1) * M.hpMul * (CONFIG.playerHp[players || 2] || 1),
     armor: CONFIG.armorPerRound * (r - 1) * Math.pow(CONFIG.armorGrowth, r - 1), bounty: bountyFor(r) }; }
-const fmtFactor = f => f === 0 ? '×0,25 · brennt nicht' : '×' + String(f).replace('.', ',');
+const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · brennt nicht' : '×' + String(f).replace('.', ',');
 
 /* ---------- Simulation (deterministisch) ----------
    Einziger Zufall: Betäubungschance, gewürfelt mit festem Seed (Spielstart, Tag, Welle, Spieler) –
@@ -447,13 +449,14 @@ function isLit(tw, towers){
 }
 function makeSim(inp){
   const res = new Set(inp.res || []), W = WEATHER[inp.weather || 0], raw = inp.towers || [];
-  const towers = raw.map(tw => { const lit = ELEMENTS[tw.el].dayOnly && isLit(tw, raw);
-    return { ...tw, cd:0, lit, def: wdef(tdef(tw), W, res, lit) }; });
+  const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw), W, res) }));
+  // Lichtkreise der Irrlichter: Im Dunkeln treffen Schatten-Türme nur Monster, die gerade darin sind
+  const lights = towers.filter(t => t.def.light).map(t => ({ x:t.x + .5, y:t.y + .5, r:t.def.light }));
   return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, rand:rng(inp.seed || 1),
-    queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), monsters:[], shots:[], fx:[], leaked:[], earned:0, kills:0, spawnT:0, t:0 };
+    queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, kills:0, spawnT:0, t:0 };
 }
 const simBusy = s => s.queue.length || s.monsters.length || s.shots.length;
-function wdef(def, W, res, lit){          // Turmwerte mit Forschung und unter dem aktuellen Wetter
+function wdef(def, W, res){          // Turmwerte mit Forschung und unter dem aktuellen Wetter
   let d = { ...def };
   if (res) {
     if (res.has('el' + def.el)) { d.dpsNow *= 1.25; d.dmg *= 1.25; }
@@ -461,7 +464,7 @@ function wdef(def, W, res, lit){          // Turmwerte mit Forschung und unter d
     if (res.has('rng')) d.range += 0.3;
   }
   if (!W || ELEMENTS[def.el].weatherproof) return d;
-  const e = W.el[def.el] || {}, ok = v => lit ? Math.max(1, v) : v;   // Licht hebt nur Nachteile auf
+  const e = W.el[def.el] || {}, ok = v => v;
   if (e.dmg) { d.dpsNow *= ok(e.dmg); d.dmg *= ok(e.dmg); }
   if (e.eff) { d.eff *= ok(e.eff); if (d.effect === 'slow') d.eff = Math.min(0.85, d.eff); }
   if (e.dur && d.dur !== DAY) d.dur *= ok(e.dur);
@@ -477,7 +480,7 @@ function addFx(m, kind, val, t){           // stärkerer Wert gewinnt, längere 
 }
 function hit(s, m, def, dmg){
   if (m.dead) return;
-  const w = m.def.weak[def.el], f = w || 0.25;                // „immun“ = nur 25 % Schaden und kein Brennen
+  const w = m.def.weak[def.el], f = w || CONFIG.immune;       // „immun“ = weniger Schaden und kein Brennen
   const vuln = 1 + (m.fx.curse && m.fx.curse.t > 0 ? m.fx.curse.v : 0);
   const armor = def.pierce ? 0 : m.def.armor;
   const raw = dmg * f * vuln;
@@ -511,10 +514,12 @@ function step(s, dt){
   }
   for (const tw of s.towers) {
     const def = tw.def;
-    if (def.dayOnly && s.dark && !tw.lit) continue;
+    const night = def.dayOnly && s.dark;
+    if (night && !s.lights.length) continue;
     tw.cd -= dt; if (tw.cd > 0) continue;
     const cx = tw.x + .5, cy = tw.y + .5, reach = def.nova ? def.splash : def.range;
-    const inRange = s.monsters.filter(m => !m.dead && canHit(def, m) && Math.hypot(m.x-cx, m.y-cy) <= reach);
+    const inRange = s.monsters.filter(m => !m.dead && canHit(def, m) && Math.hypot(m.x-cx, m.y-cy) <= reach &&
+      (!night || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));
     if (!inRange.length) continue;
     tw.cd = 1 / def.rate;
     if (def.nova) { nova(s, tw, def); continue; }
@@ -742,7 +747,7 @@ function fxText(d){
     if (d.effect === 'stun') p.push(`${d.chance ? Math.round(d.chance*100) + ' %: ' : ''}${d.el === 1 ? 'friert' : 'betäubt'} ${num(d.eff)} s${d.el === 1 ? ' ein' : ''}`);
   }
   if (d.splash) p.push(d.nova ? `Umkreis ${num(d.splash)}` : 'Fläche');
-  if (d.light) p.push(`Licht ${num(d.light)}: Schatten-Türme daneben schießen auch im Dunkeln`);
+  if (d.light) p.push(`Lichtkreis ${num(d.light)}: nachts treffen Schatten-Türme Monster darin`);
   if (d.air) p.push('nur Fliegende');
   else if (!d.hitsFly) p.push('keine Fliegenden');
   return p.join(' · ');
@@ -1115,7 +1120,7 @@ function draw(i, cv){
   if (s) for (const f of s.fx) if (f.kind === 'boom' || f.kind === 'quake' || f.kind === 'nova') drawFx(c, f, cs, time);
   for (const tw of towers) {
     const st = s && s.towers.find(o => o.x === tw.x && o.y === tw.y), fl = s && s.fx.find(f => f.kind === 'flash' && f.tw === st);
-    const dark = s && s.dark && st && st.def.dayOnly && !st.lit;
+    const dark = s && s.dark && st && st.def.dayOnly && !s.lights.length;
     if (dark) c.globalAlpha = .45;
     drawTower(c, tw, tw.x*cs, tw.y*cs, cs, st ? st.aim : (tw.x + tw.y) * .7, fl ? fl.t / fl.t0 : 0);
     c.globalAlpha = 1;
