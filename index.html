@@ -119,6 +119,10 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
 .dlg.lost{border-color:var(--danger);box-shadow:0 0 0 2px var(--danger),0 10px 40px #000c}
 .dlg dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.92rem}
 .dlg dt{color:var(--muted)} .dlg dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.stat-t{width:100%;border-collapse:collapse;font-size:.85rem}
+.stat-t th,.stat-t td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+.stat-t th{color:var(--muted);font-weight:500}
+.stat-t td{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .dlg .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 .ibtn{border:1px solid var(--line);background:var(--bg);border-radius:999px;width:24px;height:24px;padding:0;font-size:.8rem;line-height:22px;margin-left:4px;color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -143,6 +147,9 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
       <label for="fTiming" id="lTiming">Wellen kommen<select id="fTiming">
         <option value="test">Test: alle paar Minuten</option>
         <option value="real">Echt: 10, 13, 16, 19 Uhr</option></select></label>
+      <label for="fLive">Spielart<select id="fLive">
+        <option value="0">Uhrzeiten: Leaks kommen zur nächsten Welle</option>
+        <option value="1">Live: Leaks laufen sofort beim Nachbarn weiter</option></select></label>
     </div>
     <div class="row" id="rowTest"><label for="fInterval">Abstand zwischen Wellen (Minuten)<input id="fInterval" type="number" min="1" max="120" value="3"></label></div>
     <div class="row" id="rowReal" hidden><label for="fStart">Tag 1 ist<select id="fStart"><option value="0">heute</option><option value="1" selected>morgen</option></select></label></div>
@@ -196,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-11g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -204,13 +211,15 @@ const VERSION = "2026-10-11g";  // bei JEDER Änderung hochzählen: alte Handys 
 const CONFIG = {
   days: 20,                 // Runden = Tage, jeden Tag ein neues Monster
   lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
-  startGold: 15,
+  startGold: 30,
   perWave: 20,              // Monster pro Welle (Boss: 1)
-  baseHp: 3.75,             // Leben Runde 1 (bei 2 Spielern); 11.10.: +25 % (war 3), damit man sich helfen muss
-  playerHp: { 2:1, 3:2, 4:3.5 },  // Monsterleben je Spielerzahl
-  hpGrowth: 1.5,            // Leben × 1,5 pro Runde
-  armorPerRound: 0.2,       // Rüstung ab Runde 2: 0,2 × (Runde − 1) …
-  armorGrowth: 1.3,         // … × 1,3 pro Runde, damit Rüstung auch später zählt (Vorschlag)
+  /* Leben: baseHp × Runde^hpExp × hpMul × Spielerfaktor. Ausgelegt auf 40 Runden (Test: 20).
+     Richtwert (11.10. nachts): Mit den Anfangstürmen schafft ein Spieler in den ersten Runden
+     ca. 12 von 20 (2 Spieler), 8 (3 Spieler), 6 (4 Spieler). Kalibriert mit tools/kalibrieren.js. */
+  baseHp: 12.9,
+  playerHp: { 2:1, 3:1.25, 4:1.5 },
+  hpExp: 1.5,               // Runde 2: ×2,8 · Runde 5: ×11 · Runde 10: ×32 · Runde 20: ×89 · Runde 40: ×253
+  armorFrac: 0.004,         // Rüstung = 0,004 × (Runde − 1) × Grundleben der Runde (Runde 20: ca. 8 % der Leben)
   // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
   slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
   darkFrom: 19,             // ab 19 Uhr ist es dunkel: Schatten-Türme schießen nicht
@@ -225,7 +234,6 @@ const CONFIG = {
   splashEdge: 0.7,          // Flächenschaden fällt nach außen ab: Mitte 100 %, Rand 70 % (11.10. abends: war 40 %)
   shotSpeed: 9, lobSpeed: 6.5,  // Geschosse in Feldern/s: gezielte fliegen dem Ziel nach, Flächen-Geschosse (Wurf) fliegen auf den Punkt, wo das Ziel beim Abschuss war
   stunMax: 5,               // Betäubung höchstens 5 s
-  bountyMul: 0.8,           // Kopfgeld × 0,8
   sellRefund: 0.5
 };
 const DAY = 'Tag';
@@ -235,7 +243,7 @@ const TERRAIN = [
   { name:'Wald',  extra:10, col:['#17271a','#1b2e1e'] },
   { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] }
 ];
-const TERRAIN_MAX = 10;     // höchstens 10 Wald- und 10 Sumpffelder, weniger bei kürzerem Weg
+const TERRAIN_MAX = 40;     // Wald- und Sumpffelder je Karte (feines Raster), mehr bei längerem Weg
 // Forschung: drei Gebäude, alle zahlen gemeinsam aus der Gemeinschaftskasse (ohne Gebühr)
 const RESEARCH = [
   { id:'t5',   house:'Bauhütte',     name:'Türme 5–6 freischalten', cost:150 },
@@ -263,13 +271,15 @@ const WEATHER = [
   { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.5, eff:1.3}, 1:{eff:0.7, dur:0.5} } },
   { name:'Wind',     sym:'≋', w:1.5, el:{ 0:{dmg:0.9, eff:1.4} }, flySpeed:1.4 }
 ];          // Effektdauer „ganzer Tag“: hält über alle vier Wellen
-// Kopfgeld: Runde 1 = 2 Gold, dann +1 pro Runde, ab Runde 5 +2, ab Runde 10 +3, ab Runde 15 +4, alles × bountyMul
+// Kopfgeld je Monster, flach: Runde 1–5: 2, 6–10: 3, 11–15: 5, 16–20: 8, 21–25: 12, 26–30: 17, 31–35: 23, 36–40: 30
 // 11.10.: insgesamt × 0,8 (gerundet), damit das Spiel nicht zu leicht wird
-function bountyFor(r){ let b = 2; for (let k = 2; k <= r; k++) b += k >= 15 ? 4 : k >= 10 ? 3 : k >= 5 ? 2 : 1; return Math.max(2, Math.round(b * CONFIG.bountyMul)); }
+const BOUNTY = [2, 3, 5, 8, 12, 17, 23, 30];
+function bountyFor(r){ return BOUNTY[Math.min(BOUNTY.length - 1, Math.floor((r - 1) / 5))]; }
 
 // Turm 1–8: Preis und „Kraft“ (Gesamtschaden/s bei Anteil 1,0)
-const TOWER_COST  = [5, 12, 29, 69, 166, 398, 955, 2290];
-const TOWER_POWER = [1, 2.5, 6.25, 15.6, 39, 98, 244, 610];
+// Flache Baukurve (11.10. nachts): Turm 8 erreicht man in 20 Runden praktisch nicht, erst im 40-Runden-Spiel.
+const TOWER_COST  = [10, 45, 70, 120, 200, 350, 650, 1200];
+const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold steigt leicht mit dem Preis
 /* Jeder Turm: [Name, Rolle, Reichweite, Schüsse/s, Geschosse, Schadensanteil, Effektstärke, Effektdauer (s oder DAY), Fläche, Optionen]
    Rolle: Schaden · Effekt · Reichweite · Fläche · Luftabwehr · Licht (nur Anzeige)
    Effekt je Element:
@@ -285,8 +295,8 @@ const TOWER_POWER = [1, 2.5, 6.25, 15.6, 39, 98, 244, 610];
      nova     wirkt sofort im Umkreis „Fläche“ um den Turm, ohne Geschoss
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
-  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:3}, towers:[
-    ['Funke',        'Schaden',   2.0, 1,   1, 0.3, 0.17, 3],   // 3 Gold, dafür schwächer (11.10.)
+  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:8}, towers:[
+    ['Funke',        'Schaden',   2.0, 1,   1, 0.3, 0.17, 3],   // etwas billiger (8 statt 10), dafür schwächer
     ['Glutbecken',   'Effekt',    1.6, 1,   2, 0.4, 0.43, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 0.8, 0.14, 2],
     ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.36, 6, 0, {air:true}],
@@ -351,13 +361,15 @@ const MONSTERS = [
   color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
 /* ===================== Ende Spieldaten ===================== */
 
-const COLS = 12, ROWS = 8;
-// Jeder Spieler hat eine eigene Karte: Wegpunkte (Zellmitte = x,5) und zufälliges, aber festes Gelände
+/* Feines Raster (11.10. nachts): 24 × 16 Felder statt 12 × 8, gleiche Fläche. Alle Längen in den Spieldaten
+   (Reichweite, Fläche, Licht, Tempo) sind in „alten“ Feldern angegeben und werden mit GRID umgerechnet. */
+const GRID = 2, COLS = 12 * GRID, ROWS = 8 * GRID;
+// Jeder Spieler hat eine eigene Karte: Schleife nach innen, alle Wege 86 Felder lang, mind. 2 Bauplätze zwischen parallelen Stücken
 const MAP_WPS = [
-  [[-0.5,1.5],[9.5,1.5],[9.5,4.5],[2.5,4.5],[2.5,6.5],[12.5,6.5]],
-  [[-0.5,6.5],[3.5,6.5],[3.5,1.5],[7.5,1.5],[7.5,6.5],[10.5,6.5],[10.5,2.5],[12.5,2.5]],
-  [[5.5,-0.5],[5.5,2.5],[1.5,2.5],[1.5,6.5],[6.5,6.5],[6.5,4.5],[10.5,4.5],[10.5,1.5],[12.5,1.5]],
-  [[-0.5,3.5],[3.5,3.5],[3.5,0.5],[10.5,0.5],[10.5,3.5],[6.5,3.5],[6.5,6.5],[12.5,6.5]]
+  [[-0.5,1.5],[21.5,1.5],[21.5,14.5],[2.5,14.5],[2.5,5.5],[17.5,5.5],[17.5,10.5],[14.5,10.5]],
+  [[-0.5,13.5],[22.5,13.5],[22.5,1.5],[3.5,1.5],[3.5,9.5],[15.5,9.5],[15.5,5.5],[7.5,5.5]],
+  [[11.5,-0.5],[11.5,1.5],[1.5,1.5],[1.5,14.5],[21.5,14.5],[21.5,4.5],[5.5,4.5],[5.5,10.5],[14.5,10.5]],
+  [[24.5,2.5],[2.5,2.5],[2.5,13.5],[21.5,13.5],[21.5,6.5],[6.5,6.5],[6.5,9.5],[15.5,9.5]]
 ];
 function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 function buildMap(k){
@@ -365,7 +377,7 @@ function buildMap(k){
   for (let i = 0; i < wp.length - 1; i++) { const [ax,ay] = wp[i], [bx,by] = wp[i+1], l = Math.hypot(bx-ax, by-ay); seg.push({ax,ay,bx,by,len:l,start:len}); len += l; }
   const map = { k, wp, seg, len, cells:new Set(), terrain:[] };
   for (let d = 0; d < len; d += 0.1) { const [x,y] = posAt(map, d); const cx = Math.floor(x), cy = Math.floor(y); if (cx>=0&&cx<COLS&&cy>=0&&cy<ROWS) map.cells.add(cx+','+cy); }
-  const r = rng(1000 + k * 77), cnt = Math.min(TERRAIN_MAX, Math.round(TERRAIN_MAX * len / 32)), free = [];
+  const r = rng(1000 + k * 77), cnt = Math.round(TERRAIN_MAX * len / 86), free = [];
   for (let y = 0; y < ROWS; y++) { map.terrain[y] = Array(COLS).fill(0); for (let x = 0; x < COLS; x++) if (!map.cells.has(x+','+y)) free.push([x,y]); }
   for (let j = free.length - 1; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [free[j], free[q]] = [free[q], free[j]]; }
   free.slice(0, cnt).forEach(([x,y]) => map.terrain[y][x] = 1);
@@ -415,9 +427,9 @@ let replay = null, seenRun = null;
 function towerBase(el, idx){
   const E = ELEMENTS[el], [name, role, range, rate, shots, share, eff, dur, splash, opt = {}] = E.towers[idx];
   const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
-  return { name, role, cost, range, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: splash || 0,
+  return { name, role, cost, range: range * GRID, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: (splash || 0) * GRID,
     effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, pierce:!!E.pierce, dayOnly:!!E.dayOnly,
-    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:opt.light || 0,
+    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID,
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
 }
 function tdef(tw){
@@ -429,13 +441,14 @@ function tdef(tw){
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
   return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
-    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * n : 0,
-    dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * n };
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0,
+    dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
+const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
 function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
-  return { ...M, hp: CONFIG.baseHp * Math.pow(CONFIG.hpGrowth, r - 1) * M.hpMul * (CONFIG.playerHp[players || 2] || 1),
-    armor: CONFIG.armorPerRound * (r - 1) * Math.pow(CONFIG.armorGrowth, r - 1), bounty: bountyFor(r) }; }
+  return { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1),
+    armor: CONFIG.armorFrac * (r - 1) * hpBase(r), bounty: bountyFor(r) }; }
 const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · brennt nicht' : '×' + String(f).replace('.', ',');
 
 /* ---------- Simulation (deterministisch) ----------
@@ -461,7 +474,7 @@ function wdef(def, W, res){          // Turmwerte mit Forschung und unter dem ak
   if (res) {
     if (res.has('el' + def.el)) { d.dpsNow *= 1.25; d.dmg *= 1.25; }
     if (res.has('dur') && d.dur !== DAY) d.dur *= 1.3;
-    if (res.has('rng')) d.range += 0.3;
+    if (res.has('rng')) d.range += 0.3 * GRID;
   }
   if (!W || ELEMENTS[def.el].weatherproof) return d;
   const e = W.el[def.el] || {}, ok = v => v;
@@ -492,11 +505,23 @@ function hit(s, m, def, dmg){
   if (def.effect === 'stun' && def.eff > 0 && (!def.chance || s.rand() < def.chance)) addFx(m, 'stun', 1, Math.min(CONFIG.stunMax, def.eff * f));
   if (m.hp <= 0) kill(s, m);
 }
+function spawn(s, sp){
+  const d = monsterDef(sp.type, s.players), [x,y] = posAt(s.map, 0);
+  s.monsters.push({ id:s.t + s.monsters.length * .37, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, d:0, x, y, fx: sp.fx || {}, hops:sp.hops });
+}
+/* Welt = alle Felder einer Welle, im selben Takt. „Live“: Wer durchkommt, taucht sofort beim nächsten Spieler auf
+   (behält Leben und Effekte). Sonst wandern die Leaks erst zur nächsten Wellenzeit. */
+function makeWorld(run){ const sims = run.inputs.map(makeSim); sims.forEach(s => s.sent = 0); return { sims, live:!!run.live, n:run.inputs.length }; }
+const worldBusy = w => w.sims.some(simBusy);
+function stepWorld(w, dt){
+  w.sims.forEach(s => step(s, dt));
+  if (w.live) w.sims.forEach((s, i) => { while (s.sent < s.leaked.length) { const m = s.leaked[s.sent++]; if (m.hops < w.n) spawn(w.sims[(i+1) % w.n], JSON.parse(JSON.stringify(m))); } });
+}
+function simulateWorld(run){ const w = makeWorld(run); let g = 0; while (worldBusy(w) && g++ < 600000) stepWorld(w, DT); return w; }
 const canHit = (def, m) => m.def.fly ? def.hitsFly : !def.air;
 function step(s, dt){
   s.t += dt;
-  if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { const sp = s.queue.shift(), d = monsterDef(sp.type, s.players), [x,y] = posAt(s.map, 0);
-    s.monsters.push({ id:s.t, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, d:0, x, y, fx: sp.fx || {}, hops:sp.hops }); s.spawnT = CONFIG.spawnGap; } }
+  if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { spawn(s, s.queue.shift()); s.spawnT = CONFIG.spawnGap; } }
   for (const m of s.monsters) {
     if (m.dead) continue;
     for (const k in m.fx) m.fx[k].t -= dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1);
@@ -504,7 +529,7 @@ function step(s, dt){
     if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0)) * dt;
     if (m.hp <= 0) { kill(s, m); continue; }
     const slow = on('stun') ? 1 : on('slow') ? fx.slow.v : 0;
-    m.d += m.def.speed * (m.def.fly && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
+    m.d += GRID * m.def.speed * (m.def.fly && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
     [m.x, m.y] = posAt(s.map, m.d);
     if (m.d >= s.map.len) {
       m.dead = m.gone = true;
@@ -539,7 +564,7 @@ function step(s, dt){
 }
 // Geschoss abfeuern. Flächen-Geschosse werden geworfen: Sie landen dort, wo das Ziel beim Abschuss war.
 function launch(s, tw, def, target){
-  const x = tw.x + .5, y = tw.y + .5, lob = def.splash > 0, sp = lob ? (ELEMENTS[def.el].lobSpeed || CONFIG.lobSpeed) : CONFIG.shotSpeed;
+  const x = tw.x + .5, y = tw.y + .5, lob = def.splash > 0, sp = GRID * (lob ? (ELEMENTS[def.el].lobSpeed || CONFIG.lobSpeed) : CONFIG.shotSpeed);
   tw.aim = Math.atan2(target.y - y, target.x - x);       // nur für die Grafik
   s.shots.push({ x, y, x0:x, y0:y, tx:target.x, ty:target.y, tgt:target, lob, sp, def, el:def.el, idx:def.idx });
   s.fx.push({ kind:'flash', x, y, t:.12, t0:.12, el:def.el, tw });
@@ -571,7 +596,11 @@ function giftsIn(i){ let x = 0; L.forEach((_,k) => (laneOf(k).gifts || []).forEa
 function giftsOut(i){ return (laneOf(i).gifts || []).reduce((a,g) => a + g.amt, 0); }
 function goldOf(i){ const l = laneOf(i); return (G.cfg.startGold ?? CONFIG.startGold) + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i) - (l.pot||0); }
 // Gold wird erst sichtbar, wenn die Monster in der Wiedergabe sterben
-function goldAvail(i){ return goldOf(i) - (replay && replay.final ? (replay.final[i] || 0) - (replay.sims[i] ? replay.sims[i].earned : 0) : 0); }
+// Gold aus der laufenden Wiedergabe erscheint erst, wenn die Monster sterben – aber nur beim ersten Ansehen der neuesten Welle.
+// (Fehler bis 11.10.: „Letzte Welle ansehen“ zog bereits ausgegebenes Gold nochmal ab → Minus-Gold.)
+const pendingOf = (i, k) => replay && replay.pending ? Math.max(0, (replay.final[k][i] || 0) - (replay.sims[i] ? replay.sims[i][k] : 0)) : 0;
+function goldAvail(i){ return goldOf(i) - pendingOf(i, 'earned'); }
+const killsOf = i => ((G.kills || [])[i] || 0) - pendingOf(i, 'kills');
 function researchSet(lanes){ const r = new Set(); lanes.forEach(l => (l && l.research || []).forEach(id => r.add(id))); return r; }
 const curRes = () => researchSet(L.map((_,k) => laneOf(k)));
 function potOf(){ const lanes = L.map((_,k) => laneOf(k)), r = researchSet(lanes);
@@ -582,7 +611,7 @@ function laneOf(i){ const l = L[i];
   if (!l || (G && l.gid !== gidOf(G))) return { el:i % ELEMENTS.length, towers:[], spent:0, gifts:[], gid:gidOf(G) };
   return l; }
 function newGameState(cfg){
-  return { cfg, day:1, slot:0, passed:0, over:null, earned:Array(cfg.players).fill(0),
+  return { cfg, day:1, slot:0, passed:0, over:null, earned:Array(cfg.players).fill(0), kills:Array(cfg.players).fill(0),
     leaked:{}, log:[{ when:'Tag 1', text:`Neues Spiel mit ${cfg.players} Spielern. Wellen um ${cfg.slots.map(hh).join(', ')}. Zuerst kommen ${MONSTERS[0].name}.` }], lastRun:null };
 }
 function resolveSlot(g, lanes){
@@ -592,19 +621,20 @@ function resolveSlot(g, lanes){
   const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : { el:i % ELEMENTS.length, towers:[] };
     return { lane:i, players:n, res:[...resAll], el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:isDark(SL[g.slot]), weather,
       seed: (Math.floor((g.cfg.startAt || 1) / 1000) * 31 + g.day * 977 + g.slot * 131 + i * 17) >>> 0 }; });
-  const res = inputs.map(simulate);
+  const live = !!g.cfg.live, res = simulateWorld({ inputs, live }).sims;
   const leaked = {}; let broke = 0; const log = [];
   res.forEach((r,i) => {
     g.earned[i] = (g.earned[i]||0) + r.earned;
+    g.kills = g.kills || []; g.kills[i] = (g.kills[i]||0) + r.kills;
     const pass = r.leaked.filter(m => m.hops < n), outs = r.leaked.filter(m => m.hops >= n), out = outs.length;
-    leaked[i] = pass; broke += outs.reduce((a,m) => a + (MONSTERS[m.type].lives || 1), 0);
-    if (!inputs[i].incoming.length) return;
+    leaked[i] = live ? [] : pass; broke += outs.reduce((a,m) => a + (MONSTERS[m.type].lives || 1), 0);
+    if (!inputs[i].incoming.length && !r.kills && !r.leaked.length) return;
     log.push(`Spieler ${i+1}: ${r.kills} besiegt (+${r.earned} Gold), ${r.leaked.length} durch` +
-      (pass.length ? ` → Spieler ${(i+1)%n+1}${next ? ' um ' + hh(next) : ''}` : '') + (out ? ' → ganz durchgebrochen' : ''));
+      (pass.length ? ` → Spieler ${(i+1)%n+1}${live ? ' (sofort)' : next ? ' um ' + hh(next) : ''}` : '') + (out ? ' → ganz durchgebrochen' : ''));
   });
   g.leaked = leaked; g.passed += broke;
   log.reverse().forEach(text => g.log.unshift({ when:`Tag ${g.day} ${time} ${WEATHER[weather].sym}`, text }));
-  g.lastRun = { id:`${g.day}-${g.slot}-${Date.now()}`, day:g.day, slot:g.slot, inputs };
+  g.lastRun = { id:`${g.day}-${g.slot}-${Date.now()}`, day:g.day, slot:g.slot, inputs, live };
   if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
   else if (g.slot < SL.length - 1) g.slot++;
   else if (g.day >= CONFIG.days) { g.over = 'won'; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
@@ -658,22 +688,23 @@ async function tryResolve(force, onlyKey){
 }
 
 /* ---------- Wiedergabe der letzten Welle ---------- */
-function startReplay(run){
+function startReplay(run, rewatch){
   if (!run) return;
   seenRun = run.id; lsSet('ww2-seen', seenRun);
-  replay = { run, acc:0, sims: run.inputs.map(makeSim), final: run.inputs.map(inp => simulate(inp).earned) };
+  const w = makeWorld(run), end = simulateWorld(run).sims;
+  replay = { run, acc:0, w, sims:w.sims, pending:!rewatch, final:{ earned:end.map(s => s.earned), kills:end.map(s => s.kills) } };
   selCell = null; render(); replay.last = performance.now(); requestAnimationFrame(loop);
 }
 function loop(now){
   if (!replay) return;
   // feste Schritte wie bei der Auswertung, sonst weicht die Wiedergabe ab
   replay.acc += Math.min(0.1, (now - replay.last) / 1000) * speed; replay.last = now;
-  while (replay.acc >= DT) { replay.sims.forEach(s => { if (simBusy(s)) step(s, DT); }); replay.acc -= DT; }
+  while (replay.acc >= DT) { stepWorld(replay.w, DT); replay.acc -= DT; }
   drawAll(); updateLaneHeads();
-  if (!replay.sims.some(simBusy)) { replay = null; render(); return; }
+  if (!worldBusy(replay.w)) { replay = null; render(); return; }
   requestAnimationFrame(loop);
 }
-function endReplay(){ if (!replay) return; replay.sims.forEach(s => { let g = 0; while (simBusy(s) && g++ < 300000) step(s, DT); }); replay = null; render(); }
+function endReplay(){ if (!replay) return; let g = 0; while (worldBusy(replay.w) && g++ < 600000) stepWorld(replay.w, DT); replay = null; render(); }
 
 /* ---------- Bauen ---------- */
 // Bauen und Upgraden geht jederzeit, auch während eine Welle abgespielt wird (wirkt ab der nächsten Welle)
@@ -796,7 +827,12 @@ function showGameOver(){
   const won = G.over === 'won'; overSeen = G.cfg.startAt + G.over; lsSet('ww2-over', overSeen);
   openDlg(`<h2><span class="big">${won ? '🏆' : '💀'}</span>${won ? 'Gewonnen!' : 'Verloren'}</h2>
     <p style="margin:0">${won ? `Ihr habt alle ${CONFIG.days} Tage gehalten.` : `Am Tag ${G.day} war Schluss.`} ${G.passed} von ${CONFIG.lossLimit} erlaubten Monstern sind ganz durchgebrochen.</p>
-    <p class="muted" style="margin:0">Gold verdient: ${G.earned.map((e,k) => `Spieler ${k+1} ${e}`).join(' · ')}</p>
+    <table class="stat-t"><thead><tr><th>Spieler</th><th>⚔ Kills</th><th>Gold verdient</th><th>Geschenkt</th><th>In die Kasse</th></tr></thead><tbody>
+    ${[...Array(NP())].map((_,i) => { const l = laneOf(i), gifts = {};
+      (l.gifts || []).forEach(g => gifts[g.to] = (gifts[g.to] || 0) + g.amt);
+      const gt = Object.entries(gifts).map(([to,a]) => `${a} an S${+to+1}`).join(', ') || '–';
+      return `<tr><td>${i+1} <span style="color:${ELEMENTS[l.el].color}">${ELEMENTS[l.el].name}</span></td><td>${(G.kills||[])[i]||0}</td><td>${G.earned[i]||0}</td><td>${gt}</td><td>${l.pot||0}</td></tr>`; }).join('')}
+    </tbody></table>
     <div class="acts"><button class="btn primary" id="oOk">Schließen</button></div>`, won ? 'won' : 'lost');
   $('oOk').onclick = closeDlg; $('oOk').focus();
 }
@@ -843,7 +879,7 @@ function buildLanes(){
       <div class="lhead">
         <span class="name">Spieler ${i+1}</span>
         <button class="el" id="el${i}" title="Element wechseln (nur vor dem ersten Turm an Tag 1)"></button>
-        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span></span>
+        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span> · ⚔ <b id="k${i}"></b></span>
         <span class="inc" id="inc${i}"></span>
       </div>
       <canvas id="cv${i}"></canvas>
@@ -862,6 +898,7 @@ function updateLaneHeads(){
     const s = replay && replay.sims[i];
     $('p'+i).textContent = s && s.earned ? `+${s.earned}` : '';
     if (s) $('inc'+i).textContent = `${s.queue.length + s.monsters.length} unterwegs`;
+    $('k'+i).textContent = killsOf(i); $('g'+i).textContent = goldAvail(i);
   }
 }
 function fmtLeft(ms){ if (ms <= 0) return 'jetzt'; const m = Math.ceil(ms/60000); return m < 60 ? `in ${m} min` : `in ${Math.floor(m/60)} h ${m%60} min`; }
@@ -936,6 +973,7 @@ function render(){
   for (let i = 0; i < n; i++) {
     const l = laneOf(i), E = ELEMENTS[l.el];
     $('lane'+i).classList.toggle('active', seat === i);
+    $('lane'+i).style.order = MODE === 'online' ? (i - seat + n) % n : 0;   // eigener Spieler oben, dann die Nachfolger
     const eb = $('el'+i); eb.textContent = E.name + (canSwitchEl(i) ? ' ⇄' : ''); eb.style.color = E.color; eb.disabled = !canSwitchEl(i);
     $('g'+i).textContent = goldAvail(i);
     if (!replay) { const inc = incomingFor(G, i); $('inc'+i).textContent = G.over ? '' : (inc.length ? `${hh(SL[G.slot])}: ${inc.length} ${MONSTERS[inc[0].type].name}` : `${hh(SL[G.slot])}: nichts im Anmarsch`); }
@@ -1030,8 +1068,8 @@ function drawTower(c, tw, px, py, cs, aim, glow){
   else if (b.light) { c.fillStyle = '#fff4c0'; c.shadowColor = '#ffe08a'; c.shadowBlur = cs*.4; c.beginPath(); c.arc(cx, cy, cs*.16, 0, Math.PI*2); c.fill(); c.shadowBlur = 0; }
   if (glow > 0) { const g = c.createRadialGradient(cx, cy, 0, cx, cy, cs*.55);    // kurzes Aufleuchten beim Schuss
     g.addColorStop(0, '#ffffff' + Math.round(glow * 200).toString(16).padStart(2,'0')); g.addColorStop(1, '#ffffff00'); c.fillStyle = g; c.fillRect(px, py, cs, cs); }
-  c.font = `700 ${cs*.26}px ${cssVar('--mono')}`; c.textAlign = 'left'; c.textBaseline = 'top';
-  c.lineWidth = 3; c.strokeStyle = '#000b'; c.strokeText(tw.idx+1, px+2, py+1); c.fillStyle = '#fff'; c.fillText(tw.idx+1, px+2, py+1);
+  if (cs >= 14) { c.font = `700 ${Math.max(7, cs*.3)}px ${cssVar('--mono')}`; c.textAlign = 'left'; c.textBaseline = 'top';
+    c.lineWidth = 2.5; c.strokeStyle = '#000b'; c.strokeText(tw.idx+1, px+1, py); c.fillStyle = '#fff'; c.fillText(tw.idx+1, px+1, py); }
   for (let k = 1; k < (tw.lvl || 1); k++) { c.fillStyle = '#000a'; c.fillRect(px + cs - 4 - k*cs*.1, py + cs - cs*.12, cs*.08, cs*.08);
     c.fillStyle = cssVar('--accent'); c.fillRect(px + cs - 3.5 - k*cs*.1, py + cs - cs*.12 + .5, cs*.08 - 1, cs*.08 - 1); }
 }
@@ -1041,17 +1079,17 @@ function drawShot(c, p, cs, time){
   let x = p.x*cs, y = p.y*cs, h = 0;
   if (p.lob) {                              // Wurf: Bogen nach oben, Schatten am Boden
     const tAll = Math.hypot(p.x - p.x0, p.y - p.y0) + left, prog = tAll ? 1 - left / tAll : 1;
-    h = Math.sin(Math.PI * prog) * Math.min(1.2, tAll * .35) * cs;
-    c.fillStyle = '#0006'; c.beginPath(); c.ellipse(x, y, cs*.12, cs*.06, 0, 0, Math.PI*2); c.fill();
+    h = Math.sin(Math.PI * prog) * Math.min(1.2 * GRID, tAll * .35) * cs;
+    c.fillStyle = '#0006'; c.beginPath(); c.ellipse(x, y, k*.12, k*.06, 0, 0, Math.PI*2); c.fill();
   }
   y -= h;
-  const def = p.def, sz = cs * (p.lob ? .42 : .3);
+  const def = p.def, k = cs * GRID * .7, sz = k * (p.lob ? .42 : .3);   // Geschosse in alter Feldgröße
   if (p.el === 0 && def.air) {               // Brandpfeil: Pfeil mit Glut
-    c.save(); c.translate(x, y); c.rotate(dir); c.strokeStyle = '#f3d9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(-cs*.22, 0); c.lineTo(cs*.12, 0); c.stroke();
-    c.fillStyle = '#ff9a4a'; c.beginPath(); c.moveTo(cs*.18, 0); c.lineTo(cs*.08, -cs*.05); c.lineTo(cs*.08, cs*.05); c.fill(); c.restore(); return;
+    c.save(); c.translate(x, y); c.rotate(dir); c.strokeStyle = '#f3d9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(-k*.22, 0); c.lineTo(k*.12, 0); c.stroke();
+    c.fillStyle = '#ff9a4a'; c.beginPath(); c.moveTo(k*.18, 0); c.lineTo(k*.08, -k*.05); c.lineTo(k*.08, k*.05); c.fill(); c.restore(); return;
   }
   if (p.el === 0) { if (!spr(c, SPR.flame, x, y, sz * 1.2, dir - Math.PI/2)) dot(c, x, y, sz*.3, '#ff9a4a'); return; }
-  if (p.el === 1) { c.fillStyle = '#dff6ff55'; c.beginPath(); c.arc(x - Math.cos(dir)*cs*.1, y - Math.sin(dir)*cs*.1, sz*.25, 0, Math.PI*2); c.fill();
+  if (p.el === 1) { c.fillStyle = '#dff6ff55'; c.beginPath(); c.arc(x - Math.cos(dir)*k*.1, y - Math.sin(dir)*k*.1, sz*.25, 0, Math.PI*2); c.fill();
     if (!spr(c, tinted('bullet', PROJ_TINT[1]), x, y, sz * (p.lob ? 1.3 : 1))) dot(c, x, y, sz*.25, '#dff6ff'); return; }
   if (p.el === 2) { if (!spr(c, tinted('smoke', PROJ_TINT[2]), x, y, sz * 1.4, time * 6, .9)) dot(c, x, y, sz*.3, '#9b6ad8');
     dot(c, x, y, sz*.12, '#e8dcff'); return; }
@@ -1105,8 +1143,9 @@ function draw(i, cv){
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(c, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
   const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
-  c.fillStyle = v('--danger'); c.beginPath(); c.arc(ex*cs, ey*cs, cs*.18, 0, Math.PI*2); c.fill();
-  c.fillStyle = v('--accent'); c.beginPath(); c.arc(ox*cs, oy*cs, cs*.18, 0, Math.PI*2); c.fill();
+  c.fillStyle = v('--danger'); c.beginPath(); c.arc(ex*cs, ey*cs, cs*.4, 0, Math.PI*2); c.fill();
+  c.strokeStyle = v('--accent'); c.lineWidth = 2; c.fillStyle = v('--accent') + '55';   // Ziel: Portal in der Mitte der Schleife
+  c.beginPath(); c.arc(ox*cs, oy*cs, cs*.55, 0, Math.PI*2); c.fill(); c.stroke();
   const towers = laneOf(i).towers;
   if (selCell && selCell.i === i) {
     const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
@@ -1128,7 +1167,7 @@ function draw(i, cv){
   }
   if (!s) return;
   for (const m of s.monsters) {
-    const x = m.x, y = m.y, r = m.def.size*cs, on = k => m.fx[k] && m.fx[k].t > 0;
+    const x = m.x, y = m.y, r = m.def.size*cs*GRID*.8, on = k => m.fx[k] && m.fx[k].t > 0;
     const bob = m.def.fly ? Math.sin(time*8 + m.id) * cs*.04 - cs*.12 : 0;
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(x*cs, y*cs + r*.7, r*.8, r*.3, 0, 0, Math.PI*2); c.fill();
     const X = x*cs, Y = y*cs + bob;
@@ -1162,7 +1201,8 @@ function towerIcon(el, k){
 /* ---------- Start ---------- */
 async function newGame(){
   const players = +$('fPlayers').value, timing = MODE === 'online' ? $('fTiming').value : 'manual';
-  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), slots: CONFIG.slotPlan[players], startGold: CONFIG.startGold, version: VERSION };
+  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), live: $('fLive').value === '1', startGold: CONFIG.startGold, version: VERSION };
+  cfg.slots = cfg.live ? [10] : CONFIG.slotPlan[players];   // Live: eine Welle am Tag, alles läuft ineinander
   if (timing === 'real') { const d = new Date(); d.setDate(d.getDate() + (+$('fStart').value)); d.setHours(0,0,0,0); cfg.day1 = d.getTime(); }
   G = newGameState(cfg);
   L = [...Array(players)].map((_,i) => ({ el:i % ELEMENTS.length, towers:[], spent:0, gifts:[], gid:cfg.startAt }));
@@ -1185,7 +1225,7 @@ $('fTiming').onchange = renderSetup;
 $('fGo').onclick = newGame;
 $('go').onclick = () => tryResolve(true);
 $('ready').onclick = toggleReady;
-$('replay').onclick = () => G && startReplay(G.lastRun);
+$('replay').onclick = () => G && startReplay(G.lastRun, true);
 $('skip').onclick = endReplay;
 document.querySelectorAll('[data-speed]').forEach(x => x.onclick = () => { speed = +x.dataset.speed; render(); });
 $('reset').onclick = () => {

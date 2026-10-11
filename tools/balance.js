@@ -20,8 +20,8 @@ eval(game + `
 const EL=['Feuer','Eis','Schatten','Stein'];
 // Computerspieler: baut den teuersten bezahlbaren Turm, danach Upgrades.
 // Luftabwehr nur einmal vor den Fliegenden, Irrlichter neben die eigenen Schatten-Türme.
-function cellsFree(i,l){ const f=[]; for(let y=0;y<8;y++)for(let x=0;x<12;x++) if(!MAPS[i].cells.has(x+','+y)&&!l.towers.some(t=>t.x===x&&t.y===y)) f.push([x,y]); return f; }
-const pathScore=(i,[x,y])=>{ let c=0; MAPS[i].cells.forEach(k=>{const[a,b]=k.split(',').map(Number); if(Math.hypot(a-x,b-y)<=2) c++;}); return c; };
+function cellsFree(i,l){ const f=[]; for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++) if(!MAPS[i].cells.has(x+','+y)&&!l.towers.some(t=>t.x===x&&t.y===y)) f.push([x,y]); return f; }
+const PS={}; const pathScore=(i,[x,y])=>{ const id=i+','+x+','+y; if(PS[id]!==undefined) return PS[id]; let c=0; MAPS[i].cells.forEach(k=>{const[a,b]=k.split(',').map(Number); if(Math.hypot(a-x,b-y)<=2*GRID) c++;}); return PS[id]=c; };
 function botBuild(l, i, gold, day, ahead=1){
   const RS=curRes(); let spent=0;
   const flyerSoon = MONSTERS.slice(day-1, day+ahead).some(m=>m.fly);

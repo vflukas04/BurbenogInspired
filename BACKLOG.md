@@ -38,6 +38,17 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] Stein (22:18): Würfe wieder langsam (4,5), dafür Mitte 120 %, Rand 80 %. Andere Flächen-Türme: Mitte 100 %, Rand 70 %.
 - [x] Brennen −15 % (alle Feuer-Türme).
 
+### 11.10. nachts (großer Umbau)
+- [x] Eigener Spieler oben (online), danach die Nachfolger.
+- [x] Minus-Gold: Ursache 1 „Letzte Welle ansehen“ zog schon ausgegebenes Gold nochmal ab (behoben). Ursache 2: Spiele, die vor der Versionsprüfung gestartet wurden, rechnen mit dem aktuellen Startgold (Startgold-Änderung 30→15 ergab Minus). Neue Spiele speichern ihr Startgold.
+- [x] Kills je Spieler laufend im Feldkopf, Endfenster mit Statistik (Kills, Gold, Geschenke an wen, Kasse).
+- [x] Spielart „Live“: Leaks laufen sofort beim Nachbarn weiter, Wellen können sich überlappen. Eine Welle am Tag, keine Dunkelheit.
+- [x] Flache Baukurve: Kopfgeld 2/3/5/8/12/17/23/30 je 5 Runden, Türme 10/45/70/120/200/350/650/1200 (Feuer T1 8), Startgold 30.
+- [x] 40-Runden-Auslegung (Leben-Kurve Runde^1,5, Kopfgeld bis 40). Gespielt werden 20. **Offen: Monster 21–40 ausdenken.**
+- [x] Raster 24 × 16, Wege als Schleifen nach innen, alle 86 Felder lang (vorher ca. 60 in feinen Feldern), mehr Gelände.
+- [x] Leben kalibriert (`tools/kalibrieren.js`): Anfangstürme schaffen in Runde 1 ca. 12/8/6 von 20. Delle um Runde 5 (dort eher 5 von 20 im Test), danach 9–13 von 20.
+- Hinweis: Auf dem Handy sind die Felder jetzt nur ca. 15 px groß. Falls Tippen schwierig wird: Querformat oder Zoom-Funktion überlegen.
+
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [x] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.
