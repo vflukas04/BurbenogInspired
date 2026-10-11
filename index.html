@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12l";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12m";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -226,7 +226,8 @@ const CONFIG = {
   firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
   maxLevel: 6,              // Stufe 1 + 5 Upgrades
   upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
-  upgrade: { dmg:2.0, range:0.2, dur:1.3, eff:1.15 },  // pro Upgrade: Schaden ×2, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
+  upgrade: { dmg:2.0, firstDmg:2.1, range:0.2, dur:1.3, eff:1.15 },  // erstes Upgrade (Stufe 1→2): Schaden ×2,1, danach je ×2
+   // pro Upgrade: Schaden ×2, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
   giftFee: 0.10, giftStep: 10,
   weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt
   spawnGap: 0.9,            // Sekunden zwischen zwei Monstern (früher 0,5: Flächenschaden war zu stark)
@@ -296,7 +297,7 @@ const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold 
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
   { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:8}, towers:[
-    ['Funke',        'Schaden',   2.0, 1,   1, 0.65, 0.17, 3],   // 1,3 Schaden/s (Brennen ist ein Bonus)   // 8 statt 10 Gold. Türme 1–3 aller Elemente am 12.10. per Simulation angeglichen
+    ['Funke',        'Schaden',   2.0, 1,   1, 0.8, 0.17, 3],   // 1,6 Schaden/s (Brennen ist ein Bonus)   // 8 statt 10 Gold. Türme 1–3 aller Elemente am 12.10. per Simulation angeglichen
     ['Glutbecken',   'Effekt',    1.6, 1,   2, 1.19, 0.43, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 1.21, 0.14, 2],
     ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.36, 6, 0, {air:true}],
@@ -435,7 +436,7 @@ function towerBase(el, idx){
 }
 function tdef(tw){
   const b = towerBase(tw.el, tw.idx), n = (tw.lvl || 1) - 1, U = CONFIG.upgrade;
-  const dpsNow = b.dps * Math.pow(U.dmg, n);
+  const dpsNow = b.dps * (n ? U.firstDmg * Math.pow(U.dmg, n - 1) : 1);
   let eff = b.eff * Math.pow(U.eff, n);
   if (b.effect === 'slow') eff = Math.min(0.85, eff);
   if (b.effect === 'curse') eff = Math.min(1.5, eff);
