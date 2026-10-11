@@ -1,6 +1,20 @@
 # Merkliste BurbenogInspired
 
-Stand: 11.10.2026, nach Element-Balance und Grafik.
+Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 12.10. nachts).
+
+## Für die nächste Sitzung (zuerst lesen)
+**Aktueller Stand (live, VERSION 2026-10-12n):** Karte 16 × 16 mit Schleife und Kreuzung, flache Baukurve (Türme 10/45/70/120/200/350/650/1200, Kopfgeld 2/3/5/8 … je 5 Runden), Startgold 30, Leben 14 × Runde^1,5, Spielarten „Uhrzeiten“ und „Live“, Bau-Bestätigung, Monster-Info, Bereit-Knopf, Endstatistik. Turm 1 auf Stufe 1: Funke 1,6 · Frostsplitter 2,2 · Schemen 2,2 · Kiesel 1,1 (Fläche). Erstes Upgrade ×2,1, danach ×2.
+
+**Offen / als Nächstes:**
+1. Prüfen, ob Handy 2 neue Wellen jetzt ohne Neuladen zeigt (Fix 01:06: Stand alle 10 s vom Server). Falls nicht: Springen Tag/Uhrzeit ohne Neuladen? Welches Handy/Browser?
+2. Firestore-Regeln vor ca. 09.11. setzen (README).
+3. Türme 4–8 sind nach der neuen Preis-Kurve nicht abgeglichen (nur Türme 1–3 per Simulation).
+4. Monster 21–40 ausdenken (Spiel ist auf 40 Runden ausgelegt, gespielt werden 20).
+5. Lukas testet bewusst eine Zeit lang das feine, häufige Nachjustieren einzelner Werte. Später auswerten: Hat es geholfen oder nur hin- und hergeschwankt (Funke heute: 0,6 → 1,2 → 1,0 → 1,1 → 2,0 → 1,8 → 1,3 → 1,6)?
+6. Auf Hold: Forschung teurer, Gold sofort beim Tod, „Verloren“ erst am Tagesende, Chat, Monster-Sprites, „Reiche werden reicher“.
+7. Zwischenfazit (12.10. 00:55): Ideen stark (v. a. zeitversetztes Weiterreichen der Monster), Kritik: zu viele Regler gleichzeitig, Komplexität > Lesbarkeit am Handy, Snowball ungelöst, Online-Speicher offen.
+
+**Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
 ### Aus Lukas' Rückmeldung 11.10. vormittags
