@@ -3,6 +3,16 @@
 Stand: 11.10.2026, nach dem ersten Testabend.
 
 ## Offene Wünsche (vorgemerkt)
+### Aus Lukas' Rückmeldung 11.10. vormittags
+- [ ] Vorschau: Name der nächsten Runde anzeigen, mit Info-Knopf (Stärken/Schwächen je Element, fliegend, Rüstung, Leben).
+- [ ] Türme leicht abschwächen: bei jedem Turm genau einen Wert senken (Feuerrate, Reichweite, Schaden oder Geschosse), nicht überall alles. Danach Monster ggf. +20 % Leben. Mit `tools/balance.js` prüfen.
+- [ ] Forschung leicht teurer (nicht zu teuer).
+- [ ] Monsterleben zu viert ×4 oder ×4,5 (jetzt ×3,5). Lukas schwankt; Vorschlag: ×4, dann testen.
+- [ ] Element-Balance mit Tests prüfen (Lukas: „unumgänglich“). Siehe Analyse unten: Stein ist im Bot-Test deutlich zu stark, Schatten zu schwach. Das widerspricht dem Eindruck aus echten Spielen (dort war Schatten stark).
+- [ ] Grafik (höchste Priorität): Türme und Geschosse. Pfeile, Feuerbälle, kurzes Aufleuchten, Erdbeben-Wackeln. Geschosse als Objekte mit Flugzeit; langsame Flächen-Geschosse zielen auf die aktuelle Position und treffen deshalb oft nicht mittig; Flächenschaden fällt nach außen ab.
+- [ ] Freies Grafikpaket testen (z. B. Kenney „Tower Defense (top-down)“, CC0). Hinweis: Die Shell in der Cloud kann kenney.nl meist nicht laden. Lukas lädt das ZIP herunter und hängt es an.
+
+### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [ ] Stein trifft Fliegende erst ab Turm 4 (jetzt ab Turm 3).
 - [ ] Schatten: Lichttürme, die in ihrem Umkreis die Nachteile durch Dunkelheit aufheben (19 Uhr, Bewölkt, Gewitter usw.).
@@ -29,6 +39,14 @@ Ein einfacher Computerspieler baut gierig: höchster bezahlbarer Turm, danach Up
 6. **Zu viert ist es zu leicht**, trotz ×3,5 Monsterleben. Allerdings spielt der Bot gieriger und effizienter als Menschen. Euer Eindruck aus echten Tests zählt mehr.
 7. **Wetter:** Sonnig und Bewölkt zusammen 42 %. Die Verteilung passt, Extremwetter bleiben selten.
 8. **Karten:** Weglängen 27–32, Gelände 8–10 Wald/Sumpf. Kürzere Wege lassen weniger Zeit zum Schießen, bekommen aber weniger teures Gelände. Fair genug.
+
+## Element-Analyse 11.10. (Bot, `tools/balance.js`)
+- Anteil am Gold bei 3–4 Spielern: Stein 87 %, Feuer 15 %, Eis 8 %, Schatten 4 %. Der reichste Spieler war in 7 von 8 Spielen Stein.
+- Zwei Spieler mit demselben Element: Stein gewinnt ohne Durchbruch, Feuer verliert an Tag 13, Eis an Tag 9, Schatten an Tag 6.
+- Kills von 10 Monstern (je 2 gleich starke Türme): Ab Runde 9–12 bricht Eis und Schatten ein, Stein und Feuer halten länger. Gegen die späten Runden kommt mit diesen Türmen niemand an. Erwartbar, weil der Test ohne Upgrades und Forschung läuft.
+- Vermutete Ursachen: (1) 20 Monster dicht hintereinander (spawnGap 0,5 s) machen Flächenschaden extrem stark. (2) Stein betäubt mit fast allen Türmen und hält Gruppen dauerhaft fest (geplant: höchstens 2 Betäubungstürme). (3) Bei 2 Spielern fällt für Schatten die Hälfte der Wellen weg (19 Uhr). (4) Die Rüstung wächst sehr steil, Turmschaden bleibt dadurch gegen Rüstung hängen. Schatten müsste davon profitieren, kommt aber wegen (3) und Bewölkt/Regen nicht dazu.
+- Ideen: spawnGap auf 0,8–1,0 s, Flächenschaden mit Abfall nach außen (passt zu eurer Geschoss-Idee), Betäuben auf 2 Türme begrenzen, Lichttürme für Schatten.
+- Lukas' Sicht zu „Reiche werden reicher“: gewollt, solange die Elemente klare Schwächen haben und der Reiche teilen muss. Dafür muss aber jedes Element irgendwo schwach sein. Stein ist es im Moment kaum.
 
 ## Technik
 - **Firestore-Testmodus läuft nach 30 Tagen ab (ca. 9. November).** Vorher die Regeln aus der README unter Firestore → Regeln eintragen, sonst hört das Online-Spiel auf zu funktionieren.
