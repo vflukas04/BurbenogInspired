@@ -60,6 +60,7 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] „Hängt bei den Ohrenkneifern“ (00:16): Simulation hängt in keiner getesteten Konstellation. Zeichnen auf dem feinen Raster war aber langsam (17 ms/Bild am PC) → Hintergrund wird jetzt zwischengespeichert (0,8 ms). Live: fast tote Monster kamen mit vollem Leben beim Nachbarn an (behoben). Falls es weiter hängt: genauer nachfragen (ganzes Handy eingefroren? Welle startet nicht? Online oder Ein Gerät, Live oder Uhrzeiten?).
 - Offen (auf Hold): „Verloren“ erst am Ende des Tages statt nach der Welle, in der die Grenze überschritten wird.
 
+- [x] 01:06: Handy 2 zeigt neue Wellen erst nach Neuladen. Nachgestellt: Kommt der neue Stand an, startet die Wiedergabe sofort → vermutlich schläft die Firestore-Live-Verbindung ein (App-Wechsel/Bildschirm aus). Jetzt holt jedes Handy alle 10 s und beim Zurückkehren den Stand direkt vom Server. Falls es weiter auftritt: Sieht Handy 2 den neuen Tag/die Uhrzeit ohne Neuladen? Welches Handy/Browser?
 - [x] 01:03: Funke 1,6 Schaden/s. Erstes Upgrade (Stufe 1→2) Schaden ×2,1 statt ×2 (spätere Stufen weiter ×2). Lukas testet bewusst eine Zeit lang das feine, häufige Nachjustieren.
 - [x] Leaks starten beim Nachbarn in denselben Abständen, in denen sie beim Vorgänger ins Ziel kamen (00:52; z. B. nach Eis weiter auseinander).
 

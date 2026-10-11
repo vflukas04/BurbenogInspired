@@ -20,6 +20,7 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas (Codename-Projek
 - Firestore-Testmodus läuft ca. 09.11.2026 ab. Regeln aus der README müssen vorher gesetzt sein.
 - Installierbar als Web-App (manifest.json, Icons).
 - Versionen: `VERSION` steht im Code und beim Spielstart in `G.cfg.version`, Startgold in `G.cfg.startGold`. Jedes Handy fragt alle 5 Minuten und beim Zurückkehren die Seite ohne Cache ab und zeigt bei neuerer Version „Neu laden“. Alte Spielstände bekommen den Hinweis „Neues Spiel starten“.
+- Verbindung: Neben den Firestore-Live-Listenern holt jedes Handy alle 10 s sowie beim Zurückkehren (visibilitychange/focus/online) den Stand direkt vom Server (`refreshFromServer`), weil die Live-Verbindung auf Handys einschläft.
 - „Bereit“-Knopf (nur online): Feld `ready` = `startAt-Tag-Welle` im eigenen Lane-Dokument. Sind alle bereit, ruft jedes Handy `tryResolve(true, key)`; die Transaktion wertet nur aus, wenn der Spielstand noch bei genau dieser Welle steht (kein Doppelstart).
 - Anzeige: Online steht das eigene Feld oben, dann die Nachfolger (CSS `order`). Kills je Spieler in `G.kills`, laufend im Feldkopf (⚔), Endfenster mit Statistik (Kills, Gold, Geschenke an wen, Kasse).
 - Wiedergabe: Die Welle ist beim Auslösen schon fertig berechnet. Während die neueste Welle zum ersten Mal läuft (`runPending`), zeigen Durchbruch-Zähler, Verloren/Gewonnen-Banner und Chronik nur, was im Bild schon passiert ist (`lastRun.broke`, `lastRun.newLog`).

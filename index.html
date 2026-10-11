@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12m";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12n";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1281,7 +1281,25 @@ async function startOnline(db){
     if (G) render();
   }, e => console.warn(e));
   DB.doc(P_STATE).onSnapshot(snap => onGame(snap.exists ? snap.data() : null), e => { console.warn(e); toast('Verbindung verloren. Bitte Seite neu laden.'); });
+  // Zweite Leitung: Handys lassen die Live-Verbindung oft einschlafen (App-Wechsel, Bildschirm aus).
+  // Deshalb alle 10 s und beim Zurückkehren den Stand direkt vom Server holen.
+  setInterval(refreshFromServer, 10000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshFromServer(); });
+  window.addEventListener('focus', refreshFromServer); window.addEventListener('online', refreshFromServer);
   render();
+}
+let refreshing = false;
+async function refreshFromServer(){
+  if (MODE !== 'online' || refreshing || (typeof document !== 'undefined' && document.hidden)) return;
+  refreshing = true;
+  try {
+    const [st, ls] = await Promise.all([DB.doc(P_STATE).get({ source:'server' }), DB.collection(P_LANES).get({ source:'server' })]);
+    ls.docs.forEach(d => { const k = +d.id.slice(1); if (!d.metadata.hasPendingWrites) L[k] = d.data(); });
+    const g = st.exists ? st.data() : null;
+    const stamp = x => x ? `${x.cfg && x.cfg.startAt}-${x.day}-${x.slot}-${x.lastRun ? x.lastRun.id : ''}-${x.over}` : 'leer';
+    if (stamp(g) !== stamp(G)) onGame(g); else if (G) render();
+  } catch(e) { console.warn(e); }
+  finally { refreshing = false; }
 }
 (async () => {
   render();
