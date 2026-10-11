@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -296,7 +296,7 @@ const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold 
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
   { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:8}, towers:[
-    ['Funke',        'Schaden',   2.0, 1,   1, 0.6, 0.17, 3],   // 8 statt 10 Gold; 12.10.: Schaden verdoppelt (0,3 → 0,6)
+    ['Funke',        'Schaden',   2.0, 1,   1, 0.5, 0.17, 3],   // 8 statt 10 Gold; 12.10.: 1,0 Schaden/s auf Stufe 1
     ['Glutbecken',   'Effekt',    1.6, 1,   2, 0.4, 0.43, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 0.8, 0.14, 2],
     ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.36, 6, 0, {air:true}],

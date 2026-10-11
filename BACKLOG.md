@@ -52,7 +52,7 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 ### 12.10. kurz nach Mitternacht
 - [x] „Verloren“ und „Ganz durchgebrochen“ kamen zu früh (Welle war schon fertig berechnet): Anzeige zählt jetzt während der Wiedergabe mit, Banner/Chronik erst danach.
 - [x] Wege als echte Schleife: Eingang links, eine Runde mit Kreuzung, Ausgang rechts (84–86 Felder).
-- [x] Funke (Feuer Turm 1): Schaden verdoppelt (0,3 → 0,6), Brennen unverändert.
+- [x] Funke (Feuer Turm 1): 1,0 Schaden/s auf Stufe 1 (vorher 0,6), Brennen unverändert.
 - Offen (auf Hold): „Verloren“ erst am Ende des Tages statt nach der Welle, in der die Grenze überschritten wird.
 
 ### Vom Testabend
