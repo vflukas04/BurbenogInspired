@@ -35,6 +35,9 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] Monster-Faktoren auf 0,6–1,75 gestaucht, „immun“ = 50 % statt 25 % Schaden.
 - [x] Irrlicht: Wirkt nicht mehr auf Nachbartürme. Nachts treffen Schatten-Türme nur Monster im Lichtkreis. Der Wettermalus gilt jetzt auch im Licht.
 
+- [x] Stein (22:18): Würfe wieder langsam (4,5), dafür Mitte 120 %, Rand 80 %. Andere Flächen-Türme: Mitte 100 %, Rand 70 %.
+- [x] Brennen −15 % (alle Feuer-Türme).
+
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [x] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.
