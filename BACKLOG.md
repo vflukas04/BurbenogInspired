@@ -10,13 +10,13 @@ Stand: 11.10.2026, nach dem ersten Testabend.
 - [ ] Monsterleben zu viert ×4 oder ×4,5 (jetzt ×3,5). Lukas schwankt; Vorschlag: ×4, dann testen.
 - [ ] Element-Balance mit Tests prüfen (Lukas: „unumgänglich“). Siehe Analyse unten: Stein ist im Bot-Test deutlich zu stark, Schatten zu schwach. Das widerspricht dem Eindruck aus echten Spielen (dort war Schatten stark).
 - [ ] Grafik (höchste Priorität): Türme und Geschosse. Pfeile, Feuerbälle, kurzes Aufleuchten, Erdbeben-Wackeln. Geschosse als Objekte mit Flugzeit; langsame Flächen-Geschosse zielen auf die aktuelle Position und treffen deshalb oft nicht mittig; Flächenschaden fällt nach außen ab.
-- [ ] Freies Grafikpaket testen (z. B. Kenney „Tower Defense (top-down)“, CC0). Hinweis: Die Shell in der Cloud kann kenney.nl meist nicht laden. Lukas lädt das ZIP herunter und hängt es an.
+- [ ] Freies Grafikpaket einbauen: Lukas hat das Kenney-ZIP (Tower Defense, CC0) in seinem Download-Ordner. In der neuen Sitzung anhängen lassen oder über den verknüpften Rechner holen. Grafiken nach `assets/` legen, Lizenzhinweis in die README.
 
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
-- [ ] Stein trifft Fliegende erst ab Turm 4 (jetzt ab Turm 3).
+- [ ] Fliegende: Pro Element dürfen höchstens 3 Türme Fliegende angreifen (ersetzt „Stein ab Turm 4“). Welche 3 es sind, je Element festlegen.
+- [ ] Betäubung ist zu stark (von Lukas bestätigt): Stein höchstens 2 Betäubungstürme, Dauer kürzer.
 - [ ] Schatten: Lichttürme, die in ihrem Umkreis die Nachteile durch Dunkelheit aufheben (19 Uhr, Bewölkt, Gewitter usw.).
-- [ ] Stein: weniger Betäuben, höchstens 2 Türme mit dieser Fähigkeit.
 - [ ] „Uffug-Vorhut“ umbenennen in „Uffug Vorhaut“.
 - [ ] Chat in der Chronik, damit die Spieler sich schreiben können.
 - [ ] „Verloren“ erst am Ende der Runde melden, nicht mitten am Tag.
