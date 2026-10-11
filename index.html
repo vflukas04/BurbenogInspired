@@ -153,6 +153,7 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
   <div id="game" hidden>
     <div class="clock" id="clock"></div>
     <div id="banner" class="banner" hidden></div>
+    <div id="vbanner" class="banner bad" hidden></div>
     <div class="today" id="today"></div>
     <div class="seats" id="seats"></div>
     <div class="seats" id="gift"></div>
@@ -194,6 +195,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
+const VERSION = "2026-10-11d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -560,7 +562,7 @@ function incomingFor(g, i){ const n = g.cfg.players; return g.slot === 0 ? waveS
 // Gold = Start + Kopfgeld − Ausgaben − verschenkt + erhalten (nach Gebühr). Geschenke stehen im Feld des Schenkenden.
 function giftsIn(i){ let x = 0; L.forEach((_,k) => (laneOf(k).gifts || []).forEach(g => { if (g.to === i) x += Math.floor(g.amt * (1 - CONFIG.giftFee)); })); return x; }
 function giftsOut(i){ return (laneOf(i).gifts || []).reduce((a,g) => a + g.amt, 0); }
-function goldOf(i){ const l = laneOf(i); return CONFIG.startGold + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i) - (l.pot||0); }
+function goldOf(i){ const l = laneOf(i); return (G.cfg.startGold ?? CONFIG.startGold) + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i) - (l.pot||0); }
 // Gold wird erst sichtbar, wenn die Monster in der Wiedergabe sterben
 function goldAvail(i){ return goldOf(i) - (replay && replay.final ? (replay.final[i] || 0) - (replay.sims[i] ? replay.sims[i].earned : 0) : 0); }
 function researchSet(lanes){ const r = new Set(); lanes.forEach(l => (l && l.research || []).forEach(id => r.add(id))); return r; }
@@ -791,6 +793,22 @@ function showGameOver(){
   $('oOk').onclick = closeDlg; $('oOk').focus();
 }
 $('dlgback').addEventListener('click', e => { if (e.target.id !== 'dlgback') return; const was = pending; pending = null; closeDlg(); if (was) render(); });   // daneben tippen = abbrechen
+// Versionen: Spiel und Handy müssen dieselben Regeln haben, sonst rechnen sie verschieden
+let newerVersion = null;
+function checkVersion(gameV){
+  const vb = $('vbanner'), other = newerVersion || (gameV && gameV > VERSION ? gameV : null);
+  let msg = '';
+  if (other) msg = 'Es gibt eine neue Version des Spiels. Bitte neu laden.';
+  else if (gameV && gameV < VERSION) msg = 'Dieses Spiel wurde mit einer älteren Version gestartet. Für die neuen Regeln „Neues Spiel“ starten.';
+  else if (G && !gameV) msg = 'Dieses Spiel stammt aus einer älteren Version. Für die neuen Regeln „Neues Spiel“ starten.';
+  vb.hidden = !msg; if (!msg) return;
+  vb.innerHTML = msg + (other ? ' <button class="btn" id="vReload" style="margin-left:8px">Neu laden</button>' : '');
+  if (other) $('vReload').onclick = () => location.reload();
+}
+async function pollVersion(){       // fragt die Seite ohne Cache ab und vergleicht VERSION
+  try { const t = await (await fetch(location.pathname + '?v=' + Date.now(), { cache:'no-store' })).text();
+    const m = t.match(/const VERSION = "([^"]+)"/); if (m && m[1] !== VERSION) { newerVersion = m[1]; if (G) checkVersion(G.cfg.version); } } catch(e){}
+}
 let popT;
 function pop(msg){ const b = $('pop'); b.textContent = msg; b.hidden = false; clearTimeout(popT); popT = setTimeout(() => b.hidden = true, 2200); }
 let toastT;
@@ -848,6 +866,7 @@ function render(){
   $('clock').innerHTML = SL.map((h,k) => { const W = WEATHER[wd[k]];
     return `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}" title="${W.name}: ${weatherText(W)}"><b>${hh(h)} <span class="wx">${W.sym} ${W.name}</span></b>${k===0?'Welle für alle':'Leaks vom Nachbarn'}${isDark(h)?' · dunkel':''}</div>`; }).join('');
   const b = $('banner');
+  checkVersion(G.cfg.version);
   b.hidden = !G.over; b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
   if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`;
   $('seats').innerHTML = MODE === 'online'
@@ -1116,7 +1135,7 @@ function towerIcon(el, k){
 /* ---------- Start ---------- */
 async function newGame(){
   const players = +$('fPlayers').value, timing = MODE === 'online' ? $('fTiming').value : 'manual';
-  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), slots: CONFIG.slotPlan[players] };
+  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), slots: CONFIG.slotPlan[players], startGold: CONFIG.startGold, version: VERSION };
   if (timing === 'real') { const d = new Date(); d.setDate(d.getDate() + (+$('fStart').value)); d.setHours(0,0,0,0); cfg.day1 = d.getTime(); }
   G = newGameState(cfg);
   L = [...Array(players)].map((_,i) => ({ el:i % ELEMENTS.length, towers:[], spent:0, gifts:[], gid:cfg.startAt }));
@@ -1180,6 +1199,8 @@ async function startOnline(db){
   if (db) startOnline(db); else startLocal();
 })();
 loadSprites();
+if (typeof fetch !== 'undefined' && location.protocol.startsWith('http')) { pollVersion(); setInterval(pollVersion, 5 * 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) pollVersion(); }); }
 document.fonts && document.fonts.ready.then(drawAll);
 </script>
 </body>

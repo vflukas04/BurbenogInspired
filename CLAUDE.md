@@ -4,7 +4,7 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas (Codename-Projek
 
 ## Arbeitsweise
 - Live-Spiel: https://vflukas04.github.io/BurbenogInspired/ (GitHub Pages, Branch `main`, ca. 1 Minute nach Push live).
-- Claude pusht direkt nach `main` (die Claude-GitHub-App ist installiert). Nach jeder Änderung: Syntax prüfen, `node tools/balance.js schnell`, committen, pushen, kurz melden, was neu ist.
+- Claude pusht direkt nach `main` (die Claude-GitHub-App ist installiert). Nach jeder Änderung: `VERSION` in `index.html` hochzählen, Syntax prüfen, committen, pushen, kurz melden, was neu ist. **Keine Balance-Tests und keine Browser-Screenshots, außer Lukas bespricht es ausdrücklich** (sie dauern Minuten). Mehrere Wünsche in einem Commit bündeln.
 - Friedrich hat kein Claude. Seine Wünsche kommen per WhatsApp (oft als Screenshot), Lukas kopiert sie herein.
 - Beide testen auf Handys. Nach Regeländerungen immer daran erinnern: „Neues Spiel“ starten und neu laden.
 - Offene Wünsche und Erkenntnisse: `BACKLOG.md`. Erledigtes dort abhaken.
@@ -19,6 +19,7 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas (Codename-Projek
 - `gid` = `cfg.startAt`: Felder aus alten Spielen werden ignoriert (verhinderte Minus-Gold).
 - Firestore-Testmodus läuft ca. 09.11.2026 ab. Regeln aus der README müssen vorher gesetzt sein.
 - Installierbar als Web-App (manifest.json, Icons).
+- Versionen: `VERSION` steht im Code und beim Spielstart in `G.cfg.version`, Startgold in `G.cfg.startGold`. Jedes Handy fragt alle 5 Minuten und beim Zurückkehren die Seite ohne Cache ab und zeigt bei neuerer Version „Neu laden“. Alte Spielstände bekommen den Hinweis „Neues Spiel starten“.
 - Oberfläche: ein Dialog (`openDlg`) für Bau-Bestätigung (oben als Sheet), Monster-Info (`showMonster`) und Spielende (`showGameOver`).
 
 ## Regeln (Stand 11.10.2026, nach Element-Balance)
