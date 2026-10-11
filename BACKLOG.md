@@ -53,6 +53,7 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] „Verloren“ und „Ganz durchgebrochen“ kamen zu früh (Welle war schon fertig berechnet): Anzeige zählt jetzt während der Wiedergabe mit, Banner/Chronik erst danach.
 - [x] Wege als echte Schleife: Eingang links, eine Runde mit Kreuzung, Ausgang rechts (84–86 Felder).
 - [x] Funke (Feuer Turm 1): 1,0 Schaden/s auf Stufe 1 (vorher 0,6), Brennen unverändert.
+- [x] „Hängt bei den Ohrenkneifern“ (00:16): Simulation hängt in keiner getesteten Konstellation. Zeichnen auf dem feinen Raster war aber langsam (17 ms/Bild am PC) → Hintergrund wird jetzt zwischengespeichert (0,8 ms). Live: fast tote Monster kamen mit vollem Leben beim Nachbarn an (behoben). Falls es weiter hängt: genauer nachfragen (ganzes Handy eingefroren? Welle startet nicht? Online oder Ein Gerät, Live oder Uhrzeiten?).
 - Offen (auf Hold): „Verloren“ erst am Ende des Tages statt nach der Welle, in der die Grenze überschritten wird.
 
 ### Vom Testabend

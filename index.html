@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -535,7 +535,7 @@ function step(s, dt){
     if (m.d >= s.map.len) {
       m.dead = m.gone = true;
       const keep = {}; for (const k in fx) if (fx[k].t > 0 && k !== 'stun') keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };
-      s.leaked.push({ type:m.type, hops:m.hops + 1, hp:+m.hp.toFixed(2), fx:keep });
+      s.leaked.push({ type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), fx:keep });   // nie 0: sonst käme es mit vollem Leben wieder
     }
   }
   for (const tw of s.towers) {
@@ -1130,6 +1130,7 @@ function drawFx(c, f, cs, time){
 }
 let cssCache = null;
 function cssVar(n){ if (!cssCache) cssCache = getComputedStyle(document.documentElement); return cssCache.getPropertyValue(n).trim(); }
+const BG = [];
 function drawAll(){ if (G) for (let i = 0; i < NP(); i++) draw(i, $('cv'+i)); }
 function draw(i, cv){
   if (!cv) return;
@@ -1141,22 +1142,29 @@ function draw(i, cv){
   c.fillStyle = v('--bg'); c.fillRect(0, 0, W, H);
   const quake = s && s.fx.find(f => f.kind === 'quake');   // Erdbeben: das ganze Feld wackelt
   if (quake) { const a = (quake.t / quake.t0) * cs * .06; c.translate(Math.sin(time * 90) * a, Math.cos(time * 77) * a); }
+  // Hintergrund (Boden, Weg, Gelände) nur einmal zeichnen und zwischenspeichern – spart auf dem Handy viel Zeit
+  const bgKey = [W, dpr, Object.keys(SPR).length].join('-');
+  if (!BG[i] || BG[i].key !== bgKey) {
+    const bc = document.createElement('canvas'); bc.width = cv.width; bc.height = cv.height; const g = bc.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     const road = map.cells.has(x+','+y), T = TERRAIN[map.terrain[y][x]];
-    c.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : T.col[(x+y)%2];
-    c.fillRect(x*cs, y*cs, cs+.5, cs+.5);
+    g.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : T.col[(x+y)%2];
+    g.fillRect(x*cs, y*cs, cs+.5, cs+.5);
   }
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
-    if (t === 1) { if (!spr(c, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { c.font = `${cs*.55}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.globalAlpha = .55; c.fillText('🌲', (x+.5)*cs, (y+.5)*cs); c.globalAlpha = 1; } }
-    if (t === 2) { c.fillStyle = '#31504c'; c.beginPath(); c.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); c.fill();
-      if (!spr(c, tinted('bush', '#6f8a66'), (x+.72)*cs, (y+.3)*cs, cs*.38, h, .7)) { c.strokeStyle = '#4a6260'; c.lineWidth = 1; for (const dy of [.35,.65]) { c.beginPath(); c.moveTo((x+.2)*cs, (y+dy)*cs); c.lineTo((x+.8)*cs, (y+dy)*cs); c.stroke(); } } }
-    if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(c, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
+    if (t === 1) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
+    if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
+      if (!spr(g, tinted('bush', '#6f8a66'), (x+.72)*cs, (y+.3)*cs, cs*.38, h, .7)) { g.strokeStyle = '#4a6260'; g.lineWidth = 1; for (const dy of [.35,.65]) { g.beginPath(); g.moveTo((x+.2)*cs, (y+dy)*cs); g.lineTo((x+.8)*cs, (y+dy)*cs); g.stroke(); } } }
+    if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
   const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
-  c.fillStyle = v('--danger'); c.beginPath(); c.arc(ex*cs, ey*cs, cs*.4, 0, Math.PI*2); c.fill();
-  c.strokeStyle = v('--accent'); c.lineWidth = 2; c.fillStyle = v('--accent') + '55';   // Ziel: Portal in der Mitte der Schleife
-  c.beginPath(); c.arc(ox*cs, oy*cs, cs*.55, 0, Math.PI*2); c.fill(); c.stroke();
+  g.fillStyle = v('--danger'); g.beginPath(); g.arc(ex*cs, ey*cs, cs*.4, 0, Math.PI*2); g.fill();
+  g.strokeStyle = v('--accent'); g.lineWidth = 2; g.fillStyle = v('--accent') + '55';   // Ziel: Portal in der Mitte der Schleife
+  g.beginPath(); g.arc(ox*cs, oy*cs, cs*.55, 0, Math.PI*2); g.fill(); g.stroke();
+    BG[i] = { key:bgKey, cv:bc };
+  }
+  c.drawImage(BG[i].cv, 0, 0, W, H);
   const towers = laneOf(i).towers;
   if (selCell && selCell.i === i) {
     const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
