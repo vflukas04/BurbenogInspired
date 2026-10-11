@@ -158,6 +158,7 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
     <div class="seats" id="seats"></div>
     <div class="seats" id="gift"></div>
     <div class="controls">
+      <button class="btn primary" id="ready" hidden></button>
       <button class="btn primary" id="go"></button>
       <button class="btn" id="replay">Letzte Welle ansehen</button>
       <span class="muted">Tempo</span>
@@ -195,7 +196,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-11d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-11e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -297,7 +298,7 @@ const ELEMENTS = [
     ['Schneeball',   'Fläche',    2.3, 1,   2, 1.35, 0.2, 4, 0.6],
     ['Eiszapfen',    'Luftabwehr',3.6, 0.8, 2, 2.4, 0.3, 4, 0, {air:true, slowFly:true}],   // nur Fliegende, bremst sie auch
     ['Frosthauch',   'Effekt',    1.6, 2,   3, 1.05, 0.45, 8],
-    ['Frostnova',    'Effekt',    2.0, 1/8, 1, 0.15, 3,    0, 1.6, {effect:'stun', rateUp:Math.pow(8/6, 1/5), fly:false, nova:true}],  // friert alles im Umkreis 3 s ein, alle 8 s (Stufe 6: alle 6 s)
+    ['Frostnova',    'Effekt',    2.0, 1/8, 1, 0.15, 3,    0, 1.6, {effect:'stun', rateUp:Math.pow(8/6, 1/5), fly:false, nova:true, chance:0.45, chanceUp:0.04, chanceMax:0.65}],  // friert im Umkreis 3 s ein (45–65 % je Stufe), alle 8 s (Stufe 6: alle 6 s)
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
@@ -415,7 +416,7 @@ function towerBase(el, idx){
   return { name, role, cost, range, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: splash || 0,
     effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, pierce:!!E.pierce, dayOnly:!!E.dayOnly,
     hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:opt.light || 0,
-    chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, idx, el };
+    chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
 }
 function tdef(tw){
   const b = towerBase(tw.el, tw.idx), n = (tw.lvl || 1) - 1, U = CONFIG.upgrade;
@@ -426,7 +427,7 @@ function tdef(tw){
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
   return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
-    chance: b.chance ? Math.min(0.4, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * n : 0,
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * n : 0,
     dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * n };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
@@ -625,7 +626,7 @@ async function saveGame(){
   const body = JSON.parse(JSON.stringify(G)); await queueWrite(() => DB.doc(P_STATE).set(body));
 }
 let resolving = false;
-async function tryResolve(force){
+async function tryResolve(force, onlyKey){
   if (!G || G.over || resolving || replay) return;
   if (MODE === 'local') { G = resolveSlot(G, L); lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return; }
   resolving = true;
@@ -633,6 +634,7 @@ async function tryResolve(force){
     const ls = await DB.collection(P_LANES).get();
     const lanes = []; ls.docs.forEach(d => { const k = +d.id.slice(1); lanes[k] = d.data(); });
     const advance = g => { let n = 0;
+      if (onlyKey && readyKey(g) !== onlyKey) return null;   // „Bereit“: nur diese eine Welle, nie doppelt
       while (!g.over && n < 30) { const due = dueTime(g); if (!(force && n === 0) && !(due && Date.now() >= due)) break; g = resolveSlot(g, lanes); n++; }
       return n ? g : null; };
     const ref = DB.doc(P_STATE);
@@ -737,7 +739,7 @@ function fxText(d){
     if (d.effect === 'burn') p.push(`brennt ${Math.round(d.eff*100)} %, ${durText(d)}`);
     if (d.effect === 'slow') p.push(`bremst ${Math.round(d.eff*100)} %, ${durText(d)}`);
     if (d.effect === 'curse') p.push(`Fluch +${Math.round(d.eff*100)} % Schaden, ${durText(d)}`);
-    if (d.effect === 'stun') p.push(d.chance ? `${Math.round(d.chance*100)} %: betäubt ${num(d.eff)} s` : `friert ${num(d.eff)} s ein`);
+    if (d.effect === 'stun') p.push(`${d.chance ? Math.round(d.chance*100) + ' %: ' : ''}${d.el === 1 ? 'friert' : 'betäubt'} ${num(d.eff)} s${d.el === 1 ? ' ein' : ''}`);
   }
   if (d.splash) p.push(d.nova ? `Umkreis ${num(d.splash)}` : 'Fläche');
   if (d.light) p.push(`Licht ${num(d.light)}: Schatten-Türme daneben schießen auch im Dunkeln`);
@@ -808,6 +810,20 @@ function checkVersion(gameV){
 async function pollVersion(){       // fragt die Seite ohne Cache ab und vergleicht VERSION
   try { const t = await (await fetch(location.pathname + '?v=' + Date.now(), { cache:'no-store' })).text();
     const m = t.match(/const VERSION = "([^"]+)"/); if (m && m[1] !== VERSION) { newerVersion = m[1]; if (G) checkVersion(G.cfg.version); } } catch(e){}
+}
+// „Bereit“-Knopf (online): Wenn alle Spieler bereit sind, startet die nächste Welle sofort.
+const readyKey = g => `${g.cfg.startAt}-${g.day}-${g.slot}`;
+const isReady = i => laneOf(i).ready === readyKey(G);
+function toggleReady(){
+  if (!mayBuild(seat)) return; const l = laneOf(seat);
+  L[seat] = { ...l, ready: isReady(seat) ? null : readyKey(G) }; render(); saveLane(seat);
+}
+let readyFired = null;
+function checkReady(){
+  if (MODE !== 'online' || !G || G.over || replay) return;
+  const key = readyKey(G);
+  if (readyFired === key || ![...Array(NP())].every((_,i) => isReady(i))) return;
+  readyFired = key; tryResolve(true, key);
 }
 let popT;
 function pop(msg){ const b = $('pop'); b.textContent = msg; b.hidden = false; clearTimeout(popT); popT = setTimeout(() => b.hidden = true, 2200); }
@@ -903,6 +919,11 @@ function render(){
   const go = $('go');
   go.textContent = replay ? 'Welle läuft …' : (MODE === 'local' ? `Welle ${hh(SL[G.slot])} starten` : `Welle ${hh(SL[G.slot])} jetzt auslösen`);
   go.disabled = !!replay || !!G.over;
+  const rb = $('ready'), nReady = [...Array(n)].filter((_,i) => isReady(i)).length;
+  rb.hidden = MODE !== 'online' || !!G.over; rb.disabled = !!replay || !mayBuild(seat);
+  rb.textContent = (isReady(seat) ? '✓ Bereit' : 'Bereit') + ` (${nReady}/${n})`; rb.classList.toggle('on', isReady(seat));
+  if (MODE === 'online') { go.className = 'btn'; go.textContent = replay ? 'Welle läuft …' : `Sofort auslösen`; }
+  checkReady();
   $('replay').disabled = !!replay || !G.lastRun;
   $('skip').disabled = !replay;
   document.querySelectorAll('[data-speed]').forEach(x => x.classList.toggle('on', +x.dataset.speed === speed));
@@ -1157,6 +1178,7 @@ function onGame(g){
 $('fTiming').onchange = renderSetup;
 $('fGo').onclick = newGame;
 $('go').onclick = () => tryResolve(true);
+$('ready').onclick = toggleReady;
 $('replay').onclick = () => G && startReplay(G.lastRun);
 $('skip').onclick = endReplay;
 document.querySelectorAll('[data-speed]').forEach(x => x.onclick = () => { speed = +x.dataset.speed; render(); });

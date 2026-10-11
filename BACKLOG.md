@@ -26,6 +26,10 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - Bot-Test nach diesen Änderungen: gemischt 0/9 gewonnen. Der Bot spielt aber deutlich schlechter als Lukas und Friedrich (die haben gewonnen, als der Bot nur 3/9 schaffte). Echtes Spielgefühl abwarten.
 - Auf Hold (Wiedervorlage): Türme allgemein abschwächen, Forschung teurer, Monsterleben ×4 zu viert, Gold sofort beim Tod, Verloren erst am Rundenende, Chat, Monster-Sprites.
 
+### 11.10. nachmittags
+- [x] „Bereit“-Knopf online: Wenn alle bereit sind, startet die nächste Welle. „Jetzt auslösen“ bleibt als „Sofort auslösen“.
+- [x] Frostnova (Eis Turm 5) friert nur mit 45–65 % Wahrscheinlichkeit (je Stufe +4 %).
+
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [x] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.
