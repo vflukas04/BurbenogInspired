@@ -4,7 +4,7 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 
 ## Offene Wünsche (vorgemerkt)
 ### Aus Lukas' Rückmeldung 11.10. vormittags
-- [ ] Vorschau: Name der nächsten Runde anzeigen, mit Info-Knopf (Stärken/Schwächen je Element, fliegend, Rüstung, Leben).
+- [x] Vorschau: nächstes Monster mit Info-Knopf (auch für heute), Dialog mit Leben, Rüstung, Tempo, Fliegen, Faktoren (11.10.).
 - [ ] Türme leicht abschwächen: bei jedem Turm genau einen Wert senken (Feuerrate, Reichweite, Schaden oder Geschosse), nicht überall alles. Danach Monster ggf. +20 % Leben. Mit `tools/balance.js` prüfen.
 - [ ] Forschung leicht teurer (nicht zu teuer).
 - [ ] Monsterleben zu viert ×4 oder ×4,5 (jetzt ×3,5). Lukas schwankt; Vorschlag: ×4, dann testen.
@@ -12,12 +12,24 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] Grafik: Türme und Geschosse. Pfeile, Feuerbälle, kurzes Aufleuchten, Erdbeben-Wackeln, Geschosse mit Flugzeit, Wurf-Geschosse treffen nicht immer mittig, Flächenschaden fällt nach außen ab (11.10.).
 - [x] Kenney-Paket eingebaut (`assets/kenney/`, nur benutzte Sprites, Lizenz in README). Monster bleiben Emojis: Das Paket hat nur Panzer und Flugzeuge.
 
+### Aus Lukas' Rückmeldung 11.10. mittags (Feuer + Eis zu zweit gewonnen, nur 1 Uffug durch → etwas zu leicht)
+- [x] Bauen mit Bestätigung: Dialog oben mit Kosten, Gold danach, Schaden/s, Reichweite, Wirkung; Turm und Reichweite als Vorschau im Feld. Daneben tippen = abbrechen.
+- [x] Gewonnen/Verloren als Fenster im Vordergrund (einmal je Spiel).
+- [x] Kopfgeld × 0,8, gerundet, mindestens 2 (`CONFIG.bountyMul`). Runde 1–20: 2 2 3 4 6 7 9 10 12 14 17 19 22 24 27 30 34 37 40 43.
+- [x] Upgrade: Schaden ×2,0 statt ×1,8 pro Stufe.
+- [x] Eis: Eiszapfen (Turm 3) ist jetzt Luftabwehr und bremst Fliegende auch.
+- [x] Fliegende: Spatzen (9), Habichte (11), Uffug-Vorhaut (19).
+- [x] Feuer leicht schwächer: Funke kostet 5 statt 3 Gold, Brennen −15 %.
+- Hinweis: spawnGap 0,9 s (statt 0,5) hatte Claude ohne Absprache umgesetzt; stand nur als Idee in der Analyse. Lukas fragt nach – ggf. zurück auf 0,5–0,7.
+- Bot-Test nach diesen Änderungen: gemischt 0/9 gewonnen. Der Bot spielt aber deutlich schlechter als Lukas und Friedrich (die haben gewonnen, als der Bot nur 3/9 schaffte). Echtes Spielgefühl abwarten.
+- Auf Hold (Wiedervorlage): Türme allgemein abschwächen, Forschung teurer, Monsterleben ×4 zu viert, Gold sofort beim Tod, Verloren erst am Rundenende, Chat, Monster-Sprites.
+
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [x] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.
 - [x] Betäubung: höchstens 2 Betäubungstürme (Stein). Dafür **Zufall**: Jeder Treffer betäubt nur mit 10–40 % Wahrscheinlichkeit (je nach Turm und Stufe), die Dauer darf dafür **länger** sein. Wichtig: Den Zufall mit festem Seed würfeln (z. B. aus `startAt`, Tag, Welle, Spieler), damit Berechnung und Wiederholung auf allen Handys gleich bleiben.
 - [x] Schatten: Lichttürme (Irrlicht ersetzt Dolchgeist als Turm 2), heben Dunkelheit und Wettermalus im Umkreis 2,2 auf.
-- [ ] „Uffug-Vorhut“ umbenennen in „Uffug Vorhaut“.
+- [x] „Uffug-Vorhut“ heißt jetzt „Uffug-Vorhaut“ und fliegt (11.10.).
 - [ ] Chat in der Chronik, damit die Spieler sich schreiben können.
 - [ ] „Verloren“ erst am Ende der Runde melden, nicht mitten am Tag.
 - [ ] Grafik: echte Sprites statt Emojis – Türme erledigt, **Monster fehlen noch** (siehe unten).

@@ -106,6 +106,21 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
 .setup select,.setup input{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px}
 .row{display:flex;flex-wrap:wrap;gap:12px}
 .row>label{flex:1 1 160px}
+/* Dialog im Vordergrund: Bauen bestätigen, Monster-Info, Sieg/Niederlage */
+.dlgback{position:fixed;inset:0;background:#000a;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px}
+.dlg{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;max-width:420px;width:100%;max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 10px 40px #000c;display:flex;flex-direction:column;gap:10px}
+.dlg h2{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:0;display:flex;align-items:center;gap:8px}
+.dlg h2 img{width:40px;height:40px}
+.dlgback.sheet{background:#0003;align-items:flex-start;padding-top:max(12px, env(safe-area-inset-top,0px))}
+.dlgback.sheet .dlg{gap:8px;padding:12px 14px}
+.dlgback.sheet dl{grid-template-columns:auto 1fr auto 1fr;font-size:.85rem}
+.dlg .big{font-size:2.6rem;line-height:1}
+.dlg.won{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent),0 10px 40px #000c}
+.dlg.lost{border-color:var(--danger);box-shadow:0 0 0 2px var(--danger),0 10px 40px #000c}
+.dlg dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.92rem}
+.dlg dt{color:var(--muted)} .dlg dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.dlg .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.ibtn{border:1px solid var(--line);background:var(--bg);border-radius:999px;width:24px;height:24px;padding:0;font-size:.8rem;line-height:22px;margin-left:4px;color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -158,6 +173,7 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
   </div>
 </div>
 <div id="pop" class="pop" hidden></div>
+<div id="dlgback" class="dlgback" hidden><div class="dlg" id="dlg" role="dialog" aria-modal="true"></div></div>
 <div class="palette" id="palette" hidden>
   <div class="ptitle" id="ptitle"></div>
   <div class="prow" id="prow"></div>
@@ -198,13 +214,14 @@ const CONFIG = {
   firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
   maxLevel: 6,              // Stufe 1 + 5 Upgrades
   upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
-  upgrade: { dmg:1.8, range:0.2, dur:1.3, eff:1.15 },  // pro Upgrade: Schaden ×1,8, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
+  upgrade: { dmg:2.0, range:0.2, dur:1.3, eff:1.15 },  // pro Upgrade: Schaden ×2, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
   giftFee: 0.10, giftStep: 10,
   weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt
   spawnGap: 0.9,            // Sekunden zwischen zwei Monstern (früher 0,5: Flächenschaden war zu stark)
   splashEdge: 0.4,          // Flächenschaden fällt nach außen ab: Mitte 100 %, Rand 40 %
   shotSpeed: 9, lobSpeed: 6.5,  // Geschosse in Feldern/s: gezielte fliegen dem Ziel nach, Flächen-Geschosse (Wurf) fliegen auf den Punkt, wo das Ziel beim Abschuss war
   stunMax: 5,               // Betäubung höchstens 5 s
+  bountyMul: 0.8,           // Kopfgeld × 0,8
   sellRefund: 0.5
 };
 const DAY = 'Tag';
@@ -242,8 +259,9 @@ const WEATHER = [
   { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.5, eff:1.3}, 1:{eff:0.7, dur:0.5} } },
   { name:'Wind',     sym:'≋', w:1.5, el:{ 0:{dmg:0.9, eff:1.4} }, flySpeed:1.4 }
 ];          // Effektdauer „ganzer Tag“: hält über alle vier Wellen
-// Kopfgeld: Runde 1 = 2 Gold, dann +1 pro Runde, ab Runde 5 +2, ab Runde 10 +3, ab Runde 15 +4
-function bountyFor(r){ let b = 2; for (let k = 2; k <= r; k++) b += k >= 15 ? 4 : k >= 10 ? 3 : k >= 5 ? 2 : 1; return b; }
+// Kopfgeld: Runde 1 = 2 Gold, dann +1 pro Runde, ab Runde 5 +2, ab Runde 10 +3, ab Runde 15 +4, alles × bountyMul
+// 11.10.: insgesamt × 0,8 (gerundet), damit das Spiel nicht zu leicht wird
+function bountyFor(r){ let b = 2; for (let k = 2; k <= r; k++) b += k >= 15 ? 4 : k >= 10 ? 3 : k >= 5 ? 2 : 1; return Math.max(2, Math.round(b * CONFIG.bountyMul)); }
 
 // Turm 1–8: Preis und „Kraft“ (Gesamtschaden/s bei Anteil 1,0)
 const TOWER_COST  = [5, 12, 29, 69, 166, 398, 955, 2290];
@@ -263,19 +281,19 @@ const TOWER_POWER = [1, 2.5, 6.25, 15.6, 39, 98, 244, 610];
      nova     wirkt sofort im Umkreis „Fläche“ um den Turm, ohne Geschoss
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
-  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:3}, towers:[
-    ['Funke',        'Schaden',   2.0, 1,   1, 0.4, 0.3, 3],
-    ['Glutbecken',   'Effekt',    1.6, 1,   2, 0.4, 0.6, 5, 0, {fly:false}],
-    ['Flammenwerfer','Schaden',   1.5, 4,   1, 0.8, 0.2, 2],
-    ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.5, 6, 0, {air:true}],
-    ['Schwelbrand',  'Effekt',    2.5, 0.5, 3, 0.35,0.35, DAY],
-    ['Lavaturm',     'Fläche',    2.0, 0.7, 1, 1.5, 0.5, 4, 0.9, {fly:false}],
-    ['Phönix',       'Schaden',   3.0, 0.6, 2, 1.4, 0.5, 8],
-    ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.9, DAY] ]},
-  { name:'Eis', emo:'❄️', color:'#7ec8e8', note:'verlangsamt (nicht Fliegende)', effect:'slow', towers:[
+  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', towers:[
+    ['Funke',        'Schaden',   2.0, 1,   1, 0.4, 0.26, 3],
+    ['Glutbecken',   'Effekt',    1.6, 1,   2, 0.4, 0.51, 5, 0, {fly:false}],
+    ['Flammenwerfer','Schaden',   1.5, 4,   1, 0.8, 0.17, 2],
+    ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.42, 6, 0, {air:true}],
+    ['Schwelbrand',  'Effekt',    2.5, 0.5, 3, 0.35,0.3, DAY],
+    ['Lavaturm',     'Fläche',    2.0, 0.7, 1, 1.5, 0.42, 4, 0.9, {fly:false}],
+    ['Phönix',       'Schaden',   3.0, 0.6, 2, 1.4, 0.42, 8],
+    ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.77, DAY] ]},
+  { name:'Eis', emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', towers:[
     ['Frostsplitter','Effekt',    2.0, 1,   1, 1.5, 0.25, 3],
     ['Schneeball',   'Fläche',    2.3, 1,   2, 1.35, 0.2, 4, 0.6],
-    ['Eiszapfen',    'Reichweite',3.4, 0.7, 1, 2.1, 0.15, 3],
+    ['Eiszapfen',    'Luftabwehr',3.6, 0.8, 2, 2.4, 0.3, 4, 0, {air:true, slowFly:true}],   // nur Fliegende, bremst sie auch
     ['Frosthauch',   'Effekt',    1.6, 2,   3, 1.05, 0.45, 8],
     ['Frostnova',    'Effekt',    2.0, 1/8, 1, 0.15, 3,    0, 1.6, {effect:'stun', rateUp:Math.pow(8/6, 1/5), fly:false, nova:true}],  // friert alles im Umkreis 3 s ein, alle 8 s (Stufe 6: alle 6 s)
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
@@ -322,7 +340,7 @@ const MONSTERS = [
   ['Besoffene Penner',  {emo:'🍺', speed:0.7, hpMul:1.5, weak:[0.5, 2, 1.5, 1]}],
   ['Wütende Partnerin', {emo:'😠', speed:1.3, weak:[0.5, 3,   0.25,1  ]}],
   ['Wütende Nachbarn',  {emo:'😡', speed:1.1, hpMul:1.2, weak:[1, 1.5, 0.5, 1]}],
-  ['Uffug-Vorhut',      {emo:'👺', weak:[1.5, 1.5, 1.5, 1.5]}],
+  ['Uffug-Vorhaut',     {emo:'👺', fly:true, weak:[1.5, 1.5, 1.5, 1.5]}],
   ['Uffug (Boss)',      {emo:'👹', speed:0.6, hpMul:24, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]
 ].map(([name,o],k) => ({ name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:k+1,
   color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
@@ -394,7 +412,7 @@ function towerBase(el, idx){
   const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
   return { name, role, cost, range, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: splash || 0,
     effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, pierce:!!E.pierce, dayOnly:!!E.dayOnly,
-    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, nova:!!opt.nova, light:opt.light || 0,
+    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:opt.light || 0,
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, idx, el };
 }
 function tdef(tw){
@@ -463,7 +481,7 @@ function hit(s, m, def, dmg){
   m.hp -= Math.max(raw * 0.2, raw - armor);
   const t = def.dur === DAY ? FOREVER : def.dur;
   if (def.effect === 'burn' && w) addFx(m, 'burn', def.eff * def.dpsNow / def.shots * f, t);
-  if (def.effect === 'slow' && !m.def.fly) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);
+  if (def.effect === 'slow' && (!m.def.fly || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);
   if (def.effect === 'curse') addFx(m, 'curse', def.eff * f, t);
   if (def.effect === 'stun' && def.eff > 0 && (!def.chance || s.rand() < def.chance)) addFx(m, 'stun', 1, Math.min(CONFIG.stunMax, def.eff * f));
   if (m.hp <= 0) kill(s, m);
@@ -659,8 +677,32 @@ function clickCell(i, x, y){
   if (LOCKS[selTower] && !curRes().has(LOCKS[selTower])) { pop('Erst in der Bauhütte freischalten.'); return; }
   const cost = buildCost(l.el, selTower, i, x, y);
   if (goldAvail(i) < cost) { pop(`Zu wenig Gold (hier ${cost}).`); return; }
+  pending = { i, x, y, k:selTower }; selCell = { i, x, y }; render(); showBuildDialog();
+}
+// Bauen erst nach Bestätigung im Dialog (Kosten, Reichweite, Wirkung)
+let pending = null;
+function showBuildDialog(){
+  const { i, x, y, k } = pending, l = laneOf(i), d = tdef({ el:l.el, idx:k, lvl:1 }), cost = buildCost(l.el, k, i, x, y), T = TERRAIN[MAPS[i].terrain[y][x]], ic = towerIcon(l.el, k);
+  const extra = cost - d.cost;
+  openDlg(`<h2>${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</h2>
+    <dl><dt>Kosten</dt><dd>${cost} Gold${extra ? ` (${d.cost} + ${extra} ${T.name})` : ''}</dd>
+    <dt>Danach</dt><dd>${goldAvail(i) - cost} Gold</dd>
+    <dt>Schaden/s</dt><dd>${num(d.dpsNow)}</dd><dt>Reichweite</dt><dd>${num(d.range)}</dd></dl>
+    <div class="muted">${d.role}${fxText(d) ? ' · ' + fxText(d) : ''} · Reichweite gestrichelt im Feld</div>
+    <div class="acts"><button class="btn" id="bNo">Abbrechen</button><button class="btn primary" id="bYes">Wirklich bauen</button></div>`, '', true);
+  // Spielfeld unter den Dialog scrollen, damit die Reichweite sichtbar bleibt
+  const r = $('cv'+i).getBoundingClientRect(), bottom = innerHeight - ($('palette').offsetHeight || 0) - 8;
+  if (r.bottom > bottom || r.top < $('dlg').offsetHeight + 20) window.scrollBy(0, r.bottom - bottom);
+  $('bNo').onclick = () => { pending = null; closeDlg(); render(); };
+  $('bYes').onclick = () => { const p = pending; pending = null; closeDlg(); doBuild(p.i, p.x, p.y, p.k); };
+  $('bYes').focus();
+}
+function doBuild(i, x, y, k){
+  const l = laneOf(i); if (!mayBuild(i) || l.towers.some(t => t.x === x && t.y === y)) return render();
+  const cost = buildCost(l.el, k, i, x, y);
+  if (goldAvail(i) < cost) { pop(`Zu wenig Gold (hier ${cost}).`); return render(); }
   pop(`Gebaut: −${cost} Gold`);
-  L[i] = { ...l, towers:[...l.towers, { x, y, el:l.el, idx:selTower, lvl:1, invested:cost }], spent:(l.spent||0) + cost };
+  L[i] = { ...l, towers:[...l.towers, { x, y, el:l.el, idx:k, lvl:1, invested:cost }], spent:(l.spent||0) + cost };
   selCell = { i, x, y }; render(); saveLane(i);
 }
 let sellArm = null;
@@ -721,6 +763,34 @@ function buyResearch(i, id){
   const l = laneOf(i); L[i] = { ...l, research:[...(l.research || []), id] };
   pop(`Erforscht: ${R.name} (−${R.cost} aus der Kasse)`); render(); saveLane(i);
 }
+function openDlg(html, cls, sheet){ const d = $('dlg'); d.className = 'dlg' + (cls ? ' ' + cls : ''); d.innerHTML = html;
+  $('dlgback').className = 'dlgback' + (sheet ? ' sheet' : ''); $('dlgback').hidden = false; }
+function closeDlg(){ $('dlgback').hidden = true; $('dlg').innerHTML = ''; }
+// Kurzinfo zu einem Monster (Runde 1–20)
+function showMonster(r){
+  const M = MONSTERS[r-1], MD = monsterDef(r-1, NP());
+  const strong = ELEMENTS.filter((E,k) => M.weak[k] > 1).map(E => E.name), weak = ELEMENTS.filter((E,k) => M.weak[k] < 1).map(E => E.name);
+  const tempo = M.speed >= 1.4 ? 'schnell' : M.speed <= 0.8 ? 'langsam' : 'normal';
+  openDlg(`<h2><span class="big">${M.emo}</span>${M.name}</h2>
+    <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
+    <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${num(MD.armor)}${MD.armor ? ' (Schatten ignoriert sie)' : ''}</dd>
+    <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : 'nein'}</dd>
+    <dt>Kopfgeld</dt><dd>${bountyFor(r)} Gold</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
+    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('')}</div>
+    <div class="muted">${strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : ''}${weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : ''}</div>
+    <div class="acts"><button class="btn primary" id="mOk">OK</button></div>`);
+  $('mOk').onclick = closeDlg; $('mOk').focus();
+}
+let overSeen = lsGet('ww2-over');
+function showGameOver(){
+  const won = G.over === 'won'; overSeen = G.cfg.startAt + G.over; lsSet('ww2-over', overSeen);
+  openDlg(`<h2><span class="big">${won ? '🏆' : '💀'}</span>${won ? 'Gewonnen!' : 'Verloren'}</h2>
+    <p style="margin:0">${won ? `Ihr habt alle ${CONFIG.days} Tage gehalten.` : `Am Tag ${G.day} war Schluss.`} ${G.passed} von ${CONFIG.lossLimit} erlaubten Monstern sind ganz durchgebrochen.</p>
+    <p class="muted" style="margin:0">Gold verdient: ${G.earned.map((e,k) => `Spieler ${k+1} ${e}`).join(' · ')}</p>
+    <div class="acts"><button class="btn primary" id="oOk">Schließen</button></div>`, won ? 'won' : 'lost');
+  $('oOk').onclick = closeDlg; $('oOk').focus();
+}
+$('dlgback').addEventListener('click', e => { if (e.target.id !== 'dlgback') return; const was = pending; pending = null; closeDlg(); if (was) render(); });   // daneben tippen = abbrechen
 let popT;
 function pop(msg){ const b = $('pop'); b.textContent = msg; b.hidden = false; clearTimeout(popT); popT = setTimeout(() => b.hidden = true, 2200); }
 let toastT;
@@ -788,10 +858,14 @@ function render(){
   $('seats').querySelectorAll('[data-el]').forEach(x => x.onclick = () => { const l = laneOf(seat); L[seat] = { ...l, el:+x.dataset.el }; selTower = null; render(); saveLane(seat); });
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.round-1, n);
-  $('today').innerHTML = G.over ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''} · Leben ${num(MD.hp)} · Rüstung ${num(MD.armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
+  const NX = MONSTERS[G.day];   // nächster Tag
+  $('today').innerHTML = G.over ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${num(MD.armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
     ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
+    (NX ? `<br>Nächstes Monster (Tag ${NX.round}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}<button class="ibtn" data-mon="${NX.round}" aria-label="Info zu ${NX.name}">i</button>` : '') +
     `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;
+  $('today').querySelectorAll('[data-mon]').forEach(x => x.onclick = () => showMonster(+x.dataset.mon));
+  if (G.over && overSeen !== G.cfg.startAt + G.over && !replay) showGameOver();
   const others = [...Array(n)].map((_,k) => k).filter(k => k !== seat);
   $('gift').hidden = !mayBuild(seat) || !others.length;
   if (!$('gift').hidden && !$('gAmt')) {
@@ -994,6 +1068,10 @@ function draw(i, cv){
     if (tw) { const r = tdef(tw).range;
       c.beginPath(); c.arc((tw.x+.5)*cs, (tw.y+.5)*cs, r*cs, 0, Math.PI*2); c.setLineDash([4,4]); c.stroke(); c.setLineDash([]); }
   }
+  if (pending && pending.i === i) { const d = tdef({ el:laneOf(i).el, idx:pending.k, lvl:1 });
+    c.globalAlpha = .55; drawTower(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x*cs, pending.y*cs, cs, -Math.PI/2, 0); c.globalAlpha = 1;
+    c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.setLineDash([4,4]); c.beginPath(); c.arc((pending.x+.5)*cs, (pending.y+.5)*cs, d.range*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
+    c.fillStyle = v('--accent') + '18'; c.fill(); }
   if (s) for (const f of s.fx) if (f.kind === 'boom' || f.kind === 'quake' || f.kind === 'nova') drawFx(c, f, cs, time);
   for (const tw of towers) {
     const st = s && s.towers.find(o => o.x === tw.x && o.y === tw.y), fl = s && s.fx.find(f => f.kind === 'flash' && f.tw === st);
