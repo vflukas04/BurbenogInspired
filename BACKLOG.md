@@ -14,7 +14,7 @@ Stand: 11.10.2026, nach dem ersten Testabend.
 
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
-- [ ] Fliegende: Pro Element dürfen höchstens 3 Türme Fliegende angreifen, **zusätzlich** zur Regel „Stein erst ab Turm 4“. Beispiele für Stein: Turm 4, 6, 8 oder 4, 5, 7. Für die anderen Elemente je 3 Türme festlegen (Eis bleibt ohne Verlangsamung gegen Fliegende).
+- [ ] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.
 - [ ] Betäubung: höchstens 2 Betäubungstürme (Stein). Dafür **Zufall**: Jeder Treffer betäubt nur mit 10–40 % Wahrscheinlichkeit (je nach Turm und Stufe), die Dauer darf dafür **länger** sein. Wichtig: Den Zufall mit festem Seed würfeln (z. B. aus `startAt`, Tag, Welle, Spieler), damit Berechnung und Wiederholung auf allen Handys gleich bleiben.
 - [ ] Schatten: Lichttürme, die in ihrem Umkreis die Nachteile durch Dunkelheit aufheben (19 Uhr, Bewölkt, Gewitter usw.).
 - [ ] „Uffug-Vorhut“ umbenennen in „Uffug Vorhaut“.
