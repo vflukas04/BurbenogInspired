@@ -19,7 +19,8 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] Upgrade: Schaden ×2,0 statt ×1,8 pro Stufe.
 - [x] Eis: Eiszapfen (Turm 3) ist jetzt Luftabwehr und bremst Fliegende auch.
 - [x] Fliegende: Spatzen (9), Habichte (11), Uffug-Vorhaut (19).
-- [x] Feuer leicht schwächer: Funke kostet 5 statt 3 Gold, Brennen −15 %.
+- [x] Feuer leicht schwächer: Brennen −15 %. Funke bleibt bei 3 Gold, dafür Schaden 0,4→0,3 und Brennen 0,26→0,2 (Lukas 13:16).
+- [x] Monsterleben +25 % (baseHp 3 → 3,75): Am Anfang soll nicht jeder alle 20 schaffen, man soll sich helfen müssen.
 - Hinweis: spawnGap 0,9 s (statt 0,5) hatte Claude ohne Absprache umgesetzt; stand nur als Idee in der Analyse. Lukas fragt nach – ggf. zurück auf 0,5–0,7.
 - Bot-Test nach diesen Änderungen: gemischt 0/9 gewonnen. Der Bot spielt aber deutlich schlechter als Lukas und Friedrich (die haben gewonnen, als der Bot nur 3/9 schaffte). Echtes Spielgefühl abwarten.
 - Auf Hold (Wiedervorlage): Türme allgemein abschwächen, Forschung teurer, Monsterleben ×4 zu viert, Gold sofort beim Tod, Verloren erst am Rundenende, Chat, Monster-Sprites.

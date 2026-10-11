@@ -203,7 +203,7 @@ const CONFIG = {
   lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
   startGold: 30,
   perWave: 20,              // Monster pro Welle (Boss: 1)
-  baseHp: 3,                // Leben Runde 1 (bei 2 Spielern)
+  baseHp: 3.75,             // Leben Runde 1 (bei 2 Spielern); 11.10.: +25 % (war 3), damit man sich helfen muss
   playerHp: { 2:1, 3:2, 4:3.5 },  // Monsterleben je Spielerzahl
   hpGrowth: 1.5,            // Leben × 1,5 pro Runde
   armorPerRound: 0.2,       // Rüstung ab Runde 2: 0,2 × (Runde − 1) …
@@ -281,8 +281,8 @@ const TOWER_POWER = [1, 2.5, 6.25, 15.6, 39, 98, 244, 610];
      nova     wirkt sofort im Umkreis „Fläche“ um den Turm, ohne Geschoss
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
-  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', towers:[
-    ['Funke',        'Schaden',   2.0, 1,   1, 0.4, 0.26, 3],
+  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:3}, towers:[
+    ['Funke',        'Schaden',   2.0, 1,   1, 0.3, 0.2, 3],   // 3 Gold, dafür schwächer (11.10.)
     ['Glutbecken',   'Effekt',    1.6, 1,   2, 0.4, 0.51, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 0.8, 0.17, 2],
     ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.42, 6, 0, {air:true}],
