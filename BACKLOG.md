@@ -20,6 +20,7 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] Eis: Eiszapfen (Turm 3) ist jetzt Luftabwehr und bremst Fliegende auch.
 - [x] Fliegende: Spatzen (9), Habichte (11), Uffug-Vorhaut (19).
 - [x] Feuer leicht schwächer: Brennen −15 %. Funke bleibt bei 3 Gold, dafür Schaden 0,4→0,3 und Brennen 0,26→0,2 (Lukas 13:16).
+- [x] Startgold 15 statt 30. Boss nicht mit erhöht, sondern 10 % weniger als vorher (hpMul 24 → 17,3).
 - [x] Monsterleben +25 % (baseHp 3 → 3,75): Am Anfang soll nicht jeder alle 20 schaffen, man soll sich helfen müssen.
 - Hinweis: spawnGap 0,9 s (statt 0,5) hatte Claude ohne Absprache umgesetzt; stand nur als Idee in der Analyse. Lukas fragt nach – ggf. zurück auf 0,5–0,7.
 - Bot-Test nach diesen Änderungen: gemischt 0/9 gewonnen. Der Bot spielt aber deutlich schlechter als Lukas und Friedrich (die haben gewonnen, als der Bot nur 3/9 schaffte). Echtes Spielgefühl abwarten.
