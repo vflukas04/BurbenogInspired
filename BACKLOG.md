@@ -49,6 +49,11 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] Leben kalibriert (`tools/kalibrieren.js`): Anfangstürme schaffen in Runde 1 ca. 12/8/6 von 20. Delle um Runde 5 (dort eher 5 von 20 im Test), danach 9–13 von 20.
 - Hinweis: Auf dem Handy sind die Felder jetzt nur ca. 15 px groß. Falls Tippen schwierig wird: Querformat oder Zoom-Funktion überlegen.
 
+### 12.10. kurz nach Mitternacht
+- [x] „Verloren“ und „Ganz durchgebrochen“ kamen zu früh (Welle war schon fertig berechnet): Anzeige zählt jetzt während der Wiedergabe mit, Banner/Chronik erst danach.
+- [x] Wege als echte Schleife: Eingang links, eine Runde mit Kreuzung, Ausgang rechts (84–86 Felder).
+- Offen (auf Hold): „Verloren“ erst am Ende des Tages statt nach der Welle, in der die Grenze überschritten wird.
+
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [x] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.

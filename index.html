@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -243,7 +243,7 @@ const TERRAIN = [
   { name:'Wald',  extra:10, col:['#17271a','#1b2e1e'] },
   { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] }
 ];
-const TERRAIN_MAX = 40;     // Wald- und Sumpffelder je Karte (feines Raster), mehr bei längerem Weg
+const TERRAIN_MAX = 40;     // Wald- und Sumpffelder je Karte bei 86 Feldern Weg, kürzerer Weg = etwas weniger
 // Forschung: drei Gebäude, alle zahlen gemeinsam aus der Gemeinschaftskasse (ohne Gebühr)
 const RESEARCH = [
   { id:'t5',   house:'Bauhütte',     name:'Türme 5–6 freischalten', cost:150 },
@@ -364,12 +364,13 @@ const MONSTERS = [
 /* Feines Raster (11.10. nachts): 24 × 16 Felder statt 12 × 8, gleiche Fläche. Alle Längen in den Spieldaten
    (Reichweite, Fläche, Licht, Tempo) sind in „alten“ Feldern angegeben und werden mit GRID umgerechnet. */
 const GRID = 2, COLS = 12 * GRID, ROWS = 8 * GRID;
-// Jeder Spieler hat eine eigene Karte: Schleife nach innen, alle Wege 86 Felder lang, mind. 2 Bauplätze zwischen parallelen Stücken
+/* Jeder Spieler hat eine eigene Karte: Eingang links, eine Runde (Schleife mit Kreuzung), Ausgang rechts.
+   Wege 84–86 Felder, mind. 2 Bauplätze zwischen parallelen Stücken. Geprüft mit einem Skript (Länge, genau 1 Kreuzung, Abstände). */
 const MAP_WPS = [
-  [[-0.5,1.5],[21.5,1.5],[21.5,14.5],[2.5,14.5],[2.5,5.5],[17.5,5.5],[17.5,10.5],[14.5,10.5]],
-  [[-0.5,13.5],[22.5,13.5],[22.5,1.5],[3.5,1.5],[3.5,9.5],[15.5,9.5],[15.5,5.5],[7.5,5.5]],
-  [[11.5,-0.5],[11.5,1.5],[1.5,1.5],[1.5,14.5],[21.5,14.5],[21.5,4.5],[5.5,4.5],[5.5,10.5],[14.5,10.5]],
-  [[24.5,2.5],[2.5,2.5],[2.5,13.5],[21.5,13.5],[21.5,6.5],[6.5,6.5],[6.5,9.5],[15.5,9.5]]
+  [[-0.5,7.5],[21.5,7.5],[21.5,0.5],[4.5,0.5],[4.5,14.5],[17.5,14.5],[17.5,10.5],[24.5,10.5]],
+  [[-0.5,7.5],[21.5,7.5],[21.5,14.5],[4.5,14.5],[4.5,0.5],[17.5,0.5],[17.5,4.5],[24.5,4.5]],
+  [[-0.5,3.5],[19.5,3.5],[19.5,8.5],[22.5,8.5],[22.5,15.5],[5.5,15.5],[5.5,0.5],[24.5,0.5]],
+  [[-0.5,12.5],[19.5,12.5],[19.5,7.5],[22.5,7.5],[22.5,0.5],[5.5,0.5],[5.5,15.5],[24.5,15.5]]
 ];
 function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 function buildMap(k){
@@ -634,11 +635,13 @@ function resolveSlot(g, lanes){
   });
   g.leaked = leaked; g.passed += broke;
   log.reverse().forEach(text => g.log.unshift({ when:`Tag ${g.day} ${time} ${WEATHER[weather].sym}`, text }));
+  let added = log.length;
   g.lastRun = { id:`${g.day}-${g.slot}-${Date.now()}`, day:g.day, slot:g.slot, inputs, live };
-  if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
+  if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
   else if (g.slot < SL.length - 1) g.slot++;
-  else if (g.day >= CONFIG.days) { g.over = 'won'; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
-  else { g.day++; g.slot = 0; g.leaked = {}; g.log.unshift({ when:`Tag ${g.day}`, text:`Neuer Tag. Um 10:00 kommen ${MONSTERS[g.day-1] ? MONSTERS[g.day-1].name : 'Monster'}.` }); }
+  else if (g.day >= CONFIG.days) { g.over = 'won'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
+  else { g.day++; g.slot = 0; g.leaked = {}; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Neuer Tag. Um 10:00 kommen ${MONSTERS[g.day-1] ? MONSTERS[g.day-1].name : 'Monster'}.` }); }
+  g.lastRun.newLog = added; g.lastRun.broke = broke;   // für die Wiedergabe: erst zeigen, wenn es passiert
   g.log = g.log.slice(0, 60);
   return g;
 }
@@ -867,6 +870,13 @@ function checkReady(){
   if (readyFired === key || ![...Array(NP())].every((_,i) => isReady(i))) return;
   readyFired = key; tryResolve(true, key);
 }
+// Während die neueste Welle zum ersten Mal abgespielt wird, zeigt die Anzeige nur, was schon passiert ist
+// (Durchbrüche, Verloren/Gewonnen, Chronik). Ausgewertet ist die Welle da längst.
+const runPending = () => !!(replay && replay.pending);
+function brokeSoFar(){ const n = replay.sims.length;
+  return replay.sims.reduce((a, s) => a + s.leaked.filter(m => m.hops >= n).reduce((b, m) => b + (MONSTERS[m.type].lives || 1), 0), 0); }
+const passedShown = () => G.passed - (runPending() ? Math.max(0, (replay.run.broke || 0) - brokeSoFar()) : 0);
+const overShown = () => G.over && !runPending();
 let popT;
 function pop(msg){ const b = $('pop'); b.textContent = msg; b.hidden = false; clearTimeout(popT); popT = setTimeout(() => b.hidden = true, 2200); }
 let toastT;
@@ -893,7 +903,9 @@ function buildLanes(){
       L[i] = { ...l, el:(l.el + 1) % ELEMENTS.length }; selTower = null; render(); saveLane(i); });
   }
 }
+function showPassed(){ const p = passedShown(); $('sPass').textContent = `${p}/${CONFIG.lossLimit}`; $('passBox').classList.toggle('bad', p > CONFIG.lossLimit * 0.6); }
 function updateLaneHeads(){
+  if (G) showPassed();
   for (let i = 0; i < NP(); i++) {
     const s = replay && replay.sims[i];
     $('p'+i).textContent = s && s.earned ? `+${s.earned}` : '';
@@ -905,8 +917,8 @@ function fmtLeft(ms){ if (ms <= 0) return 'jetzt'; const m = Math.ceil(ms/60000)
 function renderClock(){
   if (!G) return;
   const due = dueTime(G);
-  $('sNext').textContent = G.over ? '–' : (due ? fmtLeft(due - Date.now()) : 'per Knopf');
-  $('sNextL').textContent = G.over ? 'Spiel vorbei' : `Welle ${hh(slotsOf(G)[G.slot])}`;
+  $('sNext').textContent = overShown() ? '–' : (due ? fmtLeft(due - Date.now()) : 'per Knopf');
+  $('sNextL').textContent = overShown() ? 'Spiel vorbei' : `Welle ${hh(slotsOf(G)[G.slot])}`;
 }
 function render(){
   $('modeTag').textContent = MODE === 'online' ? 'Prototyp 3 · online' : (MODE === 'local' ? 'Prototyp 3 · ein Gerät' : 'verbinde …');
@@ -916,8 +928,7 @@ function render(){
   if (lanesBuilt !== NP()) buildLanes();
   const n = NP();
   $('sDay').textContent = `${Math.min(G.day, CONFIG.days)}/${CONFIG.days}`;
-  $('sPass').textContent = `${G.passed}/${CONFIG.lossLimit}`;
-  $('passBox').classList.toggle('bad', G.passed > CONFIG.lossLimit * 0.6);
+  showPassed();
   renderClock();
   const showSlot = replay ? replay.run.slot : G.slot;
   const SL = slotsOf(G), wd = weatherDay(G, Math.min(G.day, CONFIG.days));
@@ -926,7 +937,7 @@ function render(){
     return `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}" title="${W.name}: ${weatherText(W)}"><b>${hh(h)} <span class="wx">${W.sym} ${W.name}</span></b>${k===0?'Welle für alle':'Leaks vom Nachbarn'}${isDark(h)?' · dunkel':''}</div>`; }).join('');
   const b = $('banner');
   checkVersion(G.cfg.version);
-  b.hidden = !G.over; b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
+  b.hidden = !overShown(); b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
   if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`;
   $('seats').innerHTML = MODE === 'online'
     ? `<span class="muted">Ich spiele:</span>` + [...Array(n)].map((_,i) => `<button class="btn ${seat===i?'on':''}" data-seat="${i}">Spieler ${i+1}</button>`).join('')
@@ -937,7 +948,7 @@ function render(){
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.round-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
-  $('today').innerHTML = G.over ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${num(MD.armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
+  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${num(MD.armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
     ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
     (NX ? `<br>Nächstes Monster (Tag ${NX.round}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}<button class="ibtn" data-mon="${NX.round}" aria-label="Info zu ${NX.name}">i</button>` : '') +
@@ -992,7 +1003,7 @@ function render(){
   updateLaneHeads();
   renderPalette();
   renderResearch();
-  $('log').innerHTML = G.log.map(e => `<li><b>${e.when}</b>${e.text}</li>`).join('');
+  $('log').innerHTML = G.log.slice(runPending() ? (replay.run.newLog || 0) : 0).map(e => `<li><b>${e.when}</b>${e.text}</li>`).join('');
   drawAll();
 }
 function renderPalette(){
