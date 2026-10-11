@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12h";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -216,7 +216,7 @@ const CONFIG = {
   /* Leben: baseHp × Runde^hpExp × hpMul × Spielerfaktor. Ausgelegt auf 40 Runden (Test: 20).
      Richtwert (11.10. nachts): Mit den Anfangstürmen schafft ein Spieler in den ersten Runden
      ca. 12 von 20 (2 Spieler), 8 (3 Spieler), 6 (4 Spieler). Kalibriert mit tools/kalibrieren.js. */
-  baseHp: 12.9,
+  baseHp: 14,               // 12.10.: neu kalibriert für 16 × 16
   playerHp: { 2:1, 3:1.25, 4:1.5 },
   hpExp: 1.5,               // Runde 2: ×2,8 · Runde 5: ×11 · Runde 10: ×32 · Runde 20: ×89 · Runde 40: ×253
   armorFrac: 0.004,         // Rüstung = 0,004 × (Runde − 1) × Grundleben der Runde (Runde 20: ca. 8 % der Leben)
@@ -243,7 +243,7 @@ const TERRAIN = [
   { name:'Wald',  extra:10, col:['#17271a','#1b2e1e'] },
   { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] }
 ];
-const TERRAIN_MAX = 40;     // Wald- und Sumpffelder je Karte bei 86 Feldern Weg, kürzerer Weg = etwas weniger
+const TERRAIN_MAX = 26;     // Wald- und Sumpffelder je Karte bei 63 Feldern Weg, kürzerer Weg = etwas weniger
 // Forschung: drei Gebäude, alle zahlen gemeinsam aus der Gemeinschaftskasse (ohne Gebühr)
 const RESEARCH = [
   { id:'t5',   house:'Bauhütte',     name:'Türme 5–6 freischalten', cost:150 },
@@ -363,14 +363,14 @@ const MONSTERS = [
 
 /* Feines Raster (11.10. nachts): 24 × 16 Felder statt 12 × 8, gleiche Fläche. Alle Längen in den Spieldaten
    (Reichweite, Fläche, Licht, Tempo) sind in „alten“ Feldern angegeben und werden mit GRID umgerechnet. */
-const GRID = 2, COLS = 12 * GRID, ROWS = 8 * GRID;
+const GRID = 2, COLS = 8 * GRID, ROWS = 8 * GRID;   // 16 × 16, quadratisch (12.10.)
 /* Jeder Spieler hat eine eigene Karte: Eingang links, eine Runde (Schleife mit Kreuzung), Ausgang rechts.
-   Wege 84–86 Felder, mind. 2 Bauplätze zwischen parallelen Stücken. Geprüft mit einem Skript (Länge, genau 1 Kreuzung, Abstände). */
+   16 × 16, Wege 62–64 Felder, mind. 2 Bauplätze zwischen parallelen Stücken. Geprüft per Skript (Länge, genau 1 Kreuzung, Abstände). */
 const MAP_WPS = [
-  [[-0.5,7.5],[21.5,7.5],[21.5,0.5],[4.5,0.5],[4.5,14.5],[17.5,14.5],[17.5,10.5],[24.5,10.5]],
-  [[-0.5,7.5],[21.5,7.5],[21.5,14.5],[4.5,14.5],[4.5,0.5],[17.5,0.5],[17.5,4.5],[24.5,4.5]],
-  [[-0.5,3.5],[19.5,3.5],[19.5,8.5],[22.5,8.5],[22.5,15.5],[5.5,15.5],[5.5,0.5],[24.5,0.5]],
-  [[-0.5,12.5],[19.5,12.5],[19.5,7.5],[22.5,7.5],[22.5,0.5],[5.5,0.5],[5.5,15.5],[24.5,15.5]]
+  [[-0.5,7.5],[13.5,7.5],[13.5,0.5],[3.5,0.5],[3.5,14.5],[10.5,14.5],[10.5,10.5],[16.5,10.5]],
+  [[-0.5,7.5],[13.5,7.5],[13.5,14.5],[3.5,14.5],[3.5,0.5],[10.5,0.5],[10.5,4.5],[16.5,4.5]],
+  [[-0.5,3.5],[11.5,3.5],[11.5,7.5],[14.5,7.5],[14.5,14.5],[3.5,14.5],[3.5,0.5],[16.5,0.5]],
+  [[-0.5,11.5],[11.5,11.5],[11.5,7.5],[14.5,7.5],[14.5,0.5],[3.5,0.5],[3.5,14.5],[16.5,14.5]]
 ];
 function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 function buildMap(k){
@@ -378,7 +378,7 @@ function buildMap(k){
   for (let i = 0; i < wp.length - 1; i++) { const [ax,ay] = wp[i], [bx,by] = wp[i+1], l = Math.hypot(bx-ax, by-ay); seg.push({ax,ay,bx,by,len:l,start:len}); len += l; }
   const map = { k, wp, seg, len, cells:new Set(), terrain:[] };
   for (let d = 0; d < len; d += 0.1) { const [x,y] = posAt(map, d); const cx = Math.floor(x), cy = Math.floor(y); if (cx>=0&&cx<COLS&&cy>=0&&cy<ROWS) map.cells.add(cx+','+cy); }
-  const r = rng(1000 + k * 77), cnt = Math.round(TERRAIN_MAX * len / 86), free = [];
+  const r = rng(1000 + k * 77), cnt = Math.round(TERRAIN_MAX * len / 63), free = [];
   for (let y = 0; y < ROWS; y++) { map.terrain[y] = Array(COLS).fill(0); for (let x = 0; x < COLS; x++) if (!map.cells.has(x+','+y)) free.push([x,y]); }
   for (let j = free.length - 1; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [free[j], free[q]] = [free[q], free[j]]; }
   free.slice(0, cnt).forEach(([x,y]) => map.terrain[y][x] = 1);
