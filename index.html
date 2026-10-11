@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12k";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12l";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -522,7 +522,9 @@ function simulateWorld(run){ const w = makeWorld(run); let g = 0; while (worldBu
 const canHit = (def, m) => m.def.fly ? def.hitsFly : !def.air;
 function step(s, dt){
   s.t += dt;
-  if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { spawn(s, s.queue.shift()); s.spawnT = CONFIG.spawnGap; } }
+  // Neue Welle: alle 0,9 s ein Monster. Leaks vom Nachbarn: in denselben Abständen, in denen sie dort ins Ziel kamen (at = Sekunden ab dem ersten).
+  if (s.queue.length && s.queue[0].at !== undefined) { while (s.queue.length && s.queue[0].at <= s.t) spawn(s, s.queue.shift()); }
+  else if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { spawn(s, s.queue.shift()); s.spawnT = CONFIG.spawnGap; } }
   for (const m of s.monsters) {
     if (m.dead) continue;
     for (const k in m.fx) m.fx[k].t -= dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1);
@@ -535,7 +537,7 @@ function step(s, dt){
     if (m.d >= s.map.len) {
       m.dead = m.gone = true;
       const keep = {}; for (const k in fx) if (fx[k].t > 0 && k !== 'stun') keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };
-      s.leaked.push({ type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), fx:keep });   // nie 0: sonst käme es mit vollem Leben wieder
+      s.leaked.push({ type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), fx:keep, at:+s.t.toFixed(2) });   // nie 0: sonst käme es mit vollem Leben wieder
     }
   }
   for (const tw of s.towers) {
@@ -628,6 +630,7 @@ function resolveSlot(g, lanes){
     g.earned[i] = (g.earned[i]||0) + r.earned;
     g.kills = g.kills || []; g.kills[i] = (g.kills[i]||0) + r.kills;
     const pass = r.leaked.filter(m => m.hops < n), outs = r.leaked.filter(m => m.hops >= n), out = outs.length;
+    if (pass.length) { const t0 = Math.min(...pass.map(m => m.at || 0)); pass.forEach(m => m.at = +((m.at || 0) - t0).toFixed(2)); pass.sort((a,b) => a.at - b.at); }
     leaked[i] = live ? [] : pass; broke += outs.reduce((a,m) => a + (MONSTERS[m.type].lives || 1), 0);
     if (!inputs[i].incoming.length && !r.kills && !r.leaked.length) return;
     log.push(`Spieler ${i+1}: ${r.kills} besiegt (+${r.earned} Gold), ${r.leaked.length} durch` +

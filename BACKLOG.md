@@ -60,6 +60,8 @@ Stand: 11.10.2026, nach Element-Balance und Grafik.
 - [x] „Hängt bei den Ohrenkneifern“ (00:16): Simulation hängt in keiner getesteten Konstellation. Zeichnen auf dem feinen Raster war aber langsam (17 ms/Bild am PC) → Hintergrund wird jetzt zwischengespeichert (0,8 ms). Live: fast tote Monster kamen mit vollem Leben beim Nachbarn an (behoben). Falls es weiter hängt: genauer nachfragen (ganzes Handy eingefroren? Welle startet nicht? Online oder Ein Gerät, Live oder Uhrzeiten?).
 - Offen (auf Hold): „Verloren“ erst am Ende des Tages statt nach der Welle, in der die Grenze überschritten wird.
 
+- [x] Leaks starten beim Nachbarn in denselben Abständen, in denen sie beim Vorgänger ins Ziel kamen (00:52; z. B. nach Eis weiter auseinander).
+
 ### Vom Testabend
 - [ ] Gold direkt aufs Konto, sobald ein Monster stirbt: nicht schon vor Rundenstart sichtbar, aber auch nicht erst am Rundenende. *Klären:* Gilt das auch, wenn niemand die Wiederholung anschaut?
 - [x] Fliegende: Die Begrenzung gilt **nur für Stein**: erst ab Turm 4 und insgesamt höchstens 3 Türme (z. B. 4, 6, 8 oder 4, 5, 7). Feuer, Eis und Schatten: Die meisten Türme treffen Fliegende, je Element nur 1–3 Türme nicht. Im ganzen Spiel darf es außerdem 1–2 Spezialtürme geben, die **nur** Fliegende angreifen.
