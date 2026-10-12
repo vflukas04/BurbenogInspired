@@ -17,6 +17,11 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 12:52 (VERSION 2026-10-12y)
+- [x] Analyse: Leben wuchsen mit Runde^1,5, Einkommen nur linear (Kopfgeld 2/3). Ein Spieler mit 85 % des möglichen Golds tötete ab Tag 4 nur noch ca. 4 von 20 (Eis/Schatten, Turm 1–3, gleichartig gebaut, erster Durchgang).
+- [x] Leben-Exponent 1,5 → 1,3. Gleiche Messung: ca. 7 von 20 (Tag 2–10); 1,35 ≈ 5,5, 1,25 ≈ 9. Tag 1 unverändert. Rüstung sinkt mit (hängt am Grundleben). Boss jetzt ca. 11.300 statt 20.600 Leben (2 Spieler) – beobachten, ggf. hpMul hoch.
+- Werkzeug: Analyse-Skript lag im Scratchpad (beste gleichartige Bauweise je Budget, Bedarf für 12/20). Bei Bedarf als tools/budget.js ins Repo übernehmen.
+
 ### 12.10. 12:22 (VERSION 2026-10-12x)
 - [x] Kleine Hunde jetzt Tag 6, Ratten Tag 7 (Leben, Rüstung und Kopfgeld richten sich nach dem Tag, Tempo und Faktoren wandern mit).
 - [x] Mäuse nochmal −5 % Leben (hpMul 0,9).
