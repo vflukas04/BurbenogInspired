@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12t";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12u";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -260,18 +260,18 @@ const RESEARCH = [
   { id:'gold', house:'Akademie',     name:'Kopfgeld +20 %',          cost:300 }
 ];
 const LOCKS = { 4:'t5', 5:'t5', 6:'t7', 7:'t7' };   // Turm-Index → nötige Forschung
-/* Wetter: wechselt im Lauf des Tages (Chance je Welle: CONFIG.weatherChange). Stein ist wetterfest.
+/* Wetter (12.10. 11:47: alle Abweichungen von ×1 halbiert): wechselt im Lauf des Tages (Chance je Welle: CONFIG.weatherChange). Stein ist wetterfest.
    el: je Element [Feuer, Eis, Schatten] → dmg = Schaden, eff = Effektstärke, dur = Effektdauer
    range = Reichweite aller Türme außer Stein, burnDecay = Brennen erlischt schneller, flySpeed = Fliegende schneller/langsamer */
 const WEATHER = [
-  { name:'Sonnig',   sym:'☀', w:3,   el:{ 0:{dmg:1.25, eff:1.25}, 1:{dur:0.7}, 2:{dmg:1.15} } },
-  { name:'Bewölkt',  sym:'☁', w:3,   el:{ 1:{dur:1.15}, 2:{dmg:0.7, eff:0.8} } },
-  { name:'Regen',    sym:'☂', w:2,   el:{ 0:{dmg:0.8, dur:0.4}, 1:{eff:1.25, dmg:1.1}, 2:{dmg:0.85} }, burnDecay:2.5 },
-  { name:'Gewitter', sym:'ϟ', w:1,   el:{ 0:{dmg:0.8, dur:0.4}, 1:{eff:1.15}, 2:{dmg:0.6} }, burnDecay:2, flySpeed:0.7 },
-  { name:'Nebel',    sym:'≡', w:1.5, el:{ 2:{dmg:1.3, eff:1.3} }, range:0.75 },
-  { name:'Frost',    sym:'❄', w:1,   el:{ 0:{dmg:0.85}, 1:{eff:1.3, dur:1.5, dmg:1.1} } },
-  { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.5, eff:1.3}, 1:{eff:0.7, dur:0.5} } },
-  { name:'Wind',     sym:'≋', w:1.5, el:{ 0:{dmg:0.9, eff:1.4} }, flySpeed:1.4 }
+  { name:'Sonnig',   sym:'☀', w:3,   el:{ 0:{dmg:1.125, eff:1.125}, 1:{dur:0.85}, 2:{dmg:1.075} } },
+  { name:'Bewölkt',  sym:'☁', w:3,   el:{ 1:{dur:1.075}, 2:{dmg:0.85, eff:0.9} } },
+  { name:'Regen',    sym:'☂', w:2,   el:{ 0:{dmg:0.9, dur:0.7}, 1:{eff:1.125, dmg:1.05}, 2:{dmg:0.925} }, burnDecay:1.75 },
+  { name:'Gewitter', sym:'ϟ', w:1,   el:{ 0:{dmg:0.9, dur:0.7}, 1:{eff:1.075}, 2:{dmg:0.8} }, burnDecay:1.5, flySpeed:0.85 },
+  { name:'Nebel',    sym:'≡', w:1.5, el:{ 2:{dmg:1.15, eff:1.15} }, range:0.875 },
+  { name:'Frost',    sym:'❄', w:1,   el:{ 0:{dmg:0.925}, 1:{eff:1.15, dur:1.25, dmg:1.05} } },
+  { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.25, eff:1.15}, 1:{eff:0.85, dur:0.75} } },
+  { name:'Wind',     sym:'≋', w:1.5, el:{ 0:{dmg:0.95, eff:1.2} }, flySpeed:1.2 }
 ];          // Effektdauer „ganzer Tag“: hält über alle vier Wellen
 // Kopfgeld je Monster, flach: Runde 1–5: 2, 6–10: 3, 11–15: 5, 16–20: 8, 21–25: 12, 26–30: 17, 31–35: 23, 36–40: 30
 // 11.10.: insgesamt × 0,8 (gerundet), damit das Spiel nicht zu leicht wird
