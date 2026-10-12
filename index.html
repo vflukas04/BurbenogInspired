@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12zd";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12ze";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -677,9 +677,16 @@ let writeChain = Promise.resolve();
 // 12.10. 14:36: Hing ein Schreibvorgang (Safari), blieben alle weiteren in der Schlange liegen (Element-Wahl kam nie an).
 // Jetzt: Zeitlimit 10 s je Versuch, ein zweiter Versuch, danach geht die Schlange trotzdem weiter.
 const withTimeout = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit beim Speichern')), ms))]);
+// Speicher-Anzeige oben (12.10. 14:39, Fehlersuche Fairphone): speichert … / ✓ gespeichert / ⚠ Fehler mit Meldung
+let writesOpen = 0, writeErr = null, writeOkAt = 0;
+function saveStatus(){ const t = $('modeTag'); if (!t || MODE !== 'online') return;
+  t.textContent = 'Prototyp 3 · online · ' + (writeErr ? '⚠ ' + writeErr : writesOpen ? 'speichert …' : writeOkAt ? '✓ gespeichert' : 'bereit'); }
 function queueWrite(fn){ const once = () => withTimeout(Promise.resolve().then(fn), 10000);
-  writeChain = writeChain.then(() => once().catch(e => { console.warn(e); return once(); }))
-    .catch(e => { console.warn(e); toast('Speichern hat nicht geklappt. Bitte Seite neu laden.'); }); return writeChain; }
+  writesOpen++; saveStatus();
+  writeChain = writeChain.then(() => once().catch(e => { console.warn(e); writeErr = 'nochmal: ' + (e && e.message || e); saveStatus(); return once(); }))
+    .then(() => { writeErr = null; writeOkAt = Date.now(); })
+    .catch(e => { console.warn(e); writeErr = 'Fehler: ' + (e && (e.code || e.message) || e); toast('Speichern hat nicht geklappt: ' + (e && (e.code || e.message) || e)); })
+    .finally(() => { writesOpen--; saveStatus(); }); return writeChain; }
 // Jede eigene Änderung bekommt eine Versionsnummer (rev). Ältere Stände vom Server überschreiben das eigene Feld nicht mehr
 // (12.10. 14:34: Server-Abfrage kam mit altem Stand zurück → gewähltes Element sprang auf Feuer zurück).
 function takeLane(k, data){ const cur = L[k];
@@ -965,7 +972,7 @@ function renderClock(){
   $('sNextL').textContent = overShown() ? 'Spiel vorbei' : `Welle ${hh(slotsOf(G)[G.slot])}`;
 }
 function render(){
-  $('modeTag').textContent = MODE === 'online' ? 'Prototyp 3 · online' : (MODE === 'local' ? 'Prototyp 3 · ein Gerät' : 'verbinde …');
+  $('modeTag').textContent = MODE === 'online' ? 'Prototyp 3 · online' : (MODE === 'local' ? 'Prototyp 3 · ein Gerät' : 'verbinde …'); saveStatus();
   const has = !!G;
   $('setup').hidden = has || !MODE; $('game').hidden = !has; $('stats').hidden = !has; $('palette').hidden = !has;
   if (!has) { renderSetup(); return; }
@@ -1351,7 +1358,7 @@ async function refreshFromServer(){
   render();
   if (FIREBASE_CONFIG.projectId && window.firebase) {
     try { firebase.initializeApp(FIREBASE_CONFIG); const fs = firebase.firestore();
-      try { fs.settings({ experimentalForceLongPolling: true, merge: true }); } catch(e) { console.warn(e); }   // Safari: WebChannel-Verbindung hängt oft, Long Polling ist der bekannte Ausweg
+      try { fs.settings({ experimentalForceLongPolling: true, experimentalAutoDetectLongPolling: false, merge: true }); } catch(e) { console.warn(e); }   // Safari: WebChannel-Verbindung hängt oft, Long Polling ist der bekannte Ausweg
       return startOnline({ doc:p => fs.doc(p), collection:p => fs.collection(p), tx:fn => fs.runTransaction(fn) });
     } catch(e) { console.warn(e); }
   }

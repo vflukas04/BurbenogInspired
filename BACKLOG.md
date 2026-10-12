@@ -17,6 +17,12 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 14:39 (VERSION 2026-10-12ze)
+- Element-Problem auch auf Fairphone (Android/Chrome). Server: wieder nur Feld 1 + Spielstand beim Start geschrieben, Feld 2–4 nicht; Element-Wahl kam nicht an. Schreibrechte ok (Test auf games/claude-debug), dieselbe Schreibfolge mit Firebase 10.12.2 in Node klappt. Ursache noch offen.
+- [x] Long-Polling-Schalter war wirkungslos (Konflikt mit experimentalAutoDetectLongPolling) → korrigiert.
+- [x] Speicher-Anzeige oben: „speichert …“ / „✓ gespeichert“ / „⚠ Fehler: …“.
+- Testdaten liegen unter games/claude-debug (kann gelöscht werden).
+
 ### 12.10. 14:36 (VERSION 2026-10-12zd)
 - [x] Element-Problem bestand weiter. Server gelesen: Spiel 14:35:47 mit zc angelegt, Feld 1 weiter Feuer ohne `rev` (Wahl nie angekommen), Feld 2 beim Spielstart gar nicht neu geschrieben. Ursache: Schreib-Warteschlange hing (Safari/Firebase). Jetzt: Firestore mit `experimentalForceLongPolling`, jeder Schreibvorgang 10-s-Zeitlimit + 1 Wiederholung, Schlange läuft danach weiter.
 - Falls es weiter auftritt: Feld auf dem Server lesen (REST `games/spiel1/lanes`) – kommt `rev` an? Welches Handy hat das Spiel gestartet?
