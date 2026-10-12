@@ -17,6 +17,13 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 14:07 (VERSION 2026-10-12za) – neues Rüstungssystem
+- [x] Rüstung = Prozent + Punkte je Monster (Tabelle in MONSTERS `ar`). Türme machen zusätzlich Rüstungsschaden (Feuer 50 %, Eis 60 %, Schatten 0 %, Stein 150 % des Schadens), der nur die Punkte abbaut. Brennen geht durch.
+- [x] Schatten ignoriert Rüstung nicht mehr pauschal. Fluch senkt die Rüstungsprozente um den Fluchwert für alle Türme (wandert mit Durchgelassenen weiter). Irrlicht: ×1,3–1,8 Schaden und 30–100 % Rüstung ignorieren (vorher ×1,5–3,0).
+- [x] Grauer Rüstungsbalken unter dem Lebensbalken, Monster-Info „Rüstung 35 % · 262 Punkte“.
+- Abschätzung (Kills von 20, 85 % des möglichen Golds, beste gleichartige Bauweise, Schatten auch mit Irrlicht, neutrales Wetter): Feuer/Eis/Stein praktisch unverändert. Schatten Tag 4–10 ⌀ 8,9 (Eis 9,1); vorher mit Irrlicht ×3 späte Tage übermächtig.
+- Auffällig (eigene Baustelle): Feuer ist Tag 4–12 fast immer bei 20/20 (Flammenwerfer), Stein oft bei 0–5 (langsame Würfe gegen schnelle Monster, Fliegende). Ab Tag 11 schaffen alle Elemente fast alles → späte Tage evtl. zu leicht (Kopfgeld 5/8 wächst schneller als Leben^1,3).
+
 ### 12.10. 13:08 (VERSION 2026-10-12z)
 - [x] Irrlicht-Upgrades stärker: ×1,5 · 1,75 · 2,0 · 2,3 · 2,6 · 3,0 (vorher +0,1 je Stufe bis ×2). Begründung: Bei 3 Schemen St. 4 im Kreis bringt Irrlicht St. 1→4 jetzt ca. 0,24 Schaden/s pro Gold, etwa wie normale Turm-Upgrades (vorher 0,09). Irrlichter stapeln weiterhin nicht.
 

@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12z";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12za";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -220,7 +220,6 @@ const CONFIG = {
   playerHp: { 2:1, 3:1.25, 4:1.5 },
   hpExp: 1.3,               // 12.10. 12:52 (vorher 1,5: Leben wuchsen schneller als das Einkommen). Runde 2: ×2,5 · 5: ×8,1 · 10: ×20 · 20: ×49 · 40: ×121
   hpCutFrom: 3, hpCut: 0.95,  // 12.10.: ab Runde 3 (Nacktschnecken) alle Monster 5 % weniger Leben
-  armorFrac: 0.004,         // Rüstung = 0,004 × (Runde − 1) × Grundleben der Runde (Runde 20: ca. 8 % der Leben)
   // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
   slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
   darkFrom: 19,             // ab 19 Uhr ist es dunkel: Schatten trifft nachtaktive Monster nur im Irrlicht-Kreis
@@ -297,7 +296,7 @@ const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold 
      nova     wirkt sofort im Umkreis „Fläche“ um den Turm, ohne Geschoss
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
-  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', costOverride:{0:8}, towers:[
+  { name:'Feuer', emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', armorDmg:0.5, costOverride:{0:8}, towers:[
     ['Funke',        'Schaden',   2.0, 1,   1, 0.8, 0.17, 3],   // 1,6 Schaden/s (Brennen ist ein Bonus)   // 8 statt 10 Gold. Türme 1–3 aller Elemente am 12.10. per Simulation angeglichen
     ['Glutbecken',   'Effekt',    1.6, 1,   2, 1.19, 0.43, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 1.21, 0.14, 2],
@@ -306,7 +305,7 @@ const ELEMENTS = [
     ['Lavaturm',     'Fläche',    2.0, 0.7, 1, 1.5, 0.36, 4, 0.9, {fly:false}],
     ['Phönix',       'Schaden',   3.0, 0.6, 2, 1.4, 0.36, 8],
     ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.65, DAY] ]},
-  { name:'Eis', emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', towers:[
+  { name:'Eis', emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', armorDmg:0.6, towers:[
     ['Frostsplitter','Effekt',    2.0, 1,   1, 1.1, 0.25, 3],
     ['Schneeball',   'Fläche',    2.3, 1,   2, 1.15, 0.2, 4, 0.6],
     ['Eiszapfen',    'Luftabwehr',3.6, 0.8, 2, 2.4, 0.3, 4, 0, {air:true, slowFly:true}],   // nur Fliegende, bremst sie auch
@@ -315,17 +314,17 @@ const ELEMENTS = [
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
-  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, costOverride:{1:30}, towers:[
+  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch (mehr Schaden, Rüstung bröckelt für alle) · Irrlicht verstärkt und durchdringt Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis', effect:'curse', armorDmg:0, dayOnly:true, costOverride:{1:30}, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
     ['Irrlicht',     'Licht',     // 30 statt 45 Gold (12.10.: Schatten nachts sonst zu schwach)
-                          1.8, 1,   1, 0,   0,   0, 0, {light:2.2, buff:[1.5, 1.75, 2.0, 2.3, 2.6, 3.0]}],   // schießt nicht, Schatten-Türme im Lichtkreis ×Wert je Stufe (13:08: stärker wachsend, Upgrades etwa so lohnend wie Turm-Upgrades)
+                          1.8, 1,   1, 0,   0,   0, 0, {light:2.2, buff:[1.3, 1.4, 1.5, 1.6, 1.7, 1.8], pierce:[0.3, 0.45, 0.6, 0.75, 0.9, 1]}],   // schießt nicht. Schatten-Türme im Lichtkreis: Schaden ×buff und ignorieren pierce der Rüstung (12.10. 14:07)
     ['Nachtauge',    'Reichweite',3.8, 0.6, 1, 1.01, 0.15, 5],
     ['Fluchstein',   'Effekt',    2.5, 0.7, 3, 0.3, 0.3, 12, 0, {fly:false}],
     ['Seelenfresser','Schaden',   2.0, 0.8, 2, 1.4, 0.1, 5],
     ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
     ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
     ['Ewige Nacht',  'Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
-  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 4, 6, 8', effect:'stun', noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[
+  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 4, 6, 8', effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.55, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.89, 0,   0, 0.9],
     ['Felsbrocken',  'Fläche',    2.5, 0.25,1, 0.5, 0,   0, 1.1],
@@ -343,25 +342,25 @@ const ELEMENTS = [
    Runde 1–5 (12.10.): Runde 1 neutral, Runde 2–5 je ein Element ×1,2 und eins ×0,8 – nach 5 Runden hat jedes Element genau einmal Bonus und Malus. */
 const MONSTERS = [
   ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1, 1, 1, 1]}],
-  ['Kellerasseln',      {emo:'🪲', speed:0.9, weak:[0.8, 1, 1, 1.2]}],
+  ['Kellerasseln',      {emo:'🪲', ar:[0.2, 0.3], speed:0.9, weak:[0.8, 1, 1, 1.2]}],
   ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1, 1.2, 1, 0.8]}],
-  ['Ohrenkneifer',      {emo:'🦗', weak:[1, 0.8, 1.2, 1]}],
+  ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 0.8, 1.2, 1]}],
   ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 1, 0.8, 1]}],
-  ['Kleine Hunde',      {emo:'🐕', speed:1.5, weak:[1, 1.5, 1, 0.75]}],   // 12.10.: Tag 6 (vorher 7)
-  ['Ratten',            {emo:'🐀', speed:1.3, weak:[1.5, 1, 0.75, 1]}],   // 12.10.: Tag 7 (vorher 6)
-  ['Katzen',            {emo:'🐈', speed:1.6, night:true, weak:[1, 1.75, 0.6, 1]}],
+  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1.5, 1, 0.75]}],   // 12.10.: Tag 6 (vorher 7)
+  ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 0.75, 1]}],   // 12.10.: Tag 7 (vorher 6)
+  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[1, 1.75, 0.6, 1]}],
   ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1.5, 1, 1, 0.75]}],
-  ['Füchse',            {emo:'🦊', speed:1.4, night:true, weak:[1, 0.75, 0.75, 1.5]}],
-  ['Habichte',          {emo:'🦅', fly:true, speed:1.8, weak:[1, 1, 1.5, 0.75]}],
-  ['Dachse',            {emo:'🦡', speed:0.9, hpMul:1.3, weak:[1.5, 1, 1.25, 0.75]}],
+  ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 0.75, 0.75, 1.5]}],
+  ['Habichte',          {emo:'🦅', ar:[0.1, 0.2], fly:true, speed:1.8, weak:[1, 1, 1.5, 0.75]}],
+  ['Dachse',            {emo:'🦡', ar:[0.35, 0.6], speed:0.9, hpMul:1.3, weak:[1.5, 1, 1.25, 0.75]}],
   ['Oktopusse',         {emo:'🐙', water:true, speed:0.8, weak:[0, 1.75, 1, 1]}],
-  ['Wildschweine',      {emo:'🐗', speed:1.2, hpMul:1.3, night:true, weak:[1, 0.75, 1.5, 1]}],
-  ['Schäferhunde',      {emo:'🐕‍🦺', speed:1.6, weak:[1.5, 1, 1, 0.75]}],
-  ['Besoffene Penner',  {emo:'🍺', speed:0.7, hpMul:1.5, night:true, weak:[0.75, 1.5, 1.25, 1]}],
-  ['Wütende Partnerin', {emo:'😠', speed:1.3, weak:[0.75, 1.75, 0.6, 1]}],
-  ['Wütende Nachbarn',  {emo:'😡', speed:1.1, hpMul:1.2, weak:[1, 1.25, 0.75, 1]}],
-  ['Uffug-Vorhaut',     {emo:'👺', fly:true, weak:[1.25, 1.25, 1.25, 1.25]}],
-  ['Uffug (Boss)',      {emo:'👹', speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]
+  ['Wildschweine',      {emo:'🐗', ar:[0.4, 0.6], speed:1.2, hpMul:1.3, night:true, weak:[1, 0.75, 1.5, 1]}],
+  ['Schäferhunde',      {emo:'🐕‍🦺', ar:[0.25, 0.4], speed:1.6, weak:[1.5, 1, 1, 0.75]}],
+  ['Besoffene Penner',  {emo:'🍺', ar:[0.1, 0.3], speed:0.7, hpMul:1.5, night:true, weak:[0.75, 1.5, 1.25, 1]}],
+  ['Wütende Partnerin', {emo:'😠', ar:[0.3, 0.4], speed:1.3, weak:[0.75, 1.75, 0.6, 1]}],
+  ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 1.25, 0.75, 1]}],
+  ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1.25, 1.25, 1.25]}],
+  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]
 ].map(([name,o],k) => ({ name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:k+1,
   color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
 /* ===================== Ende Spieldaten ===================== */
@@ -434,7 +433,7 @@ function towerBase(el, idx){
   const E = ELEMENTS[el], [name, role, range, rate, shots, share, eff, dur, splash, opt = {}] = E.towers[idx];
   const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
   return { name, role, cost, range: range * GRID, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: (splash || 0) * GRID,
-    effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, pierce:!!E.pierce, dayOnly:!!E.dayOnly,
+    effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, dayOnly:!!E.dayOnly, pierceArr:opt.pierce || null,
     hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID, buff:opt.buff || 0,
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
 }
@@ -449,14 +448,15 @@ function tdef(tw){
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
   return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
-    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buff ? b.buff[Math.min(n, b.buff.length - 1)] : 0,
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buff ? b.buff[Math.min(n, b.buff.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
     dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
 const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
 function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
-  return { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1),
-    armor: CONFIG.armorFrac * (r - 1) * hpBase(r), bounty: bountyFor(r) }; }
+  const d = { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1),
+    bounty: bountyFor(r) }; d.armorPct = (M.ar || [0, 0])[0]; d.armorPts = Math.round((M.ar || [0, 0])[1] * d.hp); return d; }
+const armorText = d => d.armorPct ? `${Math.round(d.armorPct*100)} % · ${d.armorPts} Punkte` : 'keine';
 const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · brennt nicht' : '×' + String(f).replace('.', ',');
 
 /* ---------- Simulation (deterministisch) ----------
@@ -476,8 +476,9 @@ function makeSim(inp){
   // Verstärker (Irrlicht): Schatten-Türme in seinem Lichtkreis machen mehr Schaden, zu jeder Tageszeit. Mehrere Kreise: der stärkste zählt.
   const amps = towers.filter(t => t.def.buff);
   for (const t of towers) { if (t.def.buff) continue;
-    const m = Math.max(1, ...amps.filter(a => a.el === t.el && Math.hypot(a.x - t.x, a.y - t.y) <= a.def.light + 1e-6).map(a => a.def.buff));
-    if (m > 1) { t.def = { ...t.def, dpsNow:t.def.dpsNow * m, dmg:t.def.dmg * m, amp:m }; } }
+    const near = amps.filter(a => a.el === t.el && Math.hypot(a.x - t.x, a.y - t.y) <= a.def.light + 1e-6);
+    if (near.length) { const m = Math.max(...near.map(a => a.def.buff)), p = Math.max(...near.map(a => a.def.pierce));
+      t.def = { ...t.def, dpsNow:t.def.dpsNow * m, dmg:t.def.dmg * m, amp:m, pierce:p }; } }
   return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, rand:rng(inp.seed || 1),
     queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, kills:0, spawnT:0, t:0 };
 }
@@ -508,9 +509,12 @@ function hit(s, m, def, dmg){
   if (m.dead) return;
   const w = m.def.weak[def.el], f = w || CONFIG.immune;       // „immun“ = weniger Schaden und kein Brennen
   const vuln = 1 + (m.fx.curse && m.fx.curse.t > 0 ? m.fx.curse.v : 0);
-  const armor = def.pierce ? 0 : m.def.armor;
-  const raw = dmg * f * vuln;
-  m.hp -= Math.max(raw * 0.2, raw - armor);
+  // Rüstung (12.10. 14:07): Solange Rüstungspunkte übrig sind, kommt der Schaden um armorPct verringert an.
+  // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
+  let pct = m.ap > 0 ? m.def.armorPct : 0;
+  if (pct > 0) { if (m.fx.curse && m.fx.curse.t > 0) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0);
+    m.ap -= dmg * f * (ELEMENTS[def.el].armorDmg || 0); }
+  m.hp -= dmg * f * vuln * (1 - pct);
   const t = def.dur === DAY ? FOREVER : def.dur;
   if (def.effect === 'burn' && w) addFx(m, 'burn', def.eff * def.dpsNow / def.shots * f, t);
   if (def.effect === 'slow' && (!m.def.fly || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);
@@ -520,7 +524,7 @@ function hit(s, m, def, dmg){
 }
 function spawn(s, sp){
   const d = monsterDef(sp.type, s.players), [x,y] = posAt(s.map, 0);
-  s.monsters.push({ id:s.t + s.monsters.length * .37, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, d:0, x, y, fx: sp.fx || {}, hops:sp.hops });
+  s.monsters.push({ id:s.t + s.monsters.length * .37, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, ap: sp.ap !== undefined ? sp.ap : d.armorPts, d:0, x, y, fx: sp.fx || {}, hops:sp.hops });
 }
 /* Welt = alle Felder einer Welle, im selben Takt. „Live“: Wer durchkommt, taucht sofort beim nächsten Spieler auf
    (behält Leben und Effekte). Sonst wandern die Leaks erst zur nächsten Wellenzeit. */
@@ -549,7 +553,7 @@ function step(s, dt){
     if (m.d >= s.map.len) {
       m.dead = m.gone = true;
       const keep = {}; for (const k in fx) if (fx[k].t > 0 && k !== 'stun') keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };
-      s.leaked.push({ type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), fx:keep, at:+s.t.toFixed(2) });   // nie 0: sonst käme es mit vollem Leben wieder
+      s.leaked.push({ type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), ap:Math.max(0, Math.round(m.ap)), fx:keep, at:+s.t.toFixed(2) });   // nie 0: sonst käme es mit vollem Leben wieder
     }
   }
   for (const tw of s.towers) {
@@ -799,13 +803,13 @@ const canSwitchEl = i => mayBuild(i) && G.day === 1 && G.slot === 0 && !laneOf(i
 const num = v => v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1).replace('.0','') : v.toFixed(2).replace(/0$/,'');
 const durText = d => d.dur === DAY ? 'ganzer Tag' : `${num(d.dur)} s`;
 function fxText(d){
-  if (d.buff) return `schießt nicht · Lichtkreis ${num(d.light)}: Schatten-Türme darin ×${String(+d.buff.toFixed(2)).replace('.', ',')} Schaden (immer), nachts treffen sie dort auch nachtaktive Monster`;
+  if (d.buff) return `schießt nicht · Lichtkreis ${num(d.light)}: Schatten-Türme darin ×${String(+d.buff.toFixed(2)).replace('.', ',')} Schaden und ignorieren ${Math.round(d.pierce*100)} % Rüstung, nachts treffen sie dort auch nachtaktive Monster`;
   const p = [];
   if (d.shots > 1) p.push(`${d.shots} Geschosse`);
   if (d.eff > 0) {
     if (d.effect === 'burn') p.push(`brennt ${Math.round(d.eff*100)} %, ${durText(d)}`);
     if (d.effect === 'slow') p.push(`bremst ${Math.round(d.eff*100)} %, ${durText(d)}`);
-    if (d.effect === 'curse') p.push(`Fluch +${Math.round(d.eff*100)} % Schaden, ${durText(d)}`);
+    if (d.effect === 'curse') p.push(`Fluch +${Math.round(d.eff*100)} % Schaden, Rüstung −${Math.round(d.eff*100)} %, ${durText(d)}`);
     if (d.effect === 'stun') p.push(`${d.chance ? Math.round(d.chance*100) + ' %: ' : ''}${d.el === 1 ? 'friert' : 'betäubt'} ${num(d.eff)} s${d.el === 1 ? ' ein' : ''}`);
   }
   if (d.splash) p.push(d.nova ? `Umkreis ${num(d.splash)}` : 'Fläche');
@@ -844,7 +848,7 @@ function showMonster(r){
   const tempo = M.speed >= 1.4 ? 'schnell' : M.speed <= 0.8 ? 'langsam' : 'normal';
   openDlg(`<h2><span class="big">${M.emo}</span>${M.name}</h2>
     <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
-    <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${num(MD.armor)}${MD.armor ? ' (Schatten ignoriert sie)' : ''}</dd>
+    <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${armorText(MD)}</dd>
     <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
     <dt>Kopfgeld</dt><dd>${bountyFor(r)} Gold</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
     <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('')}</div>
@@ -977,7 +981,7 @@ function render(){
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.round-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
-  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${num(MD.armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
+  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
     ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
     (NX ? `<br>Nächstes Monster (Tag ${NX.round}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.round}" aria-label="Info zu ${NX.name}">i</button>` : '') +
@@ -1230,6 +1234,7 @@ function draw(i, cv){
     const f = Math.max(0, m.hp / m.def.hp);
     c.fillStyle = '#00000088'; c.fillRect(X-r, Y-r-6, 2*r, 3);
     c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(X-r, Y-r-6, 2*r*f, 3);
+    if (m.def.armorPts && m.ap > 0) { c.fillStyle = '#c8ccd0'; c.fillRect(X-r, Y-r-3, 2*r*Math.min(1, m.ap / m.def.armorPts), 2); }   // Rüstung: grauer Balken
   }
   for (const p of s.shots) drawShot(c, p, cs, time);
   for (const f of s.fx) if (f.kind === 'spark') drawFx(c, f, cs, time);
