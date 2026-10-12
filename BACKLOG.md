@@ -17,6 +17,10 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 11:11 (VERSION 2026-10-12s)
+- [x] Handy 2 (Safari): Bereit gedrückt, Zähler bleibt auf „1/2“, Welle startet erst nach ca. 10 s. Ursache: Safari liefert die Live-Änderungen nicht, erst die 10-s-Abfrage. Jetzt fragt ein Handy, das auf „Bereit“ steht, alle 2 s nach.
+- Falls Safari weiter hakt: Firestore `experimentalForceLongPolling` probieren (bekannter Safari-Workaround für die Live-Verbindung).
+
 ### 12.10. 11:01 (VERSION 2026-10-12r)
 - [x] Upgrades stärker: je Stufe +0,1 auf den Faktor (erstes Upgrade ×2,2, danach ×2,1). Schaden/s jeder Stufe auf eine Nachkommastelle aufgerundet. Funke: 1,6 · 3,6 · 7,6 · 16 · 33,6 · 70,6.
 
