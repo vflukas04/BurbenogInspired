@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12zf";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12zg";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -218,7 +218,7 @@ const CONFIG = {
      ca. 12 von 20 (2 Spieler), 8 (3 Spieler), 6 (4 Spieler). Kalibriert mit tools/kalibrieren.js. */
   baseHp: 14,               // 12.10.: neu kalibriert für 16 × 16
   playerHp: { 2:1, 3:1.25, 4:1.5 },
-  hpExp: 1.3,               // 12.10. 12:52 (vorher 1,5: Leben wuchsen schneller als das Einkommen). Runde 2: ×2,5 · 5: ×8,1 · 10: ×20 · 20: ×49 · 40: ×121
+  hpExp: 1.38,              // 12.10. 15:38: etwas steiler (vorher 1,3; davor 1,5). Runde 2: ×2,6 · 5: ×9,2 · 10: ×24 · 20: ×63
   hpCutFrom: 3, hpCut: 0.95,  // 12.10.: ab Runde 3 (Nacktschnecken) alle Monster 5 % weniger Leben
   // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
   slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
@@ -360,7 +360,7 @@ const MONSTERS = [
   ['Wütende Partnerin', {emo:'😠', ar:[0.3, 0.4], speed:1.3, weak:[0.75, 1.75, 0.6, 1]}],
   ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 1.25, 0.75, 1]}],
   ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1.25, 1.25, 1.25]}],
-  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]
+  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 0.7, 1]}]   // 15:38: Schatten ×0,7 (war mit Irrlicht zu leicht)
 ].map(([name,o],k) => ({ name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:k+1,
   color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
 /* ===================== Ende Spieldaten ===================== */

@@ -17,6 +17,11 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 15:38 (VERSION 2026-10-12zg) – nach Testspiel
+- Rückmeldung: vieles klappt gut, insgesamt noch etwas zu leicht, Late Game noch etwas stark, Boss mit Schatten zu einfach.
+- [x] Leben-Kurve steiler: Exponent 1,3 → 1,38 (Tag 5 +13 %, Tag 10 +20 %, Tag 20 +27 %). Tag 1 unverändert.
+- [x] Boss: Schatten-Faktor 0,7 (Irrlicht ignoriert bis 100 % Rüstung, Fluch senkt sie zusätzlich).
+
 ### 12.10. 14:46 (VERSION 2026-10-12zf) – Element-Problem gelöst
 - [x] Echte Ursache: Seit 13:08 sind die Irrlicht-Stufen eine Liste; die Turmbeschreibung (`fxText` auf `towerBase`) rechnete damit wie mit einer Zahl → Absturz beim Zeichnen der Schatten-Bauleiste. Das Neuzeichnen brach ab, alte Bauleiste blieb stehen, und `saveLane` danach lief nie → Element kam nicht auf dem Server an. Nur Schatten betroffen.
 - [x] Fix: `towerBase` liefert Stufe-1-Werte (`buff`, `pierce`), Listen in `buffArr`/`pierceArr`. Element-Wahl speichert jetzt vor dem Neuzeichnen.
