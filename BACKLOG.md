@@ -17,6 +17,10 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 12:22 (VERSION 2026-10-12x)
+- [x] Kleine Hunde jetzt Tag 6, Ratten Tag 7 (Leben, Rüstung und Kopfgeld richten sich nach dem Tag, Tempo und Faktoren wandern mit).
+- [x] Mäuse nochmal −5 % Leben (hpMul 0,9).
+
 ### 12.10. 12:19 (VERSION 2026-10-12w)
 - [x] Irrlicht (Schatten T2) schießt nicht mehr. Schatten-Türme in seinem Lichtkreis (4,4 Felder) machen zu jeder Tageszeit ×1,5 Schaden, +0,1 je Stufe (Stufe 6: ×2). Mehrere Irrlichter stapeln nicht, das stärkste zählt. Nachtfunktion bleibt.
 - Beobachten: Früh ist ein zweiter Schemen (+100 %) noch stärker als ein Irrlicht (+50 % auf einen Turm). Lohnt sich ab 2–3 Türmen im Kreis.
