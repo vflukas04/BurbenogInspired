@@ -17,6 +17,9 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 13:08 (VERSION 2026-10-12z)
+- [x] Irrlicht-Upgrades stärker: ×1,5 · 1,75 · 2,0 · 2,3 · 2,6 · 3,0 (vorher +0,1 je Stufe bis ×2). Begründung: Bei 3 Schemen St. 4 im Kreis bringt Irrlicht St. 1→4 jetzt ca. 0,24 Schaden/s pro Gold, etwa wie normale Turm-Upgrades (vorher 0,09). Irrlichter stapeln weiterhin nicht.
+
 ### 12.10. 12:52 (VERSION 2026-10-12y)
 - [x] Analyse: Leben wuchsen mit Runde^1,5, Einkommen nur linear (Kopfgeld 2/3). Ein Spieler mit 85 % des möglichen Golds tötete ab Tag 4 nur noch ca. 4 von 20 (Eis/Schatten, Turm 1–3, gleichartig gebaut, erster Durchgang).
 - [x] Leben-Exponent 1,5 → 1,3. Gleiche Messung: ca. 7 von 20 (Tag 2–10); 1,35 ≈ 5,5, 1,25 ≈ 9. Tag 1 unverändert. Rüstung sinkt mit (hängt am Grundleben). Boss jetzt ca. 11.300 statt 20.600 Leben (2 Spieler) – beobachten, ggf. hpMul hoch.

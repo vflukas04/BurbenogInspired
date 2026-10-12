@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12y";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12z";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -227,7 +227,7 @@ const CONFIG = {
   firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
   maxLevel: 6,              // Stufe 1 + 5 Upgrades
   upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
-  upgrade: { buff:0.1, dmg:2.1, firstDmg:2.2, range:0.2, dur:1.3, eff:1.15 },  // 12.10. 11:01: erstes Upgrade ×2,2, danach je ×2,1. Schaden/s je Stufe auf 0,1 aufgerundet
+  upgrade: { dmg:2.1, firstDmg:2.2, range:0.2, dur:1.3, eff:1.15 },  // 12.10. 11:01: erstes Upgrade ×2,2, danach je ×2,1. Schaden/s je Stufe auf 0,1 aufgerundet
    // pro Upgrade: Schaden ×2, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
   giftFee: 0.10, giftStep: 10,
   weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt
@@ -318,7 +318,7 @@ const ELEMENTS = [
   { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, costOverride:{1:30}, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
     ['Irrlicht',     'Licht',     // 30 statt 45 Gold (12.10.: Schatten nachts sonst zu schwach)
-                          1.8, 1,   1, 0,   0,   0, 0, {light:2.2, buff:1.5}],   // 12.10. 12:19: schießt nicht, Schatten-Türme im Lichtkreis ×1,5 Schaden (+0,1 je Stufe)
+                          1.8, 1,   1, 0,   0,   0, 0, {light:2.2, buff:[1.5, 1.75, 2.0, 2.3, 2.6, 3.0]}],   // schießt nicht, Schatten-Türme im Lichtkreis ×Wert je Stufe (13:08: stärker wachsend, Upgrades etwa so lohnend wie Turm-Upgrades)
     ['Nachtauge',    'Reichweite',3.8, 0.6, 1, 1.01, 0.15, 5],
     ['Fluchstein',   'Effekt',    2.5, 0.7, 3, 0.3, 0.3, 12, 0, {fly:false}],
     ['Seelenfresser','Schaden',   2.0, 0.8, 2, 1.4, 0.1, 5],
@@ -449,7 +449,7 @@ function tdef(tw){
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
   return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
-    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buff ? b.buff + U.buff * n : 0,
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buff ? b.buff[Math.min(n, b.buff.length - 1)] : 0,
     dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
