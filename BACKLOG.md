@@ -3,7 +3,7 @@
 Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 12.10. nachts).
 
 ## Für die nächste Sitzung (zuerst lesen)
-**Aktueller Stand (live, VERSION 2026-10-12n):** Karte 16 × 16 mit Schleife und Kreuzung, flache Baukurve (Türme 10/45/70/120/200/350/650/1200, Kopfgeld 2/3/5/8 … je 5 Runden), Startgold 30, Leben 14 × Runde^1,5, Spielarten „Uhrzeiten“ und „Live“, Bau-Bestätigung, Monster-Info, Bereit-Knopf, Endstatistik. Turm 1 auf Stufe 1: Funke 1,6 · Frostsplitter 2,2 · Schemen 2,2 · Kiesel 1,1 (Fläche). Erstes Upgrade ×2,1, danach ×2.
+**Aktueller Stand (live, VERSION 2026-10-12o, Schatten-Nachtregel nur für nachtaktive Monster):** Karte 16 × 16 mit Schleife und Kreuzung, flache Baukurve (Türme 10/45/70/120/200/350/650/1200, Kopfgeld 2/3/5/8 … je 5 Runden), Startgold 30, Leben 14 × Runde^1,5, Spielarten „Uhrzeiten“ und „Live“, Bau-Bestätigung, Monster-Info, Bereit-Knopf, Endstatistik. Turm 1 auf Stufe 1: Funke 1,6 · Frostsplitter 2,2 · Schemen 2,2 · Kiesel 1,1 (Fläche). Erstes Upgrade ×2,1, danach ×2.
 
 **Offen / als Nächstes:**
 1. Prüfen, ob Handy 2 neue Wellen jetzt ohne Neuladen zeigt (Fix 01:06: Stand alle 10 s vom Server). Falls nicht: Springen Tag/Uhrzeit ohne Neuladen? Welches Handy/Browser?
@@ -17,6 +17,11 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. vormittags (VERSION 2026-10-12o)
+- [x] Schatten-Nachtregel gilt nur noch für **nachtaktive** Monster: Tag 5 Mäuse, 8 Katzen, 10 Füchse, 14 Wildschweine, 16 Besoffene Penner. Alle anderen trifft Schatten um 19 Uhr normal. Anzeige „(nachtaktiv)“ bei Heute/Nächstes und in der Monster-Info.
+- [x] Faktoren Runde 1–5 fair: R1 alles ×1; R2 Kellerasseln Stein 1,2/Feuer 0,8; R3 Nacktschnecken Feuer 1,2/Stein 0,8; R4 Ohrenkneifer Eis 1,2/Schatten 0,8; R5 Mäuse Schatten 1,2/Eis 0,8.
+- Offen: Ab Runde 6 bleiben die alten, stärkeren Faktoren (0,6–1,75). Schatten profitiert jetzt deutlich – im Spiel beobachten, ob er zu stark wird.
+
 ### Aus Lukas' Rückmeldung 11.10. vormittags
 - [x] Vorschau: nächstes Monster mit Info-Knopf (auch für heute), Dialog mit Leben, Rüstung, Tempo, Fliegen, Faktoren (11.10.).
 - [ ] Türme leicht abschwächen: bei jedem Turm genau einen Wert senken (Feuerrate, Reichweite, Schaden oder Geschosse), nicht überall alles. Danach Monster ggf. +20 % Leben. Mit `tools/balance.js` prüfen.

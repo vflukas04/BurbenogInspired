@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12n";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12o";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -222,7 +222,7 @@ const CONFIG = {
   armorFrac: 0.004,         // Rüstung = 0,004 × (Runde − 1) × Grundleben der Runde (Runde 20: ca. 8 % der Leben)
   // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
   slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
-  darkFrom: 19,             // ab 19 Uhr ist es dunkel: Schatten-Türme schießen nicht
+  darkFrom: 19,             // ab 19 Uhr ist es dunkel: Schatten trifft nachtaktive Monster nur im Irrlicht-Kreis
   firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
   maxLevel: 6,              // Stufe 1 + 5 Upgrades
   upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
@@ -314,7 +314,7 @@ const ELEMENTS = [
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
-  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts nur Monster im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, towers:[
+  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
     ['Irrlicht',     'Licht',     1.8, 1,   1, 0.5, 0.1, 3, 0, {light:2.2}],
     ['Nachtauge',    'Reichweite',3.8, 0.6, 1, 1.01, 0.15, 5],
@@ -336,24 +336,26 @@ const ELEMENTS = [
 /* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
    Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und kein Effekt-Brennen.
    Wirkt auch auf die Effektstärke. fly = fliegt, hpMul = Extra-Leben,
-   lives = so viele „Durchbrüche“ zählt das Monster (Boss: 3) */
+   lives = so viele „Durchbrüche“ zählt das Monster (Boss: 3),
+   night = nachtaktiv: Nur diese Monster sieht Schatten im Dunkeln (19 Uhr) bloß im Lichtkreis eines Irrlichts.
+   Runde 1–5 (12.10.): Runde 1 neutral, Runde 2–5 je ein Element ×1,2 und eins ×0,8 – nach 5 Runden hat jedes Element genau einmal Bonus und Malus. */
 const MONSTERS = [
-  ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1.25, 1, 1, 1]}],
-  ['Kellerasseln',      {emo:'🪲', speed:0.9, weak:[0.75, 1, 1.25, 1.5]}],
-  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.75, 0.75, 1, 0.75]}],
-  ['Ohrenkneifer',      {emo:'🦗', weak:[1, 1.5, 0.75, 1]}],
-  ['Mäuse',             {emo:'🐭', speed:1.4, weak:[1, 0.75, 1, 1.5]}],
+  ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1, 1, 1, 1]}],
+  ['Kellerasseln',      {emo:'🪲', speed:0.9, weak:[0.8, 1, 1, 1.2]}],
+  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.2, 1, 1, 0.8]}],
+  ['Ohrenkneifer',      {emo:'🦗', weak:[1, 1.2, 0.8, 1]}],
+  ['Mäuse',             {emo:'🐭', speed:1.4, night:true, weak:[1, 0.8, 1.2, 1]}],
   ['Ratten',            {emo:'🐀', speed:1.3, weak:[1.5, 1, 0.75, 1]}],
   ['Kleine Hunde',      {emo:'🐕', speed:1.5, weak:[1, 1.5, 1, 0.75]}],
-  ['Katzen',            {emo:'🐈', speed:1.6, weak:[1, 1.75, 0.6, 1]}],
+  ['Katzen',            {emo:'🐈', speed:1.6, night:true, weak:[1, 1.75, 0.6, 1]}],
   ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1.5, 1, 1, 0.75]}],
-  ['Füchse',            {emo:'🦊', speed:1.4, weak:[1, 0.75, 0.75, 1.5]}],
+  ['Füchse',            {emo:'🦊', speed:1.4, night:true, weak:[1, 0.75, 0.75, 1.5]}],
   ['Habichte',          {emo:'🦅', fly:true, speed:1.8, weak:[1, 1, 1.5, 0.75]}],
   ['Dachse',            {emo:'🦡', speed:0.9, hpMul:1.3, weak:[1.5, 1, 1.25, 0.75]}],
   ['Oktopusse',         {emo:'🐙', water:true, speed:0.8, weak:[0, 1.75, 1, 1]}],
-  ['Wildschweine',      {emo:'🐗', speed:1.2, hpMul:1.3, weak:[1, 0.75, 1.5, 1]}],
+  ['Wildschweine',      {emo:'🐗', speed:1.2, hpMul:1.3, night:true, weak:[1, 0.75, 1.5, 1]}],
   ['Schäferhunde',      {emo:'🐕‍🦺', speed:1.6, weak:[1.5, 1, 1, 0.75]}],
-  ['Besoffene Penner',  {emo:'🍺', speed:0.7, hpMul:1.5, weak:[0.75, 1.5, 1.25, 1]}],
+  ['Besoffene Penner',  {emo:'🍺', speed:0.7, hpMul:1.5, night:true, weak:[0.75, 1.5, 1.25, 1]}],
   ['Wütende Partnerin', {emo:'😠', speed:1.3, weak:[0.75, 1.75, 0.6, 1]}],
   ['Wütende Nachbarn',  {emo:'😡', speed:1.1, hpMul:1.2, weak:[1, 1.25, 0.75, 1]}],
   ['Uffug-Vorhaut',     {emo:'👺', fly:true, weak:[1.25, 1.25, 1.25, 1.25]}],
@@ -543,12 +545,11 @@ function step(s, dt){
   }
   for (const tw of s.towers) {
     const def = tw.def;
-    const night = def.dayOnly && s.dark;
-    if (night && !s.lights.length) continue;
+    const night = def.dayOnly && s.dark;   // 12.10.: Dunkelheit gilt nur gegen nachtaktive Monster
     tw.cd -= dt; if (tw.cd > 0) continue;
     const cx = tw.x + .5, cy = tw.y + .5, reach = def.nova ? def.splash : def.range;
     const inRange = s.monsters.filter(m => !m.dead && canHit(def, m) && Math.hypot(m.x-cx, m.y-cy) <= reach &&
-      (!night || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));
+      (!night || !m.def.night || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));
     if (!inRange.length) continue;
     tw.cd = 1 / def.rate;
     if (def.nova) { nova(s, tw, def); continue; }
@@ -789,7 +790,7 @@ function fxText(d){
     if (d.effect === 'stun') p.push(`${d.chance ? Math.round(d.chance*100) + ' %: ' : ''}${d.el === 1 ? 'friert' : 'betäubt'} ${num(d.eff)} s${d.el === 1 ? ' ein' : ''}`);
   }
   if (d.splash) p.push(d.nova ? `Umkreis ${num(d.splash)}` : 'Fläche');
-  if (d.light) p.push(`Lichtkreis ${num(d.light)}: nachts treffen Schatten-Türme Monster darin`);
+  if (d.light) p.push(`Lichtkreis ${num(d.light)}: nachts treffen Schatten-Türme nachtaktive Monster darin`);
   if (d.air) p.push('nur Fliegende');
   else if (!d.hitsFly) p.push('keine Fliegenden');
   return p.join(' · ');
@@ -825,7 +826,7 @@ function showMonster(r){
   openDlg(`<h2><span class="big">${M.emo}</span>${M.name}</h2>
     <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
     <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${num(MD.armor)}${MD.armor ? ' (Schatten ignoriert sie)' : ''}</dd>
-    <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : 'nein'}</dd>
+    <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
     <dt>Kopfgeld</dt><dd>${bountyFor(r)} Gold</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
     <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('')}</div>
     <div class="muted">${strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : ''}${weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : ''}</div>
@@ -955,10 +956,10 @@ function render(){
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.round-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
-  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${num(MD.armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
+  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${num(MD.armor)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
     ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
-    (NX ? `<br>Nächstes Monster (Tag ${NX.round}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}<button class="ibtn" data-mon="${NX.round}" aria-label="Info zu ${NX.name}">i</button>` : '') +
+    (NX ? `<br>Nächstes Monster (Tag ${NX.round}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.round}" aria-label="Info zu ${NX.name}">i</button>` : '') +
     `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;
   $('today').querySelectorAll('[data-mon]').forEach(x => x.onclick = () => showMonster(+x.dataset.mon));
   if (G.over && overSeen !== G.cfg.startAt + G.over && !replay) showGameOver();
@@ -1187,7 +1188,7 @@ function draw(i, cv){
   if (s) for (const f of s.fx) if (f.kind === 'boom' || f.kind === 'quake' || f.kind === 'nova') drawFx(c, f, cs, time);
   for (const tw of towers) {
     const st = s && s.towers.find(o => o.x === tw.x && o.y === tw.y), fl = s && s.fx.find(f => f.kind === 'flash' && f.tw === st);
-    const dark = s && s.dark && st && st.def.dayOnly && !s.lights.length;
+    const dark = s && s.dark && st && st.def.dayOnly && !s.lights.length && s.monsters.some(m => m.def.night);
     if (dark) c.globalAlpha = .45;
     drawTower(c, tw, tw.x*cs, tw.y*cs, cs, st ? st.aim : (tw.x + tw.y) * .7, fl ? fl.t / fl.t0 : 0);
     c.globalAlpha = 1;
