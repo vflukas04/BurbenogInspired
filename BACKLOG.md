@@ -17,6 +17,10 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 14:26 (VERSION 2026-10-12zb) – nicht leichter als vor dem Rüstungsumbau
+- [x] Vergleich je Tag (Ø Kills aller 4 Elemente, gleiche Messung wie 14:07): insgesamt schon etwas schwerer (244 statt 251 Kills über 20 Tage, v. a. weil Schatten nicht mehr übermächtig ist). Leichter waren nur Tag 13, 15, 16.
+- [x] Leben angehoben: Oktopusse ×1,15, Schäferhunde ×1,1, Besoffene Penner ×1,9 (vorher 1,5). Danach kein Tag mehr als 0,4 Kills leichter als vorher; Summe 242.
+
 ### 12.10. 14:07 (VERSION 2026-10-12za) – neues Rüstungssystem
 - [x] Rüstung = Prozent + Punkte je Monster (Tabelle in MONSTERS `ar`). Türme machen zusätzlich Rüstungsschaden (Feuer 50 %, Eis 60 %, Schatten 0 %, Stein 150 % des Schadens), der nur die Punkte abbaut. Brennen geht durch.
 - [x] Schatten ignoriert Rüstung nicht mehr pauschal. Fluch senkt die Rüstungsprozente um den Fluchwert für alle Türme (wandert mit Durchgelassenen weiter). Irrlicht: ×1,3–1,8 Schaden und 30–100 % Rüstung ignorieren (vorher ×1,5–3,0).
