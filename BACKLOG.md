@@ -19,7 +19,7 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 ## Offene Wünsche (vorgemerkt)
 ### 12.10. vormittags (VERSION 2026-10-12o)
 - [x] Schatten-Nachtregel gilt nur noch für **nachtaktive** Monster: Tag 5 Mäuse, 8 Katzen, 10 Füchse, 14 Wildschweine, 16 Besoffene Penner. Alle anderen trifft Schatten um 19 Uhr normal. Anzeige „(nachtaktiv)“ bei Heute/Nächstes und in der Monster-Info.
-- [x] Faktoren Runde 1–5 fair: R1 alles ×1; R2 Kellerasseln Stein 1,2/Feuer 0,8; R3 Nacktschnecken Feuer 1,2/Stein 0,8; R4 Ohrenkneifer Eis 1,2/Schatten 0,8; R5 Mäuse Schatten 1,2/Eis 0,8.
+- [x] Faktoren Runde 1–5 fair: R1 alles ×1; R2 Kellerasseln Stein 1,2/Feuer 0,8; R3 Nacktschnecken Eis 1,2/Stein 0,8; R4 Ohrenkneifer Schatten 1,2/Eis 0,8; R5 Mäuse Feuer 1,2/Schatten 0,8 (10:44 umgestellt, VERSION 2026-10-12p).
 - Offen: Ab Runde 6 bleiben die alten, stärkeren Faktoren (0,6–1,75). Schatten profitiert jetzt deutlich – im Spiel beobachten, ob er zu stark wird.
 
 ### Aus Lukas' Rückmeldung 11.10. vormittags
