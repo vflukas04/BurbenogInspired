@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12ze";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12zf";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -434,7 +434,7 @@ function towerBase(el, idx){
   const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
   return { name, role, cost, range: range * GRID, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: (splash || 0) * GRID,
     effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, dayOnly:!!E.dayOnly, pierceArr:opt.pierce || null,
-    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID, buff:opt.buff || 0,
+    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID, buffArr:opt.buff || null, buff:opt.buff ? opt.buff[0] : 0, pierce:opt.pierce ? opt.pierce[0] : 0,
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
 }
 const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;
@@ -448,7 +448,7 @@ function tdef(tw){
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
   return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
-    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buff ? b.buff[Math.min(n, b.buff.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buffArr ? b.buffArr[Math.min(n, b.buffArr.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
     dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
@@ -951,7 +951,7 @@ function buildLanes(){
     cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), cs = r.width / COLS;
       clickCell(i, Math.floor((e.clientX - r.left) / cs), Math.floor((e.clientY - r.top) / cs)); });
     $('el'+i).addEventListener('click', () => { if (!canSwitchEl(i)) return; const l = laneOf(i);
-      L[i] = { ...l, el:(l.el + 1) % ELEMENTS.length }; selTower = null; render(); saveLane(i); });
+      L[i] = { ...l, el:(l.el + 1) % ELEMENTS.length }; selTower = null; saveLane(i); render(); });
   }
 }
 function showPassed(){ const p = passedShown(); $('sPass').textContent = `${p}/${CONFIG.lossLimit}`; $('passBox').classList.toggle('bad', p > CONFIG.lossLimit * 0.6); }
@@ -995,7 +995,7 @@ function render(){
     : `<span class="muted">Ein Gerät für alle: Feld antippen, um für diesen Spieler zu bauen.</span>`;
   if (canSwitchEl(seat)) $('seats').innerHTML += `<span class="muted" style="margin-left:12px">Mein Element:</span>` +
     ELEMENTS.map((E,k) => `<button class="btn ${laneOf(seat).el===k?'on':''}" data-el="${k}" style="color:${E.color}">${E.emo} ${E.name}</button>`).join('');
-  $('seats').querySelectorAll('[data-el]').forEach(x => x.onclick = () => { const l = laneOf(seat); L[seat] = { ...l, el:+x.dataset.el }; selTower = null; render(); saveLane(seat); });
+  $('seats').querySelectorAll('[data-el]').forEach(x => x.onclick = () => { const l = laneOf(seat); L[seat] = { ...l, el:+x.dataset.el }; selTower = null; saveLane(seat); render(); });
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.round-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
