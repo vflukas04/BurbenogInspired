@@ -17,6 +17,12 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 15:45 (L) – Zusammenarbeit mit Friedrichs Claude
+- [x] Regeln in CLAUDE.md („Zusammenarbeit zweier Claudes“): Repo = gemeinsames Gedächtnis, BACKLOG-Einträge mit Kürzel L/F, Vorschlagsformat für Friedrichs Claude.
+- [x] Private Hub-Hinweise aus CLAUDE.md entfernt (Repo ist öffentlich).
+- Anleitung für Friedrich als Claude-Doc (GitHub-Konto, Mitarbeiter-Einladung, Claude-Projekt mit GitHub-Integration, Projektanweisung). Free-Plan: GitHub nur lesen; Claude Code (selbst pushen) erst ab Pro.
+- Offen: Lukas lädt Friedrich als Collaborator ein (Settings → Collaborators).
+
 ### 12.10. 15:38 (VERSION 2026-10-12zg) – nach Testspiel
 - Rückmeldung: vieles klappt gut, insgesamt noch etwas zu leicht, Late Game noch etwas stark, Boss mit Schatten zu einfach.
 - [x] Leben-Kurve steiler: Exponent 1,3 → 1,38 (Tag 5 +13 %, Tag 10 +20 %, Tag 20 +27 %). Tag 1 unverändert.
