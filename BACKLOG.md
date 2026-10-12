@@ -17,6 +17,9 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 11:59 (VERSION 2026-10-12v)
+- [x] Schatten nachts zu schwach: Irrlicht (Turm 2) kostet 30 statt 45 Gold (Upgrades dadurch auch günstiger).
+
 ### 12.10. 11:47 (VERSION 2026-10-12u)
 - [x] Wetter zu stark: alle Abweichungen halbiert (z. B. Sonnig Feuer +25 % → +12,5 %, Gewitter Schatten −40 % → −20 %, Nebel Reichweite −25 % → −12,5 %, Brennen erlischt 1,75× statt 2,5× schneller).
 - Handy-2-Hänger (11:38, Nacktschnecken): Spielstand war beim Auslesen schon per „Neues Spiel“ gelöscht, nicht nachvollziehbar. Vorschlag offen: Ereignis-Protokoll je Handy im eigenen Feld. Beim nächsten Hänger KEIN „Neues Spiel“, sondern erst auslesen.

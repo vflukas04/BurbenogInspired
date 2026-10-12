@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12u";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12v";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -315,9 +315,10 @@ const ELEMENTS = [
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
-  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, towers:[
+  { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, costOverride:{1:30}, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
-    ['Irrlicht',     'Licht',     1.8, 1,   1, 0.5, 0.1, 3, 0, {light:2.2}],
+    ['Irrlicht',     'Licht',     // 30 statt 45 Gold (12.10.: Schatten nachts sonst zu schwach)
+                          1.8, 1,   1, 0.5, 0.1, 3, 0, {light:2.2}],
     ['Nachtauge',    'Reichweite',3.8, 0.6, 1, 1.01, 0.15, 5],
     ['Fluchstein',   'Effekt',    2.5, 0.7, 3, 0.3, 0.3, 12, 0, {fly:false}],
     ['Seelenfresser','Schaden',   2.0, 0.8, 2, 1.4, 0.1, 5],
