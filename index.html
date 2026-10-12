@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12v";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12w";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -227,7 +227,7 @@ const CONFIG = {
   firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
   maxLevel: 6,              // Stufe 1 + 5 Upgrades
   upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
-  upgrade: { dmg:2.1, firstDmg:2.2, range:0.2, dur:1.3, eff:1.15 },  // 12.10. 11:01: erstes Upgrade ×2,2, danach je ×2,1. Schaden/s je Stufe auf 0,1 aufgerundet
+  upgrade: { buff:0.1, dmg:2.1, firstDmg:2.2, range:0.2, dur:1.3, eff:1.15 },  // 12.10. 11:01: erstes Upgrade ×2,2, danach je ×2,1. Schaden/s je Stufe auf 0,1 aufgerundet
    // pro Upgrade: Schaden ×2, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
   giftFee: 0.10, giftStep: 10,
   weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt
@@ -318,7 +318,7 @@ const ELEMENTS = [
   { name:'Schatten', emo:'🌑', color:'#a58ad8', note:'Fluch · ignoriert Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis eines Irrlichts', effect:'curse', pierce:true, dayOnly:true, costOverride:{1:30}, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
     ['Irrlicht',     'Licht',     // 30 statt 45 Gold (12.10.: Schatten nachts sonst zu schwach)
-                          1.8, 1,   1, 0.5, 0.1, 3, 0, {light:2.2}],
+                          1.8, 1,   1, 0,   0,   0, 0, {light:2.2, buff:1.5}],   // 12.10. 12:19: schießt nicht, Schatten-Türme im Lichtkreis ×1,5 Schaden (+0,1 je Stufe)
     ['Nachtauge',    'Reichweite',3.8, 0.6, 1, 1.01, 0.15, 5],
     ['Fluchstein',   'Effekt',    2.5, 0.7, 3, 0.3, 0.3, 12, 0, {fly:false}],
     ['Seelenfresser','Schaden',   2.0, 0.8, 2, 1.4, 0.1, 5],
@@ -435,7 +435,7 @@ function towerBase(el, idx){
   const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
   return { name, role, cost, range: range * GRID, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: (splash || 0) * GRID,
     effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, pierce:!!E.pierce, dayOnly:!!E.dayOnly,
-    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID,
+    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID, buff:opt.buff || 0,
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
 }
 const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;
@@ -449,7 +449,7 @@ function tdef(tw){
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
   return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
-    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0,
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buff ? b.buff + U.buff * n : 0,
     dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
@@ -473,6 +473,11 @@ function makeSim(inp){
   const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw), W, res) }));
   // Lichtkreise der Irrlichter: Im Dunkeln treffen Schatten-Türme nur Monster, die gerade darin sind
   const lights = towers.filter(t => t.def.light).map(t => ({ x:t.x + .5, y:t.y + .5, r:t.def.light }));
+  // Verstärker (Irrlicht): Schatten-Türme in seinem Lichtkreis machen mehr Schaden, zu jeder Tageszeit. Mehrere Kreise: der stärkste zählt.
+  const amps = towers.filter(t => t.def.buff);
+  for (const t of towers) { if (t.def.buff) continue;
+    const m = Math.max(1, ...amps.filter(a => a.el === t.el && Math.hypot(a.x - t.x, a.y - t.y) <= a.def.light + 1e-6).map(a => a.def.buff));
+    if (m > 1) { t.def = { ...t.def, dpsNow:t.def.dpsNow * m, dmg:t.def.dmg * m, amp:m }; } }
   return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, rand:rng(inp.seed || 1),
     queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, kills:0, spawnT:0, t:0 };
 }
@@ -549,6 +554,7 @@ function step(s, dt){
   }
   for (const tw of s.towers) {
     const def = tw.def;
+    if (def.buff) continue;                // Irrlicht schießt nicht selbst
     const night = def.dayOnly && s.dark;   // 12.10.: Dunkelheit gilt nur gegen nachtaktive Monster
     tw.cd -= dt; if (tw.cd > 0) continue;
     const cx = tw.x + .5, cy = tw.y + .5, reach = def.nova ? def.splash : def.range;
@@ -751,8 +757,8 @@ function showBuildDialog(){
   openDlg(`<h2>${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</h2>
     <dl><dt>Kosten</dt><dd>${cost} Gold${extra ? ` (${d.cost} + ${extra} ${T.name})` : ''}</dd>
     <dt>Danach</dt><dd>${goldAvail(i) - cost} Gold</dd>
-    <dt>Schaden/s</dt><dd>${num(d.dpsNow)}</dd><dt>Reichweite</dt><dd>${num(d.range)}</dd></dl>
-    <div class="muted">${d.role}${fxText(d) ? ' · ' + fxText(d) : ''} · Reichweite gestrichelt im Feld</div>
+    ${d.buff ? '' : `<dt>Schaden/s</dt><dd>${num(d.dpsNow)}</dd><dt>Reichweite</dt><dd>${num(d.range)}</dd>`}</dl>
+    <div class="muted">${d.role}${fxText(d) ? ' · ' + fxText(d) : ''} · ${d.buff ? 'Lichtkreis' : 'Reichweite'} gestrichelt im Feld</div>
     <div class="acts"><button class="btn" id="bNo">Abbrechen</button><button class="btn primary" id="bYes">Wirklich bauen</button></div>`, '', true);
   // Spielfeld unter den Dialog scrollen, damit die Reichweite sichtbar bleibt
   const r = $('cv'+i).getBoundingClientRect(), bottom = innerHeight - ($('palette').offsetHeight || 0) - 8;
@@ -793,6 +799,7 @@ const canSwitchEl = i => mayBuild(i) && G.day === 1 && G.slot === 0 && !laneOf(i
 const num = v => v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1).replace('.0','') : v.toFixed(2).replace(/0$/,'');
 const durText = d => d.dur === DAY ? 'ganzer Tag' : `${num(d.dur)} s`;
 function fxText(d){
+  if (d.buff) return `schießt nicht · Lichtkreis ${num(d.light)}: Schatten-Türme darin ×${String(+d.buff.toFixed(2)).replace('.', ',')} Schaden (immer), nachts treffen sie dort auch nachtaktive Monster`;
   const p = [];
   if (d.shots > 1) p.push(`${d.shots} Geschosse`);
   if (d.eff > 0) {
@@ -1013,7 +1020,7 @@ function render(){
     const info = $('info'+i);
     const tw = selCell && selCell.i === i ? l.towers.find(t => t.x === selCell.x && t.y === selCell.y) : null;
     if (tw) { const d = tdef(tw), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
-      info.innerHTML = `<b style="color:var(--fg)">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel} · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}${fxText(d) ? ' · ' + fxText(d) : ''}` +
+      info.innerHTML = `<b style="color:var(--fg)">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel}${d.buff ? '' : ` · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}`}${fxText(d) ? ' · ' + fxText(d) : ''}` +
         (mayBuild(i) ? (maxed ? '' : `<button class="btn" id="up${i}" ${goldAvail(i) < uc ? 'disabled' : ''}>Upgrade (${uc} Gold)</button>`) +
           `<button class="btn" id="sell${i}">${sellArm === i+','+tw.x+','+tw.y ? 'Wirklich verkaufen?' : 'Verkaufen'} (+${Math.floor((tw.invested || d.cost) * CONFIG.sellRefund)})</button>` : '');
       const sb = $('sell'+i); if (sb) sb.onclick = e => { e.stopPropagation(); sell(i, tw.x, tw.y); };
@@ -1034,7 +1041,7 @@ function renderPalette(){
   $('prow').innerHTML = E.towers.map((_,k) => towerBase(l.el, k)).map((d,k) => { const lock = LOCKS[k] && !RS.has(LOCKS[k]), ic = towerIcon(l.el, k);
     return `<button class="tw ${selTower===k?'sel':''}" data-k="${k}" ${!can||gold<d.cost||lock?'disabled':''}>
       <span class="n" style="color:${E.color}">${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</span><span class="c">${lock ? '🔒 Bauhütte' : d.cost + ' Gold'}</span>
-      <span class="d">${d.role} · ${num(d.dps)} Schaden/s · ${num(d.range)} weit${fxText(d) ? '<br>' + fxText(d) : ''}</span></button>`; }).join('');
+      <span class="d">${d.role}${d.buff ? '' : ` · ${num(d.dps)} Schaden/s · ${num(d.range)} weit`}${fxText(d) ? '<br>' + fxText(d) : ''}</span></button>`; }).join('');
   $('prow').querySelectorAll('.tw').forEach(x => x.onclick = () => { const k = +x.dataset.k; selTower = selTower === k ? null : k; render(); });
 }
 function renderResearch(){
@@ -1192,12 +1199,12 @@ function draw(i, cv){
   if (selCell && selCell.i === i) {
     const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
     c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.strokeRect(selCell.x*cs+1, selCell.y*cs+1, cs-2, cs-2);
-    if (tw) { const r = tdef(tw).range;
+    if (tw) { const td = tdef(tw), r = td.buff ? td.light : td.range;
       c.beginPath(); c.arc((tw.x+.5)*cs, (tw.y+.5)*cs, r*cs, 0, Math.PI*2); c.setLineDash([4,4]); c.stroke(); c.setLineDash([]); }
   }
   if (pending && pending.i === i) { const d = tdef({ el:laneOf(i).el, idx:pending.k, lvl:1 });
     c.globalAlpha = .55; drawTower(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x*cs, pending.y*cs, cs, -Math.PI/2, 0); c.globalAlpha = 1;
-    c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.setLineDash([4,4]); c.beginPath(); c.arc((pending.x+.5)*cs, (pending.y+.5)*cs, d.range*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
+    c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.setLineDash([4,4]); c.beginPath(); c.arc((pending.x+.5)*cs, (pending.y+.5)*cs, (d.buff ? d.light : d.range)*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
     c.fillStyle = v('--accent') + '18'; c.fill(); }
   if (s) for (const f of s.fx) if (f.kind === 'boom' || f.kind === 'quake' || f.kind === 'nova') drawFx(c, f, cs, time);
   for (const tw of towers) {
