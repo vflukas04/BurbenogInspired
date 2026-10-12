@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12p";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12q";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -219,6 +219,7 @@ const CONFIG = {
   baseHp: 14,               // 12.10.: neu kalibriert für 16 × 16
   playerHp: { 2:1, 3:1.25, 4:1.5 },
   hpExp: 1.5,               // Runde 2: ×2,8 · Runde 5: ×11 · Runde 10: ×32 · Runde 20: ×89 · Runde 40: ×253
+  hpCutFrom: 3, hpCut: 0.95,  // 12.10.: ab Runde 3 (Nacktschnecken) alle Monster 5 % weniger Leben
   armorFrac: 0.004,         // Rüstung = 0,004 × (Runde − 1) × Grundleben der Runde (Runde 20: ca. 8 % der Leben)
   // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
   slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
@@ -451,7 +452,7 @@ function tdef(tw){
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
 const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
 function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
-  return { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1),
+  return { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1),
     armor: CONFIG.armorFrac * (r - 1) * hpBase(r), bounty: bountyFor(r) }; }
 const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · brennt nicht' : '×' + String(f).replace('.', ',');
 
@@ -669,11 +670,13 @@ async function saveGame(){
   if (MODE === 'local') return lsSet('ww2-local', { G, L });
   const body = JSON.parse(JSON.stringify(G)); await queueWrite(() => DB.doc(P_STATE).set(body));
 }
-let resolving = false;
+let resolving = false, resolvingAt = 0;
+// Gibt true zurück, wenn ausgewertet werden konnte (für den Bereit-Knopf: sonst später nochmal versuchen)
 async function tryResolve(force, onlyKey){
-  if (!G || G.over || resolving || replay) return;
-  if (MODE === 'local') { G = resolveSlot(G, L); lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return; }
-  resolving = true;
+  if (resolving && Date.now() - resolvingAt > 20000) resolving = false;   // hängende Verbindung: nicht ewig blockieren
+  if (!G || G.over || resolving || replay) return false;
+  if (MODE === 'local') { G = resolveSlot(G, L); lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return true; }
+  resolving = true; resolvingAt = Date.now(); let ok = false;
   try {
     const ls = await DB.collection(P_LANES).get();
     const lanes = []; ls.docs.forEach(d => { const k = +d.id.slice(1); lanes[k] = d.data(); });
@@ -691,8 +694,11 @@ async function tryResolve(force, onlyKey){
       const snap = await ref.get(); if (!snap.exists) return;
       const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) await ref.set(g);
     }
+    ok = true;
   } catch(e) { console.warn(e); }
   finally { resolving = false; }
+  if (ok) refreshFromServer();   // Ergebnis sofort holen, nicht auf die Live-Verbindung warten
+  return ok;
 }
 
 /* ---------- Wiedergabe der letzten Welle ---------- */
@@ -701,16 +707,19 @@ function startReplay(run, rewatch){
   seenRun = run.id; lsSet('ww2-seen', seenRun);
   const w = makeWorld(run), end = simulateWorld(run).sims;
   replay = { run, acc:0, w, sims:w.sims, pending:!rewatch, final:{ earned:end.map(s => s.earned), kills:end.map(s => s.kills) } };
-  selCell = null; render(); replay.last = performance.now(); requestAnimationFrame(loop);
+  selCell = null; render(); kickLoop();
 }
-function loop(now){
-  if (!replay) return;
+// Jede Schleife hat eine Nummer: Startet der Wächter neu, läuft trotzdem nie zweimal gleichzeitig.
+function kickLoop(){ if (!replay) return; const tok = replay.tok = (replay.tok || 0) + 1; replay.last = performance.now(); requestAnimationFrame(now => loop(now, tok)); }
+function loop(now, tok){
+  if (!replay || replay.tok !== tok) return;
   // feste Schritte wie bei der Auswertung, sonst weicht die Wiedergabe ab
   replay.acc += Math.min(0.1, (now - replay.last) / 1000) * speed; replay.last = now;
-  while (replay.acc >= DT) { stepWorld(replay.w, DT); replay.acc -= DT; }
+  try { while (replay.acc >= DT) { stepWorld(replay.w, DT); replay.acc -= DT; } }
+  catch(e) { console.warn(e); replay = null; render(); return; }   // Fehler: Wiedergabe abbrechen statt ewig „läuft“
   try { drawAll(); updateLaneHeads(); } catch(e) { console.warn(e); }   // Zeichenfehler dürfen die Wiedergabe nicht anhalten
   if (!worldBusy(replay.w)) { replay = null; render(); nextReplay(); return; }
-  requestAnimationFrame(loop);
+  requestAnimationFrame(n => loop(n, tok));
 }
 function endReplay(){ if (!replay) return; let g = 0; while (worldBusy(replay.w) && g++ < 600000) stepWorld(replay.w, DT); replay = null; render(); nextReplay(); }
 // Kam während einer Wiedergabe schon die nächste Welle (z. B. Mitspieler drückt „Bereit“), sofort danach zeigen –
@@ -871,12 +880,14 @@ function toggleReady(){
   if (!mayBuild(seat)) return; const l = laneOf(seat);
   L[seat] = { ...l, ready: isReady(seat) ? null : readyKey(G) }; render(); saveLane(seat);
 }
-let readyFired = null;
+let readyFired = null, readyAt = 0;
 function checkReady(){
   if (MODE !== 'online' || !G || G.over || replay) return;
   const key = readyKey(G);
-  if (readyFired === key || ![...Array(NP())].every((_,i) => isReady(i))) return;
-  readyFired = key; tryResolve(true, key);
+  // 12.10.: Früher nur ein Versuch – lief gerade eine Wiedergabe oder hakte das Netz, startete die Welle erst nach Neuladen.
+  if ((readyFired === key && Date.now() - readyAt < 8000) || ![...Array(NP())].every((_,i) => isReady(i))) return;
+  readyFired = key; readyAt = Date.now();
+  tryResolve(true, key).then(ok => { if (!ok && readyFired === key) readyAt = 0; });
 }
 // Während die neueste Welle zum ersten Mal abgespielt wird, zeigt die Anzeige nur, was schon passiert ist
 // (Durchbrüche, Verloren/Gewonnen, Chronik). Ausgewertet ist die Welle da längst.
@@ -1265,6 +1276,9 @@ $('reset').onclick = () => {
 };
 window.addEventListener('resize', () => { for (let i = 0; i < 4; i++) { const cv = $('cv'+i); if (cv) cv.width = 0; } drawAll(); });
 setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   // Sicherheitsnetz: keine Welle verpassen
+   // Wächter: Steht die Wiedergabe seit 3 s still, obwohl die Seite sichtbar ist, neu anstoßen
+   if (replay && !document.hidden && performance.now() - replay.last > 3000) kickLoop();
+   checkReady();
    if (MODE === 'online' && G && !G.over) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
 
 function startLocal(){
@@ -1294,7 +1308,9 @@ async function refreshFromServer(){
   if (MODE !== 'online' || refreshing || (typeof document !== 'undefined' && document.hidden)) return;
   refreshing = true;
   try {
-    const [st, ls] = await Promise.all([DB.doc(P_STATE).get({ source:'server' }), DB.collection(P_LANES).get({ source:'server' })]);
+    // Zeitlimit: Eine hängende Abfrage blockierte vorher alle weiteren (refreshing blieb true) – dann half nur Neuladen
+    const limit = new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit Server-Abfrage')), 8000));
+    const [st, ls] = await Promise.race([Promise.all([DB.doc(P_STATE).get({ source:'server' }), DB.collection(P_LANES).get({ source:'server' })]), limit]);
     ls.docs.forEach(d => { const k = +d.id.slice(1); if (!d.metadata.hasPendingWrites) L[k] = d.data(); });
     const g = st.exists ? st.data() : null;
     const stamp = x => x ? `${x.cfg && x.cfg.startAt}-${x.day}-${x.slot}-${x.lastRun ? x.lastRun.id : ''}-${x.over}` : 'leer';
