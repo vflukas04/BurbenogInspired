@@ -17,6 +17,9 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 11:01 (VERSION 2026-10-12r)
+- [x] Upgrades stärker: je Stufe +0,1 auf den Faktor (erstes Upgrade ×2,2, danach ×2,1). Schaden/s jeder Stufe auf eine Nachkommastelle aufgerundet. Funke: 1,6 · 3,6 · 7,6 · 16 · 33,6 · 70,6.
+
 ### 12.10. 10:52 (VERSION 2026-10-12q)
 - [x] Leben ab Runde 3 (Nacktschnecken) −5 % (`CONFIG.hpCutFrom`/`hpCut`), auch der Boss.
 - [x] Handy 2 startet Wellen erst nach Neuladen (ohne Fensterwechsel). Drei Hänger behoben: (1) Bereit-Auswertung wurde nur einmal versucht – lief gerade eine Wiedergabe oder hakte das Netz, startete die Welle nie; jetzt alle 5–8 s erneut. (2) Server-Abfrage alle 10 s ohne Zeitlimit: eine hängende Abfrage blockierte alle weiteren; jetzt 8 s Limit. Auch die Auswertung gibt nach 20 s frei. (3) Wiedergabe-Wächter: steht die Animation 3 s still, wird sie neu angestoßen; Rechenfehler brechen die Wiedergabe ab statt sie ewig „laufen“ zu lassen. Nach dem Auswerten holt das Handy den Stand sofort vom Server.
