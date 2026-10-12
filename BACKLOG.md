@@ -17,6 +17,10 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 12.10. 14:36 (VERSION 2026-10-12zd)
+- [x] Element-Problem bestand weiter. Server gelesen: Spiel 14:35:47 mit zc angelegt, Feld 1 weiter Feuer ohne `rev` (Wahl nie angekommen), Feld 2 beim Spielstart gar nicht neu geschrieben. Ursache: Schreib-Warteschlange hing (Safari/Firebase). Jetzt: Firestore mit `experimentalForceLongPolling`, jeder Schreibvorgang 10-s-Zeitlimit + 1 Wiederholung, Schlange läuft danach weiter.
+- Falls es weiter auftritt: Feld auf dem Server lesen (REST `games/spiel1/lanes`) – kommt `rev` an? Welches Handy hat das Spiel gestartet?
+
 ### 12.10. 14:34 (VERSION 2026-10-12zc)
 - [x] Fehler: Schatten gewählt, aber Feuer-Bauliste. Ursache: Die Server-Abfrage alle 2/10 s überschrieb das eigene Feld mit einem älteren Serverstand, bevor die eigene Änderung angekommen war (konnte auch frisch gebaute Türme kurz verschwinden lassen; wer in dem Moment baute, speicherte das alte Element endgültig). Jetzt hat jede eigene Änderung eine Versionsnummer (`rev`), ältere Stände werden für das eigene Feld ignoriert (`takeLane`).
 
