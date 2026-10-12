@@ -12,7 +12,7 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas (Codename-Projek
 
 ## Technik
 - Alles in `index.html` (ca. 1.000 Zeilen, ein `<script>`). Oben: `FIREBASE_CONFIG`, `GAME_ID`, dann der Block **SPIELDATEN** (CONFIG, TERRAIN, RESEARCH, WEATHER, TOWER_COST/POWER, ELEMENTS mit je 8 Türmen, MONSTERS mit 20 Runden).
-- Online-Speicher: Firebase Firestore (Projekt `burbenoginspired`), Pfade `games/<GAME_ID>` (Spielstand G) und `games/<GAME_ID>/lanes/p0..p3` (Feld je Spieler: Element, Türme, ausgegeben, Geschenke, Kasse, Forschung, `gid`). Jeder Spieler schreibt nur sein eigenes Feld. Wellen werden per Transaktion ausgewertet, wenn jemand die Seite nach der fälligen Zeit offen hat.
+- Online-Speicher: Firebase Firestore (Projekt `burbenoginspired`), Pfade `games/<GAME_ID>` (Spielstand G) und `games/<GAME_ID>/lanes/p0..p3` (Feld je Spieler: Element, Türme, ausgegeben, Geschenke, Kasse, Forschung, `gid`). Jeder Spieler schreibt nur sein eigenes Feld. Eigene Änderungen tragen eine Versionsnummer `rev`; `takeLane` ignoriert ältere Serverstände fürs eigene Feld. Wellen werden per Transaktion ausgewertet, wenn jemand die Seite nach der fälligen Zeit offen hat.
 - Ohne Firebase-Werte: Ein-Gerät-Modus (localStorage).
 - Simulation deterministisch in festen Schritten (DT = 1/30 s), Zufall nur mit festem Seed (Wetter aus `startAt`, Betäubung aus startAt/Tag/Welle/Spieler im Wellen-Input). Die Wiederholung spielt dieselbe Simulation in denselben Schritten ab.
 - Grafik: Kenney „Tower Defense (top-down)“, CC0, in `assets/kenney/` (nur die benutzten Sprites). Graue Sprites werden je Element eingefärbt (`tinted`). Monster noch Emojis.

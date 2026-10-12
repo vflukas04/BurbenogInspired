@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12zb";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-12zc";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -675,7 +675,13 @@ function lsGet(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){
 function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 let writeChain = Promise.resolve();
 function queueWrite(fn){ writeChain = writeChain.then(fn).catch(e => { console.warn(e); toast('Speichern hat nicht geklappt. Bitte Seite neu laden.'); }); return writeChain; }
+// Jede eigene Änderung bekommt eine Versionsnummer (rev). Ältere Stände vom Server überschreiben das eigene Feld nicht mehr
+// (12.10. 14:34: Server-Abfrage kam mit altem Stand zurück → gewähltes Element sprang auf Feuer zurück).
+function takeLane(k, data){ const cur = L[k];
+  if (cur && cur.rev && data && data.gid === cur.gid && !((data.rev || 0) >= cur.rev)) return;
+  L[k] = data; }
 async function saveLane(i){
+  if (MODE !== 'local') L[i] = { ...laneOf(i), rev: Math.max(Date.now(), ((L[i] && L[i].rev) || 0) + 1) };
   if (MODE === 'local') return lsSet('ww2-local', { G, L });
   const body = JSON.parse(JSON.stringify({ ...laneOf(i), gid:gidOf(G) })); await queueWrite(() => DB.doc(P_LANES + '/p' + i).set(body));
 }
@@ -1307,7 +1313,7 @@ async function startOnline(db){
   if (!ME) { ME = lsGet('ww2-holder') || ('h' + Math.random().toString(36).slice(2)); lsSet('ww2-holder', ME); }
   seat = lsGet('ww2-seat') || 0; seenRun = lsGet('ww2-seen');
   DB.collection(P_LANES).onSnapshot(snap => {
-    snap.docs.forEach(d => { const k = +d.id.slice(1); if (!d.metadata.hasPendingWrites || !L[k]) L[k] = d.data(); });
+    snap.docs.forEach(d => { const k = +d.id.slice(1); if (!d.metadata.hasPendingWrites || !L[k]) takeLane(k, d.data()); });
     if (G) render();
   }, e => console.warn(e));
   DB.doc(P_STATE).onSnapshot(snap => onGame(snap.exists ? snap.data() : null), e => { console.warn(e); toast('Verbindung verloren. Bitte Seite neu laden.'); });
@@ -1329,7 +1335,7 @@ async function refreshFromServer(){
     // Zeitlimit: Eine hängende Abfrage blockierte vorher alle weiteren (refreshing blieb true) – dann half nur Neuladen
     const limit = new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit Server-Abfrage')), 8000));
     const [st, ls] = await Promise.race([Promise.all([DB.doc(P_STATE).get({ source:'server' }), DB.collection(P_LANES).get({ source:'server' })]), limit]);
-    ls.docs.forEach(d => { const k = +d.id.slice(1); if (!d.metadata.hasPendingWrites) L[k] = d.data(); });
+    ls.docs.forEach(d => { const k = +d.id.slice(1); takeLane(k, d.data()); });
     const g = st.exists ? st.data() : null;
     const stamp = x => x ? `${x.cfg && x.cfg.startAt}-${x.day}-${x.slot}-${x.lastRun ? x.lastRun.id : ''}-${x.over}` : 'leer';
     if (stamp(g) !== stamp(G)) onGame(g); else if (G) render();
