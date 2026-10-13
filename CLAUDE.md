@@ -10,12 +10,12 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas mit seinem Freun
 - Lukas' Claude: die Leitplanken aus Lukas' eigenem Projekt-Hub beachten (Pausen, Schlaf). Private Inhalte gehören nicht in dieses öffentliche Repo.
 
 ## Zusammenarbeit zweier Claudes (seit 12.10.2026)
-- Lukas' Claude (Claude Code) ändert und pusht. Friedrichs Claude (Free-Plan, Claude-Projekt mit GitHub-Integration) liest nur und macht Vorschläge. Anleitung für Friedrich: Claude-Doc „BurbenogInspired – Anleitung für Friedrich“.
+- Lukas' Claude und Friedrichs Claude (beide mit Pro) ändern und pushen. Vor jedem Push `git pull --rebase`, `VERSION` hochzählen, BACKLOG-Eintrag mit (L|F). Größere Balance-Änderungen vorher kurz absprechen. Anleitung für Friedrich: Claude-Doc „BurbenogInspired – Anleitung für Friedrich“.
 - Das Repo ist das gemeinsame Gedächtnis. Was nicht in `CLAUDE.md` oder `BACKLOG.md` steht, weiß der andere Claude nicht.
 - Vor jeder Arbeit: `CLAUDE.md` und den obersten Abschnitt von `BACKLOG.md` lesen, neuesten Stand holen (`git pull` bzw. „Sync now“).
 - Jede Änderung bekommt oben in `BACKLOG.md` einen Abschnitt `### TT.MM. HH:MM (L|F, VERSION …) – Titel` mit Stichpunkten: was, warum, offene Fragen. L = Lukas/sein Claude, F = Friedrich/sein Claude. Neue Grundregeln zusätzlich hier unter „Regeln“.
-- Vorschläge von Friedrichs Claude kommen als fertiger Block (Datei, Stelle, alt → neu, Grund, BACKLOG-Eintrag). Lukas' Claude baut sie ein und vermerkt (F) als Urheber.
-- Kleine Direktänderungen von Friedrich über den GitHub-Webeditor sind erlaubt (dann VERSION hochzählen und BACKLOG-Eintrag). Lukas' Claude macht vor jedem Push `git pull --rebase`.
+- Größere Balance-Änderungen kommen vorher als fertiger Block (Datei, Stelle, alt → neu, Grund, BACKLOG-Eintrag) zur Absprache. Danach baut sie derjenige Claude ein, der gerade am Rechner ist, und vermerkt den Urheber (L|F).
+- Kleine Direktänderungen über den GitHub-Webeditor sind erlaubt (dann VERSION hochzählen und BACKLOG-Eintrag). Jeder Claude macht vor jedem Push `git pull --rebase`.
 
 ## Technik
 - Alles in `index.html` (ca. 1.000 Zeilen, ein `<script>`). Oben: `FIREBASE_CONFIG`, `GAME_ID`, dann der Block **SPIELDATEN** (CONFIG, TERRAIN, RESEARCH, WEATHER, TOWER_COST/POWER, ELEMENTS mit je 8 Türmen, MONSTERS mit 20 Runden).

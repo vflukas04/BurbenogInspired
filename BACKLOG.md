@@ -17,6 +17,11 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 13.10. 10:15 (F, VERSION unverändert) – Zusammenarbeit: beide Claudes pushen
+- Friedrich hat jetzt Pro, sein Claude kann selbst pushen (Probe-Push auf main ging durch). Lukas hat per WhatsApp zugestimmt (13.10.).
+- CLAUDE.md, Abschnitt „Zusammenarbeit zweier Claudes“, 1., 5. und 6. Punkt: Regeln für beide Claudes angeglichen (pull --rebase, VERSION, BACKLOG mit L|F, größere Balance-Änderungen vorher absprechen).
+- Offen: Faktoren je Block (Tag 6–20 ausgeglichen) noch nicht eingebaut, wartet auf Lukas' OK.
+
 ### 12.10. 15:45 (L) – Zusammenarbeit mit Friedrichs Claude
 - [x] Regeln in CLAUDE.md („Zusammenarbeit zweier Claudes“): Repo = gemeinsames Gedächtnis, BACKLOG-Einträge mit Kürzel L/F, Vorschlagsformat für Friedrichs Claude.
 - [x] Private Hub-Hinweise aus CLAUDE.md entfernt (Repo ist öffentlich).
