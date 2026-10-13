@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-12zg";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-13a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -339,28 +339,30 @@ const ELEMENTS = [
    Wirkt auch auf die Effektstärke. fly = fliegt, hpMul = Extra-Leben,
    lives = so viele „Durchbrüche“ zählt das Monster (Boss: 3),
    night = nachtaktiv: Nur diese Monster sieht Schatten im Dunkeln (19 Uhr) bloß im Lichtkreis eines Irrlichts.
-   Runde 1–5 (12.10.): Runde 1 neutral, Runde 2–5 je ein Element ×1,2 und eins ×0,8 – nach 5 Runden hat jedes Element genau einmal Bonus und Malus. */
+   Runde 1–5 (12.10.): Runde 1 neutral, Runde 2–5 je ein Element ×1,2 und eins ×0,8 – nach 5 Runden hat jedes Element genau einmal Bonus und Malus.
+   Seit 13.10. gilt das je Block (1–5, 6–10, 11–15, 16–20): erste Runde neutral, danach je Element einmal Bonus und einmal Malus.
+   Block 4: Boss neutral – Tag 17–19 decken nur 3 Elemente ab, es fehlen Stein-Bonus und Schatten-Malus. */
 const MONSTERS = [
   ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1, 1, 1, 1]}],
   ['Kellerasseln',      {emo:'🪲', ar:[0.2, 0.3], speed:0.9, weak:[0.8, 1, 1, 1.2]}],
   ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1, 1.2, 1, 0.8]}],
   ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 0.8, 1.2, 1]}],
   ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 1, 0.8, 1]}],
-  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1.5, 1, 0.75]}],   // 12.10.: Tag 6 (vorher 7)
+  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
   ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 0.75, 1]}],   // 12.10.: Tag 7 (vorher 6)
-  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[1, 1.75, 0.6, 1]}],
-  ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1.5, 1, 1, 0.75]}],
-  ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 0.75, 0.75, 1.5]}],
-  ['Habichte',          {emo:'🦅', ar:[0.1, 0.2], fly:true, speed:1.8, weak:[1, 1, 1.5, 0.75]}],
-  ['Dachse',            {emo:'🦡', ar:[0.35, 0.6], speed:0.9, hpMul:1.3, weak:[1.5, 1, 1.25, 0.75]}],
+  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.75, 1, 1]}],
+  ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 1, 1.5, 0.75]}],
+  ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 0.75, 1, 1.5]}],
+  ['Habichte',          {emo:'🦅', ar:[0.1, 0.2], fly:true, speed:1.8, weak:[1, 1, 1, 1]}],
+  ['Dachse',            {emo:'🦡', ar:[0.35, 0.6], speed:0.9, hpMul:1.3, weak:[1, 1, 0.75, 1.5]}],
   ['Oktopusse',         {emo:'🐙', water:true, speed:0.8, hpMul:1.15, weak:[0, 1.75, 1, 1]}],
   ['Wildschweine',      {emo:'🐗', ar:[0.4, 0.6], speed:1.2, hpMul:1.3, night:true, weak:[1, 0.75, 1.5, 1]}],
   ['Schäferhunde',      {emo:'🐕‍🦺', ar:[0.25, 0.4], speed:1.6, hpMul:1.1, weak:[1.5, 1, 1, 0.75]}],
-  ['Besoffene Penner',  {emo:'🍺', ar:[0.1, 0.3], speed:0.7, hpMul:1.9, night:true, weak:[0.75, 1.5, 1.25, 1]}],
-  ['Wütende Partnerin', {emo:'😠', ar:[0.3, 0.4], speed:1.3, weak:[0.75, 1.75, 0.6, 1]}],
-  ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 1.25, 0.75, 1]}],
-  ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1.25, 1.25, 1.25]}],
-  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 0.7, 1]}]   // 15:38: Schatten ×0,7 (war mit Irrlicht zu leicht)
+  ['Besoffene Penner',  {emo:'🍺', ar:[0.1, 0.3], speed:0.7, hpMul:1.9, night:true, weak:[1, 1, 1, 1]}],
+  ['Wütende Partnerin', {emo:'😠', ar:[0.3, 0.4], speed:1.3, weak:[0.75, 1.75, 1, 1]}],
+  ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 0.75, 1.25, 1]}],
+  ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1, 1, 0.75]}],
+  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]   // 13.10.: neutral (vorher Schatten ×0,7)
 ].map(([name,o],k) => ({ name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:k+1,
   color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
 /* ===================== Ende Spieldaten ===================== */

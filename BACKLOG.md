@@ -7,7 +7,7 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 
 **Offen / als Nächstes:**
 1. Friedrich als Collaborator einladen; seinen ersten Vorschlag nach dem neuen Ablauf einbauen (Kürzel F).
-2. Nach dem nächsten Testspiel: Kurve 1,38 und Boss (Schatten ×0,7) bestätigen. Late Game war „noch etwas stark“.
+2. Nach dem nächsten Testspiel: Kurve 1,38 und Boss (seit 13.10. neutral, vorher Schatten ×0,7) bestätigen. Late Game war „noch etwas stark“.
 3. Elemente: Feuer im Mittelspiel sehr stark (Flammenwerfer), Stein oft schwach (langsame Würfe, Fliegende) – Analyse 14:07.
 4. Firestore-Regeln vor ca. 09.11. setzen (README).
 5. Türme 4–8 abgleichen; Monster 21–40 ausdenken.
@@ -17,10 +17,19 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 13.10. 10:25 (F, VERSION 2026-10-13a) – Faktoren je Block ausgeglichen, Boss neutral
+- Regel: In jedem 5er-Block (1–5, 6–10, 11–15, 16–20) ist die erste Runde neutral, in den 4 folgenden hat jedes Element genau einmal Vorteil (>1) und einmal Nachteil (<1), je Runde ein Vorteil und ein Nachteil. Block 1 war schon so.
+- Geändert (`weak` in MONSTERS): Tag 6, 8, 9, 10, 11, 12, 16, 17, 18, 19, 20. Unverändert: 7, 13 (Feuer 0 = Nachteil), 14, 15.
+- Neu: Tag 6/11/16 neutral; 8 Katzen Eis+/Feuer−; 9 Spatzen Schatten+/Stein−; 10 Füchse Stein+/Eis−; 12 Dachse Stein+/Schatten−; 17 Partnerin Eis+/Feuer−; 18 Nachbarn Schatten+/Eis−; 19 Vorhaut Feuer+/Stein− (Annahme von F).
+- Boss (Tag 20) auf Wunsch von Friedrich neutral (vorher Schatten ×0,7). Folge: Block 4 hat nur 3 Faktor-Runden, Stein-Bonus und Schatten-Malus fehlen dort. Beobachten: Schatten mit Irrlicht (ignoriert bis 100 % Rüstung) gegen den Boss war am 12.10. „zu einfach“, daher damals der Malus.
+- Faktor-Summe über 20 Tage jetzt: Feuer 19,75, Eis 21,5, Schatten 20,75, Stein 20,25 (vorher 20,75 / 23,25 / 19,9 / 19,5).
+- Leben, Rüstung, Tempo unverändert; kalibrieren.js unberührt (rechnet mit neutralem Monster).
+- Offen: Nach dem nächsten Testspiel prüfen, ob Eis zu schwach wird und wie der Boss mit Schatten läuft. Neues Spiel starten und neu laden (Monsterdaten geändert).
+
 ### 13.10. 10:15 (F, VERSION unverändert) – Zusammenarbeit: beide Claudes pushen
 - Friedrich hat jetzt Pro, sein Claude kann selbst pushen (Probe-Push auf main ging durch). Lukas hat per WhatsApp zugestimmt (13.10.).
 - CLAUDE.md, Abschnitt „Zusammenarbeit zweier Claudes“, 1., 5. und 6. Punkt: Regeln für beide Claudes angeglichen (pull --rebase, VERSION, BACKLOG mit L|F, größere Balance-Änderungen vorher absprechen).
-- Offen: Faktoren je Block (Tag 6–20 ausgeglichen) noch nicht eingebaut, wartet auf Lukas' OK.
+- Die Faktoren je Block stehen im Abschnitt darüber (13.10. 10:25).
 
 ### 12.10. 15:45 (L) – Zusammenarbeit mit Friedrichs Claude
 - [x] Regeln in CLAUDE.md („Zusammenarbeit zweier Claudes“): Repo = gemeinsames Gedächtnis, BACKLOG-Einträge mit Kürzel L/F, Vorschlagsformat für Friedrichs Claude.
