@@ -2,18 +2,20 @@
 //   (ohne Zusatz)  alles, mehrere Seeds (einige Minuten)
 //   schnell        alles mit einem Seed
 //   elemente       nur Element-Vergleich (Nur-X-Spiele und Tabelle je Runde)
+//   zehn           10 feste Testspiele (2/3/4 Spieler, verschiedene Elemente), ein Ergebnis je Spiel (ca. 15 Sekunden)
+//   INDEX=<Pfad zu einer alten index.html> node tools/balance.js zehn  → dasselbe mit altem Stand (Vergleich)
 // Lädt das Spielskript aus index.html und spielt mit einem einfachen Computerspieler ganze Partien.
 const fs = require('fs'), path = require('path');
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(process.env.INDEX || path.join(__dirname, '..', 'index.html'), 'utf8');
 const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 const game = scripts[scripts.length - 1];
 const el = () => new Proxy({ style:{}, dataset:{}, classList:{ toggle(){} }, addEventListener(){}, querySelectorAll:() => [], clientWidth:0, oninput(){}, value:'10' },
   { get:(t,k) => k in t ? t[k] : undefined, set:(t,k,v) => (t[k] = v, true) });
 const els = {};
-global.document = { getElementById:id => els[id] || (els[id] = el()), querySelectorAll:() => [], documentElement:{}, fonts:null };
+global.document = { getElementById:id => els[id] || (els[id] = el()), querySelectorAll:() => [], documentElement:{}, fonts:null, addEventListener(){} };
 global.window = { addEventListener(){} }; global.localStorage = { getItem:() => null, setItem(){}, removeItem(){} };
 global.getComputedStyle = () => ({ getPropertyValue:() => '' }); global.performance = { now:() => 0 };
-global.requestAnimationFrame = () => {}; global.setInterval = () => {}; global.Image = function(){ return {}; };
+global.requestAnimationFrame = () => {}; global.location = { protocol:'file:' }; global.setInterval = () => {}; global.Image = function(){ return {}; };
 const TESTMODE = process.argv[2] || 'voll', ONLY = process.argv[3];
 eval(game + `
 ;(function(){
@@ -74,6 +76,12 @@ const tag=r=>r.over==='won'?'gewonnen ('+r.passed+')':'verloren Tag '+r.day;
 const worst=r=>r.dayLeaks.map((v,d)=>[d,v]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([d,v])=>'T'+d+':'+v).join(' ');
 
 if (TESTMODE==='spiel') { const e=ONLY.split(',').map(Number); const r=play(e.length,e,11000,true); console.log(r.over, r.day, r.passed); return; }
+if (TESTMODE==='zehn') {   // 10 feste Testspiele (13.10.): Ergebnis je Spiel + die drei schwersten Tage (Tag = Spieltag, bei Zwischenbossen ≠ Runde)
+  const runs=[[2,[0,1],11],[2,[2,3],12],[2,[1,3],13],[2,[0,2],14],[3,[0,1,2],15],[3,[1,2,3],16],[3,[3,0,1],17],[4,[0,1,2,3],18],[4,[3,2,1,0],19],[4,[2,3,0,1],20]];
+  runs.forEach(([N,e,sd],i)=>{ const t0=Date.now(); const r=play(N,e,sd*1000,true);
+    const top=r.dayLeaks.map((v,d)=>[d,v]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([d,v])=>'T'+d+' '+MONSTERS[d-1].name+':'+v).join(', ');
+    console.log((i+1)+'. '+N+' Spieler '+e.map(k=>EL[k]).join('+')+' | '+(r.over==='won'?'GEWONNEN':'VERLOREN an Tag '+r.day)+' | durchgebrochen '+r.passed+' | Gold '+r.earned.join('/')+' | schwerste Tage: '+(top||'keine')+' | '+Math.round((Date.now()-t0)/1000)+'s'); });
+  return; }
 if (TESTMODE!=='elemente' && TESTMODE!=='bedarf') {
   for (const N of [2,3,4]) {
     const res=[]; for (const seed of seeds) for (const e of [[0,1,2,3],[3,2,1,0],[2,3,0,1]]) res.push(play(N,e.slice(0,N),seed*1000,true));

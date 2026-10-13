@@ -17,6 +17,12 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 13.10. 10:35 (F, VERSION unverändert) – balance.js repariert, neuer Modus „zehn“
+- `tools/balance.js` brach seit der Versionsprüfung sofort ab (`location` und `document.addEventListener` fehlten in den Testattrappen). Ergänzt.
+- Neu: `node tools/balance.js zehn` = 10 feste Testspiele (4× 2 Spieler, 3× 3 Spieler, 3× 4 Spieler, feste Seeds), ein Ergebnis je Spiel, ca. 15 Sekunden. Mit `INDEX=<alte index.html>` Vergleich mit altem Stand.
+- Messung 13.10. 10:30: Neu (2026-10-13b) 0/10 gewonnen, Alt (2026-10-12zg) 1/10. 2-Spieler-Läufe identisch (Tag 3–4 verloren), Zwischenbosse verursachten keine Niederlage. Der Bot spielt deutlich schlechter als ihr beide, nur Tendenz.
+- Hinweis: „Tag“ in den Ergebnissen ist der Spieltag (mit Zwischenbossen ≠ Runde). `balance.js` rechnet sonst noch Tag-basiert und deckt im Modus `bedarf` nur Tag 1–20 ab.
+
 ### 13.10. 10:40 (F, VERSION 2026-10-13b) – Zwischenbosse nach Runde 5, 10, 15, 19
 - Wunsch Friedrich: Nach Runde 5, 10, 15 und 19 je ein kleiner Zwischenboss = das letzte Monster der vorherigen Runde als Boss, neutral. Entscheidungen (Friedrich): eigener Tag, Leben ×5, zählt 2 Durchbrüche.
 - Spiel hat jetzt 24 Tage (`CONFIG.days`): Tag 6 Maus-Boss, 12 Fuchs-Boss, 18 Schäferhund-Boss, 23 Vorhaut-Boss, 24 Uffug (Boss). Alle Monster danach rücken um Tage nach hinten.

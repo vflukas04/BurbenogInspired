@@ -46,7 +46,7 @@ Danach startet das Spiel wie eine App mit eigenem Symbol, ohne Browserleiste.
 ## Inhalte ändern
 Im Block **SPIELDATEN** oben im Skript stehen Elemente, Türme, Monster und Wellen. Die Turm-Optionen (`fly`, `air`, `chance`, `nova`, `light`) sind dort direkt über `ELEMENTS` erklärt.
 
-Balance prüfen: `node tools/balance.js schnell` (alles), `node tools/balance.js bedarf` (Stärke je Element und Runde) oder `node tools/balance.js elemente`.
+Balance prüfen: `node tools/balance.js schnell` (alles), `node tools/balance.js bedarf` (Stärke je Element und Runde), `node tools/balance.js elemente` oder `node tools/balance.js zehn` (10 feste Testspiele).
 
 ## Grafik und Lizenz
 Türme, Geschosse, Effekte und Gelände-Deko stammen aus dem Paket **„Tower Defense (top-down)“ von Kenney** (www.kenney.nl), Lizenz **CC0 / Public Domain** (siehe `assets/kenney/License.txt`). Danke, Kenney! Die Monster sind vorerst Emojis.
