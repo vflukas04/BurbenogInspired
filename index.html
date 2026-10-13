@@ -203,13 +203,13 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-13a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-13b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
    */
 const CONFIG = {
-  days: 20,                 // Runden = Tage, jeden Tag ein neues Monster
+  days: 24,                 // Tage: 20 Runden (je ein Monstertyp) + 4 Zwischenbosse (nach Runde 5, 10, 15, 19); jeden Tag ein neues Monster
   lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
   startGold: 30,
   perWave: 20,              // Monster pro Welle (Boss: 1)
@@ -342,29 +342,35 @@ const ELEMENTS = [
    Runde 1–5 (12.10.): Runde 1 neutral, Runde 2–5 je ein Element ×1,2 und eins ×0,8 – nach 5 Runden hat jedes Element genau einmal Bonus und Malus.
    Seit 13.10. gilt das je Block (1–5, 6–10, 11–15, 16–20): erste Runde neutral, danach je Element einmal Bonus und einmal Malus.
    Block 4: Boss neutral – Tag 17–19 decken nur 3 Elemente ab, es fehlen Stein-Bonus und Schatten-Malus. */
+let MON_ROUND = 0;   // Runde (für Leben, Kopfgeld, Farbe): Zwischenbosse teilen sich die Runde des Monsters davor; day = Tag im Spiel
 const MONSTERS = [
   ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1, 1, 1, 1]}],
   ['Kellerasseln',      {emo:'🪲', ar:[0.2, 0.3], speed:0.9, weak:[0.8, 1, 1, 1.2]}],
   ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1, 1.2, 1, 0.8]}],
   ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 0.8, 1.2, 1]}],
   ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 1, 0.8, 1]}],
+  ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:4.5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
   ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
   ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 0.75, 1]}],   // 12.10.: Tag 7 (vorher 6)
   ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.75, 1, 1]}],
   ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 1, 1.5, 0.75]}],
   ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 0.75, 1, 1.5]}],
+  ['Fuchs-Boss',        {emo:'🦊', mini:true, ar:[0.2, 0.4], speed:1.4, hpMul:5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 10
   ['Habichte',          {emo:'🦅', ar:[0.1, 0.2], fly:true, speed:1.8, weak:[1, 1, 1, 1]}],
   ['Dachse',            {emo:'🦡', ar:[0.35, 0.6], speed:0.9, hpMul:1.3, weak:[1, 1, 0.75, 1.5]}],
   ['Oktopusse',         {emo:'🐙', water:true, speed:0.8, hpMul:1.15, weak:[0, 1.75, 1, 1]}],
   ['Wildschweine',      {emo:'🐗', ar:[0.4, 0.6], speed:1.2, hpMul:1.3, night:true, weak:[1, 0.75, 1.5, 1]}],
   ['Schäferhunde',      {emo:'🐕‍🦺', ar:[0.25, 0.4], speed:1.6, hpMul:1.1, weak:[1.5, 1, 1, 0.75]}],
+  ['Schäferhund-Boss',  {emo:'🐕‍🦺', mini:true, ar:[0.25, 0.4], speed:1.6, hpMul:5.5, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 15
   ['Besoffene Penner',  {emo:'🍺', ar:[0.1, 0.3], speed:0.7, hpMul:1.9, night:true, weak:[1, 1, 1, 1]}],
   ['Wütende Partnerin', {emo:'😠', ar:[0.3, 0.4], speed:1.3, weak:[0.75, 1.75, 1, 1]}],
   ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 0.75, 1.25, 1]}],
   ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1, 1, 0.75]}],
+  ['Vorhaut-Boss',      {emo:'👺', mini:true, ar:[0.2, 0.4], fly:true, hpMul:5, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 19, vor dem Endboss
   ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]   // 13.10.: neutral (vorher Schatten ×0,7)
-].map(([name,o],k) => ({ name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:k+1,
-  color:`hsl(${(k*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.fly?.2:.24 }));
+].map(([name,o],k) => { if (!o.mini) MON_ROUND++; const r = MON_ROUND;
+  return { name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:r, day:k+1,
+  color:`hsl(${((r-1)*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.mini?.34:o.fly?.2:.24 }; });
 /* ===================== Ende Spieldaten ===================== */
 
 /* Feines Raster (11.10. nachts): 24 × 16 Felder statt 12 × 8, gleiche Fläche. Alle Längen in den Spieldaten
@@ -870,7 +876,7 @@ function showMonster(r){
     <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
     <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${armorText(MD)}</dd>
     <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
-    <dt>Kopfgeld</dt><dd>${bountyFor(r)} Gold</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
+    <dt>Kopfgeld</dt><dd>${MD.bounty} Gold</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
     <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('')}</div>
     <div class="muted">${strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : ''}${weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : ''}</div>
     <div class="acts"><button class="btn primary" id="mOk">OK</button></div>`);
@@ -999,12 +1005,12 @@ function render(){
     ELEMENTS.map((E,k) => `<button class="btn ${laneOf(seat).el===k?'on':''}" data-el="${k}" style="color:${E.color}">${E.emo} ${E.name}</button>`).join('');
   $('seats').querySelectorAll('[data-el]').forEach(x => x.onclick = () => { const l = laneOf(seat); L[seat] = { ...l, el:+x.dataset.el }; selTower = null; saveLane(seat); render(); });
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
-  const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.round-1, n);
+  const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.day-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
-  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.round}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
+  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.day}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · Kopfgeld ${bountyFor(M.round)} &nbsp;` +
     ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
-    (NX ? `<br>Nächstes Monster (Tag ${NX.round}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.round}" aria-label="Info zu ${NX.name}">i</button>` : '') +
+    (NX ? `<br>Nächstes Monster (Tag ${NX.day}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.day}" aria-label="Info zu ${NX.name}">i</button>` : '') +
     `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;
   $('today').querySelectorAll('[data-mon]').forEach(x => x.onclick = () => showMonster(+x.dataset.mon));
   if (G.over && overSeen !== G.cfg.startAt + G.over && !replay) showGameOver();

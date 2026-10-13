@@ -17,6 +17,15 @@ Stand: 12.10.2026, 01:15 – Ende des langen Testabends (11.10. vormittags bis 1
 **Hilfsmittel:** `tools/kalibrieren.js` (Sekunden: Leben auf Ziel 12/8/6 von 20 kalibrieren, `pruefen` zeigt Kills je Runde). Echten Spielstand zum Debuggen nur lesen: Firestore-REST `games/spiel1` (+ `/lanes`).
 
 ## Offene Wünsche (vorgemerkt)
+### 13.10. 10:40 (F, VERSION 2026-10-13b) – Zwischenbosse nach Runde 5, 10, 15, 19
+- Wunsch Friedrich: Nach Runde 5, 10, 15 und 19 je ein kleiner Zwischenboss = das letzte Monster der vorherigen Runde als Boss, neutral. Entscheidungen (Friedrich): eigener Tag, Leben ×5, zählt 2 Durchbrüche.
+- Spiel hat jetzt 24 Tage (`CONFIG.days`): Tag 6 Maus-Boss, 12 Fuchs-Boss, 18 Schäferhund-Boss, 23 Vorhaut-Boss, 24 Uffug (Boss). Alle Monster danach rücken um Tage nach hinten.
+- Leben (2 Spieler): Maus-Boss 552, Fuchs-Boss 1.595, Schäferhund-Boss 3.071, Vorhaut-Boss 3.868. Rüstung wie das Monster (Punkte ×5), Tempo, Nachtaktiv, Fliegen wie das Monster, Faktoren alle ×1, Kopfgeld wie die Runde (2/3/5/8 Gold, nur 1 Stück).
+- Technik: `MONSTERS[k].day` = Tag, `.round` = Runde (Leben, Kopfgeld, Farbe). Zwischenbosse tragen `mini:true` und teilen die Runde des Monsters davor. Anzeige „Tag“ zeigt `.day`. Farben der Monster unverändert.
+- Werkzeuge: `tools/kalibrieren.js` rechnet Gold und Leben-Exponent jetzt nach Runde (Ausgabe „Runde“ = Tag-Nummer). `tools/balance.js` ist noch Tag-basiert und deckt nur Tag 1–20 ab (Runden 1–16 + 3 Zwischenbosse) – bei Bedarf anpassen.
+- Geprüft: Durchlauf ohne Türme endet nach 48 Wellen an Tag 24 mit „Gewonnen“; Turmtexte und Monsterdaten ohne Fehler.
+- Offen/beobachten: Vorhaut-Boss fliegt (Stein trifft nur Turm 4/6/8). Nachtaktive Zwischenbosse (Maus, Fuchs) sind für Schatten um 19 Uhr nur im Irrlicht sichtbar. Kopfgeld für 1 Boss ist klein – bei Bedarf Bonus. Neues Spiel starten und neu laden (24 Tage, Monsterreihenfolge geändert).
+
 ### 13.10. 10:25 (F, VERSION 2026-10-13a) – Faktoren je Block ausgeglichen, Boss neutral
 - Regel: In jedem 5er-Block (1–5, 6–10, 11–15, 16–20) ist die erste Runde neutral, in den 4 folgenden hat jedes Element genau einmal Vorteil (>1) und einmal Nachteil (<1), je Runde ein Vorteil und ein Nachteil. Block 1 war schon so.
 - Geändert (`weak` in MONSTERS): Tag 6, 8, 9, 10, 11, 12, 16, 17, 18, 19, 20. Unverändert: 7, 13 (Feuer 0 = Nachteil), 14, 15.

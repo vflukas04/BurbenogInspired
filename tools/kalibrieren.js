@@ -36,7 +36,7 @@ function build(el, lane, gold){
   }
   return towers;
 }
-const budget = r => { let g = CONFIG.startGold; for (let k = 1; k < r; k++) g += 20 * bountyFor(k); return g; };
+const budget = r => { let g = CONFIG.startGold; for (let k = 1; k < r; k++) g += (MONSTERS[k - 1].count || 20) * bountyFor(MONSTERS[k - 1].round); return g; };   // r = Tag (seit 13.10. mit Zwischenbosse), Kopfgeld nach Runde
 const neutral = r => { const M = MONSTERS[r - 1]; MONSTERS[r - 1] = { ...M, weak:[1,1,1,1], speed:1, hpMul:1, fly:false, count:20 }; return M; };
 const BUILDS = {};
 function kills(r, players, mul){
@@ -54,7 +54,7 @@ console.log('Runde 1, 2 Spieler: baseHp ' + (CONFIG.baseHp * m1).toFixed(2) + ' 
 CONFIG.baseHp *= m1;
 for (const [n, goal] of [[3, 8], [4, 6]]) { const f = solve(1, n, goal) * (CONFIG.playerHp[n] || 1); console.log('Spielerfaktor ' + n + ': ' + f.toFixed(2) + ' (jetzt ' + CONFIG.playerHp[n] + ')'); }
 const rel = [];
-for (let r = 1; r <= ROUNDS; r++) { const m = solve(r, 2, 12) * Math.pow(r, CONFIG.hpExp); rel.push(m); console.log('Runde ' + String(r).padStart(2) + ': Gold ' + String(budget(r)).padStart(5) + ', Leben-Faktor ' + m.toFixed(2)); }
+for (let r = 1; r <= ROUNDS; r++) { const m = solve(r, 2, 12) * Math.pow(MONSTERS[r - 1].round, CONFIG.hpExp); rel.push(m); console.log('Runde ' + String(r).padStart(2) + ': Gold ' + String(budget(r)).padStart(5) + ', Leben-Faktor ' + m.toFixed(2)); }
 // Wachstum pro Runde: log-lineare Ausgleichsgerade durch die Runden 1..ROUNDS
 let sx = 0, sy = 0, sxx = 0, sxy = 0; rel.forEach((m, i) => { const x = i, y = Math.log(m); sx += x; sy += y; sxx += x * x; sxy += x * y; });
 const k = rel.length, slope = (k * sxy - sx * sy) / (k * sxx - sx * sx), icpt = (sy - slope * sx) / k;
