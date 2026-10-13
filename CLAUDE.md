@@ -2,20 +2,19 @@
 
 Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas mit seinem Freund Friedrich. Antworte auf Deutsch, kurz. Inspiriert von der Warcraft-3-Map „Burbenog TD“.
 
+**Zuerst `team/START.md` lesen** (Einstieg, Regeln der Zusammenarbeit, Startprompt), dann `team/TODO.md` und die obersten 5 Einträge von `team/UPDATES.md`. Diese Datei hier ist das Nachschlagewerk für Technik und Regeldetails.
+
 ## Arbeitsweise
 - Live-Spiel: https://vflukas04.github.io/BurbenogInspired/ (GitHub Pages, Branch `main`, ca. 1 Minute nach Push live).
 - Claude pusht direkt nach `main` (die Claude-GitHub-App ist installiert). Nach jeder Änderung: `VERSION` in `index.html` hochzählen, Syntax prüfen, committen, pushen, kurz melden, was neu ist. **Keine Balance-Tests und keine Browser-Screenshots, außer Lukas bespricht es ausdrücklich** (sie dauern Minuten). Mehrere Wünsche in einem Commit bündeln.
 - Beide testen auf Handys. Nach Regeländerungen immer daran erinnern: „Neues Spiel“ starten und neu laden.
-- Offene Wünsche und Erkenntnisse: `BACKLOG.md`. Erledigtes dort abhaken.
+- Aufgaben: `team/TODO.md`, Ideen: `team/IDEEN.md`, Protokoll: `team/UPDATES.md` (kurz, max. 15 Einträge), alte Merkliste: `team/archiv/`.
 - Lukas' Claude: die Leitplanken aus Lukas' eigenem Projekt-Hub beachten (Pausen, Schlaf). Private Inhalte gehören nicht in dieses öffentliche Repo.
 
 ## Zusammenarbeit zweier Claudes (seit 12.10.2026)
-- Lukas' Claude und Friedrichs Claude (beide mit Pro) ändern und pushen. Vor jedem Push `git pull --rebase`, `VERSION` hochzählen, BACKLOG-Eintrag mit (L|F). Größere Balance-Änderungen vorher kurz absprechen. Anleitung für Friedrich: Claude-Doc „BurbenogInspired – Anleitung für Friedrich“.
-- Das Repo ist das gemeinsame Gedächtnis. Was nicht in `CLAUDE.md` oder `BACKLOG.md` steht, weiß der andere Claude nicht.
-- Vor jeder Arbeit: `CLAUDE.md` und den obersten Abschnitt von `BACKLOG.md` lesen, neuesten Stand holen (`git pull` bzw. „Sync now“).
-- Jede Änderung bekommt oben in `BACKLOG.md` einen Abschnitt `### TT.MM. HH:MM (L|F, VERSION …) – Titel` mit Stichpunkten: was, warum, offene Fragen. L = Lukas/sein Claude, F = Friedrich/sein Claude. Neue Grundregeln zusätzlich hier unter „Regeln“.
-- Größere Balance-Änderungen kommen vorher als fertiger Block (Datei, Stelle, alt → neu, Grund, BACKLOG-Eintrag) zur Absprache. Danach baut sie derjenige Claude ein, der gerade am Rechner ist, und vermerkt den Urheber (L|F).
-- Kleine Direktänderungen über den GitHub-Webeditor sind erlaubt (dann VERSION hochzählen und BACKLOG-Eintrag). Jeder Claude macht vor jedem Push `git pull --rebase`.
+- Lukas' Claude und Friedrichs Claude ändern beide und pushen. Ablauf, „Gerade dran“, Update-Format und Startprompt: `team/START.md`.
+- Das Repo ist das gemeinsame Gedächtnis. Was nicht in `team/` oder hier steht, weiß der andere Claude nicht.
+- Vor jedem Push `git pull --rebase`. Größere Balance-Änderungen vorher kurz absprechen; Urheber (L|F) im Update vermerken.
 
 ## Technik
 - Alles in `index.html` (ca. 1.000 Zeilen, ein `<script>`). Oben: `FIREBASE_CONFIG`, `GAME_ID`, dann der Block **SPIELDATEN** (CONFIG, TERRAIN, RESEARCH, WEATHER, TOWER_COST/POWER, ELEMENTS mit je 8 Türmen, MONSTERS mit 24 Einträgen: 20 Runden + 4 Zwischenbosse).

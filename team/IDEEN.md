@@ -1,0 +1,14 @@
+# Ideen (noch nicht beschlossen)
+
+Format: **Idee** – von wem, wann – Stand (offen · dafür · verworfen) – Notiz. Beschlossenes wandert nach `TODO.md`.
+
+- **Monster-Sprites statt Emojis** – L, 11.10. – offen – sieht je Handy anders aus; lohnt, wenn die Monster feststehen.
+- **Chat in der Chronik** – L, 11.10. – offen
+- **Gold sofort beim Tod** statt nach der Wiedergabe – L, 11.10. – offen – klären: auch wenn niemand zuschaut?
+- **„Verloren“ erst am Tagesende** statt mitten am Tag – L, 11.10. – offen
+- **Forschung etwas teurer** – L, 11.10. – offen – Bot gewinnt mit Forschung fast immer.
+- **„Reiche werden reicher“ ausgleichen** – Analyse 11.10. – offen – Ideen: Kopfgeld für Leaks teilen, Mindesteinkommen, Teil des Kopfgelds in die Kasse. Lukas: gewollt, solange jedes Element klare Schwächen hat.
+- **Monsterleben zu viert höher** (×4 statt ×3,5 bzw. heute Faktor 1,5) – L, 11.10. – offen
+- **Querformat oder Zoom fürs Handy** – 11.10. – offen – Felder sind am Handy klein.
+- **Trailer im Hochformat** (WhatsApp-Status) – L, 12.10. – offen
+- **Kopfgeld-Bonus für Zwischenbosse** – F, 13.10. – offen
