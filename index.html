@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-13b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-13c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -242,8 +242,10 @@ const DAY = 'Tag';
 const TERRAIN = [
   { name:'Wiese', extra:0,  col:['#24301f','#2a3824'] },
   { name:'Wald',  extra:10, col:['#17271a','#1b2e1e'] },
-  { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] }
+  { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] },
+  { name:'Felsen', extra:15, stoneExtra:30, col:['#2c2c30','#323237'] }   // 13.10. (F): Felsen +15 Reichweite für alle, Stein zahlt +30 und macht mehr Schaden
 ];
+const ROCK = { rangeMul:1.15, stoneDmg:1.3, min:6, max:8 };   // Felsen je Karte 6–8, neu gewürfelt bei jedem neuen Spiel
 const TERRAIN_MAX = 26;     // Wald- und Sumpffelder je Karte bei 63 Feldern Weg, kürzerer Weg = etwas weniger
 // Forschung: drei Gebäude, alle zahlen gemeinsam aus der Gemeinschaftskasse (ohne Gebühr)
 const RESEARCH = [
@@ -385,16 +387,31 @@ const MAP_WPS = [
   [[-0.5,11.5],[11.5,11.5],[11.5,7.5],[14.5,7.5],[14.5,0.5],[3.5,0.5],[3.5,14.5],[16.5,14.5]]
 ];
 function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+// Gelände neu würfeln: Seed aus dem Spielstart (alle Handys bekommen dasselbe), Felsen nur nahe am Weg
+let TSEED = 0;
+function genTerrain(map, seed){
+  const r = rng(seed + 1000 + map.k * 77), cnt = Math.round(TERRAIN_MAX * map.len / 63), free = [], near = [];
+  for (let y = 0; y < ROWS; y++) { map.terrain[y] = Array(COLS).fill(0); for (let x = 0; x < COLS; x++) if (!map.cells.has(x+','+y)) free.push([x,y]); }
+  const road = [...map.cells].map(q => q.split(',').map(Number));
+  const shuffle = a => { for (let j = a.length - 1; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [a[j], a[q]] = [a[q], a[j]]; } return a; };
+  shuffle(free);
+  const rocks = ROCK.min + Math.floor(r() * (ROCK.max - ROCK.min + 1)), isNear = ([x,y]) => road.some(([a,b]) => Math.abs(a-x) <= 2 && Math.abs(b-y) <= 2);
+  const fels = free.filter(isNear).slice(0, rocks); fels.forEach(([x,y]) => map.terrain[y][x] = 3);
+  const rest = free.filter(([x,y]) => !map.terrain[y][x]);
+  rest.slice(0, cnt).forEach(([x,y]) => map.terrain[y][x] = 1);
+  rest.slice(cnt, 2 * cnt).forEach(([x,y]) => map.terrain[y][x] = 2);
+}
+function ensureTerrain(startAt){
+  const sd = Math.floor((startAt || 0) / 1000);
+  if (sd === TSEED) return; TSEED = sd; MAPS.forEach(m => genTerrain(m, sd));
+  if (typeof BG !== 'undefined') for (let q = 0; q < BG.length; q++) BG[q] = null;
+}
 function buildMap(k){
   const wp = MAP_WPS[k], seg = []; let len = 0;
   for (let i = 0; i < wp.length - 1; i++) { const [ax,ay] = wp[i], [bx,by] = wp[i+1], l = Math.hypot(bx-ax, by-ay); seg.push({ax,ay,bx,by,len:l,start:len}); len += l; }
   const map = { k, wp, seg, len, cells:new Set(), terrain:[] };
   for (let d = 0; d < len; d += 0.1) { const [x,y] = posAt(map, d); const cx = Math.floor(x), cy = Math.floor(y); if (cx>=0&&cx<COLS&&cy>=0&&cy<ROWS) map.cells.add(cx+','+cy); }
-  const r = rng(1000 + k * 77), cnt = Math.round(TERRAIN_MAX * len / 63), free = [];
-  for (let y = 0; y < ROWS; y++) { map.terrain[y] = Array(COLS).fill(0); for (let x = 0; x < COLS; x++) if (!map.cells.has(x+','+y)) free.push([x,y]); }
-  for (let j = free.length - 1; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [free[j], free[q]] = [free[q], free[j]]; }
-  free.slice(0, cnt).forEach(([x,y]) => map.terrain[y][x] = 1);
-  free.slice(cnt, 2 * cnt).forEach(([x,y]) => map.terrain[y][x] = 2);
+  genTerrain(map, 0);
   return map;
 }
 function posAt(map, d){
@@ -403,8 +420,9 @@ function posAt(map, d){
 }
 const MAPS = [0,1,2,3].map(buildMap);
 function buildCost(el, idx, lane, x, y){
-  const b = towerBase(el, idx); if (ELEMENTS[el].terrainFree) return b.cost;
-  return b.cost + TERRAIN[MAPS[lane].terrain[y][x]].extra;
+  const b = towerBase(el, idx), T = TERRAIN[MAPS[lane].terrain[y][x]];
+  if (ELEMENTS[el].terrainFree) return b.cost + (T.stoneExtra || 0);
+  return b.cost + T.extra;
 }
 // Wellenzeiten und Wetter eines Spiels
 const slotsOf = g => (g && g.cfg.slots) || CONFIG.slotPlan[4];
@@ -446,7 +464,7 @@ function towerBase(el, idx){
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
 }
 const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;
-function tdef(tw){
+function tdef(tw, lane){
   const b = towerBase(tw.el, tw.idx), n = (tw.lvl || 1) - 1, U = CONFIG.upgrade;
   // Schaden/s Stufe für Stufe hochrechnen und jeweils auf eine Nachkommastelle aufrunden (lesbare Zahlen)
   let dpsNow = ceil1(b.dps); for (let k = 1; k <= n; k++) dpsNow = ceil1(dpsNow * (k === 1 ? U.firstDmg : U.dmg));
@@ -455,9 +473,15 @@ function tdef(tw){
   if (b.effect === 'curse') eff = Math.min(1.5, eff);
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
-  return { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
+  const d = { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
     chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buffArr ? b.buffArr[Math.min(n, b.buffArr.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
-    dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n };
+    dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n, onRock:false };
+  return lane !== undefined && tw.x !== undefined && MAPS[lane].terrain[tw.y][tw.x] === 3 ? onRock(d) : d;
+}
+// Felsen: alle Türme +15 % Reichweite, Stein-Türme zusätzlich mehr Schaden
+function onRock(d){
+  const m = ELEMENTS[d.el].terrainFree ? ROCK.stoneDmg : 1;
+  return { ...d, range:d.range * ROCK.rangeMul, dpsNow:d.dpsNow * m, dmg:d.dmg * m, onRock:true };
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (curRes().has('cheap') ? 0.8 : 1));
 const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
@@ -478,7 +502,8 @@ function isLit(tw, towers){
 }
 function makeSim(inp){
   const res = new Set(inp.res || []), W = WEATHER[inp.weather || 0], raw = inp.towers || [];
-  const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw), W, res) }));
+  if (inp.tseed !== undefined) ensureTerrain(inp.tseed);
+  const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw, inp.lane || 0), W, res) }));
   // Lichtkreise der Irrlichter: Im Dunkeln treffen Schatten-Türme nur Monster, die gerade darin sind
   const lights = towers.filter(t => t.def.light).map(t => ({ x:t.x + .5, y:t.y + .5, r:t.def.light }));
   // Verstärker (Irrlicht): Schatten-Türme in seinem Lichtkreis machen mehr Schaden, zu jeder Tageszeit. Mehrere Kreise: der stärkste zählt.
@@ -647,7 +672,7 @@ function resolveSlot(g, lanes){
   const n = g.cfg.players, SL = slotsOf(g), time = hh(SL[g.slot]), next = SL[g.slot+1], weather = weatherDay(g, g.day)[g.slot];
   const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : { el:i % ELEMENTS.length, towers:[] };
     return { lane:i, players:n, res:[...resAll], el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:isDark(SL[g.slot]), weather,
-      seed: (Math.floor((g.cfg.startAt || 1) / 1000) * 31 + g.day * 977 + g.slot * 131 + i * 17) >>> 0 }; });
+      tseed: g.cfg.startAt || 0, seed: (Math.floor((g.cfg.startAt || 1) / 1000) * 31 + g.day * 977 + g.slot * 131 + i * 17) >>> 0 }; });
   const live = !!g.cfg.live, res = simulateWorld({ inputs, live }).sims;
   const leaked = {}; let broke = 0; const log = [];
   res.forEach((r,i) => {
@@ -782,7 +807,7 @@ function clickCell(i, x, y){
 // Bauen erst nach Bestätigung im Dialog (Kosten, Reichweite, Wirkung)
 let pending = null;
 function showBuildDialog(){
-  const { i, x, y, k } = pending, l = laneOf(i), d = tdef({ el:l.el, idx:k, lvl:1 }), cost = buildCost(l.el, k, i, x, y), T = TERRAIN[MAPS[i].terrain[y][x]], ic = towerIcon(l.el, k);
+  const { i, x, y, k } = pending, l = laneOf(i), d = tdef({ el:l.el, idx:k, lvl:1, x, y }, i), cost = buildCost(l.el, k, i, x, y), T = TERRAIN[MAPS[i].terrain[y][x]], ic = towerIcon(l.el, k);
   const extra = cost - d.cost;
   openDlg(`<h2>${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</h2>
     <dl><dt>Kosten</dt><dd>${cost} Gold${extra ? ` (${d.cost} + ${extra} ${T.name})` : ''}</dd>
@@ -984,6 +1009,7 @@ function render(){
   const has = !!G;
   $('setup').hidden = has || !MODE; $('game').hidden = !has; $('stats').hidden = !has; $('palette').hidden = !has;
   if (!has) { renderSetup(); return; }
+  ensureTerrain(G.cfg.startAt);
   if (lanesBuilt !== NP()) buildLanes();
   const n = NP();
   $('sDay').textContent = `${Math.min(G.day, CONFIG.days)}/${CONFIG.days}`;
@@ -1049,15 +1075,16 @@ function render(){
     if (!replay) { const inc = incomingFor(G, i); $('inc'+i).textContent = G.over ? '' : (inc.length ? `${hh(SL[G.slot])}: ${inc.length} ${MONSTERS[inc[0].type].name}` : `${hh(SL[G.slot])}: nichts im Anmarsch`); }
     const info = $('info'+i);
     const tw = selCell && selCell.i === i ? l.towers.find(t => t.x === selCell.x && t.y === selCell.y) : null;
-    if (tw) { const d = tdef(tw), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
+    if (tw) { const d = tdef(tw, i), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
       info.innerHTML = `<b style="color:var(--fg)">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel}${d.buff ? '' : ` · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}`}${fxText(d) ? ' · ' + fxText(d) : ''}` +
         (mayBuild(i) ? (maxed ? '' : `<button class="btn" id="up${i}" ${goldAvail(i) < uc ? 'disabled' : ''}>Upgrade (${uc} Gold)</button>`) +
           `<button class="btn" id="sell${i}">${sellArm === i+','+tw.x+','+tw.y ? 'Wirklich verkaufen?' : 'Verkaufen'} (+${Math.floor((tw.invested || d.cost) * CONFIG.sellRefund)})</button>` : '');
       const sb = $('sell'+i); if (sb) sb.onclick = e => { e.stopPropagation(); sell(i, tw.x, tw.y); };
       const ub = $('up'+i); if (ub) ub.onclick = e => { e.stopPropagation(); upgrade(i, tw.x, tw.y); };
     } else if (selCell && selCell.i === i) { const T = TERRAIN[MAPS[i].terrain[selCell.y][selCell.x]];
-      info.textContent = `${T.name}: Bauen ${T.extra ? '+' + T.extra + ' Gold' : 'zum normalen Preis'}${T.extra && ELEMENTS[l.el].terrainFree ? ' (Stein zahlt keinen Aufschlag)' : ''}.` + (selTower === null && mayBuild(i) ? ' Erst unten einen Turm wählen.' : '');
-    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. Wald +10, Sumpf +20 Gold.' : '';
+      const tf = ELEMENTS[l.el].terrainFree, ex = tf ? (T.stoneExtra || 0) : T.extra;
+      info.textContent = `${T.name}: Bauen ${ex ? '+' + ex + ' Gold' : 'zum normalen Preis'}${tf && T.extra && !T.stoneExtra ? ' (Stein zahlt keinen Aufschlag)' : ''}${T.name === 'Felsen' ? ` · Reichweite +${Math.round((ROCK.rangeMul-1)*100)} %${tf ? `, Stein-Schaden +${Math.round((ROCK.stoneDmg-1)*100)} %` : ''}` : ''}.` + (selTower === null && mayBuild(i) ? ' Erst unten einen Turm wählen.' : '');
+    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. Wald +10, Sumpf +20, Felsen +15 Gold (Felsen: Reichweite +15 %, Stein auch mehr Schaden).' : '';
   }
   updateLaneHeads();
   renderPalette();
@@ -1216,6 +1243,8 @@ function draw(i, cv){
     if (t === 1) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
     if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
       if (!spr(g, tinted('bush', '#6f8a66'), (x+.72)*cs, (y+.3)*cs, cs*.38, h, .7)) { g.strokeStyle = '#4a6260'; g.lineWidth = 1; for (const dy of [.35,.65]) { g.beginPath(); g.moveTo((x+.2)*cs, (y+dy)*cs); g.lineTo((x+.8)*cs, (y+dy)*cs); g.stroke(); } } }
+    if (t === 3) { g.fillStyle = '#4a4a50'; g.beginPath(); g.ellipse((x+.5)*cs, (y+.6)*cs, cs*.4, cs*.28, 0, 0, Math.PI*2); g.fill();
+      if (!spr(g, SPR['rock' + (1 + (x+y)%3)], (x+.5)*cs, (y+.5)*cs, cs*.7, h, .95)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('🪨', (x+.5)*cs, (y+.5)*cs); } }
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
   const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
@@ -1229,10 +1258,10 @@ function draw(i, cv){
   if (selCell && selCell.i === i) {
     const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
     c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.strokeRect(selCell.x*cs+1, selCell.y*cs+1, cs-2, cs-2);
-    if (tw) { const td = tdef(tw), r = td.buff ? td.light : td.range;
+    if (tw) { const td = tdef(tw, i), r = td.buff ? td.light : td.range;
       c.beginPath(); c.arc((tw.x+.5)*cs, (tw.y+.5)*cs, r*cs, 0, Math.PI*2); c.setLineDash([4,4]); c.stroke(); c.setLineDash([]); }
   }
-  if (pending && pending.i === i) { const d = tdef({ el:laneOf(i).el, idx:pending.k, lvl:1 });
+  if (pending && pending.i === i) { const d = tdef({ el:laneOf(i).el, idx:pending.k, lvl:1, x:pending.x, y:pending.y }, i);
     c.globalAlpha = .55; drawTower(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x*cs, pending.y*cs, cs, -Math.PI/2, 0); c.globalAlpha = 1;
     c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.setLineDash([4,4]); c.beginPath(); c.arc((pending.x+.5)*cs, (pending.y+.5)*cs, (d.buff ? d.light : d.range)*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
     c.fillStyle = v('--accent') + '18'; c.fill(); }
