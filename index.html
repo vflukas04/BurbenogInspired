@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-13d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-14a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1244,8 +1244,13 @@ function draw(i, cv){
     if (t === 1) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
     if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
       if (!spr(g, tinted('bush', '#6f8a66'), (x+.72)*cs, (y+.3)*cs, cs*.38, h, .7)) { g.strokeStyle = '#4a6260'; g.lineWidth = 1; for (const dy of [.35,.65]) { g.beginPath(); g.moveTo((x+.2)*cs, (y+dy)*cs); g.lineTo((x+.8)*cs, (y+dy)*cs); g.stroke(); } } }
-    if (t === 3) { g.fillStyle = '#4a4a50'; g.beginPath(); g.ellipse((x+.5)*cs, (y+.6)*cs, cs*.4, cs*.28, 0, 0, Math.PI*2); g.fill();
-      if (!spr(g, SPR['rock' + (1 + (x+y)%3)], (x+.5)*cs, (y+.5)*cs, cs*.7, h, .95)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('🪨', (x+.5)*cs, (y+.5)*cs); } }
+    if (t === 3) { const bx = (x+.5)*cs, by = (y+.88)*cs, w = cs*.46, ht = cs*.78;   // kleiner Berg: Schatten, helle und dunkle Flanke, Schneekappe
+      g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(bx, by, w*1.05, cs*.1, 0, 0, Math.PI*2); g.fill();
+      const px = bx - w*.08, py = by - ht;
+      g.fillStyle = '#6d6a66'; g.beginPath(); g.moveTo(bx - w, by); g.lineTo(px, py); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
+      g.fillStyle = '#4a4845'; g.beginPath(); g.moveTo(px, py); g.lineTo(bx + w, by); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
+      g.fillStyle = '#4f4d49'; g.beginPath(); g.moveTo(bx - w*.1, by); g.lineTo(bx - w*.55, by - ht*.38); g.lineTo(bx - w*.2, by - ht*.5); g.closePath(); g.fill();
+      g.fillStyle = '#f1f3f5'; g.beginPath(); g.moveTo(px, py); g.lineTo(px - w*.3, py + ht*.28); g.lineTo(px - w*.08, py + ht*.2); g.lineTo(px + w*.1, py + ht*.3); g.lineTo(px + w*.34, py + ht*.27); g.closePath(); g.fill(); }
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
   const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
@@ -1273,6 +1278,12 @@ function draw(i, cv){
     if (dark) c.globalAlpha = .45;
     drawTower(c, tw, tw.x*cs, tw.y*cs, cs, st ? st.aim : (tw.x + tw.y) * .7, fl ? fl.t / fl.t0 : 0);
     c.globalAlpha = 1;
+    if (map.terrain[tw.y][tw.x] === 3) {   // Turm steht auf Felsen: kleines Berg-Symbol oben rechts
+      const ox = (tw.x+.8)*cs, oy = (tw.y+.2)*cs, r = cs*.17;
+      c.fillStyle = 'rgba(20,20,24,.85)'; c.beginPath(); c.arc(ox, oy, r, 0, Math.PI*2); c.fill();
+      c.strokeStyle = '#ffd35a'; c.lineWidth = Math.max(1, cs*.03); c.stroke();
+      c.fillStyle = '#d8dce0'; c.beginPath(); c.moveTo(ox - r*.7, oy + r*.5); c.lineTo(ox - r*.1, oy - r*.6); c.lineTo(ox + r*.25, oy); c.lineTo(ox + r*.45, oy - r*.25); c.lineTo(ox + r*.8, oy + r*.5); c.closePath(); c.fill();
+    }
   }
   if (!s) return;
   for (const m of s.monsters) {
