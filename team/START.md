@@ -13,14 +13,15 @@ Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md`
 - **L** = Lukas und sein Claude · **F** = Friedrich und sein Claude. Beide Claudes ändern Code und pushen nach `main`.
 - Live-Spiel: https://vflukas04.github.io/BurbenogInspired/ (ca. 1 Minute nach dem Push).
 
-## Das Spiel in 10 Zeilen (Stand 13.10.)
+## Das Spiel in 10 Zeilen (Stand 14.10.)
 - Koop-Tower-Defense über mehrere Tage, 2–4 Spieler, jeder hat ein eigenes Feld (16 × 16).
-- 24 Spieltage: 20 Runden mit je einem Monstertyp (20 Stück) + Zwischenbosse an Tag 6, 12, 18, 23; Tag 24 Endboss Uffug.
+- 23 Spieltage: 20 Runden mit je einem Monstertyp (20 Stück) + Zwischenbosse an Tag 6, 12, 18 (kein Gold, dafür Edelstein); Tag 23 Endboss Uffug.
 - Spielart „Uhrzeiten“ (10 Uhr neue Welle, Durchgelassene laufen später beim Nachbarn weiter) oder „Live“ (sofort weiter). Mehr als 30 ganz durchgebrochen = verloren.
 - Elemente: Feuer brennt · Eis bremst · Schatten verflucht (mehr Schaden, weniger Rüstung) + Irrlicht verstärkt · Stein Fläche, zertrümmert Rüstung, wetterfest.
 - Monster: Leben 14 × Runde^1,38; Rüstung = Prozent + Punkte; nachtaktive Monster sieht Schatten um 19 Uhr nur im Irrlicht-Kreis.
 - Faktoren: je 5er-Block erste Runde neutral, danach hat jedes Element genau einmal Vor- und Nachteil.
-- Gold: Start 30, Kopfgeld 2/3/5/8 je 5 Runden; Schenken (10 % Gebühr); Gemeinschaftskasse für Forschung.
+- Gold: Start 30, Kopfgeld 2/3/5/8 je 5 Runden; Schenken (10 % Gebühr); Gemeinschaftskasse für Forschung (jede Verbesserung in 3 Stufen).
+- Edelsteine (Rubin/Saphir/Amethyst/Quarz) vom tötenden Turm: Fähigkeit für einen Turm des eigenen Elements oder Turm in ein anderes Element umwandeln. Tauschen ohne Gebühr.
 - Türme: 8 je Element (10 … 1200 Gold), Upgrades bis Stufe 6.
 - Gelände: Wald +10, Sumpf +20, Felsen (6–8, +30 Gold für alle, +15 % Reichweite, Stein ×1,3 Schaden); wird je neuem Spiel neu gewürfelt.
 - Leitlinie: Spielgefühl der beiden > Simulation. Lieber wenige Regler auf einmal drehen und eine Weile testen.

@@ -59,7 +59,7 @@ function play(N, els, seed, research, noLoss){
     G=g;
     for(let i=0;i<N;i++){ const l=L[i];
       if(research){ const give=Math.floor(goldOf(i)*0.15); if(give>0) l.pot+=give;
-        for(const id of ['t5','el'+l.el,'t7','cheap','gold']){ const R=RESEARCH.find(r=>r.id===id); const have=curRes();
+        for(const id of ['t5:1','el'+l.el+':1','el'+l.el+':2','el'+l.el+':3','t7:1','cheap:1','cheap:2','cheap:3','gold:1','gold:2','gold:3']){ const R=RESEARCH.find(r=>r.id===id); const have=curRes();
           if(!have.has(id) && (!R.need||have.has(R.need)) && potOf()>=R.cost) l.research.push(id); } }
       l.spent+=botBuild(l,i,goldOf(i),g.day); }
     const d=g.day, before=g.passed; g=resolveSlot(g,L);
@@ -105,8 +105,8 @@ for (let k=0;k<4;k++) for (const N of [2,4]) {
 // Gold-Bedarf je Runde: Wie viel Gold braucht ein Element (Bot baut auf Feld 0), um 18 von 20 zu töten?
 // Angegeben als Vielfaches eines Richtwerts. < 1 = stark, > 2 = schwacher Tag. Mit Forschung t5/t7, Tageslicht, Mittel aus Sonnig/Bewölkt/Regen.
 const budget=r=>Math.round(30+60*(Math.pow(1.38,r)-1));
-function killsWith(k,r,gold,weather){ L=[{el:k,towers:[],spent:0,gifts:[],research:['t5','t7'],gid:0}]; G={cfg:{startAt:0,players:2},day:r};
-  botBuild(L[0],0,gold,r,0); return simulate({lane:0,players:2,towers:L[0].towers,res:['t5','t7'],incoming:waveSpecs(r),weather,seed:r}).kills; }
+function killsWith(k,r,gold,weather){ L=[{el:k,towers:[],spent:0,gifts:[],research:['t5:1','t7:1'],gid:0}]; G={cfg:{startAt:0,players:2},day:r};
+  botBuild(L[0],0,gold,r,0); return simulate({lane:0,players:2,towers:L[0].towers,res:['t5:1','t7:1'],incoming:waveSpecs(r),weather,seed:r}).kills; }
 function need(k,r,weather){ const n=MONSTERS[r-1].count||20, goal=Math.ceil(n*0.9); let lo=0.125, hi=16;
   if(killsWith(k,r,budget(r)*hi,weather)<goal) return Infinity;
   for(let it=0;it<6;it++){ const mid=Math.sqrt(lo*hi); if(killsWith(k,r,budget(r)*mid,weather)>=goal) hi=mid; else lo=mid; } return hi; }

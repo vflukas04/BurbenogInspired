@@ -17,7 +17,7 @@ Größere Vorhaben, bevor sie umgesetzt werden. Kommentare beider willkommen, mi
 - Laufzeit: Volltest dauert ca. 8 Minuten – reicht `zehn` als Schnellcheck?
 - Aufteilung mit F bestätigen: F meldet Spielgefühl, das Skript (L) setzt die Zahlen – **vorübergehend**, bis das Skript steht; danach Feintuning wieder gemeinsam.
 
-## 2. Edelsteine bei Zwischenbossen – L, 14.10.
+## 2. Edelsteine bei Zwischenbossen – L, 14.10. – **umgesetzt in VERSION 2026-10-14c**
 **Konzept (L, mit Claude abgestimmt):**
 - An Zwischenboss-Tagen kommt bei jedem Spieler ein Zwischenboss. Wer einen tötet, bekommt einen Edelstein in der Farbe des Turms, der ihn getötet hat. Wer zwei erledigt (weil ein anderer seinen durchlässt), bekommt zwei.
 - Edelsteine lassen sich ohne Gebühr tauschen und verschenken. Ungleich verteilte Farben (z. B. wenig Quarz, weil Stein Fliegende schwer trifft) gleicht faires Tauschen aus.
@@ -93,6 +93,8 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 **Weitere Idee (L):** „Explosion bei Tod durch Brennen“ – nur für langsam schießende Türme, nicht zwingend Feuer.
 
 Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wie stark*. Einige verbinden Elemente (Absturz hilft Stein gegen Fliegende, Sprödes Eis hilft Stein, Leuchtfeuer hilft allen). 18 sind leicht, 14 nutzen 5 neue Bausteine (Tod-Auslöser, Bodenfeld, Sprung, Aura, Einzelfälle) – mit den Bausteinen kommt der Rest schnell.
+
+**Umsetzung 14.10. (Claude, Entscheidungen für den Test):** Todesstoß 3 % (Bosse −5 % Leben statt Sofort-Tod), Angst 10 %/1,5 s, Fluchwelle springt weiter (Kette), Absturz nur Eiszapfen (Stein-Variante offen), Lavapfütze 40 % des Turm-Schadens/s, Weitwurf Reichweite +2 Felder, Umwandeln löscht eine eingesetzte Fähigkeit. Alle Werte stehen in `gemMods` in `index.html`.
 
 **Offen:**
 - Fähigkeiten-Entwurf prüfen: Feuer durchgesehen und bestätigt (L, 14.10.), Eis/Schatten/Stein noch offen.
