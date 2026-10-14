@@ -48,6 +48,7 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 | 4 Brandpfeil | Feuerregen | Trifft auch Bodenmonster mit 50 % Schaden – sonst steht der Turm in Runden ohne Fliegende nutzlos herum | leicht |
 | 5 Schwelbrand | Schwelglut | Monster, die durch Schwelbrand brennen, nehmen +15 % Schaden von allen Türmen | leicht |
 | 6 Lavaturm | Lavapfütze | Einschlagstelle bleibt 4 s Lava: Schaden + Brennen. Mehrere Pfützen stapeln nicht (ein Monster in 2 Pfützen zählt einmal) | mittel (Bodenfeld) |
+| 6 Lavaturm (Grundturm) | – | Vorschlag L: langsamer bei gleichem Schaden/s (z. B. 0,35 statt 0,7 Schüsse/s, doppelter Schaden je Schuss). Ändert den Turm für alle, auch ohne Stein – mit dem Balancing-Skript prüfen | leicht |
 | 7 Phönix | Phönixflug | Geschoss springt nach dem Treffer aufs nächste Monster (60 %) | mittel (Sprung) |
 | 8 Höllenfeuer | Fegefeuer | Brand wirkt auch auf feuer-immune Monster (50 %) | leicht |
 
@@ -94,5 +95,5 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wie stark*. Einige verbinden Elemente (Absturz hilft Stein gegen Fliegende, Sprödes Eis hilft Stein, Leuchtfeuer hilft allen). 18 sind leicht, 14 nutzen 5 neue Bausteine (Tod-Auslöser, Bodenfeld, Sprung, Aura, Einzelfälle) – mit den Bausteinen kommt der Rest schnell.
 
 **Offen:**
-- Fähigkeiten-Entwurf prüfen: Feuer durchgesehen (L, 14.10.), Eis/Schatten/Stein noch offen.
+- Fähigkeiten-Entwurf prüfen: Feuer durchgesehen und bestätigt (L, 14.10.), Eis/Schatten/Stein noch offen.
 - Darstellung: Woran sieht man am Turm, dass er eine Fähigkeit hat?
