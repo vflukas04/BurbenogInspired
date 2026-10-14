@@ -31,7 +31,64 @@ Größere Vorhaben, bevor sie umgesetzt werden. Kommentare beider willkommen, mi
 - „Wer hat getötet“ ist einfach: Der tödliche Treffer läuft durch `hit()` (kennt das Element des Turms), Tod durch Brennen ist immer Feuer. `kill()` bekommt das Element mit und zählt Boss-Kills je Element; die Auswertung schreibt die Steine ins Feld des Spielers.
 - Neu im Feld je Spieler: Steinvorrat; je Turm: eingesetzte Fähigkeit.
 
+**Entschieden (L, 14.10.):**
+- Zwischenbosse geben kein Gold mehr, nur den Edelstein (ersetzt die Idee „Kopfgeld-Bonus für Zwischenbosse“).
+- Vorhaut-Boss fällt weg → 23 Tage, 3 Zwischenbosse (Tag 6, 12, 18).
+- Umwandeln: Geländekosten (Wald/Sumpf/Felsen) werden nicht nachgezahlt.
+
+### Fähigkeiten – erster Entwurf (Claude, 14.10.)
+Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur Werte/vorhandene Effekte; **mittel** = neuer Baustein, der mehrfach genutzt wird (in Klammern). Einfrieren/Rückstoß wirken auf Bosse nur halb.
+
+**🔥 Feuer – Rubin**
+| Turm | Fähigkeit | Wirkung | Aufwand |
+| --- | --- | --- | --- |
+| 1 Funke | Zündschnur | Stirbt ein brennendes Monster, springt der Brand aufs nächste in 1 Feld über | mittel (Tod-Auslöser) |
+| 2 Glutbecken | Glutnest | Brand stapelt sich bis 2× (addiert statt Maximum) | leicht |
+| 3 Flammenwerfer | Breitstrahl | Treffer verbrennen auch Monster in 0,4 Feldern ums Ziel | leicht |
+| 4 Brandpfeil | Feuerregen | Trifft auch Bodenmonster mit 50 % Schaden | leicht |
+| 5 Schwelbrand | Schwelglut | Brennende Monster nehmen +15 % Schaden von allen Türmen | leicht |
+| 6 Lavaturm | Lavapfütze | Einschlagstelle brennt 4 s weiter | mittel (Bodenfeld) |
+| 7 Phönix | Phönixflug | Geschoss springt nach dem Treffer aufs nächste Monster (60 %) | mittel (Sprung) |
+| 8 Höllenfeuer | Fegefeuer | Brand wirkt auch auf feuer-immune Monster (50 %) | leicht |
+
+**❄️ Eis – Saphir**
+| Turm | Fähigkeit | Wirkung | Aufwand |
+| --- | --- | --- | --- |
+| 1 Frostsplitter | Zersplittern | Stirbt das Ziel, verlangsamt es alles in 1 Feld für 2 s | mittel (Tod-Auslöser) |
+| 2 Schneeball | Großer Ball | Fläche +50 %, verlangsamt auch Fliegende | leicht |
+| 3 Eiszapfen | Absturz | Getroffene Fliegende fallen 2 s zu Boden – dann treffen sie auch Bodentürme | mittel |
+| 4 Frosthauch | Sprödes Eis | Ziele nehmen 25 % mehr Rüstungsschaden von allen Türmen | leicht |
+| 5 Frostnova | Dauerfrost | Einfrieren 4,5 statt 3 s, trifft auch Fliegende | leicht |
+| 6 Eisspeer | Durchbohren | Speer trifft bis zu 3 Monster in einer Linie | mittel (Sprung) |
+| 7 Blizzard | Schneesturm | Dauerhaft: alle Monster in Reichweite 10 % langsamer, auch Fliegende | mittel (Aura) |
+| 8 Ewiges Eis | Permafrost | Wer 3 s am Stück verlangsamt ist, friert 1 s ein | mittel |
+
+**🌑 Schatten – Amethyst**
+| Turm | Fähigkeit | Wirkung | Aufwand |
+| --- | --- | --- | --- |
+| 1 Schemen | Nachtsicht | Trifft nachtaktive Monster nachts auch ohne Irrlicht | leicht |
+| 2 Irrlicht | Leuchtfeuer | Lichtkreis +50 %, verstärkt auch Türme anderer Elemente (×1,15) | mittel (Aura) |
+| 3 Nachtauge | Seherblick | Zielt immer aufs Monster mit den meisten Leben, Reichweite +0,8 | leicht |
+| 4 Fluchstein | Fluchwelle | Stirbt ein verfluchtes Monster, springt der Fluch auf 2 Nachbarn | mittel (Tod-Auslöser) |
+| 5 Seelenfresser | Hunger | +3 % Schaden je Kill in dieser Welle (höchstens +45 %) | leicht |
+| 6 Phantom | Geisterpfeile | Ignoriert 50 % Rüstung, auch ohne Irrlicht | leicht |
+| 7 Leerenturm | Sog | Treffer ziehen das Ziel 0,5 Felder zurück | mittel |
+| 8 Ewige Nacht | Finsternis | Fluch trifft alle Monster in 1 Feld ums Ziel | leicht |
+
+**🪨 Stein – Quarz**
+| Turm | Fähigkeit | Wirkung | Aufwand |
+| --- | --- | --- | --- |
+| 1 Kiesel | Prellstein | Springt nach dem Aufprall einmal weiter (50 %) | mittel (Sprung) |
+| 2 Schleuder | Steilschuss | Trifft auch Fliegende (60 % Schaden) | leicht |
+| 3 Felsbrocken | Erschütterung | 10 % Chance, 0,5 s zu betäuben | leicht |
+| 4 Katapult | Weitwurf | Reichweite +1, Fläche +30 % | leicht |
+| 5 Erdbeben | Nachbeben | Nach 1 s ein zweites Beben mit 50 % | mittel |
+| 6 Granitwächter | Panzerbrecher | Rüstungsschaden ×2 | leicht |
+| 7 Lawine | Geröll | Einschlagstelle 3 s lang: Monster dort 30 % langsamer | mittel (Bodenfeld) |
+| 8 Bergkönig | Gipfelstoß | Betäubungschance +15 Prozentpunkte, wirkt auf Bosse voll | leicht |
+
+Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wie stark*. Einige verbinden Elemente (Absturz hilft Stein gegen Fliegende, Sprödes Eis hilft Stein, Leuchtfeuer hilft allen). 18 sind leicht, 14 nutzen 5 neue Bausteine (Tod-Auslöser, Bodenfeld, Sprung, Aura, Einzelfälle) – mit den Bausteinen kommt der Rest schnell.
+
 **Offen:**
-- Die 32 Fähigkeiten entwerfen (Claude macht einen ersten Vorschlag).
-- Ersetzt das den „Kopfgeld-Bonus für Zwischenbosse“ (Idee F, 13.10.)?
-- Umwandeln: Geländeaufschlag (Stein auf Felsen +30 Gold) nachzahlen oder entfällt er?
+- Fähigkeiten-Entwurf prüfen (L, F).
+- Darstellung: Woran sieht man am Turm, dass er eine Fähigkeit hat?
