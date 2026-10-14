@@ -23,6 +23,7 @@
 | --- | --- | --- |
 | Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-14c) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
 | Fähigkeiten: Schatten-Rest und Stein-Liste | L oder F | Feuer/Eis besprochen, Schatten: Angst + Todesstoß bestätigt. Stein darf F gestalten; offen: Absturz auch bei Stein (Optionen A/B in `PLANUNG.md`) |
+| Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
 | Balancing-Skript planen und bauen (ersetzt Mikro-Balancing) | L | Entwurf in `PLANUNG.md`; Aufteilung mit F abstimmen (siehe Post) |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
