@@ -167,6 +167,7 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
     <div class="clock" id="clock"></div>
     <div id="banner" class="banner" hidden></div>
     <div id="vbanner" class="banner bad" hidden></div>
+    <div id="flybanner" class="banner" hidden></div>
     <div class="today" id="today"></div>
     <div class="seats" id="seats"></div>
     <div class="controls">
@@ -206,7 +207,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1290,6 +1291,8 @@ function render(){
   const b = $('banner');
   checkVersion(G.cfg.version);
   b.hidden = !overShown(); b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
+  const fw = flyWarn(), fb = $('flybanner');
+  fb.hidden = !fw; if (fw) { fb.className = 'banner' + (fw.bad ? ' bad' : ''); fb.textContent = fw.text; }
   if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`;
   $('seats').innerHTML = MODE === 'online'
     ? `<span class="muted">Ich spiele:</span>` + [...Array(n)].map((_,i) => `<button class="btn ${seat===i?'on':''}" data-seat="${i}">Spieler ${i+1}</button>`).join('')
@@ -1370,6 +1373,22 @@ function renderResearch(){
         `<button class="btn" data-r="${next.id}" ${!can||blocked||pot<next.cost?'disabled':''}>${blocked ? 'erst ' + RESEARCH.find(x => x.id === next.need).name.split(' ')[1] : (R.steps ? R.fmt(R.steps[n]) + ' · ' : '') + next.cost + ' Gold'}</button>`}</div>`; }).join('')}</div>`).join('')}</div>`;
   $('potGo').onclick = () => deposit(seat, Math.floor(+$('potAmt').value || 0));
   $('research').querySelectorAll('[data-r]').forEach(x => x.onclick = () => buyResearch(seat, x.dataset.r));
+}
+/* Fliegende-Warnung (15.10., F): am Vortag und vor der 10-Uhr-Welle zeigt ein Banner, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat. */
+function flyWarn(){
+  if (!G || G.over) return null;
+  const d = G.day, isFly = k => !!(MONSTERS[k - 1] && MONSTERS[k - 1].fly);
+  let when, name;
+  if (G.slot === 0 && isFly(d)) { when = 'Um 10:00 kommen'; name = MONSTERS[d - 1].name; }
+  else if (isFly(d + 1)) { when = 'Morgen kommen'; name = MONSTERS[d].name; }
+  else return null;
+  const l = laneOf(seat), E = ELEMENTS[l.el];
+  const hits = d0 => !!(d0.hitsFly || d0.air) && !d0.buff;
+  const names = E.towers.map((_, k) => towerBase(l.el, k)).filter(hits).map(b => b.name);
+  const mine = l.towers.map(tw => ({ tw, d:tdef({ ...tw, lvl:tw.lvl || 1 }, seat) })).filter(x => hits(x.d));
+  const best = mine.reduce((a, x) => Math.max(a, x.tw.lvl || 1), 0);
+  const text = `✈ ${when} ${name} – Fliegende! Nur Türme, die Fliegende treffen, wirken. ${E.emo} ${E.name}: ${names.join(', ')}. Du hast ${mine.length ? mine.length + ' davon (stärkster Stufe ' + best + ')' : 'noch keinen davon'}.`;
+  return { text, bad: mine.length < 2 };
 }
 function renderSetup(){
   const online = MODE === 'online';

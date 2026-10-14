@@ -1,6 +1,9 @@
 # Updates (neueste oben, höchstens 15 Einträge)
 
-Format: `### 14.10. 23:50 · F · 2026-10-15b – Edelsteine bei Bossen nur halb
+Format: `### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
+- Neues Banner über dem Spielfeld: am Vortag und vor der 10-Uhr-Welle (Tag 10 Spatzen, 13 Habichte, 22 Uffug-Vorhaut) steht, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat (rot bei weniger als 2). Anlass: Testspiel verloren an Tag 13 mit ca. 200 ungenutztem Gold. Keine Balance-Änderung.
+
+### 14.10. 23:50 · F · 2026-10-15b – Edelsteine bei Bossen nur halb
 - Gegen Zwischenbosse und Endboss wirken die zahlenbasierten Edelstein-Fähigkeiten halb: Schwelglut (+15 %), Glutnest (Stapel), Haut vereist, Granitwächter (Rüstungsschaden ×2), Hunger, Schatten-Durchdringen (Turm 6). Schon vorher halb: Eisblock, Absturz, Angst, Todesstoß. Ungeändert: Explosionen/Sprünge/Pfützen. Neues Spiel + neu laden.
 
 ### 14.10. 23:30 · F · 2026-10-15a – Forschung „Stein bremst“
@@ -57,5 +60,3 @@ Format: `### 14.10. 23:50 · F · 2026-10-15b – Edelsteine bei Bossen nur halb
 ### 12.10. 14:46 · L · 2026-10-12zf – Fehler: Schatten-Bauleiste
 - Irrlicht-Werte als Liste ließen die Turmbeschreibung abstürzen → Element sprang zurück, wurde nicht gespeichert. Lehre: nach Datenänderungen alle Turmtexte prüfen.
 
-### 12.10. 14:07 · L · 2026-10-12za – Neues Rüstungssystem
-- Rüstung = Prozent + Punkte; Rüstungsschaden je Element (Feuer 0,5 · Eis 0,6 · Schatten 0 · Stein 1,5). Fluch senkt Rüstung für alle, Irrlicht ×1,3–1,8 und ignoriert 30–100 %.
