@@ -69,14 +69,19 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 | --- | --- | --- | --- |
 | 1 Schemen | Nachtsicht | Trifft nachtaktive Monster nachts auch ohne Irrlicht | leicht |
 | 2 Irrlicht | Leuchtfeuer | Lichtkreis +50 %, verstärkt auch Türme anderer Elemente (×1,15) | mittel (Aura) |
-| 3 Nachtauge | Angst (Idee L) | 10 % je Treffer: Monster läuft 1,5 s rückwärts (nicht über den Eingang hinaus, Bosse halb). Erzeugt Nachzügler, verteilt Monster – Achtung: schadet Flächentürmen der Mitspieler | mittel |
+| 3 Nachtauge | Angst (Idee L) | 10 % je Treffer: Monster läuft 1,5 s rückwärts (nicht über den Eingang hinaus, Bosse halb). Erzeugt Nachzügler, verteilt Monster. L: eher kein Nachteil – rückwärts Laufende können auch mehr Überlapp erzeugen. **Bestätigt (L, 14.10.)** | mittel |
 | 4 Fluchstein | Fluchwelle | Stirbt ein verfluchtes Monster, springt der Fluch auf 2 Nachbarn | mittel (Tod-Auslöser) |
 | 5 Seelenfresser | Hunger | +3 % Schaden je Kill in dieser Welle (höchstens +45 %) | leicht |
 | 6 Phantom | Geisterpfeile | Ignoriert 50 % Rüstung, auch ohne Irrlicht | leicht |
-| 7 Leerenturm | Todesstoß (Idee L) | 3 % je Treffer: Monster stirbt sofort. Bosse/Zwischenbosse: stattdessen 5 % ihrer vollen Leben (sonst Edelstein-Lotterie). Sog verworfen (zu ähnlich wie Angst) | leicht |
+| 7 Leerenturm | Todesstoß (Idee L) | 3 % je Treffer: Monster stirbt sofort. Bosse/Zwischenbosse: stattdessen 5 % ihrer vollen Leben (sonst Edelstein-Lotterie). Sog verworfen (zu ähnlich wie Angst). **Bestätigt (L, 14.10.)** | leicht |
 | 8 Ewige Nacht | Finsternis | Fluch trifft alle Monster in 1 Feld ums Ziel | leicht |
 
-**🪨 Stein – Quarz**
+**🪨 Stein – Quarz** – *F darf diese Liste gern gestalten (L, 14.10.)*
+
+Offene Frage für die Stein-Liste: **Absturz (Fliegende fallen zu Boden) auch bei Stein?**
+- Option A: Nein, Absturz bleibt nur beim Eiszapfen (Eis). Stein kommt an Fliegende über Tauschen/Umwandeln und Steilschuss (Schleuder).
+- Option B: Ja, zusätzlich bei einem Stein-Turm, der Fliegende trifft – Vorschlag Granitwächter (Turm 6) statt Panzerbrecher. Dann kann Stein fliegende Bosse selbst zu Boden holen, und alle anderen Türme treffen sie.
+
 | Turm | Fähigkeit | Wirkung | Aufwand |
 | --- | --- | --- | --- |
 | 1 Kiesel | Prellstein | Springt nach dem Aufprall einmal weiter (50 %) | mittel (Sprung) |

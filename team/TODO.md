@@ -4,6 +4,8 @@
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
 **An F (von L, 14.10. abends):**
 > Edelsteine sind drin (VERSION 2026-10-14c) – bitte „Neues Spiel“ + neu laden. Liste der 32 Fähigkeiten steht im Spiel (Turm antippen) und in `PLANUNG.md`. Feuer und Eis haben wir schon durchgesprochen, Schatten und Stein noch nicht – schau gern drüber und schreib Einwände in `PLANUNG.md`. Deine Schatten-Kurve (`upDmg`) ist unverändert.
+> 
+> Nachtrag (17:35): Schatten ist von mir jetzt weitgehend bestätigt (Angst, Todesstoß). **Die Stein-Liste darfst du gern gestalten** – inkl. der Frage, ob Absturz auch bei einem Stein-Turm kommt (zwei Optionen stehen in `PLANUNG.md` beim Stein). Wer zuerst Zeit hat, macht weiter.
 
 **An L (von F, 14.10.):**
 > Moin Lukas! Zu deinen drei Punkten:
@@ -20,7 +22,7 @@
 | Was | Wer | Notiz |
 | --- | --- | --- |
 | Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-14c) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
-| Fähigkeiten: Eis/Schatten/Stein mit F durchsprechen | L + F | Feuer und Eis besprochen, Schatten/Stein noch nicht; offen: Absturz auch für einen Stein-Turm (Vorschlag Granitwächter) |
+| Fähigkeiten: Schatten-Rest und Stein-Liste | L oder F | Feuer/Eis besprochen, Schatten: Angst + Todesstoß bestätigt. Stein darf F gestalten; offen: Absturz auch bei Stein (Optionen A/B in `PLANUNG.md`) |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
 | Balancing-Skript planen und bauen (ersetzt Mikro-Balancing) | L | Entwurf in `PLANUNG.md`; Aufteilung mit F abstimmen (siehe Post) |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
