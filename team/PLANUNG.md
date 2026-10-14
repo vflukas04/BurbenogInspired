@@ -32,7 +32,7 @@ Größere Vorhaben, bevor sie umgesetzt werden. Kommentare beider willkommen, mi
 - Neu im Feld je Spieler: Steinvorrat; je Turm: eingesetzte Fähigkeit.
 
 **Entschieden (L, 14.10.):**
-- Zwischenbosse geben kein Gold mehr, nur den Edelstein (ersetzt die Idee „Kopfgeld-Bonus für Zwischenbosse“).
+- Zwischenbosse geben kein Gold mehr, nur den Edelstein (ersetzt die Idee „Kopfgeld-Bonus für Zwischenbosse“). Bosse (Endboss, später bei 40/60 Runden auch Bosse dazwischen) geben Gold **und** Edelstein – beim letzten Boss nur noch als Erinnerungsstück.
 - Vorhaut-Boss fällt weg → 23 Tage, 3 Zwischenbosse (Tag 6, 12, 18).
 - Umwandeln: Geländekosten (Wald/Sumpf/Felsen) werden nicht nachgezahlt.
 
@@ -42,12 +42,12 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 **🔥 Feuer – Rubin**
 | Turm | Fähigkeit | Wirkung | Aufwand |
 | --- | --- | --- | --- |
-| 1 Funke | Zündschnur | Stirbt ein brennendes Monster, springt der Brand aufs nächste in 1 Feld über | mittel (Tod-Auslöser) |
-| 2 Glutbecken | Glutnest | Brand stapelt sich bis 2× (addiert statt Maximum) | leicht |
-| 3 Flammenwerfer | Breitstrahl | Treffer verbrennen auch Monster in 0,4 Feldern ums Ziel | leicht |
-| 4 Brandpfeil | Feuerregen | Trifft auch Bodenmonster mit 50 % Schaden | leicht |
-| 5 Schwelbrand | Schwelglut | Brennende Monster nehmen +15 % Schaden von allen Türmen | leicht |
-| 6 Lavaturm | Lavapfütze | Einschlagstelle brennt 4 s weiter | mittel (Bodenfeld) |
+| 1 Funke | Zündschnur | Stirbt ein Monster durch einen Funke-Schuss (nicht durchs Brennen), explodiert es: Flächenschaden in 1 Feld und setzt in Brand | mittel (Tod-Auslöser) |
+| 2 Glutbecken | Glutnest | Brand stapelt sich bis 2×: Heute zählt bei mehreren Bränden nur der stärkste; mit Glutnest addieren sich zwei Brände | leicht |
+| 3 Flammenwerfer | Weite Flamme | Reichweite +50 % (Standard; Breitstrahl verworfen: Feuer setzt ohnehin fast alles in Brand) | leicht |
+| 4 Brandpfeil | Feuerregen | Trifft auch Bodenmonster mit 50 % Schaden – sonst steht der Turm in Runden ohne Fliegende nutzlos herum | leicht |
+| 5 Schwelbrand | Schwelglut | Monster, die durch Schwelbrand brennen, nehmen +15 % Schaden von allen Türmen | leicht |
+| 6 Lavaturm | Lavapfütze | Einschlagstelle bleibt 4 s Lava: Schaden + Brennen. Mehrere Pfützen stapeln nicht (ein Monster in 2 Pfützen zählt einmal) | mittel (Bodenfeld) |
 | 7 Phönix | Phönixflug | Geschoss springt nach dem Treffer aufs nächste Monster (60 %) | mittel (Sprung) |
 | 8 Höllenfeuer | Fegefeuer | Brand wirkt auch auf feuer-immune Monster (50 %) | leicht |
 
@@ -87,8 +87,12 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 | 7 Lawine | Geröll | Einschlagstelle 3 s lang: Monster dort 30 % langsamer | mittel (Bodenfeld) |
 | 8 Bergkönig | Gipfelstoß | Betäubungschance +15 Prozentpunkte, wirkt auf Bosse voll | leicht |
 
+**Standard-Fähigkeiten (L, 14.10.):** Es dürfen auch viele schlichte Verbesserungen dabei sein: doppelter Schaden, +50 % Reichweite, doppelte Schussrate. Bei Stein z. B.: Geschoss wird nicht geworfen, sondern schlägt direkt ein bzw. zielt dorthin, wo das Monster ankommt (Zielvorhersage). Beim weiteren Durchgehen schwache Spezial-Fähigkeiten durch Standards ersetzen.
+
+**Weitere Idee (L):** „Explosion bei Tod durch Brennen“ – nur für langsam schießende Türme, nicht zwingend Feuer.
+
 Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wie stark*. Einige verbinden Elemente (Absturz hilft Stein gegen Fliegende, Sprödes Eis hilft Stein, Leuchtfeuer hilft allen). 18 sind leicht, 14 nutzen 5 neue Bausteine (Tod-Auslöser, Bodenfeld, Sprung, Aura, Einzelfälle) – mit den Bausteinen kommt der Rest schnell.
 
 **Offen:**
-- Fähigkeiten-Entwurf prüfen (L, F).
+- Fähigkeiten-Entwurf prüfen: Feuer durchgesehen (L, 14.10.), Eis/Schatten/Stein noch offen.
 - Darstellung: Woran sieht man am Turm, dass er eine Fähigkeit hat?

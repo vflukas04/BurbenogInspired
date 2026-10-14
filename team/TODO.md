@@ -9,6 +9,8 @@
 > 3. **Claude-Projekt:** Ich habe mir in der App ein eigenes Projekt mit Anweisungen für BurbenogInspired angelegt. Hast du das auch schon? Falls nicht: Anleitung steht in `team/START.md` unter „Eigenes Claude-Projekt einrichten“ – dein Claude hilft dir beim Aufsetzen.
 >
 > Und zum Schluss, mit herzlichen Grüßen: Du bist ein alter Stinker aus Pupshausen und du putzt dir deine Zähne mit dem Klowasser nach Bierschiss. 💩🍺
+> 
+> PS (11:50): Ich habe die Felsen-Kosten angeglichen – alle zahlen jetzt +30, Schadensbonus bleibt nur bei Stein. Gib Bescheid, falls du das anders gedacht hattest.
 
 **An L:** –
 

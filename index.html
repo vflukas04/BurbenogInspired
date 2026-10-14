@@ -203,7 +203,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-14a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-14b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -243,7 +243,7 @@ const TERRAIN = [
   { name:'Wiese', extra:0,  col:['#24301f','#2a3824'] },
   { name:'Wald',  extra:10, col:['#17271a','#1b2e1e'] },
   { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] },
-  { name:'Felsen', extra:15, stoneExtra:30, col:['#2c2c30','#323237'] }   // 13.10. (F): Felsen +15 Reichweite für alle, Stein zahlt +30 und macht mehr Schaden
+  { name:'Felsen', extra:30, stoneExtra:30, col:['#2c2c30','#323237'] }   // 13.10. (F): Felsen +15 % Reichweite für alle, Stein macht mehr Schaden. 14.10. (L): alle zahlen +30
 ];
 const ROCK = { rangeMul:1.15, stoneDmg:1.3, min:6, max:8 };   // Felsen je Karte 6–8, neu gewürfelt bei jedem neuen Spiel
 const TERRAIN_MAX = 26;     // Wald- und Sumpffelder je Karte bei 63 Feldern Weg, kürzerer Weg = etwas weniger

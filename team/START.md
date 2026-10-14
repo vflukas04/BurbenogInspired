@@ -22,7 +22,7 @@ Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md`
 - Faktoren: je 5er-Block erste Runde neutral, danach hat jedes Element genau einmal Vor- und Nachteil.
 - Gold: Start 30, Kopfgeld 2/3/5/8 je 5 Runden; Schenken (10 % Gebühr); Gemeinschaftskasse für Forschung.
 - Türme: 8 je Element (10 … 1200 Gold), Upgrades bis Stufe 6.
-- Gelände: Wald +10, Sumpf +20, Felsen (6–8, +15 % Reichweite, Stein +30 Gold und ×1,3 Schaden); wird je neuem Spiel neu gewürfelt.
+- Gelände: Wald +10, Sumpf +20, Felsen (6–8, +30 Gold für alle, +15 % Reichweite, Stein ×1,3 Schaden); wird je neuem Spiel neu gewürfelt.
 - Leitlinie: Spielgefühl der beiden > Simulation. Lieber wenige Regler auf einmal drehen und eine Weile testen.
 
 ## Regeln der Zusammenarbeit
