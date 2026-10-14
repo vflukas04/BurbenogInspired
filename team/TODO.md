@@ -30,7 +30,8 @@
 | Optik: Gold schenken bequemer | L | Fenster mit Knöpfen +10/+50/+100/Hälfte und Anzeige „kommt an“; „Senden“ ausgegraut bei zu wenig Gold; Bestätigung: Goldstand blinkt kurz farbig (bei jeder Änderung des Goldstands) |
 | Optik: Wetter auf der Karte sichtbar | L | Symbol in jeder Feldecke (billig, klarer Nutzen); Regen/Gewitter-Animation nur leicht und abschaltbar (Safari-Hänger!) |
 | Niederlage nicht vorab verraten | L | Ursache: `mayBuild` prüft `G.over` sofort, Upgrade-Knöpfe verschwinden vor der Wiedergabe. Vorschlag: auf `overShown()` umstellen |
-| Zwischenbosse: Kopfgeld für 1 Boss klein – Bonus? | offen | Vorhaut-Boss fliegt (Stein nur Turm 4/6/8); evtl. über Edelsteine |
+| Vorhaut-Boss (Tag 23) streichen | L | Uffug ist ja schon der Boss nach der Uffug-Vorhaut. Offen: Spiel dann 23 Tage, 3 Zwischenbosse? |
+| Zwischenbosse: Kopfgeld für 1 Boss klein – Bonus? | offen | evtl. über Edelsteine |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
 | `tools/balance.js` auf Runden statt Tage umstellen | L | deckt sonst nur Tag 1–20 ab; erster Schritt fürs Balancing-Skript |
 | Firestore-Regeln setzen | L | **vor ca. 09.11.**, sonst stoppt das Online-Spiel (README) |

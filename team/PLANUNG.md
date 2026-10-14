@@ -18,18 +18,20 @@ Größere Vorhaben, bevor sie umgesetzt werden. Kommentare beider willkommen, mi
 - Aufteilung mit F bestätigen: F meldet Spielgefühl, das Skript (L) setzt die Zahlen – **vorübergehend**, bis das Skript steht; danach Feintuning wieder gemeinsam.
 
 ## 2. Edelsteine bei Zwischenbossen – L, 14.10.
-**Konzept (L):**
-- Wer einen Zwischenboss tötet, bekommt einen Edelstein in der Farbe des Turms, der den Boss getötet hat. Nur dieser Spieler. Wer zwei Bosse erledigt (weil ein anderer seinen nicht schafft), bekommt zwei.
-- Edelsteine lassen sich ohne Gebühr tauschen und verschenken.
-- Steine je Element (Vorschlag): Feuer **Rubin** · Eis **Saphir** · Schatten **Amethyst** · Stein **Bernstein** (passt zu den Element-Farben).
-- **Einsatz A – Turm-Fähigkeit:** Ein Turm bekommt mit einem Stein seines Elements eine besondere Fähigkeit, je Turm individuell (mehr Reichweite, schnellere Schüsse, neuer Effekt …). Offen: je Turm eine Option (Arbeitsversion) oder zwei zur Wahl (A/B).
-- **Einsatz B – Umwandeln:** Ein Turm wird mit einem Stein eines anderen Elements in den Turm gleicher Nummer und Stufe dieses Elements umgewandelt.
+**Konzept (L, mit Claude abgestimmt):**
+- An Zwischenboss-Tagen kommt bei jedem Spieler ein Zwischenboss. Wer einen tötet, bekommt einen Edelstein in der Farbe des Turms, der ihn getötet hat. Wer zwei erledigt (weil ein anderer seinen durchlässt), bekommt zwei.
+- Edelsteine lassen sich ohne Gebühr tauschen und verschenken. Ungleich verteilte Farben (z. B. wenig Quarz, weil Stein Fliegende schwer trifft) gleicht faires Tauschen aus.
+- Steine je Element: Feuer **Rubin** · Eis **Saphir** · Schatten **Amethyst** · Stein **Quarz**.
+- **Einsatz A – Turm-Fähigkeit:** Ein Turm bekommt mit einem Stein seines Elements eine besondere Fähigkeit, je Turm individuell (mehr Reichweite, schnellere Schüsse, neuer Effekt …). **Für alle 8 Türme je Element**, auch Turm 1, weil man nach den ersten Zwischenbossen oft noch keine hohen Türme hat. Arbeitsversion: eine Fähigkeit je Turm; später evtl. zwei zur Wahl (A/B).
+- **Einsatz B – Umwandeln:** Ein Turm wird mit einem Stein eines anderen Elements in den Turm gleicher Nummer und Stufe dieses Elements umgewandelt. Der investierte Wert bleibt. So kommt z. B. Stein über umgewandelte Luftabwehr (Brandpfeil, Eiszapfen) auch an fliegende Bosse, und andere Elemente können ein Irrlicht nutzen.
+- Irrlicht schießt nicht und tötet daher nie – es erzeugt selbst keine Steine.
+- Verkauft man einen Turm, ist sein Stein weg.
 
-**Anmerkungen und offene Fragen (Claude):**
-- **Menge:** 4 Zwischenbosse = höchstens 4 Steine im ganzen Spiel (nicht je Spieler). Der Stein von Tag 23 hilft nur noch für den Endboss. Bei 3–4 Spielern sehr knapp. Idee: Boss lässt so viele Steine fallen, wie es Spieler gibt – alle in der Farbe des tötenden Turms, alle an den Töter (verteilt wird per Tausch).
-- **Wer hat getötet:** Kills werden heute nur je Feld gezählt. Solange jeder nur ein Element hat, ist Feld = Element. Nach Umwandlungen muss das Element des tötenden Turms (bzw. des Brandes) mitgespeichert werden.
-- **Stein-Edelsteine werden selten:** Vorhaut-Boss fliegt, Stein trifft Fliegende nur mit Turm 4/6/8.
-- **Umwandeln:** Schatten-Türme brauchen Irrlichter; Irrlicht (Schatten T2) schießt nicht selbst – Umwandlung von/nach T2 klären. Bleibt die investierte Gold-Summe gleich? Gilt der Geländeaufschlag (Stein auf Felsen +30)?
-- **Fähigkeiten:** 32 Türme × 1 Option ist viel Arbeit. Vorschlag: Türme 3–6 zuerst (die hat man zur Zeit der Bosse), Rest später.
-- **Verkaufen:** Geht der Stein mit dem Turm verloren oder kommt er zurück?
-- Ersetzt den „Kopfgeld-Bonus für Zwischenbosse“ (Idee F, 13.10.)?
+**Technik (Claude):**
+- „Wer hat getötet“ ist einfach: Der tödliche Treffer läuft durch `hit()` (kennt das Element des Turms), Tod durch Brennen ist immer Feuer. `kill()` bekommt das Element mit und zählt Boss-Kills je Element; die Auswertung schreibt die Steine ins Feld des Spielers.
+- Neu im Feld je Spieler: Steinvorrat; je Turm: eingesetzte Fähigkeit.
+
+**Offen:**
+- Die 32 Fähigkeiten entwerfen (Claude macht einen ersten Vorschlag).
+- Ersetzt das den „Kopfgeld-Bonus für Zwischenbosse“ (Idee F, 13.10.)?
+- Umwandeln: Geländeaufschlag (Stein auf Felsen +30 Gold) nachzahlen oder entfällt er?
