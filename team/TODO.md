@@ -4,7 +4,7 @@
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
 **An F (von L, 14.10.):**
 > Moin Friedrich! Drei Sachen von mir:
-> 1. **Balancing-Skript:** Ich baue ein Skript, das unser ständiges Mikro-Balancing ersetzen soll. Mein Vorschlag: Du musst dir über kleine Zahlen keine Gedanken mehr machen und kannst dich ganz auf Spielprinzip und neue Mechaniken stürzen. Deine Eindrücke aus Testspielen („Schatten fühlt sich zu stark an“) bleiben trotzdem Gold wert – einfach in `IDEEN.md` oder hier unter „Post an L“ notieren. Passt dir diese Aufteilung?
+> 1. **Balancing-Skript:** Ich baue ein Skript, das unser ständiges Mikro-Balancing ersetzen soll. Mein Vorschlag: Du musst dir über kleine Zahlen keine Gedanken mehr machen und kannst dich ganz auf Spielprinzip und neue Mechaniken stürzen. Deine Eindrücke aus Testspielen („Schatten fühlt sich zu stark an“) bleiben trotzdem Gold wert – einfach in `IDEEN.md` oder hier unter „Post an L“ notieren. Das ist nur vorübergehend gedacht: Sobald das Skript steht, machen wir das Feintuning wieder gemeinsam. Passt dir das so?
 > 2. **Edelsteine:** Ich mache einen Vorschlag für Edelsteine, die man bei Zwischenbossen sammelt. Entwurf und offene Fragen: `team/PLANUNG.md` – gern schon reinschreiben, was dir dazu einfällt.
 > 3. **Claude-Projekt:** Ich habe mir in der App ein eigenes Projekt mit Anweisungen für BurbenogInspired angelegt. Hast du das auch schon? Falls nicht: Anleitung steht in `team/START.md` unter „Eigenes Claude-Projekt einrichten“ – dein Claude hilft dir beim Aufsetzen.
 >
@@ -23,11 +23,11 @@
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
 | Balancing-Skript planen und bauen (ersetzt Mikro-Balancing) | L | Entwurf in `PLANUNG.md`; Aufteilung mit F abstimmen (siehe Post) |
 | Edelsteine bei Zwischenbossen: Vorschlag | L | Entwurf + offene Fragen in `PLANUNG.md`; könnte auch das kleine Boss-Kopfgeld lösen |
-| Forschung früher relevant: jede Forschung in 3 Stufen teilen (Stufe 1 billig) | L | Vorschlag L 14.10.; offen: wie Freischaltungen (Türme 5–8) stufen; evtl. mit Edelsteinen verknüpfen |
+| Forschung früher relevant: jede Forschung in 3 Stufen teilen (Stufe 1 billig) | L | Vorschlag L 14.10.; Freischaltungen bleiben ungestuft, kosten aber mehr als ein Turm der freigeschalteten Stufe; evtl. mit Edelsteinen verknüpfen |
 | Optik: Verkaufen mit Bestätigungsfenster wie beim Bauen | L | heute Doppelklick „Wirklich verkaufen?“ |
 | Optik: Upgrade mit Vorschau (alt → neu) und Bestätigung | L | gleicher Dialog wie Bauen |
 | Optik: Knopfleiste oben entschlacken | L | Vorschlag: Tempo als ein Knopf (1×→3×→10×), „Ende zeigen“ nur während Wiedergabe, „Neues Spiel“ ins ⋯-Menü (mit Rückfrage), Schenken in Fenster |
-| Optik: Gold schenken bequemer | L | Gegenvorschlag statt Dropdown: Fenster mit Knöpfen +10/+50/+100/Hälfte und Anzeige „kommt an“ |
+| Optik: Gold schenken bequemer | L | Fenster mit Knöpfen +10/+50/+100/Hälfte und Anzeige „kommt an“; „Senden“ ausgegraut bei zu wenig Gold; Bestätigung: Goldstand blinkt kurz farbig (bei jeder Änderung des Goldstands) |
 | Optik: Wetter auf der Karte sichtbar | L | Symbol in jeder Feldecke (billig, klarer Nutzen); Regen/Gewitter-Animation nur leicht und abschaltbar (Safari-Hänger!) |
 | Niederlage nicht vorab verraten | L | Ursache: `mayBuild` prüft `G.over` sofort, Upgrade-Knöpfe verschwinden vor der Wiedergabe. Vorschlag: auf `overShown()` umstellen |
 | Zwischenbosse: Kopfgeld für 1 Boss klein – Bonus? | offen | Vorhaut-Boss fliegt (Stein nur Turm 4/6/8); evtl. über Edelsteine |
