@@ -206,7 +206,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -636,20 +636,21 @@ function hit(s, m, def, dmg){
   const vuln = 1 + (on(m, 'curse') ? m.fx.curse.v : 0) + (on(m, 'smolder') ? m.fx.smolder.v : 0);
   if (def.groundHalf && !flying(m)) dmg *= 0.5;               // Feuerregen: Bodenmonster halb
   if (def.flyMul && flying(m)) dmg *= def.flyMul;             // Steilschuss: Fliegende 60 %
-  if (def.hunger) dmg *= 1 + Math.min(0.45, def.hunger * (def.feast || 0));
+  const bossy = isBossy(m), bh = bossy ? 0.5 : 1;                // Edelstein-Fähigkeiten wirken bei Bossen nur halb (15.10.)
+  if (def.hunger) dmg *= 1 + Math.min(0.45, def.hunger * (def.feast || 0)) * bh;
   // Rüstung (12.10. 14:07): Solange Rüstungspunkte übrig sind, kommt der Schaden um armorPct verringert an.
   // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
   let pct = m.ap > 0 ? m.def.armorPct : 0;
-  const ad = dmg * f * (ELEMENTS[def.el].armorDmg || 0) * (def.armorMul || 1);
-  if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0); m.ap -= ad; }
+  const ad = dmg * f * (ELEMENTS[def.el].armorDmg || 0) * (def.armorMul ? 1 + (def.armorMul - 1) * bh : 1);
+  if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0) * (def.gem && def.el === 2 && def.idx === 5 ? bh : 1); m.ap -= ad; }
   m.hp -= dmg * f * vuln * (1 - pct);
-  if (on(m, 'brittle')) m.hp -= ad;                           // Haut vereist: Rüstungsschaden trifft auch die Leben
+  if (on(m, 'brittle')) m.hp -= ad * bh;                           // Haut vereist: Rüstungsschaden trifft auch die Leben
   const t = def.dur === DAY ? FOREVER : def.dur;
   if (def.effect === 'burn' && (w || def.burnImmune)) {
     const v = def.eff * def.dpsNow / def.shots * f;
-    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, def.burnStack * Math.max(c.v, v)); c.t = Math.max(c.t, t); }
+    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); }
     else addFx(m, 'burn', v, t);
-    if (def.smolder) addFx(m, 'smolder', def.smolder, t);
+    if (def.smolder) addFx(m, 'smolder', def.smolder * bh, t);
   }
   if (def.iceBlock && on(m, 'slow') && !flying(m)) addFx(m, 'stun', 1, def.iceBlock * (isBossy(m) ? 0.5 : 1));
   if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);

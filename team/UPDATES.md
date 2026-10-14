@@ -1,6 +1,9 @@
 # Updates (neueste oben, höchstens 15 Einträge)
 
-Format: `### 14.10. 23:30 · F · 2026-10-15a – Forschung „Stein bremst“
+Format: `### 14.10. 23:50 · F · 2026-10-15b – Edelsteine bei Bossen nur halb
+- Gegen Zwischenbosse und Endboss wirken die zahlenbasierten Edelstein-Fähigkeiten halb: Schwelglut (+15 %), Glutnest (Stapel), Haut vereist, Granitwächter (Rüstungsschaden ×2), Hunger, Schatten-Durchdringen (Turm 6). Schon vorher halb: Eisblock, Absturz, Angst, Todesstoß. Ungeändert: Explosionen/Sprünge/Pfützen. Neues Spiel + neu laden.
+
+### 14.10. 23:30 · F · 2026-10-15a – Forschung „Stein bremst“
 - Neue Forschung im Elementlabor, 3 Stufen (20/35/50 Gold): ab Runde 6 bremst jeder Stein-Turm alle Monster in seiner Reichweite um 18/25/32 % – auch Fliegende, ohne dass er trifft (`brk`, Stärkstes zählt). Gedacht gegen das Tempo-/Spatzen-Problem von Stein.
 - Bot-Messung (20 Läufe je Spiel, mit Edelsteinen): Siege 57 → 65 von 160, Stein 12 → 20 von 80; fast alles aus Feuer+Stein (5 → 13 von 20). Eis+Stein und Schatten+Stein unverändert (sterben vor Runde 6–7). Nur Tendenz.
 - Als Nächstes: Feuer evtl. abschwächen (profitiert am meisten). Neues Spiel + neu laden.
