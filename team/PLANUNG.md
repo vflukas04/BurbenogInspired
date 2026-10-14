@@ -64,34 +64,31 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 | 7 Blizzard | Großer Sturm | Fläche +50 %, 8 statt 5 Geschosse (Standard) | leicht |
 | 8 Ewiges Eis | Eisblock | Treffer auf bereits verlangsamte Monster frieren sie 0,5 s ein (Bosse 0,25 s). Schussabstand 2 s → Stop-and-go | leicht |
 
-**🌑 Schatten – Amethyst**
-| Turm | Fähigkeit | Wirkung | Aufwand |
-| --- | --- | --- | --- |
-| 1 Schemen | Nachtsicht | Trifft nachtaktive Monster nachts auch ohne Irrlicht | leicht |
-| 2 Irrlicht | Leuchtfeuer | Lichtkreis +50 %, verstärkt auch Türme anderer Elemente (×1,15) | mittel (Aura) |
-| 3 Nachtauge | Angst (Idee L) | 10 % je Treffer: Monster läuft 1,5 s rückwärts (nicht über den Eingang hinaus, Bosse halb). Erzeugt Nachzügler, verteilt Monster. L: eher kein Nachteil – rückwärts Laufende können auch mehr Überlapp erzeugen. **Bestätigt (L, 14.10.)** | mittel |
-| 4 Fluchstein | Fluchwelle | Stirbt ein verfluchtes Monster, springt der Fluch auf 2 Nachbarn | mittel (Tod-Auslöser) |
-| 5 Seelenfresser | Hunger | +3 % Schaden je Kill in dieser Welle (höchstens +45 %) | leicht |
-| 6 Phantom | Geisterpfeile | Ignoriert 50 % Rüstung, auch ohne Irrlicht | leicht |
-| 7 Leerenturm | Todesstoß (Idee L) | 3 % je Treffer: Monster stirbt sofort. Bosse/Zwischenbosse: stattdessen 5 % ihrer vollen Leben (sonst Edelstein-Lotterie). Sog verworfen (zu ähnlich wie Angst). **Bestätigt (L, 14.10.)** | leicht |
-| 8 Ewige Nacht | Finsternis | Fluch trifft alle Monster in 1 Feld ums Ziel | leicht |
+**🌑 Schatten – Amethyst** (final, L 15.10., VERSION 2026-10-15d)
+| Turm | Fähigkeit | Wirkung |
+| --- | --- | --- |
+| 1 Schemen | Angst | 10 % je Treffer: Monster läuft 1,5 s rückwärts (Bosse halb). Von Nachtauge hierher getauscht, damit es früh verfügbar ist |
+| 2 Irrlicht | Mottenplage | Motten im Lichtkreis treffen bis zu 3 Monster, 2× je Sekunde; Schaden wächst mit der Stufe (Stufe 1: 4,7/s je Monster). Irrlicht kann damit selbst Bosse töten (Amethyst). Ersetzt Leuchtfeuer (andere Elemente im eigenen Feld sind selten) |
+| 3 Nachtauge | Nachtjäger | Schussrate ×1,5 und trifft nachtaktive Monster nachts ohne Irrlicht |
+| 4 Fluchstein | Fluchwelle | stirbt ein so verfluchtes Monster, springt der Fluch auf 2 Nachbarn (Kette). Flüche stapeln sonst nicht |
+| 5 Seelenfresser | Hunger | +20 % je Kill dieses Turms in der Welle, höchstens +200 %. Zählt nur letzte Treffer → hinten am Weg platzieren. Welle oder Tag: testen (L tendiert zu Welle) |
+| 6 Phantom | Geisterpfeile | ignoriert die ganze Rüstung, auch ohne Irrlicht |
+| 7 Leerenturm | Todesstoß | 3 % je Treffer Sofort-Tod, Bosse −5 % Leben |
+| 8 Ewige Nacht | Tiefe Nacht | Fluch addiert sich zu anderen Flüchen (bis +200 %). Ersetzt Finsternis (kaum Mehrwert, da ohnehin fast alles verflucht) |
 
-**🪨 Stein – Quarz** – *F darf diese Liste gern gestalten (L, 14.10.)*
+**🪨 Stein – Quarz** (final, L 15.10.)
+| Turm | Fähigkeit | Wirkung |
+| --- | --- | --- |
+| 1 Kiesel | Prellstein | hüpft an derselben Stelle nach 0,4 s und 0,8 s nach (60 % / 30 %) – Nachfolgende laufen in die Mitte |
+| 2 Schleuder | Steilschuss | trifft Fliegende mit vollem Schaden |
+| 3 Felsbrocken | Erschütterung | 10 % je getroffenem Monster: 2 s betäubt (Bosse 1 s) |
+| 4 Katapult | Weitwurf | Reichweite +2 Felder, Fläche +20 % |
+| 5 Erdbeben | Nachbeben | 1 s später zweites Beben, 50 %, gleicher Radius |
+| 6 Granitwächter | Flügelbruch | 10 % je Treffer (Bosse 5 %): Flieger stürzt ab, bis Wellenende am Boden und 30 % langsamer (beim Nachbarn fliegt er wieder). Unterschied zu Eiszapfen: selten, aber dauerhaft |
+| 7 Lawine | Geröll | Einschlagstelle bremst 3 s um 30 % |
+| 8 Bergkönig | Gipfelstoß | Betäubungschance +15 Prozentpunkte |
 
-Offene Frage für die Stein-Liste: **Absturz (Fliegende fallen zu Boden) auch bei Stein?**
-- Option A: Nein, Absturz bleibt nur beim Eiszapfen (Eis). Stein kommt an Fliegende über Tauschen/Umwandeln und Steilschuss (Schleuder).
-- Option B: Ja, zusätzlich bei einem Stein-Turm, der Fliegende trifft – Vorschlag Granitwächter (Turm 6) statt Panzerbrecher. Dann kann Stein fliegende Bosse selbst zu Boden holen, und alle anderen Türme treffen sie.
-
-| Turm | Fähigkeit | Wirkung | Aufwand |
-| --- | --- | --- | --- |
-| 1 Kiesel | Prellstein | Springt nach dem Aufprall einmal weiter (50 %) | mittel (Sprung) |
-| 2 Schleuder | Steilschuss | Trifft auch Fliegende (60 % Schaden) | leicht |
-| 3 Felsbrocken | Erschütterung | 10 % Chance, 0,5 s zu betäuben | leicht |
-| 4 Katapult | Weitwurf | Reichweite +1, Fläche +30 % | leicht |
-| 5 Erdbeben | Nachbeben | Nach 1 s ein zweites Beben mit 50 % | mittel |
-| 6 Granitwächter | Panzerbrecher | Rüstungsschaden ×2 | leicht |
-| 7 Lawine | Geröll | Einschlagstelle 3 s lang: Monster dort 30 % langsamer | mittel (Bodenfeld) |
-| 8 Bergkönig | Gipfelstoß | Betäubungschance +15 Prozentpunkte, wirkt auf Bosse voll | leicht |
+**Wurfgeschwindigkeit (L, 15.10.):** Mittelwert aus heute/A/B = Korridor: bisheriger Wert, aber mindestens so schnell, dass Tempo-1,4-Monster bei voller Reichweite am Rand getroffen werden, höchstens so schnell wie für Tempo 1,8 nötig. Ergebnis: Kiesel, Schleuder, Schneeball unverändert; Katapult schneller (5,3); Felsbrocken, Granitwächter, Lawine, Bergkönig, Lavaturm, Blizzard langsamer (Flugzeit bis 1,4 s beim Bergkönig). Schadenskurve der Fläche im Balancing-Skript prüfen.
 
 **Standard-Fähigkeiten (L, 14.10.):** Es dürfen auch viele schlichte Verbesserungen dabei sein: doppelter Schaden, +50 % Reichweite, doppelte Schussrate. Bei Stein z. B.: Geschoss wird nicht geworfen, sondern schlägt direkt ein bzw. zielt dorthin, wo das Monster ankommt (Zielvorhersage). Beim weiteren Durchgehen schwache Spezial-Fähigkeiten durch Standards ersetzen.
 
@@ -102,5 +99,5 @@ Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wi
 **Umsetzung 14.10. (Claude, Entscheidungen für den Test):** Todesstoß 3 % (Bosse −5 % Leben statt Sofort-Tod), Angst 10 %/1,5 s, Fluchwelle springt weiter (Kette), Absturz nur Eiszapfen (Stein-Variante offen), Lavapfütze 40 % des Turm-Schadens/s, Weitwurf Reichweite +2 Felder, Umwandeln löscht eine eingesetzte Fähigkeit. Alle Werte stehen in `gemMods` in `index.html`.
 
 **Offen:**
-- Fähigkeiten-Entwurf prüfen: Feuer durchgesehen und bestätigt (L, 14.10.), Eis/Schatten/Stein noch offen.
+- Alle vier Listen durchgesprochen (L, 15.10.). Offen: Idee F „Fähigkeit frei wählbar“ (siehe TODO).
 - Darstellung: Woran sieht man am Turm, dass er eine Fähigkeit hat?

@@ -13,3 +13,4 @@ Format: **Idee** – von wem, wann – Stand (offen · dafür · verworfen) – 
 - **Trailer im Hochformat** (WhatsApp-Status) – L, 12.10. – offen
 - **Kopfgeld-Bonus für Zwischenbosse** – F, 13.10. – offen
 - **Schaden nach Abstand** – L, 14.10. – offen – Türme, die mehr Schaden machen, je weiter (Scharfschütze) oder je näher (Schrotflinte) das Ziel ist. Auch als Grundlage für ein neues Element denkbar.
+- **Je Element ein Turm ohne Element-Effekt** (z. B. Stein-Turm, der wie ein Pfeil direkt trifft, ohne Fläche) – L, 15.10. – offen – Einwand Claude: verwischt die Element-Identität; mit dem Wurf-Korridor trifft Stein sein Ziel ohnehin.

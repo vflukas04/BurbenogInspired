@@ -2,10 +2,8 @@
 
 ## Post
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
-**An F (von L, 14.10. abends):**
-> Edelsteine sind drin (VERSION 2026-10-14c) – bitte „Neues Spiel“ + neu laden. Liste der 32 Fähigkeiten steht im Spiel (Turm antippen) und in `PLANUNG.md`. Feuer und Eis haben wir schon durchgesprochen, Schatten und Stein noch nicht – schau gern drüber und schreib Einwände in `PLANUNG.md`. Deine Schatten-Kurve (`upDmg`) ist unverändert.
-> 
-> Nachtrag (17:35): Schatten ist von mir jetzt weitgehend bestätigt (Angst, Todesstoß). **Die Stein-Liste darfst du gern gestalten** – inkl. der Frage, ob Absturz auch bei einem Stein-Turm kommt (zwei Optionen stehen in `PLANUNG.md` beim Stein). Wer zuerst Zeit hat, macht weiter.
+**An F (von L, 15.10. nachts):**
+> Danke für Stein bremst, Boss-Halbierung und das Flieger-Banner – alles übernommen, nichts überschrieben. Ich habe Schatten und Stein heute Nacht doch noch selbst durchgesprochen und eingebaut (VERSION 2026-10-15d, Liste in `PLANUNG.md`); Einwände gern dort. Neu ist auch der Wurf-Korridor: manche Würfe fliegen langsamer, treffen aber sicherer. Zu deiner Idee „Fähigkeit frei wählbar“ und zu Feuer abschwächen melde ich mich, sobald wir Testspiele mit dem neuen Stand haben.
 
 **An L (von F, 15.10.):**
 > Neu von mir (alles gepusht, VERSION 2026-10-15c, bitte „Neues Spiel“ + neu laden):
@@ -29,8 +27,7 @@
 ## Als Nächstes
 | Was | Wer | Notiz |
 | --- | --- | --- |
-| Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-14c) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
-| Fähigkeiten: Schatten-Rest und Stein-Liste | L oder F | Feuer/Eis besprochen, Schatten: Angst + Todesstoß bestätigt. Stein darf F gestalten; offen: Absturz auch bei Stein (Optionen A/B in `PLANUNG.md`) |
+| Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-15d) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
 | Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
 | Balancing-Skript planen und bauen (ersetzt Mikro-Balancing) | L | Entwurf in `PLANUNG.md`; Aufteilung mit F abstimmen (siehe Post) |
@@ -46,6 +43,7 @@
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 
 ## Erledigt (letzte 10)
+- [x] 15.10. Schatten-/Stein-Fähigkeiten final, Wurf-Korridor (L)
 - [x] 15.10. Banner vor Fliegenden (Tag 10, 13, 22) (F)
 - [x] 15.10. Edelstein-Fähigkeiten bei Bossen nur halb (F)
 - [x] 15.10. Forschung „Stein bremst“, 3 Stufen (F)
@@ -55,4 +53,3 @@
 - [x] 13.10. Zusammenarbeitsordner `team/` angelegt (L)
 - [x] 13.10. Zwischenbosse nach Runde 5, 10, 15, 19 (F)
 - [x] 13.10. Faktoren je 5er-Block ausgeglichen, Endboss neutral (F)
-- [x] 13.10. `balance.js` repariert, Modus „zehn“ (F)

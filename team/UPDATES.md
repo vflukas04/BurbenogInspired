@@ -3,6 +3,11 @@
 Format: `### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
 - Neues Banner über dem Spielfeld: am Vortag und vor der 10-Uhr-Welle (Tag 10 Spatzen, 13 Habichte, 22 Uffug-Vorhaut) steht, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat (rot bei weniger als 2). Anlass: Testspiel verloren an Tag 13 mit ca. 200 ungenutztem Gold. Keine Balance-Änderung.
 
+### 15.10. 01:50 · L · 2026-10-15d – Schatten- und Stein-Fähigkeiten final, Wurf-Korridor
+- Schatten: Schemen Angst, Irrlicht Mottenplage (Motten im Lichtkreis schaden), Nachtauge Nachtjäger (×1,5 + Nachtsicht), Hunger +20 %/Kill bis +200 %, Geisterpfeile ganze Rüstung, Ewige Nacht Tiefe Nacht (Fluch addiert sich).
+- Stein: Prellstein hüpft an der Stelle nach (60/30 %), Steilschuss voller Schaden, Erschütterung 2 s, Weitwurf Fläche +20 %, Granitwächter Flügelbruch.
+- Wurfgeschwindigkeit im Korridor (`lobSpeedOf`): einige Würfe langsamer, Katapult schneller. F: deine Boss-Halbierung (`bh`) ist übernommen. Neues Spiel + neu laden.
+
 ### 14.10. 23:50 · F · 2026-10-15b – Edelsteine bei Bossen nur halb
 - Gegen Zwischenbosse und Endboss wirken die zahlenbasierten Edelstein-Fähigkeiten halb: Schwelglut (+15 %), Glutnest (Stapel), Haut vereist, Granitwächter (Rüstungsschaden ×2), Hunger, Schatten-Durchdringen (Turm 6). Schon vorher halb: Eisblock, Absturz, Angst, Todesstoß. Ungeändert: Explosionen/Sprünge/Pfützen. Neues Spiel + neu laden.
 
@@ -56,7 +61,3 @@ Format: `### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
 
 ### 12.10. 15:38 · L · 2026-10-12zg – Nach Testspiel steiler
 - Leben-Kurve Runde^1,38 (vorher 1,3). Rückmeldung: „vieles klappt schon sehr gut“, etwas zu leicht.
-
-### 12.10. 14:46 · L · 2026-10-12zf – Fehler: Schatten-Bauleiste
-- Irrlicht-Werte als Liste ließen die Turmbeschreibung abstürzen → Element sprang zurück, wurde nicht gespeichert. Lehre: nach Datenänderungen alle Turmtexte prüfen.
-
