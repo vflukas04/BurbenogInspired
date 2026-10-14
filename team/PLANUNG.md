@@ -55,25 +55,25 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 **❄️ Eis – Saphir**
 | Turm | Fähigkeit | Wirkung | Aufwand |
 | --- | --- | --- | --- |
-| 1 Frostsplitter | Zersplittern | Stirbt das Ziel, verlangsamt es alles in 1 Feld für 2 s | mittel (Tod-Auslöser) |
+| 1 Frostsplitter | Zersplittern | Tod durch Schuss: Explosion mit Schaden + Verlangsamung in 1 Feld (gleicher Baustein wie Zündschnur). Verlangsamung stapelt nicht – Wert liegt darin, dass Nachbarn überhaupt verlangsamt werden (T1 trifft sonst nur ein Ziel) | mittel (Tod-Auslöser) |
 | 2 Schneeball | Großer Ball | Fläche +50 %, verlangsamt auch Fliegende | leicht |
-| 3 Eiszapfen | Absturz | Getroffene Fliegende fallen 2 s zu Boden – dann treffen sie auch Bodentürme | mittel |
-| 4 Frosthauch | Sprödes Eis | Ziele nehmen 25 % mehr Rüstungsschaden von allen Türmen | leicht |
+| 3 Eiszapfen | Absturz | Getroffene Fliegende fallen 2 s zu Boden und sind dort langsamer. Nutzen für Eis selbst: Am Boden wirken alle Eis-Verlangsamungen, Frostnova und Ewiges Eis treffen. Variante auch für einen Stein-Turm, der Fliegende trifft (offen) | mittel |
+| 4 Frosthauch | Haut vereist | 4 s lang wirkt Rüstungsschaden aller Türme zusätzlich auf die Leben (starke Kombi mit Stein, Rüstungsschaden ×1,5) | leicht |
 | 5 Frostnova | Dauerfrost | Einfrieren 4,5 statt 3 s, trifft auch Fliegende | leicht |
-| 6 Eisspeer | Durchbohren | Speer trifft bis zu 3 Monster in einer Linie | mittel (Sprung) |
-| 7 Blizzard | Schneesturm | Dauerhaft: alle Monster in Reichweite 10 % langsamer, auch Fliegende | mittel (Aura) |
-| 8 Ewiges Eis | Permafrost | Wer 3 s am Stück verlangsamt ist, friert 1 s ein | mittel |
+| 6 Eisspeer | Durchbohren | Speer fliegt in gerader Linie über die ganze Karte und trifft alles darauf. Zielt bevorzugt so, dass die Linie möglichst viele Monster trifft. Lohnt sich an Enden gerader Wegstücke – Platzierungsrätsel | mittel |
+| 7 Blizzard | Großer Sturm | Fläche +50 %, 8 statt 5 Geschosse (Standard) | leicht |
+| 8 Ewiges Eis | Eisblock | Treffer auf bereits verlangsamte Monster frieren sie 0,5 s ein (Bosse 0,25 s). Schussabstand 2 s → Stop-and-go | leicht |
 
 **🌑 Schatten – Amethyst**
 | Turm | Fähigkeit | Wirkung | Aufwand |
 | --- | --- | --- | --- |
 | 1 Schemen | Nachtsicht | Trifft nachtaktive Monster nachts auch ohne Irrlicht | leicht |
 | 2 Irrlicht | Leuchtfeuer | Lichtkreis +50 %, verstärkt auch Türme anderer Elemente (×1,15) | mittel (Aura) |
-| 3 Nachtauge | Seherblick | Zielt immer aufs Monster mit den meisten Leben, Reichweite +0,8 | leicht |
+| 3 Nachtauge | Angst (Idee L) | 10 % je Treffer: Monster läuft 1,5 s rückwärts (nicht über den Eingang hinaus, Bosse halb). Erzeugt Nachzügler, verteilt Monster – Achtung: schadet Flächentürmen der Mitspieler | mittel |
 | 4 Fluchstein | Fluchwelle | Stirbt ein verfluchtes Monster, springt der Fluch auf 2 Nachbarn | mittel (Tod-Auslöser) |
 | 5 Seelenfresser | Hunger | +3 % Schaden je Kill in dieser Welle (höchstens +45 %) | leicht |
 | 6 Phantom | Geisterpfeile | Ignoriert 50 % Rüstung, auch ohne Irrlicht | leicht |
-| 7 Leerenturm | Sog | Treffer ziehen das Ziel 0,5 Felder zurück | mittel |
+| 7 Leerenturm | Todesstoß (Idee L) | 3 % je Treffer: Monster stirbt sofort. Bosse/Zwischenbosse: stattdessen 5 % ihrer vollen Leben (sonst Edelstein-Lotterie). Sog verworfen (zu ähnlich wie Angst) | leicht |
 | 8 Ewige Nacht | Finsternis | Fluch trifft alle Monster in 1 Feld ums Ziel | leicht |
 
 **🪨 Stein – Quarz**
