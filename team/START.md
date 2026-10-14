@@ -5,7 +5,9 @@
 2. `team/TODO.md` – vor allem „Gerade dran“
 3. `team/UPDATES.md` – nur die obersten 5 Einträge
 
-Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/IDEEN.md` (noch nicht beschlossen), `team/archiv/` (alte Protokolle), `index.html` (die echten Zahlen).
+**Post:** Steht in `TODO.md` unter „Post“ etwas für deinen Menschen (an L oder an F), gib es ihm **als Erstes und wörtlich** weiter, vor allem anderen. Erst wenn er es gelesen hat, den Eintrag löschen.
+
+Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md` (Entwürfe in Arbeit), `team/IDEEN.md` (noch nicht beschlossen), `team/archiv/` (alte Protokolle), `index.html` (die echten Zahlen).
 
 ## Wer ist wer
 - **L** = Lukas und sein Claude · **F** = Friedrich und sein Claude. Beide Claudes ändern Code und pushen nach `main`.
@@ -31,6 +33,13 @@ Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/IDEEN.md` (
 5. Neue Grundregel des Spiels → hier unter „Das Spiel in 10 Zeilen“ anpassen **und** in `CLAUDE.md` → Regeln.
 6. **Kurz halten:** `UPDATES.md` höchstens 15 Einträge, ältere ans Ende von `team/archiv/` verschieben. Erledigtes in `TODO.md` höchstens 10 Zeilen.
 7. Keine privaten Inhalte ins Repo – es ist öffentlich.
+8. Nachrichten an den anderen → in `TODO.md` unter „Post“ (an L / an F). Der andere Claude gibt sie beim Start weiter.
+
+## Eigenes Claude-Projekt einrichten (empfohlen)
+- In der Claude-App ein Projekt „BurbenogInspired“ anlegen. In die Projekt-Anweisungen ungefähr: *„Antworte auf Deutsch, kurz. Zu Beginn jeder Sitzung das GitHub-Repo vflukas04/BurbenogInspired mit Schreibzugriff anhängen, klonen bzw. pullen und team/START.md, team/TODO.md und die obersten 5 Einträge von team/UPDATES.md lesen. CLAUDE.md ist das Nachschlagewerk. Änderungen nach den Regeln in team/START.md, Kürzel (F) bzw. (L). Keine Repo-Dateien ins Projektwissen kopieren. Nichts Privates ins Repo.“*
+- Persönliches (Ton, Pausen, Arbeitszeiten) gehört in diese Anweisungen, nicht ins Repo.
+- Ins Projektwissen höchstens ein kurzes Dokument mit Links (Repo, Live-Spiel, welche Datei wofür) – keine Kopien, die veralten.
+- Jede neue Sitzung mit dem Startprompt unten beginnen.
 
 ## Startprompt für einen neuen Chat
-> Wir arbeiten an BurbenogInspired. Hol den neuesten Stand und lies team/START.md, team/TODO.md und die obersten 5 Einträge von team/UPDATES.md. Sag mir in 3 Zeilen, was zuletzt passiert ist, wer gerade woran arbeitet und was als Nächstes ansteht. Dann warte auf meinen Wunsch.
+> Wir arbeiten an BurbenogInspired. Hol den neuesten Stand und lies team/START.md, team/TODO.md und die obersten 5 Einträge von team/UPDATES.md. Gib mir zuerst wörtlich, was in TODO.md unter „Post“ an mich steht. Dann sag mir in 3 Zeilen, was zuletzt passiert ist, wer gerade woran arbeitet und was als Nächstes ansteht. Dann warte auf meinen Wunsch.
