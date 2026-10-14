@@ -7,6 +7,14 @@
 > 
 > Nachtrag (17:35): Schatten ist von mir jetzt weitgehend bestätigt (Angst, Todesstoß). **Die Stein-Liste darfst du gern gestalten** – inkl. der Frage, ob Absturz auch bei einem Stein-Turm kommt (zwei Optionen stehen in `PLANUNG.md` beim Stein). Wer zuerst Zeit hat, macht weiter.
 
+**An L (von F, 15.10.):**
+> Neu von mir (alles gepusht, VERSION 2026-10-15c, bitte „Neues Spiel“ + neu laden):
+> 1. **Forschung „Stein bremst“** (Elementlabor, 20/35/50 Gold): ab Runde 6 bremst jeder Stein-Turm alle Monster in Reichweite um 18/25/32 % (auch Fliegende). Bot-Test (20 Läufe je Spiel): Siege 57 → 65 von 160, fast alles aus Feuer+Stein (5 → 13 von 20). Eis+Stein und Schatten+Stein unverändert.
+> 2. **Edelstein-Fähigkeiten bei Bossen nur halb** (Schwelglut, Glutnest, Haut vereist, Rüstungsschaden ×2, Hunger, Durchdringen Schatten T6); Eisblock, Absturz, Angst, Todesstoß waren schon halb.
+> 3. **Banner vor Fliegenden** (Tag 10, 13, 22): zeigt, welche Türme des eigenen Elements treffen und wie viele man hat. Anlass: Testspiel verloren an Tag 13 (Habichte) mit ca. 200 ungenutztem Gold.
+> 4. **Offen, bitte mit dir absprechen:** Feuer im Mittelspiel abschwächen? Feuer+Stein ist jetzt stark. Ich würde vorher ein, zwei echte Testspiele abwarten.
+> Hinweis: Bot-Zahlen sind nur Tendenzen (Bot kommt ca. 5 Tage weiter als wir echt).
+
 **An L (von F, 14.10.):**
 > Moin Lukas! Zu deinen drei Punkten:
 > 1. **Balancing-Skript:** Ja, passt. Ich notiere meine Testeindrücke in `IDEEN.md` oder hier. Eine Bitte: Meine Schatten-Kurve vom 13.10. (`upDmg`, Schaden je Upgrade ab Stufe 5 nur ×1,8) bitte nicht einfach überschreiben, erst anschauen, ob sie noch passt.
@@ -34,6 +42,9 @@
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 
 ## Erledigt (letzte 10)
+- [x] 15.10. Banner vor Fliegenden (Tag 10, 13, 22) (F)
+- [x] 15.10. Edelstein-Fähigkeiten bei Bossen nur halb (F)
+- [x] 15.10. Forschung „Stein bremst“, 3 Stufen (F)
 - [x] 14.10. Edelsteine (32 Fähigkeiten, Umwandeln, Schenken), Vorhaut-Boss gestrichen, Zwischenbosse ohne Gold (L)
 - [x] 14.10. Forschung in 3 Stufen, Freischaltungen 250/700 (L)
 - [x] 14.10. Optik: Fenster für Verkaufen/Upgrade/Schenken, Menü ⋯, Tempo-Knopf, Wetter auf der Karte, Goldstand blinkt, Niederlage nicht vorab verraten; Lavaturm halb so oft (L)
@@ -41,5 +52,3 @@
 - [x] 13.10. Zwischenbosse nach Runde 5, 10, 15, 19 (F)
 - [x] 13.10. Faktoren je 5er-Block ausgeglichen, Endboss neutral (F)
 - [x] 13.10. `balance.js` repariert, Modus „zehn“ (F)
-- [x] 12.10. Rüstungssystem, Irrlicht-Verstärker, nachtaktive Monster, Leben-Kurve 1,38 (L)
-- [x] 12.10. Friedrich als Collaborator eingeladen (L)
