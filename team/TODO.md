@@ -39,7 +39,7 @@
 | Buttons für Upgrade und Verkauf direkt über dem Turm | offen | statt erst Turm antippen und Dialog öffnen |
 | Skilltree bei Türmen? | offen | Idee, noch nicht beschlossen: erst Konzept, dann ggf. nach `IDEEN.md` |
 | Grafikupdates für Türme | offen | Kenney-Sprites, graue Sprites werden je Element eingefärbt (`tinted`) |
-| Edelsteine überarbeiten | offen | Anlass: Testspiel 14.10. (Amethyst auf Fluchsteinen Stufe 1, die Fliegende nicht treffen); Stein-Liste bleibt bei L oder F |
+| Edelsteine überarbeiten | offen | Anlass: Testspiel 14.10. (Amethyst auf Fluchsteinen Stufe 1, die Fliegende nicht treffen); Stein-Liste bleibt bei L oder F. **Idee F:** Fähigkeit frei wählbar statt an den Turm gebunden (jetzt: Turm 1 → Fähigkeit 1, Turm 2 → Fähigkeit 2 …); mit dem Stein eine der 8 Fähigkeiten des Elements für beliebigen Turm wählen. Klären: Balance (starke Fähigkeit auf billigem Turm), Wahl pro Stein oder Turm |
 | Firestore-Regeln setzen | L | **vor ca. 09.11.**, sonst stoppt das Online-Spiel (README) |
 | Türme 4–8 abgleichen | offen | nur Türme 1–3 per Simulation geprüft |
 | Monster 21–40 ausdenken | offen | Spiel ist auf 40 Runden ausgelegt |
