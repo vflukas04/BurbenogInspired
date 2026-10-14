@@ -23,6 +23,13 @@
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
 | Balancing-Skript planen und bauen (ersetzt Mikro-Balancing) | L | Entwurf in `PLANUNG.md`; Aufteilung mit F abstimmen (siehe Post) |
 | Edelsteine bei Zwischenbossen: Vorschlag | L | Entwurf + offene Fragen in `PLANUNG.md`; könnte auch das kleine Boss-Kopfgeld lösen |
+| Forschung früher relevant: jede Forschung in 3 Stufen teilen (Stufe 1 billig) | L | Vorschlag L 14.10.; offen: wie Freischaltungen (Türme 5–8) stufen; evtl. mit Edelsteinen verknüpfen |
+| Optik: Verkaufen mit Bestätigungsfenster wie beim Bauen | L | heute Doppelklick „Wirklich verkaufen?“ |
+| Optik: Upgrade mit Vorschau (alt → neu) und Bestätigung | L | gleicher Dialog wie Bauen |
+| Optik: Knopfleiste oben entschlacken | L | Vorschlag: Tempo als ein Knopf (1×→3×→10×), „Ende zeigen“ nur während Wiedergabe, „Neues Spiel“ ins ⋯-Menü (mit Rückfrage), Schenken in Fenster |
+| Optik: Gold schenken bequemer | L | Gegenvorschlag statt Dropdown: Fenster mit Knöpfen +10/+50/+100/Hälfte und Anzeige „kommt an“ |
+| Optik: Wetter auf der Karte sichtbar | L | Symbol in jeder Feldecke (billig, klarer Nutzen); Regen/Gewitter-Animation nur leicht und abschaltbar (Safari-Hänger!) |
+| Niederlage nicht vorab verraten | L | Ursache: `mayBuild` prüft `G.over` sofort, Upgrade-Knöpfe verschwinden vor der Wiedergabe. Vorschlag: auf `overShown()` umstellen |
 | Zwischenbosse: Kopfgeld für 1 Boss klein – Bonus? | offen | Vorhaut-Boss fliegt (Stein nur Turm 4/6/8); evtl. über Edelsteine |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
 | `tools/balance.js` auf Runden statt Tage umstellen | L | deckt sonst nur Tag 1–20 ab; erster Schritt fürs Balancing-Skript |
