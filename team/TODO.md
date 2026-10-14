@@ -13,7 +13,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- (niemand)
+- L · Edelsteine + Fähigkeiten, Zwischenbosse, Forschung in Stufen, Optik-Paket (`index.html` großflächig – bitte nicht parallel ändern) · seit 14.10. 16:50
 
 ## Als Nächstes
 | Was | Wer | Notiz |
