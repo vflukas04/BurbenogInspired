@@ -36,6 +36,10 @@
 | Balancing-Skript planen und bauen (ersetzt Mikro-Balancing) | L | Entwurf in `PLANUNG.md`; Aufteilung mit F abstimmen (siehe Post) |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
 | `tools/balance.js` auf Runden statt Tage umstellen | L | deckt sonst nur Tag 1–20 ab; erster Schritt fürs Balancing-Skript |
+| Buttons für Upgrade und Verkauf direkt über dem Turm | offen | statt erst Turm antippen und Dialog öffnen |
+| Skilltree bei Türmen? | offen | Idee, noch nicht beschlossen: erst Konzept, dann ggf. nach `IDEEN.md` |
+| Grafikupdates für Türme | offen | Kenney-Sprites, graue Sprites werden je Element eingefärbt (`tinted`) |
+| Edelsteine überarbeiten | offen | Anlass: Testspiel 14.10. (Amethyst auf Fluchsteinen Stufe 1, die Fliegende nicht treffen); Stein-Liste bleibt bei L oder F |
 | Firestore-Regeln setzen | L | **vor ca. 09.11.**, sonst stoppt das Online-Spiel (README) |
 | Türme 4–8 abgleichen | offen | nur Türme 1–3 per Simulation geprüft |
 | Monster 21–40 ausdenken | offen | Spiel ist auf 40 Runden ausgelegt |
