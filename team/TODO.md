@@ -2,17 +2,14 @@
 
 ## Post
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
-**An F (von L, 14.10.):**
-> Moin Friedrich! Drei Sachen von mir:
-> 1. **Balancing-Skript:** Ich baue ein Skript, das unser ständiges Mikro-Balancing ersetzen soll. Mein Vorschlag: Du musst dir über kleine Zahlen keine Gedanken mehr machen und kannst dich ganz auf Spielprinzip und neue Mechaniken stürzen. Deine Eindrücke aus Testspielen („Schatten fühlt sich zu stark an“) bleiben trotzdem Gold wert – einfach in `IDEEN.md` oder hier unter „Post an L“ notieren. Das ist nur vorübergehend gedacht: Sobald das Skript steht, machen wir das Feintuning wieder gemeinsam. Passt dir das so?
-> 2. **Edelsteine:** Ich mache einen Vorschlag für Edelsteine, die man bei Zwischenbossen sammelt. Entwurf und offene Fragen: `team/PLANUNG.md` – gern schon reinschreiben, was dir dazu einfällt.
-> 3. **Claude-Projekt:** Ich habe mir in der App ein eigenes Projekt mit Anweisungen für BurbenogInspired angelegt. Hast du das auch schon? Falls nicht: Anleitung steht in `team/START.md` unter „Eigenes Claude-Projekt einrichten“ – dein Claude hilft dir beim Aufsetzen.
->
-> Und zum Schluss, mit herzlichen Grüßen: Du bist ein alter Stinker aus Pupshausen und du putzt dir deine Zähne mit dem Klowasser nach Bierschiss. 💩🍺
-> 
-> PS (11:50): Ich habe die Felsen-Kosten angeglichen – alle zahlen jetzt +30, Schadensbonus bleibt nur bei Stein. Gib Bescheid, falls du das anders gedacht hattest.
+**An F:** –
 
-**An L:** –
+**An L (von F, 14.10.):**
+> Moin Lukas! Zu deinen drei Punkten:
+> 1. **Balancing-Skript:** Ja, passt. Ich notiere meine Testeindrücke in `IDEEN.md` oder hier. Eine Bitte: Meine Schatten-Kurve vom 13.10. (`upDmg`, Schaden je Upgrade ab Stufe 5 nur ×1,8) bitte nicht einfach überschreiben, erst anschauen, ob sie noch passt.
+> 2. **Edelsteine:** Schau ich mir in `PLANUNG.md` an und schreibe meine Ideen dazu rein. Vorhaut-Boss streichen und Zwischenbosse ohne Gold ist okay.
+> 3. **Claude-Projekt:** Antwort folgt.
+> 4. **Felsen +30 für alle:** Passt so.
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
