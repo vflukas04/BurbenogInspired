@@ -207,7 +207,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -540,7 +540,7 @@ function gemMods(d, ab){
   const F = [
     [ () => d.explode = { r:0.8*R, mul:1 },  () => d.burnStack = 2,  () => d.range *= 1.5,
       () => { if (d.air) { d.air = false; d.groundHalf = true; } else if (!d.hitsFly) { d.hitsFly = true; d.flyHalf = true; } },
-      () => d.smolder = 0.15,  () => d.pool = { r:Math.max(d.splash, 0.9*R), t:4, dpsMul:0.4 },  () => d.bounce = { r:1.5*R, mul:0.6 },  () => d.burnImmune = true ],
+      () => d.smolder = 0.15,  () => d.pool = { r:Math.max(d.splash, 0.9*R), t:4, dpsMul:0.2 },  () => d.bounce = { r:1.5*R, mul:0.6 },  () => d.burnImmune = true ],
     [ () => d.explode = { r:0.8*R, mul:1 },  () => { d.splash = d.splash ? d.splash * 1.5 : 0.6*R; d.slowFly = true; },  () => { d.groundHit = 2; d.hitsFly = true; },  () => d.brittle = 4,
       () => { d.eff *= 1.5; d.hitsFly = true; },  () => { d.lance = true; if (d.nova) { d.nova = false; d.splash = 0; } },
       () => { if (d.splash) d.splash *= 1.5;

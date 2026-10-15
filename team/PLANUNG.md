@@ -94,7 +94,7 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 
 **Fähigkeit frei wählbar (F, 15.10., VERSION 2026-10-15e):** Mit dem Stein wählt man eine der 8 Fähigkeiten des Elements für **einen beliebigen Turm** des Elements (vorher: Turmnummer = Fähigkeit). Damit jede Fähigkeit auf jedem Turm etwas tut, wurden einige angepasst:
 - Feuerregen: Luftabwehr trifft auch Boden, Bodenturm (Glutbecken, Lavaturm) auch Fliegende, jeweils halber Schaden; gesperrt bei Türmen, die schon beides treffen.
-- Lavapfütze: mindestens kleiner Kreis (0,9 Felder), auch ohne Fläche. Großer Ball: ohne Fläche kleine Fläche (0,6). Großer Sturm: +60 % Geschosse (mindestens +1) statt „8 Geschosse“; Frostnova 50 % öfter. Durchbohren: Frostnova wird zum Speer.
+- Lavapfütze: Schaden/s = 0,2 × Turm-Schaden/s (15.10. F: vorher 0,4), mindestens kleiner Kreis (0,9 Felder), auch ohne Fläche. Großer Ball: ohne Fläche kleine Fläche (0,6). Großer Sturm: +60 % Geschosse (mindestens +1) statt „8 Geschosse“; Frostnova 50 % öfter. Durchbohren: Frostnova wird zum Speer.
 - Absturz und Flügelbruch: Turm trifft zusätzlich Fliegende. Steilschuss: gesperrt bei Türmen, die Fliegende schon treffen.
 - Mottenplage: Radius = Lichtkreis (Irrlicht) oder 1,6 Felder. Irrlicht kann nur Mottenplage bekommen (schießt nicht).
 - Erschütterung: +10 Punkte Betäubungschance, mindestens 2 s. Gipfelstoß: +15 Punkte (ohne Betäubung 1,5 s). Nachbeben und Prellstein wirken auch bei Wurf-/Beben-Türmen, Geröll auch beim Erdbeben.
