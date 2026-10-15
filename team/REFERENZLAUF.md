@@ -27,3 +27,31 @@ Schatten (1617 Gold, Forschung cheap:1): Schemen S6 4,8 (204) · Schemen S2 10,1
 
 ## Einzelfeld-Schätzung (Simulator, gleiches Gold, nur eigenes Feld, Tag 14/17/19)
 Anteil der erreichbaren Stärke: Feuer ca. 63 % (53 % ohne Edelsteine), Schatten ca. 83 % (77 %). Pfadabdeckung der Türme: Feuer ca. 70 %, Schatten ca. 79 % der besten Lage. Auffällig: viele Upgrades auf Stufe 6 statt billige Türme nah am Weg. Grobe Schätzung, Zeitpunkte der Käufe nicht messbar.
+
+---
+
+# Lauf 2: Schatten + Feuer, 2 Spieler (15.10.2026 22:27, Version 15m) – Sieg mit 2 Durchbrüchen
+
+Ausgelesen aus Firestore kurz vor dem Überschreiben durch das nächste Spiel (Tag 1–8 im Log waren schon weggekürzt, Log hält nur ca. 60 Einträge). Beide Durchbrüche fielen vor Tag 9. Gold verdient: 1723 / 1731. Kills 371 / 395. Spieler 1 Schatten, Spieler 2 Feuer, Testmodus.
+
+## Treffer in der eigenen 10-Uhr-Welle (von 20), Tag 9–22
+| Tag | Monster | Schatten (S1) | Feuer (S2) |
+|---|---|---|---|
+| 9 | Katzen | 7 | 5 |
+| 10 | Spatzen | 19 | 13 |
+| 11 | Füchse | 11 | 20 |
+| 13 | Habichte | 10 | 20 |
+| 14 | Dachse | 6 | 20 |
+| 15 | Oktopusse | 20 | 3 |
+| 16 | Wildschweine | 20 | 17 |
+| 17 | Schäferhunde | 15 | 20 |
+| 19 | Besoffene Penner | 14 | 9 |
+| 20 | Wütende Partnerin | 20 | 15 |
+| 21 | Wütende Nachbarn | 20 | 20 |
+| 22 | Uffug-Vorhaut | 20 | 20 |
+Summe 182/240 = 76 % bei beiden (Lauf 1: 75 % / 78 %). Alle 116 durchgelassenen Monster fing der Partner um 19:00 ab (0 Durchbrüche in Tag 9–23). Bosse: Tag 12 beide selbst besiegt; Tag 18 und 23 kam der Feuer-Boss durch und Schatten besiegte ihn (Schatten besiegte 5 von 6 Bossen).
+
+## Endaufbau (Stufe, Ort x,y; investiertes Gold; Forschung beider: cheap:1, el2:1, el2:2, el0:1, el0:2, gold:1, t5:1)
+Schatten (1374 Gold, Pfadabdeckung 75 %): Schemen S6 6,10 (200, Edelstein Fähigkeit 0) · Funke S6 7,10 (200, per Stein umgewandelt) · Irrlicht S5 5,10 (373) · Nachtauge S3 8,9 (314, Edelstein Fähigkeit 6) · Fluchstein S2 6,11 (287, Edelstein Fähigkeit 7).
+Feuer (1557 Gold, Pfadabdeckung 98 %): Funke S4 6,3 (62) · Schemen S6 8,4 (162, umgewandelt) · Funke S6 8,11 (156) · Funke S5 7,8 (100) · Glutbecken S4 6,6 (343, Fähigkeit 2) · Flammenwerfer S4 7,5 (534, Fähigkeit 6) · Schwelbrand S1 8,6 (200).
+Auffällig: 4 von 12 Türmen sind Turm 1 auf Stufe 6; Turm 5 (Schwelbrand) nur Stufe 1 trotz 250 Gold Freischaltung; beide Felder haben je einen Turm des anderen Elements (Umwandlung).
