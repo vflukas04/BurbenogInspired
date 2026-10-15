@@ -1,12 +1,14 @@
 # Updates (neueste oben, höchstens 15 Einträge)
 
-Format: `### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
-- Neues Banner über dem Spielfeld: am Vortag und vor der 10-Uhr-Welle (Tag 10 Spatzen, 13 Habichte, 22 Uffug-Vorhaut) steht, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat (rot bei weniger als 2). Anlass: Testspiel verloren an Tag 13 mit ca. 200 ungenutztem Gold. Keine Balance-Änderung.
+Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
 ### 15.10. 01:50 · L · 2026-10-15d – Schatten- und Stein-Fähigkeiten final, Wurf-Korridor
 - Schatten: Schemen Angst, Irrlicht Mottenplage (Motten im Lichtkreis schaden), Nachtauge Nachtjäger (×1,5 + Nachtsicht), Hunger +20 %/Kill bis +200 %, Geisterpfeile ganze Rüstung, Ewige Nacht Tiefe Nacht (Fluch addiert sich).
 - Stein: Prellstein hüpft an der Stelle nach (60/30 %), Steilschuss voller Schaden, Erschütterung 2 s, Weitwurf Fläche +20 %, Granitwächter Flügelbruch.
 - Wurfgeschwindigkeit im Korridor (`lobSpeedOf`): einige Würfe langsamer, Katapult schneller. F: deine Boss-Halbierung (`bh`) ist übernommen. Neues Spiel + neu laden.
+
+### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
+- Neues Banner über dem Spielfeld: am Vortag und vor der 10-Uhr-Welle (Tag 10 Spatzen, 13 Habichte, 22 Uffug-Vorhaut) steht, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat (rot bei weniger als 2). Anlass: Testspiel verloren an Tag 13 mit ca. 200 ungenutztem Gold. Keine Balance-Änderung.
 
 ### 14.10. 23:50 · F · 2026-10-15b – Edelsteine bei Bossen nur halb
 - Gegen Zwischenbosse und Endboss wirken die zahlenbasierten Edelstein-Fähigkeiten halb: Schwelglut (+15 %), Glutnest (Stapel), Haut vereist, Granitwächter (Rüstungsschaden ×2), Hunger, Schatten-Durchdringen (Turm 6). Schon vorher halb: Eisblock, Absturz, Angst, Todesstoß. Ungeändert: Explosionen/Sprünge/Pfützen. Neues Spiel + neu laden.
@@ -15,8 +17,6 @@ Format: `### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
 - Neue Forschung im Elementlabor, 3 Stufen (20/35/50 Gold): ab Runde 6 bremst jeder Stein-Turm alle Monster in seiner Reichweite um 18/25/32 % – auch Fliegende, ohne dass er trifft (`brk`, Stärkstes zählt). Gedacht gegen das Tempo-/Spatzen-Problem von Stein.
 - Bot-Messung (20 Läufe je Spiel, mit Edelsteinen): Siege 57 → 65 von 160, Stein 12 → 20 von 80; fast alles aus Feuer+Stein (5 → 13 von 20). Eis+Stein und Schatten+Stein unverändert (sterben vor Runde 6–7). Nur Tendenz.
 - Als Nächstes: Feuer evtl. abschwächen (profitiert am meisten). Neues Spiel + neu laden.
-
-### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
 ### 14.10. 17:40 · L · 2026-10-14c – Edelsteine, Forschung in Stufen, Optik-Paket
 - Edelsteine: Zwischenbosse (jetzt nur Tag 6/12/18, Vorhaut-Boss gestrichen, 23 Tage) geben kein Gold, sondern einen Stein in der Farbe des tötenden Turms; Endboss Gold + Stein. Einsatz: Fähigkeit (32, je Turm eine) oder Umwandeln in anderes Element. Schenken ohne Gebühr.
