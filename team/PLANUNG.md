@@ -112,3 +112,6 @@ Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wi
 
 ## Edelsteine = kleiner Buff (F, 15.10., 2026-10-15g)
 Richtwert: eine Fähigkeit bringt ≈ +15 % (Tag 5: +1 Kill bei 6–7). Gedämpft: Eis Großer Ball/Sturm, Eisblock 0,35 s, Haut vereist 3 s, Schatten Nachtjäger ×1,25, Stein Prellstein [0,3/0,15], Reichweite +0,5 Felder/Fläche +10 %, Nachbeben 0,25. Messung grob, bitte im echten Spiel prüfen.
+
+## Schwache Tage Runde 2–5 (F, 15.10., 2026-10-15k)
+Ziel: je Element ein Tag mit Gold-Bedarf ≈ 1,5 (Bot `bedarf`). Faktoren: Schatten/Kellerasseln 1,05, Feuer/Nacktschnecken 0,9, Eis/Ohrenkneifer 1,1, Stein/Mäuse 0,7. Silberfische Tempo 1,0 (Stein war an Tag 1 doppelt so teuer wie die anderen).

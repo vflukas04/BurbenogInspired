@@ -2,6 +2,11 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 15.10. 18:40 · F · 2026-10-15k – Schwache Tage in Runde 2–5 auf Gold-Bedarf 1,5
+- Pro Element ein bewusst schwacher Tag (Bot `bedarf` ≈ 1,5): Schatten Kellerasseln (Faktor 1,05, vorher 1), Feuer Nacktschnecken (0,9, vorher 1), Eis Ohrenkneifer (1,1, vorher 0,8; Messwert 1,6), Stein Mäuse (0,7, vorher 1). Die Regel „je Runde ein Bonus/Malus ±20 %" gilt in Block 1 damit nicht mehr streng.
+- Stein 0,7 liegt knapp unter der bisherigen Spanne (0,75–1,75). Werte sind Bot-Tendenzen, bitte im Spiel prüfen.
+- Neues Spiel + neu laden.
+
 ### 15.10. 17:45 · F · 2026-10-15j – Silberfische langsamer
 - Silberfische Tempo 1,2 → 1,0. Grund: Stein brauchte an Tag 1 ca. das Doppelte an Gold (Bot `bedarf`: 1,9 gegen 0,8–0,9), weil geworfene Steine schnelle Ziele schlecht treffen. Mit 1,0 liegen alle Elemente bei 0,7–0,8. Kiesel-Kosten/-Schaden waren nicht der Hebel.
 - Noch offen (Vorschlag, nicht eingebaut): Faktoren Block 1 neu verteilen (Stein-Malus von Runde 3 auf Runde 5), Schatten Tag 2/3 schwach (1,9/1,6, Rüstung der Kellerasseln).
@@ -60,8 +65,4 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 ### 14.10. 00:15 · F · 2026-10-14a – Felsen sehen aus wie kleine Berge
 - Felsen-Felder werden als kleiner Berg mit Schneekappe gezeichnet. Türme auf Felsen tragen oben rechts ein kleines Berg-Symbol (gelber Rand).
 - Nur Optik, keine Regeländerung. Auf dem Handy prüfen, ob das Symbol bei kleinen Feldern gut erkennbar ist (nicht per Screenshot getestet).
-
-### 13.10. 00:10 · F · 2026-10-13d – Schatten: flachere Schadenskurve ab Stufe 4
-- Schaden je Upgrade bei Schatten: Stufe 2/3/4 wie bisher (×2,2 / ×2,1 / ×2,1), Stufe 5 und 6 nur ×1,8 (`ELEMENTS.Schatten.upDmg`). Stufe 6 ca. −27 % gegenüber vorher, Stufe 5 −14 %, Stufe 4 und darunter unverändert.
-- Grund (F): Schatten ist ab Runde 10 zu stark (Irrlicht-Verstärkung ×1,8 + ignoriert Rüstung). Der Bot spielt ohne hohe Stufen und zeigt die Änderung nicht. Im echten Spiel beobachten. Neues Spiel + neu laden.
 
