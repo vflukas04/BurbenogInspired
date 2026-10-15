@@ -58,6 +58,12 @@ Gedreht wird nacheinander in Schleifen (Elemente → Kurve → Türme → wieder
 - Erkenntnis 16.10.: Die Kill-Kurve hat Kipppunkte (Eis zu zweit: Faktor 0,94 → 18 Kills, 0,97 → 7). Ein Ziel mit fester Kill-Schwelle lässt die Suche auf solche Kanten optimieren. Nächster Schritt: glattere Bewertung (Mittel über mehrere Schwellen bzw. Schadensanteil) + lokale Verbesserung. Spiegel-Prinzip: Änderungsvorschläge werden nur im Speicher an der geladenen Simulation getestet, nie in `index.html` geschrieben.
 - Idee „Lernen“: kein neuronales Netz (zu wenig Daten), sondern ein Wissensspeicher bester Aufstellungen (Warmstart für die nächste Suche) und für den Endboss-Prüfpunkt eine stärkere evolutionäre Suche (mehr Rechenzeit, Ergebnis wird gespeichert).
 
+## Grundsätze (L, 16.10.)
+- **Spiegel-Spiel:** Änderungen werden beim Durchwandern der Prüfpunkte im Spiegel fortlaufend hinterlegt (eigene Datei mit Änderungen, z. B. `tools/balance/spiegel.json`, auf die geladene Simulation angewandt). Ins Spiel kommt erst ein abgesegnetes Paket.
+- **Suche optimiert auf das Optimum, nicht auf das Ziel:** Die Suche bewertet ohne Kill-Schwelle (glatt: Schaden/Reserve), danach wird gemessen, wie viele Kills die beste Aufstellung schafft. Erst dann zählen Zielwerte wie 12/8/6 – beim Nerfen/Buffen.
+- **Lernen:** Wissensspeicher bester Aufstellungen (`tools/balance/wissen.json`); jede Suche startet von der bisher besten und übernimmt bessere Funde, damit die Aufstellungen besser werden und am Ende wenig schwanken.
+- 12/8/6 bleibt vorerst Maßgabe; später lockerbar, wenn viel Schaden gemacht wird und Leaks nicht mit vollem Leben weiterlaufen.
+
 ## Plan
 1. Grundgerüst: Simulation laden, Reservefaktor, Testkarte, Bauplatz-Maske.
 2. Aufstellungssuche (gierig + lokale Verbesserung), Nebenbedingungen.

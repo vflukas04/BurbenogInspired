@@ -32,7 +32,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- L · Balancing-Skript (`tools/balance/`, `team/BALANCING.md`) · seit 15.10. 23:50 – bitte keine Zahlen drehen, siehe Post
+- (niemand)
 
 ## Als Nächstes
 | Was | Wer | Notiz |
@@ -40,7 +40,7 @@
 | Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-15d) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
 | Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
-| Balancing-Skript bauen (ersetzt Mikro-Balancing) | L | Verfahren in `team/BALANCING.md` (Prüfpunkte P1–P13) |
+| Balancing-Skript bauen (ersetzt Mikro-Balancing) | L | Verfahren in `team/BALANCING.md` (Prüfpunkte P1–P13). Stand 16.10.: Grundgerüst + P1. Nächstes: glatte Bewertung, lokale Verbesserung, Wissensspeicher, Spiegel-Datei, Forschung/Edelsteine, P2/P4/P5. Balance-Pause gilt weiter |
 | Fähigkeit frei wählbar (15e) besprechen | L + F | L ist dagegen: Fähigkeiten sind auf Türme zugeschnitten |
 | Schwierigkeitsstufen beim Spielstart | L | Faktor auf Monsterleben/-rüstung, Werte aus dem Balancing-Skript |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
