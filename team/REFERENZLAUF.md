@@ -22,7 +22,7 @@ Erster Sieg (Tag 23, 11 von 30 Durchbrüchen). Dient als Maßstab für spätere 
 Bosse: Tag 12 beide, Tag 18 nur Schatten, Tag 23 beide (am Partner, 19 Uhr). Der Partner fing in Tag 9–23 jeden Leak auf.
 
 ## Endaufbau (Stufe, Ort x,y; investiertes Gold)
-Feuer (1203 Gold, Forschung t5:1): Funke S6 5,6 (162, Edelstein Fähigkeit 7) · Funke S2 9,1 (20) · Schemen S6 4,9 (187, durch Stein umgewandelt) · Funke S6 12,9 (162) · Funke S3 9,13 (38) · Flammenwerfer S3 11,6 (314, Edelstein Fähigkeit 6) · Lavaturm-Reihe: Turm 4 S1 5,8 (120) · Turm 5 S1 5,4 (200)
+Feuer (1203 Gold, Forschung t5:1): Funke S6 5,6 (162, Edelstein Fähigkeit 7) · Funke S2 9,1 (20) · Schemen S6 4,9 (187, durch Stein umgewandelt) · Funke S6 12,9 (162) · Funke S3 9,13 (38) · Flammenwerfer S3 11,6 (314, Edelstein Fähigkeit 6) · Brandpfeil S1 5,8 (120) · Schwelbrand S1 5,4 (200)
 Schatten (1617 Gold, Forschung cheap:1): Schemen S6 4,8 (204) · Schemen S2 10,12 (25) · Schemen S6 6,4 (209, Edelstein) · Irrlicht S3 5,6 (135) · Nachtauge S3 7,4 (314, Edelstein) · Irrlicht S2 8,3 (72) · Fluchstein S1 6,5 (120) · Fluchstein S3 7,3 (538, Edelstein)
 
 ## Einzelfeld-Schätzung (Simulator, gleiches Gold, nur eigenes Feld, Tag 14/17/19)
