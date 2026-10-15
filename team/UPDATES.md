@@ -2,6 +2,10 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 16.10. 00:30 · L · (kein Spielcode) – Balancing-Skript: Grundgerüst
+- `tools/balance/`: lädt die Simulation direkt aus `index.html`, Testkarte, Reservefaktor, Bauplatz-Maske, gieriger Aufbau. Aufruf: `node tools/balance/run.js p1` bzw. `maske`.
+- Erster Prüfpunkt P1 (Start, Runde 1): Feuer zu stark (17 statt 12 von 20 zu zweit), Stein zu schwach (6). Noch keine Zahlen geändert – Vorschläge kommen gesammelt.
+
 ### 15.10. 23:59 · F · 2026-10-15t – „Nichts im Anmarsch"-Wellen werden übersprungen
 - Im Uhrzeiten-Modus fällt eine Welle weg, wenn bei keinem Spieler etwas ankommt (nur Leaks der Vorwelle zählen). Die Chronik vermerkt „übersprungen"; folgen nur leere Wellen, geht es direkt zum nächsten Tag (oder zum Sieg).
 - Live-Modus unverändert. Regeländerung im Ablauf: neu laden, laufende Spiele sind nicht betroffen, bis die nächste Welle ausgewertet wird.
@@ -63,7 +67,3 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 
 ### 15.10. 13:10 · F · 2026-10-15f – Lavapfütze schwächer
 - Lavapfütze macht 20 % statt 40 % des Turm-Schadens/s (Wunsch F, nach freier Fähigkeitswahl wirkt sie auf jedem Turm). Sonst nichts geändert. Neues Spiel + neu laden.
-
-### 15.10. 12:50 · F · 2026-10-15e – Edelstein-Fähigkeit frei wählbar
-- Mit dem Stein wählt man eine der 8 Fähigkeiten des Elements für einen beliebigen Turm des Elements (Auswahlliste im Edelstein-Dialog). Alte Steine behalten die Fähigkeit ihrer Turmnummer.
-- Einige Fähigkeiten für jeden Turm angepasst (Liste in `PLANUNG.md`), sinnlose Kombinationen sind gesperrt (Irrlicht nur Mottenplage u. a.). Alle 241 möglichen Kombinationen laufen ohne Fehler durch die Simulation, Balance nicht gemessen. Neues Spiel + neu laden.

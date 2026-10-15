@@ -36,7 +36,7 @@ Optimal ist das nie bewiesen („beste gefundene“). Ist das Spiel am Ende zu l
 | P9 | Edelsteine | die 3 besten Fähigkeiten je Element liegen nah beieinander |
 | P10 | Forschung | lohnt sich zu passenden Zeitpunkten (früh dürfen Türme besser sein) |
 | P11 | Kartenvarianz | < 5 % ignorieren, > 15 % ins Verfahren aufnehmen |
-| P12 | Gier-Lücke: gieriger Aufbau vs. verbesserter | spürbar (Idee L: Gier soll nicht die beste Strategie sein) |
+| P12 | Gier-Lücke (nur im Pfadtest): gieriger Vorwärts-Aufbau vs. verbesserter | spürbar (L: Gier soll nicht die beste Strategie sein); bei Einzeltests je Stufe ist gierig + Verbesserung einfach das Suchverfahren |
 | P13 | Eichung an echten Spielen (`tools/archiv.js`, `REFERENZLAUF.md`) | Abstand Skript ↔ echt bestimmt die Korridore |
 
 ## Korridore = Schwierigkeitsstufen
@@ -51,6 +51,10 @@ Spielt man die beste gefundene Aufstellung, bleibt am Endboss je Stufe eine Rese
 | Fähigkeitswerte | knappe Edelstein-Wahl | P9 |
 | Spielerfaktor 3/4 | mehr Spieler | P2/P4 mit 3/4 |
 Gedreht wird nacheinander in Schleifen (Elemente → Kurve → Türme → wieder von vorn), bis sich nichts mehr bewegt.
+
+## Stand
+- 16.10. (L): Grundgerüst in `tools/balance/`: `sim.js` (lädt die Simulation aus `index.html`), `core.js` (Testkarte, Reservefaktor, Bauplatz-Maske), `build.js` (gieriger Aufbau), `run.js` (Aufruf). `node tools/balance/run.js p1` prüft P1 in ~5 s.
+- Erstes Ergebnis P1 (Version 15t, beste Startaufstellung, Runde 1, Kills von 20; Ziel 12/8/6): Feuer 17/12/4 · Eis 7/9/4 · Schatten 14/8/3 · Stein 6/4/2. Feuer startet zu stark, Stein zu schwach. Noch nichts geändert.
 
 ## Plan
 1. Grundgerüst: Simulation laden, Reservefaktor, Testkarte, Bauplatz-Maske.
