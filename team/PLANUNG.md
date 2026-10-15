@@ -92,6 +92,14 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 
 **Standard-Fähigkeiten (L, 14.10.):** Es dürfen auch viele schlichte Verbesserungen dabei sein: doppelter Schaden, +50 % Reichweite, doppelte Schussrate. Bei Stein z. B.: Geschoss wird nicht geworfen, sondern schlägt direkt ein bzw. zielt dorthin, wo das Monster ankommt (Zielvorhersage). Beim weiteren Durchgehen schwache Spezial-Fähigkeiten durch Standards ersetzen.
 
+**Fähigkeit frei wählbar (F, 15.10., VERSION 2026-10-15e):** Mit dem Stein wählt man eine der 8 Fähigkeiten des Elements für **einen beliebigen Turm** des Elements (vorher: Turmnummer = Fähigkeit). Damit jede Fähigkeit auf jedem Turm etwas tut, wurden einige angepasst:
+- Feuerregen: Luftabwehr trifft auch Boden, Bodenturm (Glutbecken, Lavaturm) auch Fliegende, jeweils halber Schaden; gesperrt bei Türmen, die schon beides treffen.
+- Lavapfütze: mindestens kleiner Kreis (0,9 Felder), auch ohne Fläche. Großer Ball: ohne Fläche kleine Fläche (0,6). Großer Sturm: +60 % Geschosse (mindestens +1) statt „8 Geschosse“; Frostnova 50 % öfter. Durchbohren: Frostnova wird zum Speer.
+- Absturz und Flügelbruch: Turm trifft zusätzlich Fliegende. Steilschuss: gesperrt bei Türmen, die Fliegende schon treffen.
+- Mottenplage: Radius = Lichtkreis (Irrlicht) oder 1,6 Felder. Irrlicht kann nur Mottenplage bekommen (schießt nicht).
+- Erschütterung: +10 Punkte Betäubungschance, mindestens 2 s. Gipfelstoß: +15 Punkte (ohne Betäubung 1,5 s). Nachbeben und Prellstein wirken auch bei Wurf-/Beben-Türmen, Geröll auch beim Erdbeben.
+Offen: Balance (starke Fähigkeit auf billigem Turm, z. B. Hunger oder Geisterpfeile auf Turm 1).
+
 **Weitere Idee (L):** „Explosion bei Tod durch Brennen“ – nur für langsam schießende Türme, nicht zwingend Feuer.
 
 Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wie stark*. Einige verbinden Elemente (Absturz hilft Stein gegen Fliegende, Sprödes Eis hilft Stein, Leuchtfeuer hilft allen). 18 sind leicht, 14 nutzen 5 neue Bausteine (Tod-Auslöser, Bodenfeld, Sprung, Aura, Einzelfälle) – mit den Bausteinen kommt der Rest schnell.

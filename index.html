@@ -207,7 +207,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -362,21 +362,21 @@ const ABILITIES = [
   [ ['Zündschnur', 'Stirbt ein Monster durch einen Schuss, explodiert es: Schaden im Umkreis 1,6 und setzt in Brand'],
     ['Glutnest', 'Brand stapelt sich bis doppelt so stark'],
     ['Weite Flamme', 'Reichweite +50 %'],
-    ['Feuerregen', 'trifft auch Bodenmonster (halber Schaden)'],
+    ['Feuerregen', 'trifft auch die andere Zielart mit halbem Schaden (Luftabwehr den Boden, Bodenturm die Fliegenden); nicht bei Türmen, die schon beides treffen'],
     ['Schwelglut', 'Monster, die durch diesen Turm brennen, nehmen +15 % Schaden von allen Türmen'],
-    ['Lavapfütze', 'Einschlagstelle bleibt 4 s Lava: Schaden und Brennen (Pfützen zählen nicht doppelt)'],
+    ['Lavapfütze', 'Einschlagstelle bleibt 4 s Lava: Schaden und Brennen (Pfützen zählen nicht doppelt; ohne Fläche kleiner Kreis)'],
     ['Phönixflug', 'Geschoss springt nach dem Treffer aufs nächste Monster (60 % Schaden)'],
     ['Fegefeuer', 'Brand wirkt auch auf feuer-immune Monster (halb so stark)'] ],
   [ ['Zersplittern', 'Stirbt ein Monster durch einen Schuss, zersplittert es: Schaden und Verlangsamung im Umkreis 1,6'],
-    ['Großer Ball', 'Fläche +50 %, verlangsamt auch Fliegende'],
-    ['Absturz', 'getroffene Fliegende fallen 2 s zu Boden: dann treffen sie alle Türme und Verlangsamung wirkt'],
+    ['Großer Ball', 'Fläche +50 % (ohne Fläche: kleine Fläche), verlangsamt auch Fliegende'],
+    ['Absturz', 'der Turm trifft Fliegende; getroffene fallen 2 s zu Boden: dann treffen sie alle Türme und Verlangsamung wirkt'],
     ['Haut vereist', '4 s lang trifft der Rüstungsschaden aller Türme zusätzlich die Leben'],
-    ['Dauerfrost', 'friert 50 % länger ein, trifft auch Fliegende'],
-    ['Durchbohren', 'Speer fliegt in gerader Linie über die ganze Karte und trifft alles darauf'],
-    ['Großer Sturm', 'Fläche +50 %, 8 statt 5 Geschosse'],
+    ['Dauerfrost', 'Effekt +50 % stärker, trifft auch Fliegende'],
+    ['Durchbohren', 'Speer fliegt in gerader Linie über die ganze Karte und trifft alles darauf (Frostnova wird zum Speer)'],
+    ['Großer Sturm', 'Fläche +50 %, +60 % Geschosse je Salve (mindestens +1); Frostnova: 50 % öfter'],
     ['Eisblock', 'Treffer auf schon verlangsamte Monster frieren sie 0,5 s ein (Bosse 0,25 s)'] ],
   [ ['Angst', '10 % je Treffer: Monster läuft 1,5 s rückwärts (Bosse 0,75 s)'],
-    ['Mottenplage', 'im Lichtkreis schwirren Motten und treffen bis zu 3 Monster (Schaden wächst mit der Stufe)'],
+    ['Mottenplage', 'um den Turm schwirren Motten und treffen bis zu 3 Monster (Schaden wächst mit der Stufe; Irrlicht: im ganzen Lichtkreis)'],
     ['Nachtjäger', 'schießt 50 % schneller und trifft nachtaktive Monster nachts auch ohne Irrlicht'],
     ['Fluchwelle', 'stirbt ein so verfluchtes Monster, springt der Fluch auf 2 Nachbarn'],
     ['Hunger', '+20 % Schaden je Kill dieses Turms in dieser Welle (höchstens +200 %)'],
@@ -384,13 +384,13 @@ const ABILITIES = [
     ['Todesstoß', '3 % je Treffer: Monster stirbt sofort (Bosse: −5 % ihrer Leben)'],
     ['Tiefe Nacht', 'Fluch addiert sich zu anderen Flüchen (sonst zählt nur der stärkste)'] ],
   [ ['Prellstein', 'hüpft an derselben Stelle zweimal nach (60 % und 30 % Schaden)'],
-    ['Steilschuss', 'trifft auch Fliegende'],
-    ['Erschütterung', '10 % Chance, 2 s zu betäuben (Bosse 1 s)'],
+    ['Steilschuss', 'trifft auch Fliegende (nicht bei Türmen, die sie schon treffen)'],
+    ['Erschütterung', '+10 Punkte Betäubungschance, mindestens 2 s (Bosse 1 s)'],
     ['Weitwurf', 'Reichweite +2, Fläche +20 %'],
-    ['Nachbeben', 'nach 1 s ein zweites Beben mit 50 % Schaden'],
-    ['Flügelbruch', '10 % je Treffer (Bosse 5 %): Fliegender stürzt ab und bleibt bis Wellenende am Boden, dort 30 % langsamer'],
+    ['Nachbeben', 'nach 1 s ein zweiter Einschlag/Beben mit 50 % Schaden'],
+    ['Flügelbruch', 'der Turm trifft Fliegende; 10 % je Treffer (Bosse 5 %): Fliegender stürzt ab und bleibt bis Wellenende am Boden, dort 30 % langsamer'],
     ['Geröll', 'Einschlagstelle bremst 3 s lang um 30 %'],
-    ['Gipfelstoß', 'Betäubungschance +15 Prozentpunkte'] ]
+    ['Gipfelstoß', 'Betäubungschance +15 Punkte (ohne Betäubung: 1,5 s)'] ]
 ];
 /* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
    Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und kein Effekt-Brennen.
@@ -531,26 +531,40 @@ function tdef(tw, lane){
   const d = { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
     chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buffArr ? b.buffArr[Math.min(n, b.buffArr.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
     dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n, onRock:false };
-  if (tw.gem) gemMods(d);
+  if (tw.gem) gemMods(d, tw.ab !== undefined ? tw.ab : tw.idx);   // Fähigkeit frei wählbar (15.10., F): ab = Nummer 0–7; alte Steine ohne ab → Fähigkeit der Turmnummer
   return lane !== undefined && tw.x !== undefined && MAPS[lane].terrain[tw.y][tw.x] === 3 ? onRock(d) : d;
 }
 // Edelstein-Fähigkeit: verändert die Turmwerte oder setzt Merkmale, die die Simulation auswertet
-function gemMods(d){
-  d.gem = true; const R = GRID;
+function gemMods(d, ab){
+  d.gem = true; d.gemAb = ab; const R = GRID;
   const F = [
-    [ () => d.explode = { r:0.8*R, mul:1 },  () => d.burnStack = 2,  () => d.range *= 1.5,  () => { d.air = false; d.groundHalf = true; },
-      () => d.smolder = 0.15,  () => d.pool = { r:d.splash, t:4, dpsMul:0.4 },  () => d.bounce = { r:1.5*R, mul:0.6 },  () => d.burnImmune = true ],
-    [ () => d.explode = { r:0.8*R, mul:1 },  () => { d.splash *= 1.5; d.slowFly = true; },  () => d.groundHit = 2,  () => d.brittle = 4,
-      () => { d.eff *= 1.5; d.hitsFly = true; },  () => d.lance = true,  () => { d.splash *= 1.5; d.dpsNow *= 8 / d.shots; d.shots = 8; },  () => d.iceBlock = 0.5 ],
+    [ () => d.explode = { r:0.8*R, mul:1 },  () => d.burnStack = 2,  () => d.range *= 1.5,
+      () => { if (d.air) { d.air = false; d.groundHalf = true; } else if (!d.hitsFly) { d.hitsFly = true; d.flyHalf = true; } },
+      () => d.smolder = 0.15,  () => d.pool = { r:Math.max(d.splash, 0.9*R), t:4, dpsMul:0.4 },  () => d.bounce = { r:1.5*R, mul:0.6 },  () => d.burnImmune = true ],
+    [ () => d.explode = { r:0.8*R, mul:1 },  () => { d.splash = d.splash ? d.splash * 1.5 : 0.6*R; d.slowFly = true; },  () => { d.groundHit = 2; d.hitsFly = true; },  () => d.brittle = 4,
+      () => { d.eff *= 1.5; d.hitsFly = true; },  () => { d.lance = true; if (d.nova) { d.nova = false; d.splash = 0; } },
+      () => { if (d.splash) d.splash *= 1.5;
+              if (d.nova) { d.rate *= 1.5; d.dpsNow *= 1.5; } else { const ns = Math.max(d.shots + 1, Math.round(d.shots * 1.6)); d.dpsNow *= ns / d.shots; d.shots = ns; } },
+      () => d.iceBlock = 0.5 ],
     [ () => d.fear = { chance:0.1, t:1.5 },
-      () => { let m = TOWER_POWER[1] * 0.5; for (let k = 0; k < d.lvl - 1; k++) m *= ELEMENTS[2].upDmg[k]; d.moths = { dps:m, n:3 }; },
+      () => { let m = TOWER_POWER[1] * 0.5; for (let k = 0; k < d.lvl - 1; k++) m *= ELEMENTS[2].upDmg[k]; d.moths = { dps:m, n:3, r:d.light || 1.6*R }; },
       () => { d.nightSight = true; d.rate *= 1.5; d.dpsNow *= 1.5; },  () => d.curseWave = true,
       () => { d.hunger = 0.2; d.hungerMax = 2; },  () => d.pierce = 1,  () => d.deathChance = 0.03,  () => d.curseStack = 2 ],
-    [ () => d.rebound = [0.6, 0.3],  () => d.hitsFly = true,  () => { d.eff = 2; d.chance = 0.1; d.stunBossHalf = true; },  () => { d.range += 1*R; d.splash *= 1.2; },
-      () => d.aftershock = { t:1, mul:0.5 },  () => d.wingBreak = 0.1,  () => d.pool = { r:d.splash, t:3, slow:0.3 },  () => { d.chance = Math.min(0.75, d.chance + 0.15); } ]
+    [ () => d.rebound = [0.6, 0.3],  () => d.hitsFly = true,  () => { d.eff = Math.max(d.eff, 2); d.chance = Math.min(0.75, (d.chance || 0) + 0.1); d.stunBossHalf = true; },  () => { d.range += 1*R; d.splash *= 1.2; },
+      () => d.aftershock = { t:1, mul:0.5 },  () => { d.wingBreak = 0.1; d.hitsFly = true; },  () => d.pool = { r:d.splash, t:3, slow:0.3 },
+      () => { if (!(d.eff > 0)) d.eff = 1.5; d.chance = Math.min(0.75, (d.chance || 0) + 0.15); } ]
   ];
-  F[d.el][d.idx]();
+  F[d.el][ab]();
   return d;
+}
+// Welche Fähigkeit ein Turm hat (alte Steine ohne ab: Fähigkeit der Turmnummer) und ob eine Fähigkeit bei ihm sinnlos wäre
+const abIdx = tw => tw.ab !== undefined ? tw.ab : tw.idx;
+function abilityBlocked(tw, k){
+  const b = towerBase(tw.el, tw.idx);
+  if (tw.el === 2 && b.buff) return k === 1 ? '' : 'Irrlicht schießt nicht – nur Mottenplage wirkt';
+  if (tw.el === 0 && k === 3 && !b.air && b.hitsFly) return 'trifft schon Boden und Luft';
+  if (tw.el === 3 && k === 1 && b.hitsFly) return 'trifft schon Fliegende';
+  return '';
 }
 // Felsen: alle Türme +15 % Reichweite, Stein-Türme zusätzlich mehr Schaden
 function onRock(d){
@@ -638,6 +652,7 @@ function hit(s, m, def, dmg){
   const w = m.def.weak[def.el], f = w || CONFIG.immune;       // „immun“ = weniger Schaden und kein Brennen
   const vuln = 1 + (on(m, 'curse') ? m.fx.curse.v : 0) + (on(m, 'smolder') ? m.fx.smolder.v : 0);
   if (def.groundHalf && !flying(m)) dmg *= 0.5;               // Feuerregen: Bodenmonster halb
+  if (def.flyHalf && flying(m)) dmg *= 0.5;                   // Feuerregen bei Bodentürmen: Fliegende halb
   if (def.flyMul && flying(m)) dmg *= def.flyMul;             // Steilschuss: Fliegende 60 %
   const bossy = isBossy(m), bh = bossy ? 0.5 : 1;                // Edelstein-Fähigkeiten wirken bei Bossen nur halb (15.10.)
   if (def.hunger) dmg *= 1 + Math.min(def.hungerMax || 0.45, def.hunger * (def.feast || 0)) * bh;
@@ -645,7 +660,7 @@ function hit(s, m, def, dmg){
   // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
   let pct = m.ap > 0 ? m.def.armorPct : 0;
   const ad = dmg * f * (ELEMENTS[def.el].armorDmg || 0) * (def.armorMul ? 1 + (def.armorMul - 1) * bh : 1);
-  if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0) * (def.gem && def.el === 2 && def.idx === 5 ? bh : 1); m.ap -= ad; }
+  if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0) * (def.gemAb === 5 && def.el === 2 ? bh : 1); m.ap -= ad; }
   m.hp -= dmg * f * vuln * (1 - pct);
   if (on(m, 'brittle')) m.hp -= ad * bh;                           // Haut vereist: Rüstungsschaden trifft auch die Leben
   const t = def.dur === DAY ? FOREVER : def.dur;
@@ -722,7 +737,7 @@ function step(s, dt){
     if (def.moths) {                       // Mottenplage: Motten im Lichtkreis treffen bis zu 3 Monster, zweimal je Sekunde
       tw.mcd = (tw.mcd || 0) - dt;
       if (tw.mcd <= 0) { tw.mcd = 0.5; const cx = tw.x + .5, cy = tw.y + .5;
-        s.monsters.filter(m => !m.dead && Math.hypot(m.x - cx, m.y - cy) <= def.light).sort((a, b) => b.d - a.d).slice(0, def.moths.n)
+        s.monsters.filter(m => !m.dead && Math.hypot(m.x - cx, m.y - cy) <= def.moths.r).sort((a, b) => b.d - a.d).slice(0, def.moths.n)
           .forEach(m => { hit(s, m, { ...def, moths:null, dmg:0, dpsNow:0 }, def.moths.dps * 0.5); s.fx.push({ kind:'spark', x:m.x, y:m.y, t:.15, t0:.15, el:2 }); }); }
     }
     if (def.buff) continue;                // Irrlicht schießt nicht selbst
@@ -733,7 +748,7 @@ function step(s, dt){
       (!night || !m.def.night || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));
     if (!inRange.length) continue;
     tw.cd = 1 / def.rate;
-    if (def.nova) { nova(s, tw, def); if (def.aftershock) s.later.push({ t:def.aftershock.t, tw, def:{ ...def, aftershock:null, dmg:def.dmg * def.aftershock.mul } }); continue; }
+    if (def.nova) { nova(s, tw, def); if (def.aftershock) s.later.push({ t:def.aftershock.t, tw, def:{ ...def, aftershock:null, rebound:null, pool:null, dmg:def.dmg * def.aftershock.mul } }); continue; }
     inRange.sort((a,b) => b.d - a.d);
     if (def.lance) { lance(s, tw, def, inRange); continue; }
     for (const m of inRange.slice(0, def.shots)) launch(s, tw, def, m);
@@ -772,6 +787,7 @@ function impact(s, p){
   const def = p.def;
   if (def.splash) { splashAt(s, def, p.tx, p.ty, def.splash); s.fx.push({ kind:'boom', x:p.tx, y:p.ty, r:def.splash, t:.3, t0:.3, el:def.el }); }
   else if (!p.tgt.dead) { hit(s, p.tgt, def, def.dmg); s.fx.push({ kind:'spark', x:p.tx, y:p.ty, t:.15, t0:.15, el:def.el }); }
+  if (def.aftershock) s.later.push({ t:def.aftershock.t, at:[p.tx, p.ty], def:{ ...def, aftershock:null, rebound:null, pool:null, dmg:def.dmg * def.aftershock.mul } });   // Nachbeben bei Wurf-Türmen
   if (def.pool) {                          // Lavapfütze / Geröll
     s.pools.push({ x:p.tx, y:p.ty, r:def.pool.r, t:def.pool.t, t0:def.pool.t, el:def.el, slow:def.pool.slow || 0,
       dps:def.pool.dpsMul ? def.dpsNow * def.pool.dpsMul : 0, def:{ ...def, pool:null, bounce:null, explode:null } });
@@ -801,6 +817,8 @@ function nova(s, tw, def){                  // Erdbeben, Frostnova: wirkt sofort
   const x = tw.x + .5, y = tw.y + .5;
   splashAt(s, def, x, y, def.splash);
   s.fx.push({ kind: def.el === 3 ? 'quake' : 'nova', x, y, r:def.splash, t:.5, t0:.5, el:def.el, tw });
+  if (def.rebound) def.rebound.forEach((mul, k) => s.later.push({ t:0.4 * (k + 1), tw, def:{ ...def, rebound:null, aftershock:null, pool:null, dmg:def.dmg * mul } }));   // Prellstein bei Beben-Türmen
+  if (def.pool) s.pools.push({ x, y, r:def.pool.r, t:def.pool.t, t0:def.pool.t, el:def.el, slow:def.pool.slow || 0, dps:0, def:{ ...def, pool:null, rebound:null, aftershock:null } });   // Geröll bei Beben-Türmen
 }
 function simulate(inp){ const s = makeSim(inp); let g = 0; while (simBusy(s) && g++ < 400000) step(s, DT); return s; }
 
@@ -1055,24 +1073,28 @@ const gemDot = (e, n) => `<span class="gem" style="color:${GEMS[e].col}" title="
 const abilityOf = (el, idx) => ABILITIES[el][idx];
 function gemDialog(i, x, y){
   const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
-  const have = gemsOf(i), [an, at] = abilityOf(tw.el, tw.idx), d = tdef(tw, i);
+  const have = gemsOf(i), d = tdef(tw, i), cur = abilityOf(tw.el, abIdx(tw));
   const conv = ELEMENTS.map((E, e) => e === tw.el || have[e] < 1 ? '' :
     `<button class="btn" data-conv="${e}">${gemDot(e)} In ${tw.idx+1}. ${E.towers[tw.idx][0]} (<span style="color:${E.color}">${E.name}</span>) umwandeln</button>`).join('');
+  const list = ABILITIES[tw.el].map(([an, at], k) => { const why = abilityBlocked(tw, k);
+    return `<button class="btn" data-ab="${k}" ${why ? 'disabled' : ''} style="display:block;width:100%;text-align:left;margin:4px 0">${gemDot(tw.el)}<b>${an}</b><br><span class="muted">${why || at}</span></button>`; }).join('');
   openDlg(`<h2>💎 ${d.name}</h2>
-    <div><b>Fähigkeit ${gemDot(tw.el)} ${an}</b><br><span class="muted">${at}</span></div>
-    ${tw.gem ? '<div class="done-r">schon eingesetzt</div>' : have[tw.el] > 0
-      ? `<button class="btn primary" id="gUse">${GEMS[tw.el].name} einsetzen</button>` : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}.</div>`}
+    ${tw.gem ? `<div><b>Fähigkeit ${gemDot(tw.el)} ${cur[0]}</b><br><span class="muted">${cur[1]}</span></div><div class="done-r">schon eingesetzt</div>`
+      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, für jeden Turm möglich)</span></div>${list}`
+      : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}. Mit dem Stein darf man eine der 8 Fähigkeiten frei wählen:</div>${ABILITIES[tw.el].map(([an]) => an).join(' · ')}`}
     ${conv ? `<div><b>Umwandeln</b><br><span class="muted">Gleiche Nummer und Stufe, investiertes Gold bleibt${tw.gem ? ', die Fähigkeit geht verloren' : ''}.</span></div><div class="acts" style="justify-content:flex-start">${conv}</div>` : ''}
     <div class="muted">Deine Steine: ${have.map((n, e) => n > 0 ? gemDot(e, n) : '').join(' ') || 'keine'} · Schenken über „🎁 Schenken“.</div>
     <div class="acts"><button class="btn" id="gNo">Schließen</button></div>`);
   $('gNo').onclick = closeDlg;
-  if ($('gUse')) $('gUse').onclick = () => { closeDlg(); useGem(i, x, y, tw.el); };
+  $('dlg').querySelectorAll('[data-ab]').forEach(b => b.onclick = () => { closeDlg(); useGem(i, x, y, tw.el, +b.dataset.ab); });
   $('dlg').querySelectorAll('[data-conv]').forEach(b => b.onclick = () => { closeDlg(); useGem(i, x, y, +b.dataset.conv); });
 }
-function useGem(i, x, y, e){
+function useGem(i, x, y, e, ab){
   const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i) || gemsOf(i)[e] < 1) return;
-  const nt = e === tw.el ? { ...tw, gem:true } : { ...tw, el:e, gem:false };
-  pop(e === tw.el ? `Fähigkeit: ${abilityOf(tw.el, tw.idx)[0]}` : `Umgewandelt: ${ELEMENTS[e].towers[tw.idx][0]}`);
+  if (e === tw.el && (tw.gem || ab === undefined || abilityBlocked(tw, ab))) return;
+  const { ab: _old, ...rest } = tw;
+  const nt = e === tw.el ? { ...rest, gem:true, ab } : { ...rest, el:e, gem:false };
+  pop(e === tw.el ? `Fähigkeit: ${abilityOf(tw.el, ab)[0]}` : `Umgewandelt: ${ELEMENTS[e].towers[tw.idx][0]}`);
   L[i] = { ...l, towers:l.towers.map(t => t === tw ? nt : t), gemUsed:[...(l.gemUsed || []), e] };
   render(); saveLane(i);
 }
@@ -1351,9 +1373,9 @@ function render(){
     const info = $('info'+i);
     const tw = selCell && selCell.i === i ? l.towers.find(t => t.x === selCell.x && t.y === selCell.y) : null;
     if (tw) { const d = tdef(tw, i), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
-      const [an, at] = abilityOf(tw.el, tw.idx), gm = gemsOf(i), anyGem = gm.some(v => v > 0);
+      const [an, at] = abilityOf(tw.el, abIdx(tw)), gm = gemsOf(i), anyGem = gm.some(v => v > 0);
       info.innerHTML = `<b style="color:${ELEMENTS[tw.el].color}">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel}${d.buff ? '' : ` · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}`}${fxText(d) ? ' · ' + fxText(d) : ''}` +
-        (tw.gem ? `<br>${gemDot(tw.el)}<b style="color:var(--fg)">${an}</b>: ${at}` : `<br><span title="${at}">${gemDot(tw.el)}Mit ${GEMS[tw.el].name}: ${an} – ${at}</span>`) +
+        (tw.gem ? `<br>${gemDot(tw.el)}<b style="color:var(--fg)">${an}</b>: ${at}` : `<br><span>${gemDot(tw.el)}Mit ${GEMS[tw.el].name}: eine der 8 Fähigkeiten frei wählen</span>`) +
         (mayBuild(i) ? '<br>' + (maxed ? '' : `<button class="btn" id="up${i}" ${goldAvail(i) < uc ? 'disabled' : ''}>Upgrade (${uc} Gold)</button>`) +
           `<button class="btn" id="sell${i}">Verkaufen (+${refundOf(tw)})</button>` + (anyGem ? `<button class="btn" id="gem${i}">💎 Edelstein</button>` : '') : '');
       const sb = $('sell'+i); if (sb) sb.onclick = e => { e.stopPropagation(); sellDialog(i, tw.x, tw.y); };

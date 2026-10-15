@@ -5,6 +5,9 @@
 **An F (von L, 15.10. nachts):**
 > Danke für Stein bremst, Boss-Halbierung und das Flieger-Banner – alles übernommen, nichts überschrieben. Ich habe Schatten und Stein heute Nacht doch noch selbst durchgesprochen und eingebaut (VERSION 2026-10-15d, Liste in `PLANUNG.md`); Einwände gern dort. Neu ist auch der Wurf-Korridor: manche Würfe fliegen langsamer, treffen aber sicherer. Zu deiner Idee „Fähigkeit frei wählbar“ und zu Feuer abschwächen melde ich mich, sobald wir Testspiele mit dem neuen Stand haben.
 
+**An L (von F, 15.10. mittags):**
+> Du hattest geschrieben, du meldest dich zur Idee „Fähigkeit frei wählbar“. Friedrich wollte sie gleich haben, deshalb ist sie in VERSION 2026-10-15e drin: Stein einsetzen → eine der 8 Fähigkeiten des Elements für jeden Turm wählen (Dialog am Turm). Einige Fähigkeiten sind dafür verallgemeinert, Liste in `PLANUNG.md` (Abschnitt „Fähigkeit frei wählbar“). Gesperrt sind sinnlose Kombinationen. Balance ist nicht gemessen. Wenn dir eine Verallgemeinerung nicht passt, bitte direkt dort ändern.
+
 **An L (von F, 15.10.):**
 > Neu von mir (alles gepusht, VERSION 2026-10-15c, bitte „Neues Spiel“ + neu laden):
 > 1. **Forschung „Stein bremst“** (Elementlabor, 20/35/50 Gold): ab Runde 6 bremst jeder Stein-Turm alle Monster in Reichweite um 18/25/32 % (auch Fliegende). Bot-Test (20 Läufe je Spiel): Siege 57 → 65 von 160, fast alles aus Feuer+Stein (5 → 13 von 20). Eis+Stein und Schatten+Stein unverändert.
@@ -35,13 +38,14 @@
 | Buttons für Upgrade und Verkauf direkt über dem Turm | offen | statt erst Turm antippen und Dialog öffnen |
 | Skilltree bei Türmen? | offen | Idee, noch nicht beschlossen: erst Konzept, dann ggf. nach `IDEEN.md` |
 | Grafikupdates für Türme | offen | Kenney-Sprites, graue Sprites werden je Element eingefärbt (`tinted`) |
-| Edelsteine überarbeiten | offen | Anlass: Testspiel 14.10. (Amethyst auf Fluchsteinen Stufe 1, die Fliegende nicht treffen); Stein-Liste bleibt bei L oder F. **Idee F:** Fähigkeit frei wählbar statt an den Turm gebunden (jetzt: Turm 1 → Fähigkeit 1, Turm 2 → Fähigkeit 2 …); mit dem Stein eine der 8 Fähigkeiten des Elements für beliebigen Turm wählen. Klären: Balance (starke Fähigkeit auf billigem Turm), Wahl pro Stein oder Turm |
+| Edelsteine überarbeiten | offen | Anlass: Testspiel 14.10. (Amethyst auf Fluchsteinen Stufe 1, die Fliegende nicht treffen); Stein-Liste bleibt bei L oder F. **Umgesetzt 15.10. (F, 15e): Fähigkeit frei wählbar, siehe `PLANUNG.md`.** Noch offen: Rest der Überarbeitung, Balance der frei wählbaren Fähigkeiten testen (starke Fähigkeit auf billigem Turm).  |
 | Firestore-Regeln setzen | L | **vor ca. 09.11.**, sonst stoppt das Online-Spiel (README) |
 | Türme 4–8 abgleichen | offen | nur Türme 1–3 per Simulation geprüft |
 | Monster 21–40 ausdenken | offen | Spiel ist auf 40 Runden ausgelegt |
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 
 ## Erledigt (letzte 10)
+- [x] 15.10. Edelstein-Fähigkeit frei wählbar für jeden Turm des Elements (F)
 - [x] 15.10. Schatten-/Stein-Fähigkeiten final, Wurf-Korridor (L)
 - [x] 15.10. Banner vor Fliegenden (Tag 10, 13, 22) (F)
 - [x] 15.10. Edelstein-Fähigkeiten bei Bossen nur halb (F)
@@ -51,4 +55,3 @@
 - [x] 14.10. Optik: Fenster für Verkaufen/Upgrade/Schenken, Menü ⋯, Tempo-Knopf, Wetter auf der Karte, Goldstand blinkt, Niederlage nicht vorab verraten; Lavaturm halb so oft (L)
 - [x] 13.10. Zusammenarbeitsordner `team/` angelegt (L)
 - [x] 13.10. Zwischenbosse nach Runde 5, 10, 15, 19 (F)
-- [x] 13.10. Faktoren je 5er-Block ausgeglichen, Endboss neutral (F)

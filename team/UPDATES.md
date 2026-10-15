@@ -2,6 +2,10 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 15.10. 12:50 · F · 2026-10-15e – Edelstein-Fähigkeit frei wählbar
+- Mit dem Stein wählt man eine der 8 Fähigkeiten des Elements für einen beliebigen Turm des Elements (Auswahlliste im Edelstein-Dialog). Alte Steine behalten die Fähigkeit ihrer Turmnummer.
+- Einige Fähigkeiten für jeden Turm angepasst (Liste in `PLANUNG.md`), sinnlose Kombinationen sind gesperrt (Irrlicht nur Mottenplage u. a.). Alle 241 möglichen Kombinationen laufen ohne Fehler durch die Simulation, Balance nicht gemessen. Neues Spiel + neu laden.
+
 ### 15.10. 01:50 · L · 2026-10-15d – Schatten- und Stein-Fähigkeiten final, Wurf-Korridor
 - Schatten: Schemen Angst, Irrlicht Mottenplage (Motten im Lichtkreis schaden), Nachtauge Nachtjäger (×1,5 + Nachtsicht), Hunger +20 %/Kill bis +200 %, Geisterpfeile ganze Rüstung, Ewige Nacht Tiefe Nacht (Fluch addiert sich).
 - Stein: Prellstein hüpft an der Stelle nach (60/30 %), Steilschuss voller Schaden, Erschütterung 2 s, Weitwurf Fläche +20 %, Granitwächter Flügelbruch.
@@ -59,5 +63,3 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 ### 13.10. 10:25 · F · 2026-10-13a – Faktoren je 5er-Block, Endboss neutral
 - Je Block erste Runde neutral, danach jedes Element einmal Vor- und Nachteil. Endboss wieder neutral (vorher Schatten ×0,7) – beobachten.
 
-### 12.10. 15:38 · L · 2026-10-12zg – Nach Testspiel steiler
-- Leben-Kurve Runde^1,38 (vorher 1,3). Rückmeldung: „vieles klappt schon sehr gut“, etwas zu leicht.
