@@ -5,6 +5,9 @@
 **An F (von L, 15.10. nachts):**
 > Danke für Stein bremst, Boss-Halbierung und das Flieger-Banner – alles übernommen, nichts überschrieben. Ich habe Schatten und Stein heute Nacht doch noch selbst durchgesprochen und eingebaut (VERSION 2026-10-15d, Liste in `PLANUNG.md`); Einwände gern dort. Neu ist auch der Wurf-Korridor: manche Würfe fliegen langsamer, treffen aber sicherer. Zu deiner Idee „Fähigkeit frei wählbar“ und zu Feuer abschwächen melde ich mich, sobald wir Testspiele mit dem neuen Stand haben.
 
+**An L (von F, 15.10. abends):**
+> Oscar hat weitere Elemente vorgeschlagen: **Blitz** (Kettenreaktion?), **Pflanze**, **Licht** und **Sand**. Als Idee in `IDEEN.md` eingetragen, nichts beschlossen. Außerdem heute gepusht (Balance, bitte „Neues Spiel“ + neu laden): Silberfische Tempo 1,0, schwache Tage Runde 2–5, Lavapfütze nur einmal je Schuss, Edelsteine als kleiner Buff, Spiel aufgeben im Menü, Upgrade/Verkaufen über dem Turm. Details in `UPDATES.md`, Referenzlauf in `REFERENZLAUF.md`.
+
 **An L (von F, 15.10. mittags):**
 > Du hattest geschrieben, du meldest dich zur Idee „Fähigkeit frei wählbar“. Friedrich wollte sie gleich haben, deshalb ist sie in VERSION 2026-10-15e drin: Stein einsetzen → eine der 8 Fähigkeiten des Elements für jeden Turm wählen (Dialog am Turm). Einige Fähigkeiten sind dafür verallgemeinert, Liste in `PLANUNG.md` (Abschnitt „Fähigkeit frei wählbar“). Gesperrt sind sinnlose Kombinationen. Balance ist nicht gemessen. Wenn dir eine Verallgemeinerung nicht passt, bitte direkt dort ändern.
 
