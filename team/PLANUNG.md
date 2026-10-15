@@ -109,3 +109,6 @@ Gedanken dahinter: Jede Fähigkeit ändert, *wie* der Turm spielt, nicht nur *wi
 **Offen:**
 - Alle vier Listen durchgesprochen (L, 15.10.). Offen: Idee F „Fähigkeit frei wählbar“ (siehe TODO).
 - Darstellung: Woran sieht man am Turm, dass er eine Fähigkeit hat?
+
+## Edelsteine = kleiner Buff (F, 15.10., 2026-10-15g)
+Richtwert: eine Fähigkeit bringt ≈ +15 % (Tag 5: +1 Kill bei 6–7). Gedämpft: Eis Großer Ball/Sturm, Eisblock 0,35 s, Haut vereist 3 s, Schatten Nachtjäger ×1,25, Stein Prellstein [0,3/0,15], Reichweite +0,5 Felder/Fläche +10 %, Nachbeben 0,25. Messung grob, bitte im echten Spiel prüfen.
