@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15q";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15r";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -927,6 +927,24 @@ async function saveGame(){
 }
 let resolving = false, resolvingAt = 0;
 // Gibt true zurück, wenn ausgewertet werden konnte (für den Bereit-Knopf: sonst später nochmal versuchen)
+/* Archiv (15.10., L): Jedes online gespielte Spiel wird mitgeschrieben, für die Eichung des Balancing-Skripts.
+   games/<GAME_ID>/archiv/<startAt>: je Welle Kills, Gold, Durchbrüche (slots), je Tagesende alle Türme (days).
+   Fehlspiele (z. B. früh aufgegeben) werden erst beim Auslesen aussortiert (tools/archiv.js). */
+const P_ARCH = 'games/' + GAME_ID + '/archiv';
+const archLanes = (lanes, g) => [...Array(g.cfg.players)].map((_, i) => { const l = lanes[i];
+  if (!l || l.gid !== gidOf(g)) return null;
+  return { el:l.el, spent:l.spent || 0, pot:l.pot || 0, research:l.research || [], gemUsed:l.gemUsed || [],
+    gifts:(l.gifts || []).reduce((a, x) => a + x.amt, 0),
+    towers:(l.towers || []).map(t => ({ x:t.x, y:t.y, el:t.el, idx:t.idx, lvl:t.lvl || 1, inv:t.invested || 0, gem:!!t.gem, ab:t.ab ?? null })) }; });
+function archSlot(b, g, lanes, arch){
+  const n = g.cfg.players, d = (a, c, i) => ((a || [])[i] || 0) - ((c || [])[i] || 0);
+  arch.slots[`${b.day}-${b.slot}`] = { kills:[...Array(n)].map((_, i) => d(g.kills, b.kills, i)), earned:[...Array(n)].map((_, i) => d(g.earned, b.earned, i)),
+    broke:(g.lastRun && g.lastRun.broke) || 0, passed:g.passed, weather:g.lastRun && g.lastRun.inputs[0] ? g.lastRun.inputs[0].weather || 0 : 0,
+    leaked:[...Array(n)].map((_, i) => ((g.leaked || {})[i] || []).length) };
+  if (g.day !== b.day || g.over) arch.days[b.day] = { lanes:archLanes(lanes, g), earned:g.earned, kills:g.kills, gems:g.gems || {}, passed:g.passed };
+}
+const archDoc = (g, arch) => JSON.parse(JSON.stringify({ cfg:g.cfg, version:VERSION, updated:Date.now(), day:g.day, slot:g.slot, over:g.over || null,
+  gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...arch }));
 async function tryResolve(force, onlyKey){
   if (resolving && Date.now() - resolvingAt > 20000) resolving = false;   // hängende Verbindung: nicht ewig blockieren
   if (!G || G.over || resolving || replay) return false;
@@ -935,14 +953,17 @@ async function tryResolve(force, onlyKey){
   try {
     const ls = await DB.collection(P_LANES).get();
     const lanes = []; ls.docs.forEach(d => { const k = +d.id.slice(1); lanes[k] = d.data(); });
+    const arch = { slots:{}, days:{} };
     const advance = g => { let n = 0;
       if (onlyKey && readyKey(g) !== onlyKey) return null;   // „Bereit“: nur diese eine Welle, nie doppelt
-      while (!g.over && n < 30) { const due = dueTime(g); if (!(force && n === 0) && !(due && Date.now() >= due)) break; g = resolveSlot(g, lanes); n++; }
+      while (!g.over && n < 30) { const due = dueTime(g); if (!(force && n === 0) && !(due && Date.now() >= due)) break; const b = g; g = resolveSlot(g, lanes); n++;
+        try { archSlot(b, g, lanes, arch); } catch(e) { console.warn(e); } }
       return n ? g : null; };
     const ref = DB.doc(P_STATE);
     if (DB.tx) {            // Firebase: Transaktion verhindert doppelte Auswertung
       await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists) return;
-        const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) tr.set(ref, g); });
+        const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) { tr.set(ref, g);
+          try { tr.set(DB.doc(P_ARCH + '/' + g.cfg.startAt), archDoc(g, arch), { merge:true }); } catch(e) { console.warn(e); } } });
     } else {                // Claude-Artifact: kurze Sperre statt Transaktion
       const lease = await ref.acquire({ holder: ME, ttlMs: 15000 });
       if (!lease.acquired) return;
@@ -1186,7 +1207,8 @@ function giveUp(){
   if (MODE === 'local') { G = mark(G); lsSet('ww2-local', { G, L }); render(); return; }
   const ref = DB.doc(P_STATE);
   queueWrite(async () => {
-    if (DB.tx) await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists || snap.data().over) return; tr.set(ref, mark(JSON.parse(JSON.stringify(snap.data())))); });
+    if (DB.tx) await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists || snap.data().over) return; const g = mark(JSON.parse(JSON.stringify(snap.data()))); tr.set(ref, g);
+      try { tr.set(DB.doc(P_ARCH + '/' + g.cfg.startAt), archDoc(g, {}), { merge:true }); } catch(e) { console.warn(e); } });
     else { const snap = await ref.get(); if (snap.exists && !snap.data().over) await ref.set(mark(JSON.parse(JSON.stringify(snap.data())))); }
   }).then(() => refreshFromServer());
 }

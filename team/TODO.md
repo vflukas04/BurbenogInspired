@@ -2,8 +2,13 @@
 
 ## Post
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
-**An F (von L, 15.10. nachts):**
-> Danke für Stein bremst, Boss-Halbierung und das Flieger-Banner – alles übernommen, nichts überschrieben. Ich habe Schatten und Stein heute Nacht doch noch selbst durchgesprochen und eingebaut (VERSION 2026-10-15d, Liste in `PLANUNG.md`); Einwände gern dort. Neu ist auch der Wurf-Korridor: manche Würfe fliegen langsamer, treffen aber sicherer. Zu deiner Idee „Fähigkeit frei wählbar“ und zu Feuer abschwächen melde ich mich, sobald wir Testspiele mit dem neuen Stand haben.
+**An F (von L, 15.10. 23:50):**
+> 1. **Fähigkeit frei wählbar:** Da bin ich noch dagegen. Die Fähigkeiten sind bewusst auf einzelne Türme zugeschnitten; verallgemeinert verlieren sie ihren Sinn. Bitte lass es erst mal so, wir besprechen es zusammen (WhatsApp), bevor weiter daran gebaut wird.
+> 2. **Edelsteine als kleiner Buff (+15 %):** Ich wollte eher einen deutlichen Mehrwert über einem Upgrade. Prellstein/Weitwurf übernehme ich wie von dir getestet – den Rest besprechen wir.
+> 3. **Stein bremst:** gut, dass es raus ist – war mir zu nah an Eis.
+> 4. **Balance-Pause:** Ich baue jetzt das Balancing-Skript (Verfahren in `team/BALANCING.md`). Bitte bis dahin keine Zahlen mehr drehen (Faktoren, Kopfgeld, Fähigkeitswerte) – sonst rechnet das Skript gegen ein bewegliches Ziel. Fehler beheben und neue Funktionen ohne Zahlenänderung sind natürlich okay. Deine Eindrücke gern weiter in `IDEEN.md`.
+> 5. **Spoiler:** `tools/balance/STRATEGIE.md` (kommt noch) enthält Erkenntnisse zur besten Platzierung – bitte nicht lesen, sonst ist der Spielspaß weg.
+> 6. **Archiv:** Jedes Online-Spiel wird jetzt automatisch in Firestore mitgeschrieben (`games/spiel1/archiv`), auslesen mit `node tools/archiv.js`. Danke für die Referenzläufe – genau so etwas brauchen wir zum Eichen, jetzt ohne Abschreiben.
 
 **An L (von F, 15.10. abends):**
 > Oscar hat weitere Elemente vorgeschlagen: **Blitz** (Kettenreaktion?), **Pflanze**, **Licht** und **Sand**. Als Idee in `IDEEN.md` eingetragen, nichts beschlossen. Außerdem heute gepusht (Balance, bitte „Neues Spiel“ + neu laden): Silberfische Tempo 1,0, schwache Tage Runde 2–5, Lavapfütze nur einmal je Schuss, Edelsteine als kleiner Buff, Spiel aufgeben im Menü, Upgrade/Verkaufen über dem Turm. Details in `UPDATES.md`, Referenzlauf in `REFERENZLAUF.md`.
@@ -27,7 +32,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- (niemand)
+- L · Balancing-Skript (`tools/balance/`, `team/BALANCING.md`) · seit 15.10. 23:50 – bitte keine Zahlen drehen, siehe Post
 
 ## Als Nächstes
 | Was | Wer | Notiz |
@@ -35,7 +40,9 @@
 | Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-15d) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
 | Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
-| Balancing-Skript planen und bauen (ersetzt Mikro-Balancing) | L | Entwurf in `PLANUNG.md`; Aufteilung mit F abstimmen (siehe Post) |
+| Balancing-Skript bauen (ersetzt Mikro-Balancing) | L | Verfahren in `team/BALANCING.md` (Prüfpunkte P1–P13) |
+| Fähigkeit frei wählbar (15e) besprechen | L + F | L ist dagegen: Fähigkeiten sind auf Türme zugeschnitten |
+| Schwierigkeitsstufen beim Spielstart | L | Faktor auf Monsterleben/-rüstung, Werte aus dem Balancing-Skript |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
 | `tools/balance.js` auf Runden statt Tage umstellen | L | deckt sonst nur Tag 1–20 ab; erster Schritt fürs Balancing-Skript |
 | Skilltree bei Türmen? | offen | Idee, noch nicht beschlossen: erst Konzept, dann ggf. nach `IDEEN.md` |

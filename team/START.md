@@ -7,7 +7,7 @@
 
 **Post:** Steht in `TODO.md` unter „Post“ etwas für deinen Menschen (an L oder an F), gib es ihm **als Erstes und wörtlich** weiter, vor allem anderen. Erst wenn er es gelesen hat, den Eintrag löschen.
 
-Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md` (Entwürfe in Arbeit), `team/IDEEN.md` (noch nicht beschlossen), `team/archiv/` (alte Protokolle), `index.html` (die echten Zahlen).
+Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md` (Entwürfe in Arbeit), `team/BALANCING.md` (Balancing-Verfahren), `team/IDEEN.md` (noch nicht beschlossen), `team/archiv/` (alte Protokolle), `index.html` (die echten Zahlen).
 
 ## Wer ist wer
 - **L** = Lukas und sein Claude · **F** = Friedrich und sein Claude. Beide Claudes ändern Code und pushen nach `main`.

@@ -2,6 +2,11 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 15.10. 23:50 · L · 2026-10-15r – Spiel-Archiv, Balancing-Verfahren
+- Jedes Online-Spiel wird automatisch mitgeschrieben: `games/spiel1/archiv/<Spielstart>` (je Welle Kills/Gold/Durchbrüche, je Tagesende alle Türme). Auslesen: `node tools/archiv.js` bzw. `node tools/archiv.js <Spielstart>`. Fehlspiele werden beim Auslesen markiert.
+- Neu: `team/BALANCING.md` (Verfahren und Prüfpunkte des Balancing-Skripts). Bitte Balance-Pause bis zum Skript (siehe Post an F).
+- Keine Regeländerung, nur neu laden.
+
 ### 15.10. 22:55 · F · 2026-10-15q – Forschung „Stein bremst" entfernt
 - Die Elementlabor-Forschung „Stein bremst" (−18/25/32 % Tempo ab Runde 6) ist raus: aus der Forschungsliste und aus der Simulation. Alte Spielstände mit gekaufter Stufe laufen ohne den Effekt weiter (kein Absturz).
 - Stein ist an Tag 7–10 über die Faktoren (15m) angehoben; die Bremse war damit doppelt. Wirkung bitte im Testspiel prüfen.
@@ -64,7 +69,3 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 - Schatten: Schemen Angst, Irrlicht Mottenplage (Motten im Lichtkreis schaden), Nachtauge Nachtjäger (×1,5 + Nachtsicht), Hunger +20 %/Kill bis +200 %, Geisterpfeile ganze Rüstung, Ewige Nacht Tiefe Nacht (Fluch addiert sich).
 - Stein: Prellstein hüpft an der Stelle nach (60/30 %), Steilschuss voller Schaden, Erschütterung 2 s, Weitwurf Fläche +20 %, Granitwächter Flügelbruch.
 - Wurfgeschwindigkeit im Korridor (`lobSpeedOf`): einige Würfe langsamer, Katapult schneller. F: deine Boss-Halbierung (`bh`) ist übernommen. Neues Spiel + neu laden.
-
-### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
-- Neues Banner über dem Spielfeld: am Vortag und vor der 10-Uhr-Welle (Tag 10 Spatzen, 13 Habichte, 22 Uffug-Vorhaut) steht, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat (rot bei weniger als 2). Anlass: Testspiel verloren an Tag 13 mit ca. 200 ungenutztem Gold. Keine Balance-Änderung.
-
