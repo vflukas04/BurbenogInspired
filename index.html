@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15s";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15t";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -881,9 +881,16 @@ function resolveSlot(g, lanes){
   let added = log.length;
   g.lastRun = { id:`${g.day}-${g.slot}-${Date.now()}`, day:g.day, slot:g.slot, inputs, live };
   if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
-  else if (g.slot < SL.length - 1) g.slot++;
-  else if (g.day >= CONFIG.days) { g.over = 'won'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
-  else { g.day++; g.slot = 0; g.leaked = {}; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Neuer Tag. Um 10:00 kommen ${MONSTERS[g.day-1] ? MONSTERS[g.day-1].name : 'Monster'}.` }); }
+  else {
+    // Uhrzeiten-Modus: Wellen, bei denen bei niemandem etwas ankommt, werden übersprungen
+    const none = () => !live && !Object.values(g.leaked).some(a => a && a.length);
+    const skipped = []; g.slot++;
+    while (g.slot < SL.length && none()) { skipped.push(hh(SL[g.slot])); g.slot++; }
+    if (skipped.length) { added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Nichts im Anmarsch um ${skipped.join(', ')} – übersprungen.` }); }
+    if (g.slot < SL.length) { /* nächste Welle desselben Tages */ }
+    else if (g.day >= CONFIG.days) { g.slot = SL.length - 1; g.over = 'won'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
+    else { g.day++; g.slot = 0; g.leaked = {}; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Neuer Tag. Um 10:00 kommen ${MONSTERS[g.day-1] ? MONSTERS[g.day-1].name : 'Monster'}.` }); }
+  }
   g.lastRun.newLog = added; g.lastRun.broke = broke;   // für die Wiedergabe: erst zeigen, wenn es passiert
   g.log = g.log.slice(0, 60);
   return g;
