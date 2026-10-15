@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15n";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15o";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -572,6 +572,8 @@ function abilityBlocked(tw, k){
   if (tw.el === 3 && k === 1 && b.hitsFly) return 'trifft schon Fliegende';
   return '';
 }
+// Jede Fähigkeit nur einmal je Feld (15.10., F): Hat schon ein anderer Turm dieses Feldes den Stein mit Fähigkeit k, ist sie gesperrt (nach Verkauf wieder frei)
+const abilityTaken = (l, tw, k) => l.towers.some(t => t !== tw && t.gem && t.el === tw.el && abIdx(t) === k);
 // Felsen: alle Türme +15 % Reichweite, Stein-Türme zusätzlich mehr Schaden
 function onRock(d){
   const m = ELEMENTS[d.el].terrainFree ? ROCK.stoneDmg : 1;
@@ -1082,11 +1084,11 @@ function gemDialog(i, x, y){
   const have = gemsOf(i), d = tdef(tw, i), cur = abilityOf(tw.el, abIdx(tw));
   const conv = ELEMENTS.map((E, e) => e === tw.el || have[e] < 1 ? '' :
     `<button class="btn" data-conv="${e}">${gemDot(e)} In ${tw.idx+1}. ${E.towers[tw.idx][0]} (<span style="color:${E.color}">${E.name}</span>) umwandeln</button>`).join('');
-  const list = ABILITIES[tw.el].map(([an, at], k) => { const why = abilityBlocked(tw, k);
+  const list = ABILITIES[tw.el].map(([an, at], k) => { const why = abilityBlocked(tw, k) || (abilityTaken(l, tw, k) ? 'schon bei einem anderen Turm vergeben' : '');
     return `<button class="btn" data-ab="${k}" ${why ? 'disabled' : ''} style="display:block;width:100%;text-align:left;margin:4px 0">${gemDot(tw.el)}<b>${an}</b><br><span class="muted">${why || at}</span></button>`; }).join('');
   openDlg(`<h2>💎 ${d.name}</h2>
     ${tw.gem ? `<div><b>Fähigkeit ${gemDot(tw.el)} ${cur[0]}</b><br><span class="muted">${cur[1]}</span></div><div class="done-r">schon eingesetzt</div>`
-      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, für jeden Turm möglich)</span></div>${list}`
+      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, für jeden Turm möglich, jede Fähigkeit nur einmal je Feld)</span></div>${list}`
       : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}. Mit dem Stein darf man eine der 8 Fähigkeiten frei wählen:</div>${ABILITIES[tw.el].map(([an]) => an).join(' · ')}`}
     ${conv ? `<div><b>Umwandeln</b><br><span class="muted">Gleiche Nummer und Stufe, investiertes Gold bleibt${tw.gem ? ', die Fähigkeit geht verloren' : ''}.</span></div><div class="acts" style="justify-content:flex-start">${conv}</div>` : ''}
     <div class="muted">Deine Steine: ${have.map((n, e) => n > 0 ? gemDot(e, n) : '').join(' ') || 'keine'} · Schenken über „🎁 Schenken“.</div>
@@ -1097,7 +1099,7 @@ function gemDialog(i, x, y){
 }
 function useGem(i, x, y, e, ab){
   const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i) || gemsOf(i)[e] < 1) return;
-  if (e === tw.el && (tw.gem || ab === undefined || abilityBlocked(tw, ab))) return;
+  if (e === tw.el && (tw.gem || ab === undefined || abilityBlocked(tw, ab) || abilityTaken(l, tw, ab))) return;
   const { ab: _old, ...rest } = tw;
   const nt = e === tw.el ? { ...rest, gem:true, ab } : { ...rest, el:e, gem:false };
   pop(e === tw.el ? `Fähigkeit: ${abilityOf(tw.el, ab)[0]}` : `Umgewandelt: ${ELEMENTS[e].towers[tw.idx][0]}`);
