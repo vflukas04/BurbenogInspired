@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15j";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -409,7 +409,7 @@ const ABILITIES = [
    Block 4: Boss neutral – Tag 17–19 decken nur 3 Elemente ab, es fehlen Stein-Bonus und Schatten-Malus. */
 let MON_ROUND = 0;   // Runde (für Leben, Kopfgeld, Farbe): Zwischenbosse teilen sich die Runde des Monsters davor; day = Tag im Spiel
 const MONSTERS = [
-  ['Silberfische',      {emo:'🐛', speed:1.2, weak:[1, 1, 1, 1]}],
+  ['Silberfische',      {emo:'🐛', speed:1.0, weak:[1, 1, 1, 1]}],
   ['Kellerasseln',      {emo:'🪲', ar:[0.2, 0.3], speed:0.9, weak:[0.8, 1, 1, 1.2]}],
   ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1, 1.2, 1, 0.8]}],
   ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 0.8, 1.2, 1]}],
