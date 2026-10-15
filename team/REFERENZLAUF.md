@@ -55,3 +55,29 @@ Summe 182/240 = 76 % bei beiden (Lauf 1: 75 % / 78 %). Alle 116 durchgelassenen 
 Schatten (1374 Gold, Pfadabdeckung 75 %): Schemen S6 6,10 (200, Edelstein Fähigkeit 0) · Funke S6 7,10 (200, per Stein umgewandelt) · Irrlicht S5 5,10 (373) · Nachtauge S3 8,9 (314, Edelstein Fähigkeit 6) · Fluchstein S2 6,11 (287, Edelstein Fähigkeit 7).
 Feuer (1557 Gold, Pfadabdeckung 98 %): Funke S4 6,3 (62) · Schemen S6 8,4 (162, umgewandelt) · Funke S6 8,11 (156) · Funke S5 7,8 (100) · Glutbecken S4 6,6 (343, Fähigkeit 2) · Flammenwerfer S4 7,5 (534, Fähigkeit 6) · Schwelbrand S1 8,6 (200).
 Auffällig: 4 von 12 Türmen sind Turm 1 auf Stufe 6; Turm 5 (Schwelbrand) nur Stufe 1 trotz 250 Gold Freischaltung; beide Felder haben je einen Turm des anderen Elements (Umwandlung).
+
+---
+
+# Lauf 3: Eis + Stein, 2 Spieler (15.10.2026 22:27–23:04, Version 15o) – Sieg mit 29 von 30 Durchbrüchen
+
+Spieler 1 Eis, Spieler 2 Stein. Gespielt mit Version 15o (noch mit „Stein bremst“ brk:1+2, ohne Akademie-Fix). Log hält nur Tag 9–23; die 29 Durchbrüche passen genau zu Tag 10 (20) und Tag 13 (9), in Tag 1–9 und allen anderen Tagen gab es keine. Gold verdient 1639 / 1552, Kills 378 / 361. Forschung: Eis +25 %, Stein +25 %, Effekte länger 1, Upgrades billiger 1, Stein bremst 2 (keine Türme 5–8).
+
+## Treffer in der eigenen 10-Uhr-Welle (von 20) und Durchbrüche um 19:00
+| Tag | Monster | Eis | Stein | ganz durch (19:00) |
+|---|---|---|---|---|
+| 9 | Katzen | 16 | 19 | 0 |
+| 10 | Spatzen (fliegen) | 4 | 1 | **20** |
+| 11 | Füchse | 2 | 16 | 0 |
+| 13 | Habichte (fliegen) | 10 | 0 | **9** |
+| 14 | Dachse | 18 | 20 | 0 |
+| 15 | Oktopusse | 20 | 20 | 0 |
+| 16 | Wildschweine | 2 | 5 | 0 |
+| 17 | Schäferhunde | 20 | 13 | 0 |
+| 19–21 | Penner, Partnerin, Nachbarn | 20 | 20 | 0 |
+| 22 | Uffug-Vorhaut (fliegt) | 20 | 16 | 0 |
+Summe Eis 172/240 = 72 %, Stein 170/240 = 71 %. Bosse (Tag 12, 18, 23) alle besiegt, Tag 12 kam der Stein-Boss durch und Eis fing ihn ab. Bei einem Ausfall beider Felder am selben Tag (Tag 10, 13) fängt die zweite Linie nicht mehr ab: sie sieht 16–20 Monster bei gleicher Stärke.
+
+## Endaufbau (Stufe, Ort x,y; investiert)
+Eis (1567 Gold): Frostsplitter S6 6,11 (200, Fähigkeit 2) · Frostsplitter S6 7,11 (200, Fähigkeit 1) · Schneeball S5 7,9 (560, Fähigkeit 0) · Turm 4 S2 5,9 (287, Fähigkeit 7) · Eiszapfen S1 8,10 und 8,11 (je 70) · Schneeball S1 4,6 / 5,6 / 4,10 / 2,9 (je 45).
+Stein (ca. 1278 Gold): Kiesel S6 6,4 (204) · Frostsplitter S6 7,4 (195, per Stein zu Eis umgewandelt, Fähigkeit 2) · Schleuder S4 8,8 (348) · Turm 4 S2 7,8 (287) · Kiesel S4 8,6 (76) · Felsbrocken S2 6,6 (168).
+Mit diesem Endaufbau schaffen beide Felder in der Simulation fast alle Tage mit 20/20 (außer Stein Tag 22: 13). Die Ausfälle in Tag 10–16 kamen also vom Goldstand zu dem Zeitpunkt, nicht von der Turmwahl.
