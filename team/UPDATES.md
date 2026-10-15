@@ -2,6 +2,11 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 15.10. 21:30 · F · 2026-10-15m – Stein Tag 7–10 leichter
+- Stein-Faktor: Kleine Hunde 1,75 (vorher 1), Ratten 1,4 (1), Katzen 1,4 (1), Spatzen 1,25 (0,75). Grund: Stein brauchte an Tag 7–10 2,4–2,9× das real verfügbare Gold (die anderen 1,2–1,6×). Ziel jetzt ca. 1,4–1,7×.
+- Block-2-Regel „je Element ein Bonus/Malus" gilt für Stein damit nicht mehr. Maus-Boss (Tag 6, Stein 3,7×) bewusst unverändert. Werte sind Bot-Tendenzen.
+- Neues Spiel + neu laden.
+
 ### 15.10. 19:30 · F · 2026-10-15l – Lavapfütze nur einmal je Schuss
 - Feuer-Edelstein „Lavapfütze“: Hat der Turm mehrere Geschosse je Schuss, legt nur das erste eine Pfütze (vorher eine je Geschoss). Gilt nur für Feuer, Stein-Geröll unverändert.
 - Neues Spiel + neu laden.
@@ -60,9 +65,4 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 
 ### 14.10. 11:50 · L · 2026-10-14b – Felsen kosten für alle +30
 - Felsen: alle Elemente zahlen +30 Gold (vorher +15, nur Stein +30). Reichweite +15 % für alle und ×1,3 Schaden nur für Stein bleiben. Neues Spiel + neu laden.
-
-### 14.10. 09:30 · L · (kein Spielcode) – Post-Fach, Planung, Projekt-Anleitung
-- Neu in `TODO.md`: Abschnitt „Post“ – Nachrichten an den anderen, sein Claude gibt sie beim Start wörtlich weiter. Startprompt in `START.md` entsprechend ergänzt. **F: Post für dich liegt dort.**
-- Neu: `team/PLANUNG.md` mit Entwürfen für Balancing-Skript und Edelsteine.
-- `START.md`: Anleitung „Eigenes Claude-Projekt einrichten“.
 

@@ -115,3 +115,6 @@ Richtwert: eine Fähigkeit bringt ≈ +15 % (Tag 5: +1 Kill bei 6–7). Gedämpf
 
 ## Schwache Tage Runde 2–5 (F, 15.10., 2026-10-15k)
 Ziel: je Element ein Tag mit Gold-Bedarf ≈ 1,5 (Bot `bedarf`). Faktoren: Schatten/Kellerasseln 1,05, Feuer/Nacktschnecken 0,9, Eis/Ohrenkneifer 1,1, Stein/Mäuse 0,7. Silberfische Tempo 1,0 (Stein war an Tag 1 doppelt so teuer wie die anderen).
+
+## Stein Tag 7–10 (F, 15.10., 2026-10-15m)
+Messgröße: Bot-Bedarf ÷ real verfügbares Gold (30 + Kopfgelder der Vortage, volle Kills). Der Richtwert 1,38^r ist kein echtes Gold: Er wächst exponentiell, das Kopfgeld linear. Tag 1–5 liegt bei ca. 1,4, Tag 7–11 bei 1,7, Stein aber bei 2,4 (Tag 7–10: 2,4–2,9). Stein-Faktoren angehoben auf 1,75/1,4/1,4/1,25 (Tag 7–10). Offen: Feuer Tag 7 (2,8), Maus-Boss Stein (3,7), Tag 13–20 insgesamt 1,5–3,2.

@@ -1,5 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 14.10. 09:30 · L · (kein Spielcode) – Post-Fach, Planung, Projekt-Anleitung
+- Neu in `TODO.md`: Abschnitt „Post“ – Nachrichten an den anderen, sein Claude gibt sie beim Start wörtlich weiter. Startprompt in `START.md` entsprechend ergänzt. **F: Post für dich liegt dort.**
+- Neu: `team/PLANUNG.md` mit Entwürfen für Balancing-Skript und Edelsteine.
+- `START.md`: Anleitung „Eigenes Claude-Projekt einrichten“.
+
 ### 13.10. 10:25 · F · 2026-10-13a – Faktoren je 5er-Block, Endboss neutral
 - Je Block erste Runde neutral, danach jedes Element einmal Vor- und Nachteil. Endboss wieder neutral (vorher Schatten ×0,7) – beobachten.
 
