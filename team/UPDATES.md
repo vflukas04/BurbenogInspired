@@ -2,7 +2,7 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
-### 15.10. 23:50 · L · 2026-10-15r – Spiel-Archiv, Balancing-Verfahren
+### 15.10. 23:50 · L · 2026-10-15s – Spiel-Archiv, Balancing-Verfahren
 - Jedes Online-Spiel wird automatisch mitgeschrieben: `games/spiel1/archiv/<Spielstart>` (je Welle Kills/Gold/Durchbrüche, je Tagesende alle Türme). Auslesen: `node tools/archiv.js` bzw. `node tools/archiv.js <Spielstart>`. Fehlspiele werden beim Auslesen markiert.
 - Neu: `team/BALANCING.md` (Verfahren und Prüfpunkte des Balancing-Skripts). Bitte Balance-Pause bis zum Skript (siehe Post an F).
 - Keine Regeländerung, nur neu laden.
