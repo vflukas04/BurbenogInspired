@@ -2,6 +2,11 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 15.10. 22:55 · F · 2026-10-15q – Forschung „Stein bremst" entfernt
+- Die Elementlabor-Forschung „Stein bremst" (−18/25/32 % Tempo ab Runde 6) ist raus: aus der Forschungsliste und aus der Simulation. Alte Spielstände mit gekaufter Stufe laufen ohne den Effekt weiter (kein Absturz).
+- Stein ist an Tag 7–10 über die Faktoren (15m) angehoben; die Bremse war damit doppelt. Wirkung bitte im Testspiel prüfen.
+- Neues Spiel nicht nötig, nur neu laden.
+
 ### 15.10. 22:35 · F · 2026-10-15p – Akademie: Kopfgeld-Bonus auf die ganze Welle gerundet
 - Bisher wurde der Bonus (+7/14/20 %) je Monster gerundet: Bei Kopfgeld 2–5 kam bis Runde 15 oft nichts an (Stufe 1 = +0 bis Runde 15). Jetzt: Summe der Kopfgelder einer Welle × (1 + Bonus), einmal gerundet. Beispiel Runde 1, 20 Kills: 40 → 43 Gold bei +7 %.
 - Gewinn über das ganze Spiel jetzt ca. +125 / +250 / +360 Gold (Stufe 1/2/3) statt +100 / +200 / +400, dafür gleichmäßig. Preise (60/100/140) bleiben, bitte im Spiel prüfen: Stufe 1 könnte früh zu günstig sein.
@@ -62,7 +67,4 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 
 ### 15.10. 00:05 · F · 2026-10-15c – Warnung vor Fliegenden
 - Neues Banner über dem Spielfeld: am Vortag und vor der 10-Uhr-Welle (Tag 10 Spatzen, 13 Habichte, 22 Uffug-Vorhaut) steht, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat (rot bei weniger als 2). Anlass: Testspiel verloren an Tag 13 mit ca. 200 ungenutztem Gold. Keine Balance-Änderung.
-
-### 14.10. 23:50 · F · 2026-10-15b – Edelsteine bei Bossen nur halb
-- Gegen Zwischenbosse und Endboss wirken die zahlenbasierten Edelstein-Fähigkeiten halb: Schwelglut (+15 %), Glutnest (Stapel), Haut vereist, Granitwächter (Rüstungsschaden ×2), Hunger, Schatten-Durchdringen (Turm 6). Schon vorher halb: Eisblock, Absturz, Angst, Todesstoß. Ungeändert: Explosionen/Sprünge/Pfützen. Neues Spiel + neu laden.
 

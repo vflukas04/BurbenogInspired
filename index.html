@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15p";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15q";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -268,7 +268,6 @@ const RESEARCH_GROUPS = [
   { grp:'el1',   house:'Elementlabor', name:'Eis Schaden',            costs:[25, 40, 55],   steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:1 },
   { grp:'el2',   house:'Elementlabor', name:'Schatten Schaden',       costs:[25, 40, 55],   steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:2 },
   { grp:'el3',   house:'Elementlabor', name:'Stein Schaden',          costs:[25, 40, 55],   steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:3 },
-  { grp:'brk',   house:'Elementlabor', name:'Stein bremst',       costs:[20, 35, 50],  steps:[0.18, 0.25, 0.32], fmt:v => '−' + Math.round(v*100) + ' % Tempo ab Runde 6' },
   { grp:'dur',   house:'Akademie',     name:'Effekte halten länger',  costs:[40, 60, 100],  steps:[0.1, 0.2, 0.3],    fmt:v => '+' + Math.round(v*100) + ' %' },
   { grp:'rng',   house:'Akademie',     name:'Reichweite',             costs:[40, 60, 100],  steps:[0.1, 0.2, 0.3],    fmt:v => '+' + String(v).replace('.', ',') },
   { grp:'gold',  house:'Akademie',     name:'Kopfgeld',               costs:[60, 100, 140], steps:[0.07, 0.14, 0.2],  fmt:v => '+' + Math.round(v*100) + ' %' }
@@ -717,9 +716,6 @@ function step(s, dt){
     const fx = m.fx, on = k => fx[k] && fx[k].t > 0;
     if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * dt;
     if (m.hp <= 0) { kill(s, m); continue; }
-    // Steinbremse (Forschung, 14.10. F): ab Runde 6 bremst jeder Stein-Turm alle Monster in seiner Reichweite (auch Fliegende, ohne Treffer). Das Stärkste zählt.
-    const brk = resVal(s.res, 'brk');
-    if (brk && m.def.round >= 6 && s.towers.some(tw => tw.el === 3 && Math.hypot(m.x-(tw.x+.5), m.y-(tw.y+.5)) <= tw.def.range)) addFx(m, 'slow', brk, 0.1);
     const slow = on('stun') ? 1 : Math.max(on('slow') ? fx.slow.v : 0, on('grounded') ? 0.3 : 0);
     const v = GRID * m.def.speed * (flying(m) && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
     m.d = on('fear') ? Math.max(0, m.d - v) : m.d + v;     // Angst: läuft rückwärts, höchstens bis zum Eingang
