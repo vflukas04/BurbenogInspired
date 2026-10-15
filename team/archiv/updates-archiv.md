@@ -10,3 +10,7 @@
 
 ### 13.10. 10:35 · F · (kein Spielcode) – `balance.js` repariert
 - Brach seit der Versionsprüfung ab. Neu: `node tools/balance.js zehn` = 10 feste Testspiele in ca. 15 s, `INDEX=<Pfad>` zum Vergleich.
+
+### 13.10. 10:40 · F · 2026-10-13b – Zwischenbosse
+- Nach Runde 5, 10, 15, 19 ein Zwischenboss (letztes Monster als Boss, Leben ×5, zählt 2 Durchbrüche, neutral). Spiel hat jetzt 24 Tage.
+- `MONSTERS[k].day` = Tag, `.round` = Runde. Neues Spiel nötig.

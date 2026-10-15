@@ -83,6 +83,13 @@ h1 small{font-family:var(--body);font-size:.78rem;color:var(--muted);letter-spac
 canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
 .info{font-size:.85rem;color:var(--muted);min-height:1.3em;margin-top:6px}
 .info button{margin-left:8px;padding:2px 8px;font-size:.8rem}
+.cvw{position:relative}
+.tbar{position:absolute;display:flex;gap:6px;transform:translate(-50%,-100%);margin-top:-6px;z-index:5;pointer-events:none}
+.tbar.below{transform:translate(-50%,0);margin-top:6px}
+.tbar button{pointer-events:auto;display:flex;flex-direction:column;align-items:center;min-width:44px;padding:3px 6px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--fg);font-size:.7rem;line-height:1.1;box-shadow:0 2px 6px rgba(0,0,0,.45);cursor:pointer}
+.tbar button b{font-size:1.25rem;line-height:1}
+.tbar .tup b{color:#e5483b}
+.tbar button:disabled{opacity:.4}
 .log{margin-top:16px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 .log h2{font-family:var(--display);font-weight:600;color:var(--fg);font-size:1.2rem;margin:0 0 6px}
 .log ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
@@ -207,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15h";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1274,7 +1281,7 @@ function buildLanes(){
         <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span> · ⚔ <b id="k${i}"></b> <span id="gm${i}"></span></span>
         <span class="inc" id="inc${i}"></span>
       </div>
-      <canvas id="cv${i}"></canvas>
+      <div class="cvw"><canvas id="cv${i}"></canvas><div class="tbar" id="tb${i}" hidden></div></div>
       <div class="info" id="info${i}"></div>
     </section>`).join('');
   for (let i = 0; i < n; i++) {
@@ -1369,14 +1376,17 @@ function render(){
     const eb = $('el'+i); eb.textContent = E.name + (canSwitchEl(i) ? ' ⇄' : ''); eb.style.color = E.color; eb.disabled = !canSwitchEl(i);
     setGold(i);
     if (!replay) { const inc = incomingFor(G, i); $('inc'+i).textContent = G.over ? '' : (inc.length ? `${hh(SL[G.slot])}: ${inc.length} ${MONSTERS[inc[0].type].name}` : `${hh(SL[G.slot])}: nichts im Anmarsch`); }
-    const info = $('info'+i);
+    const info = $('info'+i); $('tb'+i).hidden = true;
     const tw = selCell && selCell.i === i ? l.towers.find(t => t.x === selCell.x && t.y === selCell.y) : null;
     if (tw) { const d = tdef(tw, i), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
       const [an, at] = abilityOf(tw.el, abIdx(tw)), gm = gemsOf(i), anyGem = gm.some(v => v > 0);
       info.innerHTML = `<b style="color:${ELEMENTS[tw.el].color}">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel}${d.buff ? '' : ` · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}`}${fxText(d) ? ' · ' + fxText(d) : ''}` +
         (tw.gem ? `<br>${gemDot(tw.el)}<b style="color:var(--fg)">${an}</b>: ${at}` : `<br><span>${gemDot(tw.el)}Mit ${GEMS[tw.el].name}: eine der 8 Fähigkeiten frei wählen</span>`) +
-        (mayBuild(i) ? '<br>' + (maxed ? '' : `<button class="btn" id="up${i}" ${goldAvail(i) < uc ? 'disabled' : ''}>Upgrade (${uc} Gold)</button>`) +
-          `<button class="btn" id="sell${i}">Verkaufen (+${refundOf(tw)})</button>` + (anyGem ? `<button class="btn" id="gem${i}">💎 Edelstein</button>` : '') : '');
+        '';
+      const tb = $('tb'+i), can = mayBuild(i);
+      tb.hidden = !can; tb.className = 'tbar' + (tw.y < 2 ? ' below' : '');
+      tb.style.left = Math.min(88, Math.max(12, (tw.x + .5) / COLS * 100)) + '%'; tb.style.top = (tw.y + (tw.y < 2 ? 1 : 0)) / ROWS * 100 + '%';
+      tb.innerHTML = (maxed ? '' : `<button class="tup" id="up${i}" title="Upgrade" ${goldAvail(i) < uc ? 'disabled' : ''}><b>⬆</b>${uc}</button>`) + `<button id="sell${i}" title="Verkaufen"><b>💰</b>+${refundOf(tw)}</button>` + (anyGem ? `<button id="gem${i}" title="Edelstein"><b>💎</b></button>` : '');
       const sb = $('sell'+i); if (sb) sb.onclick = e => { e.stopPropagation(); sellDialog(i, tw.x, tw.y); };
       const ub = $('up'+i); if (ub) ub.onclick = e => { e.stopPropagation(); upgradeDialog(i, tw.x, tw.y); };
       const gb = $('gem'+i); if (gb) gb.onclick = e => { e.stopPropagation(); gemDialog(i, tw.x, tw.y); };
