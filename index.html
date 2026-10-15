@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15h";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1169,12 +1169,28 @@ function menuDialog(){
   openDlg(`<h2>Menü</h2>
     <button class="btn" id="mWx">Wetter-Animation: ${wxAnim ? 'an' : 'aus'}</button>
     <button class="btn" id="mNew">Neues Spiel …</button>
+    ${G && !G.over ? '<button class="btn" id="mGive">Spiel aufgeben …</button>' : ''}
     <div class="acts"><button class="btn primary" id="mClose">Schließen</button></div>`);
   $('mWx').onclick = () => { wxAnim = !wxAnim; lsSet('ww2-wxanim', wxAnim); menuDialog(); drawAll(); };
   $('mNew').onclick = () => { openDlg(`<h2>Neues Spiel?</h2><p style="margin:0">Das laufende Spiel wird für alle beendet.</p>
     <div class="acts"><button class="btn" id="nNo">Abbrechen</button><button class="btn primary" id="nYes">Neues Spiel</button></div>`);
     $('nNo').onclick = closeDlg; $('nYes').onclick = () => { closeDlg(); resetGame(); }; };
+  const mg = $('mGive'); if (mg) mg.onclick = () => { openDlg(`<h2>Spiel aufgeben?</h2><p style="margin:0">Das Spiel gilt für alle als verloren und die Statistik erscheint. Danach kannst du ein neues Spiel starten.</p>
+    <div class="acts"><button class="btn" id="gNo">Abbrechen</button><button class="btn primary" id="gYes">Aufgeben</button></div>`);
+    $('gNo').onclick = closeDlg; $('gYes').onclick = () => { closeDlg(); giveUp(); }; };
   $('mClose').onclick = closeDlg;
+}
+// Aufgeben: Spiel sofort als verloren beenden (für alle; online per Transaktion, damit nichts doppelt oder gegen eine Auswertung läuft)
+function giveUp(){
+  if (!G || G.over) return;
+  if (replay) endReplay();
+  const mark = g => { g.over = 'lost'; g.gaveUp = true; g.log.unshift({ when:`Tag ${g.day}`, text:`Aufgegeben nach ${g.passed} Durchbrüchen.` }); return g; };
+  if (MODE === 'local') { G = mark(G); lsSet('ww2-local', { G, L }); render(); return; }
+  const ref = DB.doc(P_STATE);
+  queueWrite(async () => {
+    if (DB.tx) await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists || snap.data().over) return; tr.set(ref, mark(JSON.parse(JSON.stringify(snap.data())))); });
+    else { const snap = await ref.get(); if (snap.exists && !snap.data().over) await ref.set(mark(JSON.parse(JSON.stringify(snap.data())))); }
+  }).then(() => refreshFromServer());
 }
 function resetGame(){
   replay = null;
@@ -1216,7 +1232,7 @@ let overSeen = lsGet('ww2-over');
 function showGameOver(){
   const won = G.over === 'won'; overSeen = G.cfg.startAt + G.over; lsSet('ww2-over', overSeen);
   openDlg(`<h2><span class="big">${won ? '🏆' : '💀'}</span>${won ? 'Gewonnen!' : 'Verloren'}</h2>
-    <p style="margin:0">${won ? `Ihr habt alle ${CONFIG.days} Tage gehalten.` : `Am Tag ${G.day} war Schluss.`} ${G.passed} von ${CONFIG.lossLimit} erlaubten Monstern sind ganz durchgebrochen.</p>
+    <p style="margin:0">${won ? `Ihr habt alle ${CONFIG.days} Tage gehalten.` : G.gaveUp ? `Aufgegeben am Tag ${G.day}.` : `Am Tag ${G.day} war Schluss.`} ${G.passed} von ${CONFIG.lossLimit} erlaubten Monstern sind ganz durchgebrochen.</p>
     <table class="stat-t"><thead><tr><th>Spieler</th><th>⚔ Kills</th><th>Gold verdient</th><th>Geschenkt</th><th>In die Kasse</th></tr></thead><tbody>
     ${[...Array(NP())].map((_,i) => { const l = laneOf(i), gifts = {};
       (l.gifts || []).forEach(g => gifts[g.to] = (gifts[g.to] || 0) + g.amt);
@@ -1340,7 +1356,7 @@ function render(){
   b.hidden = !overShown(); b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
   const fw = flyWarn(), fb = $('flybanner');
   fb.hidden = !fw; if (fw) { fb.className = 'banner' + (fw.bad ? ' bad' : ''); fb.textContent = fw.text; }
-  if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`;
+  if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : (G.gaveUp ? `Aufgegeben am Tag ${G.day}: ${G.passed} Monster sind ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`);
   $('seats').innerHTML = MODE === 'online'
     ? `<span class="muted">Ich spiele:</span>` + [...Array(n)].map((_,i) => `<button class="btn ${seat===i?'on':''}" data-seat="${i}">Spieler ${i+1}</button>`).join('')
     : `<span class="muted">Ein Gerät für alle: Feld antippen, um für diesen Spieler zu bauen.</span>`;

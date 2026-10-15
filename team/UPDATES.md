@@ -2,6 +2,10 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 15.10. 16:50 · F · 2026-10-15i – Spiel aufgeben
+- Menü ⋯ → „Spiel aufgeben …“ (mit Rückfrage): beendet das Spiel für alle als verloren, die Statistik erscheint, danach „Neues Spiel“. Vorher musste man alle Türme verkaufen und eine Welle durchlassen.
+- Neu laden.
+
 ### 15.10. 14:00 · F · 2026-10-15h – Upgrade/Verkaufen über dem Turm
 - Beim angewählten Turm erscheinen direkt darüber ein roter Pfeil ⬆ (Upgrade, mit Preis) und ein Goldtopf 💰 (Verkaufen, mit Erlös), bei Edelstein zusätzlich 💎. Tippen öffnet wie bisher das Bestätigungsfenster. Die Knöpfe unter der Karte entfallen. Am oberen Rand erscheinen sie unter dem Turm.
 - Neu laden.
@@ -60,8 +64,4 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 - 6–8 Felsen je Karte (nahe am Weg): alle Türme +15 % Reichweite, +15 Gold Bau; Stein +30 Gold, dafür Schaden ×1,3. Wald/Sumpf bleiben für Stein gratis.
 - Gelände wird bei jedem neuen Spiel aus `startAt` neu gewürfelt (Seed `tseed` in den Wellen-Eingaben). Werte in `ROCK`/`TERRAIN`. Neues Spiel + neu laden.
 - Annahme F: ×1,3 und +15 Gold für Nicht-Stein. Bot nutzt noch festes Gelände. Wirkung auf Stein im echten Spiel beobachten.
-
-### 13.10. 10:50 · L · (kein Spielcode) – Ordner `team/` für die Zusammenarbeit
-- Neu: `team/START.md` (Einstieg + Startprompt), `TODO.md` (mit „Gerade dran“), `IDEEN.md`, `UPDATES.md`. Die lange Merkliste liegt jetzt in `team/archiv/merkliste-bis-2026-10-13.md`.
-- Zweck: weniger Kontext pro Sitzung, und keiner arbeitet versehentlich gegen den anderen.
 

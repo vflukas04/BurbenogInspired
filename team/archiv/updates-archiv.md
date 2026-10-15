@@ -14,3 +14,7 @@
 ### 13.10. 10:40 · F · 2026-10-13b – Zwischenbosse
 - Nach Runde 5, 10, 15, 19 ein Zwischenboss (letztes Monster als Boss, Leben ×5, zählt 2 Durchbrüche, neutral). Spiel hat jetzt 24 Tage.
 - `MONSTERS[k].day` = Tag, `.round` = Runde. Neues Spiel nötig.
+
+### 13.10. 10:50 · L · (kein Spielcode) – Ordner `team/` für die Zusammenarbeit
+- Neu: `team/START.md` (Einstieg + Startprompt), `TODO.md` (mit „Gerade dran“), `IDEEN.md`, `UPDATES.md`. Die lange Merkliste liegt jetzt in `team/archiv/merkliste-bis-2026-10-13.md`.
+- Zweck: weniger Kontext pro Sitzung, und keiner arbeitet versehentlich gegen den anderen.
