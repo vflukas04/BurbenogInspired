@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15k";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15l";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -371,7 +371,7 @@ const ABILITIES = [
     ['Weite Flamme', 'Reichweite +50 %'],
     ['Feuerregen', 'trifft auch die andere Zielart mit halbem Schaden (Luftabwehr den Boden, Bodenturm die Fliegenden); nicht bei Türmen, die schon beides treffen'],
     ['Schwelglut', 'Monster, die durch diesen Turm brennen, nehmen +15 % Schaden von allen Türmen'],
-    ['Lavapfütze', 'Einschlagstelle bleibt 4 s Lava: Schaden und Brennen (Pfützen zählen nicht doppelt; ohne Fläche kleiner Kreis)'],
+    ['Lavapfütze', 'Einschlagstelle bleibt 4 s Lava: Schaden und Brennen (eine Pfütze je Schuss, auch bei mehreren Geschossen; Pfützen zählen nicht doppelt; ohne Fläche kleiner Kreis)'],
     ['Phönixflug', 'Geschoss springt nach dem Treffer aufs nächste Monster (60 % Schaden)'],
     ['Fegefeuer', 'Brand wirkt auch auf feuer-immune Monster (halb so stark)'] ],
   [ ['Zersplittern', 'Stirbt ein Monster durch einen Schuss, zersplittert es: Schaden und Verlangsamung im Umkreis 1,6'],
@@ -757,7 +757,7 @@ function step(s, dt){
     if (def.nova) { nova(s, tw, def); if (def.aftershock) s.later.push({ t:def.aftershock.t, tw, def:{ ...def, aftershock:null, rebound:null, pool:null, dmg:def.dmg * def.aftershock.mul } }); continue; }
     inRange.sort((a,b) => b.d - a.d);
     if (def.lance) { lance(s, tw, def, inRange); continue; }
-    for (const m of inRange.slice(0, def.shots)) launch(s, tw, def, m);
+    inRange.slice(0, def.shots).forEach((m, k) => launch(s, tw, def, m, k === 0));
   }
   for (const p of s.shots) {
     if (!p.lob && !p.tgt.dead) { p.tx = p.tgt.x; p.ty = p.tgt.y; }
@@ -778,10 +778,10 @@ function lobSpeedOf(def){
   return Math.min(CONFIG.lobFast * q, Math.max(CONFIG.lobMid * q, base));
 }
 // Geschoss abfeuern. Flächen-Geschosse werden geworfen: Sie landen dort, wo das Ziel beim Abschuss war.
-function launch(s, tw, def, target){
+function launch(s, tw, def, target, first = true){
   const x = tw.x + .5, y = tw.y + .5, lob = def.splash > 0, sp = GRID * (lob ? lobSpeedOf(def) : CONFIG.shotSpeed);
   tw.aim = Math.atan2(target.y - y, target.x - x);       // nur für die Grafik
-  s.shots.push({ x, y, x0:x, y0:y, tx:target.x, ty:target.y, tgt:target, lob, sp, def, el:def.el, idx:def.idx });
+  s.shots.push({ x, y, x0:x, y0:y, tx:target.x, ty:target.y, tgt:target, lob, sp, def, el:def.el, idx:def.idx, noPool:!first && def.el === 0 });   // Lavapfütze (Feuer): nur das erste Geschoss je Schuss legt eine
   s.fx.push({ kind:'flash', x, y, t:.12, t0:.12, el:def.el, tw });
 }
 function splashAt(s, def, x, y, R){   // Flächenschaden um einen Punkt
@@ -794,7 +794,7 @@ function impact(s, p){
   if (def.splash) { splashAt(s, def, p.tx, p.ty, def.splash); s.fx.push({ kind:'boom', x:p.tx, y:p.ty, r:def.splash, t:.3, t0:.3, el:def.el }); }
   else if (!p.tgt.dead) { hit(s, p.tgt, def, def.dmg); s.fx.push({ kind:'spark', x:p.tx, y:p.ty, t:.15, t0:.15, el:def.el }); }
   if (def.aftershock) s.later.push({ t:def.aftershock.t, at:[p.tx, p.ty], def:{ ...def, aftershock:null, rebound:null, pool:null, dmg:def.dmg * def.aftershock.mul } });   // Nachbeben bei Wurf-Türmen
-  if (def.pool) {                          // Lavapfütze / Geröll
+  if (def.pool && !p.noPool) {             // Lavapfütze / Geröll
     s.pools.push({ x:p.tx, y:p.ty, r:def.pool.r, t:def.pool.t, t0:def.pool.t, el:def.el, slow:def.pool.slow || 0,
       dps:def.pool.dpsMul ? def.dpsNow * def.pool.dpsMul : 0, def:{ ...def, pool:null, bounce:null, explode:null } });
   }
