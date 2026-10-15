@@ -2,6 +2,10 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 15.10. 21:50 · F · 2026-10-15n – „verdient" im Feldkopf
+- Neben Gold und Kills zeigt jeder Feldkopf, wie viel Gold der Spieler insgesamt verdient hat (ohne Ausgaben, Geschenke, Kasse). Wächst wie das Gold erst, wenn die Monster in der Wiedergabe sterben.
+- Neues Spiel nicht nötig, nur neu laden.
+
 ### 15.10. 21:30 · F · 2026-10-15m – Stein Tag 7–10 leichter
 - Stein-Faktor: Kleine Hunde 1,75 (vorher 1), Ratten 1,4 (1), Katzen 1,4 (1), Spatzen 1,25 (0,75). Grund: Stein brauchte an Tag 7–10 2,4–2,9× das real verfügbare Gold (die anderen 1,2–1,6×). Ziel jetzt ca. 1,4–1,7×.
 - Block-2-Regel „je Element ein Bonus/Malus" gilt für Stein damit nicht mehr. Maus-Boss (Tag 6, Stein 3,7×) bewusst unverändert. Werte sind Bot-Tendenzen.
@@ -62,7 +66,4 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 - Forschung: jede Verbesserung in 3 Stufen (Stufe 1 ab 25 Gold), Freischaltung Türme 5–6: 250, 7–8: 700. Lavaturm 0,35 Schüsse/s bei gleichem Schaden/s.
 - Optik: Fenster für Verkaufen, Upgrade (Vorschau), Schenken (Knöpfe +10/+50/+100/Hälfte); Menü ⋯ (Neues Spiel, Wetter-Animation); Tempo als ein Knopf; Wetter-Symbol auf der Karte; Goldstand blinkt; Bauen erst gesperrt, wenn die Niederlage im Bild ist.
 - Fähigkeiten-Zahlen sind Startwerte (Kurztest: Glutnest, Durchbohren, Weitwurf, Haut vereist stark). Neues Spiel + neu laden.
-
-### 14.10. 11:50 · L · 2026-10-14b – Felsen kosten für alle +30
-- Felsen: alle Elemente zahlen +30 Gold (vorher +15, nur Stein +30). Reichweite +15 % für alle und ×1,3 Schaden nur für Stein bleiben. Neues Spiel + neu laden.
 

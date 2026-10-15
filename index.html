@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15m";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15n";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1294,7 +1294,7 @@ function buildLanes(){
       <div class="lhead">
         <span class="name">Spieler ${i+1}</span>
         <button class="el" id="el${i}" title="Element wechseln (nur vor dem ersten Turm an Tag 1)"></button>
-        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span> · ⚔ <b id="k${i}"></b> <span id="gm${i}"></span></span>
+        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span> · verdient <b id="e${i}"></b> · ⚔ <b id="k${i}"></b> <span id="gm${i}"></span></span>
         <span class="inc" id="inc${i}"></span>
       </div>
       <div class="cvw"><canvas id="cv${i}"></canvas><div class="tbar" id="tb${i}" hidden></div></div>
@@ -1316,6 +1316,7 @@ function updateLaneHeads(){
     $('p'+i).textContent = s && s.earned ? `+${s.earned}` : '';
     if (s) $('inc'+i).textContent = `${s.queue.length + s.monsters.length} unterwegs`;
     $('k'+i).textContent = killsOf(i); setGold(i);
+    $('e'+i).textContent = (G.earned[i] || 0) - pendingOf(i, 'earned');   // insgesamt verdient (erscheint wie das Gold erst beim Sterben)
     const gm = gemsOf(i), gh = gm.map((v, e) => v > 0 ? gemDot(e, v) : '').join('');
     if ($('gm'+i).innerHTML !== gh) $('gm'+i).innerHTML = gh;
   }
