@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15o";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-15p";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -610,7 +610,7 @@ function makeSim(inp){
     if (near.length) { const m = Math.max(...near.map(a => a.el === t.el ? a.def.buff : a.def.allBuff)), p = Math.max(t.def.pierce || 0, ...near.map(a => a.el === t.el ? a.def.pierce : 0));
       t.def = { ...t.def, dpsNow:t.def.dpsNow * m, dmg:t.def.dmg * m, amp:m, pierce:p }; } }
   return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, rand:rng(inp.seed || 1),
-    queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, kills:0, gems:[0,0,0,0], pools:[], later:[], spawnT:0, t:0 };
+    queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, bSum:0, kills:0, gems:[0,0,0,0], pools:[], later:[], spawnT:0, t:0 };
 }
 const simBusy = s => s.queue.length || s.monsters.length || s.shots.length || s.later.length;
 function wdef(def, W, res){          // Turmwerte mit Forschung und unter dem aktuellen Wetter
@@ -634,7 +634,7 @@ const flying = m => m.def.fly && !(m.fx.grounded && m.fx.grounded.t > 0);
 // Tod: Gold, Kills, Edelstein (Zwischenboss/Boss: Farbe des tötenden Turms, Brennen/Lava = Feuer), Fähigkeiten, die beim Tod auslösen
 function kill(s, m, def){
   if (m.dead) return; m.dead = true;
-  s.earned += Math.round(m.def.bounty * (1 + resVal(s.res, 'gold'))); s.kills++;
+  s.bSum += m.def.bounty; s.earned = Math.round(s.bSum * (1 + resVal(s.res, 'gold'))); s.kills++;   // 15.10. (F): Akademie-Bonus auf die Summe der Kopfgelder der Welle, nicht je Monster gerundet (bei 2–5 Gold kam sonst fast nichts an)
   if (isBossy(m)) s.gems[def ? def.el : 0]++;
   if (def && def.hunger) def.feast = (def.feast || 0) + 1;
   const c = m.fx.curse;
