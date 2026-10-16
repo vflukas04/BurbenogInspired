@@ -3,7 +3,7 @@
 const fs = require('fs'), path = require('path');
 const NAMES = ['CONFIG', 'ELEMENTS', 'MONSTERS', 'MAPS', 'GRID', 'COLS', 'ROWS', 'TERRAIN', 'TOWER_COST', 'TOWER_POWER', 'RESEARCH', 'RESEARCH_GROUPS',
   'LOCKS', 'ABILITIES', 'GEMS', 'towerBase', 'tdef', 'upgradeCost', 'monsterDef', 'waveSpecs', 'simulate', 'makeSim', 'step', 'simBusy', 'posAt',
-  'buildCost', 'bountyFor', 'DT', 'resVal', 'VERSION'];
+  'buildCost', 'bountyFor', 'DT', 'resVal', 'VERSION', 'genTerrain', 'gemOptions', 'BASICS', 'abilityBlocked'];
 function stubs(){
   const el = () => new Proxy({ style:{}, dataset:{}, classList:{ toggle(){}, add(){}, remove(){} }, addEventListener(){}, querySelectorAll:() => [], clientWidth:0, value:'10' },
     { get:(t, k) => k in t ? t[k] : undefined, set:(t, k, v) => (t[k] = v, true) });

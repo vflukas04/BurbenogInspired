@@ -6,12 +6,18 @@ const G = require('./sim').load();
 const SPIEGEL = require('./spiegel').anwenden(G);   // Änderungen aus spiegel.json (nur im Speicher)
 const { MAPS, COLS, ROWS, GRID, ELEMENTS } = G;
 
-// ---------- Testkarte ----------
-const LANE = 0, MAP = MAPS[LANE];
-for (let y = 0; y < ROWS; y++) MAP.terrain[y] = Array(COLS).fill(0);   // nur Wiese
-const free = []; for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) if (!MAP.cells.has(x + ',' + y)) free.push([x, y]);
-// Wegpunkte im Abstand 0,1 (für Abdeckung)
-const PATH = []; for (let d = 0; d <= MAP.len; d += 0.1) PATH.push(G.posAt(MAP, d));
+// ---------- Maps ----------
+// useMap(lane, seed): eine der 4 Maps des Spiels; seed = null → Testmap (nur Wiese), sonst Gelände wie im Spiel aus diesem Seed gewürfelt
+// (Wald/Sumpf kosten Gold, Felsen +30 Gold, +15 % Reichweite, Stein ×1,3). Standard: Map 0 als Testmap.
+let LANE = 0, MAP = MAPS[0], free = [], PATH = [], maskCache = new Map();
+function useMap(lane = 0, seed = null){
+  LANE = lane; MAP = MAPS[lane]; maskCache = new Map();
+  if (seed === null || seed === undefined) for (let y = 0; y < ROWS; y++) MAP.terrain[y] = Array(COLS).fill(0);
+  else G.genTerrain(MAP, seed);
+  free = []; for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) if (!MAP.cells.has(x + ',' + y)) free.push([x, y]);
+  PATH = []; for (let d = 0; d <= MAP.len; d += 0.1) PATH.push(G.posAt(MAP, d));   // Wegpunkte im Abstand 0,1 (für Abdeckung)
+  Object.assign(module.exports, { LANE, MAP, free, PATH });
+}
 
 // ---------- Simulation einer Welle auf einem Feld ----------
 /* setup = { el, towers:[{x,y,el,idx,lvl,gem,ab}], res:[ids] }
@@ -68,9 +74,10 @@ function coverage(x, y, r){ const cx = x + .5, cy = y + .5; let c = 0; for (cons
 /* Maske für einen Turm: alle freien Felder mit Abdeckung, sortiert; behalten wird, was mindestens keep × bestes Feld erreicht.
    Reichweite = Grundreichweite auf Stufe lvl (Upgrades vergrößern sie). Irrlicht: Lichtkreis (Motten, Nachtsicht wirken auf Monster darin). */
 function mask(el, idx, lvl = 1, keep = 0.6){
+  const ck = [el, idx, lvl, keep].join(); if (maskCache.has(ck)) return maskCache.get(ck);
   const d = G.tdef({ el, idx, lvl, x:0, y:0 }), r = d.buff ? d.light : d.nova ? d.splash : d.range;
   const all = free.map(([x, y]) => ({ x, y, c:coverage(x, y, r) })).sort((a, b) => b.c - a.c);
-  const best = all[0].c; return { r, best, cells:all.filter(o => o.c >= keep * best) };
+  const best = all[0].c, res = { r, best, cells:all.filter(o => o.c >= keep * best) }; maskCache.set(ck, res); return res;
 }
 // Gold bis einschließlich Tag `day` bei vollständigem Abschuss (Obergrenze), 1 Spieler, ohne Forschungsbonus
 function incomeUntil(day, players = 2){
@@ -78,4 +85,5 @@ function incomeUntil(day, players = 2){
   for (let d = 1; d < day; d++) { const M = G.MONSTERS[d - 1]; if (!M) break; g += G.monsterDef(d - 1, players).bounty * (M.count || G.CONFIG.perWave); }
   return g;
 }
-module.exports = { G, SPIEGEL, MAP, LANE, free, PATH, runWave, runDay, reserveDay, reserve, reserveHp, coverage, mask, incomeUntil };
+module.exports = { G, SPIEGEL, useMap, runWave, runDay, reserveDay, reserve, reserveHp, coverage, mask, incomeUntil };
+useMap(0, null);

@@ -25,9 +25,10 @@ function actions(setup, gold, opt){
   const out = [], used = new Set(setup.towers.map(key)), res = new Set(setup.res || []), el = setup.el;
   for (let k = 0; k < 8; k++) {
     if (G.LOCKS[k] && !res.has(G.LOCKS[k])) continue;
-    const cost = G.buildCost(el, k, C.LANE, 0, 0); if (cost > gold + (opt.spar || 0)) continue;
+    // Felder mit Geländeaufschlag kosten mehr (Wald/Sumpf/Felsen); je Turm die besten Felder seiner Maske
     C.mask(el, k, 1, opt.keep || 0.8).cells.filter(c => !used.has(c.x + ',' + c.y)).slice(0, opt.cells || 4)
-      .forEach(c => out.push({ kind:'bau', cost, apply:s => ({ ...s, towers:[...s.towers, { x:c.x, y:c.y, el, idx:k, lvl:1, inv:cost }] }), txt:`${G.ELEMENTS[el].towers[k][0]} bauen` }));
+      .forEach(c => { const cost = G.buildCost(el, k, C.LANE, c.x, c.y); if (cost > gold + (opt.spar || 0)) return;
+        out.push({ kind:'bau', cost, apply:s => ({ ...s, towers:[...s.towers, { x:c.x, y:c.y, el, idx:k, lvl:1, inv:cost }] }), txt:`${G.ELEMENTS[el].towers[k][0]} bauen` }); });
   }
   setup.towers.forEach((t, i) => { if ((t.lvl || 1) >= G.CONFIG.maxLevel) return;
     const cost = upCost(t, setup.res); if (cost > gold + (opt.spar || 0)) return;
