@@ -35,15 +35,22 @@ function forschung(setup, kasse, waves){
 }
 // Edelsteine: neue Steine auf die Türme mit dem meisten Gold, jeweils die Option mit dem größten Zuwachs
 function steine(setup, n, waves){
-  for (let k = setup.towers.filter(t => t.gem).length; k < n; k++) {
+  // KONVERT=1 (Sonderprüfung 16.10.): Steine dürfen auch Türme in ein anderes Element umwandeln (gleiche Nummer und Stufe, Gold bleibt)
+  const konv = !!process.env.KONVERT;
+  for (let k = setup.used || 0; k < n; k++) {
     const R = waves.map(w => C.reserveDay(setup, w)), fRef = R.map(r => r * 1.25), base = B.quick(setup, waves, fRef);
-    const top = setup.towers.map((t, i) => [t, i]).filter(([t]) => !t.gem).sort((a, b) => (b[0].inv || 0) - (a[0].inv || 0)).slice(0, 4);
+    const top = setup.towers.map((t, i) => [t, i]).filter(([t]) => !t.gem && !t.conv).sort((a, b) => (b[0].inv || 0) - (a[0].inv || 0)).slice(0, konv ? 8 : 4);
     let best = null;
-    for (const [t, i] of top) for (const ab of G.gemOptions(t.el, t.idx)) {
-      if (typeof ab === 'number' && G.abilityBlocked(t, ab)) continue;
-      const s = { ...setup, towers:setup.towers.map((u, j) => j === i ? { ...u, gem:true, ab } : u) }, v = B.quick(s, waves, fRef) - base;
-      if (!best || v > best.v) best = { s, v }; }
+    const tryS = s => { const v = B.quick(s, waves, fRef) - base; if (!best || v > best.v) best = { s:{ ...s, used:k + 1 }, v }; };
+    for (const [t, i] of top) {
+      if (t.el === setup.el) for (const ab of G.gemOptions(t.el, t.idx)) {
+        if (typeof ab === 'number' && G.abilityBlocked(t, ab)) continue;
+        tryS({ ...setup, towers:setup.towers.map((u, j) => j === i ? { ...u, gem:true, ab } : u) }); }
+      if (konv) for (let e2 = 0; e2 < 4; e2++) if (e2 !== t.el)
+        tryS({ ...setup, towers:setup.towers.map((u, j) => j === i ? { ...u, el:e2, gem:false, ab:undefined, conv:true } : u) });
+    }
     if (!best) break; setup = best.s;
+    if (konv && process.env.LAUT) { const c = setup.towers.filter(t => t.conv).map(t => G.ELEMENTS[t.el].towers[t.idx][0]); if (c.length) console.error('  umgewandelt: ' + c.join(', ')); }
   }
   return setup;
 }
@@ -81,7 +88,7 @@ if (require.main === module) {
       require('./bericht').p2(erg); })();
   }
   const e = +arg, erg = { [G.ELEMENTS[e].name]: maps.map(([lane, seed]) => ({ lane, seed, tage:lauf(e, lane, seed, bis) })) };
-  fs.writeFileSync(path.join(out, `p2-${e}.json`), JSON.stringify({ version:G.VERSION, spiegel:C.SPIEGEL, maps, erg }, null, 1));
+  fs.writeFileSync(path.join(out, `p2-${e}${process.env.KONVERT ? '-konv' : ''}.json`), JSON.stringify({ version:G.VERSION, spiegel:C.SPIEGEL, maps, erg }, null, 1));
   if (!process.env.NUR_JSON) require('./bericht').p2(erg);
 }
 module.exports = { lauf, budget };
