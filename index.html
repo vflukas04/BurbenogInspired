@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-16c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-16d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -321,7 +321,7 @@ const ELEMENTS = [
     ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.36, 6, 0, {air:true}],
     ['Schwelbrand',  'Effekt',    2.5, 0.5, 3, 0.35,0.26, DAY],
     ['Lavaturm',     'Fläche',    2.0, 0.35,1, 1.5, 0.36, 4, 0.9, {fly:false}],   // 14.10. (L): halb so oft, doppelter Schaden je Wurf (gleicher Schaden/s)
-    ['Phönix',       'Schaden',   3.0, 0.6, 2, 1.4, 0.36, 8],
+    ['Sonnenturm',   'Schaden',   3.0, 0.6, 2, 1.4, 0.36, 8],
     ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.65, DAY] ]},
   { name:'Eis', emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', armorDmg:0.6, towers:[
     ['Frostsplitter','Effekt',    2.0, 1,   1, 1.1, 0.25, 3],
@@ -371,7 +371,7 @@ const ABILITIES = [
     ['Feuerregen', 'trifft auch die andere Zielart mit halbem Schaden (Luftabwehr den Boden, Bodenturm die Fliegenden); nicht bei Türmen, die schon beides treffen'],
     ['Schwelglut', 'Monster, die durch diesen Turm brennen, nehmen +15 % Schaden von allen Türmen'],
     ['Lavapfütze', 'Einschlagstelle bleibt 4 s Lava: Schaden und Brennen (eine Pfütze je Schuss, auch bei mehreren Geschossen; Pfützen zählen nicht doppelt; ohne Fläche kleiner Kreis)'],
-    ['Phönixflug', 'Geschoss springt nach dem Treffer aufs nächste Monster (60 % Schaden)'],
+    ['Sonnenfeuer', 'Geschoss springt nach dem Treffer aufs nächste Monster (60 % Schaden)'],
     ['Fegefeuer', 'Brand wirkt auch auf feuer-immune Monster (halb so stark)'] ],
   [ ['Zersplittern', 'Stirbt ein Monster durch einen Schuss, zersplittert es: Schaden und Verlangsamung im Umkreis 1,6'],
     ['Großer Ball', 'Fläche +30 % (ohne Fläche: kleine Fläche), verlangsamt auch Fliegende'],
@@ -946,7 +946,7 @@ function impact(s, p){
       dps:def.pool.dpsMul ? def.dpsNow * def.pool.dpsMul : 0, def:{ ...def, pool:null, bounce:null, explode:null } });
   }
   if (def.rebound) def.rebound.forEach((mul, k) => s.later.push({ t:0.4 * (k + 1), at:[p.tx, p.ty], def:{ ...def, rebound:null, pool:null, dmg:def.dmg * mul } }));   // Prellstein: hüpft an derselben Stelle nach
-  if (def.bounce) {                        // Phönixflug: einmal weiter zum nächsten Monster
+  if (def.bounce) {                        // Sonnenfeuer (bis 16.10. Phönixflug): einmal weiter zum nächsten Monster
     const nx = s.monsters.filter(o => !o.dead && !hidden(o) && o !== p.tgt && canHit(def, o)).map(o => [o, Math.hypot(o.x - p.tx, o.y - p.ty)])
       .filter(([,r]) => r <= def.bounce.r && r > 0.3).sort((a, b) => a[1] - b[1])[0];
     if (nx) { const d2 = { ...def, bounce:null, pool:null, dmg:def.dmg * def.bounce.mul }, o = nx[0];

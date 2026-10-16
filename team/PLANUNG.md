@@ -70,7 +70,7 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 | 5 Schwelbrand | Schwelglut | Monster, die durch Schwelbrand brennen, nehmen +15 % Schaden von allen Türmen | leicht |
 | 6 Lavaturm | Lavapfütze | Einschlagstelle bleibt 4 s Lava: Schaden + Brennen. Mehrere Pfützen stapeln nicht (ein Monster in 2 Pfützen zählt einmal) | mittel (Bodenfeld) |
 | 6 Lavaturm (Grundturm) | – | Vorschlag L: langsamer bei gleichem Schaden/s (z. B. 0,35 statt 0,7 Schüsse/s, doppelter Schaden je Schuss). Ändert den Turm für alle, auch ohne Stein – mit dem Balancing-Skript prüfen | leicht |
-| 7 Phönix | Phönixflug | Geschoss springt nach dem Treffer aufs nächste Monster (60 %) | mittel (Sprung) |
+| 7 Sonnenturm (bis 16.10. Phönix) | Sonnenfeuer (bis 16.10. Phönixflug) | Geschoss springt nach dem Treffer aufs nächste Monster (60 %) | mittel (Sprung) |
 | 8 Höllenfeuer | Fegefeuer | Brand wirkt auch auf feuer-immune Monster (50 %) | leicht |
 
 **❄️ Eis – Saphir**
