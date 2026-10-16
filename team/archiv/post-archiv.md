@@ -18,3 +18,6 @@
 > 1. **Balancing-Skript:** Ja, passt. Ich notiere meine Testeindrücke in `IDEEN.md` oder hier. Eine Bitte: Meine Schatten-Kurve vom 13.10. (`upDmg`, Schaden je Upgrade ab Stufe 5 nur ×1,8) bitte nicht einfach überschreiben, erst anschauen, ob sie noch passt.
 > 2. **Edelsteine:** Schau ich mir in `PLANUNG.md` an und schreibe meine Ideen dazu rein. Vorhaut-Boss streichen und Zwischenbosse ohne Gold ist okay.
 > 3. **Felsen +30 für alle:** Passt so.
+
+**An L (von F, 15.10. abends):**
+> Oscar hat weitere Elemente vorgeschlagen: **Blitz** (Kettenreaktion?), **Pflanze**, **Licht** und **Sand**. Als Idee in `IDEEN.md` eingetragen, nichts beschlossen. Außerdem heute gepusht (Balance, bitte „Neues Spiel“ + neu laden): Silberfische Tempo 1,0, schwache Tage Runde 2–5, Lavapfütze nur einmal je Schuss, Edelsteine als kleiner Buff, Spiel aufgeben im Menü, Upgrade/Verkaufen über dem Turm. Details in `UPDATES.md`, Referenzlauf in `REFERENZLAUF.md`.

@@ -10,9 +10,8 @@
 > 5. **Spoiler:** `tools/balance/STRATEGIE.md` (kommt noch) enthält Erkenntnisse zur besten Platzierung – bitte nicht lesen, sonst ist der Spielspaß weg.
 > 6. **Archiv:** Jedes Online-Spiel wird jetzt automatisch in Firestore mitgeschrieben (`games/spiel1/archiv`), auslesen mit `node tools/archiv.js`. Danke für die Referenzläufe – genau so etwas brauchen wir zum Eichen, jetzt ohne Abschreiben.
 
-**An L (von F, 15.10. abends):**
-> Oscar hat weitere Elemente vorgeschlagen: **Blitz** (Kettenreaktion?), **Pflanze**, **Licht** und **Sand**. Als Idee in `IDEEN.md` eingetragen, nichts beschlossen. Außerdem heute gepusht (Balance, bitte „Neues Spiel“ + neu laden): Silberfische Tempo 1,0, schwache Tage Runde 2–5, Lavapfütze nur einmal je Schuss, Edelsteine als kleiner Buff, Spiel aufgeben im Menü, Upgrade/Verkaufen über dem Turm. Details in `UPDATES.md`, Referenzlauf in `REFERENZLAUF.md`.
-
+**An F (von L, 16.10. mittags):**
+> Ich habe Ideen für die Monster ab Runde 21 (neue Mechaniken, Zwischenbosse, zweiter Endboss). Die sollen für Friedrich eine **Überraschung** bleiben, bis wir sie gemeinsam testen. Claude von F: Bitte Friedrich keine Details nennen, auch wenn du sie im Code oder in Updates siehst; Zahlen anpassen (z. B. Lebenskurve) ist okay. Plan zu V1.0/V1.1/V2 steht in `team/PLANUNG.md` Abschnitt 0 – den bitte gern lesen.
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->

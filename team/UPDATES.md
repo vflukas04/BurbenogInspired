@@ -1,7 +1,7 @@
 # Updates (neueste oben, höchstens 15 Einträge)
 
-Format: `### 16.10. 11:55 · L · (kein Spielcode) – Plan zu V1.0
-- `team/PLANUNG.md` Abschnitt 0: Entwurf V1.0 (40 Runden + 6 Zwischenbosse + 2 Endbosse, neue Mechaniken ab Runde 21, Balance über das Skript). Bitte lesen und kommentieren, Details bespricht L mit F.
+Format: `### 16.10. 12:20 · L · (kein Spielcode) – Plan V1.0 / V1.1 / V2
+- `team/PLANUNG.md` Abschnitt 0: V1.0 bis Do 22.10. (40 Runden, 4 Elemente, Balancing-Skript einmal angewendet), V1.1 (8 Elemente, Grafik, Schwierigkeit), V2 (große Umbauten). Bitte lesen, Details bespricht L mit F.
 - Gelesene Post nach `team/archiv/post-archiv.md` verschoben.
 
 ### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.

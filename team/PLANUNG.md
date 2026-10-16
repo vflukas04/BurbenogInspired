@@ -3,21 +3,25 @@
 Größere Vorhaben, bevor sie umgesetzt werden. Kommentare beider willkommen, mit Kürzel (L/F). Beschlossenes wandert nach `TODO.md`, Verworfenes nach `IDEEN.md`.
 
 ## 0. Weg zu V1.0 – L, 16.10. – Entwurf, mit F abstimmen
-Produktversion (unabhängig von `VERSION`): heute ca. **0.8** – Kern steht, Balance und Inhalt offen.
+Produktversion (unabhängig von `VERSION`): heute ca. **0.8**.
 
-**V1.0 soll enthalten:**
-- **Elemente:** 4 oder 8 – noch offen.
-- **Wellen:** 40 Runden (normale Monster) + 6 Zwischenbosse + 2 Endbosse (nach Runde 20 und 40). Neue Mechaniken erst ab Runde 21 (Runden 1–20 sind schon besser einschätzbar). Zwischenbosse bleiben große Varianten der Vorwelle.
-- **Zeit:** gespielt wird meist am Stück; für die verteilte Version ggf. mehrere „Tage“ pro echtem Tag.
-- **Balance:** fertig, wenn das Balancing-Skript eine Einstellung findet, die seine Vorgaben erfüllt, und sich Testspiele gut anfühlen. Gewinnen eher selten (Richtwert 20–30 %), wichtiger ist eine gute Ausgestaltung der Reserve.
-- **Fähigkeit frei wählbar:** Kompromiss zwischen L und F (folgt).
-- **Schwierigkeitsstufen:** nach dem Balancing einbauen.
-- **Grafik:** Umfang noch klären (Pakete wie Kenney oder eigene, was alles: Karte, Gelände, Türme, Monster, Geschosse, Treffer, Effekte).
-- **Pflicht:** Firestore-Regeln vor 09.11., Handy-Hänger.
+**V1.0 – Ziel Do 22.10.**
+- 4 Elemente.
+- 40 Runden (normale Monster) + 6 Zwischenbosse + 2 Endbosse (nach Runde 20 und 40). Neue Mechaniken erst ab Runde 21 (Inhalt: Überraschung von L). Zwischenbosse bleiben große Varianten der Vorwelle.
+- Balancing-Skript steht und ist einmal auf alle 40 Runden angewendet. Ziel: Das Skript findet eine Einstellung, die seine Vorgaben erfüllt, und Testspiele fühlen sich gut an. Gewinnen eher selten (Richtwert 20–30 %), wichtiger ist eine gute Ausgestaltung der Reserve.
+- Fähigkeit frei wählbar: Kompromiss L/F (folgt).
+- Pflicht: Firestore-Regeln vor 09.11.
 
-**Danach:** V1.x neue Inhalte ohne Grundregeländerung · V2 große Umbauten (gemeinsame Map, Skilltree, ggf. weitere Elemente).
+**V1.1 – Termin wird am 22.10. festgelegt (dann auch Termin fürs Spiel zu viert)**
+- 8 Elemente (Kandidaten: Blitz, Pflanze, Licht, Sand).
+- Nacharbeit Balancing, Schwierigkeitsstufen (aus den Korridoren des Skripts).
+- Grafik: einheitliche Sprites und Animationen für alles (Karte, Gelände, Türme, Monster, Geschosse, Treffer, Effekte), auf allen Handys gleich.
+- Handy-Hänger.
 
-**Zeitziel:** ambitioniert, frühestens Do 22.10. F hält sich bis dahin eher im Hintergrund und macht Mikro-Balancing für den Testspaß.
+**V2 – zu groß, zu grundsätzlich oder nicht dringend für die nächsten 1–2 Wochen**
+- Gemeinsame Map statt einer Map je Spieler, Skilltree, Querformat/Zoom, Chat, weitere Ideen aus `IDEEN.md`.
+
+**Zeit:** gespielt wird meist am Stück; für die verteilte Version ggf. mehrere „Tage“ pro echtem Tag. F hält sich bis 22.10. eher im Hintergrund und macht Mikro-Balancing für den Testspaß.
 
 ## 1. Balancing-Skript – L, 14.10.
 **Ziel:** Statt vieler kleiner Handänderungen schlägt ein Skript Zahlen vor, die messbare Ziele treffen. F kann sich auf Spielprinzip und neue Mechaniken konzentrieren.
