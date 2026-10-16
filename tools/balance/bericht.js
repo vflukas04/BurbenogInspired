@@ -4,9 +4,10 @@ const pad = (s, k) => String(s).padEnd(k), gm = a => Math.exp(a.reduce((x, v) =>
 // Zielkurve (16.10., L): Anfang lockerer, Ende knapper; Endboss ca. 50 % Reserve für den (fast perfekten) Bot, davor mehr. Linear über die Runde.
 // Eichung grob (Referenzläufe 15.10.): Menschen erreichen ca. 65–85 % der Bot-Stärke → bei R 1,5 bleibt für echte Spieler ungefähr 1,0–1,25.
 const ZIEL_START = +process.env.ZIEL_START || 2.0, ZIEL_ENDE = +process.env.ZIEL_ENDE || 1.4;   // 16.10. (L): Endboss 40 % Bot-Reserve → für echte Spieler etwa −10 % bis +15 %
-const ziel = round => ZIEL_START + (ZIEL_ENDE - ZIEL_START) * (round - 1) / 39;
-// Band (16.10., L: „Endboss ca. 50 %, davor höher erlaubt“): untere Grenze überall ZIEL_ENDE, obere Grenze die Zielkurve.
-// Verhältnis zum Band: < 1 zu schwer (unter 1,5), > 1 zu leicht (über der Kurve), dazwischen 1.
+// Zielband (16.10., L): untere Grenze überall ZIEL_ENDE (Endboss 40 % Bot-Reserve); nach oben öffnet es sich in der Mitte des Spiels
+// bis ZIEL_START und schließt sich zum Endboss wieder (Bogen). Runde 1–5 regelt P1 (Start), nicht die Kurve.
+const ziel = round => ZIEL_ENDE + (ZIEL_START - ZIEL_ENDE) * Math.sin(Math.PI * Math.min(1, Math.max(0, (round - 1) / 39)));
+// Verhältnis zum Band: < 1 zu schwer (unter der Untergrenze), > 1 zu leicht (über dem Bogen), dazwischen 1.
 const band = (R, round) => R < ZIEL_ENDE ? R / ZIEL_ENDE : R > ziel(round) ? R / ziel(round) : 1;
 
 function p2(erg){
@@ -14,7 +15,7 @@ function p2(erg){
   // R je Element und Tag: geometrisches Mittel über die Maps
   const R = {}; for (const x of namen) R[x] = [...Array(nT)].map((_, i) => gm(erg[x].map(m => m.tage[i].R)));
   console.log(`P2 · beste gefundene Aufstellung je Tag · Version ${G.VERSION} · 2 Spieler · Maps ${erg[namen[0]].map(m => m.lane + ':' + m.seed).join(', ')}`);
-  console.log(`R = Reserve (1 = gerade geschafft), Ziel linear ${ZIEL_START} → ${ZIEL_ENDE}\n`);
+  console.log(`R = Reserve (1 = gerade geschafft), Band: unten ${ZIEL_ENDE}, oben Bogen bis ${ZIEL_START} (Mitte), Endboss ${ZIEL_ENDE}\n`);
   console.log(pad('Tag', 4) + pad('Monster', 24) + namen.map(x => pad(x, 10)).join('') + pad('Mittel', 8) + 'Ziel');
   for (let i = 0; i < nT; i++) {
     const M = G.MONSTERS[i], rs = namen.map(x => R[x][i]);

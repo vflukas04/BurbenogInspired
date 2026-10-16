@@ -18,7 +18,7 @@ const alt = S.lesen(), neu = { ...alt };
 
 // 1. Kurve je Block: Leben ×(Mittel aller Elemente R/Ziel)
 console.log('Lebensfaktor je Block (CONFIG.hpBlock):');
-for (let b = 0; b < 8; b++) {
+for (let b = 1; b < 8; b++) {   // Block 1 (Runde 1–5) bleibt bei P1
   const idx = [...Array(nT).keys()].filter(i => Math.ceil(G.MONSTERS[i].round / 5) === b + 1); if (!idx.length) continue;
   const v = gm(idx.flatMap(i => namen.map(x => q(x, i)))), key = `CONFIG.hpBlock.${b}`, a = alt[key] ?? G.CONFIG.hpBlock[b];
   neu[key] = +Math.max(HP_MIN, a * clamp(Math.pow(v, DAEMPFUNG))).toFixed(3);

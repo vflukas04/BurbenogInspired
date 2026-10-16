@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-16f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-16g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -238,7 +238,7 @@ const CONFIG = {
   firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
   maxLevel: 6,              // Stufe 1 + 5 Upgrades
   upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
-  upgrade: { dmg:2.1, firstDmg:2.2, range:0.2, dur:1.3, eff:1.15 },  // 12.10. 11:01: erstes Upgrade ×2,2, danach je ×2,1. Schaden/s je Stufe auf 0,1 aufgerundet
+  upgrade: { dmg:2.1, firstDmg:2.2, steps:[2.2, 2.1, 2.1, 2.1, 2.1], range:0.2, dur:1.3, eff:1.15 },  // 12.10. 11:01: erstes Upgrade ×2,2, danach je ×2,1. Schaden/s je Stufe auf 0,1 aufgerundet
    // pro Upgrade: Schaden ×2, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
   giftFee: 0.10, giftStep: 10,
   weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt
@@ -569,7 +569,7 @@ const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;
 function tdef(tw, lane){
   const b = towerBase(tw.el, tw.idx), n = (tw.lvl || 1) - 1, U = CONFIG.upgrade;
   // Schaden/s Stufe für Stufe hochrechnen und jeweils auf eine Nachkommastelle aufrunden (lesbare Zahlen)
-  let dpsNow = ceil1(b.dps); for (let k = 1; k <= n; k++) dpsNow = ceil1(dpsNow * (ELEMENTS[tw.el].upDmg ? ELEMENTS[tw.el].upDmg[k - 1] : (k === 1 ? U.firstDmg : U.dmg)));
+  let dpsNow = ceil1(b.dps); for (let k = 1; k <= n; k++) dpsNow = ceil1(dpsNow * (ELEMENTS[tw.el].upDmg ? ELEMENTS[tw.el].upDmg[k - 1] : U.steps ? U.steps[k - 1] : (k === 1 ? U.firstDmg : U.dmg)));   // U.steps (16.10.): Schaden je Upgrade-Stufe, Stellschraube Balancing-Skript
   let eff = b.eff * Math.pow(U.eff, n);
   if (b.effect === 'slow') eff = Math.min(0.85, eff);
   if (b.effect === 'curse') eff = Math.min(1.5, eff);
