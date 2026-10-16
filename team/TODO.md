@@ -15,7 +15,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- (niemand)
+- L · Balancing-Skript (glatte Bewertung, lokale Verbesserung, Spiegel, Wissen, Vorwärtspfad) · seit 16.10. 12:50
 
 ## Als Nächstes
 | Was | Wer | Notiz |
