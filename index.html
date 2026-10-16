@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-16e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-16f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -466,7 +466,7 @@ const MONSTERS = [
   ['Fledermäuse',       {emo:'🦇', fly:true, night:true, speed:1.6, weak:[0.75, 1.5, 1, 1]}],
   ['Lehrer',            {emo:'🧑‍🏫', ar:[0.2, 0.3], speed:1.0, mixed:true, weak:[1, 1, 1, 1], info:'jeder Lehrer hat eigene Stärken und Schwächen: eine „Immunität“, ein Bonus, der Rest gemischt'}],
   ['Schulleiter',       {emo:'🎓', mini:true, ar:[0.2, 0.3], speed:1.0, hpMul:5, count:1, lives:2, weatherBoss:true, weak:[1, 1, 1, 1], info:'macht auf jeder Map das Wetter, das dem Element dort am meisten schadet (Stein ist wetterfest)'}],
-  ['Streichquartett',   {emo:'🎻', ar:[0.15, 0.3], speed:1.0, hpMul:1.05, quartet:true, weak:[1, 1, 1, 1], info:'gemischte Welle: Violinen (leicht), Bratschen (verwirrt, laufen immer wieder rückwärts), Celli (stärker) und Kontrabässe (etwas langsamer, geben Monstern in ihrer Nähe +20 Punkte Rüstung)'}],
+  ['Streichquartett',   {emo:'🎻', ar:[0.15, 0.3], speed:1.0, hpMul:1.05, quartet:true, weak:[1, 1, 1, 1], info:'gemischte Welle (Farbe und Größe zeigen die Sorte): 7 Violinen (gelb, leicht), 6 Bratschen (orange, verwirrt, laufen immer wieder rückwärts), 4 Celli (braun, stärker), 3 Kontrabässe (dunkelrot, groß, etwas langsamer, geben Monstern in ihrer Nähe +20 Punkte Rüstung)'}],
   ['Heisenbergs',       {emo:'🧪', ar:[0.3, 0.4], speed:1.15, night:true, weak:[0.75, 1, 1.5, 1]}],
   ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
   ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, weak:[1, 1, 0.75, 1.5]}],
@@ -763,17 +763,18 @@ function variantDef(d, v){
   if (v === 'warg') return { ...d, name:'Warg', emo:'🐺', speed:d.speed * 1.6, armorPct:0, armorPts:0, rider:null, bounty:b, hp:d.hp * 0.5 };
   if (v === 'ork')  return { ...d, name:'Ork', emo:'🧌', speed:0.6, armorPct:0, armorPts:0, rider:null, ork:true, bounty:b, hp:d.hp * 0.5 };
   const Q = QUARTET[v]; if (Q) { const hp = d.hp * Q.hp, pct = Q.ar ? Q.ar[0] : d.armorPct;   // Streichquartett (16.10.)
-    return { ...d, name:Q.name, speed:d.speed * Q.speed, size:d.size * Q.size, confused:Q.confused, bass:Q.bass, hp, armorPct:pct, armorPts:Math.round((Q.ar ? Q.ar[1] : (d.ar || [0, 0])[1]) * hp) }; }
+    return { ...d, name:Q.name, speed:d.speed * Q.speed, size:d.size * Q.size, color:Q.color, confused:Q.confused, bass:Q.bass, hp, armorPct:pct, armorPts:Math.round((Q.ar ? Q.ar[1] : (d.ar || [0, 0])[1]) * hp) }; }
   return d;
 }
 // Streichquartett (16.10., L): gemischte Welle, je 5 Stück in fester, gemischter Reihenfolge
 const QUARTET = {
-  violine: { name:'Violine',    hp:0.7, speed:1,    size:0.85 },
-  bratsche:{ name:'Bratsche',   hp:0.8, speed:1,    size:0.95, confused:{ every:3.5, back:1 } },   // läuft alle 3,5 s für 1 s rückwärts
-  cello:   { name:'Cello',      hp:1.3, speed:1,    size:1.15 },
-  bass:    { name:'Kontrabass', hp:1.6, speed:0.9,  size:1.35, ar:[0.3, 0.4], bass:{ r:1.5, pct:0.2 } }   // etwas langsamer; Monster in 1,5 Feldern: +20 Punkte Rüstung
+  violine: { name:'Violine',    hp:0.7,  speed:1,   size:0.8,  color:'#e9c46a' },
+  bratsche:{ name:'Bratsche',   hp:0.85, speed:1,   size:0.95, color:'#e07a3f', confused:{ every:3.5, back:1 } },   // läuft alle 3,5 s für 1 s rückwärts
+  cello:   { name:'Cello',      hp:1.3,  speed:1,   size:1.15, color:'#9c5a2e' },
+  bass:    { name:'Kontrabass', hp:2.0,  speed:0.9, size:1.4,  color:'#6b2f2a', ar:[0.35, 0.5], bass:{ r:1.5, pct:0.2 } }   // etwas langsamer; Monster in 1,5 Feldern: +20 Punkte Rüstung
 };
-const QUARTET_ORDER = ['bass','violine','cello','bratsche','violine','bass','bratsche','cello','violine','cello','bass','bratsche','violine','cello','bratsche','bass','violine','cello','bratsche','bass'];
+// 16.10. (L): 3 Bässe, 4 Celli, 6 Bratschen, 7 Violinen – gemischt, Bässe über die Welle verteilt
+const QUARTET_ORDER = ['violine','bass','bratsche','violine','cello','bratsche','violine','violine','bass','cello','bratsche','violine','bratsche','cello','violine','bass','bratsche','cello','violine','bratsche'];
 const waveMix = (type, n) => MONSTERS[type].quartet ? [...Array(n)].map((_, k) => QUARTET_ORDER[k % QUARTET_ORDER.length]) : [...Array(n)].map(() => undefined);
 function splitRider(s, m){
   const base = monsterDef(m.type, s.players), H = Math.max(0.01, m.hp);
@@ -1856,7 +1857,6 @@ function draw(i, cv){
     if (m.heartT > 0) { c.font = `${r*1.1}px serif`; c.fillText('❤️', X + r*.7, Y - r*.8); }
     if (m.def.bass) { c.strokeStyle = '#c8ccd055'; c.lineWidth = 1; c.setLineDash([3,3]); c.beginPath(); c.arc(X, Y, m.def.bass.r*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]); }
     if (m.def.confused) { c.fillStyle = '#ffe9a8'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.fillText('?', X - r, Y - r); }
-    if (m.def.quartet && m.v) { c.fillStyle = '#fff'; c.font = `700 ${Math.max(7, r*.7)}px ${v('--mono')}`; c.fillText(m.def.name[0], X + r*.75, Y + r*.6); }
     if (on('curse')) spr(c, tinted('smoke', PROJ_TINT[2]), X, Y, r*2.4, time*2, .45);
     if (on('burn')) spr(c, SPR.flameS, X + r*.55, Y - r*.5 + Math.sin(time*20 + m.id)*1.5, r*.9, 0, .9);
     if (on('stun')) for (let j = 0; j < 3; j++) { const a = time*5 + j*2.1; spr(c, SPR.star, X + Math.cos(a)*r, Y - r + Math.sin(a)*r*.3, r*.6); }

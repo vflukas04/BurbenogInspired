@@ -3,7 +3,7 @@ const C = require('./core'), { G } = C;
 const pad = (s, k) => String(s).padEnd(k), gm = a => Math.exp(a.reduce((x, v) => x + Math.log(Math.max(1e-3, v)), 0) / a.length);
 // Zielkurve (16.10., L): Anfang lockerer, Ende knapper; Endboss ca. 50 % Reserve für den (fast perfekten) Bot, davor mehr. Linear über die Runde.
 // Eichung grob (Referenzläufe 15.10.): Menschen erreichen ca. 65–85 % der Bot-Stärke → bei R 1,5 bleibt für echte Spieler ungefähr 1,0–1,25.
-const ZIEL_START = +process.env.ZIEL_START || 2.0, ZIEL_ENDE = +process.env.ZIEL_ENDE || 1.5;
+const ZIEL_START = +process.env.ZIEL_START || 2.0, ZIEL_ENDE = +process.env.ZIEL_ENDE || 1.4;   // 16.10. (L): Endboss 40 % Bot-Reserve → für echte Spieler etwa −10 % bis +15 %
 const ziel = round => ZIEL_START + (ZIEL_ENDE - ZIEL_START) * (round - 1) / 39;
 // Band (16.10., L: „Endboss ca. 50 %, davor höher erlaubt“): untere Grenze überall ZIEL_ENDE, obere Grenze die Zielkurve.
 // Verhältnis zum Band: < 1 zu schwer (unter 1,5), > 1 zu leicht (über der Kurve), dazwischen 1.
