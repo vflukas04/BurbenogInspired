@@ -214,13 +214,13 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-15t";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-16a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
    */
 const CONFIG = {
-  days: 23,                 // Tage: 20 Runden (je ein Monstertyp) + 3 Zwischenbosse (nach Runde 5, 10, 15); 14.10.: Vorhaut-Boss gestrichen
+  days: 24,                 // Tage: 20 Runden (je ein Monstertyp) + 3 Zwischenbosse (nach Runde 5, 10, 15) + Endboss; 16.10. (L): 5. Monster im Block 4 (Eifersüchtige Geliebte), Endboss teilt sich die Runde der Vorhut
   lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
   startGold: 30,
   perWave: 20,              // Monster pro Welle (Boss: 1)
@@ -429,9 +429,10 @@ const MONSTERS = [
   ['Besoffene Penner',  {emo:'🍺', ar:[0.1, 0.3], speed:0.7, hpMul:1.9, night:true, weak:[1, 1, 1, 1]}],
   ['Wütende Partnerin', {emo:'😠', ar:[0.3, 0.4], speed:1.3, weak:[0.75, 1.75, 1, 1]}],
   ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 0.75, 1.25, 1]}],
+  ['Eifersüchtige Geliebte', {emo:'💔', ar:[0.25, 0.4], speed:1.25, hpMul:1.1, weak:[1, 1, 0.75, 1.5]}],   // 16.10. (L): 5. Monster im Block 4; trägt den dort fehlenden Stein-Bonus und Schatten-Malus
   ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1, 1, 0.75]}],
   ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]   // 13.10.: neutral (vorher Schatten ×0,7)
-].map(([name,o],k) => { if (!o.mini) MON_ROUND++; const r = MON_ROUND;
+].map(([name,o],k) => { if (!o.mini && !o.boss) MON_ROUND++; const r = MON_ROUND;   // 16.10.: auch der Endboss teilt sich die Runde der Vorhut
   return { name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:r, day:k+1,
   color:`hsl(${((r-1)*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.mini?.34:o.fly?.2:.24 }; });
 /* ===================== Ende Spieldaten ===================== */

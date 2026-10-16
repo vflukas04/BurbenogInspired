@@ -24,7 +24,7 @@
 | Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
 | Balancing-Skript bauen (ersetzt Mikro-Balancing) | L | Verfahren in `team/BALANCING.md` (Prüfpunkte P1–P13). Stand 16.10.: Grundgerüst + P1. Nächstes: glatte Bewertung, lokale Verbesserung, Wissensspeicher, Spiegel-Datei, Forschung/Edelsteine, P2/P4/P5. Balance-Pause gilt weiter |
-| Fähigkeit frei wählbar (15e) besprechen | L + F | L ist dagegen: Fähigkeiten sind auf Türme zugeschnitten |
+| Edelstein-Kompromiss umsetzen (3 Optionen je Turm: 2 Basics + 1 Unique, Ziel ~+30 %) | offen | beschlossen 16.10. L + F, Details `PLANUNG.md` Abschnitt 0 |
 | Schwierigkeitsstufen beim Spielstart | L | Faktor auf Monsterleben/-rüstung, Werte aus dem Balancing-Skript |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
 | `tools/balance.js` auf Runden statt Tage umstellen | L | deckt sonst nur Tag 1–20 ab; erster Schritt fürs Balancing-Skript |

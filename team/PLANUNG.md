@@ -9,7 +9,7 @@ Produktversion (unabhängig von `VERSION`): heute ca. **0.8**.
 - 4 Elemente.
 - 40 Runden (normale Monster) + 6 Zwischenbosse + 2 Endbosse (nach Runde 20 und 40). Neue Mechaniken erst ab Runde 21 (Inhalt: Überraschung von L). Zwischenbosse bleiben große Varianten der Vorwelle.
 - Balancing-Skript steht und ist einmal auf alle 40 Runden angewendet. Ziel: Das Skript findet eine Einstellung, die seine Vorgaben erfüllt, und Testspiele fühlen sich gut an. Gewinnen eher selten (Richtwert 20–30 %), wichtiger ist eine gute Ausgestaltung der Reserve.
-- Fähigkeit frei wählbar: Kompromiss L/F (folgt).
+- **Edelstein-Kompromiss L/F (16.10.):** Je Turm 3 Wahlmöglichkeiten statt 8: 2 Basics (z. B. +x % Schaden, Reichweite; dürfen sich bei mehreren Türmen wiederholen) und 1 Unique, an den Turmtyp gebunden. Die Regel „jede Fähigkeit nur einmal je Map“ (`abilityTaken`) entfällt. Zielwert je Option ca. +30 % Wirkung (Mitte zwischen F +15 % und L „deutlich mehr als ein Upgrade“). Uniques sollen möglichst einen nicht leicht einschätzbaren Mehrwert haben, der von der Lage abhängt (z. B. doppelt gegen Fliegende, sonst wenig); im Mittel über das Spiel etwa gleich viel wert wie die Basics (Skript: P9 je Turm).
 - Pflicht: Firestore-Regeln vor 09.11.
 
 **V1.1 – Termin wird am 22.10. festgelegt (dann auch Termin fürs Spiel zu viert)**
