@@ -69,9 +69,13 @@ function steine(setup, n, waves){
 }
 function lauf(e, lane, seed, bis){
   C.useMap(lane, seed);
-  let setup = { el:e, towers:[], res:[] }, gesamt = G.CONFIG.startGold, gems = 0;
-  const tage = [], n = Math.min(bis || G.MONSTERS.length, G.MONSTERS.length);
-  for (let d = 0; d < n; d++) {
+  let setup = { el:e, towers:[], res:[] }, gesamt = G.CONFIG.startGold, gems = 0, start = 0;
+  let tage = [];
+  const n = Math.min(bis || G.MONSTERS.length, G.MONSTERS.length);
+  // Zwischenstand (17.10.): nach jedem Tag gesichert; ein abgebrochener Lauf rechnet dort weiter (WEITER=1)
+  const ck = path.join(out, `ck-${e}-${lane}-${seed}.json`);
+  if (process.env.WEITER && fs.existsSync(ck)) { const s = JSON.parse(fs.readFileSync(ck)); if (JSON.stringify(s.spiegel) === JSON.stringify(C.SPIEGEL)) ({ setup, gesamt, gems, tage, start } = s); }
+  for (let d = start; d < n; d++) {
     const w = tagWelle(d), waves = [w];
     const frei = () => gesamt - resCost(setup.res) / SPIELER - B.spent(setup);
     setup = forschung(setup, frei(), waves, d);
@@ -89,6 +93,7 @@ function lauf(e, lane, seed, bis){
     // Einkommen des Tages (mit Kopfgeld-Forschung), Edelstein nach Bossen
     gesamt += einkommen(d) * (1 + G.resVal(new Set(setup.res), 'gold'));
     if (G.MONSTERS[d].mini || G.MONSTERS[d].boss) gems++;
+    fs.writeFileSync(ck, JSON.stringify({ spiegel:C.SPIEGEL, setup, gesamt, gems, tage, start:d + 1 }));
   }
   return tage;
 }
