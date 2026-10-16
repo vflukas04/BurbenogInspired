@@ -2,34 +2,47 @@
 // Je Element und Map: Tag für Tag, Start von der besten Aufstellung des Vortags (darf umgebaut werden: verschieben, abreißen = volles Gold zurück).
 // Annahmen (team/BALANCING.md):
 //   – 2 Spieler, gleiches Element auf beiden Maps; Tag = 10 Uhr frisch + 19 Uhr (dunkel) die Leaks des Nachbarn (runDay)
-//   – Gold: Start + volles Kopfgeld aller Tage davor; Anteil KASSE geht in die Gemeinschaftskasse (beide zahlen ein)
-//   – Forschung: die Suche kauft aus der Kasse, was je Gold am meisten bringt; Edelsteine: 1 je Spieler und Boss davor, die Suche wählt Turm und Option
+//   – Gold: Start + volles Kopfgeld aller Tage davor (mit Kopfgeld-Forschung); die Kasse bekommt nur, was die Forschung kostet (je Spieler die Hälfte)
+//   – Forschung: siehe forschung(); Edelsteine: 1 je Spieler und Boss davor, die Suche wählt Turm und Option
 //   – Maps: echte Wege mit gewürfeltem Gelände (Seeds unten), kein Wetter
 // Aufruf: node tools/balance/p2.js [Element 0–3 | alle] [bisTag] [Maps z. B. 0:11,2:23]
 const fs = require('fs'), path = require('path');
 const C = require('./core'), B = require('./build'), { G } = C;
-const KASSE = 0.25, SPIELER = 2;
+const SPIELER = 2;
 const MAPS_STD = [[0, 11], [2, 23]];   // [Map, Gelände-Seed]
 
 const tagWelle = d => ({ type:d, players:SPIELER, tag:true });
-function budget(d){                      // Gold eines Spielers und Kasse vor Tag d (0-basiert)
-  let g = G.CONFIG.startGold, k = 0, gems = 0;
-  for (let i = 0; i < d; i++) { const M = G.MONSTERS[i], b = G.monsterDef(i, SPIELER).bounty * (M.count || G.CONFIG.perWave);
-    g += b * (1 - KASSE); k += b * KASSE * SPIELER; if (M.mini || M.boss) gems++; }
-  return { gold:Math.floor(g), kasse:Math.floor(k), gems };
+const einkommen = d => G.monsterDef(d, SPIELER).bounty * (G.MONSTERS[d].count || G.CONFIG.perWave);   // Kopfgeld eines Spielers an Tag d (alle getötet)
+function budget(d){                      // Gold eines Spielers (ohne Forschung) und Edelsteine vor Tag d (0-basiert)
+  let g = G.CONFIG.startGold, gems = 0;
+  for (let i = 0; i < d; i++) { g += einkommen(i); if (G.MONSTERS[i].mini || G.MONSTERS[i].boss) gems++; }
+  return { gold:Math.floor(g), gems };
 }
 const resCost = res => res.reduce((a, id) => a + G.RESEARCH.find(x => x.id === id).cost, 0);
-// Forschung: solange die Kasse reicht, die Forschung mit dem größten Zuwachs je Gold (Freischaltungen zählen über den besten Turm, den sie erlauben)
-function forschung(setup, kasse, waves){
+/* Forschung (17.10.): Die Kasse bekommt nur, was die Forschung kostet (je Spieler die Hälfte), der Rest geht in Türme.
+   – Element-Schaden, Reichweite, Effektdauer: gekauft, wenn der Zuwachs je Gold mindestens so groß ist wie beim besten Turmkauf
+   – Freischaltungen und „Upgrades billiger“: Vergleich gieriger Aufbau mit und ohne (alle 3 Tage geprüft)
+   – Kopfgeld: gekauft, wenn sich der Bonus über die restlichen Tage mindestens 3-fach bezahlt macht */
+function forschung(setup, frei, waves, d, opt){
   for (let guard = 0; guard < 20; guard++) {
-    const left = kasse - resCost(setup.res); let best = null;
+    let best = null;
     const R = waves.map(w => C.reserveDay(setup, w)), fRef = R.map(r => r * 1.25), base = B.quick(setup, waves, fRef);
-    for (const F of G.RESEARCH) { if (setup.res.includes(F.id) || F.cost > left || (F.need && !setup.res.includes(F.need))) continue;
-      if (F.grp === 'gold') continue;                       // Kopfgeld-Forschung wirkt erst später, im Budget nicht abgebildet
+    const turm = B.actions(setup, frei, { cells:3 }).reduce((m, a) => Math.max(m, (B.quick(a.apply(setup), waves, fRef) - base) / a.cost), 0);
+    for (const F of G.RESEARCH) {
+      const anteil = F.cost / SPIELER;
+      if (setup.res.includes(F.id) || anteil > frei || (F.need && !setup.res.includes(F.need))) continue;
       const s = { ...setup, res:[...setup.res, F.id] };
-      const v = F.grp === 't5' || F.grp === 't7' ? 0.001 : B.quick(s, waves, fRef) - base;   // Freischaltung: nur kaufen, wenn sonst nichts lohnt
-      if (v > 0 && (!best || v / F.cost > best.g)) best = { s, g:v / F.cost }; }
-    if (!best) break; setup = best.s;
+      if (F.grp === 'gold') { if (d < 3 || anteil > 0.5 * frei) continue;   // nicht auf Kosten der heutigen Welle
+        const rest = G.MONSTERS.slice(d).reduce((a, _, i) => a + einkommen(d + i), 0), stufe = G.RESEARCH_GROUPS.find(x => x.grp === 'gold').steps;
+        const plus = (stufe[F.lvl - 1] - (F.lvl > 1 ? stufe[F.lvl - 2] : 0)) * rest; if (plus > 3 * anteil) { best = { s, g:Infinity, F }; break; } continue; }
+      if (F.grp === 't5' || F.grp === 't7' || F.grp === 'cheap') {
+        if (d % 3) continue;
+        const ohne = B.greedy(setup.el, frei + B.spent(setup), waves, { cells:2 }, setup).score, mit = B.greedy(setup.el, frei - anteil + B.spent(setup), waves, { cells:2 }, s).score;
+        if (mit > ohne * 1.01) { const g = Math.log(mit / ohne) / anteil * 1e3; if (!best || g > best.g) best = { s, g, F }; } continue; }
+      const v = (B.quick(s, waves, fRef) - base) / anteil;
+      if (v > 0 && v >= turm && (!best || v > best.g)) best = { s, g:v, F };
+    }
+    if (!best) break; setup = best.s; frei -= best.F.cost / SPIELER;
   }
   return setup;
 }
@@ -56,21 +69,26 @@ function steine(setup, n, waves){
 }
 function lauf(e, lane, seed, bis){
   C.useMap(lane, seed);
-  let setup = { el:e, towers:[], res:[] };
+  let setup = { el:e, towers:[], res:[] }, gesamt = G.CONFIG.startGold, gems = 0;
   const tage = [], n = Math.min(bis || G.MONSTERS.length, G.MONSTERS.length);
   for (let d = 0; d < n; d++) {
-    const w = tagWelle(d), bu = budget(d), waves = [w];
-    setup = forschung(setup, bu.kasse, waves);
-    let r = B.greedy(e, bu.gold, waves, { cells:3 }, setup);
+    const w = tagWelle(d), waves = [w];
+    const frei = () => gesamt - resCost(setup.res) / SPIELER - B.spent(setup);
+    setup = forschung(setup, frei(), waves, d);
+    const turmGold = gesamt - resCost(setup.res) / SPIELER;
+    let r = B.greedy(e, turmGold, waves, { cells:3 }, setup);
     // Umbau: die zwei billigsten Türme ohne Stein abreißen und neu verteilen (nur übernehmen, wenn besser)
     const cheap = r.setup.towers.map((t, i) => [t, i]).filter(([t]) => !t.gem).sort((a, b) => (a[0].inv || 0) - (b[0].inv || 0)).slice(0, 2);
-    for (const [t] of cheap) { const rest = { ...r.setup, towers:r.setup.towers.filter(u => u !== t) }, g = B.greedy(e, bu.gold, waves, { cells:3 }, rest);
+    for (const [t] of cheap) { const rest = { ...r.setup, towers:r.setup.towers.filter(u => u !== t) }, g = B.greedy(e, turmGold, waves, { cells:3 }, rest);
       if (g.score > r.score * 1.01) r = g; }
-    setup = steine(r.setup, bu.gems, waves);
+    setup = steine(r.setup, gems, waves);
     const R = C.reserveDay(setup, w), r1 = C.runDay(setup, w, 1);
-    tage.push({ tag:d + 1, monster:G.MONSTERS[d].name, R:+R.toFixed(3), kills:r1.kills, n:r1.n, durch:r1.durch, gold:bu.gold, kasse:bu.kasse,
+    tage.push({ tag:d + 1, monster:G.MONSTERS[d].name, R:+R.toFixed(3), kills:r1.kills, n:r1.n, durch:r1.durch, gold:Math.round(gesamt), kasse:resCost(setup.res),
       wert:B.spent(setup), tuerme:setup.towers.length, stufen:setup.towers.map(t => (t.idx + 1) + '.' + (t.lvl || 1) + (t.gem ? '*' : '')).sort().join(' '), forschung:setup.res.join(' ') });
-    if (process.env.LAUT) console.error(`${G.ELEMENTS[e].name} Map ${lane} Tag ${d + 1} R ${R.toFixed(2)} Wert ${B.spent(setup)}/${bu.gold}`);
+    if (process.env.LAUT) console.error(`${G.ELEMENTS[e].name} Map ${lane} Tag ${d + 1} R ${R.toFixed(2)} Wert ${B.spent(setup)}/${Math.round(gesamt)} Forschung ${setup.res.length}`);
+    // Einkommen des Tages (mit Kopfgeld-Forschung), Edelstein nach Bossen
+    gesamt += einkommen(d) * (1 + G.resVal(new Set(setup.res), 'gold'));
+    if (G.MONSTERS[d].mini || G.MONSTERS[d].boss) gems++;
   }
   return tage;
 }

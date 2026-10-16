@@ -22,5 +22,8 @@
   "CONFIG.hpBlock.6": 4.84,
   "CONFIG.hpBlock.7": 8.178,
   "ELEMENTS.3.costOverride.3": 100,
-  "MONSTERS.Betty (Boss).hpMul": 12.1
+  "MONSTERS.Betty (Boss).hpMul": 12.1,
+  "MONSTERS.Nazgul.hpMul": 0.8,
+  "MONSTERS.Fledermäuse.hpMul": 0.8,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.8
 }
