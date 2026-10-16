@@ -1,0 +1,15 @@
+{
+  "CONFIG.hpBlock.0": 0.919,
+  "CONFIG.hpBlock.1": 0.96,
+  "CONFIG.hpBlock.2": 1.096,
+  "CONFIG.hpBlock.3": 1.459,
+  "CONFIG.hpBlock.4": 2.035,
+  "CONFIG.hpBlock.5": 2.5,
+  "CONFIG.hpBlock.6": 2.5,
+  "CONFIG.hpBlock.7": 2.5,
+  "ELEMENTS.0.kraft": 0.631,
+  "ELEMENTS.1.kraft": 0.997,
+  "ELEMENTS.2.kraft": 1.013,
+  "ELEMENTS.3.kraft": 1.567,
+  "_stand": "Schleife nach P2 vom 2026-10-16T13:02, Dämpfung 0.7"
+}
