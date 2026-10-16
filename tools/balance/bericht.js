@@ -1,8 +1,9 @@
 // Berichte für die Prüfpunkte (nur Zahlen und Vorschläge, keine Positionen – Spoiler-Regel).
 const C = require('./core'), { G } = C;
 const pad = (s, k) => String(s).padEnd(k), gm = a => Math.exp(a.reduce((x, v) => x + Math.log(Math.max(1e-3, v)), 0) / a.length);
-// Zielkurve (16.10., L): Anfang lockerer, Ende knapper; „Normal“ = 15 % Reserve am Ende. Linear über die Runde.
-const ZIEL_START = +process.env.ZIEL_START || 1.5, ZIEL_ENDE = +process.env.ZIEL_ENDE || 1.15;
+// Zielkurve (16.10., L): Anfang lockerer, Ende knapper; Endboss ca. 50 % Reserve für den (fast perfekten) Bot, davor mehr. Linear über die Runde.
+// Eichung grob (Referenzläufe 15.10.): Menschen erreichen ca. 65–85 % der Bot-Stärke → bei R 1,5 bleibt für echte Spieler ungefähr 1,0–1,25.
+const ZIEL_START = +process.env.ZIEL_START || 2.0, ZIEL_ENDE = +process.env.ZIEL_ENDE || 1.5;
 const ziel = round => ZIEL_START + (ZIEL_ENDE - ZIEL_START) * (round - 1) / 39;
 
 function p2(erg){

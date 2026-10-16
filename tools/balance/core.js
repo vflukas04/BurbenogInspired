@@ -25,17 +25,20 @@ function useMap(lane = 0, seed = null){
    f     = Faktor auf Leben und Rüstung */
 function runWave(setup, wave, f = 1){
   const M = G.monsterDef(wave.type, wave.players || 2), n = wave.count || G.MONSTERS[wave.type].count || G.CONFIG.perWave;
-  const incoming = wave.incoming || [...Array(n)].map(() => ({ type:wave.type, hops:0, hp:M.hp * f, ap:Math.round(M.armorPts * f) }));
+  // Gemischte Wellen (Streichquartett): Varianten wie im Spiel (waveMix), Leben/Rüstung je Variante
+  const mix = G.waveMix ? G.waveMix(wave.type, n) : [];
+  const incoming = wave.incoming || [...Array(n)].map((_, k) => { const v = mix[k], d = v ? G.variantDef(M, v) : M;
+    return v ? { type:wave.type, hops:0, v, hp:d.hp * f, ap:Math.round(d.armorPts * f) } : { type:wave.type, hops:0, hp:M.hp * f, ap:Math.round(M.armorPts * f) }; });
   const s = G.simulate({ lane:LANE, players:wave.players || 2, towers:setup.towers, res:setup.res || [], incoming,
     dark:!!wave.dark, weather:wave.weather || 0, seed:wave.seed || 7 });
-  const hpLeft = s.leaked.reduce((a, m) => a + m.hp, 0), hpIn = wave.hpIn || M.hp * f * n;
-  return { kills:s.kills, n, leaked:s.leaked.length, hpShare:1 - hpLeft / hpIn, gems:s.gems, out:s.leaked };
+  const hpLeft = s.leaked.reduce((a, m) => a + m.hp, 0), hpIn = wave.hpIn || (wave.incoming ? M.hp * f * n : incoming.reduce((a, q) => a + q.hp, 0));
+  return { kills:s.kills, n, leaked:s.leaked.length, hpShare:1 - hpLeft / hpIn, gems:s.gems, out:s.leaked, hpIn };
 }
 /* Ein Tag zu zweit (Spielart Uhrzeiten, 16.10.): 10 Uhr frische Welle, 19 Uhr (dunkel) kommen die Leaks des Nachbarn mit Restleben
    und Effekten. Beide Spieler symmetrisch (gleiche Aufstellung), daher laufen die eigenen Leaks noch einmal durch dieselbe Aufstellung.
    durch = ganz durchgebrochen (Bosse zählen mehrfach), kills = beide Wellen, hpShare = Anteil vernichteter Leben am Tagesende. */
 function runDay(setup, wave, f = 1){
-  const M = G.monsterDef(wave.type, wave.players || 2), a = runWave(setup, wave, f), hpIn = M.hp * f * a.n;
+  const a = runWave(setup, wave, f), hpIn = a.hpIn;
   if (!a.out.length) return { kills:a.kills, n:a.n, durch:0, hpShare:1, gems:a.gems };
   const b = runWave(setup, { ...wave, incoming:a.out, dark:wave.dark2 !== false, hpIn }, 1);
   const lives = G.MONSTERS[wave.type].lives || 1;

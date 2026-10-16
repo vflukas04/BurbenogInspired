@@ -214,7 +214,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-16d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-16e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -230,6 +230,7 @@ const CONFIG = {
   baseHp: 14,               // 12.10.: neu kalibriert für 16 × 16
   playerHp: { 2:1, 3:1.25, 4:1.5 },
   hpExp: 1.38,              // 12.10. 15:38: etwas steiler (vorher 1,3; davor 1,5). Runde 2: ×2,6 · 5: ×9,2 · 10: ×24 · 20: ×63
+  hpBlock: [1, 1, 1, 1, 1, 1, 1, 1],   // 16.10.: Lebensfaktor je Block (Runde 1–5, 6–10, …, 36–40), Stellschraube Balancing-Skript
   hpCutFrom: 3, hpCut: 0.95,  // 12.10.: ab Runde 3 (Nacktschnecken) alle Monster 5 % weniger Leben
   // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
   slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
@@ -465,7 +466,7 @@ const MONSTERS = [
   ['Fledermäuse',       {emo:'🦇', fly:true, night:true, speed:1.6, weak:[0.75, 1.5, 1, 1]}],
   ['Lehrer',            {emo:'🧑‍🏫', ar:[0.2, 0.3], speed:1.0, mixed:true, weak:[1, 1, 1, 1], info:'jeder Lehrer hat eigene Stärken und Schwächen: eine „Immunität“, ein Bonus, der Rest gemischt'}],
   ['Schulleiter',       {emo:'🎓', mini:true, ar:[0.2, 0.3], speed:1.0, hpMul:5, count:1, lives:2, weatherBoss:true, weak:[1, 1, 1, 1], info:'macht auf jeder Map das Wetter, das dem Element dort am meisten schadet (Stein ist wetterfest)'}],
-  ['Bratschen',         {emo:'🎻', ar:[0.25, 0.4], speed:1.0, hpMul:1.1, weak:[1, 1, 1, 1]}],
+  ['Streichquartett',   {emo:'🎻', ar:[0.15, 0.3], speed:1.0, hpMul:1.05, quartet:true, weak:[1, 1, 1, 1], info:'gemischte Welle: Violinen (leicht), Bratschen (verwirrt, laufen immer wieder rückwärts), Celli (stärker) und Kontrabässe (etwas langsamer, geben Monstern in ihrer Nähe +20 Punkte Rüstung)'}],
   ['Heisenbergs',       {emo:'🧪', ar:[0.3, 0.4], speed:1.15, night:true, weak:[0.75, 1, 1.5, 1]}],
   ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
   ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, weak:[1, 1, 0.75, 1.5]}],
@@ -559,7 +560,7 @@ let replay = null, seenRun = null;
 function towerBase(el, idx){
   const E = ELEMENTS[el], [name, role, range, rate, shots, share, eff, dur, splash, opt = {}] = E.towers[idx];
   const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
-  return { name, role, cost, range: range * GRID, rate, shots, dps: TOWER_POWER[idx] * share, eff, dur, splash: (splash || 0) * GRID,
+  return { name, role, cost, range: range * GRID, rate, shots, dps: TOWER_POWER[idx] * share * (E.kraft || 1), eff, dur, splash: (splash || 0) * GRID,   // E.kraft: Stellschraube Balancing-Skript (16.10.)
     effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, dayOnly:!!E.dayOnly, pierceArr:opt.pierce || null,
     hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID, buffArr:opt.buff || null, buff:opt.buff ? opt.buff[0] : 0, pierce:opt.pierce ? opt.pierce[0] : 0,
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
@@ -631,7 +632,7 @@ function onRock(d){
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (1 - resVal(curRes(), 'cheap')));
 const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
 function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
-  const d = { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1),
+  const d = { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1) * (CONFIG.hpBlock[Math.ceil(r / 5) - 1] || 1),
     bounty: M.mini ? 0 : Math.max(1, Math.round(bountyFor(r) * (M.bountyMul || 1))) }; d.armorPct = (M.ar || [0, 0])[0]; d.armorPts = Math.round((M.ar || [0, 0])[1] * d.hp); return d; }
 const armorText = d => d.armorPct ? `${Math.round(d.armorPct*100)} % · ${d.armorPts} Punkte` : 'keine';
 const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · kein Effekt' : '×' + String(f).replace('.', ',');
@@ -725,7 +726,7 @@ function hit(s, m, def, dmg){
   if (def.hunger) dmg *= 1 + Math.min(def.hungerMax || 0.45, def.hunger * (def.feast || 0)) * bh;
   // Rüstung (12.10. 14:07): Solange Rüstungspunkte übrig sind, kommt der Schaden um armorPct verringert an.
   // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
-  let pct = m.ap > 0 ? armorPctOf(m) : 0;
+  let pct = m.ap > 0 ? Math.min(0.95, armorPctOf(m) + (m.aura || 0)) : 0;   // Kontrabass in der Nähe: +Rüstung
   const ad = dmg * f * (ELEMENTS[def.el].armorDmg || 0) * (def.armorMul ? 1 + (def.armorMul - 1) * bh : 1);
   if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0) * (def.gemAb === 5 && def.el === 2 ? bh : 1); m.ap -= ad; }
   m.hp -= dmg * f * vuln * (1 - pct);
@@ -761,8 +762,19 @@ function variantDef(d, v){
   const b = Math.ceil(d.bounty / 2);
   if (v === 'warg') return { ...d, name:'Warg', emo:'🐺', speed:d.speed * 1.6, armorPct:0, armorPts:0, rider:null, bounty:b, hp:d.hp * 0.5 };
   if (v === 'ork')  return { ...d, name:'Ork', emo:'🧌', speed:0.6, armorPct:0, armorPts:0, rider:null, ork:true, bounty:b, hp:d.hp * 0.5 };
+  const Q = QUARTET[v]; if (Q) { const hp = d.hp * Q.hp, pct = Q.ar ? Q.ar[0] : d.armorPct;   // Streichquartett (16.10.)
+    return { ...d, name:Q.name, speed:d.speed * Q.speed, size:d.size * Q.size, confused:Q.confused, bass:Q.bass, hp, armorPct:pct, armorPts:Math.round((Q.ar ? Q.ar[1] : (d.ar || [0, 0])[1]) * hp) }; }
   return d;
 }
+// Streichquartett (16.10., L): gemischte Welle, je 5 Stück in fester, gemischter Reihenfolge
+const QUARTET = {
+  violine: { name:'Violine',    hp:0.7, speed:1,    size:0.85 },
+  bratsche:{ name:'Bratsche',   hp:0.8, speed:1,    size:0.95, confused:{ every:3.5, back:1 } },   // läuft alle 3,5 s für 1 s rückwärts
+  cello:   { name:'Cello',      hp:1.3, speed:1,    size:1.15 },
+  bass:    { name:'Kontrabass', hp:1.6, speed:0.9,  size:1.35, ar:[0.3, 0.4], bass:{ r:1.5, pct:0.2 } }   // etwas langsamer; Monster in 1,5 Feldern: +20 Punkte Rüstung
+};
+const QUARTET_ORDER = ['bass','violine','cello','bratsche','violine','bass','bratsche','cello','violine','cello','bass','bratsche','violine','cello','bratsche','bass','violine','cello','bratsche','bass'];
+const waveMix = (type, n) => MONSTERS[type].quartet ? [...Array(n)].map((_, k) => QUARTET_ORDER[k % QUARTET_ORDER.length]) : [...Array(n)].map(() => undefined);
 function splitRider(s, m){
   const base = monsterDef(m.type, s.players), H = Math.max(0.01, m.hp);
   m.v = 'warg'; m.def = variantDef(base, 'warg'); m.hp = H * 0.5; m.ap = 0;
@@ -849,6 +861,7 @@ function step(s, dt){
     if (D.charm) { m.charmCd -= dt; if (m.strip > 0) m.strip -= dt;                    // Betty: Türme in Reichweite verlieben sich
       if (m.charmCd <= 0) { m.charmCd = D.charm.every; m.strip = D.charm.show;
         for (const tw of s.towers) { const r = tw.def.nova ? tw.def.splash : tw.def.buff ? tw.def.light : tw.def.range; if (Math.hypot(m.x - tw.x - .5, m.y - tw.y - .5) <= r) tw.love = D.charm.stop; } } }
+    if (D.confused) m.back = (m.age % D.confused.every) > D.confused.every - D.confused.back;   // Bratsche: verwirrt, kurz rückwärts
     const slow = on('stun') ? 1 : Math.max(on('slow') ? fx.slow.v : 0, on('grounded') ? 0.3 : 0);
     const spd = m.coc ? (m.coc.fly ? D.cocoon.speed : 0) : D.speed;
     const v = GRID * spd * (flying(m) && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
@@ -863,7 +876,7 @@ function step(s, dt){
       const cx = Math.floor(m.x), cy = Math.floor(m.y); m.inForest = cx >= 0 && cx < COLS && cy >= 0 && cy < ROWS && s.map.terrain[cy][cx] === 1 && !s.map.cells.has(cx + ',' + cy);
       if (m.od >= m.route.len) m.d = s.map.len;
     } else {
-      m.d = on('fear') ? Math.max(0, m.d - v) : m.d + v;     // Angst: läuft rückwärts, höchstens bis zum Eingang
+      m.d = on('fear') || m.back ? Math.max(0, m.d - v) : m.d + v;     // Angst (und verwirrte Bratschen): läuft rückwärts, höchstens bis zum Eingang
       [m.x, m.y] = posAt(s.map, m.d);
     }
     if (m.d >= s.map.len) {
@@ -874,6 +887,9 @@ function step(s, dt){
       s.leaked.push(rec);   // nie 0: sonst käme es mit vollem Leben wieder
     }
   }
+  // Kontrabass: Monster in seiner Nähe bekommen zusätzliche Rüstung (Prozentpunkte), solange er lebt
+  const basses = s.monsters.filter(b => !b.dead && b.def.bass);
+  for (const m of s.monsters) m.aura = basses.some(b => b !== m && Math.hypot(b.x - m.x, b.y - m.y) <= b.def.bass.r) ? basses[0].def.bass.pct : 0;
   // Bodenfelder (Lavapfütze, Geröll): jedes Monster zählt je Art nur einmal, auch in mehreren Feldern
   for (const P of s.pools) { P.t -= dt; }
   s.pools = s.pools.filter(P => P.t > 0);
@@ -978,7 +994,7 @@ function simulate(inp){ const s = makeSim(inp); let g = 0; while (simBusy(s) && 
 /* ---------- Spielregeln ---------- */
 const NP = () => G.cfg.players;
 const P_STATE = 'games/' + GAME_ID, P_LANES = 'games/' + GAME_ID + '/lanes';
-function waveSpecs(day){ const m = MONSTERS[day-1]; if (!m) return []; return [...Array(m.count || CONFIG.perWave)].map(() => ({ type:day-1, hops:0 })); }
+function waveSpecs(day){ const m = MONSTERS[day-1]; if (!m) return []; return waveMix(day-1, m.count || CONFIG.perWave).map(v => v ? { type:day-1, hops:0, v } : { type:day-1, hops:0 }); }
 function incomingFor(g, i){ const n = g.cfg.players; return g.slot === 0 ? waveSpecs(g.day) : ((g.leaked || {})[(i-1+n)%n] || []); }
 // Gold = Start + Kopfgeld − Ausgaben − verschenkt + erhalten (nach Gebühr). Geschenke stehen im Feld des Schenkenden.
 function giftsIn(i){ let x = 0; L.forEach((_,k) => (laneOf(k).gifts || []).forEach(g => { if (g.to === i) x += Math.floor(g.amt * (1 - CONFIG.giftFee)); })); return x; }
@@ -1838,6 +1854,9 @@ function draw(i, cv){
       c.fillStyle = '#000'; c.fillRect(X - r*1.25, Y - r*.2, r*2.5, r*.5);
       c.fillStyle = '#fff'; c.font = `700 ${Math.max(7, r*.36)}px ${v('--mono')}`; c.fillText('CENSORED', X, Y + r*.06); }
     if (m.heartT > 0) { c.font = `${r*1.1}px serif`; c.fillText('❤️', X + r*.7, Y - r*.8); }
+    if (m.def.bass) { c.strokeStyle = '#c8ccd055'; c.lineWidth = 1; c.setLineDash([3,3]); c.beginPath(); c.arc(X, Y, m.def.bass.r*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]); }
+    if (m.def.confused) { c.fillStyle = '#ffe9a8'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.fillText('?', X - r, Y - r); }
+    if (m.def.quartet && m.v) { c.fillStyle = '#fff'; c.font = `700 ${Math.max(7, r*.7)}px ${v('--mono')}`; c.fillText(m.def.name[0], X + r*.75, Y + r*.6); }
     if (on('curse')) spr(c, tinted('smoke', PROJ_TINT[2]), X, Y, r*2.4, time*2, .45);
     if (on('burn')) spr(c, SPR.flameS, X + r*.55, Y - r*.5 + Math.sin(time*20 + m.id)*1.5, r*.9, 0, .9);
     if (on('stun')) for (let j = 0; j < 3; j++) { const a = time*5 + j*2.1; spr(c, SPR.star, X + Math.cos(a)*r, Y - r + Math.sin(a)*r*.3, r*.6); }
