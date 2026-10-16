@@ -16,13 +16,13 @@ Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md`
 ## Das Spiel in 10 Zeilen (Stand 14.10.)
 - Koop-Tower-Defense über mehrere Tage, 2–4 Spieler, jeder hat eine eigene Map (16 × 16 Felder).
 - **Begriffe (seit 16.10.):** **Map** = Karte eines Spielers, **Feld** = ein einzelnes Kästchen darauf. (Im Code heißt die Map `lane`, in älteren Texten oft noch „Feld“.)
-- 24 Spieltage: 20 Runden mit je einem Monstertyp (20 Stück) + Zwischenbosse an Tag 6, 12, 18 (kein Gold, dafür Edelstein); Tag 24 Endboss Uffug (teilt sich Runde 20 mit der Vorhaut). Ziel V1.0: 40 Runden, siehe `PLANUNG.md`.
+- 48 Spieltage: 40 Runden mit je einem Monstertyp (20 Stück) + 6 Zwischenbosse (kein Gold, dafür Edelstein) + 2 Endbosse (Tag 24 Uffug, Tag 48). Ab Runde 21 neue Mechaniken (Überraschung von L für F, siehe Post).
 - Spielart „Uhrzeiten“ (10 Uhr neue Welle, Durchgelassene laufen später beim Nachbarn weiter) oder „Live“ (sofort weiter). Mehr als 30 ganz durchgebrochen = verloren.
 - Elemente: Feuer brennt · Eis bremst · Schatten verflucht (mehr Schaden, weniger Rüstung) + Irrlicht verstärkt · Stein Fläche, zertrümmert Rüstung, wetterfest.
 - Monster: Leben 14 × Runde^1,38; Rüstung = Prozent + Punkte; nachtaktive Monster sieht Schatten um 19 Uhr nur im Irrlicht-Kreis.
 - Faktoren: je 5er-Block erste Runde neutral, danach hat jedes Element genau einmal Vor- und Nachteil.
 - Gold: Start 30, Kopfgeld 2/3/5/8 je 5 Runden; Schenken (10 % Gebühr); Gemeinschaftskasse für Forschung (jede Verbesserung in 3 Stufen).
-- Edelsteine (Rubin/Saphir/Amethyst/Quarz) vom tötenden Turm: Fähigkeit für einen Turm des eigenen Elements oder Turm in ein anderes Element umwandeln. Tauschen ohne Gebühr.
+- Edelsteine (Rubin/Saphir/Amethyst/Quarz) vom tötenden Turm: je Turm eine von 3 Fähigkeiten (2 Basics +30 %, 1 Unique des Turms) oder Turm in ein anderes Element umwandeln. Tauschen ohne Gebühr.
 - Türme: 8 je Element (10 … 1200 Gold), Upgrades bis Stufe 6.
 - Gelände: Wald +10, Sumpf +20, Felsen (6–8, +30 Gold für alle, +15 % Reichweite, Stein ×1,3 Schaden); wird je neuem Spiel neu gewürfelt.
 - Leitlinie: Spielgefühl der beiden > Simulation. Lieber wenige Regler auf einmal drehen und eine Weile testen.

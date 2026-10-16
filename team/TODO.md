@@ -24,7 +24,7 @@
 | Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
 | Balancing-Skript bauen (ersetzt Mikro-Balancing) | L | Verfahren in `team/BALANCING.md` (Prüfpunkte P1–P13). Stand 16.10.: Grundgerüst + P1. Nächstes: glatte Bewertung, lokale Verbesserung, Wissensspeicher, Spiegel-Datei, Forschung/Edelsteine, P2/P4/P5. Balance-Pause gilt weiter |
-| Edelstein-Kompromiss umsetzen (3 Optionen je Turm: 2 Basics + 1 Unique, Ziel ~+30 %) | offen | beschlossen 16.10. L + F, Details `PLANUNG.md` Abschnitt 0 |
+| Edelstein-Kompromiss: Werte prüfen (Uniques sind noch die gedämpften Startwerte, Basics +30 %) | L | umgesetzt 16.10. (16b), Abgleich über Balancing-Skript P9 |
 | Schwierigkeitsstufen beim Spielstart | L | Faktor auf Monsterleben/-rüstung, Werte aus dem Balancing-Skript |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
 | `tools/balance.js` auf Runden statt Tage umstellen | L | deckt sonst nur Tag 1–20 ab; erster Schritt fürs Balancing-Skript |
@@ -36,7 +36,7 @@
 | Gemeinsame Map statt je einer Map pro Spieler | offen | Idee F, 15.10.: Statt jeweils eine separate Map pro Spieler eine gemeinsame. Noch nicht besprochen oder beschlossen. |
 | Upgrades bei Türmen sind zu stark | offen | Idee F, 16.10.: Beispiel Schatten T1 – Upgrade 2→3 kostet 38 Gold, macht aber so viel Schaden wie 5 Türme. Hebel: Schadensfaktor je Stufe (aktuell ×2,2 / ×2,1), Kosten ×1,5 je Stufe. Erst nach Balancing-Skript angehen (Balance-Pause, siehe Post). |
 | Effekt-Abstufung der einzelnen Elemente | offen | Idee F, 16.10.: Wie stark die Effekte (Brennen, Verlangsamen, Fluch, Betäuben usw.) je Stufe wachsen, je Element prüfen und abstufen. Noch nicht besprochen. |
-| Monster 21–40 ausdenken | L | Ideen für neue Mechaniken liegen bei L und bleiben bis zum Testlauf eine Überraschung für F. Zwischenbosse bleiben große Varianten der Vorwelle |
+| Monster 21–40: Werte über Balancing-Skript, Testspiel | L | eingebaut 16.10. (16b), Werte sind Startwerte; Inhalt bleibt Überraschung für F |
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 
 ## Erledigt (letzte 10)

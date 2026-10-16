@@ -220,7 +220,7 @@ const VERSION = "2026-10-16b";  // bei JEDER Änderung hochzählen: alte Handys 
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
    */
 const CONFIG = {
-  days: 48,                 // Tage: 40 Runden (je ein Monstertyp) + 6 Zwischenbosse + 2 Endbosse (16.10.: Runde 21–40); 16.10. (L): 5. Monster im Block 4 (Eifersüchtige Geliebte), Endboss teilt sich die Runde der Vorhut
+  days: 48,                 // Tage: 40 Runden (je ein Monstertyp) + 6 Zwischenbosse + 2 Endbosse (16.10.: Runde 21–40); 16.10. (L): 5. Monster im Block 4 (Eifersüchtige Geliebte), Endboss teilt sich die Runde der Vorhaut
   lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
   startGold: 30,
   perWave: 20,              // Monster pro Welle (Boss: 1)
@@ -446,7 +446,7 @@ const MONSTERS = [
   ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1, 1, 0.75]}],
   ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}],   // 13.10.: neutral (vorher Schatten ×0,7)
   /* Runde 21–40 (16.10., L): neue Mechaniken. „Immun“ (Faktor 0) = 50 % Schaden und kein Effekt des Elements. Werte sind Startwerte fürs Balancing-Skript.
-     Block 5–8 wie bisher: erste Runde neutral, danach je Element einmal Bonus und Malus (Block 7: Lehrer gemischt, Block 8: Vorhut nicht neutral). */
+     Block 5–8 wie bisher: erste Runde neutral, danach je Element einmal Bonus und Malus (Block 7: Lehrer gemischt, Block 8: Vorhaut nicht neutral). */
   ['Roboter',           {emo:'🤖', ar:[0.3, 0.5], speed:0.9, hpMul:1.1, weak:[1, 1, 1, 1]}],
   ['Sommer-Schneebälle',{emo:'⛄', ar:[0.45, 0.7], speed:1.0, weak:[1.5, 0, 1, 1], info:'rollen mit dicker Schale – Eis kann ihnen kaum etwas anhaben'}],
   ['Würfel',            {emo:'🎲', ar:[0.2, 0.3], speed:1.1, weak:[1, 1, 1.5, 0.75]}],
@@ -471,7 +471,7 @@ const MONSTERS = [
   ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, weak:[1, 1, 0.75, 1.5]}],
   ['GNTModels',         {emo:'💃', speed:1.3, heart:{ t:1, cd:1 }, weak:[1, 1.5, 1, 0.75], info:'nach jedem Treffer kurz ein Herz – dann zielt kein Turm auf sie'}],
   ['Betty (Boss)',      {emo:'👼', ar:[0.4, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, charm:{ every:6, show:1.2, stop:3 }, weak:[1, 1, 1, 1], info:'zieht sich alle paar Sekunden aus – Türme in Reichweite verlieben sich und schießen 3 s nicht'}]
-].map(([name,o],k) => { if (!o.mini && !o.boss) MON_ROUND++; const r = MON_ROUND;   // 16.10.: auch der Endboss teilt sich die Runde der Vorhut
+].map(([name,o],k) => { if (!o.mini && !o.boss) MON_ROUND++; const r = MON_ROUND;   // 16.10.: auch der Endboss teilt sich die Runde der Vorhaut
   return { name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:r, day:k+1,
   color:`hsl(${((r-1)*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.mini?.34:o.fly?.2:.24 }; });
 /* ===================== Ende Spieldaten ===================== */
