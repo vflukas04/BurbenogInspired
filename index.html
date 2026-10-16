@@ -214,13 +214,13 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-16a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-16b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
    */
 const CONFIG = {
-  days: 24,                 // Tage: 20 Runden (je ein Monstertyp) + 3 Zwischenbosse (nach Runde 5, 10, 15) + Endboss; 16.10. (L): 5. Monster im Block 4 (Eifersüchtige Geliebte), Endboss teilt sich die Runde der Vorhut
+  days: 48,                 // Tage: 40 Runden (je ein Monstertyp) + 6 Zwischenbosse + 2 Endbosse (16.10.: Runde 21–40); 16.10. (L): 5. Monster im Block 4 (Eifersüchtige Geliebte), Endboss teilt sich die Runde der Vorhut
   lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
   startGold: 30,
   perWave: 20,              // Monster pro Welle (Boss: 1)
@@ -398,8 +398,21 @@ const ABILITIES = [
     ['Geröll', 'Einschlagstelle bremst 3 s lang um 30 %'],
     ['Gipfelstoß', 'Betäubungschance +15 Punkte (ohne Betäubung: 1,5 s)'] ]
 ];
+/* Edelstein-Kompromiss (16.10., L+F): je Turm 3 Wahlmöglichkeiten – 2 Basics (dürfen bei mehreren Türmen vorkommen)
+   und 1 Unique = die Fähigkeit aus ABILITIES mit der Nummer des Turms (an den Turmtyp gebunden). Zielwert je Option ca. +30 % Wirkung.
+   Gespeichert in tw.ab: Zahl = Fähigkeit aus ABILITIES (alte Steine: freie Wahl von F), Text = Basic (Schlüssel aus BASICS). */
+const BASICS = {
+  dmg:  ['Wucht',       'Schaden +30 %'],
+  rng:  ['Weitblick',   'Reichweite +30 %'],
+  eff:  ['Verstärkt',   'Effekt +30 % (Stärke und Dauer)'],
+  area: ['Breite',      'Fläche +30 %'],
+  light:['Leuchtkraft', 'Lichtkreis +30 %'],
+  buff: ['Glanz',       'Verstärkung im Lichtkreis +0,15']
+};
+const BASIC_BY_ROLE = { Schaden:['dmg','rng'], Effekt:['dmg','eff'], Reichweite:['dmg','rng'], Fläche:['dmg','area'], Luftabwehr:['dmg','rng'], Licht:['light','buff'] };
+const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], idx];
 /* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
-   Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und kein Effekt-Brennen.
+   Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und (seit 16.10.) kein Effekt des Elements (kein Brennen, Bremsen, Einfrieren, Fluch, Betäuben).
    Wirkt auch auf die Effektstärke. fly = fliegt, hpMul = Extra-Leben,
    lives = so viele „Durchbrüche“ zählt das Monster (Boss: 3),
    night = nachtaktiv: Nur diese Monster sieht Schatten im Dunkeln (19 Uhr) bloß im Lichtkreis eines Irrlichts.
@@ -431,7 +444,33 @@ const MONSTERS = [
   ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 0.75, 1.25, 1]}],
   ['Eifersüchtige Geliebte', {emo:'💔', ar:[0.25, 0.4], speed:1.25, hpMul:1.1, weak:[1, 1, 0.75, 1.5]}],   // 16.10. (L): 5. Monster im Block 4; trägt den dort fehlenden Stein-Bonus und Schatten-Malus
   ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1, 1, 0.75]}],
-  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}]   // 13.10.: neutral (vorher Schatten ×0,7)
+  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}],   // 13.10.: neutral (vorher Schatten ×0,7)
+  /* Runde 21–40 (16.10., L): neue Mechaniken. „Immun“ (Faktor 0) = 50 % Schaden und kein Effekt des Elements. Werte sind Startwerte fürs Balancing-Skript.
+     Block 5–8 wie bisher: erste Runde neutral, danach je Element einmal Bonus und Malus (Block 7: Lehrer gemischt, Block 8: Vorhut nicht neutral). */
+  ['Roboter',           {emo:'🤖', ar:[0.3, 0.5], speed:0.9, hpMul:1.1, weak:[1, 1, 1, 1]}],
+  ['Sommer-Schneebälle',{emo:'⛄', ar:[0.45, 0.7], speed:1.0, weak:[1.5, 0, 1, 1], info:'rollen mit dicker Schale – Eis kann ihnen kaum etwas anhaben'}],
+  ['Würfel',            {emo:'🎲', ar:[0.2, 0.3], speed:1.1, weak:[1, 1, 1.5, 0.75]}],
+  ['Phönixe',           {emo:'🐦‍🔥', ar:[0.1, 0.2], fly:true, speed:1.4, weak:[0, 1.5, 1, 1], info:'aus Feuer geboren – Feuer wirkt kaum'}],
+  ['Fairtrade-Bananen', {emo:'🍌', speed:1.2, hpMul:0.95, weak:[1, 1, 0.75, 1.5]}],
+  ['El Schlucko',       {emo:'🎒', mini:true, fly:true, speed:1.0, hpMul:4.75, count:1, lives:2, weak:[1, 1, 1, 1], info:'ein riesiger Rucksack voller Bananen – fliegt!'}],
+  ['Krieger',           {emo:'🗡️', ar:[0.5, 0.7], speed:0.9, hpMul:1.15, weak:[1, 1, 1, 1]}],
+  ['Golems',            {emo:'🗿', ar:[0.35, 0.5], speed:0.7, hpMul:1.4, weak:[1, 1.5, 1, 0], info:'aus Fels – Stein wirkt kaum'}],
+  ['Albträume',         {emo:'👻', speed:1.3, night:true, weak:[1.5, 1, 0, 1], info:'Wesen der Nacht – Schatten wirkt kaum'}],
+  ['Looping-Louie-Flugzeuge', {emo:'✈️', ar:[0.1, 0.2], fly:true, speed:1.7, weak:[0.75, 1, 1, 1.5]}],
+  ['Magier-Novizen',    {emo:'🧙', ar:[0.15, 0.3], speed:1.1, blink:{ every:4, dur:1.5 }, weak:[1, 0.75, 1.5, 1], info:'werden immer wieder kurz unsichtbar – nur Flächenschaden trifft sie dann'}],
+  ['Magiermeister',     {emo:'🧙‍♂️', mini:true, ar:[0.15, 0.3], speed:1.1, hpMul:5, count:1, lives:2, teleport:{ n:6, stay:2.5 }, weak:[1, 1, 1, 1], info:'läuft nicht, sondern springt kreuz und quer über den Weg; die letzten Felder geht er zu Fuß'}],
+  ['E-Scooter-Fahrer',  {emo:'🛴', speed:1.9, hpMul:0.85, weak:[1, 1, 1, 1], info:'sehr schnell'}],
+  ['Lindner-Spezialisten', {emo:'🍻', speed:1.0, hpMul:0.5, count:40, gap:0.5, bountyMul:0.5, weak:[1.5, 0.75, 1, 1], info:'ein Schwarm: doppelt so viele, halbe Leben, halbes Kopfgeld'}],
+  ['Wargreiter',        {emo:'🐺', ar:[0.3, 0.35], speed:1.1, hpMul:1.3, rider:true, weak:[1, 1, 0.75, 1.5], info:'ist die Rüstung weg, steigt der Ork ab: der Warg flieht schnell weiter, der Ork geht möglichst gerade zum Ausgang (um Türme, Felsen und Sumpf herum, durch Wald – dort unsichtbar)'}],
+  ['Fledermäuse',       {emo:'🦇', fly:true, night:true, speed:1.6, weak:[0.75, 1.5, 1, 1]}],
+  ['Lehrer',            {emo:'🧑‍🏫', ar:[0.2, 0.3], speed:1.0, mixed:true, weak:[1, 1, 1, 1], info:'jeder Lehrer hat eigene Stärken und Schwächen: eine „Immunität“, ein Bonus, der Rest gemischt'}],
+  ['Schulleiter',       {emo:'🎓', mini:true, ar:[0.2, 0.3], speed:1.0, hpMul:5, count:1, lives:2, weatherBoss:true, weak:[1, 1, 1, 1], info:'macht auf jeder Map das Wetter, das dem Element dort am meisten schadet (Stein ist wetterfest)'}],
+  ['Bratschen',         {emo:'🎻', ar:[0.25, 0.4], speed:1.0, hpMul:1.1, weak:[1, 1, 1, 1]}],
+  ['Heisenbergs',       {emo:'🧪', ar:[0.3, 0.4], speed:1.15, night:true, weak:[0.75, 1, 1.5, 1]}],
+  ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
+  ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, weak:[1, 1, 0.75, 1.5]}],
+  ['GNTModels',         {emo:'💃', speed:1.3, heart:{ t:1, cd:1 }, weak:[1, 1.5, 1, 0.75], info:'nach jedem Treffer kurz ein Herz – dann zielt kein Turm auf sie'}],
+  ['Betty (Boss)',      {emo:'👼', ar:[0.4, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, charm:{ every:6, show:1.2, stop:3 }, weak:[1, 1, 1, 1], info:'zieht sich alle paar Sekunden aus – Türme in Reichweite verlieben sich und schießen 3 s nicht'}]
 ].map(([name,o],k) => { if (!o.mini && !o.boss) MON_ROUND++; const r = MON_ROUND;   // 16.10.: auch der Endboss teilt sich die Runde der Vorhut
   return { name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:r, day:k+1,
   color:`hsl(${((r-1)*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.mini?.34:o.fly?.2:.24 }; });
@@ -544,6 +583,16 @@ function tdef(tw, lane){
 // Edelstein-Fähigkeit: verändert die Turmwerte oder setzt Merkmale, die die Simulation auswertet
 function gemMods(d, ab){
   d.gem = true; d.gemAb = ab; const R = GRID;
+  if (typeof ab === 'string') {   // Basic (16.10.)
+    if (ab === 'dmg') { d.dpsNow *= 1.3; d.dmg *= 1.3; }
+    if (ab === 'rng') d.range *= 1.3;
+    if (ab === 'eff') { d.eff *= 1.3; if (d.dur !== DAY) d.dur *= 1.3; if (d.chance) d.chance = Math.min(0.75, d.chance * 1.3);
+      if (d.effect === 'slow') d.eff = Math.min(0.85, d.eff); if (d.effect === 'curse') d.eff = Math.min(1.5, d.eff); if (d.effect === 'stun' && !d.nova) d.eff = Math.min(CONFIG.stunMax, d.eff); }
+    if (ab === 'area') d.splash = d.splash ? d.splash * 1.3 : 0.4 * R;
+    if (ab === 'light') d.light *= 1.3;
+    if (ab === 'buff') d.buff += 0.15;
+    return d;
+  }
   const F = [
     [ () => d.explode = { r:0.8*R, mul:1 },  () => d.burnStack = 2,  () => d.range *= 1.5,
       () => { if (d.air) { d.air = false; d.groundHalf = true; } else if (!d.hitsFly) { d.hitsFly = true; d.flyHalf = true; } },
@@ -572,8 +621,8 @@ function abilityBlocked(tw, k){
   if (tw.el === 3 && k === 1 && b.hitsFly) return 'trifft schon Fliegende';
   return '';
 }
-// Jede Fähigkeit nur einmal je Feld (15.10., F): Hat schon ein anderer Turm dieses Feldes den Stein mit Fähigkeit k, ist sie gesperrt (nach Verkauf wieder frei)
-const abilityTaken = (l, tw, k) => l.towers.some(t => t !== tw && t.gem && t.el === tw.el && abIdx(t) === k);
+// 16.10. (Kompromiss L+F): Die Regel „jede Fähigkeit nur einmal je Map“ (15.10., F) entfällt – das Unique hängt am Turmtyp, Basics dürfen sich wiederholen
+const abilityTaken = () => false;
 // Felsen: alle Türme +15 % Reichweite, Stein-Türme zusätzlich mehr Schaden
 function onRock(d){
   const m = ELEMENTS[d.el].terrainFree ? ROCK.stoneDmg : 1;
@@ -583,9 +632,9 @@ const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CO
 const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
 function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
   const d = { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1),
-    bounty: M.mini ? 0 : bountyFor(r) }; d.armorPct = (M.ar || [0, 0])[0]; d.armorPts = Math.round((M.ar || [0, 0])[1] * d.hp); return d; }
+    bounty: M.mini ? 0 : Math.max(1, Math.round(bountyFor(r) * (M.bountyMul || 1))) }; d.armorPct = (M.ar || [0, 0])[0]; d.armorPts = Math.round((M.ar || [0, 0])[1] * d.hp); return d; }
 const armorText = d => d.armorPct ? `${Math.round(d.armorPct*100)} % · ${d.armorPts} Punkte` : 'keine';
-const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · brennt nicht' : '×' + String(f).replace('.', ',');
+const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · kein Effekt' : '×' + String(f).replace('.', ',');
 
 /* ---------- Simulation (deterministisch) ----------
    Einziger Zufall: Betäubungschance, gewürfelt mit festem Seed (Spielstart, Tag, Welle, Spieler) –
@@ -597,7 +646,12 @@ function isLit(tw, towers){
   return towers.some(o => { if (o.el !== tw.el) return false; const L = tdef(o).light; return L && Math.hypot(o.x - tw.x, o.y - tw.y) <= L + 1e-6; });
 }
 function makeSim(inp){
-  const res = new Set(inp.res || []), W = WEATHER[inp.weather || 0], raw = inp.towers || [];
+  const res = new Set(inp.res || []), raw = inp.towers || [];
+  let wIdx = inp.weather || 0;
+  if (raw.length && (inp.incoming || []).some(q => MONSTERS[q.type] && MONSTERS[q.type].weatherBoss)) {   // Schulleiter: schlimmstes Wetter für das Element der Map
+    const cnt = [0,0,0,0]; raw.forEach(t => cnt[t.el]++); const el = cnt.indexOf(Math.max(...cnt));
+    if (!ELEMENTS[el].weatherproof) wIdx = worstWeather(el); }
+  const W = WEATHER[wIdx];
   if (inp.tseed !== undefined) ensureTerrain(inp.tseed);
   const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw, inp.lane || 0), W, res) }));
   // Lichtkreise der Irrlichter: Im Dunkeln treffen Schatten-Türme nur Monster, die gerade darin sind
@@ -609,7 +663,7 @@ function makeSim(inp){
     const near = amps.filter(a => (a.el === t.el || a.def.allBuff) && Math.hypot(a.x - t.x, a.y - t.y) <= a.def.light + 1e-6);
     if (near.length) { const m = Math.max(...near.map(a => a.el === t.el ? a.def.buff : a.def.allBuff)), p = Math.max(t.def.pierce || 0, ...near.map(a => a.el === t.el ? a.def.pierce : 0));
       t.def = { ...t.def, dpsNow:t.def.dpsNow * m, dmg:t.def.dmg * m, amp:m, pierce:p }; } }
-  return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, rand:rng(inp.seed || 1),
+  return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, wIdx, rand:rng(inp.seed || 1),
     queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, bSum:0, kills:0, gems:[0,0,0,0], pools:[], later:[], spawnT:0, t:0 };
 }
 const simBusy = s => s.queue.length || s.monsters.length || s.shots.length || s.later.length;
@@ -630,7 +684,12 @@ function wdef(def, W, res){          // Turmwerte mit Forschung und unter dem ak
 }
 const isBossy = m => !!(m.def.mini || m.def.boss);
 // Fliegt das Monster gerade? (Absturz: 2 s am Boden)
-const flying = m => m.def.fly && !(m.fx.grounded && m.fx.grounded.t > 0);
+// 16.10.: Mehlmottenraupen fliegen nur als Motte (m.coc.fly)
+const flier = m => !!(m.def.fly || (m.coc && m.coc.fly));
+const flying = m => flier(m) && !(m.fx.grounded && m.fx.grounded.t > 0);
+// Nicht anvisierbar (16.10.): unsichtbar (Magier-Novizen), Herz (GNTModels), Ork im Wald. Flächenschaden trifft trotzdem.
+const hidden = m => !!(m.inv || m.heartT > 0 || m.inForest);
+const armorPctOf = m => m.def.cocoon ? (m.coc && m.coc.fly ? 0 : m.def.cocoon.pct) : m.def.armorPct;
 // Tod: Gold, Kills, Edelstein (Zwischenboss/Boss: Farbe des tötenden Turms, Brennen/Lava = Feuer), Fähigkeiten, die beim Tod auslösen
 function kill(s, m, def){
   if (m.dead) return; m.dead = true;
@@ -657,7 +716,7 @@ function addFx(m, kind, val, t, w){        // stärkerer Wert gewinnt, längere 
 const on = (m, k) => m.fx[k] && m.fx[k].t > 0;
 function hit(s, m, def, dmg){
   if (m.dead) return;
-  const w = m.def.weak[def.el], f = w || CONFIG.immune;       // „immun“ = weniger Schaden und kein Brennen
+  const w = (m.weak || m.def.weak)[def.el], f = w || CONFIG.immune, imm = !w;   // „immun“ = weniger Schaden und (seit 16.10.) kein Effekt des Elements; Lehrer: Faktoren je Exemplar (m.weak)
   const vuln = 1 + (on(m, 'curse') ? m.fx.curse.v : 0) + (on(m, 'smolder') ? m.fx.smolder.v : 0);
   if (def.groundHalf && !flying(m)) dmg *= 0.5;               // Feuerregen: Bodenmonster halb
   if (def.flyHalf && flying(m)) dmg *= 0.5;                   // Feuerregen bei Bodentürmen: Fliegende halb
@@ -666,7 +725,7 @@ function hit(s, m, def, dmg){
   if (def.hunger) dmg *= 1 + Math.min(def.hungerMax || 0.45, def.hunger * (def.feast || 0)) * bh;
   // Rüstung (12.10. 14:07): Solange Rüstungspunkte übrig sind, kommt der Schaden um armorPct verringert an.
   // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
-  let pct = m.ap > 0 ? m.def.armorPct : 0;
+  let pct = m.ap > 0 ? armorPctOf(m) : 0;
   const ad = dmg * f * (ELEMENTS[def.el].armorDmg || 0) * (def.armorMul ? 1 + (def.armorMul - 1) * bh : 1);
   if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0) * (def.gemAb === 5 && def.el === 2 ? bh : 1); m.ap -= ad; }
   m.hp -= dmg * f * vuln * (1 - pct);
@@ -678,6 +737,7 @@ function hit(s, m, def, dmg){
     else addFx(m, 'burn', v, t);
     if (def.smolder) addFx(m, 'smolder', def.smolder * bh, t);
   }
+  if (!imm) {
   if (def.iceBlock && on(m, 'slow') && !flying(m)) addFx(m, 'stun', 1, def.iceBlock * (isBossy(m) ? 0.5 : 1));
   if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);
   if (def.effect === 'curse') {
@@ -686,15 +746,80 @@ function hit(s, m, def, dmg){
     }
   if (def.effect === 'stun' && def.eff > 0 && (!def.chance || s.rand() < def.chance)) addFx(m, 'stun', 1, Math.min(CONFIG.stunMax, def.eff * f) * (def.stunBossHalf ? bh : 1));
   if (def.wingBreak && flying(m) && s.rand() < def.wingBreak * bh) addFx(m, 'grounded', 1, FOREVER);   // Flügelbruch: bis Wellenende am Boden
-  if (def.groundHit && m.def.fly) addFx(m, 'grounded', 1, def.groundHit * (isBossy(m) ? 0.5 : 1));
+  if (def.groundHit && flier(m)) addFx(m, 'grounded', 1, def.groundHit * (isBossy(m) ? 0.5 : 1));
   if (def.brittle) addFx(m, 'brittle', 1, def.brittle);
   if (def.fear && s.rand() < def.fear.chance) addFx(m, 'fear', 1, def.fear.t * (isBossy(m) ? 0.5 : 1));
+  }
   if (def.deathChance && m.hp > 0 && s.rand() < def.deathChance) { if (isBossy(m)) m.hp -= 0.05 * m.def.hp; else m.hp = 0; }
-  if (m.hp <= 0) kill(s, m, def);
+  if (m.hp <= 0) { kill(s, m, def); return; }
+  if (m.def.heart && !(m.heartCd > 0)) { m.heartT = m.def.heart.t; m.heartCd = m.def.heart.t + m.def.heart.cd; }   // GNTModels: nach Treffer kurz ein Herz, nicht anvisierbar
+  if (m.def.rider && m.ap <= 0 && !m.v) splitRider(s, m);                                                         // Wargreiter: Rüstung weg → Warg und Ork
+}
+/* ---------- Besondere Monster (16.10., ab Runde 21) ---------- */
+// Wargreiter-Teile: Warg flieht schnell den Weg entlang, Ork geht möglichst gerade zum Ausgang (Wegsuche auf dem Raster)
+function variantDef(d, v){
+  const b = Math.ceil(d.bounty / 2);
+  if (v === 'warg') return { ...d, name:'Warg', emo:'🐺', speed:d.speed * 1.6, armorPct:0, armorPts:0, rider:null, bounty:b, hp:d.hp * 0.5 };
+  if (v === 'ork')  return { ...d, name:'Ork', emo:'🧌', speed:0.6, armorPct:0, armorPts:0, rider:null, ork:true, bounty:b, hp:d.hp * 0.5 };
+  return d;
+}
+function splitRider(s, m){
+  const base = monsterDef(m.type, s.players), H = Math.max(0.01, m.hp);
+  m.v = 'warg'; m.def = variantDef(base, 'warg'); m.hp = H * 0.5; m.ap = 0;
+  const o = { id:m.id + .5, type:m.type, v:'ork', def:variantDef(base, 'ork'), hp:H * 0.5, ap:0, d:m.d, x:m.x, y:m.y, fx:JSON.parse(JSON.stringify(m.fx)), hops:m.hops, age:0 };
+  o.route = orkRoute(s, m.x, m.y); o.od = 0;
+  s.monsters.push(o); s.fx.push({ kind:'boom', x:m.x, y:m.y, r:0.5 * GRID, t:.3, t0:.3, el:3 });
+}
+// Weg des Orks: kürzester Weg auf dem Raster (8 Richtungen) vom Absteigen bis zum Ausgang. Türme, Felsen und Sumpf sind Hindernisse,
+// Wald ist begehbar (dort ist er nicht anvisierbar). Der Weg ist nie verbaut, also gibt es immer eine Verbindung.
+function orkRoute(s, x0, y0){
+  const map = s.map, block = new Set(s.towers.map(t => t.x + ',' + t.y)), cl = (v, n) => Math.max(0, Math.min(n - 1, Math.floor(v)));
+  const ok = (x, y) => x >= 0 && x < COLS && y >= 0 && y < ROWS && !block.has(x + ',' + y) && !(map.terrain[y][x] === 2 || map.terrain[y][x] === 3) || map.cells.has(x + ',' + y);
+  const [ex, ey] = map.wp[map.wp.length - 1], gx = cl(ex, COLS), gy = cl(ey, ROWS), sx = cl(x0, COLS), sy = cl(y0, ROWS);
+  const D = new Map(), P = new Map(), K = (x, y) => x + ',' + y, open = [[0, sx, sy]]; D.set(K(sx, sy), 0);
+  while (open.length) {
+    let bi = 0; for (let i = 1; i < open.length; i++) if (open[i][0] < open[bi][0]) bi = i;
+    const [c, x, y] = open.splice(bi, 1)[0]; if (c > D.get(K(x, y))) continue; if (x === gx && y === gy) break;
+    for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]) {
+      const nx = x + dx, ny = y + dy; if (!ok(nx, ny)) continue;
+      if (dx && dy && (!ok(x + dx, y) || !ok(x, y + dy))) continue;
+      const nc = c + (dx && dy ? Math.SQRT2 : 1); if (nc < (D.has(K(nx, ny)) ? D.get(K(nx, ny)) : Infinity)) { D.set(K(nx, ny), nc); P.set(K(nx, ny), [x, y]); open.push([nc, nx, ny]); }
+    }
+  }
+  const cells = []; let cur = [gx, gy]; if (!D.has(K(gx, gy))) cur = null;
+  while (cur) { cells.unshift(cur); cur = P.get(K(cur[0], cur[1])); }
+  const pts = [[x0, y0], ...cells.slice(1).map(([x, y]) => [x + .5, y + .5]), [ex, ey]];
+  const seg = []; let len = 0; for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i+1][0] - pts[i][0], pts[i+1][1] - pts[i][1]); seg.push({ ax:pts[i][0], ay:pts[i][1], bx:pts[i+1][0], by:pts[i+1][1], len:l, start:len }); len += l; }
+  return { seg, len };
+}
+// Magiermeister: steht auf N Wegpunkten mit gleichem Abstand, in gemischter Reihenfolge (fester Seed), danach die letzten Felder zu Fuß
+function teleportPlan(s, d){
+  const n = d.teleport.n, L = s.map.len, list = [...Array(n)].map((_, k) => L * (0.06 + 0.76 * k / (n - 1)));
+  for (let j = n - 1; j > 0; j--) { const q = Math.floor(s.rand() * (j + 1)); [list[j], list[q]] = [list[q], list[j]]; }
+  return { list, i:0, t:d.teleport.stay };
+}
+// Lehrer: jeder hat eine eigene Mischung aus Faktoren (eine „Immunität“, einen Bonus, der Rest gemischt)
+function mixedWeak(r){
+  const w = [0, 1.5, [0.75, 1, 1.25][Math.floor(r() * 3)], [0.75, 1, 1.25][Math.floor(r() * 3)]];
+  for (let j = 3; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [w[j], w[q]] = [w[q], w[j]]; }
+  return w;
+}
+// Schulleiter: auf jeder Map das Wetter, das dem Element der Map am meisten schadet (Stein ist wetterfest)
+function worstWeather(el){
+  let best = 0, bv = Infinity;
+  WEATHER.forEach((W, k) => { const e = W.el[el] || {}, v = (e.dmg || 1) * Math.sqrt((e.eff || 1) * (e.dur || 1)) * (W.range || 1); if (v < bv) { bv = v; best = k; } });
+  return best;
 }
 function spawn(s, sp){
-  const d = monsterDef(sp.type, s.players), [x,y] = posAt(s.map, 0);
-  s.monsters.push({ id:s.t + s.monsters.length * .37, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, ap: sp.ap !== undefined ? sp.ap : d.armorPts, d:0, x, y, fx: sp.fx || {}, hops:sp.hops });
+  let d = monsterDef(sp.type, s.players); if (sp.v) d = variantDef(d, sp.v);
+  const [x,y] = posAt(s.map, 0);
+  const m = { id:s.t + s.monsters.length * .37, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, ap: sp.ap !== undefined ? sp.ap : d.armorPts, d:0, x, y, fx: sp.fx || {}, hops:sp.hops, age:0, v:sp.v };
+  if (sp.weak || d.mixed) m.weak = sp.weak || mixedWeak(s.rand);
+  if (d.teleport) m.tp = teleportPlan(s, d);
+  if (d.cocoon) m.coc = { fly:false, t:d.cocoon.ground };
+  if (d.charm) m.charmCd = d.charm.every;
+  if (d.ork) { m.route = orkRoute(s, x, y); m.od = 0; }
+  s.monsters.push(m);
 }
 /* Welt = alle Felder einer Welle, im selben Takt. „Live“: Wer durchkommt, taucht sofort beim nächsten Spieler auf
    (behält Leben und Effekte). Sonst wandern die Leaks erst zur nächsten Wellenzeit. */
@@ -705,26 +830,48 @@ function stepWorld(w, dt){
   if (w.live) w.sims.forEach((s, i) => { while (s.sent < s.leaked.length) { const m = s.leaked[s.sent++]; if (m.hops < w.n) spawn(w.sims[(i+1) % w.n], JSON.parse(JSON.stringify(m))); } });
 }
 function simulateWorld(run){ const w = makeWorld(run); let g = 0; while (worldBusy(w) && g++ < 600000) stepWorld(w, DT); return w; }
-const canHit = (def, m) => !m.def.fly ? (!def.air || !!def.groundHalf) : flying(m) ? def.hitsFly : true;   // abgestürzte Fliegende treffen alle
+const canHit = (def, m) => !flier(m) ? (!def.air || !!def.groundHalf) : flying(m) ? def.hitsFly : true;   // abgestürzte Fliegende treffen alle
 function step(s, dt){
   s.t += dt;
   // Neue Welle: alle 0,9 s ein Monster. Leaks vom Nachbarn: in denselben Abständen, in denen sie dort ins Ziel kamen (at = Sekunden ab dem ersten).
   if (s.queue.length && s.queue[0].at !== undefined) { while (s.queue.length && s.queue[0].at <= s.t) spawn(s, s.queue.shift()); }
-  else if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { spawn(s, s.queue.shift()); s.spawnT = CONFIG.spawnGap; } }
+  else if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { const q = s.queue.shift(); spawn(s, q); s.spawnT = CONFIG.spawnGap * (MONSTERS[q.type].gap || 1); } }
   for (const m of s.monsters) {
     if (m.dead) continue;
     for (const k in m.fx) m.fx[k].t -= dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1);
     const fx = m.fx, on = k => fx[k] && fx[k].t > 0;
     if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * dt;
     if (m.hp <= 0) { kill(s, m); continue; }
+    m.age += dt; const D = m.def;
+    if (m.heartT > 0) m.heartT -= dt; if (m.heartCd > 0) m.heartCd -= dt;
+    if (D.blink) m.inv = (m.age % D.blink.every) > D.blink.every - D.blink.dur;          // Magier-Novizen: kurz unsichtbar
+    if (m.coc) { m.coc.t -= dt; if (m.coc.t <= 0) { m.coc.fly = !m.coc.fly; m.coc.t = m.coc.fly ? D.cocoon.fly : D.cocoon.ground; } }   // Kokon ↔ Motte
+    if (D.charm) { m.charmCd -= dt; if (m.strip > 0) m.strip -= dt;                    // Betty: Türme in Reichweite verlieben sich
+      if (m.charmCd <= 0) { m.charmCd = D.charm.every; m.strip = D.charm.show;
+        for (const tw of s.towers) { const r = tw.def.nova ? tw.def.splash : tw.def.buff ? tw.def.light : tw.def.range; if (Math.hypot(m.x - tw.x - .5, m.y - tw.y - .5) <= r) tw.love = D.charm.stop; } } }
     const slow = on('stun') ? 1 : Math.max(on('slow') ? fx.slow.v : 0, on('grounded') ? 0.3 : 0);
-    const v = GRID * m.def.speed * (flying(m) && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
-    m.d = on('fear') ? Math.max(0, m.d - v) : m.d + v;     // Angst: läuft rückwärts, höchstens bis zum Eingang
-    [m.x, m.y] = posAt(s.map, m.d);
+    const spd = m.coc ? (m.coc.fly ? D.cocoon.speed : 0) : D.speed;
+    const v = GRID * spd * (flying(m) && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
+    if (m.tp && m.tp.i < m.tp.list.length) {                                           // Magiermeister: steht, dann Sprung
+      m.d = m.tp.list[m.tp.i]; m.tp.t -= dt;
+      if (m.tp.t <= 0) { s.fx.push({ kind:'boom', x:m.x, y:m.y, r:0.4 * GRID, t:.3, t0:.3, el:2 }); m.tp.i++; m.tp.t = D.teleport.stay;
+        if (m.tp.i >= m.tp.list.length) m.d = s.map.len * 0.88; }
+      [m.x, m.y] = posAt(s.map, m.d);
+    } else if (m.route) {                                                                // Ork: eigener Weg
+      m.od = on('fear') ? Math.max(0, m.od - v) : m.od + v;
+      [m.x, m.y] = posAt(m.route, m.od); m.d = s.map.len * Math.min(1, m.od / Math.max(0.1, m.route.len));
+      const cx = Math.floor(m.x), cy = Math.floor(m.y); m.inForest = cx >= 0 && cx < COLS && cy >= 0 && cy < ROWS && s.map.terrain[cy][cx] === 1 && !s.map.cells.has(cx + ',' + cy);
+      if (m.od >= m.route.len) m.d = s.map.len;
+    } else {
+      m.d = on('fear') ? Math.max(0, m.d - v) : m.d + v;     // Angst: läuft rückwärts, höchstens bis zum Eingang
+      [m.x, m.y] = posAt(s.map, m.d);
+    }
     if (m.d >= s.map.len) {
       m.dead = m.gone = true;
       const keep = {}; for (const k in fx) if (fx[k].t > 0 && !['stun', 'fear', 'grounded'].includes(k)) keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };
-      s.leaked.push({ type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), ap:Math.max(0, Math.round(m.ap)), fx:keep, at:+s.t.toFixed(2) });   // nie 0: sonst käme es mit vollem Leben wieder
+      const rec = { type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), ap:Math.max(0, Math.round(m.ap)), fx:keep, at:+s.t.toFixed(2) };
+      if (m.v) rec.v = m.v; if (m.weak) rec.weak = m.weak;
+      s.leaked.push(rec);   // nie 0: sonst käme es mit vollem Leben wieder
     }
   }
   // Bodenfelder (Lavapfütze, Geröll): jedes Monster zählt je Art nur einmal, auch in mehreren Feldern
@@ -733,23 +880,24 @@ function step(s, dt){
   if (s.pools.length) for (const m of s.monsters) { if (m.dead || flying(m)) continue;
     const lava = s.pools.find(P => P.dps && Math.hypot(m.x - P.x, m.y - P.y) <= P.r);
     if (lava) hit(s, m, lava.def, lava.dps * dt);
-    if (!m.dead && s.pools.some(P => P.slow && Math.hypot(m.x - P.x, m.y - P.y) <= P.r)) addFx(m, 'slow', 0.3, 0.2); }
+    if (!m.dead && (m.weak || m.def.weak)[3] !== 0 && s.pools.some(P => P.slow && Math.hypot(m.x - P.x, m.y - P.y) <= P.r)) addFx(m, 'slow', 0.3, 0.2); }
   for (const L of s.later) L.t -= dt;      // Nachbeben
   s.later.filter(L => L.t <= 0).forEach(L => { if (L.at) { splashAt(s, L.def, L.at[0], L.at[1], L.def.splash); s.fx.push({ kind:'boom', x:L.at[0], y:L.at[1], r:L.def.splash, t:.3, t0:.3, el:L.def.el }); } else nova(s, L.tw, L.def); });
   s.later = s.later.filter(L => L.t > 0);
   for (const tw of s.towers) {
     const def = tw.def;
+    if (tw.love > 0) { tw.love -= dt; continue; }   // Betty: verliebt, schießt nicht
     if (def.moths) {                       // Mottenplage: Motten im Lichtkreis treffen bis zu 3 Monster, zweimal je Sekunde
       tw.mcd = (tw.mcd || 0) - dt;
       if (tw.mcd <= 0) { tw.mcd = 0.5; const cx = tw.x + .5, cy = tw.y + .5;
-        s.monsters.filter(m => !m.dead && Math.hypot(m.x - cx, m.y - cy) <= def.moths.r).sort((a, b) => b.d - a.d).slice(0, def.moths.n)
+        s.monsters.filter(m => !m.dead && !hidden(m) && Math.hypot(m.x - cx, m.y - cy) <= def.moths.r).sort((a, b) => b.d - a.d).slice(0, def.moths.n)
           .forEach(m => { hit(s, m, { ...def, moths:null, dmg:0, dpsNow:0 }, def.moths.dps * 0.5); s.fx.push({ kind:'spark', x:m.x, y:m.y, t:.15, t0:.15, el:2 }); }); }
     }
     if (def.buff) continue;                // Irrlicht schießt nicht selbst
     const night = def.dayOnly && s.dark && !def.nightSight;   // 12.10.: Dunkelheit gilt nur gegen nachtaktive Monster
     tw.cd -= dt; if (tw.cd > 0) continue;
     const cx = tw.x + .5, cy = tw.y + .5, reach = def.nova ? def.splash : def.range;
-    const inRange = s.monsters.filter(m => !m.dead && canHit(def, m) && Math.hypot(m.x-cx, m.y-cy) <= reach &&
+    const inRange = s.monsters.filter(m => !m.dead && !hidden(m) && canHit(def, m) && Math.hypot(m.x-cx, m.y-cy) <= reach &&
       (!night || !m.def.night || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));
     if (!inRange.length) continue;
     tw.cd = 1 / def.rate;
@@ -799,7 +947,7 @@ function impact(s, p){
   }
   if (def.rebound) def.rebound.forEach((mul, k) => s.later.push({ t:0.4 * (k + 1), at:[p.tx, p.ty], def:{ ...def, rebound:null, pool:null, dmg:def.dmg * mul } }));   // Prellstein: hüpft an derselben Stelle nach
   if (def.bounce) {                        // Phönixflug: einmal weiter zum nächsten Monster
-    const nx = s.monsters.filter(o => !o.dead && o !== p.tgt && canHit(def, o)).map(o => [o, Math.hypot(o.x - p.tx, o.y - p.ty)])
+    const nx = s.monsters.filter(o => !o.dead && !hidden(o) && o !== p.tgt && canHit(def, o)).map(o => [o, Math.hypot(o.x - p.tx, o.y - p.ty)])
       .filter(([,r]) => r <= def.bounce.r && r > 0.3).sort((a, b) => a[1] - b[1])[0];
     if (nx) { const d2 = { ...def, bounce:null, pool:null, dmg:def.dmg * def.bounce.mul }, o = nx[0];
       s.shots.push({ x:p.tx, y:p.ty, x0:p.tx, y0:p.ty, tx:o.x, ty:o.y, tgt:o, lob:p.lob, sp:p.sp, def:d2, el:def.el, idx:def.idx }); }
@@ -1104,28 +1252,29 @@ function gemsOf(i){
   return out;
 }
 const gemDot = (e, n) => `<span class="gem" style="color:${GEMS[e].col}" title="${GEMS[e].name}">◆${n !== undefined ? n : ''}</span>`;
-const abilityOf = (el, idx) => ABILITIES[el][idx];
+const abilityOf = (el, ab) => typeof ab === 'string' ? BASICS[ab] : ABILITIES[el][ab];
 function gemDialog(i, x, y){
   const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
   const have = gemsOf(i), d = tdef(tw, i), cur = abilityOf(tw.el, abIdx(tw));
   const conv = ELEMENTS.map((E, e) => e === tw.el || have[e] < 1 ? '' :
     `<button class="btn" data-conv="${e}">${gemDot(e)} In ${tw.idx+1}. ${E.towers[tw.idx][0]} (<span style="color:${E.color}">${E.name}</span>) umwandeln</button>`).join('');
-  const list = ABILITIES[tw.el].map(([an, at], k) => { const why = abilityBlocked(tw, k) || (abilityTaken(l, tw, k) ? 'schon bei einem anderen Turm vergeben' : '');
-    return `<button class="btn" data-ab="${k}" ${why ? 'disabled' : ''} style="display:block;width:100%;text-align:left;margin:4px 0">${gemDot(tw.el)}<b>${an}</b><br><span class="muted">${why || at}</span></button>`; }).join('');
+  const opts = gemOptions(tw.el, tw.idx);
+  const list = opts.map(k => { const [an, at] = abilityOf(tw.el, k), why = typeof k === 'number' ? abilityBlocked(tw, k) : '';
+    return `<button class="btn" data-ab="${k}" ${why ? 'disabled' : ''} style="display:block;width:100%;text-align:left;margin:4px 0">${gemDot(tw.el)}<b>${an}</b>${typeof k === 'number' ? ' <span class="muted">(nur dieser Turm)</span>' : ''}<br><span class="muted">${why || at}</span></button>`; }).join('');
   openDlg(`<h2>💎 ${d.name}</h2>
     ${tw.gem ? `<div><b>Fähigkeit ${gemDot(tw.el)} ${cur[0]}</b><br><span class="muted">${cur[1]}</span></div><div class="done-r">schon eingesetzt</div>`
-      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, für jeden Turm möglich, jede Fähigkeit nur einmal je Feld)</span></div>${list}`
-      : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}. Mit dem Stein darf man eine der 8 Fähigkeiten frei wählen:</div>${ABILITIES[tw.el].map(([an]) => an).join(' · ')}`}
+      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, eine von 3)</span></div>${list}`
+      : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}. Mit dem Stein wählt man eine von 3 Fähigkeiten:</div>${gemOptions(tw.el, tw.idx).map(k => abilityOf(tw.el, k)[0]).join(' · ')}`}
     ${conv ? `<div><b>Umwandeln</b><br><span class="muted">Gleiche Nummer und Stufe, investiertes Gold bleibt${tw.gem ? ', die Fähigkeit geht verloren' : ''}.</span></div><div class="acts" style="justify-content:flex-start">${conv}</div>` : ''}
     <div class="muted">Deine Steine: ${have.map((n, e) => n > 0 ? gemDot(e, n) : '').join(' ') || 'keine'} · Schenken über „🎁 Schenken“.</div>
     <div class="acts"><button class="btn" id="gNo">Schließen</button></div>`);
   $('gNo').onclick = closeDlg;
-  $('dlg').querySelectorAll('[data-ab]').forEach(b => b.onclick = () => { closeDlg(); useGem(i, x, y, tw.el, +b.dataset.ab); });
+  $('dlg').querySelectorAll('[data-ab]').forEach(b => b.onclick = () => { closeDlg(); const v = b.dataset.ab; useGem(i, x, y, tw.el, isNaN(+v) ? v : +v); });
   $('dlg').querySelectorAll('[data-conv]').forEach(b => b.onclick = () => { closeDlg(); useGem(i, x, y, +b.dataset.conv); });
 }
 function useGem(i, x, y, e, ab){
   const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i) || gemsOf(i)[e] < 1) return;
-  if (e === tw.el && (tw.gem || ab === undefined || abilityBlocked(tw, ab) || abilityTaken(l, tw, ab))) return;
+  if (e === tw.el && (tw.gem || ab === undefined || !gemOptions(tw.el, tw.idx).includes(ab) || (typeof ab === 'number' && abilityBlocked(tw, ab)))) return;
   const { ab: _old, ...rest } = tw;
   const nt = e === tw.el ? { ...rest, gem:true, ab } : { ...rest, el:e, gem:false };
   pop(e === tw.el ? `Fähigkeit: ${abilityOf(tw.el, ab)[0]}` : `Umgewandelt: ${ELEMENTS[e].towers[tw.idx][0]}`);
@@ -1242,7 +1391,7 @@ function buyResearch(i, id){
 function openDlg(html, cls, sheet){ const d = $('dlg'); d.className = 'dlg' + (cls ? ' ' + cls : ''); d.innerHTML = html;
   $('dlgback').className = 'dlgback' + (sheet ? ' sheet' : ''); $('dlgback').hidden = false; }
 function closeDlg(){ $('dlgback').hidden = true; $('dlg').innerHTML = ''; }
-// Kurzinfo zu einem Monster (Runde 1–20)
+// Kurzinfo zu einem Monster
 function showMonster(r){
   const M = MONSTERS[r-1], MD = monsterDef(r-1, NP());
   const strong = ELEMENTS.filter((E,k) => M.weak[k] > 1).map(E => E.name), weak = ELEMENTS.filter((E,k) => M.weak[k] < 1).map(E => E.name);
@@ -1250,10 +1399,11 @@ function showMonster(r){
   openDlg(`<h2><span class="big">${M.emo}</span>${M.name}</h2>
     <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
     <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${armorText(MD)}</dd>
-    <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
+    <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : M.cocoon ? 'zeitweise (als Motte)' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
     <dt>Kopfgeld</dt><dd>${M.mini ? 'kein Gold, dafür 💎 Edelstein' : MD.bounty + ' Gold' + (M.boss ? ' + 💎 Edelstein' : '')}</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
-    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('')}</div>
-    <div class="muted">${strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : ''}${weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : ''}</div>
+    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${M.mixed ? '?' : fmtFactor(M.weak[k])}</span>`).join('')}</div>
+    ${M.info ? `<div><b>Besonderheit:</b> ${M.info}</div>` : ''}
+    <div class="muted">${M.mixed ? 'Faktoren je Lehrer verschieden.' : (strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : '')}</div>
     <div class="acts"><button class="btn primary" id="mOk">OK</button></div>`);
   $('mOk').onclick = closeDlg; $('mOk').focus();
 }
@@ -1396,7 +1546,7 @@ function render(){
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.day-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
-  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.day}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · ${M.mini ? '<b>💎 Edelstein</b> für den, der ihn besiegt (kein Gold)' : `Kopfgeld ${bountyFor(M.round)}${M.boss ? ' + 💎 Edelstein' : ''}`} &nbsp;` +
+  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.day}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · ${M.mini ? '<b>💎 Edelstein</b> für den, der ihn besiegt (kein Gold)' : `Kopfgeld ${MD.bounty}${M.boss ? ' + 💎 Edelstein' : ''}`} &nbsp;` +
     ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
     (NX ? `<br>Nächstes Monster (Tag ${NX.day}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.day}" aria-label="Info zu ${NX.name}">i</button>` : '') +
@@ -1427,7 +1577,7 @@ function render(){
     if (tw) { const d = tdef(tw, i), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
       const [an, at] = abilityOf(tw.el, abIdx(tw)), gm = gemsOf(i), anyGem = gm.some(v => v > 0);
       info.innerHTML = `<b style="color:${ELEMENTS[tw.el].color}">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel}${d.buff ? '' : ` · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}`}${fxText(d) ? ' · ' + fxText(d) : ''}` +
-        (tw.gem ? `<br>${gemDot(tw.el)}<b style="color:var(--fg)">${an}</b>: ${at}` : `<br><span>${gemDot(tw.el)}Mit ${GEMS[tw.el].name}: eine der 8 Fähigkeiten frei wählen</span>`) +
+        (tw.gem ? `<br>${gemDot(tw.el)}<b style="color:var(--fg)">${an}</b>: ${at}` : `<br><span>${gemDot(tw.el)}Mit ${GEMS[tw.el].name}: ${gemOptions(tw.el, tw.idx).map(k => abilityOf(tw.el, k)[0]).join(' / ')}</span>`) +
         '';
       const tb = $('tb'+i), can = mayBuild(i);
       tb.hidden = !can; tb.className = 'tbar' + (tw.y < 2 ? ' below' : '');
@@ -1473,7 +1623,7 @@ function renderResearch(){
 /* Fliegende-Warnung (15.10., F): am Vortag und vor der 10-Uhr-Welle zeigt ein Banner, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat. */
 function flyWarn(){
   if (!G || G.over) return null;
-  const d = G.day, isFly = k => !!(MONSTERS[k - 1] && MONSTERS[k - 1].fly);
+  const d = G.day, isFly = k => !!(MONSTERS[k - 1] && (MONSTERS[k - 1].fly || MONSTERS[k - 1].cocoon));
   let when, name;
   if (G.slot === 0 && isFly(d)) { when = 'Um 10:00 kommen'; name = MONSTERS[d - 1].name; }
   else if (isFly(d + 1)) { when = 'Morgen kommen'; name = MONSTERS[d].name; }
@@ -1662,6 +1812,7 @@ function draw(i, cv){
     if (dark) c.globalAlpha = .45;
     drawTower(c, tw, tw.x*cs, tw.y*cs, cs, st ? st.aim : (tw.x + tw.y) * .7, fl ? fl.t / fl.t0 : 0);
     c.globalAlpha = 1;
+    if (st && st.love > 0) { c.font = `${cs*.45}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('💕', (tw.x+.5)*cs, (tw.y+.15)*cs + Math.sin(time*6)*cs*.05); }
     if (map.terrain[tw.y][tw.x] === 3) {   // Turm steht auf Felsen: kleines Berg-Symbol oben rechts
       const ox = (tw.x+.8)*cs, oy = (tw.y+.2)*cs, r = cs*.17;
       c.fillStyle = 'rgba(20,20,24,.85)'; c.beginPath(); c.arc(ox, oy, r, 0, Math.PI*2); c.fill();
@@ -1674,10 +1825,19 @@ function draw(i, cv){
     const x = m.x, y = m.y, r = m.def.size*cs*GRID*.8, on = k => m.fx[k] && m.fx[k].t > 0;
     const bob = flying(m) ? Math.sin(time*8 + m.id) * cs*.04 - cs*.12 : 0;
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(x*cs, y*cs + r*.7, r*.8, r*.3, 0, 0, Math.PI*2); c.fill();
-    const X = x*cs, Y = y*cs + bob;
-    c.fillStyle = m.def.color; c.globalAlpha = .35; c.beginPath(); c.arc(X, Y, r, 0, Math.PI*2); c.fill(); c.globalAlpha = 1;
+    const X = x*cs, Y = y*cs + bob, ghost = m.inv ? .18 + .1 * Math.sin(time*25 + m.id) : m.inForest ? .35 : 1;   // unsichtbar flimmert, Ork im Wald halb
+    c.globalAlpha = ghost;
+    c.fillStyle = m.def.color; c.globalAlpha = .35 * ghost; c.beginPath(); c.arc(X, Y, r, 0, Math.PI*2); c.fill(); c.globalAlpha = ghost;
     if (on('slow')) { c.fillStyle = '#9fdcf540'; c.beginPath(); c.arc(X, Y, r*1.15, 0, Math.PI*2); c.fill(); }
-    c.font = `${r*1.9}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(m.def.emo, X, Y + 1);
+    const emo = m.coc ? (m.coc.fly ? '🦋' : m.def.emo) : m.def.emo;
+    c.font = `${r*1.9}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(emo, X, Y + 1);
+    c.globalAlpha = 1;
+    if (m.strip > 0) {                         // Betty „zieht sich aus“: hautfarben verpixelt, schwarzer Balken
+      const n = 4, q = 2*r/n, skin = ['#f1c6a7', '#e8b494', '#d9a07f', '#f6d3b8'];
+      for (let a = 0; a < n; a++) for (let b = 0; b < n; b++) { c.fillStyle = skin[(a*3 + b + Math.floor(time*6)) % 4]; c.fillRect(X - r + a*q, Y - r + b*q, q + .5, q + .5); }
+      c.fillStyle = '#000'; c.fillRect(X - r*1.25, Y - r*.2, r*2.5, r*.5);
+      c.fillStyle = '#fff'; c.font = `700 ${Math.max(7, r*.36)}px ${v('--mono')}`; c.fillText('CENSORED', X, Y + r*.06); }
+    if (m.heartT > 0) { c.font = `${r*1.1}px serif`; c.fillText('❤️', X + r*.7, Y - r*.8); }
     if (on('curse')) spr(c, tinted('smoke', PROJ_TINT[2]), X, Y, r*2.4, time*2, .45);
     if (on('burn')) spr(c, SPR.flameS, X + r*.55, Y - r*.5 + Math.sin(time*20 + m.id)*1.5, r*.9, 0, .9);
     if (on('stun')) for (let j = 0; j < 3; j++) { const a = time*5 + j*2.1; spr(c, SPR.star, X + Math.cos(a)*r, Y - r + Math.sin(a)*r*.3, r*.6); }
@@ -1701,7 +1861,7 @@ function weatherIdx(i){
   if (!G || G.over) return null; return weatherDay(G, Math.min(G.day, CONFIG.days))[G.slot];
 }
 function drawWeather(c, i, s, W, H, cs, time){
-  const k = weatherIdx(i); if (k === null || k === undefined) return; const Wx = WEATHER[k];
+  const k = s && s.wIdx !== undefined && s.wIdx !== weatherIdx(i) ? s.wIdx : weatherIdx(i); if (k === null || k === undefined) return; const Wx = WEATHER[k];   // Schulleiter: Wetter dieser Map
   if (s && wxAnim && (Wx.name === 'Regen' || Wx.name === 'Gewitter')) {
     c.strokeStyle = '#a9c8ff55'; c.lineWidth = 1; c.beginPath();
     for (let j = 0; j < 40; j++) { const sx = ((j * 0.6180339) % 1) * W, sp = H * 1.4;
