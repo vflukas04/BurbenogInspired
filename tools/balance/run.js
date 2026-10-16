@@ -12,7 +12,7 @@ if (cmd === 'p1') {
   console.log(`P1 Start · Version ${G.VERSION} · Testkarte · Startgold ${G.CONFIG.startGold}\n`);
   console.log(pad('Element', 10) + [2, 3, 4].map(p => pad(`${p} Sp. (Ziel ${target[p]})`, 18)).join('') + 'Aufbau (2 Sp.)');
   for (let e = 0; e < EL.length; e++) {
-    const row = [2, 3, 4].map(p => { const w = { type:0, players:p }, r = B.greedy(e, G.CONFIG.startGold, [w], { q:target[p] / 20 });
+    const row = [2, 3, 4].map(p => { const w = { type:0, players:p }, r = B.improve(B.greedy(e, G.CONFIG.startGold, [w]), G.CONFIG.startGold, [w]);
       return { k:C.runWave(r.setup, w).kills, r }; });
     const build = row[0].r.setup.towers.map(t => `${G.ELEMENTS[t.el].towers[t.idx][0]} S${t.lvl}`).join(', ');
     console.log(pad(EL[e], 10) + row.map((x, i) => pad(`${x.k}/20 ${x.k > target[i + 2] + 2 ? '↑' : x.k < target[i + 2] - 2 ? '↓' : '✓'}`, 18)).join('') + build);
