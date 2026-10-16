@@ -2,6 +2,23 @@
 
 Größere Vorhaben, bevor sie umgesetzt werden. Kommentare beider willkommen, mit Kürzel (L/F). Beschlossenes wandert nach `TODO.md`, Verworfenes nach `IDEEN.md`.
 
+## 0. Weg zu V1.0 – L, 16.10. – Entwurf, mit F abstimmen
+Produktversion (unabhängig von `VERSION`): heute ca. **0.8** – Kern steht, Balance und Inhalt offen.
+
+**V1.0 soll enthalten:**
+- **Elemente:** 4 oder 8 – noch offen.
+- **Wellen:** 40 Runden (normale Monster) + 6 Zwischenbosse + 2 Endbosse (nach Runde 20 und 40). Neue Mechaniken erst ab Runde 21 (Runden 1–20 sind schon besser einschätzbar). Zwischenbosse bleiben große Varianten der Vorwelle.
+- **Zeit:** gespielt wird meist am Stück; für die verteilte Version ggf. mehrere „Tage“ pro echtem Tag.
+- **Balance:** fertig, wenn das Balancing-Skript eine Einstellung findet, die seine Vorgaben erfüllt, und sich Testspiele gut anfühlen. Gewinnen eher selten (Richtwert 20–30 %), wichtiger ist eine gute Ausgestaltung der Reserve.
+- **Fähigkeit frei wählbar:** Kompromiss zwischen L und F (folgt).
+- **Schwierigkeitsstufen:** nach dem Balancing einbauen.
+- **Grafik:** Umfang noch klären (Pakete wie Kenney oder eigene, was alles: Karte, Gelände, Türme, Monster, Geschosse, Treffer, Effekte).
+- **Pflicht:** Firestore-Regeln vor 09.11., Handy-Hänger.
+
+**Danach:** V1.x neue Inhalte ohne Grundregeländerung · V2 große Umbauten (gemeinsame Map, Skilltree, ggf. weitere Elemente).
+
+**Zeitziel:** ambitioniert, frühestens Do 22.10. F hält sich bis dahin eher im Hintergrund und macht Mikro-Balancing für den Testspaß.
+
 ## 1. Balancing-Skript – L, 14.10.
 **Ziel:** Statt vieler kleiner Handänderungen schlägt ein Skript Zahlen vor, die messbare Ziele treffen. F kann sich auf Spielprinzip und neue Mechaniken konzentrieren.
 

@@ -1,6 +1,10 @@
 # Updates (neueste oben, höchstens 15 Einträge)
 
-Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
+Format: `### 16.10. 11:55 · L · (kein Spielcode) – Plan zu V1.0
+- `team/PLANUNG.md` Abschnitt 0: Entwurf V1.0 (40 Runden + 6 Zwischenbosse + 2 Endbosse, neue Mechaniken ab Runde 21, Balance über das Skript). Bitte lesen und kommentieren, Details bespricht L mit F.
+- Gelesene Post nach `team/archiv/post-archiv.md` verschoben.
+
+### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
 ### 16.10. 00:30 · L · (kein Spielcode) – Balancing-Skript: Grundgerüst
 - `tools/balance/`: lädt die Simulation direkt aus `index.html`, Testkarte, Reservefaktor, Bauplatz-Maske, gieriger Aufbau. Aufruf: `node tools/balance/run.js p1` bzw. `maske`.
