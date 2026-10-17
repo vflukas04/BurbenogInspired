@@ -33,15 +33,17 @@ function p2(erg){
   if (aus.length) console.log('\nAusreißer je Tag (R/Ziel relativ zur Element-Kraft, < 0,6 oder > 1,8):\n  ' + aus.join('\n  '));
 }
 // Stärkenband je Block (L, 17.10.): in jedem 5er-Block sollen alle Elemente ähnlich stark sein (±10 % um das Block-Mittel).
-// Stein zählt hier ohne Tage mit Fliegenden (eigene Grenze 25 %). Hebel bei Abweichung: Kraft je Turm (kraftT) der Türme, die in dem Block tragen.
-const BAND_EL = +process.env.BAND_EL || 0.10;
+// Stein zählt Tage mit Fliegenden nur mit Gewicht 0,25 (L, 17.10. abends), alle anderen Tage und Elemente mit 1.
+// Hebel bei Abweichung: Kraft je Turm (kraftT) der Türme, die in dem Block tragen.
+const BAND_EL = +process.env.BAND_EL || 0.10, GEW_STEIN_FLIEGER = 0.25;
+const gmw = (a, w) => Math.exp(a.reduce((x, v, k) => x + w[k] * Math.log(Math.max(1e-3, v)), 0) / w.reduce((x, v) => x + v, 0));
 function elementeJeBlock(R, namen){
   const nT = R[namen[0]].length, fl = i => !!(G.MONSTERS[i].fly || G.MONSTERS[i].cocoon), raus = [];
-  console.log(`\nStärkenband je Block (R/Ziel relativ zum Block-Mittel, Ziel ±${BAND_EL * 100} %; Stein ohne Fliegende):`);
+  console.log(`\nStärkenband je Block (R/Ziel relativ zum Block-Mittel, Ziel ±${BAND_EL * 100} %; Stein: Fliegertage mit Gewicht ${GEW_STEIN_FLIEGER}):`);
   console.log('  ' + pad('Runden', 9) + namen.map(x => pad(x, 10)).join(''));
   for (let b = 0; b < 8; b++) {
     const idx = [...Array(nT).keys()].filter(i => Math.ceil(G.MONSTERS[i].round / 5) === b + 1); if (!idx.length) continue;
-    const w = namen.map(x => gm(idx.filter(i => !(x === 'Stein' && fl(i))).map(i => R[x][i] / ziel(G.MONSTERS[i].round)))), mw = gm(w);
+    const w = namen.map(x => gmw(idx.map(i => R[x][i] / ziel(G.MONSTERS[i].round)), idx.map(i => x === 'Stein' && fl(i) ? GEW_STEIN_FLIEGER : 1))), mw = gm(w);
     console.log('  ' + pad(`${b * 5 + 1}–${b * 5 + 5}`, 9) + w.map((v, j) => { const r = v / mw, ok = Math.abs(r - 1) <= BAND_EL; if (!ok) raus.push(`Runde ${b * 5 + 1}–${b * 5 + 5} ${namen[j]} ${r.toFixed(2)}`); return pad(r.toFixed(2) + (ok ? '' : ' ✗'), 10); }).join(''));
   }
   console.log(raus.length ? '  außerhalb: ' + raus.join(' · ') : '  alle Blöcke im Band ✓');

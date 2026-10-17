@@ -2,6 +2,11 @@
 
 Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
+### 17.10. 22:15 · L · 2026-10-17j – Betty länger „censored“, Git-Verlauf umgeschrieben
+- Endboss 2: Pause beim „Ausziehen“ 1,5 s statt 1,2 s (bleibt so lange stehen). Neues Spiel + neu laden.
+- Stärkenband je Block: Stein zählt Fliegertage mit Gewicht 0,25 statt gar nicht.
+- **Git-Verlauf neu geschrieben** (Autor-Adressen ersetzt), alle Commit-IDs haben sich geändert → siehe Post an F.
+
 ### 17.10. 22:00 · L · 2026-10-17i – Feinschliff Runde 21–40, Balancing-Prüfungen
 - Drei Monster ab Runde 21 wirken jetzt versetzt statt alle an derselben Stelle (Inhalt bleibt Überraschung für F). Neues Spiel + neu laden.
 - Balancing-Skript prüft neu: **Stärkenband je 5er-Block** (alle Elemente ±10 % um das Block-Mittel) und **Kraft je Gold je Turmstufe** (darf mit der Stufe nicht fallen). Erster Befund: Stein Turm 5–8 liegen je Gold unter Katapult/Felsbrocken, Feuer Turm 2–6 unter dem billigeren Funken. Noch keine Werte geändert.
@@ -60,7 +65,3 @@ Format: `### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: wa
 ### 16.10. 13:40 · L · (kein Spielcode) – Balancing-Skript: glatte Bewertung, Tagesmodell, Vorwärtspfad
 - `node tools/balance/pfad.js alle`: ganzes Spiel je Element (2 Spieler, Tag mit 10- und 19-Uhr-Welle), Vorschläge für Element-Kraft und Kurve. Spiegel-Datei für Teständerungen ohne `index.html`.
 - Erste Tendenz: Feuer klar zu stark, Stein zu schwach, späte Tage zu leicht. Noch keine Zahlen geändert, Balance-Pause gilt weiter.
-
-### 16.10. 12:20 · L · (kein Spielcode) – Plan V1.0 / V1.1 / V2
-- `team/PLANUNG.md` Abschnitt 0: V1.0 bis Do 22.10. (40 Runden, 4 Elemente, Balancing-Skript einmal angewendet), V1.1 (8 Elemente, Grafik, Schwierigkeit), V2 (große Umbauten). Bitte lesen, Details bespricht L mit F.
-- Gelesene Post nach `team/archiv/post-archiv.md` verschoben.

@@ -2,6 +2,9 @@
 
 ## Post
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
+**An F (von L, 17.10. 22:15) – wichtig, vor allem anderen:**
+> Ich habe den Git-Verlauf von `main` neu geschrieben (meine private Mailadresse stand in zwei Commits). Alle Commit-IDs sind neu. Claude von F: **nicht** `git pull --rebase` auf einem alten Klon – sonst werden 150 alte Commits neu angewendet. Stattdessen: eigene ungepushte Änderungen sichern (`git diff > ~/sicherung.patch`), dann `git fetch origin && git reset --hard origin/main`, Sicherung wieder einspielen. Oder einfach neu klonen.
+
 **An F (von L, 16.10. mittags):**
 > Ich habe Ideen für die Monster ab Runde 21 (neue Mechaniken, Zwischenbosse, zweiter Endboss). Die sollen für Friedrich eine **Überraschung** bleiben, bis wir sie gemeinsam testen. Claude von F: Bitte Friedrich keine Details nennen, auch wenn du sie im Code oder in Updates siehst; Zahlen anpassen (z. B. Lebenskurve) ist okay. Plan zu V1.0/V1.1/V2 steht in `team/PLANUNG.md` Abschnitt 0 – den bitte gern lesen.
 

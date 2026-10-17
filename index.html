@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-17i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-17j";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -478,7 +478,7 @@ const MONSTERS = [
   ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'krabbeln erst kurz als Raupe, dann abwechselnd Kokon und Motte – als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
   ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, hpMul:0.8, weak:[1, 1, 0.75, 1.5]}],
   ['GNTModels',         {emo:'💃', speed:1.3, heart:{ t:1, cd:1 }, weak:[1, 1.5, 1, 0.75], info:'nach jedem Treffer kurz ein Herz – dann zielt kein Turm auf sie'}],
-  ['Betty (Boss)',      {emo:'👩‍🦱', ar:[0.4, 0.5], speed:0.6, hpMul:12.1, count:1, boss:true, lives:5, charm:{ every:6, show:1.2, stop:3 }, weak:[1, 1, 1, 1], info:'zieht sich alle paar Sekunden aus und bleibt dabei kurz stehen – Türme in Reichweite verlieben sich und schießen 3 s nicht'}]
+  ['Betty (Boss)',      {emo:'👩‍🦱', ar:[0.4, 0.5], speed:0.6, hpMul:12.1, count:1, boss:true, lives:5, charm:{ every:6, show:1.5, stop:3 }, weak:[1, 1, 1, 1], info:'zieht sich alle paar Sekunden aus und bleibt dabei kurz stehen – Türme in Reichweite verlieben sich und schießen 3 s nicht'}]
 ].map(([name,o],k) => { if (!o.mini && !o.boss) MON_ROUND++; const r = MON_ROUND;   // 16.10.: auch der Endboss teilt sich die Runde der Vorhaut
   return { name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:r, day:k+1,
   color:`hsl(${((r-1)*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.mini?.34:o.fly?.2:.24 }; });

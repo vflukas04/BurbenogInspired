@@ -1,5 +1,9 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 16.10. 12:20 · L · (kein Spielcode) – Plan V1.0 / V1.1 / V2
+- `team/PLANUNG.md` Abschnitt 0: V1.0 bis Do 22.10. (40 Runden, 4 Elemente, Balancing-Skript einmal angewendet), V1.1 (8 Elemente, Grafik, Schwierigkeit), V2 (große Umbauten). Bitte lesen, Details bespricht L mit F.
+- Gelesene Post nach `team/archiv/post-archiv.md` verschoben.
+
 ### 16.10. 00:30 · L · (kein Spielcode) – Balancing-Skript: Grundgerüst
 - `tools/balance/`: lädt die Simulation direkt aus `index.html`, Testkarte, Reservefaktor, Bauplatz-Maske, gieriger Aufbau. Aufruf: `node tools/balance/run.js p1` bzw. `maske`.
 - Erster Prüfpunkt P1 (Start, Runde 1): Feuer zu stark (17 statt 12 von 20 zu zweit), Stein zu schwach (6). Noch keine Zahlen geändert – Vorschläge kommen gesammelt.

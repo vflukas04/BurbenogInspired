@@ -30,7 +30,7 @@ Optimal ist das nie bewiesen („beste gefundene“). Ist das Spiel am Ende zu l
 | P3 | Pfad: durchgehender Vorwärts-Aufbau ohne Verkaufen vs. P2 | Verlust ≤ ~15 % |
 | P4 | Endboss, 2 Spieler | schaffbar mit Korridor; 1 Spieler allein ≈ halbes Leben |
 | P5 | Niemand nutzlos am Endboss | jeder ≥ ~30 % des Boss-Schadens (2 Spieler; bei 4 weniger) |
-| P6 | Elemente gleich stark – **in jedem 5er-Block** (L, 17.10.), nicht nur im Mittel | je Block R/Ziel jedes Elements ±10 % um das Block-Mittel (Stein ohne Fliegende) |
+| P6 | Elemente gleich stark – **in jedem 5er-Block** (L, 17.10.), nicht nur im Mittel | je Block R/Ziel jedes Elements ±10 % um das Block-Mittel (Stein: Fliegertage mit Gewicht 0,25) |
 | P7 | Monstertypen (fliegend, Rüstung, viele Leben, nachtaktiv, schnell/langsam, Kombinationen) | jedes Element hat gewichtet nach Häufigkeit ähnlich viele schwere Tage |
 | P8a | Kraft je Gold je Turmstufe (Stellschrauben `TOWER_POWER`, `kraftT`, Kosten) | fällt mit der Stufe nicht ab (Lichttürme ausgenommen); sonst lohnen teure Türme nicht |
 | P8 | Turmrelevanz: Aufstellung ohne einen Turm; gleiches Gold in Turm k vs. k+1 | jeder Turm fehlt spürbar; höhere Stufe meist knapp vorn (nicht strikt, frühe Upgrades dürfen kippen) |
