@@ -7,6 +7,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
+- L · Feinschliff Runde 21–40, Balancing-Prüfungen (Band je Block, Kraft je Gold) · seit 17.10. 21:50
 
 ## Als Nächstes
 | Was | Wer | Notiz |
