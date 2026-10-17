@@ -4,6 +4,12 @@ Format: `### 16.10. 17:45 · L · 2026-10-16f – gemischte Welle angepasst
 - Zusammensetzung und Darstellung der gemischten Welle (Runde 36) geändert (Farbe/Größe statt Buchstabe). Neues Spiel + neu laden.
 - Balancing-Skript: Ziel jetzt Endboss 40 % Bot-Reserve, Band nach oben offen bis 2,0; Spiegel testet schwächere Upgrades (×1,8 statt ×2,1) – noch nichts im Spiel.
 
+### 17.10. 10:10 · L · 2026-10-17c – Schwierigkeit, Stein-Katapult früher, Faktoren nach Regel
+- Beim Spielstart wählbar: **Schwierigkeit** leicht (Leben −25 %), normal, schwer (+25 %).
+- Stein: **Katapult ist jetzt Turm 3** (70 Gold, trifft Fliegende), Felsbrocken Turm 4. Fähigkeiten bleiben beim jeweiligen Turm.
+- Faktoren Runde 2–10 wieder streng nach der Regel (je Element ein Bonus und ein Malus je Block); die vielen Stein-Boni sind raus.
+- Lebensbalken am oberen Rand sichtbar; „verdient“ und ⚔ kleiner in eigener Zeile. Neues Spiel + neu laden.
+
 ### 17.10. 09:35 · L · 2026-10-17b – erstes Balancing-Paket im Spiel
 - Werte aus Balancing-Schleife 5: Element-Kraft Feuer 0,71 · Eis 0,83 · Schatten 1,04 · Stein 1,93; Upgrades flacher (×2,35/2,1/1,85/1,7/1,6, Schatten ×2,35/2,1/1,85/1,6/1,5); Stein-Katapult 100.
 - Leben je 5er-Block ab Runde 11 höher (bis ×12 in Runde 36–40); Betty und späte Fliegende etwas weniger Leben.
@@ -64,6 +70,3 @@ Format: `### 16.10. 17:45 · L · 2026-10-16f – gemischte Welle angepasst
 - Gilt nur für neue Wahlen; bereits vergebene doppelte Fähigkeiten bleiben bestehen.
 - Neues Spiel nicht nötig, nur neu laden.
 
-### 15.10. 21:50 · F · 2026-10-15n – „verdient" im Feldkopf
-- Neben Gold und Kills zeigt jeder Feldkopf, wie viel Gold der Spieler insgesamt verdient hat (ohne Ausgaben, Geschenke, Kasse). Wächst wie das Gold erst, wenn die Monster in der Wiedergabe sterben.
-- Neues Spiel nicht nötig, nur neu laden.

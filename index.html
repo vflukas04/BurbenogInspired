@@ -79,6 +79,7 @@ h1 small{font-family:var(--body);font-size:.78rem;color:var(--muted);letter-spac
 .meta{font-family:var(--mono);font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .meta b{color:var(--fg)}
 .meta .plus{color:var(--ok)}
+.meta.sub{flex-basis:100%;font-size:.7rem;margin-top:-4px}
 .inc{margin-left:auto;font-size:.82rem;color:var(--muted)}
 canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
 .info{font-size:.85rem;color:var(--muted);min-height:1.3em;margin-top:6px}
@@ -163,6 +164,10 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
       <label for="fLive">Spielart<select id="fLive">
         <option value="0">Uhrzeiten: Leaks kommen zur nächsten Welle</option>
         <option value="1">Live: Leaks laufen sofort beim Nachbarn weiter</option></select></label>
+      <label for="fDiff">Schwierigkeit<select id="fDiff">
+        <option value="leicht">Leicht: Monster −25 % Leben</option>
+        <option value="normal" selected>Normal</option>
+        <option value="schwer">Schwer: Monster +25 % Leben</option></select></label>
     </div>
     <div class="row" id="rowTest"><label for="fInterval">Abstand zwischen Wellen (Minuten)<input id="fInterval" type="number" min="1" max="120" value="3"></label></div>
     <div class="row" id="rowReal" hidden><label for="fStart">Tag 1 ist<select id="fStart"><option value="0">heute</option><option value="1" selected>morgen</option></select></label></div>
@@ -214,7 +219,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-17b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-17c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -344,11 +349,11 @@ const ELEMENTS = [
     ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
     ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
     ['Ewige Nacht',  'Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
-  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 4, 6, 8', kraft:1.929, costOverride:{3:100}, effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[
+  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 3, 6, 8', kraft:1.929, costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.55, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.89, 0,   0, 0.9],
-    ['Felsbrocken',  'Fläche',    2.5, 0.25,1, 0.5, 0,   0, 1.1],
     ['Katapult',     'Reichweite',3.8, 0.25,2, 0.72, 0,   0, 1.0, {fly:true}],
+    ['Felsbrocken',  'Fläche',    2.5, 0.25,1, 0.5, 0,   0, 1.1],
     ['Erdbeben',     'Effekt',    1.8, 0.25,1, 0.36, 2.0, 0, 2.2, {nova:true, chance:0.15, chanceUp:0.05}],
     ['Granitwächter','Fläche',    2.0, 0.33,3, 0.58, 0,   0, 1.2, {fly:true}],
     ['Lawine',       'Fläche',    3.0, 0.25,3, 0.55, 0,   0, 1.6],
@@ -411,7 +416,8 @@ const BASICS = {
   buff: ['Glanz',       'Verstärkung im Lichtkreis +0,15']
 };
 const BASIC_BY_ROLE = { Schaden:['dmg','rng'], Effekt:['dmg','eff'], Reichweite:['dmg','rng'], Fläche:['dmg','area'], Luftabwehr:['dmg','rng'], Licht:['light','buff'] };
-const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], idx];
+const uniqOf = (el, idx) => ELEMENTS[el].uniq ? ELEMENTS[el].uniq[idx] : idx;   // Nummer der eigenen Fähigkeit eines Turms (17.10.: Stein 3↔4 getauscht)
+const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], uniqOf(el, idx)];
 /* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
    Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und (seit 16.10.) kein Effekt des Elements (kein Brennen, Bremsen, Einfrieren, Fluch, Betäuben).
    Wirkt auch auf die Effektstärke. fly = fliegt, hpMul = Extra-Leben,
@@ -423,16 +429,16 @@ const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], 
 let MON_ROUND = 0;   // Runde (für Leben, Kopfgeld, Farbe): Zwischenbosse teilen sich die Runde des Monsters davor; day = Tag im Spiel
 const MONSTERS = [
   ['Silberfische',      {emo:'🐛', speed:1.0, weak:[1, 1, 1, 1]}],
-  ['Kellerasseln',      {emo:'🪲', ar:[0.2, 0.3], speed:0.9, weak:[0.8, 1, 1.05, 1.2]}],
-  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[0.9, 1.2, 1, 0.8]}],
-  ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 1.1, 1.2, 1]}],
-  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 1, 0.8, 0.7]}],
+  ['Kellerasseln',      {emo:'🪲', ar:[0.2, 0.3], speed:0.9, weak:[0.8, 1, 1, 1.2]}],
+  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1, 1.2, 1, 0.8]}],
+  ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 0.8, 1.2, 1]}],
+  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 1, 0.8, 1]}],
   ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:4.5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
-  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1.75]}],   // 12.10.: Tag 6 (vorher 7)
-  ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 0.75, 1.4]}],   // 12.10.: Tag 7 (vorher 6)
-  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.75, 1, 1.4]}],
-  ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 1, 1.5, 1.25]}],
-  ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 0.75, 1, 1.5]}],
+  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
+  ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 1, 0.75]}],   // 12.10.: Tag 7 (vorher 6)
+  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.75, 1, 1]}],
+  ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 0.75, 1.5, 1]}],
+  ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 1, 0.75, 1.5]}],
   ['Fuchs-Boss',        {emo:'🦊', mini:true, ar:[0.2, 0.4], speed:1.4, hpMul:5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 10
   ['Habichte',          {emo:'🦅', ar:[0.1, 0.2], fly:true, speed:1.8, weak:[1, 1, 1, 1]}],
   ['Dachse',            {emo:'🦡', ar:[0.35, 0.6], speed:0.9, hpMul:1.3, weak:[1, 1, 0.75, 1.5]}],
@@ -614,7 +620,7 @@ function gemMods(d, ab){
   return d;
 }
 // Welche Fähigkeit ein Turm hat (alte Steine ohne ab: Fähigkeit der Turmnummer) und ob eine Fähigkeit bei ihm sinnlos wäre
-const abIdx = tw => tw.ab !== undefined ? tw.ab : tw.idx;
+const abIdx = tw => tw.ab !== undefined ? tw.ab : uniqOf(tw.el, tw.idx);
 function abilityBlocked(tw, k){
   const b = towerBase(tw.el, tw.idx);
   if (tw.el === 2 && b.buff) return k === 1 ? '' : 'Irrlicht schießt nicht – nur Mottenplage wirkt';
@@ -631,8 +637,11 @@ function onRock(d){
 }
 const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (1 - resVal(curRes(), 'cheap')));
 const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
+// Schwierigkeit (17.10., L): wird beim Spielstart gewählt (G.cfg.diff) und wirkt nur auf die Leben; alte Spiele = normal
+const DIFFS = { leicht:{ name:'leicht', hp:0.75 }, normal:{ name:'normal', hp:1 }, schwer:{ name:'schwer', hp:1.25 } };
+const diffHp = () => (G && G.cfg && DIFFS[G.cfg.diff] || DIFFS.normal).hp;
 function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
-  const d = { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1) * (CONFIG.hpBlock[Math.ceil(r / 5) - 1] || 1),
+  const d = { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1) * (CONFIG.hpBlock[Math.ceil(r / 5) - 1] || 1) * diffHp(),
     bounty: M.mini ? 0 : Math.max(1, Math.round(bountyFor(r) * (M.bountyMul || 1))) }; d.armorPct = (M.ar || [0, 0])[0]; d.armorPts = Math.round((M.ar || [0, 0])[1] * d.hp); return d; }
 const armorText = d => d.armorPct ? `${Math.round(d.armorPct*100)} % · ${d.armorPts} Punkte` : 'keine';
 const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · kein Effekt' : '×' + String(f).replace('.', ',');
@@ -1490,8 +1499,9 @@ function buildLanes(){
       <div class="lhead">
         <span class="name">Spieler ${i+1}</span>
         <button class="el" id="el${i}" title="Element wechseln (nur vor dem ersten Turm an Tag 1)"></button>
-        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span> · verdient <b id="e${i}"></b> · ⚔ <b id="k${i}"></b> <span id="gm${i}"></span></span>
+        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span> <span id="gm${i}"></span></span>
         <span class="inc" id="inc${i}"></span>
+        <span class="meta sub">verdient <b id="e${i}"></b> · ⚔ <b id="k${i}"></b></span>
       </div>
       <div class="cvw"><canvas id="cv${i}"></canvas><div class="tbar" id="tb${i}" hidden></div></div>
       <div class="info" id="info${i}"></div>
@@ -1547,7 +1557,7 @@ function render(){
   const SL = slotsOf(G), wd = weatherDay(G, Math.min(G.day, CONFIG.days));
   $('clock').style.gridTemplateColumns = `repeat(${SL.length}, minmax(0,1fr))`;
   $('clock').innerHTML = SL.map((h,k) => { const W = WEATHER[wd[k]];
-    return `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}" title="${W.name}: ${weatherText(W)}"><b>${hh(h)} <span class="wx">${W.sym} ${W.name}</span></b>${k===0?'Welle für alle':'Leaks vom Nachbarn'}${isDark(h)?' · dunkel':''}</div>`; }).join('');
+    return `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}" title="${W.name}: ${weatherText(W)}"><b>${hh(h)} <span class="wx">${W.sym} ${W.name}</span></b>${k===0?'Welle für alle' + (G.cfg.diff && G.cfg.diff !== 'normal' ? ' · ' + DIFFS[G.cfg.diff].name : ''):'Leaks vom Nachbarn'}${isDark(h)?' · dunkel':''}</div>`; }).join('');
   const b = $('banner');
   checkVersion(G.cfg.version);
   b.hidden = !overShown(); b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
@@ -1863,9 +1873,10 @@ function draw(i, cv){
     if (on('fear')) { c.fillStyle = '#e8dcff'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.fillText('!', X - r, Y - r); }
     if (m.hops) { c.fillStyle = v('--accent'); c.font = `700 ${cs*.22}px ${v('--mono')}`; c.fillText(m.hops, X + r, Y - r); }
     const f = Math.max(0, m.hp / m.def.hp);
-    c.fillStyle = '#00000088'; c.fillRect(X-r, Y-r-6, 2*r, 3);
-    c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(X-r, Y-r-6, 2*r*f, 3);
-    if (m.def.armorPts && m.ap > 0) { c.fillStyle = '#c8ccd0'; c.fillRect(X-r, Y-r-3, 2*r*Math.min(1, m.ap / m.def.armorPts), 2); }   // Rüstung: grauer Balken
+    const by = Y - r - 6 < 0 ? Y + r + 2 : Y - r - 6;   // 17.10.: am oberen Rand Balken unter das Monster
+    c.fillStyle = '#00000088'; c.fillRect(X-r, by, 2*r, 3);
+    c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(X-r, by, 2*r*f, 3);
+    if (m.def.armorPts && m.ap > 0) { c.fillStyle = '#c8ccd0'; c.fillRect(X-r, by + 3, 2*r*Math.min(1, m.ap / m.def.armorPts), 2); }   // Rüstung: grauer Balken
   }
   for (const p of s.shots) drawShot(c, p, cs, time);
   for (const f of s.fx) if (f.kind === 'spark') drawFx(c, f, cs, time);
@@ -1906,7 +1917,7 @@ function towerIcon(el, k){
 /* ---------- Start ---------- */
 async function newGame(){
   const players = +$('fPlayers').value, timing = MODE === 'online' ? $('fTiming').value : 'manual';
-  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), live: $('fLive').value === '1', startGold: CONFIG.startGold, version: VERSION };
+  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), live: $('fLive').value === '1', diff: $('fDiff').value, startGold: CONFIG.startGold, version: VERSION };
   cfg.slots = cfg.live ? [10] : CONFIG.slotPlan[players];   // Live: eine Welle am Tag, alles läuft ineinander
   if (timing === 'real') { const d = new Date(); d.setDate(d.getDate() + (+$('fStart').value)); d.setHours(0,0,0,0); cfg.day1 = d.getTime(); }
   G = newGameState(cfg);
