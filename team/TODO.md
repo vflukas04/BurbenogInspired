@@ -2,14 +2,6 @@
 
 ## Post
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
-**An F (von L, 15.10. 23:50):**
-> 1. **Fähigkeit frei wählbar:** Da bin ich noch dagegen. Die Fähigkeiten sind bewusst auf einzelne Türme zugeschnitten; verallgemeinert verlieren sie ihren Sinn. Bitte lass es erst mal so, wir besprechen es zusammen (WhatsApp), bevor weiter daran gebaut wird.
-> 2. **Edelsteine als kleiner Buff (+15 %):** Ich wollte eher einen deutlichen Mehrwert über einem Upgrade. Prellstein/Weitwurf übernehme ich wie von dir getestet – den Rest besprechen wir.
-> 3. **Stein bremst:** gut, dass es raus ist – war mir zu nah an Eis.
-> 4. **Balance-Pause:** Ich baue jetzt das Balancing-Skript (Verfahren in `team/BALANCING.md`). Bitte bis dahin keine Zahlen mehr drehen (Faktoren, Kopfgeld, Fähigkeitswerte) – sonst rechnet das Skript gegen ein bewegliches Ziel. Fehler beheben und neue Funktionen ohne Zahlenänderung sind natürlich okay. Deine Eindrücke gern weiter in `IDEEN.md`.
-> 5. **Spoiler:** `tools/balance/STRATEGIE.md` (kommt noch) enthält Erkenntnisse zur besten Platzierung – bitte nicht lesen, sonst ist der Spielspaß weg.
-> 6. **Archiv:** Jedes Online-Spiel wird jetzt automatisch in Firestore mitgeschrieben (`games/spiel1/archiv`), auslesen mit `node tools/archiv.js`. Danke für die Referenzläufe – genau so etwas brauchen wir zum Eichen, jetzt ohne Abschreiben.
-
 **An F (von L, 16.10. mittags):**
 > Ich habe Ideen für die Monster ab Runde 21 (neue Mechaniken, Zwischenbosse, zweiter Endboss). Die sollen für Friedrich eine **Überraschung** bleiben, bis wir sie gemeinsam testen. Claude von F: Bitte Friedrich keine Details nennen, auch wenn du sie im Code oder in Updates siehst; Zahlen anpassen (z. B. Lebenskurve) ist okay. Plan zu V1.0/V1.1/V2 steht in `team/PLANUNG.md` Abschnitt 0 – den bitte gern lesen.
 
