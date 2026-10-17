@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-17h";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-17i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -466,7 +466,7 @@ const MONSTERS = [
   ['Albträume',         {emo:'👻', speed:1.3, night:true, weak:[1.5, 1, 0, 1], info:'Wesen der Nacht – Schatten wirkt kaum'}],
   ['Looping-Louie-Flugzeuge', {emo:'✈️', ar:[0.1, 0.2], fly:true, speed:1.7, hpMul:0.8, weak:[0.75, 1, 1, 1.5]}],
   ['Magier-Novizen',    {emo:'🧙', ar:[0.15, 0.3], speed:1.1, blink:{ every:4, dur:1.5 }, weak:[1, 0.75, 1.5, 1], info:'werden immer wieder kurz unsichtbar – nur Flächenschaden trifft sie dann'}],
-  ['Magiermeister',     {emo:'🧙‍♂️', mini:true, ar:[0.15, 0.3], speed:1.1, hpMul:5, count:1, lives:2, teleport:{ n:6, stay:2.5 }, weak:[1, 1, 1, 1], info:'läuft nicht, sondern springt kreuz und quer über den Weg; die letzten Felder geht er zu Fuß'}],
+  ['Magiermeister',     {emo:'🧙‍♂️', mini:true, ar:[0.15, 0.3], speed:1.1, hpMul:5, count:1, lives:2, teleport:{ n:6, stay:2.5 }, weak:[1, 1, 1, 1], info:'geht erst ein Stück wie ein normales Monster, dann springt er kreuz und quer über den Weg; die letzten Felder geht er zu Fuß'}],
   ['E-Scooter-Fahrer',  {emo:'🛴', speed:1.9, hpMul:0.85, weak:[1, 1, 1, 1], info:'sehr schnell'}],
   ['Lindner-Spezialisten', {emo:'🍻', speed:1.0, hpMul:0.5, count:40, gap:0.5, bountyMul:0.5, weak:[1.5, 0.75, 1, 1], info:'ein Schwarm: doppelt so viele, halbe Leben, halbes Kopfgeld'}],
   ['Wargreiter',        {emo:'🐺', ar:[0.3, 0.35], speed:1.1, hpMul:1.3, rider:true, weak:[1, 1, 0.75, 1.5], info:'ist die Rüstung weg, steigt der Ork ab: der Warg flieht schnell weiter, der Ork geht möglichst gerade zum Ausgang (um Türme, Felsen und Sumpf herum, durch Wald – dort unsichtbar)'}],
@@ -475,7 +475,7 @@ const MONSTERS = [
   ['Schulleiter',       {emo:'🎓', mini:true, ar:[0.2, 0.3], speed:1.0, hpMul:5, count:1, lives:2, weatherBoss:true, weak:[1, 1, 1, 1], info:'macht auf jeder Map das Wetter, das dem Element dort am meisten schadet (Stein ist wetterfest)'}],
   ['Streichquartett',   {emo:'🎻', ar:[0.15, 0.3], speed:1.0, hpMul:1.05, quartet:true, weak:[1, 1, 1, 1], info:'gemischte Welle (Farbe und Größe zeigen die Sorte): 7 Violinen (gelb, leicht), 6 Bratschen (orange, verwirrt, laufen immer wieder rückwärts), 4 Celli (braun, stärker), 3 Kontrabässe (dunkelrot, groß, etwas langsamer, geben Monstern in ihrer Nähe +20 Punkte Rüstung)'}],
   ['Heisenbergs',       {emo:'🧪', ar:[0.3, 0.4], speed:1.15, night:true, weak:[0.75, 1, 1.5, 1]}],
-  ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
+  ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'krabbeln erst kurz als Raupe, dann abwechselnd Kokon und Motte – als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
   ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, hpMul:0.8, weak:[1, 1, 0.75, 1.5]}],
   ['GNTModels',         {emo:'💃', speed:1.3, heart:{ t:1, cd:1 }, weak:[1, 1.5, 1, 0.75], info:'nach jedem Treffer kurz ein Herz – dann zielt kein Turm auf sie'}],
   ['Betty (Boss)',      {emo:'👩‍🦱', ar:[0.4, 0.5], speed:0.6, hpMul:12.1, count:1, boss:true, lives:5, charm:{ every:6, show:1.2, stop:3 }, weak:[1, 1, 1, 1], info:'zieht sich alle paar Sekunden aus und bleibt dabei kurz stehen – Türme in Reichweite verlieben sich und schießen 3 s nicht'}]
@@ -815,11 +815,12 @@ function orkRoute(s, x0, y0){
   const seg = []; let len = 0; for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i+1][0] - pts[i][0], pts[i+1][1] - pts[i][1]); seg.push({ ax:pts[i][0], ay:pts[i][1], bx:pts[i+1][0], by:pts[i+1][1], len:l, start:len }); len += l; }
   return { seg, len };
 }
-// Magiermeister: steht auf N Wegpunkten mit gleichem Abstand, in gemischter Reihenfolge (fester Seed), danach die letzten Felder zu Fuß
+// Magiermeister: geht erst ein Stück wie ein normales Monster (17.10.), steht dann auf N Wegpunkten mit gleichem Abstand,
+// in gemischter Reihenfolge (fester Seed), danach die letzten Felder zu Fuß
 function teleportPlan(s, d){
-  const n = d.teleport.n, L = s.map.len, list = [...Array(n)].map((_, k) => L * (0.06 + 0.76 * k / (n - 1)));
+  const n = d.teleport.n, L = s.map.len, list = [...Array(n)].map((_, k) => L * (0.16 + 0.66 * k / (n - 1)));
   for (let j = n - 1; j > 0; j--) { const q = Math.floor(s.rand() * (j + 1)); [list[j], list[q]] = [list[q], list[j]]; }
-  return { list, i:0, t:d.teleport.stay };
+  return { list, i:0, t:d.teleport.stay, walk:L * 0.1 };
 }
 // Lehrer: jeder hat eine eigene Mischung aus Faktoren (eine „Immunität“, einen Bonus, der Rest gemischt)
 function mixedWeak(r){
@@ -839,7 +840,8 @@ function spawn(s, sp){
   const m = { id:s.t + s.monsters.length * .37, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, ap: sp.ap !== undefined ? sp.ap : d.armorPts, d:0, x, y, fx: sp.fx || {}, hops:sp.hops, age:0, v:sp.v };
   if (sp.weak || d.mixed) m.weak = sp.weak || mixedWeak(s.rand);
   if (d.teleport) m.tp = teleportPlan(s, d);
-  if (d.cocoon) m.coc = { fly:false, t:d.cocoon.ground };
+  if (d.cocoon) m.coc = { fly:false, walk:true, t:0.3 + 2.2 * s.rand() };   // 17.10.: erst kurz als Raupe laufen (zufällig lang), damit nicht alle an derselben Stelle einpuppen
+  if (d.blink) m.blinkPh = s.rand() * d.blink.every;                         // 17.10.: jeder Novize mit eigenem Takt
   if (d.charm) m.charmCd = d.charm.every;
   if (d.ork) { m.route = orkRoute(s, x, y); m.od = 0; }
   s.monsters.push(m);
@@ -867,16 +869,18 @@ function step(s, dt){
     if (m.hp <= 0) { kill(s, m); continue; }
     m.age += dt; const D = m.def;
     if (m.heartT > 0) m.heartT -= dt; if (m.heartCd > 0) m.heartCd -= dt;
-    if (D.blink) m.inv = (m.age % D.blink.every) > D.blink.every - D.blink.dur;          // Magier-Novizen: kurz unsichtbar
-    if (m.coc) { m.coc.t -= dt; if (m.coc.t <= 0) { m.coc.fly = !m.coc.fly; m.coc.t = m.coc.fly ? D.cocoon.fly : D.cocoon.ground; } }   // Kokon ↔ Motte
+    if (D.blink) m.inv = ((m.age + (m.blinkPh || 0)) % D.blink.every) > D.blink.every - D.blink.dur;   // Magier-Novizen: kurz unsichtbar, versetzt
+    if (m.coc) { m.coc.t -= dt; if (m.coc.t <= 0) { m.coc.fly = !m.coc.walk && !m.coc.fly; m.coc.walk = false;          // Raupe → Kokon ↔ Motte, Dauer je ±25 %
+      m.coc.t = (m.coc.fly ? D.cocoon.fly : D.cocoon.ground) * (0.75 + 0.5 * s.rand()); } }
     if (D.charm) { m.charmCd -= dt; if (m.strip > 0) m.strip -= dt;                    // Betty: Türme in Reichweite verlieben sich
       if (m.charmCd <= 0) { m.charmCd = D.charm.every; m.strip = D.charm.show;
         for (const tw of s.towers) { const r = tw.def.nova ? tw.def.splash : tw.def.buff ? tw.def.light : tw.def.range; if (Math.hypot(m.x - tw.x - .5, m.y - tw.y - .5) <= r) tw.love = D.charm.stop; } } }
     if (D.confused) m.back = (m.age % D.confused.every) > D.confused.every - D.confused.back;   // Bratsche: verwirrt, kurz rückwärts
     const slow = on('stun') ? 1 : Math.max(on('slow') ? fx.slow.v : 0, on('grounded') ? 0.3 : 0);
-    const spd = m.strip > 0 ? 0 : m.coc ? (m.coc.fly ? D.cocoon.speed : 0) : D.speed;   // Betty bleibt stehen, solange sie „censored“ ist (17.10.)
+    const spd = m.strip > 0 ? 0 : m.coc ? (m.coc.fly ? D.cocoon.speed : m.coc.walk ? D.speed : 0) : D.speed;   // Betty bleibt stehen, solange sie „censored“ ist (17.10.)
     const v = GRID * spd * (flying(m) && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
-    if (m.tp && m.tp.i < m.tp.list.length) {                                           // Magiermeister: steht, dann Sprung
+    if (m.tp && m.tp.i < m.tp.list.length && (m.tp.walk < 0 || m.d >= m.tp.walk)) {   // Magiermeister: erst gehen, dann stehen und springen
+      if (m.tp.walk >= 0) { m.tp.walk = -1; s.fx.push({ kind:'boom', x:m.x, y:m.y, r:0.4 * GRID, t:.3, t0:.3, el:2 }); }
       m.d = m.tp.list[m.tp.i]; m.tp.t -= dt;
       if (m.tp.t <= 0) { s.fx.push({ kind:'boom', x:m.x, y:m.y, r:0.4 * GRID, t:.3, t0:.3, el:2 }); m.tp.i++; m.tp.t = D.teleport.stay;
         if (m.tp.i >= m.tp.list.length) m.d = s.map.len * 0.88; }

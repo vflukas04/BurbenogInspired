@@ -4,7 +4,7 @@
 //   TROCKEN=1 node tools/balance/schleife.js → nur anzeigen
 // Gedämpft: Änderung je Schleife = (Zielverhältnis)^DAEMPFUNG, begrenzt auf ×MIN…×MAX; Anker bleiben die Startwerte im Spiel.
 const fs = require('fs'), path = require('path');
-const C = require('./core'), { G } = C, S = require('./spiegel'), { ziel, band } = require('./bericht');
+const C = require('./core'), { G } = C, S = require('./spiegel'), { ziel, band, elementeJeBlock, kraftJeGold } = require('./bericht');
 const DAEMPFUNG = +process.env.DAEMPFUNG || 0.7, MIN = 0.5, MAX = 2.5, HP_MIN = 1;   // Leben nie unter die Startwerte (L 16.10.: der Anfang soll nicht leichter werden)
 const gm = a => Math.exp(a.reduce((x, v) => x + Math.log(Math.max(1e-3, v)), 0) / a.length), clamp = v => Math.min(MAX, Math.max(MIN, v));
 
@@ -37,5 +37,7 @@ const fl = [...Array(nT).keys()].filter(fliegt);
 if (fl.length && namen.includes('Stein')) { const st = gm(fl.map(i => R.Stein[i])), andere = gm(fl.flatMap(i => namen.filter(x => x !== 'Stein').map(x => R[x][i])));
   console.log(`\nStein an Tagen mit Fliegenden: ${(st / andere * 100).toFixed(0)} % der anderen Elemente (Grenze 25 %) ${st / andere >= 0.25 ? '✓' : '✗ – Stein-Luftabwehr nachbessern (Türme 4/6/8), nicht über die Element-Kraft'}`);
   fl.forEach(i => console.log(`  ${G.MONSTERS[i].name.padEnd(24)} Stein ${R.Stein[i].toFixed(2)} · andere ${gm(namen.filter(x => x !== 'Stein').map(x => R[x][i])).toFixed(2)}`)); }
+// 3. Prüfungen (17.10., L): Stärkenband je Block und Kraft je Gold je Turmstufe. Nur Anzeige – Hebel ist kraftT je Turm, kein Automatismus.
+elementeJeBlock(R, namen); kraftJeGold();
 neu._stand = `Schleife nach P2 vom ${new Date().toISOString().slice(0, 16)}, Dämpfung ${DAEMPFUNG}`;
 if (!process.env.TROCKEN) { S.speichern(neu); console.log('\n→ in spiegel.json übernommen (nur Skript, nicht im Spiel)'); }

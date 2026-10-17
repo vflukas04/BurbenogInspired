@@ -30,8 +30,9 @@ Optimal ist das nie bewiesen („beste gefundene“). Ist das Spiel am Ende zu l
 | P3 | Pfad: durchgehender Vorwärts-Aufbau ohne Verkaufen vs. P2 | Verlust ≤ ~15 % |
 | P4 | Endboss, 2 Spieler | schaffbar mit Korridor; 1 Spieler allein ≈ halbes Leben |
 | P5 | Niemand nutzlos am Endboss | jeder ≥ ~30 % des Boss-Schadens (2 Spieler; bei 4 weniger) |
-| P6 | Elemente gleich stark, vor allem am Ende | Reservefaktoren der Elemente ±10 % |
+| P6 | Elemente gleich stark – **in jedem 5er-Block** (L, 17.10.), nicht nur im Mittel | je Block R/Ziel jedes Elements ±10 % um das Block-Mittel (Stein ohne Fliegende) |
 | P7 | Monstertypen (fliegend, Rüstung, viele Leben, nachtaktiv, schnell/langsam, Kombinationen) | jedes Element hat gewichtet nach Häufigkeit ähnlich viele schwere Tage |
+| P8a | Kraft je Gold je Turmstufe (Stellschrauben `TOWER_POWER`, `kraftT`, Kosten) | fällt mit der Stufe nicht ab (Lichttürme ausgenommen); sonst lohnen teure Türme nicht |
 | P8 | Turmrelevanz: Aufstellung ohne einen Turm; gleiches Gold in Turm k vs. k+1 | jeder Turm fehlt spürbar; höhere Stufe meist knapp vorn (nicht strikt, frühe Upgrades dürfen kippen) |
 | P9 | Edelsteine | die 3 besten Fähigkeiten je Element liegen nah beieinander |
 | P10 | Forschung | lohnt sich zu passenden Zeitpunkten (früh dürfen Türme besser sein) |
@@ -46,7 +47,8 @@ Spielt man die beste gefundene Aufstellung, bleibt am Endboss je Stufe eine Rese
 | Stellschraube | Aufgabe | gemessen an |
 | --- | --- | --- |
 | Monsterleben/-rüstung je Welle | Schwierigkeitskurve | P2, P4 |
-| Kraftfaktor je Element | Element-Gleichgewicht | P6, P7 |
+| Kraftfaktor je Element | Element-Gleichgewicht über das ganze Spiel | P6, P7 |
+| Kraft je Turm (`kraftT`) | Element-Gleichgewicht je Block (die Türme, die dort tragen); Nebenbedingung P8a | P6 je Block, P8a |
 | Turmwerte je Stufe | Relevanz | P8 |
 | Fähigkeitswerte | knappe Edelstein-Wahl | P9 |
 | Spielerfaktor 3/4 | mehr Spieler | P2/P4 mit 3/4 |
@@ -63,6 +65,7 @@ Gedreht wird nacheinander in Schleifen (Elemente → Kurve → Türme → wieder
 - 16.10. abends (L): Schleifen 1–3 (`schleife.js` schreibt `spiegel.json`). Ziel: Band unten 1,4 (Endboss 40 % Bot-Reserve), oben Bogen bis 2,0 um Runde 20, Runde 1–5 bleibt bei P1, Leben nie unter Startwert. Upgrades gestuft genervt (Spiegel: ×2,2/2,1/1,9/1,7/1,6). Stand nach Schleife 3: Elemente ±2 % (Stein ohne Fliegende), Stein bei Fliegenden 28 % der anderen (Grenze 25 %), Leben je Block ab Runde 16 ×1,36 … ×7,2. Offen: Betty (Endboss 2) zu schwer (R ≈ 1,0), Nazgul/Fledermäuse knapp.
 - 17.10. (L): Schleifen 4–10. Forschung im Bot neu (Kasse nur für Forschung, Kopfgeld nur bei 3-facher Rückzahlung), Zwischenstände je Tag (`ck-*.json`, `WEITER=1`), `nacht.sh` (startet nach Abbruch neu), `nacht.bat` (Windows). Ins Spiel übernommen: Element-Kraft, Upgrade-Stufen, Leben je Block (17b, d, f), Stein-Kraft je Turm `kraftT` (17e, g), Stein Katapult = Turm 3 (17c), Faktoren Runde 2–10 nach Regel (17c).
 - **Stand nach Schleife 10 (Spiel 17g):** Elemente innerhalb ±7 %, Kurve ab Runde 6 ca. 10–15 % unter dem Bogen (im Band), Runde 1–5 ca. +10 %. Stein gegen Fliegende ca. 45 % der anderen (Grenze 25 %); einzelne Fliegertage für den Bot schwach (Spatzen ~0,6), mit früh gebauten Katapulten schaffbar. Weitere Schleifen pendeln nur noch; nächster Schritt sind Testspiele, nicht mehr Schleifen.
+- 17.10. abends (L): `schleife.js` und `bericht.js` zeigen jetzt das **Stärkenband je Block** und **Kraft je Gold je Turmstufe** (nur Anzeige, kein Automatismus). Befund P8a (Spiel 17i): Stein Turm 5–8 je Gold 1,17–1,33 gegenüber Katapult 1,43 / Felsbrocken 1,50 (relativ zu Turm 1 = 1) – teure Stein-Türme lohnen sich zu wenig; Feuer Turm 2–6 unter dem Funken (8 Gold, 1,25). Stärkenband je Block braucht einen neuen P2-Lauf (Ergebnisse liegen nicht im Repo).
 - Bekannte Bot-Schwäche: plant nur den heutigen Tag und baut höchstens 2 billige Türme um → unterschätzt Elemente, die vorausplanen müssen (Stein vor Fliegertagen).
 - Offen: P9 (Edelstein-Uniques gegen Basics), P8 (Türme 4–8 einzeln), P13 (Eichung mit echten Spielen aus dem Archiv).
 - Idee „Lernen“: kein neuronales Netz (zu wenig Daten), sondern ein Wissensspeicher bester Aufstellungen (Warmstart für die nächste Suche) und für den Endboss-Prüfpunkt eine stärkere evolutionäre Suche (mehr Rechenzeit, Ergebnis wird gespeichert).
