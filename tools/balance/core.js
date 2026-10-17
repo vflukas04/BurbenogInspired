@@ -3,7 +3,7 @@
 //  – Reservefaktor: mit welchem Faktor auf Leben UND Rüstung eine Aufstellung eine Welle gerade noch schafft
 //  – Bauplatz-Maske: Wegstrecke in Reichweite je Feld und Turmtyp
 const G = require('./sim').load();
-const SPIEGEL = require('./spiegel').anwenden(G);   // Änderungen aus spiegel.json (nur im Speicher)
+const SPIEGEL = require('./spiegel').lesen(); require('./spiegel').anwenden(G, SPIEGEL);   // Änderungen aus spiegel.json (nur im Speicher); SPIEGEL = die angewandten Werte (Prüfung der Zwischenstände)
 const { MAPS, COLS, ROWS, GRID, ELEMENTS } = G;
 
 // ---------- Maps ----------
