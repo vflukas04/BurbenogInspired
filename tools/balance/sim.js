@@ -1,7 +1,7 @@
 // Lädt die Spiel-Simulation direkt aus index.html (keine Kopie, damit Skript und Spiel nie auseinanderlaufen).
 // Gibt ein Objekt mit den benötigten Spielfunktionen und -daten zurück.
 const fs = require('fs'), path = require('path');
-const NAMES = ['CONFIG', 'ELEMENTS', 'MONSTERS', 'MAPS', 'GRID', 'COLS', 'ROWS', 'TERRAIN', 'TOWER_COST', 'TOWER_POWER', 'RESEARCH', 'RESEARCH_GROUPS',
+const NAMES = ['fxText', 'CONFIG', 'ELEMENTS', 'MONSTERS', 'MAPS', 'GRID', 'COLS', 'ROWS', 'TERRAIN', 'TOWER_COST', 'TOWER_POWER', 'RESEARCH', 'RESEARCH_GROUPS',
   'LOCKS', 'ABILITIES', 'GEMS', 'towerBase', 'tdef', 'upgradeCost', 'monsterDef', 'waveSpecs', 'simulate', 'makeSim', 'step', 'simBusy', 'posAt',
   'buildCost', 'bountyFor', 'DT', 'resVal', 'VERSION', 'genTerrain', 'gemOptions', 'BASICS', 'abilityBlocked', 'waveMix', 'variantDef'];
 function stubs(){

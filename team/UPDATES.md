@@ -4,6 +4,11 @@ Format: `### 16.10. 17:45 · L · 2026-10-16f – gemischte Welle angepasst
 - Zusammensetzung und Darstellung der gemischten Welle (Runde 36) geändert (Farbe/Größe statt Buchstabe). Neues Spiel + neu laden.
 - Balancing-Skript: Ziel jetzt Endboss 40 % Bot-Reserve, Band nach oben offen bis 2,0; Spiegel testet schwächere Upgrades (×1,8 statt ×2,1) – noch nichts im Spiel.
 
+### 17.10. 09:35 · L · 2026-10-17b – erstes Balancing-Paket im Spiel
+- Werte aus Balancing-Schleife 5: Element-Kraft Feuer 0,71 · Eis 0,83 · Schatten 1,04 · Stein 1,93; Upgrades flacher (×2,35/2,1/1,85/1,7/1,6, Schatten ×2,35/2,1/1,85/1,6/1,5); Stein-Katapult 100.
+- Leben je 5er-Block ab Runde 11 höher (bis ×12 in Runde 36–40); Betty und späte Fliegende etwas weniger Leben.
+- Runde 1–20 gelten als verlässlich, Runde 21–40 folgen nach Schleife 6. Neues Spiel + neu laden.
+
 ### 16.10. 17:10 · L · 2026-10-16e – gemischte Welle, Stellschrauben fürs Skript
 - Runde 36 ist jetzt eine gemischte Welle (Überraschung für F). Neue, noch neutrale Stellschrauben: `ELEMENTS[e].kraft`, `CONFIG.hpBlock` – Werte setzt das Balancing-Skript, nicht von Hand.
 - Neues Spiel + neu laden.
@@ -38,6 +43,7 @@ Format: `### 16.10. 17:45 · L · 2026-10-16f – gemischte Welle angepasst
 ### 15.10. 23:59 · F · 2026-10-15t – „Nichts im Anmarsch"-Wellen werden übersprungen
 - Im Uhrzeiten-Modus fällt eine Welle weg, wenn bei keinem Spieler etwas ankommt (nur Leaks der Vorwelle zählen). Die Chronik vermerkt „übersprungen"; folgen nur leere Wellen, geht es direkt zum nächsten Tag (oder zum Sieg).
 - Live-Modus unverändert. Regeländerung im Ablauf: neu laden, laufende Spiele sind nicht betroffen, bis die nächste Welle ausgewertet wird.
+
 ### 15.10. 23:50 · L · 2026-10-15s – Spiel-Archiv, Balancing-Verfahren
 - Jedes Online-Spiel wird automatisch mitgeschrieben: `games/spiel1/archiv/<Spielstart>` (je Welle Kills/Gold/Durchbrüche, je Tagesende alle Türme). Auslesen: `node tools/archiv.js` bzw. `node tools/archiv.js <Spielstart>`. Fehlspiele werden beim Auslesen markiert.
 - Neu: `team/BALANCING.md` (Verfahren und Prüfpunkte des Balancing-Skripts). Bitte Balance-Pause bis zum Skript (siehe Post an F).
@@ -61,38 +67,3 @@ Format: `### 16.10. 17:45 · L · 2026-10-16f – gemischte Welle angepasst
 ### 15.10. 21:50 · F · 2026-10-15n – „verdient" im Feldkopf
 - Neben Gold und Kills zeigt jeder Feldkopf, wie viel Gold der Spieler insgesamt verdient hat (ohne Ausgaben, Geschenke, Kasse). Wächst wie das Gold erst, wenn die Monster in der Wiedergabe sterben.
 - Neues Spiel nicht nötig, nur neu laden.
-
-### 15.10. 21:30 · F · 2026-10-15m – Stein Tag 7–10 leichter
-- Stein-Faktor: Kleine Hunde 1,75 (vorher 1), Ratten 1,4 (1), Katzen 1,4 (1), Spatzen 1,25 (0,75). Grund: Stein brauchte an Tag 7–10 2,4–2,9× das real verfügbare Gold (die anderen 1,2–1,6×). Ziel jetzt ca. 1,4–1,7×.
-- Block-2-Regel „je Element ein Bonus/Malus" gilt für Stein damit nicht mehr. Maus-Boss (Tag 6, Stein 3,7×) bewusst unverändert. Werte sind Bot-Tendenzen.
-- Neues Spiel + neu laden.
-
-### 15.10. 19:30 · F · 2026-10-15l – Lavapfütze nur einmal je Schuss
-- Feuer-Edelstein „Lavapfütze“: Hat der Turm mehrere Geschosse je Schuss, legt nur das erste eine Pfütze (vorher eine je Geschoss). Gilt nur für Feuer, Stein-Geröll unverändert.
-- Neues Spiel + neu laden.
-
-### 15.10. 18:40 · F · 2026-10-15k – Schwache Tage in Runde 2–5 auf Gold-Bedarf 1,5
-- Pro Element ein bewusst schwacher Tag (Bot `bedarf` ≈ 1,5): Schatten Kellerasseln (Faktor 1,05, vorher 1), Feuer Nacktschnecken (0,9, vorher 1), Eis Ohrenkneifer (1,1, vorher 0,8; Messwert 1,6), Stein Mäuse (0,7, vorher 1). Die Regel „je Runde ein Bonus/Malus ±20 %" gilt in Block 1 damit nicht mehr streng.
-- Stein 0,7 liegt knapp unter der bisherigen Spanne (0,75–1,75). Werte sind Bot-Tendenzen, bitte im Spiel prüfen.
-- Neues Spiel + neu laden.
-
-### 15.10. 17:45 · F · 2026-10-15j – Silberfische langsamer
-- Silberfische Tempo 1,2 → 1,0. Grund: Stein brauchte an Tag 1 ca. das Doppelte an Gold (Bot `bedarf`: 1,9 gegen 0,8–0,9), weil geworfene Steine schnelle Ziele schlecht treffen. Mit 1,0 liegen alle Elemente bei 0,7–0,8. Kiesel-Kosten/-Schaden waren nicht der Hebel.
-- Noch offen (Vorschlag, nicht eingebaut): Faktoren Block 1 neu verteilen (Stein-Malus von Runde 3 auf Runde 5), Schatten Tag 2/3 schwach (1,9/1,6, Rüstung der Kellerasseln).
-- Neues Spiel + neu laden.
-
-### 15.10. 16:50 · F · 2026-10-15i – Spiel aufgeben
-- Menü ⋯ → „Spiel aufgeben …“ (mit Rückfrage): beendet das Spiel für alle als verloren, die Statistik erscheint, danach „Neues Spiel“. Vorher musste man alle Türme verkaufen und eine Welle durchlassen.
-- Neu laden.
-
-### 15.10. 14:00 · F · 2026-10-15h – Upgrade/Verkaufen über dem Turm
-- Beim angewählten Turm erscheinen direkt darüber ein roter Pfeil ⬆ (Upgrade, mit Preis) und ein Goldtopf 💰 (Verkaufen, mit Erlös), bei Edelstein zusätzlich 💎. Tippen öffnet wie bisher das Bestätigungsfenster. Die Knöpfe unter der Karte entfallen. Am oberen Rand erscheinen sie unter dem Turm.
-- Neu laden.
-
-### 15.10. 13:40 · F · 2026-10-15g – Edelsteine als kleiner Buff
-- Ziel: Edelstein-Fähigkeit ≈ +15 % Wirkung (Tag 5: etwa +1 Kill bei 6–7). Zu starke Fähigkeiten gedämpft: Eis Großer Ball (+30 % Fläche), Großer Sturm (+25 % Fläche, +20 % Schaden), Eisblock 0,35 s, Haut vereist 3 s; Schatten Nachtjäger +25 %; Stein Prellstein 30/15 %, Reichweite +0,5 Felder, Nachbeben 25 %.
-- Messung grob (nur 7 brauchbare Test-Türme): Median Schadensgewinn Tag 5 jetzt meist 0–25 %, Stein liegt noch eher bei ~20 %. Bedingte Fähigkeiten (Fliegende, Kill-Auslöser) nicht gemessen.
-- Neues Spiel + neu laden.
-
-### 15.10. 13:10 · F · 2026-10-15f – Lavapfütze schwächer
-- Lavapfütze macht 20 % statt 40 % des Turm-Schadens/s (Wunsch F, nach freier Fähigkeitswahl wirkt sie auf jedem Turm). Sonst nichts geändert. Neues Spiel + neu laden.
