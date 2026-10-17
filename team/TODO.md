@@ -10,6 +10,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
+- L (Claude, unbeaufsichtigt) · Balancing: Kraft je Turm Feuer/Stein, P2-Läufe · seit 18.10. 01:20
 
 ## Als Nächstes
 | Was | Wer | Notiz |
