@@ -4,6 +4,10 @@ Format: `### 16.10. 17:45 · L · 2026-10-16f – gemischte Welle angepasst
 - Zusammensetzung und Darstellung der gemischten Welle (Runde 36) geändert (Farbe/Größe statt Buchstabe). Neues Spiel + neu laden.
 - Balancing-Skript: Ziel jetzt Endboss 40 % Bot-Reserve, Band nach oben offen bis 2,0; Spiegel testet schwächere Upgrades (×1,8 statt ×2,1) – noch nichts im Spiel.
 
+### 17.10. 10:25 · L · 2026-10-17d – Balancing nach Schleife 6
+- Element-Kraft Feuer 0,69 · Eis 0,81 · Schatten 1,07 · Stein 2,04 (Elemente laut Bot jetzt innerhalb ±4 %; Stein gegen Fliegende 49 % der anderen).
+- Leben ab Runde 16 höher (Runde 36–40 ×14,4). Ab Runde 21 noch etwas zu leicht, Schleife 7 läuft. Neues Spiel + neu laden.
+
 ### 17.10. 10:10 · L · 2026-10-17c – Schwierigkeit, Stein-Katapult früher, Faktoren nach Regel
 - Beim Spielstart wählbar: **Schwierigkeit** leicht (Leben −25 %), normal, schwer (+25 %).
 - Stein: **Katapult ist jetzt Turm 3** (70 Gold, trifft Fliegende), Felsbrocken Turm 4. Fähigkeiten bleiben beim jeweiligen Turm.
@@ -64,9 +68,4 @@ Format: `### 16.10. 17:45 · L · 2026-10-16f – gemischte Welle angepasst
 - Bisher wurde der Bonus (+7/14/20 %) je Monster gerundet: Bei Kopfgeld 2–5 kam bis Runde 15 oft nichts an (Stufe 1 = +0 bis Runde 15). Jetzt: Summe der Kopfgelder einer Welle × (1 + Bonus), einmal gerundet. Beispiel Runde 1, 20 Kills: 40 → 43 Gold bei +7 %.
 - Gewinn über das ganze Spiel jetzt ca. +125 / +250 / +360 Gold (Stufe 1/2/3) statt +100 / +200 / +400, dafür gleichmäßig. Preise (60/100/140) bleiben, bitte im Spiel prüfen: Stufe 1 könnte früh zu günstig sein.
 - Neues Spiel nicht nötig, nur neu laden (wirkt ab der nächsten Welle).
-
-### 15.10. 22:10 · F · 2026-10-15o – Edelstein-Fähigkeit nur einmal je Feld
-- Hat ein Turm schon Fähigkeit X, ist X für die anderen Türme dieses Feldes im Edelstein-Dialog gesperrt („schon bei einem anderen Turm vergeben"). Wird der Turm verkauft oder umgewandelt, ist sie wieder frei.
-- Gilt nur für neue Wahlen; bereits vergebene doppelte Fähigkeiten bleiben bestehen.
-- Neues Spiel nicht nötig, nur neu laden.
 
