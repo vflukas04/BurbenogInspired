@@ -10,7 +10,6 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- L (Claude, unbeaufsichtigt) · Balancing: Kraft je Turm Feuer/Stein, P2-Läufe · seit 18.10. 01:20
 
 ## Als Nächstes
 | Was | Wer | Notiz |
@@ -31,7 +30,7 @@
 | Gemeinsame Map statt je einer Map pro Spieler | offen | Idee F, 15.10.: Statt jeweils eine separate Map pro Spieler eine gemeinsame. Noch nicht besprochen oder beschlossen. |
 | Upgrades bei Türmen sind zu stark | erledigt 17.10. (17b): Schadensfaktor je Stufe flacher, über Balancing-Skript | Idee F, 16.10.: Beispiel Schatten T1 – Upgrade 2→3 kostet 38 Gold, macht aber so viel Schaden wie 5 Türme. Hebel: Schadensfaktor je Stufe (aktuell ×2,2 / ×2,1), Kosten ×1,5 je Stufe. Erst nach Balancing-Skript angehen (Balance-Pause, siehe Post). |
 | Effekt-Abstufung der einzelnen Elemente | offen | Idee F, 16.10.: Wie stark die Effekte (Brennen, Verlangsamen, Fluch, Betäuben usw.) je Stufe wachsen, je Element prüfen und abstufen. Noch nicht besprochen. |
-| Stärkenband je Block + Kraft je Gold (P6/P8a): neuer P2-Lauf, dann `kraftT` so setzen, dass jeder Block im Band liegt und Kraft je Gold mit der Stufe steigt (zuerst Stein Turm 5–8) | L | Prüfungen eingebaut 17.10. (17i), Werte noch nicht |
+| Stärkenband je Block + Kraft je Gold (P6/P8a) | L | Lauf A mit `kraftT` verworfen (18.10.); Bot baut fast nur Turm 1–4 → zuerst klären, wie höhere Türme sich gegen Upgrades lohnen (Upgrade-Faktoren, Freischaltkosten), siehe `BALANCING.md` |
 | Monster 21–40: Werte über Balancing-Skript, Testspiel | L | eingebaut 16.10. (16b), Werte sind Startwerte; Inhalt bleibt Überraschung für F |
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 
