@@ -7,7 +7,6 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- L · Balancing-Skript (glatte Bewertung, lokale Verbesserung, Spiegel, Wissen, Vorwärtspfad) · seit 16.10. 12:50
 
 ## Als Nächstes
 | Was | Wer | Notiz |
@@ -15,13 +14,13 @@
 | Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-15d) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
 | Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |
-| Balancing-Skript bauen (ersetzt Mikro-Balancing) | L | Verfahren in `team/BALANCING.md` (Prüfpunkte P1–P13). Stand 16.10.: Grundgerüst + P1. Nächstes: glatte Bewertung, lokale Verbesserung, Wissensspeicher, Spiegel-Datei, Forschung/Edelsteine, P2/P4/P5. Balance-Pause gilt weiter |
+| Balancing-Skript | L | Schleifen 1–10 durch, Werte im Spiel (17g). Stand und Offenes: `team/BALANCING.md`. Jetzt: Testspiele, dann ggf. P8/P9/P13 |
 | Edelstein-Kompromiss: Werte prüfen (Uniques sind noch die gedämpften Startwerte, Basics +30 %) | L | umgesetzt 16.10. (16b), Abgleich über Balancing-Skript P9 |
-| Schwierigkeitsstufen beim Spielstart | L | Faktor auf Monsterleben/-rüstung, Werte aus dem Balancing-Skript |
+| Schwierigkeitsstufen beim Spielstart | erledigt 17.10. (17c) | leicht/normal/schwer, Leben ×0,75/1/1,25 |
 | Elemente: Feuer im Mittelspiel stark (Flammenwerfer), Stein oft schwach | offen | Analyse 12.10. im Archiv |
 | `tools/balance.js` auf Runden statt Tage umstellen | L | deckt sonst nur Tag 1–20 ab; erster Schritt fürs Balancing-Skript |
 | Skilltree bei Türmen? | offen | Idee, noch nicht beschlossen: erst Konzept, dann ggf. nach `IDEEN.md` |
-| Grafikupdates für Türme | offen | Kenney-Sprites, graue Sprites werden je Element eingefärbt (`tinted`) |
+| Grafik: Monster-Bilder | L | Plan und Prompt-Vorlage in `team/GRAFIK.md` (Krea, 3 Ansichten von schräg oben, im Spiel gespiegelt + Wippen). Nächstes: Ansichten für ein zweites Tier testen, dann Einbau mit Emoji als Rückfall |
 | Edelsteine überarbeiten | offen | Anlass: Testspiel 14.10. (Amethyst auf Fluchsteinen Stufe 1, die Fliegende nicht treffen); Stein-Liste bleibt bei L oder F. **Umgesetzt 15.10. (F, 15e): Fähigkeit frei wählbar, siehe `PLANUNG.md`.** Noch offen: Rest der Überarbeitung, Balance der frei wählbaren Fähigkeiten testen (starke Fähigkeit auf billigem Turm).  |
 | Firestore-Regeln setzen | L | **vor ca. 09.11.**, sonst stoppt das Online-Spiel (README) |
 | Türme 4–8 abgleichen | offen | nur Türme 1–3 per Simulation geprüft |
