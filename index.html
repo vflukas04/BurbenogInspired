@@ -219,7 +219,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-17e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-17f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -235,7 +235,7 @@ const CONFIG = {
   baseHp: 14,               // 12.10.: neu kalibriert für 16 × 16
   playerHp: { 2:1, 3:1.25, 4:1.5 },
   hpExp: 1.38,              // 12.10. 15:38: etwas steiler (vorher 1,3; davor 1,5). Runde 2: ×2,6 · 5: ×9,2 · 10: ×24 · 20: ×63
-  hpBlock: [1, 1.011, 1.06, 1.782, 3.248, 5.051, 7.65, 14.446],   // 17.10. (L): aus Balancing-Schleife 6;   // 16.10.: Lebensfaktor je Block (Runde 1–5, 6–10, …, 36–40), Stellschraube Balancing-Skript
+  hpBlock: [1, 1.002, 1.081, 1.942, 3.518, 5.766, 8.289, 14.922],   // 17.10. (L): aus Balancing-Schleife 9;   // 16.10.: Lebensfaktor je Block (Runde 1–5, 6–10, …, 36–40), Stellschraube Balancing-Skript
   hpCutFrom: 3, hpCut: 0.95,  // 12.10.: ab Runde 3 (Nacktschnecken) alle Monster 5 % weniger Leben
   // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
   slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
@@ -320,7 +320,7 @@ const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold 
      nova     wirkt sofort im Umkreis „Fläche“ um den Turm, ohne Geschoss
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
-  { name:'Feuer', kraft:0.693, emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', armorDmg:0.5, costOverride:{0:8}, towers:[
+  { name:'Feuer', kraft:0.622, emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', armorDmg:0.5, costOverride:{0:8}, towers:[
     ['Funke',        'Schaden',   2.0, 1,   1, 0.8, 0.17, 3],   // 1,6 Schaden/s (Brennen ist ein Bonus)   // 8 statt 10 Gold. Türme 1–3 aller Elemente am 12.10. per Simulation angeglichen
     ['Glutbecken',   'Effekt',    1.6, 1,   2, 1.19, 0.43, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 1.21, 0.14, 2],
@@ -329,7 +329,7 @@ const ELEMENTS = [
     ['Lavaturm',     'Fläche',    2.0, 0.35,1, 1.5, 0.36, 4, 0.9, {fly:false}],   // 14.10. (L): halb so oft, doppelter Schaden je Wurf (gleicher Schaden/s)
     ['Sonnenturm',   'Schaden',   3.0, 0.6, 2, 1.4, 0.36, 8],
     ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.65, DAY] ]},
-  { name:'Eis', kraft:0.811, emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', armorDmg:0.6, towers:[
+  { name:'Eis', kraft:0.864, emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', armorDmg:0.6, towers:[
     ['Frostsplitter','Effekt',    2.0, 1,   1, 1.1, 0.25, 3],
     ['Schneeball',   'Fläche',    2.3, 1,   2, 1.15, 0.2, 4, 0.6],
     ['Eiszapfen',    'Luftabwehr',3.6, 0.8, 2, 2.4, 0.3, 4, 0, {air:true, slowFly:true}],   // nur Fliegende, bremst sie auch
@@ -338,7 +338,7 @@ const ELEMENTS = [
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
-  { name:'Schatten', kraft:1.07, emo:'🌑', color:'#a58ad8', upDmg:[2.35, 2.1, 1.85, 1.6, 1.5],   // 17.10. (L): Balancing-Schleife 5;   // 13.10. (F): Schaden je Upgrade ab Stufe 4 flacher (Irrlicht-Verstärkung + Rüstung ignorieren ab Runde 10 zu stark)
+  { name:'Schatten', kraft:1.082, emo:'🌑', color:'#a58ad8', upDmg:[2.35, 2.1, 1.85, 1.6, 1.5],   // 17.10. (L): Balancing-Schleife 5;   // 13.10. (F): Schaden je Upgrade ab Stufe 4 flacher (Irrlicht-Verstärkung + Rüstung ignorieren ab Runde 10 zu stark)
     note:'Fluch (mehr Schaden, Rüstung bröckelt für alle) · Irrlicht verstärkt und durchdringt Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis', effect:'curse', armorDmg:0, dayOnly:true, costOverride:{1:30}, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
     ['Irrlicht',     'Licht',     // 30 statt 45 Gold (12.10.: Schatten nachts sonst zu schwach)
@@ -349,7 +349,7 @@ const ELEMENTS = [
     ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
     ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
     ['Ewige Nacht',  'Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
-  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 3, 6, 8', kraft:2.039, kraftT:[0.65, 0.9, 1, 1, 1, 1, 1, 1], costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
+  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 3, 6, 8', kraft:2.256, kraftT:[0.5, 0.8, 1.3, 1.3, 1, 1, 1, 1], costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.55, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.89, 0,   0, 0.9],
     ['Katapult',     'Reichweite',3.8, 0.25,2, 0.72, 0,   0, 1.0, {fly:true}],
