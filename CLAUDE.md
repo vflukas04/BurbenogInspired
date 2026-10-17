@@ -36,6 +36,7 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas mit seinem Freun
 
 ## Regeln (Stand 12.10.2026 nachts: flache Baukurve, feines Raster, Live-Variante)
 - Spielart beim Start: **Uhrzeiten** (wie bisher) oder **Live** (`cfg.live`): eine Welle am Tag um 10 Uhr, alle Felder werden gemeinsam simuliert (`simulateWorld`/`stepWorld`), wer durchkommt, erscheint sofort beim nächsten Spieler (Wellen können sich überlappen). Live hat keine Dunkelheit.
+- Pause (seit 17.10., F): Menü ⋯ → „Spiel pausieren" setzt `G.paused = {at}` (online per Transaktion, `setPause`). Solange gesetzt: keine Auswertung (`tryResolve`, `advance`, Bereit, Timer), `mayBuild` false, Banner `pausebanner`. Weiterspielen verschiebt die Fälligkeit (`real`: `cfg.day1` um ganze Tage, `test`: `cfg.shift`).
 - Schwierigkeit (seit 17.10., L): beim Start leicht/normal/schwer (`G.cfg.diff`, `DIFFS`), wirkt nur auf die Leben (×0,75/1/1,25, `diffHp` in `monsterDef`).
 - 2–4 Spieler. Wellen je Spielerzahl: 2 → 10 + 19 Uhr, 3 → 10/16/19, 4 → 10/13/16/19. 10 Uhr: neue Welle bei allen. Danach laufen die Leaks zum nächsten Spieler und behalten Leben und Effekte. Wer nach der letzten Welle noch durchkommt, „bricht ganz durch“. Bei mehr als 30 ist das Spiel verloren.
 - Begriffe: **Map** = Karte eines Spielers (im Code `lane`), **Feld** = einzelnes Kästchen der Map.

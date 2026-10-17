@@ -179,6 +179,7 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
     <div class="clock" id="clock"></div>
     <div id="banner" class="banner" hidden></div>
     <div id="vbanner" class="banner bad" hidden></div>
+    <div id="pausebanner" class="banner" hidden><b>⏸ Spiel pausiert</b> – keine Welle, bis jemand weiterspielt. <button class="btn primary" id="resumeBtn" style="margin-left:8px">Weiter spielen</button></div>
     <div id="flybanner" class="banner" hidden></div>
     <div class="today" id="today"></div>
     <div class="seats" id="seats"></div>
@@ -219,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-17g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-17h";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1072,7 +1073,7 @@ function resolveSlot(g, lanes){
 }
 function dueTime(g){
   const c = g.cfg; if (c.timing === 'manual') return null;
-  if (c.timing === 'test') return c.startAt + (c.slots ? CONFIG.firstWaveDelay * 60000 : 0) + ((g.day-1)*slotsOf(g).length + g.slot) * c.interval * 60000;
+  if (c.timing === 'test') return c.startAt + (c.shift || 0) + (c.slots ? CONFIG.firstWaveDelay * 60000 : 0) + ((g.day-1)*slotsOf(g).length + g.slot) * c.interval * 60000;
   const d = new Date(c.day1); d.setDate(d.getDate() + g.day - 1); d.setHours(slotsOf(g)[g.slot], 0, 0, 0); return d.getTime();
 }
 
@@ -1129,7 +1130,7 @@ const archDoc = (g, arch) => JSON.parse(JSON.stringify({ cfg:g.cfg, version:VERS
   gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...arch }));
 async function tryResolve(force, onlyKey){
   if (resolving && Date.now() - resolvingAt > 20000) resolving = false;   // hängende Verbindung: nicht ewig blockieren
-  if (!G || G.over || resolving || replay) return false;
+  if (!G || G.over || G.paused || resolving || replay) return false;
   if (MODE === 'local') { G = resolveSlot(G, L); lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return true; }
   resolving = true; resolvingAt = Date.now(); let ok = false;
   try {
@@ -1137,6 +1138,7 @@ async function tryResolve(force, onlyKey){
     const lanes = []; ls.docs.forEach(d => { const k = +d.id.slice(1); lanes[k] = d.data(); });
     const arch = { slots:{}, days:{} }; let archOut = null;
     const advance = g => { let n = 0;
+      if (g.paused) return null;   // Pause: keine Welle, auch nicht per Knopf
       if (onlyKey && readyKey(g) !== onlyKey) return null;   // „Bereit“: nur diese eine Welle, nie doppelt
       while (!g.over && n < 30) { const due = dueTime(g); if (!(force && n === 0) && !(due && Date.now() >= due)) break; const b = g; g = resolveSlot(g, lanes); n++;
         try { archSlot(b, g, lanes, arch); } catch(e) { console.warn(e); } }
@@ -1188,7 +1190,7 @@ function nextReplay(){ if (G && G.lastRun && G.lastRun.id !== seenRun) startRepl
 /* ---------- Bauen ---------- */
 // Bauen und Upgraden geht jederzeit, auch während eine Welle abgespielt wird (wirkt ab der nächsten Welle)
 // 14.10.: erst gesperrt, wenn das Spielende auch im Bild angekommen ist – sonst verrät die Leiste die Niederlage vorab
-const mayBuild = i => G && !overShown() && (MODE === 'local' || i === seat);
+const mayBuild = i => G && !overShown() && !G.paused && (MODE === 'local' || i === seat);
 function clickCell(i, x, y){
   if (!G) return;
   if (MODE === 'local' && seat !== i) { seat = i; selTower = null; }
@@ -1372,17 +1374,42 @@ function menuDialog(){
   openDlg(`<h2>Menü</h2>
     <button class="btn" id="mWx">Wetter-Animation: ${wxAnim ? 'an' : 'aus'}</button>
     <button class="btn" id="mNew">Neues Spiel …</button>
+    ${G && !G.over ? (G.paused ? '<button class="btn" id="mPause">Weiter spielen</button>' : '<button class="btn" id="mPause">Spiel pausieren …</button>') : ''}
     ${G && !G.over ? '<button class="btn" id="mGive">Spiel aufgeben …</button>' : ''}
     <div class="acts"><button class="btn primary" id="mClose">Schließen</button></div>`);
   $('mWx').onclick = () => { wxAnim = !wxAnim; lsSet('ww2-wxanim', wxAnim); menuDialog(); drawAll(); };
   $('mNew').onclick = () => { openDlg(`<h2>Neues Spiel?</h2><p style="margin:0">Das laufende Spiel wird für alle beendet.</p>
     <div class="acts"><button class="btn" id="nNo">Abbrechen</button><button class="btn primary" id="nYes">Neues Spiel</button></div>`);
     $('nNo').onclick = closeDlg; $('nYes').onclick = () => { closeDlg(); resetGame(); }; };
+  const mp = $('mPause'); if (mp) mp.onclick = () => { if (G.paused) { closeDlg(); resumeGame(); return; }
+    openDlg(`<h2>Spiel pausieren?</h2><p style="margin:0">Das Spiel pausiert für alle: Es kommt keine Welle, und niemand kann bauen. Der Stand bleibt gespeichert, ihr spielt beim nächsten Mal genau hier weiter.</p>
+    <div class="acts"><button class="btn" id="pNo">Abbrechen</button><button class="btn primary" id="pYes">Pausieren</button></div>`);
+    $('pNo').onclick = closeDlg; $('pYes').onclick = () => { closeDlg(); pauseGame(); }; };
   const mg = $('mGive'); if (mg) mg.onclick = () => { openDlg(`<h2>Spiel aufgeben?</h2><p style="margin:0">Das Spiel gilt für alle als verloren und die Statistik erscheint. Danach kannst du ein neues Spiel starten.</p>
     <div class="acts"><button class="btn" id="gNo">Abbrechen</button><button class="btn primary" id="gYes">Aufgeben</button></div>`);
     $('gNo').onclick = closeDlg; $('gYes').onclick = () => { closeDlg(); giveUp(); }; };
   $('mClose').onclick = closeDlg;
 }
+// Pause (17.10., F): G.paused = {at}. Keine Auswertung, kein Bauen. Beim Weiterspielen werden die Wellenzeiten nach hinten
+// geschoben (Uhrzeiten: ganze Tage, bis die aktuelle Welle wieder in der Zukunft liegt; Testzeit: um die Pausendauer).
+function setPause(on){
+  if (!G || G.over) return;
+  if (replay) endReplay();
+  const mark = g => { if (g.over) return g;
+    if (on) { if (!g.paused) g.paused = { at:Date.now() }; return g; }
+    if (!g.paused) return g;
+    const now = Date.now();
+    if (g.cfg.timing === 'test') g.cfg.shift = (g.cfg.shift || 0) + Math.max(0, now - g.paused.at);
+    else if (g.cfg.timing === 'real') for (let k = 0; k < 400; k++) { const due = dueTime(g); if (!due || due >= now) break; const d = new Date(g.cfg.day1); d.setDate(d.getDate() + 1); g.cfg.day1 = d.getTime(); }
+    delete g.paused; return g; };
+  if (MODE === 'local') { G = mark(G); lsSet('ww2-local', { G, L }); render(); return; }
+  const ref = DB.doc(P_STATE);
+  queueWrite(async () => {
+    if (DB.tx) await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists) return; tr.set(ref, mark(JSON.parse(JSON.stringify(snap.data())))); });
+    else { const snap = await ref.get(); if (snap.exists) await ref.set(mark(JSON.parse(JSON.stringify(snap.data())))); }
+  }).then(() => refreshFromServer());
+}
+const pauseGame = () => setPause(true), resumeGame = () => setPause(false);
 // Aufgeben: Spiel sofort als verloren beenden (für alle; online per Transaktion, damit nichts doppelt oder gegen eine Auswertung läuft)
 function giveUp(){
   if (!G || G.over) return;
@@ -1473,7 +1500,7 @@ function toggleReady(){
 }
 let readyFired = null, readyAt = 0;
 function checkReady(){
-  if (MODE !== 'online' || !G || G.over || replay) return;
+  if (MODE !== 'online' || !G || G.over || G.paused || replay) return;
   const key = readyKey(G);
   // 12.10.: Früher nur ein Versuch – lief gerade eine Wiedergabe oder hakte das Netz, startete die Welle erst nach Neuladen.
   if ((readyFired === key && Date.now() - readyAt < 8000) || ![...Array(NP())].every((_,i) => isReady(i))) return;
@@ -1561,6 +1588,7 @@ function render(){
   const b = $('banner');
   checkVersion(G.cfg.version);
   b.hidden = !overShown(); b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
+  $('pausebanner').hidden = !(G.paused && !G.over);
   const fw = flyWarn(), fb = $('flybanner');
   fb.hidden = !fw; if (fw) { fb.className = 'banner' + (fw.bad ? ' bad' : ''); fb.textContent = fw.text; }
   if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : (G.gaveUp ? `Aufgegeben am Tag ${G.day}: ${G.passed} Monster sind ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`);
@@ -1583,9 +1611,9 @@ function render(){
   $('giftBtn').hidden = !mayBuild(seat) || n < 2;
   const go = $('go');
   go.textContent = replay ? 'Welle läuft …' : (MODE === 'local' ? `Welle ${hh(SL[G.slot])} starten` : `Welle ${hh(SL[G.slot])} jetzt auslösen`);
-  go.disabled = !!replay || !!G.over;
+  go.disabled = !!replay || !!G.over || !!G.paused;
   const rb = $('ready'), nReady = [...Array(n)].filter((_,i) => isReady(i)).length;
-  rb.hidden = MODE !== 'online' || !!G.over; rb.disabled = !!replay || !mayBuild(seat);
+  rb.hidden = MODE !== 'online' || !!G.over; rb.disabled = !!replay || !mayBuild(seat) || !!G.paused;
   rb.textContent = (isReady(seat) ? '✓ Bereit' : 'Bereit') + ` (${nReady}/${n})`; rb.classList.toggle('on', isReady(seat));
   if (MODE === 'online') { go.className = 'btn'; go.textContent = replay ? 'Welle läuft …' : `Sofort auslösen`; }
   checkReady();
@@ -1940,6 +1968,7 @@ function onGame(g){
 $('fTiming').onchange = renderSetup;
 $('fGo').onclick = newGame;
 $('go').onclick = () => tryResolve(true);
+$('resumeBtn').onclick = resumeGame;
 $('ready').onclick = toggleReady;
 $('replay').onclick = () => G && startReplay(G.lastRun, true);
 $('skip').onclick = endReplay;
@@ -1951,7 +1980,7 @@ setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   
    // Wächter: Steht die Wiedergabe seit 3 s still, obwohl die Seite sichtbar ist, neu anstoßen
    if (replay && !document.hidden && performance.now() - replay.last > 3000) kickLoop();
    checkReady();
-   if (MODE === 'online' && G && !G.over) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
+   if (MODE === 'online' && G && !G.over && !G.paused) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
 
 function startLocal(){
   MODE = 'local';
