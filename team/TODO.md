@@ -16,7 +16,6 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- L (Claude) · Optimierer-Lauf (nur Spiegel, rechnet einige Stunden) · seit 18.10. 12:30
 
 ## Als Nächstes
 | Was | Wer | Notiz |

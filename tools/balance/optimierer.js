@@ -9,7 +9,8 @@ const fs = require('fs'), path = require('path'), cp = require('child_process');
 const G = require('./sim').load(), S = require('./spiegel'), P = require('./pruef');
 const OUT = path.join(__dirname, 'ergebnisse'), STAND = path.join(OUT, 'opt-stand.json'), KAND = path.join(OUT, 'opt-kandidat.json');
 const MAPS = process.env.OPT_MAPS || '0:11', RUNDEN = +process.env.RUNDEN || 2, PAR = +process.env.PAR || 2;
-const PUNKTE = ['P2', 'P6', 'P6B', 'P8a', 'P8'], GEWICHT = { P2:1, P6:2, P6B:1, P8a:1, P8:1 };
+// P8 nur mit 0,25: Im ersten Lauf (18.10.) hat P8 den Gesamtfehler beherrscht und einen Schritt durchgewinkt, der P6 verschlechterte
+const PUNKTE = ['P2', 'P6', 'P6B', 'P8a', 'P8'], GEWICHT = { P2:1, P6:2, P6B:1, P8a:1, P8:0.25 };
 const STRUKTUR = new Set(['P6B', 'P8a', 'P8']);   // ändern das Gefüge → vor dem Verwerfen Kurve und Elementkraft nachführen
 fs.mkdirSync(OUT, { recursive:true });
 
@@ -55,7 +56,7 @@ async function main(){
       if (b2.E < b.E) { cand = cand2; erg = erg2; b = b2; }
     }
     const ok = b.E < st.E;
-    st.verlauf.push({ k, ok, E:+b.E.toFixed(5), vor });
+    st.verlauf.push({ k, ok, E:+b.E.toFixed(5), vor, sp:cand });   // sp: vollständiger Kandidat (mit Nachführen), damit jeder Zwischenstand wiederherstellbar ist
     if (ok) { st.sp = { ...cand, _stand:`Optimierer ${new Date().toISOString().slice(0, 16)}, Gesamtfehler ${b.E.toFixed(4)}` }; st.erg = erg; st.E = b.E; log(`${k}: übernommen`); }
     else log(`${k}: verworfen (Gesamtfehler ${b.E.toFixed(4)} ≥ ${st.E.toFixed(4)})`);
     st.seed = seed; fs.writeFileSync(STAND, JSON.stringify(st));
