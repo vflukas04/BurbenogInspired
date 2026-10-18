@@ -10,7 +10,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- L · Balancing-Skript (Prüfpunkte, Optimierer), Stein-Fläche, Monster-Bilder · seit 18.10. 11:20
+- L (Claude) · Optimierer-Lauf (nur Spiegel, rechnet einige Stunden) · seit 18.10. 12:30
 
 ## Als Nächstes
 | Was | Wer | Notiz |
@@ -31,7 +31,8 @@
 | Gemeinsame Map statt je einer Map pro Spieler | offen | Idee F, 15.10.: Statt jeweils eine separate Map pro Spieler eine gemeinsame. Noch nicht besprochen oder beschlossen. |
 | Upgrades bei Türmen sind zu stark | erledigt 17.10. (17b): Schadensfaktor je Stufe flacher, über Balancing-Skript | Idee F, 16.10.: Beispiel Schatten T1 – Upgrade 2→3 kostet 38 Gold, macht aber so viel Schaden wie 5 Türme. Hebel: Schadensfaktor je Stufe (aktuell ×2,2 / ×2,1), Kosten ×1,5 je Stufe. Erst nach Balancing-Skript angehen (Balance-Pause, siehe Post). |
 | Effekt-Abstufung der einzelnen Elemente | offen | Idee F, 16.10.: Wie stark die Effekte (Brennen, Verlangsamen, Fluch, Betäuben usw.) je Stufe wachsen, je Element prüfen und abstufen. Noch nicht besprochen. |
-| Stärkenband je Block + Kraft je Gold (P6/P8a) | L | Lauf A mit `kraftT` verworfen (18.10.); Bot baut fast nur Turm 1–4 → zuerst klären, wie höhere Türme sich gegen Upgrades lohnen (Upgrade-Faktoren, Freischaltkosten), siehe `BALANCING.md` |
+| Optimierer auswerten, dann Paket ins Spiel (Upgrades flacher? Stein-Fläche/Kiesel?) | L + F | `node tools/balance/optimierer.js bericht`; Kiesel/Stein-Fläche mit F absprechen (sein Einwand 18.10.) |
+| Monster-Bilder für Runde 1–11 erzeugen | L | Prompts in `team/GRAFIK.md` |
 | Monster 21–40: Werte über Balancing-Skript, Testspiel | L | eingebaut 16.10. (16b), Werte sind Startwerte; Inhalt bleibt Überraschung für F |
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 

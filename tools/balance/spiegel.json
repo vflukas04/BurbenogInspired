@@ -2,13 +2,13 @@
   "ELEMENTS.0.kraft": 0.622,
   "ELEMENTS.1.kraft": 0.864,
   "ELEMENTS.2.kraft": 1.082,
-  "ELEMENTS.3.kraft": 2.256,
+  "ELEMENTS.3.kraft": 2.01,
   "ELEMENTS.2.upDmg.0": 2.35,
   "ELEMENTS.2.upDmg.1": 2.1,
   "ELEMENTS.2.upDmg.2": 1.85,
   "ELEMENTS.2.upDmg.3": 1.6,
   "ELEMENTS.2.upDmg.4": 1.5,
-  "_stand": "18.10. nachts: Lauf A (kraftT Feuer/Stein) verworfen, Spiegel = Spiel 18a",
+  "_stand": "18.10. 12 Uhr: Start Optimierer – Stein Fläche Mitte 1,0/Rand 0,5, Kiesel 0,7, Kraft 2,01 (Variante F); Wargreiter-Faktoren im Spiel getauscht",
   "CONFIG.upgrade.steps.0": 2.35,
   "CONFIG.upgrade.steps.1": 2.1,
   "CONFIG.upgrade.steps.2": 1.85,
@@ -24,5 +24,11 @@
   "MONSTERS.Betty (Boss).hpMul": 12.1,
   "MONSTERS.Nazgul.hpMul": 0.8,
   "MONSTERS.Fledermäuse.hpMul": 0.8,
-  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.8
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.8,
+  "ELEMENTS.3.splashCenter": 1,
+  "ELEMENTS.3.splashEdge": 0.5,
+  "ELEMENTS.3.kraftT.0": 0.7,
+  "ELEMENTS.3.kraftT.1": 1,
+  "ELEMENTS.3.kraftT.2": 1.3,
+  "ELEMENTS.3.kraftT.3": 1.3
 }

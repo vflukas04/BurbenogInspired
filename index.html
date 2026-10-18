@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -502,7 +502,7 @@ const MONSTERS = [
   ['Magiermeister',     {emo:'🧙‍♂️', mini:true, ar:[0.15, 0.3], speed:1.1, hpMul:5, count:1, lives:2, teleport:{ n:6, stay:2.5 }, weak:[1, 1, 1, 1], info:'geht erst ein Stück wie ein normales Monster, dann springt er kreuz und quer über den Weg; die letzten Felder geht er zu Fuß'}],
   ['E-Scooter-Fahrer',  {emo:'🛴', speed:1.9, hpMul:0.85, weak:[1, 1, 1, 1], info:'sehr schnell'}],
   ['Lindner-Spezialisten', {emo:'🍻', speed:1.0, hpMul:0.5, count:40, gap:0.5, bountyMul:0.5, weak:[1.5, 0.75, 1, 1], info:'ein Schwarm: doppelt so viele, halbe Leben, halbes Kopfgeld'}],
-  ['Wargreiter',        {emo:'🐺', ar:[0.3, 0.35], speed:1.1, hpMul:1.3, rider:true, weak:[1, 1, 0.75, 1.5], info:'ist die Rüstung weg, steigt der Ork ab: der Warg flieht schnell weiter, der Ork geht möglichst gerade zum Ausgang (um Türme, Felsen und Sumpf herum, durch Wald – dort unsichtbar)'}],
+  ['Wargreiter',        {emo:'🐺', ar:[0.3, 0.35], speed:1.1, hpMul:1.3, rider:true, weak:[1, 1, 1.5, 0.75], info:'ist die Rüstung weg, steigt der Ork ab: der Warg flieht schnell weiter, der Ork geht möglichst gerade zum Ausgang (um Türme, Felsen und Sumpf herum, durch Wald – dort unsichtbar)'}],
   ['Fledermäuse',       {emo:'🦇', fly:true, night:true, speed:1.6, hpMul:0.8, weak:[0.75, 1.5, 1, 1]}],
   ['Lehrer',            {emo:'🧑‍🏫', ar:[0.2, 0.3], speed:1.0, mixed:true, weak:[1, 1, 1, 1], info:'jeder Lehrer hat eigene Stärken und Schwächen: eine „Immunität“, ein Bonus, der Rest gemischt'}],
   ['Schulleiter',       {emo:'🎓', mini:true, ar:[0.2, 0.3], speed:1.0, hpMul:5, count:1, lives:2, weatherBoss:true, weak:[1, 1, 1, 1], info:'macht auf jeder Map das Wetter, das dem Element dort am meisten schadet (Stein ist wetterfest)'}],
@@ -1777,6 +1777,14 @@ const SPRITES = { smoke:19, debris:20, boom:21, star:22, tree:130, bush:131, roc
   base:181, base2:180, castle:203, rockets:205, cannon:226, wide:227, barrel:229, missile:252, bulletY:272, bullet:275, flameS:295, flame:296 };
 const TURRET = { Schaden:'cannon', Reichweite:'barrel', 'Fläche':'wide', Effekt:'castle', Luftabwehr:'rockets', Licht:null };
 const SPR = {}, TINT = {};
+/* Monster-Bilder (18.10., L): je Monster 3 Ansichten in assets/monster/<name>-seite|vorne|hinten.png (Seite blickt nach rechts, nach links gespiegelt).
+   Fehlt ein Bild, bleibt das Emoji. Raupe: Kokon = Raupe mit weißer Hülle, Motte fliegt. Herkunft und Prompts: team/GRAFIK.md */
+const MONSTER_IMG = { 'Besoffene Penner':'penner', 'Uffug (Boss)':'uffug', 'Mehlmottenraupen':'raupe', 'Betty (Boss)':'betty' };
+const MIMG = {};
+function monsterImg(key, view){
+  const k = key + '-' + view; if (k in MIMG) return MIMG[k] && MIMG[k].complete && MIMG[k].naturalWidth ? MIMG[k] : null;
+  const im = new Image(); im.onerror = () => { MIMG[k] = null; }; im.src = 'assets/monster/' + k + '.png'; MIMG[k] = im; return null;
+}
 function loadSprites(){
   if (typeof Image === 'undefined') return;
   for (const [k,n] of Object.entries(SPRITES)) { const im = new Image();
@@ -1955,7 +1963,23 @@ function draw(i, cv){
     c.fillStyle = m.def.color; c.globalAlpha = .35 * ghost; c.beginPath(); c.arc(X, Y, r, 0, Math.PI*2); c.fill(); c.globalAlpha = ghost;
     if (on('slow')) { c.fillStyle = '#9fdcf540'; c.beginPath(); c.arc(X, Y, r*1.15, 0, Math.PI*2); c.fill(); }
     const emo = m.coc ? (m.coc.fly ? '🦋' : m.def.emo) : m.def.emo;
-    c.font = `${r*1.9}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(emo, X, Y + 1);
+    // Laufrichtung aus der Bewegung seit dem letzten Bild (nur Anzeige, die Simulation liest das nicht)
+    if (m.lx !== undefined) { const dx = x - m.lx, dy = y - m.ly; if (Math.abs(dx) + Math.abs(dy) > 1e-4) { m.vx = (m.vx || 0) * .7 + dx * .3; m.vy = (m.vy || 0) * .7 + dy * .3; } }
+    m.lx = x; m.ly = y;
+    let ikey = MONSTER_IMG[m.def.name] || MONSTER_IMG[MONSTERS[m.type] && MONSTERS[m.type].name];
+    if (ikey === 'raupe' && m.coc && m.coc.fly) ikey = 'motte';
+    const view = Math.abs(m.vx || 1) >= Math.abs(m.vy || 0) ? 'seite' : (m.vy > 0 ? 'vorne' : 'hinten');
+    const im = ikey && monsterImg(ikey, view);
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    if (im) {
+      const S = r * 2.5 * (m.def.boss || m.def.mini ? 1.15 : 1), walk = !(m.coc && !m.coc.fly && !m.coc.walk) && !(m.strip > 0) && !flying(m);
+      const sq = walk ? 1 + .05 * Math.sin(time * 11 + m.id * 3) : 1;   // Wippen beim Gehen
+      c.save(); c.translate(X, Y + r * .75); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.scale(1 / sq, sq);
+      c.drawImage(im, -S / 2, -S, S, S); c.restore();
+      if (m.coc && !m.coc.fly && !m.coc.walk) {   // Kokon: weiße, halbdurchsichtige Hülle über der Raupe
+        c.fillStyle = '#ffffffb8'; c.strokeStyle = '#ffffff'; c.lineWidth = 1; c.beginPath();
+        c.ellipse(X, Y + r * .75 - S * .3, (view === 'seite' ? S * .5 : S * .28), (view === 'seite' ? S * .24 : S * .45), 0, 0, Math.PI * 2); c.fill(); c.stroke(); }
+    } else { c.font = `${r*1.9}px serif`; c.fillText(emo, X, Y + 1); }
     c.globalAlpha = 1;
     if (m.strip > 0) {                         // Betty „zieht sich aus“: hautfarben verpixelt, schwarzer Balken
       const n = 4, q = 2*r/n, skin = ['#f1c6a7', '#e8b494', '#d9a07f', '#f6d3b8'];

@@ -30,15 +30,16 @@ Optimal ist das nie bewiesen („beste gefundene“). Ist das Spiel am Ende zu l
 | P3 | Pfad: durchgehender Vorwärts-Aufbau ohne Verkaufen vs. P2 | Verlust ≤ ~15 % |
 | P4 | Endboss, 2 Spieler | schaffbar mit Korridor; 1 Spieler allein ≈ halbes Leben |
 | P5 | Niemand nutzlos am Endboss | jeder ≥ ~30 % des Boss-Schadens (2 Spieler; bei 4 weniger) |
-| P6 | Elemente gleich stark – **in jedem 5er-Block** (L, 17.10.), nicht nur im Mittel | je Block R/Ziel jedes Elements ±10 % um das Block-Mittel (Stein: Fliegertage mit Gewicht 0,25) |
+| P6 | Elemente gleich stark, **gesamt** (L, 18.10.) | ±5 % (Stein: Fliegertage mit Gewicht 0,25) |
+| P6B | Elemente gleich stark **je 5er-Block** | ±10 % |
 | P7 | Monstertypen (fliegend, Rüstung, viele Leben, nachtaktiv, schnell/langsam, Kombinationen) | jedes Element hat gewichtet nach Häufigkeit ähnlich viele schwere Tage |
-| P8a | Kraft je Gold je Turmstufe (Stellschrauben `TOWER_POWER`, `kraftT`, Kosten) | fällt mit der Stufe nicht ab (Lichttürme ausgenommen); sonst lohnen teure Türme nicht |
-| P8 | Turmrelevanz: Aufstellung ohne einen Turm; gleiches Gold in Turm k vs. k+1 | jeder Turm fehlt spürbar; höhere Stufe meist knapp vorn (nicht strikt, frühe Upgrades dürfen kippen) |
-| P9 | Edelsteine | die 3 besten Fähigkeiten je Element liegen nah beieinander |
-| P10 | Forschung | lohnt sich zu passenden Zeitpunkten (früh dürfen Türme besser sein) |
-| P11 | Kartenvarianz | < 5 % ignorieren, > 15 % ins Verfahren aufnehmen |
-| P12 | Gier-Lücke (nur im Pfadtest): gieriger Vorwärts-Aufbau vs. verbesserter | spürbar (L: Gier soll nicht die beste Strategie sein); bei Einzeltests je Stufe ist gierig + Verbesserung einfach das Suchverfahren |
-| P13 | Eichung an echten Spielen (`tools/archiv.js`, `REFERENZLAUF.md`) | Abstand Skript ↔ echt bestimmt die Korridore |
+| P8a | **Turmstufen** (analytisch): Zuwachs an Schaden/s je Gold beim Upgrade auf Stufe 2…6 relativ zum Bau desselben Turms | fallend, Ziel 0,95/0,9/0,8/0,7/0,6; Upgrade auf S4 nicht besser als Bau des nächsten Schadensturms (inkl. halbe Freischaltung); Turm 1 je Gold ≥ 60 % des nächsten Schadensturms (Einsteiger-Falle) |
+| P8 | **Turmnutzung** (aus P2): neue Türme lohnen sich, kein Turm nutzlos | ab Runde 21 ≥ 35 % des Turm-Golds in Türmen 5–8; jeder Schadensturm in mindestens einem Block ≥ 5 % |
+| P9 | Edelsteine (`p9.js`, nur Bericht) | die 3 besten Fähigkeiten je Element höchstens ×1,15 auseinander; keine unter +2 % |
+| P10 | Forschung (nur Bericht) | Kaufzeitpunkt und -häufigkeit im P2-Lauf: „nie“ = zu teuer/nutzlos, „sofort“ = zu billig. Später: Wert je Gold gegen besten Turmkauf an Stichtagen; P2 mit/ohne Forschung |
+| P11 | Kartenvarianz | < 5 % ignorieren, > 15 % ins Verfahren aufnehmen (zurückgestellt) |
+| P12 | Gier-Lücke | zurückgestellt |
+| P13 | Eichung an echten Spielen | zurückgestellt |
 
 ## Korridore = Schwierigkeitsstufen
 Spielt man die beste gefundene Aufstellung, bleibt am Endboss je Stufe eine Reserve, z. B. Schwerste 5 %, Schwer 10 %, Normal 20 %, Leicht 40 %, Ganz leicht 60 % (Startwerte). Wird später als Auswahl beim Spielstart eingebaut (Faktor auf Monsterleben/-rüstung).
@@ -49,10 +50,25 @@ Spielt man die beste gefundene Aufstellung, bleibt am Endboss je Stufe eine Rese
 | Monsterleben/-rüstung je Welle | Schwierigkeitskurve | P2, P4 |
 | Kraftfaktor je Element | Element-Gleichgewicht über das ganze Spiel | P6, P7 |
 | Kraft je Turm (`kraftT`) | Element-Gleichgewicht je Block (die Türme, die dort tragen); Nebenbedingung P8a | P6 je Block, P8a |
-| Turmwerte je Stufe | Relevanz | P8 |
+| Schadensfaktor je Upgrade-Stufe (`CONFIG.upgrade.steps`, Schatten `upDmg`) | Turmstufen | P8a |
+| Kraft je Turm (`kraftT`), Freischaltkosten (`RESEARCH t5/t7`) | Turmnutzung | P8 |
 | Fähigkeitswerte | knappe Edelstein-Wahl | P9 |
 | Spielerfaktor 3/4 | mehr Spieler | P2/P4 mit 3/4 |
 Gedreht wird nacheinander in Schleifen (Elemente → Kurve → Türme → wieder von vorn), bis sich nichts mehr bewegt.
+
+## Optimierer (seit 18.10.)
+`node tools/balance/optimierer.js` (Prüfpunkte in `pruef.js`). Je Runde alle Prüfpunkte mit Stellschraube (P2, P6, P6B, P8a, P8) in **zufälliger Reihenfolge**; je Prüfpunkt ein Vorschlag für seine Stellschrauben (gedämpft ^0,7) → voller P2-Lauf → **nur übernommen, wenn der Gesamtfehler sinkt** (Summe der gewichteten Fehlerquadrate, P6 doppelt). Bei Strukturänderungen (P6B, P8a, P8) wird vor dem Verwerfen einmal Kurve und Elementkraft nachgeführt. Ende, wenn jeder Prüfpunkt `RUNDEN` (2) Mal dran war; bester Stand → `spiegel.json`. Zwischenstand `ergebnisse/opt-stand.json`, Protokoll `opt-log.txt`, Neustart rechnet weiter. `node tools/balance/optimierer.js bericht` zeigt den Stand. P9, P10 sind Berichte (P9: `node tools/balance/p9.js`).
+- Dauer: je Schritt ein P2-Lauf (1 Map ca. 20–25 min, `OPT_MAPS=0:11,2:23` doppelt so lang).
+- Zufällige statt fester Reihenfolge bringt allein nichts; der Gewinn kommt aus Annehmen/Verwerfen (kein Pendeln wie Lauf A) und dem Nachführen. Grenzen bleiben die des Bots (nur heutige Welle, volles Kopfgeld, beide Spieler gleiches Element).
+
+## Einwände aus Testspielen → Learning fürs Skript
+Jeder Einwand von L oder F wird hier eingetragen: Was fiel auf, woran lag es, welcher Prüfpunkt hätte es zeigen müssen, was wurde am Skript geändert.
+
+| Datum | Einwand | Ursache | Prüfpunkt | Änderung am Skript |
+| --- | --- | --- | --- | --- |
+| 16.10. | F: Upgrades zu stark (Schatten T1 → S3 so stark wie 5 Türme) | Schaden je Stufe ×1,6–2,35 bei Kosten ×1,5 → Upgrade je Gold wird nie schlechter | fehlte | P8a (Turmstufen) |
+| 18.10. | F: Stein-Kiesel ist eine Falle („nur Kiesel hochgezogen, kaum etwas geschafft“) | `kraftT` Kiesel 0,4 (17g), weil der Bot mit Kiesel-Massen Stein in Runde 1–5 zu stark machte; der Bot baut ab Tag 2 Schleuder, Menschen ziehen Kiesel hoch | fehlte (Bot spielt anders als Menschen) | P8a: Turm 1 je Gold ≥ 60 % des nächsten Schadensturms |
+| 18.10. | L: Bot baut fast nur Turm 1–4 | wie 16.10.; dazu Freischaltung 250/700 | P8 fehlte | P8 (Turmnutzung) |
 
 ## Stand
 - 16.10. (L): Grundgerüst in `tools/balance/`: `sim.js` (lädt die Simulation aus `index.html`), `core.js` (Testkarte, Reservefaktor, Bauplatz-Maske), `build.js` (gieriger Aufbau), `run.js` (Aufruf). `node tools/balance/run.js p1` prüft P1 in ~5 s.
@@ -69,6 +85,9 @@ Gedreht wird nacheinander in Schleifen (Elemente → Kurve → Türme → wieder
 - 18.10. 00:30 (L), P2-Lauf mit Spiel 17j: Kurve passt (R/Ziel je Block 1,00–1,11). Elemente gesamt Feuer 0,90 · Eis 0,94 · Schatten 1,02 · Stein 1,16. **Stärkenband je Block verletzt:** Stein Runde 11–25 und 31–35 ca. +30–36 %, Feuer Runde 11–20 ca. −30 %, Eis Runde 21–25 −27 %. Stein an Fliegertagen 97 % der anderen (alte Grenze 25 % längst erfüllt). Nächster Schritt: `kraftT` je Element so setzen, dass Band und P8a gleichzeitig halten (bei Stein eher Katapult/Felsbrocken senken als Turm 5–8 heben). Noch nichts geändert.
 - 18.10. nachts (L, Claude allein): **Lauf A** mit Kraft je Turm Feuer [1; 1,15 ×7] und Stein [0,4; 1; 1,1; 1,15 ×5] (P8a bis auf den 8-Gold-Funken erfüllt). Ergebnis: Stein Runde 11–25 besser (1,18–1,25 statt 1,34), aber Runde 36–40 0,66 statt 0,85; Feuer Runde 11–20 kaum besser (0,71/0,75), dafür Runde 26–40 1,5 zu stark. Mittlere Abweichung vom Band 16,0 % statt 15,3 % → **verworfen, nichts ins Spiel.**
 - **Befund dazu:** Der Bot baut das ganze Spiel fast nur Turm 1–4 und rüstet sie auf (Eis vereinzelt Turm 5/6; Freischaltung Turm 7–8 nie gekauft). Dieselben Türme tragen also alle Blöcke, deshalb lässt sich das Band je Block über `kraftT` kaum formen: Wer einen Turm stärkt, verschiebt alle Blöcke ab seinem Einsatz. Das bestätigt auch F's/L's Sorge: Neue Türme lohnen sich gegenüber Upgrades zu wenig. Mögliche Hebel (noch nicht beschlossen): Upgrade-Faktoren je Element (`upDmg`, z. B. Feuer später Stufen stärker), Upgrades ab Stufe 4 flacher, damit höhere Türme sich lohnen, Freischaltkosten 250/700 prüfen.
+- 18.10. vormittags (L): Faktoren je Monster geprüft – Regel überall erfüllt außer Block 7 (Lehrer gemischt → Stein ohne Malus, Schatten ohne Bonus); Wargreiter auf Schatten 1,5 / Stein 0,75 getauscht (im Spiel, 18d). Stein-Fläche getestet (Runde 1–20, Kraft je Turm zurück auf 1): Randwert regelt nur das **Niveau** von Stein, nicht die Form (Runde 1–5 zu stark, 6–10 zu schwach bleibt bei jedem Randwert, Spreizung ×1,7–2,1). Bester Kompromiss im Spiegel: Mitte 1,0, Rand 0,5, Kiesel 0,7, Kraft 2,01 (Spreizung ×1,72 statt ×1,82). Kiesel ganz auf 1 geht nur, wenn Stein in Runde 1–5 anders gebremst wird. Ins Spiel erst nach Absprache mit F.
+- 18.10. (L): P9 erster Lauf: Feuer Glutnest (Glutbecken) +200–370 % R, weit vor allen anderen (Abstand ×2,4); Eis Frosthauch-Effekt +68 % (×1,5); Schatten und Stein im Ziel, Stein-Steine aber insgesamt schwach (+7 %). Ohne Wirkung u. a. Weite Flamme, Tiefschnee, Belagerung, Steilschuss (an den Stichtagen).
+- 18.10. (L): P10 aus P2 (Spiel 17j): Freischaltung Türme 5–6 in 1 von 8 Läufen (Tag 40), Türme 7–8 nie; Kopfgeld 1–3 immer (Tag 8/14/20); Element-Schaden immer früh (Tag 4–17).
 - Bekannte Bot-Schwäche: plant nur den heutigen Tag und baut höchstens 2 billige Türme um → unterschätzt Elemente, die vorausplanen müssen (Stein vor Fliegertagen).
 - Offen: P9 (Edelstein-Uniques gegen Basics), P8 (Türme 4–8 einzeln), P13 (Eichung mit echten Spielen aus dem Archiv).
 - Idee „Lernen“: kein neuronales Netz (zu wenig Daten), sondern ein Wissensspeicher bester Aufstellungen (Warmstart für die nächste Suche) und für den Endboss-Prüfpunkt eine stärkere evolutionäre Suche (mehr Rechenzeit, Ergebnis wird gespeichert).

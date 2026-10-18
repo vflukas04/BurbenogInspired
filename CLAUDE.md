@@ -22,7 +22,7 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas mit seinem Freun
 - Archiv (seit 15.10., L): Jede Auswertung schreibt zusätzlich `games/<GAME_ID>/archiv/<startAt>` (merge): `slots["Tag-Welle"]` = Kills/Gold/weitergegeben je Spieler, Durchbrüche; `days[Tag]` = alle Felder mit Türmen am Tagesende (`archSlot`/`archDoc` in `tryResolve`, auch bei `giveUp`). Auslesen mit `node tools/archiv.js` (Firestore-REST, Rohdaten nach `tools/archiv-daten/`, nicht im Repo). Für das Balancing-Skript (`team/BALANCING.md`).
 - Ohne Firebase-Werte: Ein-Gerät-Modus (localStorage).
 - Simulation deterministisch in festen Schritten (DT = 1/30 s), Zufall nur mit festem Seed (Wetter aus `startAt`, Betäubung aus startAt/Tag/Welle/Spieler im Wellen-Input). Die Wiederholung spielt dieselbe Simulation in denselben Schritten ab.
-- Grafik: Kenney „Tower Defense (top-down)“, CC0, in `assets/kenney/` (nur die benutzten Sprites). Graue Sprites werden je Element eingefärbt (`tinted`). Monster noch Emojis.
+- Grafik: Kenney „Tower Defense (top-down)“, CC0, in `assets/kenney/` (nur die benutzten Sprites). Graue Sprites werden je Element eingefärbt (`tinted`). Monster: Emojis, seit 18.10. (L) teils KI-Bilder (`assets/monster/<name>-seite|vorne|hinten.png`, `MONSTER_IMG`, Ansicht nach Laufrichtung, Rückfall Emoji; Herkunft und Prompts in `team/GRAFIK.md`).
 - `gid` = `cfg.startAt`: Felder aus alten Spielen werden ignoriert (verhinderte Minus-Gold).
 - Firestore-Testmodus läuft ca. 09.11.2026 ab. Regeln aus der README müssen vorher gesetzt sein.
 - Installierbar als Web-App (manifest.json, Icons).

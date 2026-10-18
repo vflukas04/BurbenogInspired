@@ -1,4 +1,4 @@
-# Grafik (Stand 17.10., L)
+# Grafik (Stand 18.10., L)
 
 ## Entscheidungen
 - **Türme** bleiben Kenney (CC0), wie bisher.
@@ -8,7 +8,21 @@
 - Getestet mit dem Fuchs: Ansichten aus *einem* Modell mit *gleicher* Kamerahöhe passen gut zusammen. Referenzbilder in Krea waren zu stark (zweiköpfige Füchse) → lieber ohne Referenz, gleiche Farbangaben im Text.
 - Freistellen: weißer Hintergrund wird automatisch entfernt (Flutfüllung von den Ecken).
 
-## Prompt-Vorlage (Krea, 1:1)
+## Stand 18.10.: eingebaut
+- Modell: **Krea 3 auf Civitai** (txt2img + img2img-Edit), 17./18.10. Ansichten je Monster in `assets/monster/<name>-seite|vorne|hinten.png`, freigestellt (Flutfüllung vom Rand), 192 px.
+- Im Spiel (`MONSTER_IMG` in `index.html`): Besoffene Penner, Uffug (Boss), Mehlmottenraupen (Raupe; Kokon = Raupe mit weißer Hülle; Motte im Flug), Betty (Boss). Ansicht nach Laufrichtung, Seite nach links gespiegelt, leichtes Wippen. Fehlt ein Bild → Emoji.
+- Gewählte Bilder (Civitai-Datei-Anfang): Penner cfadda41 / 4d325694 / 58430d4f · Uffug cfddba46 / 432c7240 / 999c1ea8 · Raupe d7eeacb9 / 927bbc60 / 17aa92be · Motte 41f955d6 / 5e2bcfaf / c8754065 · Betty ee4cfb5d / 4759880c / 22aacaff.
+- Figuren über Kleidung, Haltung, Requisiten beschreiben, **nicht über Herkunft oder Hautfarbe** (öffentliches Spiel; Edits an der Hautfarbe kosteten außerdem viele Versuche und Farbstiche).
+
+## Erkenntnisse aus den Metadaten (17./18.10.)
+1. Erst **Seite per txt2img**, dann die anderen Ansichten per **Edit** („The same …, same style. …“). Hält die Figur stabil; getrennte txt2img-Bilder ergaben verschiedene Tiere.
+2. „walking **directly** to the right … seen from the side and slightly from above“ gibt saubere Profile zum Spiegeln. „Isometric … we see side and back from above“ gab schräge Posen.
+3. **Eine Änderung je Edit** („Only add a bottle of beer into his right hand.“ klappte sofort). Mehrere Änderungen auf einmal färbten das ganze Bild.
+4. Menschen werden malerischer als Tiere → „cel shading with two tones“ ergänzen (noch nicht getestet).
+5. „pure white background“, weil einzelne Bilder grauen Hintergrund hatten (stört das Freistellen).
+6. Die Straße ist braun: braune Monster brauchen farbige Akzente oder die dunkle Kontur.
+
+## Alte Prompt-Vorlage (Krea, 17.10.)
 Seite:
 ```
 Isometric game sprite of a single [TIER + FARBEN] walking to the right, high angle view from above, we see its side and its back from above, the far legs are partly hidden behind the body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, thin dark outline, isolated on a plain white background, no shadow, no ground, no text.
@@ -27,3 +41,117 @@ Beispiel `[TIER + FARBEN]`: `red fox with orange fur, white chest, dark brown le
 1. Zweites Tier (z. B. Maus) mit der Vorlage testen – hält der Stil?
 2. Einbau: Bilder in `assets/monster/<name>-seite|vorne|hinten.png`, fehlt ein Bild → Emoji; Wippen; Blickrichtung aus der Laufrichtung.
 3. Danach alle Monster der Reihe nach (Bosse größer, Fliegende ggf. nur Draufsicht).
+
+## Prompts für die nächsten Monster (18.10., aus den Erfahrungen vom 17./18.10.)
+Ablauf je Monster: 1. Seite per txt2img (Krea 3, 1:1). 2. Das beste Seitenbild als Vorlage, dann Vorne und Hinten per Edit. 3. Bei Abweichungen nur **eine** Änderung je Edit.
+
+**Silberfische**
+```
+Game sprite of a single silverfish insect with a long tapered silvery-grey scaly body, three long tail bristles and long thin antennae, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same insect, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same insect, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Kellerasseln**
+```
+Game sprite of a single woodlouse with a dark slate-grey segmented shell with pale edges and many short legs, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same woodlouse, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same woodlouse, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Nacktschnecken**
+```
+Game sprite of a single bright orange slug without a shell, glossy body, two eye stalks on its head, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same slug, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same slug, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Ohrenkneifer**
+```
+Game sprite of a single earwig with a glossy reddish-brown body, pale yellow legs and large curved pincers at its tail end, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same earwig, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same earwig, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Mäuse**
+```
+Game sprite of a single small grey house mouse with large pink ears, pink feet and a long thin pink tail, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same mouse, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same mouse, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Kleine Hunde**
+```
+Game sprite of a single small white terrier dog with a brown patch over one eye, a red collar and a short upright tail, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same dog, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same dog, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Ratten**
+```
+Game sprite of a single large dark grey rat with scruffy fur, small red eyes and a long bare pink tail, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same rat, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same rat, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Katzen**
+```
+Game sprite of a single ginger tabby cat with white paws, sneaking low with its tail raised, walking directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same cat, same style. It walks directly towards the viewer. Seen slightly from above.
+```
+```
+The same cat, same style. It walks directly away from the viewer - up. Seen slightly from behind and above.
+```
+
+**Spatzen**
+```
+Game sprite of a single house sparrow with spread wings, brown back with dark streaks, grey cap and black bib, flying directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same bird, same style. It flies directly towards the viewer. Seen slightly from above.
+```
+```
+The same bird, same style. It flies directly away from the viewer - up. Seen from behind and above, wings spread.
+```
+
+**Habichte**
+```
+Game sprite of a single goshawk with wings fully spread, slate-grey back, white chest with fine grey barring and yellow feet, flying directly to the right, seen from the side and slightly from above, full body, flat vector style like a mobile strategy game unit, simple shapes, soft colors, cel shading with two tones, thin dark outline, isolated on a pure white background, no shadow, no ground, no text.
+```
+```
+The same bird, same style. It flies directly towards the viewer. Seen slightly from above.
+```
+```
+The same bird, same style. It flies directly away from the viewer - up. Seen from behind and above, wings spread.
+```
+
