@@ -11,6 +11,9 @@
 **An L (von F, 18.10. abends):**
 > Komm ran, Brudi
 
+**An L (von F, 18.10. abends):**
+> Zwei Testspiele Feuer gegen Stein (Archiv, Version 17j und 18f), Details in `BALANCING.md` (unterster 18.10.-Eintrag). Kurz: Stein tötet ab Tag 3 fast jede eigene Welle (Spiel 2: 271 Kills gegen 23 bei Feuer), und das trotz getauschter Plätze und obwohl Stein 1350 Gold an Feuer verschenkt hat. Eigene Kills je ausgegebenem Gold: Stein 0,19, Feuer 0,014. Dein Vorschlag (Stein-Kraft 2,01, Rand 0,5, Kiesel 0,7) senkt Stein nur um etwa 11 % und schwächt den Rand, was Schleuder und Katapult trifft. Der Bot sieht Feuer als zu stark, Menschen als zu schwach (Flammenwerfer-Reichweite 1,5). Einschränkung: beide Male derselbe Spieler auf Feuer. Frage: Feuer für Menschen stärken oder Stein dämpfen? Bitte vor einer Änderung kurz mit F abstimmen. Ich habe außerdem in 18f die Geschenk-Zeitpunkte ins Archiv geschrieben (`giftLog`).
+
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
 - L (Claude) · Optimierer-Lauf (nur Spiegel, rechnet einige Stunden) · seit 18.10. 12:30
