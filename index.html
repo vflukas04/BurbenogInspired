@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -330,7 +330,7 @@ const ELEMENTS = [
     ['Lavaturm',     'Fläche',    2.0, 0.35,1, 1.5, 0.36, 4, 0.9, {fly:false}],   // 14.10. (L): halb so oft, doppelter Schaden je Wurf (gleicher Schaden/s)
     ['Sonnenturm',   'Schaden',   3.0, 0.6, 2, 1.4, 0.36, 8],
     ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.65, DAY] ]},
-  { name:'Eis', kraft:0.864, emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', armorDmg:0.6, towers:[
+  { name:'Eis', kraftT:[1, 1, 1, 1, 1, 1, 1, 1], kraft:0.864, emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', armorDmg:0.6, towers:[
     ['Frostsplitter','Effekt',    2.0, 1,   1, 1.1, 0.25, 3],
     ['Schneeball',   'Fläche',    2.3, 1,   2, 1.15, 0.2, 4, 0.6],
     ['Eiszapfen',    'Luftabwehr',3.6, 0.8, 2, 2.4, 0.3, 4, 0, {air:true, slowFly:true}],   // nur Fliegende, bremst sie auch
@@ -339,7 +339,7 @@ const ELEMENTS = [
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
     ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
-  { name:'Schatten', kraft:1.082, emo:'🌑', color:'#a58ad8', upDmg:[2.35, 2.1, 1.85, 1.6, 1.5],   // 17.10. (L): Balancing-Schleife 5;   // 13.10. (F): Schaden je Upgrade ab Stufe 4 flacher (Irrlicht-Verstärkung + Rüstung ignorieren ab Runde 10 zu stark)
+  { name:'Schatten', kraftT:[1, 1, 1, 1, 1, 1, 1, 1], kraft:1.082, emo:'🌑', color:'#a58ad8', upDmg:[2.35, 2.1, 1.85, 1.6, 1.5],   // 17.10. (L): Balancing-Schleife 5;   // 13.10. (F): Schaden je Upgrade ab Stufe 4 flacher (Irrlicht-Verstärkung + Rüstung ignorieren ab Runde 10 zu stark)
     note:'Fluch (mehr Schaden, Rüstung bröckelt für alle) · Irrlicht verstärkt und durchdringt Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis', effect:'curse', armorDmg:0, dayOnly:true, costOverride:{1:30}, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
     ['Irrlicht',     'Licht',     // 30 statt 45 Gold (12.10.: Schatten nachts sonst zu schwach)
