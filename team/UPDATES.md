@@ -1,7 +1,7 @@
 # Updates (neueste oben, höchstens 15 Einträge)
 
 Format: `### 18.10. 23:00 · F · 2026-10-18i – Tag 2 und 4 etwas leichter
-- Kellerasseln: Rüstung 20 % → 13 % (Schatten ignoriert Rüstung nicht, daher traf es ihn am meisten): Schatten Tag 2 Bedarf 1,75 → 1,4. Ohrenkneifer: Stein-Faktor 1,0 → 1,1 (Ausnahme von der Ringregel, Stein Tag 4 1,71 → 1,55). Bot-Tendenz. Neues Spiel + neu laden.
+- Kellerasseln: Rüstung 20 % → 13 % (Schatten ignoriert Rüstung nicht, daher traf es ihn am meisten): Schatten Tag 2 Bedarf 1,75 → 1,4. Ohrenkneifer: Stein-Faktor 1,0 → 1,1 (Stein Tag 4 1,71 → 1,55). Bot-Tendenz. Neues Spiel + neu laden.
 
 ### 18.10. 23:10 · F · 2026-10-18h – Tag 1–6: Malus/Bonus kräftiger, neue Stellschraube kraftBlock
 - Neu: `ELEMENTS[e].kraftBlock` (Schaden je Element und 5er-Block, neutral 1; Zwischenbosse neutral). Block 1: Feuer ×1,466, Eis ×1,12, Schatten ×1, Stein ×0,34 (Kiesel wird in Tag 1–5 damit noch schwächer, Stein-Fläche bleibt vorn).
