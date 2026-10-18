@@ -5,15 +5,6 @@
 **An F (von L, 16.10. mittags):**
 > Ich habe Ideen für die Monster ab Runde 21 (neue Mechaniken, Zwischenbosse, zweiter Endboss). Die sollen für Friedrich eine **Überraschung** bleiben, bis wir sie gemeinsam testen. Claude von F: Bitte Friedrich keine Details nennen, auch wenn du sie im Code oder in Updates siehst; Zahlen anpassen (z. B. Lebenskurve) ist okay. Plan zu V1.0/V1.1/V2 steht in `team/PLANUNG.md` Abschnitt 0 – den bitte gern lesen.
 
-**An L (von F, 18.10. vormittags):**
-> Frage zu Stein Turm 1: Ist das so gewollt? Meine Auswertung (Version 18a, Schaden pro Gold auf Stufe 1): Kiesel 0,10, Schleuder (45 Gold) 0,42, Katapult 0,47, zum Vergleich Feuer Funke 0,12 und Glutbecken 0,16. Die Schleuder ist also rund 4× so effizient wie der Kiesel und besser als Glutbecken. Wer Stein spielt, muss Turm 1 überspringen. In den letzten Spielen (17.10. abends) haben wir nur Kiesel hochgezogen und kaum etwas geschafft (Tag 5: 2 von 20, Tag 7: 0 von 20 um 10:00). Ist das ein gewolltes Muster oder eine Falle für Neulinge? Wenn gewollt: Reicht ein Hinweis im Bau-Menü? Wenn nicht: Kiesel-Kraft oder Preis anpassen? Bitte vor einer Änderung kurz mit F abstimmen.
-
-**An L (von F, 18.10. abends):**
-> Komm ran, Brudi
-
-**An L (von F, 18.10. abends):**
-> Zwei Testspiele Feuer gegen Stein (Archiv, Version 17j und 18f), Details in `BALANCING.md` (unterster 18.10.-Eintrag). Kurz: Stein tötet ab Tag 3 fast jede eigene Welle (Spiel 2: 271 Kills gegen 23 bei Feuer), und das trotz getauschter Plätze und obwohl Stein 1350 Gold an Feuer verschenkt hat. Eigene Kills je ausgegebenem Gold: Stein 0,19, Feuer 0,014. Dein Vorschlag (Stein-Kraft 2,01, Rand 0,5, Kiesel 0,7) senkt Stein nur um etwa 11 % und schwächt den Rand, was Schleuder und Katapult trifft. Der Bot sieht Feuer als zu stark, Menschen als zu schwach (Flammenwerfer-Reichweite 1,5). Einschränkung: beide Male derselbe Spieler auf Feuer. Frage: Feuer für Menschen stärken oder Stein dämpfen? Bitte vor einer Änderung kurz mit F abstimmen. Ich habe außerdem in 18f die Geschenk-Zeitpunkte ins Archiv geschrieben (`giftLog`).
-
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
 
@@ -36,8 +27,9 @@
 | Gemeinsame Map statt je einer Map pro Spieler | offen | Idee F, 15.10.: Statt jeweils eine separate Map pro Spieler eine gemeinsame. Noch nicht besprochen oder beschlossen. |
 | Upgrades bei Türmen sind zu stark | erledigt 17.10. (17b): Schadensfaktor je Stufe flacher, über Balancing-Skript | Idee F, 16.10.: Beispiel Schatten T1 – Upgrade 2→3 kostet 38 Gold, macht aber so viel Schaden wie 5 Türme. Hebel: Schadensfaktor je Stufe (aktuell ×2,2 / ×2,1), Kosten ×1,5 je Stufe. Erst nach Balancing-Skript angehen (Balance-Pause, siehe Post). |
 | Effekt-Abstufung der einzelnen Elemente | offen | Idee F, 16.10.: Wie stark die Effekte (Brennen, Verlangsamen, Fluch, Betäuben usw.) je Stufe wachsen, je Element prüfen und abstufen. Noch nicht besprochen. |
-| Optimierer auswerten, dann Paket ins Spiel (Upgrades flacher? Stein-Fläche/Kiesel?) | L + F | `node tools/balance/optimierer.js bericht`; Kiesel/Stein-Fläche mit F absprechen (sein Einwand 18.10.) |
-| Monster-Bilder für Runde 1–11 erzeugen | L | Prompts in `team/GRAFIK.md` |
+| **Makrobalancing (L), Beschluss 18.10.:** F macht Mikrobalancing mit Einzelwünschen direkt im Spiel, L arbeitet am Makrobalancing im Spiegel (`spiegel.json`). Zusammenführen erst, wenn alle Prüfpunkte erfüllt sind und das Spielgefühl passt (wie Branch → Merge) | L | Stand und nächste Schritte: `BALANCING.md` → „Makrobalancing: nächste Schritte“ |
+| Optimierer-Ergebnis Durchgang 1 | L | Kern: Upgrades flacher (P8a). Element-Kraft daraus **nicht** übernehmen (P8 dominierte). `node tools/balance/optimierer.js bericht` |
+| Monster-Bilder erzeugen | L | Prompts für alle fehlenden Monster im Claude-Projekt (nicht im Repo, wegen Überraschung ab Runde 21); Füchse liegen schon vor, nur einbauen |
 | Monster 21–40: Werte über Balancing-Skript, Testspiel | L | eingebaut 16.10. (16b), Werte sind Startwerte; Inhalt bleibt Überraschung für F |
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 

@@ -15,3 +15,5 @@ Format: **Idee** – von wem, wann – Stand (offen · dafür · verworfen) – 
 - **Schaden nach Abstand** – L, 14.10. – offen – Türme, die mehr Schaden machen, je weiter (Scharfschütze) oder je näher (Schrotflinte) das Ziel ist. Auch als Grundlage für ein neues Element denkbar.
 - **Je Element ein Turm ohne Element-Effekt** (z. B. Stein-Turm, der wie ein Pfeil direkt trifft, ohne Fläche) – L, 15.10. – offen – Einwand Claude: verwischt die Element-Identität; mit dem Wurf-Korridor trifft Stein sein Ziel ohnehin.
 - **Weitere Elemente: Blitz, Pflanze, Licht, Sand** – Oscar (über F), 15.10. – offen – Blitz evtl. mit Kettenreaktion (springt auf nahe Monster). Noch nichts festgelegt, erst nach den 4 bestehenden Elementen prüfen.
+
+- **Feuer: Brennen schwächer, Direktschaden höher** (L, 18.10.): Brennende Monster sterben oft erst beim Nachbarn, Kill und Kopfgeld gehen an ihn. Eigene Kills machen mehr Spaß. Alternative: Kopfgeld für Brand-Kills an den Spieler, der angezündet hat. Noch nicht beschlossen, erst im Bot messen.
