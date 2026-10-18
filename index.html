@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1198,8 +1198,10 @@ function archSlot(b, g, lanes, arch){
     leaked:[...Array(n)].map((_, i) => ((g.leaked || {})[i] || []).length) };
   if (g.day !== b.day || g.over) arch.days[b.day] = { lanes:archLanes(lanes, g), earned:g.earned, kills:g.kills, gems:g.gems || {}, passed:g.passed };
 }
-const archDoc = (g, arch) => JSON.parse(JSON.stringify({ cfg:g.cfg, version:VERSION, updated:Date.now(), day:g.day, slot:g.slot, over:g.over || null,
-  gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...arch }));
+// 18.10. (F): leere Maps (days/slots) weglassen. Firestore ersetzt bei set(..., {merge:true}) ein leeres Objekt als Ganzes und löschte so die früheren Tage (nur der letzte Tag blieb im Archiv).
+const archDoc = (g, arch) => { const a = { ...arch }; ['days', 'slots'].forEach(k => { if (a[k] && !Object.keys(a[k]).length) delete a[k]; });
+  return JSON.parse(JSON.stringify({ cfg:g.cfg, version:VERSION, updated:Date.now(), day:g.day, slot:g.slot, over:g.over || null,
+    gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...a })); };
 async function tryResolve(force, onlyKey){
   if (resolving && Date.now() - resolvingAt > 20000) resolving = false;   // hängende Verbindung: nicht ewig blockieren
   if (!G || G.over || G.paused || resolving || replay) return false;
