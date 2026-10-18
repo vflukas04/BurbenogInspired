@@ -10,6 +10,7 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
+- L · Balancing-Skript (Prüfpunkte, Optimierer), Stein-Fläche, Monster-Bilder · seit 18.10. 11:20
 
 ## Als Nächstes
 | Was | Wer | Notiz |
