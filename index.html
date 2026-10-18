@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1188,6 +1188,8 @@ const archLanes = (lanes, g) => [...Array(g.cfg.players)].map((_, i) => { const 
   if (!l || l.gid !== gidOf(g)) return null;
   return { el:l.el, spent:l.spent || 0, pot:l.pot || 0, research:l.research || [], gemUsed:l.gemUsed || [],
     gifts:(l.gifts || []).reduce((a, x) => a + x.amt, 0),
+    giftLog:(l.gifts || []).map(x => ({ to:x.to, amt:x.amt, d:x.d ?? null, s:x.s ?? null, at:x.at ?? null })),   // 18.10. (F): wann wie viel an wen
+    gemGiftLog:(l.gemGifts || []).map(x => ({ to:x.to, el:x.el, d:x.d ?? null, s:x.s ?? null, at:x.at ?? null })),
     towers:(l.towers || []).map(t => ({ x:t.x, y:t.y, el:t.el, idx:t.idx, lvl:t.lvl || 1, inv:t.invested || 0, gem:!!t.gem, ab:t.ab ?? null })) }; });
 function archSlot(b, g, lanes, arch){
   const n = g.cfg.players, d = (a, c, i) => ((a || [])[i] || 0) - ((c || [])[i] || 0);
@@ -1381,7 +1383,7 @@ function useGem(i, x, y, e, ab){
 }
 function giveGem(from, to, e){
   if (!mayBuild(from) || to === from || gemsOf(from)[e] < 1) return;
-  const l = laneOf(from); L[from] = { ...l, gemGifts:[...(l.gemGifts || []), { to, el:e }] };
+  const l = laneOf(from); L[from] = { ...l, gemGifts:[...(l.gemGifts || []), { to, el:e, d:G ? G.day : 0, s:G ? G.slot : 0, at:Date.now() }] };
   pop(`${GEMS[e].name} an Spieler ${to+1} geschenkt`); render(); saveLane(from);
 }
 const canSwitchEl = i => mayBuild(i) && G.day === 1 && G.slot === 0 && !laneOf(i).towers.length;
@@ -1409,7 +1411,7 @@ function giveGold(from, to, amt){
   if (!mayBuild(from) || to === from || amt < CONFIG.giftStep || amt % CONFIG.giftStep) return;
   if (goldAvail(from) < amt) { pop('Zu wenig Gold.'); return; }
   const l = laneOf(from);
-  L[from] = { ...l, gifts:[...(l.gifts || []), { to, amt }] };
+  L[from] = { ...l, gifts:[...(l.gifts || []), { to, amt, d:G ? G.day : 0, s:G ? G.slot : 0, at:Date.now() }] };   // 18.10. (F): Tag, Welle und Zeit fürs Archiv
   pop(`Gesendet: −${amt} Gold · Spieler ${to+1} bekommt ${Math.floor(amt * (1 - CONFIG.giftFee))}`); render(); saveLane(from);
 }
 // Schenken im Fenster: Empfänger wählen, Betrag mit Knöpfen, „Senden“ nur wenn genug Gold. Edelsteine ohne Gebühr.
