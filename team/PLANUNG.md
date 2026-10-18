@@ -103,7 +103,7 @@ Alle Zahlen sind Platzhalter fürs Balancing-Skript. Aufwand: **leicht** = nur W
 | 1 Kiesel | Prellstein | hüpft an derselben Stelle nach 0,4 s und 0,8 s nach (60 % / 30 %) – Nachfolgende laufen in die Mitte |
 | 2 Schleuder | Steilschuss | trifft Fliegende mit vollem Schaden |
 | 3 Felsbrocken | Erschütterung | 10 % je getroffenem Monster: 2 s betäubt (Bosse 1 s) |
-| 4 Katapult | Weitwurf | Reichweite +2 Felder, Fläche +20 % |
+| 4 Katapult (seit 17.10. Turm 3) | Salve (18.10., F; vorher Weitwurf) | jeder 2. Wurf: zwei weitere Brocken seitlich neben dem Ziel (Abstand 0,9 × Fläche), voller Schaden. Test 1 Katapult Stufe 1 an Tag 7: Rest-Leben der Durchgelassenen −18 % (Weitblick −21 %) |
 | 5 Erdbeben | Nachbeben | 1 s später zweites Beben, 50 %, gleicher Radius |
 | 6 Granitwächter | Flügelbruch | 10 % je Treffer (Bosse 5 %): Flieger stürzt ab, bis Wellenende am Boden und 30 % langsamer (beim Nachbarn fliegt er wieder). Unterschied zu Eiszapfen: selten, aber dauerhaft |
 | 7 Lawine | Geröll | Einschlagstelle bremst 3 s um 30 % |

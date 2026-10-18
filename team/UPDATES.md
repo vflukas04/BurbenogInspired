@@ -4,6 +4,9 @@ Format: `### 18.10. 02:15 · L · 2026-10-18a – (keine Regeländerung) Balanci
 - `kraftT` für Feuer neutral angelegt, sonst nichts im Spiel geändert.
 - Test „Kraft je Turm“ für Feuer/Stein verbessert das Band je Block nicht (16,0 % statt 15,3 % Abweichung) → verworfen. Befund: Der Bot baut fast nur Turm 1–4 und rüstet auf; höhere Türme lohnen sich zu wenig. Details `BALANCING.md`.
 
+### 18.10. 10:05 · F · 2026-10-18b – Katapult: Salve statt Weitwurf
+- Das einzigartige Edelstein-Talent von Stein Turm 3 (Katapult) ist jetzt **Salve**: jeder 2. Wurf schickt zwei weitere Brocken seitlich neben das Ziel (voller Schaden, Abstand 0,9 × Fläche; `d.salvo` in `gemMods`, `launch`). Weitwurf entfällt.
+- Der Katapult wirft nur alle 4 s, deshalb „jeder 2." statt „jeder 4.". Kurztest (1 Katapult, Tag 7): ungefähr so stark wie Weitblick. Zahlen sind Startwerte. Neu laden; bereits eingesetzte Weitwurf-Steine (`ab` 3) wirken nun als Salve.
 ### TT.MM. HH:MM · L|F · VERSION – Titel` + höchstens 5 Zeilen: was, warum, worauf achten. Details stehen im Commit.
 
 ### 17.10. 22:15 · L · 2026-10-17j – Betty länger „censored“, Git-Verlauf umgeschrieben
@@ -60,8 +63,3 @@ Format: `### 18.10. 02:15 · L · 2026-10-18a – (keine Regeländerung) Balanci
 - Spiel hat jetzt 48 Tage (40 Runden, 6 Zwischenbosse, 2 Endbosse). Runde 21–40 mit neuen Mechaniken – **Überraschung für F**, Werte sind Startwerte.
 - Edelstein: je Turm 3 Optionen (2 Basics +30 %, 1 Unique des Turms), „einmal je Map“ entfällt.
 - „Immun“ (Faktor 0) = 50 % Schaden und kein Effekt des Elements (auch kein Bremsen, Fluch, Betäuben). Neues Spiel + neu laden.
-
-### 16.10. 14:00 · L · 2026-10-16a – 5. Monster in Block 4, Begriffe Map/Feld
-- Neu vor der Uffug-Vorhaut: **Eifersüchtige Geliebte** (Runde 19, Tag 22; Stein ×1,5, Schatten ×0,75, Rüstung 25 %). Vorhaut jetzt Runde 20, Uffug Tag 24 (teilt sich Runde 20, Leben unverändert). Spiel hat 24 Tage.
-- Begriffe: **Map** = Karte eines Spielers, **Feld** = einzelnes Kästchen. Edelstein-Kompromiss in `PLANUNG.md`.
-- Neues Spiel + neu laden.

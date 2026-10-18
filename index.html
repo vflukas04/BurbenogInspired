@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -399,7 +399,7 @@ const ABILITIES = [
   [ ['Prellstein', 'hüpft an derselben Stelle zweimal nach (30 % und 15 % Schaden)'],
     ['Steilschuss', 'trifft auch Fliegende (nicht bei Türmen, die sie schon treffen)'],
     ['Erschütterung', '+10 Punkte Betäubungschance, mindestens 2 s (Bosse 1 s)'],
-    ['Weitwurf', 'Reichweite +0,5 Felder, Fläche +10 %'],
+    ['Salve', 'jeder 2. Wurf: zwei weitere Brocken seitlich neben dem Ziel (voller Schaden)'],
     ['Nachbeben', 'nach 1 s ein zweiter Einschlag/Beben mit 25 % Schaden'],
     ['Flügelbruch', 'der Turm trifft Fliegende; 10 % je Treffer (Bosse 5 %): Fliegender stürzt ab und bleibt bis Wellenende am Boden, dort 30 % langsamer'],
     ['Geröll', 'Einschlagstelle bremst 3 s lang um 30 %'],
@@ -613,7 +613,8 @@ function gemMods(d, ab){
       () => { let m = TOWER_POWER[1] * 0.5; for (let k = 0; k < d.lvl - 1; k++) m *= ELEMENTS[2].upDmg[k]; d.moths = { dps:m, n:3, r:d.light || 1.6*R }; },
       () => { d.nightSight = true; d.rate *= 1.25; d.dpsNow *= 1.25; },  () => d.curseWave = true,
       () => { d.hunger = 0.2; d.hungerMax = 2; },  () => d.pierce = 1,  () => d.deathChance = 0.03,  () => d.curseStack = 2 ],
-    [ () => d.rebound = [0.3, 0.15],  () => d.hitsFly = true,  () => { d.eff = Math.max(d.eff, 2); d.chance = Math.min(0.75, (d.chance || 0) + 0.1); d.stunBossHalf = true; },  () => { d.range += 0.5*R; d.splash *= 1.1; },
+    [ () => d.rebound = [0.3, 0.15],  () => d.hitsFly = true,  () => { d.eff = Math.max(d.eff, 2); d.chance = Math.min(0.75, (d.chance || 0) + 0.1); d.stunBossHalf = true; },  () => d.salvo = { every:2, spread:0.9*(d.splash || R), mul:1 },   // Salve (18.10., F; vorher Weitwurf)
+     
       () => d.aftershock = { t:1, mul:0.25 },  () => { d.wingBreak = 0.1; d.hitsFly = true; },  () => d.pool = { r:d.splash, t:3, slow:0.3 },
       () => { if (!(d.eff > 0)) d.eff = 1.5; d.chance = Math.min(0.75, (d.chance || 0) + 0.15); } ]
   ];
@@ -960,6 +961,11 @@ function launch(s, tw, def, target, first = true){
   const x = tw.x + .5, y = tw.y + .5, lob = def.splash > 0, sp = GRID * (lob ? lobSpeedOf(def) : CONFIG.shotSpeed);
   tw.aim = Math.atan2(target.y - y, target.x - x);       // nur für die Grafik
   s.shots.push({ x, y, x0:x, y0:y, tx:target.x, ty:target.y, tgt:target, lob, sp, def, el:def.el, idx:def.idx, noPool:!first && def.el === 0 });   // Lavapfütze (Feuer): nur das erste Geschoss je Schuss legt eine
+  if (def.salvo && lob && first) {            // Salve (Katapult): jeder n-te Schuss wirft zwei weitere Brocken seitlich daneben
+    tw.sn = (tw.sn || 0) + 1;
+    if (tw.sn % def.salvo.every === 0) { const a = tw.aim + Math.PI / 2, d2 = { ...def, salvo:null, dmg:def.dmg * def.salvo.mul };
+      for (const sg of [-1, 1]) s.shots.push({ x, y, x0:x, y0:y, tx:target.x + Math.cos(a) * sg * def.salvo.spread, ty:target.y + Math.sin(a) * sg * def.salvo.spread, tgt:target, lob, sp, def:d2, el:def.el, idx:def.idx, noPool:true }); }
+  }
   s.fx.push({ kind:'flash', x, y, t:.12, t0:.12, el:def.el, tw });
 }
 function splashAt(s, def, x, y, R){   // Flächenschaden um einen Punkt
