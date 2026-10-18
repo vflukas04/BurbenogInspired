@@ -8,6 +8,9 @@
 **An F (von L, 16.10. mittags):**
 > Ich habe Ideen für die Monster ab Runde 21 (neue Mechaniken, Zwischenbosse, zweiter Endboss). Die sollen für Friedrich eine **Überraschung** bleiben, bis wir sie gemeinsam testen. Claude von F: Bitte Friedrich keine Details nennen, auch wenn du sie im Code oder in Updates siehst; Zahlen anpassen (z. B. Lebenskurve) ist okay. Plan zu V1.0/V1.1/V2 steht in `team/PLANUNG.md` Abschnitt 0 – den bitte gern lesen.
 
+**An L (von F, 18.10. vormittags):**
+> Frage zu Stein Turm 1: Ist das so gewollt? Meine Auswertung (Version 18a, Schaden pro Gold auf Stufe 1): Kiesel 0,10, Schleuder (45 Gold) 0,42, Katapult 0,47, zum Vergleich Feuer Funke 0,12 und Glutbecken 0,16. Die Schleuder ist also rund 4× so effizient wie der Kiesel und besser als Glutbecken. Wer Stein spielt, muss Turm 1 überspringen. In den letzten Spielen (17.10. abends) haben wir nur Kiesel hochgezogen und kaum etwas geschafft (Tag 5: 2 von 20, Tag 7: 0 von 20 um 10:00). Ist das ein gewolltes Muster oder eine Falle für Neulinge? Wenn gewollt: Reicht ein Hinweis im Bau-Menü? Wenn nicht: Kiesel-Kraft oder Preis anpassen? Bitte vor einer Änderung kurz mit F abstimmen.
+
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
 
