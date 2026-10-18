@@ -112,3 +112,5 @@ Jeder Einwand von L oder F wird hier eingetragen: Was fiel auf, woran lag es, we
 3. Forschung, Edelsteine, Pfad (P3).
 4. Prüfpunkte P1–P12, Schleifen, Bericht.
 5. Eichung (P13) mit Archiv und Referenzläufen.
+
+- 18.10. nachts (F): **Ringregel als Ganzes.** Ziel pro Tag: ein Element effektiv (Bedarf ÷ verfügbar etwa 1,0), eines ineffektiv (höchstens etwa 2), zwei neutral (etwa 1,5). Das Skript soll die Faktoren nicht mehr nur als Bonus/Malus/Rest 1 prüfen, sondern diese Bedarfs-Rollen. Messwerte Block 1 (2026-10-18j): T1 1,41/1,33/1,17/1,59; T2 2,09/0,98/1,40/0,89; T3 1,56/1,07/1,50/2,23; T4 1,55/1,90/1,28/1,55; T5 1,08/1,44/2,13/1,46; T6 1,80/1,62/1,98/1,78 (Feuer/Eis/Schatten/Stein). Der Bot kauft in Stufen: Bedarf springt (z. B. Eis Tag 4 2,40 oder 1,90, nichts dazwischen), feine Zielwerte sind nicht erreichbar.

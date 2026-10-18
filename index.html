@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18j";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -463,11 +463,11 @@ const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], 
 let MON_ROUND = 0;   // Runde (für Leben, Kopfgeld, Farbe): Zwischenbosse teilen sich die Runde des Monsters davor; day = Tag im Spiel
 const MONSTERS = [
   ['Silberfische',      {emo:'🐛', speed:1.0, weak:[1, 1, 1, 1]}],
-  ['Kellerasseln',      {emo:'🪲', ar:[0.13, 0.3], speed:0.9, weak:[0.75, 1, 1, 1.75]}],
-  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1, 1.3, 1, 0.75]}],
-  ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 0.8, 1.75, 1.1]}],
-  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.75, 1, 0.75, 1]}],
-  ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:4.5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
+  ['Kellerasseln',      {emo:'🪲', ar:[0.13, 0.3], speed:0.9, weak:[0.6, 1, 1, 1.75], eff:[-1, 0, 0, 1]}],
+  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.1, 0.92, 1.6, 0.5], eff:[0, 1, 0, -1]}],
+  ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 1.2, 1.75, 1.1], eff:[0, -1, 1, 0]}],
+  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.75, 1.5, 0.6, 1.3], eff:[1, 0, -1, 0]}],
+  ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:5.5, night:true, count:1, lives:2, weak:[0.85, 1, 1.25, 1], eff:[0, 0, 0, 0]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
   ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
   ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 1, 0.75]}],   // 12.10.: Tag 7 (vorher 6)
   ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.75, 1, 1]}],
@@ -692,6 +692,10 @@ function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
     bounty: M.mini ? 0 : Math.max(1, Math.round(bountyFor(r) * (M.bountyMul || 1))) }; d.armorPct = (M.ar || [0, 0])[0]; d.armorPts = Math.round((M.ar || [0, 0])[1] * d.hp); return d; }
 const armorText = d => d.armorPct ? `${Math.round(d.armorPct*100)} % · ${d.armorPts} Punkte` : 'keine';
 const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · kein Effekt' : '×' + String(f).replace('.', ',');
+// 18.10. (F): Anzeige ohne Zahlen: effektiv / neutral / ineffektiv (Rolle des Elements an dem Tag). `eff` am Monster legt sie fest (1 / 0 / -1), sonst aus dem Faktor (≥ 1,2 / ≤ 0,8). Die Faktoren wirken weiter wie zuvor.
+const effOf = (M, k) => M.weak[k] === 0 ? -2 : M.eff ? M.eff[k] : M.weak[k] >= 1.2 ? 1 : M.weak[k] <= 0.8 ? -1 : 0;
+const effText = e => e === -2 ? 'immun · kein Effekt' : e > 0 ? 'effektiv' : e < 0 ? 'ineffektiv' : 'neutral';
+const effCls = e => e > 0 ? 'good' : e < 0 ? 'bad' : '';
 
 /* ---------- Simulation (deterministisch) ----------
    Einziger Zufall: Betäubungschance, gewürfelt mit festem Seed (Spielstart, Tag, Welle, Spieler) –
@@ -1525,16 +1529,16 @@ function closeDlg(){ $('dlgback').hidden = true; $('dlg').innerHTML = ''; }
 // Kurzinfo zu einem Monster
 function showMonster(r){
   const M = MONSTERS[r-1], MD = monsterDef(r-1, NP());
-  const strong = ELEMENTS.filter((E,k) => M.weak[k] > 1).map(E => E.name), weak = ELEMENTS.filter((E,k) => M.weak[k] < 1).map(E => E.name);
+  const strong = ELEMENTS.filter((E,k) => effOf(M,k) > 0).map(E => E.name), weak = ELEMENTS.filter((E,k) => effOf(M,k) < 0).map(E => E.name);
   const tempo = M.speed >= 1.4 ? 'schnell' : M.speed <= 0.8 ? 'langsam' : 'normal';
   openDlg(`<h2><span class="big">${M.emo}</span>${M.name}</h2>
     <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
     <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${armorText(MD)}</dd>
     <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : M.cocoon ? 'zeitweise (als Motte)' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
     <dt>Kopfgeld</dt><dd>${M.mini ? 'kein Gold, dafür 💎 Edelstein' : MD.bounty + ' Gold' + (M.boss ? ' + 💎 Edelstein' : '')}</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
-    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${M.mixed ? '?' : fmtFactor(M.weak[k])}</span>`).join('')}</div>
+    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.mixed ? '' : effCls(effOf(M,k))}">${E.name} ${M.mixed ? '?' : effText(effOf(M,k))}</span>`).join('')}</div>
     ${M.info ? `<div><b>Besonderheit:</b> ${M.info}</div>` : ''}
-    <div class="muted">${M.mixed ? 'Faktoren je Lehrer verschieden.' : (strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : '')}</div>
+    <div class="muted">${M.mixed ? 'Faktoren je Lehrer verschieden.' : (strong.length ? 'Effektiv: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Ineffektiv: ' + weak.join(', ') + '.' : '')}</div>
     <div class="acts"><button class="btn primary" id="mOk">OK</button></div>`);
   $('mOk').onclick = closeDlg; $('mOk').focus();
 }
@@ -1680,7 +1684,7 @@ function render(){
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.day-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
   $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.day}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · ${M.mini ? '<b>💎 Edelstein</b> für den, der ihn besiegt (kein Gold)' : `Kopfgeld ${MD.bounty}${M.boss ? ' + 💎 Edelstein' : ''}`} &nbsp;` +
-    ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
+    ELEMENTS.map((E,k) => `<span class="chip ${effCls(effOf(M,k))}">${E.name} ${effText(effOf(M,k))}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
     (NX ? `<br>Nächstes Monster (Tag ${NX.day}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.day}" aria-label="Info zu ${NX.name}">i</button>` : '') +
     `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;
