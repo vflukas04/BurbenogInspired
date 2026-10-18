@@ -52,3 +52,5 @@
 - [x] 14.10. Optik: Fenster für Verkaufen/Upgrade/Schenken, Menü ⋯, Tempo-Knopf, Wetter auf der Karte, Goldstand blinkt, Niederlage nicht vorab verraten; Lavaturm halb so oft (L)
 - [x] 13.10. Zusammenarbeitsordner `team/` angelegt (L)
 - [x] 13.10. Zwischenbosse nach Runde 5, 10, 15, 19 (F)
+
+**An L (von F, 18.10. nachts):** 18h: neue Stellschraube `kraftBlock` (Schaden je Element und 5er-Block) + Faktoren Tag 2–5 (Malus 0,75 / Bonus 1,75). Block 1: Feuer 1,466 / Eis 1,12 / Schatten 1 / Stein 0,34. Ziel: jedes Element hat einen Malus-Tag (max. ca. 2), der Partner fängt ihn auf. Wenn dein Optimierer das stört: `kraftBlock[0]` zurück auf 1 und die `weak`-Werte aus 18g nehmen. Block 2+ ist unberührt.
