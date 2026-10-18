@@ -141,3 +141,6 @@ Ziel: je Element ein Tag mit Gold-Bedarf ≈ 1,5 (Bot `bedarf`). Faktoren: Schat
 Messgröße: Bot-Bedarf ÷ real verfügbares Gold (30 + Kopfgelder der Vortage, volle Kills). Der Richtwert 1,38^r ist kein echtes Gold: Er wächst exponentiell, das Kopfgeld linear. Tag 1–5 liegt bei ca. 1,4, Tag 7–11 bei 1,7, Stein aber bei 2,4 (Tag 7–10: 2,4–2,9). Stein-Faktoren angehoben auf 1,75/1,4/1,4/1,25 (Tag 7–10). Offen: Feuer Tag 7 (2,8), Maus-Boss Stein (3,7), Tag 13–20 insgesamt 1,5–3,2.
 
 Festlegung F, 15.10. 21:20: Steins Malus an Tag 10 (Spatzen) entsteht durch Fliegende und Tempo, nicht durch den Faktor. Stein-Faktor 1,25 bleibt, Bedarf ca. 2,2× gewollt.
+
+### Zweite Uniques (18.10., F)
+Jeder Turm hat ein zweites einzigartiges Edelstein-Talent (`ABILITIES[e][8 + Turmnummer]`, `F2` in `gemMods`), insgesamt 4 Optionen je Turm. Startwerte, Liste in `ABILITIES`. Rückgängig: Commit 2026-10-18c.

@@ -1,6 +1,11 @@
 # Updates (neueste oben, höchstens 15 Einträge)
 
-Format: `### 18.10. 02:15 · L · 2026-10-18a – (keine Regeländerung) Balancing-Lauf A verworfen
+Format: `### 18.10. 11:30 · F · 2026-10-18c – Zweite einzigartige Edelstein-Fähigkeit je Turm
+- Jeder Turm hat jetzt **4 Edelstein-Wahlmöglichkeiten** (2 Basics, 2 Uniques): neu `ABILITIES[e][8..15]` = Nummer 8 + Turmnummer. Beispiele: Funkenregen, Dauerglut, Stichflamme, Flächenbrand, Zenit (Feuer); Tiefschnee, Frostbiss, Nullpunkt (Eis); Schattenstreich, Todesblick, Entkräften (Schatten); Streuschuss, Zerschmettern, Königlicher Befehl (Stein). Irrlicht: Geisterlicht.
+- Neue Merkmale in `hit`/`kill`: `burnBonus`, `chillBonus`, `sun`, `crit`, `execute`, `fresh`, `drain`, `curseSlow`, `freeze`, `burnWave`; Rest über vorhandene Hebel (Schüsse, Reichweite, Pool, Explosion, Rüstungsschaden).
+- Zahlen sind Startwerte, nur auf Abstürze geprüft (32 Türme × Stufe 1–6, Kurzsimulation). **Wenn L das nicht will: Commit 18c rückgängig machen.** Neu laden; bestehende Steine bleiben unverändert.
+
+### 18.10. 02:15 · L · 2026-10-18a – (keine Regeländerung) Balancing-Lauf A verworfen
 - `kraftT` für Feuer neutral angelegt, sonst nichts im Spiel geändert.
 - Test „Kraft je Turm“ für Feuer/Stein verbessert das Band je Block nicht (16,0 % statt 15,3 % Abweichung) → verworfen. Befund: Der Bot baut fast nur Turm 1–4 und rüstet auf; höhere Türme lohnen sich zu wenig. Details `BALANCING.md`.
 

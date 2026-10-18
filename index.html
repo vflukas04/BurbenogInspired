@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -405,6 +405,39 @@ const ABILITIES = [
     ['Geröll', 'Einschlagstelle bremst 3 s lang um 30 %'],
     ['Gipfelstoß', 'Betäubungschance +15 Punkte (ohne Betäubung: 1,5 s)'] ]
 ];
+/* 18.10. (F): zweite einzigartige Fähigkeit je Turm = Nummer 8 + Turmnummer (0-basiert). Je Turm jetzt 4 Wahlmöglichkeiten (2 Basics, 2 Uniques). */
+[ [ ['Funkenregen', 'ein zusätzlicher Funke je Schuss (65 % Schaden je Funke, insgesamt +30 %)'],
+    ['Dauerglut', 'Brennen hält 80 % länger und ist 15 % stärker'],
+    ['Stichflamme', '+40 % Schaden gegen Monster, die schon brennen'],
+    ['Brandspitze', 'Pfeil ignoriert die Hälfte der Rüstung'],
+    ['Flächenbrand', 'stirbt ein brennendes Monster, springt der Brand auf 2 Nachbarn'],
+    ['Magmaschmelze', 'Rüstungsschaden dieses Turms ×2'],
+    ['Zenit', '+40 % Schaden bei Tageswellen (nicht um 19 Uhr)'],
+    ['Inferno', 'Brennen +50 % stärker, Schaden +10 %'] ],
+  [ ['Splitterhagel', 'ein zusätzlicher Splitter je Schuss (65 % Schaden je Splitter, insgesamt +30 %)'],
+    ['Tiefschnee', 'Einschlagstelle bleibt 3 s Schneefeld: bremst um 25 %'],
+    ['Zapfensturm', 'schießt 30 % schneller'],
+    ['Frostbiss', '+35 % Schaden gegen verlangsamte Monster'],
+    ['Kältepuls', 'Frostnova pulsiert 30 % schneller'],
+    ['Gefrierstich', 'Verlangsamung +50 % stärker'],
+    ['Eisnebel', 'Fläche +15 %, Dauer des Effekts +60 %'],
+    ['Nullpunkt', '5 % je Treffer: Monster friert 1,5 s ein (Bosse 0,75 s)'] ],
+  [ ['Schattenstreich', '25 % Chance auf Doppelschaden (×2,2; Bosse halb)'],
+    ['Geisterlicht', 'Lichtkreis +20 %, Verstärkung +0,1, ignoriert zusätzlich 10 % Rüstung'],
+    ['Todesblick', '+60 % Schaden gegen Monster unter 25 % Leben'],
+    ['Verderben', 'verfluchte Monster werden 20 % langsamer'],
+    ['Seelensplitter', 'stirbt ein Monster durch diesen Turm, nehmen Nachbarn im Umkreis 1,6 60 % Schaden'],
+    ['Phantomschritt', 'zwei zusätzliche Schüsse (insgesamt +30 %)'],
+    ['Entkräften', 'jeder Treffer zersetzt 2 % der Rüstungspunkte des Ziels (Bosse halb)'],
+    ['Nachtschleier', 'Fluch +40 % stärker, Verfluchte werden 20 % langsamer'] ],
+  [ ['Streuschuss', 'ein zusätzlicher Kiesel je Wurf (insgesamt +30 %)'],
+    ['Wuchtwurf', 'Schaden +15 %, Fläche +15 %'],
+    ['Belagerung', 'Rüstungsschaden ×1,8'],
+    ['Zerschmettern', '+35 % Schaden gegen Monster mit mehr als 70 % Leben'],
+    ['Dauerbeben', 'Beben 30 % schneller'],
+    ['Wächterblick', 'Reichweite +20 %, Fläche +20 %'],
+    ['Steinschlag', 'ein zusätzlicher Brocken je Wurf (insgesamt +30 %)'],
+    ['Königlicher Befehl', 'Betäubung dauert 50 % länger'] ] ].forEach((a, e) => ABILITIES[e].push(...a));
 /* Edelstein-Kompromiss (16.10., L+F): je Turm 3 Wahlmöglichkeiten – 2 Basics (dürfen bei mehreren Türmen vorkommen)
    und 1 Unique = die Fähigkeit aus ABILITIES mit der Nummer des Turms (an den Turmtyp gebunden). Zielwert je Option ca. +30 % Wirkung.
    Gespeichert in tw.ab: Zahl = Fähigkeit aus ABILITIES (alte Steine: freie Wahl von F), Text = Basic (Schlüssel aus BASICS). */
@@ -418,7 +451,7 @@ const BASICS = {
 };
 const BASIC_BY_ROLE = { Schaden:['dmg','rng'], Effekt:['dmg','eff'], Reichweite:['dmg','rng'], Fläche:['dmg','area'], Luftabwehr:['dmg','rng'], Licht:['light','buff'] };
 const uniqOf = (el, idx) => ELEMENTS[el].uniq ? ELEMENTS[el].uniq[idx] : idx;   // Nummer der eigenen Fähigkeit eines Turms (17.10.: Stein 3↔4 getauscht)
-const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], uniqOf(el, idx)];
+const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], uniqOf(el, idx), 8 + idx];   // 18.10. (F): zweites Unique je Turm
 /* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
    Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und (seit 16.10.) kein Effekt des Elements (kein Brennen, Bremsen, Einfrieren, Fluch, Betäuben).
    Wirkt auch auf die Effektstärke. fly = fliegt, hpMul = Extra-Leben,
@@ -618,14 +651,26 @@ function gemMods(d, ab){
       () => d.aftershock = { t:1, mul:0.25 },  () => { d.wingBreak = 0.1; d.hitsFly = true; },  () => d.pool = { r:d.splash, t:3, slow:0.3 },
       () => { if (!(d.eff > 0)) d.eff = 1.5; d.chance = Math.min(0.75, (d.chance || 0) + 0.15); } ]
   ];
-  F[d.el][ab]();
+  // 18.10. (F): zweite Uniques (8 + Turmnummer)
+  const more = n => { d.shots += n; d.dpsNow *= 1.3; d.dmg = d.dpsNow / d.rate / d.shots; };   // zusätzliche Geschosse: insgesamt +30 %
+  const F2 = [
+    [ () => more(1),  () => { if (d.dur !== DAY) d.dur *= 1.8; d.eff *= 1.15; },  () => d.burnBonus = 0.4,  () => d.pierce = 0.5,
+      () => d.burnWave = true,  () => d.armorMul = 2,  () => d.sun = 1.4,  () => { d.eff *= 1.5; d.dpsNow *= 1.1; d.dmg *= 1.1; } ],
+    [ () => more(1),  () => d.pool = { r:Math.max(d.splash, 0.9*R), t:3, slow:0.25 },  () => { d.rate *= 1.3; d.dpsNow *= 1.3; },  () => d.chillBonus = 0.35,
+      () => d.rate *= 1.3,  () => d.eff = Math.min(0.85, d.eff * 1.5),  () => { if (d.splash) d.splash *= 1.15; if (d.dur !== DAY) d.dur *= 1.6; },  () => d.freeze = { chance:0.05, t:1.5 } ],
+    [ () => d.crit = { chance:0.25, mul:2.2 },  () => { d.light *= 1.2; d.buff += 0.1; d.pierce = Math.min(1, (d.pierce || 0) + 0.1); },  () => d.execute = { thr:0.25, mul:1.6 },  () => d.curseSlow = 0.2,
+      () => d.explode = { r:0.8*R, mul:0.6 },  () => more(2),  () => d.drain = 0.02,  () => { d.eff = Math.min(1.5, d.eff * 1.4); d.curseSlow = 0.2; } ],
+    [ () => more(1),  () => { d.dpsNow *= 1.15; d.dmg *= 1.15; if (d.splash) d.splash *= 1.15; },  () => d.armorMul = 1.8,  () => d.fresh = { thr:0.7, mul:1.35 },
+      () => d.rate *= 1.3,  () => { d.range *= 1.2; if (d.splash) d.splash *= 1.2; },  () => more(1),  () => { d.eff = Math.min(CONFIG.stunMax, d.eff * 1.5); } ]
+  ];
+  if (typeof ab === 'number' && ab >= 8) F2[d.el][ab - 8](); else F[d.el][ab]();
   return d;
 }
 // Welche Fähigkeit ein Turm hat (alte Steine ohne ab: Fähigkeit der Turmnummer) und ob eine Fähigkeit bei ihm sinnlos wäre
 const abIdx = tw => tw.ab !== undefined ? tw.ab : uniqOf(tw.el, tw.idx);
 function abilityBlocked(tw, k){
   const b = towerBase(tw.el, tw.idx);
-  if (tw.el === 2 && b.buff) return k === 1 ? '' : 'Irrlicht schießt nicht – nur Mottenplage wirkt';
+  if (tw.el === 2 && b.buff) return k === 1 || k === 9 ? '' : 'Irrlicht schießt nicht – nur Mottenplage und Geisterlicht wirken';
   if (tw.el === 0 && k === 3 && !b.air && b.hitsFly) return 'trifft schon Boden und Luft';
   if (tw.el === 3 && k === 1 && b.hitsFly) return 'trifft schon Fliegende';
   return '';
@@ -713,6 +758,11 @@ function kill(s, m, def){
     s.monsters.filter(o => !o.dead && o !== m).map(o => [o, Math.hypot(o.x - m.x, o.y - m.y)]).filter(([,r]) => r <= 1.5 * GRID)
       .sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addFx(o, 'curse', c.v, c.t, true));
   }
+  const bn = m.fx.burn;
+  if (bn && bn.t > 0 && bn.w) {              // Flächenbrand: Brand springt auf die 2 nächsten Monster (ohne weiter zu springen)
+    s.monsters.filter(o => !o.dead && o !== m).map(o => [o, Math.hypot(o.x - m.x, o.y - m.y)]).filter(([,r]) => r <= 1.5 * GRID)
+      .sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addFx(o, 'burn', bn.v, bn.t));
+  }
   if (def && def.explode) {                  // Zündschnur / Zersplittern: nur bei Tod durch einen Schuss dieses Turms
     const ex = { ...def, explode:null, bounce:null, hunger:0, dmg:def.dmg * def.explode.mul };
     s.fx.push({ kind:'boom', x:m.x, y:m.y, r:def.explode.r, t:.3, t0:.3, el:def.el });
@@ -735,6 +785,14 @@ function hit(s, m, def, dmg){
   if (def.flyMul && flying(m)) dmg *= def.flyMul;             // Steilschuss: Fliegende 60 %
   const bossy = isBossy(m), bh = bossy ? 0.5 : 1;                // Edelstein-Fähigkeiten wirken bei Bossen nur halb (15.10.)
   if (def.hunger) dmg *= 1 + Math.min(def.hungerMax || 0.45, def.hunger * (def.feast || 0)) * bh;
+  // 18.10. (F): zweite Uniques
+  if (def.burnBonus && on(m, 'burn')) dmg *= 1 + def.burnBonus * bh;                                   // Stichflamme
+  if (def.chillBonus && on(m, 'slow')) dmg *= 1 + def.chillBonus * bh;                                 // Frostbiss
+  if (def.sun && !s.dark) dmg *= 1 + (def.sun - 1) * bh;                                               // Zenit (nur Tageswellen)
+  if (def.execute && m.hp < def.execute.thr * m.def.hp) dmg *= 1 + (def.execute.mul - 1) * bh;         // Todesblick
+  if (def.fresh && m.hp > def.fresh.thr * m.def.hp) dmg *= 1 + (def.fresh.mul - 1) * bh;               // Zerschmettern
+  if (def.crit && s.rand() < def.crit.chance) dmg *= 1 + (def.crit.mul - 1) * bh;                      // Schattenstreich
+  if (def.drain && m.ap > 0) m.ap -= def.drain * m.def.armorPts * bh;                                  // Entkräften
   // Rüstung (12.10. 14:07): Solange Rüstungspunkte übrig sind, kommt der Schaden um armorPct verringert an.
   // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
   let pct = m.ap > 0 ? Math.min(0.95, armorPctOf(m) + (m.aura || 0)) : 0;   // Kontrabass in der Nähe: +Rüstung
@@ -745,8 +803,8 @@ function hit(s, m, def, dmg){
   const t = def.dur === DAY ? FOREVER : def.dur;
   if (def.effect === 'burn' && (w || def.burnImmune)) {
     const v = def.eff * def.dpsNow / def.shots * f;
-    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); }
-    else addFx(m, 'burn', v, t);
+    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); if (def.burnWave) c.w = true; }
+    else addFx(m, 'burn', v, t, def.burnWave);
     if (def.smolder) addFx(m, 'smolder', def.smolder * bh, t);
   }
   if (!imm) {
@@ -755,11 +813,13 @@ function hit(s, m, def, dmg){
   if (def.effect === 'curse') {
     if (def.curseStack && on(m, 'curse')) { const c = m.fx.curse; c.v = Math.min(def.curseStack, c.v + def.eff * f * bh); c.t = Math.max(c.t, t); }   // Tiefe Nacht: Fluch addiert sich
     else addFx(m, 'curse', def.eff * f, t, def.curseWave);
+    if (def.curseSlow) addFx(m, 'slow', def.curseSlow, t);   // Verderben / Nachtschleier
     }
   if (def.effect === 'stun' && def.eff > 0 && (!def.chance || s.rand() < def.chance)) addFx(m, 'stun', 1, Math.min(CONFIG.stunMax, def.eff * f) * (def.stunBossHalf ? bh : 1));
   if (def.wingBreak && flying(m) && s.rand() < def.wingBreak * bh) addFx(m, 'grounded', 1, FOREVER);   // Flügelbruch: bis Wellenende am Boden
   if (def.groundHit && flier(m)) addFx(m, 'grounded', 1, def.groundHit * (isBossy(m) ? 0.5 : 1));
   if (def.brittle) addFx(m, 'brittle', 1, def.brittle);
+  if (def.freeze && s.rand() < def.freeze.chance) addFx(m, 'stun', 1, def.freeze.t * (isBossy(m) ? 0.5 : 1));   // Nullpunkt
   if (def.fear && s.rand() < def.fear.chance) addFx(m, 'fear', 1, def.fear.t * (isBossy(m) ? 0.5 : 1));
   }
   if (def.deathChance && m.hp > 0 && s.rand() < def.deathChance) { if (isBossy(m)) m.hp -= 0.05 * m.def.hp; else m.hp = 0; }
@@ -1301,8 +1361,8 @@ function gemDialog(i, x, y){
     return `<button class="btn" data-ab="${k}" ${why ? 'disabled' : ''} style="display:block;width:100%;text-align:left;margin:4px 0">${gemDot(tw.el)}<b>${an}</b>${typeof k === 'number' ? ' <span class="muted">(nur dieser Turm)</span>' : ''}<br><span class="muted">${why || at}</span></button>`; }).join('');
   openDlg(`<h2>💎 ${d.name}</h2>
     ${tw.gem ? `<div><b>Fähigkeit ${gemDot(tw.el)} ${cur[0]}</b><br><span class="muted">${cur[1]}</span></div><div class="done-r">schon eingesetzt</div>`
-      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, eine von 3)</span></div>${list}`
-      : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}. Mit dem Stein wählt man eine von 3 Fähigkeiten:</div>${gemOptions(tw.el, tw.idx).map(k => abilityOf(tw.el, k)[0]).join(' · ')}`}
+      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, eine von 4)</span></div>${list}`
+      : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}. Mit dem Stein wählt man eine von 4 Fähigkeiten:</div>${gemOptions(tw.el, tw.idx).map(k => abilityOf(tw.el, k)[0]).join(' · ')}`}
     ${conv ? `<div><b>Umwandeln</b><br><span class="muted">Gleiche Nummer und Stufe, investiertes Gold bleibt${tw.gem ? ', die Fähigkeit geht verloren' : ''}.</span></div><div class="acts" style="justify-content:flex-start">${conv}</div>` : ''}
     <div class="muted">Deine Steine: ${have.map((n, e) => n > 0 ? gemDot(e, n) : '').join(' ') || 'keine'} · Schenken über „🎁 Schenken“.</div>
     <div class="acts"><button class="btn" id="gNo">Schließen</button></div>`);
