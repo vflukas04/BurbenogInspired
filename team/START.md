@@ -29,7 +29,7 @@ Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md`
 
 ## Regeln der Zusammenarbeit
 1. **Vor der Arbeit:** `git pull`, dann in `TODO.md` unter „Gerade dran“ eintragen: wer, was, seit wann. Steht dort schon jemand am selben Thema oder an denselben Werten → erst absprechen (WhatsApp).
-2. **Nach der Arbeit:** oben in `UPDATES.md` ein Eintrag (höchstens 5 Zeilen), `TODO.md` abhaken/ergänzen, die eigene Zeile unter „Gerade dran“ löschen. Dann `git pull --rebase`, pushen.
+2. **Nach der Arbeit:** in `UPDATES.md` ein Eintrag direkt unter der Zeile `<!-- NEUE EINTRÄGE HIER -->` (nicht in den Kopf darüber; höchstens 5 Zeilen), `TODO.md` abhaken/ergänzen, die eigene Zeile unter „Gerade dran“ löschen. Dann `git pull --rebase`, pushen.
 3. Spielcode geändert → `VERSION` in `index.html` hochzählen, Turm-/Monstertexte prüfen (siehe `CLAUDE.md` → Testen), Spieler an „Neues Spiel + neu laden“ erinnern.
 4. Ideen, die noch nicht beschlossen sind → `IDEEN.md`, nicht `TODO.md`.
 5. Neue Grundregel des Spiels → hier unter „Das Spiel in 10 Zeilen“ anpassen **und** in `CLAUDE.md` → Regeln.
