@@ -12,6 +12,11 @@ const SPIELER = 2;
 const MAPS_STD = [[0, 11], [2, 23]];   // [Map, Gelände-Seed]
 
 const tagWelle = d => ({ type:d, players:SPIELER, tag:true });
+/* Vorausschau (19.10., L): VORAUS=1 → der Bot bewertet Käufe an heute (×1), morgen (×0,5) und übermorgen (×0,25) statt nur an heute,
+   und prüft Freischaltungen als Investition über HORIZONT Tage (Standard 5) mit dem bis dahin erwarteten Einkommen.
+   Ohne VORAUS rechnet P2 wie bisher (Vergleichbarkeit mit älteren Läufen). Gemeldet wird R immer nur für heute. */
+const VORAUS = !!process.env.VORAUS, HORIZONT = +process.env.HORIZONT || 5, GEWICHTE = [1, 0.5, 0.25];
+const voraus = (d, n) => VORAUS ? GEWICHTE.map((wt, k) => d + k < n ? { ...tagWelle(d + k), wt } : null).filter(Boolean) : [tagWelle(d)];
 const einkommen = d => G.monsterDef(d, SPIELER).bounty * (G.MONSTERS[d].count || G.CONFIG.perWave);   // Kopfgeld eines Spielers an Tag d (alle getötet)
 function budget(d){                      // Gold eines Spielers (ohne Forschung) und Edelsteine vor Tag d (0-basiert)
   let g = G.CONFIG.startGold, gems = 0;
@@ -30,11 +35,23 @@ function forschung(setup, frei, waves, d, opt){
     const turm = B.actions(setup, frei, { cells:3 }).reduce((m, a) => Math.max(m, (B.quick(a.apply(setup), waves, fRef) - base) / a.cost), 0);
     for (const F of G.RESEARCH) {
       const anteil = F.cost / SPIELER;
-      if (setup.res.includes(F.id) || anteil > frei || (F.need && !setup.res.includes(F.need))) continue;
+      // Mit Vorausschau darf eine Freischaltung auch über Abriss bezahlt werden (P2: volles Gold zurück), höchstens die Hälfte des Turmwerts
+      const zahlbar = VORAUS && (F.grp === 't5' || F.grp === 't7') ? frei + 0.5 * B.spent(setup) : frei;
+      if (setup.res.includes(F.id) || anteil > zahlbar || (F.need && !setup.res.includes(F.need))) continue;
       const s = { ...setup, res:[...setup.res, F.id] };
       if (F.grp === 'gold') { if (d < 3 || anteil > 0.5 * frei) continue;   // nicht auf Kosten der heutigen Welle
         const rest = G.MONSTERS.slice(d).reduce((a, _, i) => a + einkommen(d + i), 0), stufe = G.RESEARCH_GROUPS.find(x => x.grp === 'gold').steps;
         const plus = (stufe[F.lvl - 1] - (F.lvl > 1 ? stufe[F.lvl - 2] : 0)) * rest; if (plus > 3 * anteil) { best = { s, g:Infinity, F }; break; } continue; }
+      if (VORAUS && (F.grp === 't5' || F.grp === 't7')) {
+        // Investition: Gold bis Tag d+HORIZONT−1 (heutiges freies Gold + erwartetes Kopfgeld), bewertet an den Wellen am Ende des Horizonts.
+        // Gekauft, wenn der Aufbau mit Freischaltung dort besser ist als ohne – auch wenn es heute nichts bringt.
+        if (d % 2) continue;
+        const bis = Math.min(G.MONSTERS.length - 1, d + HORIZONT - 1); if (bis <= d) continue;
+        let plus = 0; for (let i = d; i < bis; i++) plus += einkommen(i);
+        const zw = [{ ...tagWelle(bis), wt:1 }, ...(bis - 1 > d ? [{ ...tagWelle(bis - 1), wt:0.5 }] : [])];
+        const gold = frei + plus + B.spent(setup);
+        const ohne = B.greedy(setup.el, gold, zw, { cells:2 }, setup).score, mit = B.greedy(setup.el, gold - anteil, zw, { cells:2 }, s).score;
+        if (mit > ohne * 1.02) { const g = Math.log(mit / ohne) / anteil * 1e3; if (!best || g > best.g) best = { s, g, F }; } continue; }
       if (F.grp === 't5' || F.grp === 't7' || F.grp === 'cheap') {
         if (d % 3) continue;
         const ohne = B.greedy(setup.el, frei + B.spent(setup), waves, { cells:2 }, setup).score, mit = B.greedy(setup.el, frei - anteil + B.spent(setup), waves, { cells:2 }, s).score;
@@ -76,10 +93,14 @@ function lauf(e, lane, seed, bis){
   const ck = path.join(out, `ck-${e}-${lane}-${seed}.json`);
   if (process.env.WEITER && fs.existsSync(ck)) { const s = JSON.parse(fs.readFileSync(ck)); if (JSON.stringify(s.spiegel) === JSON.stringify(C.SPIEGEL)) ({ setup, gesamt, gems, tage, start } = s); }
   for (let d = start; d < n; d++) {
-    const w = tagWelle(d), waves = [w];
+    const w = tagWelle(d), waves = voraus(d, n);
     const frei = () => gesamt - resCost(setup.res) / SPIELER - B.spent(setup);
     setup = forschung(setup, frei(), waves, d);
     const turmGold = gesamt - resCost(setup.res) / SPIELER;
+    // Über Budget (Freischaltung per Abriss bezahlt): billigste Türme ohne Stein abreißen, bis es passt
+    while (B.spent(setup) > turmGold && setup.towers.length) {
+      const t = [...setup.towers].sort((a, b) => (!!a.gem - !!b.gem) || (a.inv || 0) - (b.inv || 0))[0];
+      setup = { ...setup, towers:setup.towers.filter(u => u !== t) }; }
     let r = B.greedy(e, turmGold, waves, { cells:3 }, setup);
     // Umbau: die zwei billigsten Türme ohne Stein abreißen und neu verteilen (nur übernehmen, wenn besser)
     const cheap = r.setup.towers.map((t, i) => [t, i]).filter(([t]) => !t.gem).sort((a, b) => (a[0].inv || 0) - (b[0].inv || 0)).slice(0, 2);
@@ -88,7 +109,8 @@ function lauf(e, lane, seed, bis){
     setup = steine(r.setup, gems, waves);
     const R = C.reserveDay(setup, w), r1 = C.runDay(setup, w, 1);
     tage.push({ tag:d + 1, monster:G.MONSTERS[d].name, R:+R.toFixed(3), kills:r1.kills, n:r1.n, durch:r1.durch, gold:Math.round(gesamt), kasse:resCost(setup.res),
-      wert:B.spent(setup), tuerme:setup.towers.length, stufen:setup.towers.map(t => (t.idx + 1) + '.' + (t.lvl || 1) + (t.gem ? '*' : '')).sort().join(' '), forschung:setup.res.join(' ') });
+      wert:B.spent(setup), tuerme:setup.towers.length, stufen:setup.towers.map(t => (t.idx + 1) + '.' + (t.lvl || 1) + (t.gem ? '*' : '')).sort().join(' '), forschung:setup.res.join(' '),
+      setup:{ towers:setup.towers.map(t => ({ x:t.x, y:t.y, el:t.el, idx:t.idx, lvl:t.lvl || 1, inv:t.inv, gem:t.gem, ab:t.ab })), res:setup.res } });
     if (process.env.LAUT) console.error(`${G.ELEMENTS[e].name} Map ${lane} Tag ${d + 1} R ${R.toFixed(2)} Wert ${B.spent(setup)}/${Math.round(gesamt)} Forschung ${setup.res.length}`);
     // Einkommen des Tages (mit Kopfgeld-Forschung), Edelstein nach Bossen
     gesamt += einkommen(d) * (1 + G.resVal(new Set(setup.res), 'gold'));
@@ -97,7 +119,7 @@ function lauf(e, lane, seed, bis){
   }
   return tage;
 }
-const out = path.join(__dirname, 'ergebnisse');
+const out = path.join(__dirname, 'ergebnisse', process.env.AUSGABE || '');
 if (require.main === module) {
   const arg = process.argv[2] || 'alle', bis = +process.argv[3] || 0;
   const maps = process.argv[4] ? process.argv[4].split(',').map(x => x.split(':').map(Number)) : MAPS_STD;
