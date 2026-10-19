@@ -5,6 +5,10 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 19.10. 17:30 · L · (keine Spieländerung) – UPDATES-Kopf repariert, Abstandsskript
+- Ursache für den kaputten Kopf: Die Format-Zeile begann selbst mit `###`, neue Einträge landeten darin. Jetzt Einfügemarke `<!-- NEUE EINTRÄGE HIER -->`, Format als Kommentar, Regel 2 in `START.md` angepasst. 6 alte Einträge ins Archiv.
+- Neu `node tools/balance/abstand.js [kurz]`: wie weit Spiegel (L, Makro) und Spiel (F, Mikro) auseinanderliegen, Basis in `spiegel.json` → `_basis`. Stand: keine Überschneidung, aber beide drehen an Feuer/Eis/Stein (z. B. Spiegel Kiesel 0,66 statt 0,4 mal F's Block-Faktor 0,6).
+
 ### 19.10. 09:20 · F · 2026-10-19a – Stein Tag 3 wieder Malus
 - Mit Stein-Block-Faktor 0,6 (18k) war Stein an Tag 3 mit Faktor 0,5 nur noch bei 0,9 (Bot). Damit Tag 3 wieder der Stein-Malus ist: Nacktschnecken Stein-Faktor 0,5 → 0,3 (Bot: Bedarf ÷ verfügbar 2,23). Faktorspanne jetzt 0,3–1,75. Stein Tag 2/4/5 liegen bei 0,68/0,90/0,98 (leicht), Feuer wird weiter getestet. Neues Spiel + neu laden.
 
