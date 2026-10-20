@@ -56,6 +56,25 @@ Spielt man die beste gefundene Aufstellung, bleibt am Endboss je Stufe eine Rese
 | Spielerfaktor 3/4 | mehr Spieler | P2/P4 mit 3/4 |
 Gedreht wird nacheinander in Schleifen (Elemente → Kurve → Türme → wieder von vorn), bis sich nichts mehr bewegt.
 
+## Neuer Plan (L, 20.10.): drei Ebenen
+**Grundsatz:** Makrobalancing rechnet nur auf der eingefrorenen Basis 044d8c0 (`tools/balance/basis/`) plus `spiegel.json`. F's Mikrobalancing im Spiel fließt nicht ein; der Abstand wird mit `abstand.js` gezeigt, zusammengeführt wird am Ende. Spielbar: `spiegel.html`.
+
+**Ebene A – Türme (deterministisch, ohne gierigen Bot).** Messgröße *Kraft* (L, 20.10.): mittlerer Schaden je Welle eines einzelnen Turms, optimal platziert, gemittelt über die Wellen seines Einsatzbereichs; Schaden einschließlich Brennen usw., solange das Monster auf der eigenen Map ist. Vorschlag Claude: Monsterleben dafür stark erhöhen, damit nichts stirbt (sonst sättigt der Wert bei starken Türmen). *Kraft je Gold* = Kraft ÷ investiertes Gold.
+| # | Regel | Ziel | Stand |
+| --- | --- | --- | --- |
+| A1 | Upgrades: Kraft je Gold auf Stufe s ÷ dasselbe Gold in Kopien des Turms (Stufe 1) | S2 < 1 (ca. 0,9), S3 ≈ 1,0, S4 ≈ 1,1, S5 ≈ 1,2, S6 ≈ 1,3 | beschlossen (L); ersetzt P8a. Gewollt: Sparen auf einen hohen Turm ist ein Risiko, das sich spät lohnt |
+| A2 | Turmtreppe: Turm k+1 (Stufe 1) je Gold gegenüber Turm k (Stufe 1) | +5–6 % | beschlossen (L), 7 % eher zu viel |
+| A3 | Fliegende | nur Luftabwehr: +50 % an Fliegertagen; trifft keine Fliegenden: +10 % an den übrigen Tagen | beschlossen (L); Fliegende an 8 von 48 Tagen |
+| A4 | Effekte: Wert = Simulation mit ÷ ohne Effekt, aufgeteilt nach eigener Map und Partner-Map | Türme 1–3: fast alles auf der eigenen Map (Vorschlag ≥ 80 %); höhere Türme und lange Dauer: Partner darf mehr profitieren (Vorschlag ≥ 50 %), gleitend mit Stufe | Richtung beschlossen (L), Zahlen offen |
+| A5 | Kills gegen Schaden (Brennen) | vorerst über A4 abgedeckt | offen |
+Rechenbeispiel A1/A2: Turm 1 auf S6 kostet zusammen etwa 21 × 10 = 208 Gold ≈ Turm 5 (200). Turm 1 S6 ×1,30 schlägt Turm 5 S1 (1,055⁴ ≈ ×1,24); Turm 5 überholt ab S4 (×1,24 × 1,1 ≈ ×1,36). Das ist die gewollte Entscheidung „sicher jetzt oder sparen“.
+
+**Ebene B – Makro (Bot/Optimierer, wenige Regler):** Leben je Block (`hpBlock`), Kraft je Element (`kraft`). Bot seit 20.10.: Vorausschau, Freischaltung als Investition, Konsolidieren, Edelsteine je Turmtyp.
+- **P8 neu (L, 20.10.):** ab Runde 30 gehen mindestens 80 % des neu verdienten Golds in Forschung oder Türme 6–8 (Bau und Upgrades). Ersetzt „ab Runde 21 ≥ 35 % in Türmen 5–8“.
+- **P9 neu (Vorschlag):** jede der 4 Edelstein-Optionen eines Turms wirkt 0,75–1,33 × so stark wie „Schaden +30 %“ auf demselben Turm (`p9turm.js`).
+
+**Ebene C – Paare (Ringregel):** Ein Element allein darf an seinen schweren Tagen scheitern; jedes der 6 Paare soll jeden Tag schaffen. Messung 20.10. (nacht-voraus): **Paar-R ≈ geometrisches Mittel der beiden Solo-R** (Median 1,03; 10–90 % 0,90–1,26). Folge: Scheitern beide allein, scheitert meist auch das Paar. „Solo R < 1 an > 85 % der Tage“ (L) und „jedes Paar schafft jeden Tag“ gehen deshalb nicht zusammen. Vorschlag: Solo R < 1 nur an den Malus-Tagen (etwa ein Tag je Block und Element), Paare über einem Zielwert. Was „schaffen“ heißt (Paar-R ≥ 1? höchstens n Durchbrüche?), ist offen.
+
 ## Optimierer (seit 18.10.)
 `node tools/balance/optimierer.js` (Prüfpunkte in `pruef.js`). Je Runde alle Prüfpunkte mit Stellschraube (P2, P6, P6B, P8a, P8) in **zufälliger Reihenfolge**; je Prüfpunkt ein Vorschlag für seine Stellschrauben (gedämpft ^0,7) → voller P2-Lauf → **nur übernommen, wenn der Gesamtfehler sinkt** (Summe der gewichteten Fehlerquadrate, P6 doppelt). Bei Strukturänderungen (P6B, P8a, P8) wird vor dem Verwerfen einmal Kurve und Elementkraft nachgeführt. Ende, wenn jeder Prüfpunkt `RUNDEN` (2) Mal dran war; bester Stand → `spiegel.json`. Zwischenstand `ergebnisse/opt-stand.json`, Protokoll `opt-log.txt`, Neustart rechnet weiter. `node tools/balance/optimierer.js bericht` zeigt den Stand. P9, P10 sind Berichte (P9: `node tools/balance/p9.js`).
 - **Abstand Spiegel ↔ Spiel** (19.10.): `node tools/balance/abstand.js` (Tabelle) bzw. `… kurz` (Fazit, bei jedem Sitzungsstart). Vergleicht die Spiegel-Werte mit dem Spielstand, auf dem der Spiegel aufsetzt (`_basis` in `spiegel.json`), und mit dem Spiel jetzt; ⚠ = F hat einen Spiegel-Wert geändert; dazu alle übrigen Spieländerungen seit der Basis und Elemente, an denen beide mit verschiedenen Stellschrauben drehen. Wird der Spiegel auf einen neueren Spielstand gesetzt, `_basis` mitziehen.
