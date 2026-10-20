@@ -20,7 +20,7 @@ function paarTag(sA, sB, d, f){
   const rest = [a2, b2].filter(Boolean).reduce((x, r) => x + r.out.reduce((y, m) => y + m.hp, 0), 0);
   const lives = G.MONSTERS[d].lives || 1;
   return { hpShare:1 - rest / hpIn, durch:((a2 ? a2.leaked : 0) + (b2 ? b2.leaked : 0)) * lives,
-    ersterA:a.kills, ersterB:b.kills };
+    ersterA:a.kills, ersterB:b.kills, n:a.n, leckA:a.out.length, leckB:b.out.length };
 }
 function paarReserve(sA, sB, d){
   const ok = f => paarTag(sA, sB, d, f).hpShare >= Q;
@@ -31,14 +31,17 @@ function paarReserve(sA, sB, d){
 
 const paare = []; for (let i = 0; i < namen.length; i++) for (let j = i + 1; j < namen.length; j++) paare.push([namen[i], namen[j]]);
 const nT = daten.erg[namen[0]][0].tage.length, maps = daten.erg[namen[0]].map(m => [m.lane, m.seed]);
-const R = {}, D = {};   // R[paar][tag] (geom. Mittel über Maps), D = Durchbrüche (Summe über Maps)
+const R = {}, D = {}, V = {};   // R[paar][tag] (geom. Mittel über Maps), D = Durchbrüche (Summe über Maps)
 for (const [a, b] of paare) { const k = a + '+' + b; R[k] = []; D[k] = []; }
 maps.forEach(([lane, seed], mi) => {
   C.useMap(lane, seed);
   for (let d = 0; d < nT; d++) for (const [a, b] of paare) {
     const k = a + '+' + b, sA = { el:namen.indexOf(a), ...daten.erg[a][mi].tage[d].setup }, sB = { el:namen.indexOf(b), ...daten.erg[b][mi].tage[d].setup };
     (R[k][d] = R[k][d] || []).push(paarReserve(sA, sB, d));
-    D[k][d] = (D[k][d] || 0) + paarTag(sA, sB, d, 1).durch;
+    const t1 = paarTag(sA, sB, d, 1);
+    D[k][d] = (D[k][d] || 0) + t1.durch;
+    // Erster Durchlauf (10 Uhr, eigene Map): alle Monster erledigt? (L, 20.10.: soll die seltene Ausnahme sein, Ziel ≤ 15 % der Tage je Element)
+    for (const [x, leck] of [[a, t1.leckA], [b, t1.leckB]]) { V[x] = V[x] || { voll:0, n:0 }; V[x].n++; if (!leck) V[x].voll++; }
     if (process.env.LAUT) console.error(`Map ${lane} Tag ${d + 1} ${k}`);
   }
 });
@@ -58,4 +61,6 @@ for (const x of namen) {
   console.log(`  ${pad(x, 9)} ` + tage.map(d => { const p = paare.filter(q => q.includes(x)).map(([a, b]) => { const o = a === x ? b : a; return `${o.slice(0, 3)} ${gm(R[a + '+' + b][d]).toFixed(2)}`; });
     return `Tag ${d + 1} (${solo(x)(d).toFixed(2)}): ${p.join(', ')}`; }).join(' · '));
 }
-fs.writeFileSync(path.join(dir, 'paare.json'), JSON.stringify({ version:daten.version, paare, R, D }, null, 1));
+console.log('\nErster Durchlauf ohne Leak (alle Monster auf der eigenen Map erledigt), Anteil der Tage × Partner × Maps; Ziel ≤ 15 %:');
+for (const x of namen) { const v = V[x]; console.log(`  ${pad(x, 9)} ${(100 * v.voll / v.n).toFixed(0)} % ${v.voll / v.n <= 0.15 ? '✓' : '✗'}`); }
+fs.writeFileSync(path.join(dir, 'paare.json'), JSON.stringify({ version:daten.version, paare, R, D, V }, null, 1));
