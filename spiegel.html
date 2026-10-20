@@ -142,7 +142,7 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
-<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel</div>
+<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel spiegel1</div>
 
 <div class="wrap">
   <header class="top">
@@ -613,18 +613,20 @@ function towerBase(el, idx){
     chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
 }
 const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;
+// 21.10. (L, Spiegel): Upgrade-Schwerpunkt je Stufe
+const upProd = (a, d, n) => a ? a.slice(0, n).reduce((x, v) => x * v, 1) : Math.pow(d, n), upSum = (a, d, n) => a ? a.slice(0, n).reduce((x, v) => x + v, 0) : d * n;
 function tdef(tw, lane){
   const b = towerBase(tw.el, tw.idx), n = (tw.lvl || 1) - 1, U = CONFIG.upgrade;
   // Schaden/s Stufe für Stufe hochrechnen und jeweils auf eine Nachkommastelle aufrunden (lesbare Zahlen)
   let dpsNow = ceil1(b.dps); for (let k = 1; k <= n; k++) dpsNow = ceil1(dpsNow * (ELEMENTS[tw.el].upDmg ? ELEMENTS[tw.el].upDmg[k - 1] : U.steps ? U.steps[k - 1] : (k === 1 ? U.firstDmg : U.dmg)));   // U.steps (16.10.): Schaden je Upgrade-Stufe, Stellschraube Balancing-Skript
-  let eff = b.eff * Math.pow(U.eff, n);
+  let eff = b.eff * upProd(U.effSteps, U.eff, n);
   if (b.effect === 'slow') eff = Math.min(0.85, eff);
   if (b.effect === 'curse') eff = Math.min(1.5, eff);
   if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
   const rate = b.rate * Math.pow(b.rateUp, n);
   const d = { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
-    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buffArr ? b.buffArr[Math.min(n, b.buffArr.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
-    dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n, onRock:false };
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + upSum(U.rangeSteps, U.range, n) * GRID : 0, buff: b.buffArr ? b.buffArr[Math.min(n, b.buffArr.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
+    dur: b.dur === DAY ? DAY : b.dur * upProd(U.durSteps, U.dur, n), range: b.range + upSum(U.rangeSteps, U.range, n) * GRID, onRock:false };
   if (tw.gem) gemMods(d, tw.ab !== undefined ? tw.ab : tw.idx);   // Fähigkeit frei wählbar (15.10., F): ab = Nummer 0–7; alte Steine ohne ab → Fähigkeit der Turmnummer
   return lane !== undefined && tw.x !== undefined && MAPS[lane].terrain[tw.y][tw.x] === 3 ? onRock(d) : d;
 }

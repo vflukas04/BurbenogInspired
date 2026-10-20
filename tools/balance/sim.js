@@ -25,7 +25,9 @@ function datei(){
   return path.join(__dirname, '..', '..', 'index.html');
 }
 function load(file){
-  const html = fs.readFileSync(file || datei(), 'utf8');
+  const f = file || datei();
+  let html = fs.readFileSync(f, 'utf8');
+  if (path.dirname(path.resolve(f)) === path.join(__dirname, 'basis')) html = require('./basis/patch')(html);   // Code-Änderungen des Spiegels
   const code = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]).pop();
   stubs();
   // typeof: fehlt ein Name in einer älteren Spielversion, gibt es undefined statt eines Fehlers

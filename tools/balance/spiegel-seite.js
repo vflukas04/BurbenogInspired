@@ -3,17 +3,19 @@
 // stört das normale Spiel (index.html, "spiel1") nicht. Archiv landet unter games/spiegel1/archiv.
 // Spielzahlen kommen nur aus Basis + Spiegel. Einziger Code-Eingriff: Archiv-Fix 18g (F), damit Testspiele auswertbar sind.
 // Aufruf: node tools/balance/spiegel-seite.js   (nach jeder Änderung an spiegel.json neu erzeugen und pushen)
+//         SPIEGEL=tools/balance/spiegel-A.json ZIEL=spiegel-a.html SPIEL=spiegel2 node tools/balance/spiegel-seite.js   (Kandidat als eigene Seite)
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const S = require('./spiegel'), { datei } = require('./sim');
 const sp = S.lesen(), basis = sp._basis;
 if (!basis) throw new Error('spiegel.json ohne _basis');
-let html = fs.readFileSync(datei(), 'utf8');
+let html = require('./basis/patch')(fs.readFileSync(datei(), 'utf8'));   // Code-Änderungen des Spiegels (basis/patch.js)
 const werte = Object.fromEntries(Object.entries(sp).filter(([k]) => !k.startsWith('_')));
 const kenn = crypto.createHash('md5').update(JSON.stringify(werte)).digest('hex').slice(0, 6);
 
 function ersetze(alt, neu){ if (!html.includes(alt)) throw new Error('nicht gefunden: ' + alt.slice(0, 60)); html = html.replace(alt, neu); }
 // 1) eigenes Spiel, eigene Version
-html = html.replace(/const GAME_ID = "[^"]*";/, 'const GAME_ID = "spiegel1";');
+const SPIEL = process.env.SPIEL || 'spiegel1';
+html = html.replace(/const GAME_ID = "[^"]*";/, `const GAME_ID = "${SPIEL}";`);
 html = html.replace(/const VERSION = "([^"]*)";/, (m, v) => `const VERSION = "${v}-S${kenn}";`);
 html = html.replace(/<title>([^<]*)<\/title>/, '<title>$1 · Spiegel-Test</title>');
 // 2) Spiegel-Werte direkt nach den Monsterdaten anwenden (vor allem, was daraus berechnet wird)
@@ -34,11 +36,11 @@ ersetze(`const archDoc = (g, arch) => JSON.parse(JSON.stringify({ cfg:g.cfg, ver
   return JSON.parse(JSON.stringify({ cfg:g.cfg, version:VERSION, updated:Date.now(), day:g.day, slot:g.slot, over:g.over || null,
     gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...a })); };`);
 // 3b) eigene Browser-Speicher-Schlüssel (Platz, gesehene Welle, lokales Spiel), damit das normale Spiel nicht durcheinanderkommt
-html = html.replace(/'ww2-(?!holder)/g, "'ww2s-");
+html = html.replace(/'ww2-(?!holder)/g, `'ww2${SPIEL === 'spiegel1' ? 's' : SPIEL.slice(-1)}-`);
 // 4) sichtbarer Hinweis, damit niemand die Seiten verwechselt
-ersetze('<body>', '<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel</div>');
+ersetze('<body>', '<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel ' + SPIEL + '</div>');
 
-const ziel = path.join(__dirname, '..', '..', 'spiegel.html');
+const ziel = path.join(__dirname, '..', '..', process.env.ZIEL || 'spiegel.html');
 fs.writeFileSync(ziel, html);
 // Prüfen: Seite lädt in der Simulation, Werte sind angekommen
 const G = require('./sim').load(ziel), bad = Object.entries(werte).filter(([p, v]) => {
