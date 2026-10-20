@@ -69,7 +69,7 @@ function tabelle(){
 // Abweichung von den Zielen
 function auswerten(T){
   const z = [], gew = (e, k) => { const b = G.towerBase(e, k); return b.air ? LUFT : b.hitsFly ? 1 : BODEN; };
-  const passt = (e, k) => (ANTEIL[e + ',' + k] ?? 1) >= 0.7;
+  const passt = (e, k) => (ANTEIL[e + ',' + k] ?? 1) >= 0.3;   // 21.10.: nur reine Hilfstürme (eigener Schaden < 30 %) außen vor
   let err = 0, nErr = 0;
   for (let e = 0; e < 4; e++) {
     // Anker der Treppe: geometrisches Mittel über die Schadenstürme (kein einzelner Turm als Maßstab)
@@ -97,12 +97,14 @@ function drucken(A){
    1) Upgrade-Schwerpunkt je Stufe (fest, Vorschlag): S2 Schaden · S3 Reichweite +0,3 · S4 Schaden · S5 Effekt ×1,15 und Dauer ×1,2 · S6 Schaden + Reichweite +0,2
       (vorher wuchs jede Stufe in allem: Reichweite +0,2, Dauer ×1,3, Effekt ×1,15)
    2) A1: Schadensfaktor je Element und Stufe (ELEMENTS[e].upDmg) aus dem Median der Türme
-   3) A2/A3 nur Schadenstürme: Abweichung q = Soll ÷ Ist; mit Fläche: Fläche ×q^0,4 und Schaden ×q^0,6, sonst Schaden ×q (kraftT) */
+   3) A1 je Turm: Steigung upT (Code-Patch 2)
+   4) A2/A3 alle Türme außer reinen Hilfstürmen: Schaden, Fläche, bei Effekt-Türmen Effektstärke */
 const SCHWERPUNKT = { rangeSteps:[0, 0.3, 0, 0, 0.2], durSteps:[1, 1, 1, 1.2, 1], effSteps:[1, 1, 1, 1.15, 1] };
 function anpassen(){
   const sp = { ...C.SPIEGEL };
   const set = (p, v) => { sp[p] = Array.isArray(v) ? v.map(x => +x.toFixed(4)) : +v.toFixed(4); S.anwenden(G, { [p]:sp[p] }); };
   for (const [k, v] of Object.entries(SCHWERPUNKT)) { G.CONFIG.upgrade[k] = v; sp['CONFIG.upgrade.' + k] = v; }
+  for (let e = 0; e < 4; e++) if (sp[`ELEMENTS.${e}.upT`]) G.ELEMENTS[e].upT = [...sp[`ELEMENTS.${e}.upT`]];
   const upOf = e => G.ELEMENTS[e].upDmg ? [...G.ELEMENTS[e].upDmg] : [...G.CONFIG.upgrade.steps];
   let T = tabelle(), A = auswerten(T); console.error(`Start (mit Schwerpunkt): ${(100 * A.rms).toFixed(1)} %`);
   let best = { A, sp:{ ...sp } };
@@ -115,12 +117,20 @@ function anpassen(){
       }
       Object.keys(sp).filter(p => p.startsWith(`ELEMENTS.${e}.upDmg.`)).forEach(p => delete sp[p]);
       G.ELEMENTS[e].upDmg = up; set(`ELEMENTS.${e}.upDmg`, up);
+      // A1 je Turm: Steigung (upT) aus der mittleren Abweichung über die Stufen (log a1[s] ≈ c·s)
+      if (!G.ELEMENTS[e].upT) { G.ELEMENTS[e].upT = Array(8).fill(1); sp[`ELEMENTS.${e}.upT`] = [...G.ELEMENTS[e].upT]; }
+      const upT = [...G.ELEMENTS[e].upT];
+      for (let k = 0; k < 8; k++) { const a = A.z[e].tuerme[k].a1; let num = 0, den = 0;
+        for (let s2 = 1; s2 < 6; s2++) if (a[s2] > 0) { num += s2 * Math.log(a[s2]); den += s2 * s2; }
+        if (den) upT[k] = Math.min(1.6, Math.max(0.6, upT[k] * Math.exp(-0.8 * num / den))); }
+      G.ELEMENTS[e].upT = upT; set(`ELEMENTS.${e}.upT`, upT);
+      // A2/A3: alle Türme außer reinen Hilfstürmen (eigener Schaden < 30 %): Schaden (kraftT) ×q^0,7, Fläche ×q^0,3, bei Effekt-Türmen auch Effektstärke ×q^0,3
       for (let k = 0; k < 8; k++) {
-        const t = A.z[e].tuerme[k]; if (t.effekt || !(t.a2 > 0)) continue;
-        const q = 1 / t.a2, tw = G.ELEMENTS[e].towers[k], fl = tw[8] || 0;
-        if (fl > 0) { set(`ELEMENTS.${e}.towers.${k}.8`, Math.max(0.3, fl * Math.pow(q, 0.4 * 0.8)));
-          set(`ELEMENTS.${e}.kraftT.${k}`, Math.min(4, Math.max(0.05, G.ELEMENTS[e].kraftT[k] * Math.pow(q, 0.6 * 0.8)))); }
-        else set(`ELEMENTS.${e}.kraftT.${k}`, Math.min(4, Math.max(0.05, G.ELEMENTS[e].kraftT[k] * Math.pow(q, 0.8))));
+        const t = A.z[e].tuerme[k]; if ((t.anteil ?? 1) < 0.3 || !(t.a2 > 0)) continue;
+        const q = Math.pow(1 / t.a2, 0.8), tw = G.ELEMENTS[e].towers[k], fl = tw[8] || 0;
+        set(`ELEMENTS.${e}.kraftT.${k}`, Math.min(4, Math.max(0.03, G.ELEMENTS[e].kraftT[k] * Math.pow(q, fl > 0 ? 0.7 : 1))));
+        if (fl > 0) set(`ELEMENTS.${e}.towers.${k}.8`, Math.max(0.3, fl * Math.pow(q, 0.3)));
+        if ((t.anteil ?? 1) < 0.7 && tw[6] > 0) set(`ELEMENTS.${e}.towers.${k}.6`, Math.max(0.02, tw[6] * Math.pow(q, 0.3)));
       }
     }
     T = tabelle(); A = auswerten(T); console.error(`Runde ${runde + 1}: ${(100 * A.rms).toFixed(1)} %`);
