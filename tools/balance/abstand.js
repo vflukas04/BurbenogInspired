@@ -1,8 +1,8 @@
 // Abstand Spiegel ↔ Spiel (Makrobalancing L im Spiegel, Mikrobalancing F im Spiel, Beschluss 18.10.).
 // Zeigt, wie weit beide Stände auseinanderlaufen, ohne etwas zu ändern:
 //   A) Werte im Spiegel: Basis (Spielstand, auf dem der Spiegel aufsetzt) | Spiel jetzt | Spiegel.
-//      „⚠“ = seit der Basis im Spiel geändert → der Spiegel überschreibt diese Änderung von F.
-//   B) Seit der Basis im Spiel geänderte Werte, die der Spiegel nicht enthält (wirken in Spiegel-Läufen mit).
+//      „⚠“ = seit der Basis im Spiel geändert → beim Zusammenführen entscheiden (Spiegel-Läufe nutzen die eingefrorene Basis).
+//   B) Seit der Basis im Spiel geänderte Werte, die der Spiegel nicht enthält (nur im Spiel; Spiegel-Läufe rechnen seit 20.10. auf der eingefrorenen Basis).
 //   C) Kurzfazit.
 // Aufruf: node tools/balance/abstand.js [basis-commit]   (sonst "_basis" aus spiegel.json)
 //         node tools/balance/abstand.js kurz              (nur Fazit, für den Start jeder Sitzung)
@@ -71,11 +71,11 @@ const mittel = abstaende.length ? abstaende.reduce((a, b) => a + b, 0) / abstaen
 const fazit = [
   `Spiegel (${Object.keys(sp).filter(k => !k.startsWith('_')).length} Werte) setzt auf ${BASIS} (${vB}) auf, Spiel ist bei ${vJ}.`,
   `Spiegel weicht im Mittel ${(mittel * 100).toFixed(0)} % vom Spiel ab (bei seinen eigenen Werten).`,
-  konflikt.length ? `⚠ ${konflikt.length} Spiegel-Werte hat F seit der Basis im Spiel geändert (Spiegel überschreibt sie): ${konflikt.join(', ')}`
+  konflikt.length ? `⚠ ${konflikt.length} Spiegel-Werte hat F seit der Basis ebenfalls im Spiel geändert (beim Zusammenführen entscheiden): ${konflikt.join(', ')}`
                   : 'Keine Überschneidung: F hat keinen der Spiegel-Werte geändert.',
-  wechsel.length ? `Wechselwirkung: Spiegel und Spiel drehen bei ${wechsel.join(', ')} an verschiedenen Stellschrauben desselben Elements – Wirkung multipliziert sich, Ergebnisse nur gemeinsam deuten.` : '',
+  wechsel.length ? `Wechselwirkung: Spiegel und Spiel drehen bei ${wechsel.join(', ')} an verschiedenen Stellschrauben desselben Elements – beim Zusammenführen gemeinsam betrachten.` : '',
   monF.length ? `F hat ${monF.length} Monster geändert (${monF.map(k => k.slice(9)).join(', ')}).` : '',
-  `${geaendert.length} weitere Spielwerte in ${Object.keys(gruppen).length} Bereichen seit der Basis geändert (wirken in Spiegel-Läufen mit).`
+  `${geaendert.length} weitere Spielwerte in ${Object.keys(gruppen).length} Bereichen seit der Basis geändert (nur im Spiel; Spiegel-Läufe rechnen seit 20.10. auf der eingefrorenen Basis).`
 ];
 const fz = fazit.filter(Boolean);
 if (KURZ) { console.log(fz.join('\n')); process.exit(0); }

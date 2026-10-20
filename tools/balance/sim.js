@@ -14,11 +14,21 @@ function stubs(){
     getComputedStyle:() => ({ getPropertyValue:() => '' }), performance:{ now:() => 0 }, requestAnimationFrame:() => {},
     location:{ protocol:'file:' }, setInterval:() => 0, Image:function(){ return {}; } });
 }
+// Welche index.html? (20.10., L) Explizit (file / INDEX=…) geht vor. Sonst: Ist der Spiegel an und hat er eine Basis ("_basis"),
+// rechnet alles auf der eingefrorenen Kopie tools/balance/basis/index-<basis>.html – F's laufende Änderungen im Spiel fließen nicht ein.
+// SPIEGEL=aus → aktuelles Spiel (index.html).
+function datei(){
+  if (process.env.INDEX) return process.env.INDEX;
+  const sp = process.env.SPIEGEL || path.join(__dirname, 'spiegel.json');
+  if (sp !== 'aus' && fs.existsSync(sp)) { const b = JSON.parse(fs.readFileSync(sp, 'utf8'))._basis;
+    if (b) { const f = path.join(__dirname, 'basis', `index-${b}.html`); if (!fs.existsSync(f)) throw new Error('Basis fehlt: ' + f); return f; } }
+  return path.join(__dirname, '..', '..', 'index.html');
+}
 function load(file){
-  const html = fs.readFileSync(file || process.env.INDEX || path.join(__dirname, '..', '..', 'index.html'), 'utf8');
+  const html = fs.readFileSync(file || datei(), 'utf8');
   const code = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]).pop();
   stubs();
   // typeof: fehlt ein Name in einer älteren Spielversion, gibt es undefined statt eines Fehlers
   return new Function(code + '\n;return {' + NAMES.map(n => `${n}: typeof ${n} === 'undefined' ? undefined : ${n}`).join(',') + '};')();
 }
-module.exports = { load };
+module.exports = { load, datei };
