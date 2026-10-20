@@ -7,7 +7,6 @@
 
 ## Gerade dran
 <!-- Eine Zeile je Person: Wer · was · seit wann. Nach der Arbeit löschen. -->
-- L · Balancing-Bot: Vorausschau, Freischaltung als Investition, gemischte Paare (nur `tools/balance/`, kein Spielcode) · seit 19.10. 23:15
 
 ## Als Nächstes
 | Was | Wer | Notiz |
