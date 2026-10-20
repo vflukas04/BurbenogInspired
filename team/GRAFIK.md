@@ -1,4 +1,4 @@
-# Grafik (Stand 18.10., L)
+# Grafik (Stand 21.10., L)
 
 ## Entscheidungen
 - **Türme** bleiben Kenney (CC0), wie bisher.
@@ -13,6 +13,14 @@
 - Im Spiel (`MONSTER_IMG` in `index.html`): Besoffene Penner, Uffug (Boss), Mehlmottenraupen (Raupe; Kokon = Raupe mit weißer Hülle; Motte im Flug), Betty (Boss). Ansicht nach Laufrichtung, Seite nach links gespiegelt, leichtes Wippen. Fehlt ein Bild → Emoji.
 - Gewählte Bilder (Civitai-Datei-Anfang): Penner cfadda41 / 4d325694 / 58430d4f · Uffug cfddba46 / 432c7240 / 999c1ea8 · Raupe d7eeacb9 / 927bbc60 / 17aa92be · Motte 41f955d6 / 5e2bcfaf / c8754065 · Betty ee4cfb5d / 4759880c / 22aacaff.
 - Figuren über Kleidung, Haltung, Requisiten beschreiben, **nicht über Herkunft oder Hautfarbe** (öffentliches Spiel; Edits an der Hautfarbe kosteten außerdem viele Versuche und Farbstiche).
+
+## Stand 21.10.: alle Monster eingebaut
+- Fast alle Monster haben jetzt Bilder (Krea 3 auf Civitai, 19.–20.10.); nur ein Schwarm-Monster bleibt Emoji. Zwischenbosse nutzen die Bilder ihres Monsters, Varianten (z. B. Reiter/Reittier) haben eigene. Auswahl und Dateinamen ab Runde 21 im Claude-Projekt (Überraschung für F).
+- Fehlt eine Ansicht (z. B. Asseln und Dachse von hinten, Füchse von hinten), nimmt das Spiel die Seitenansicht (`MIMG[...] = null` vorbelegt).
+- Erstes **Laufbild**: Betty (Endboss) hat 8 Laufbilder für die Seitenansicht (`betty-lauf-0..7.png`, aus einem Krea-Video, `MONSTER_ANIM` = [Anzahl, Bilder/s]). Andere Monster wippen weiter.
+- Bilder auf 128 Farben verkleinert (alle zusammen ca. 0,9 MB).
+- Gewählt Runde 1–20 (Datei-Anfang Seite/Vorne/Hinten): siehe Claude-Projekt „Grafik-Prompts (alle Monster)“; Auswahl nach Perspektive (Blick rechts, Kamera leicht von oben) und gleicher Figur über alle Ansichten.
+- Gelernt: Bei Menschen kippt die Kamera im Edit oft in reine Draufsicht; „hinten“ brauchte die meisten Versuche. Bekannte Figuren (Film/Serie) nicht nachbauen lassen, auch nicht über Hut + Brille + Bart: lieber eine eigene Figur.
 
 ## Erkenntnisse aus den Metadaten (17./18.10.)
 1. Erst **Seite per txt2img**, dann die anderen Ansichten per **Edit** („The same …, same style. …“). Hält die Figur stabil; getrennte txt2img-Bilder ergaben verschiedene Tiere.

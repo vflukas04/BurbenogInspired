@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 18.10. 21:15 · F · 2026-10-18f – Archiv: Zeitpunkt der Geschenke
+- Jedes Geschenk (Gold und Edelsteine) merkt sich Tag, Welle und Uhrzeit (`d`, `s`, `at`). Im Archiv stehen sie je Spieler als `giftLog` und `gemGiftLog` in `days[Tag].lanes[i]` (die Summe `gifts` bleibt). Für die Auswertung von Testspielen. Bereits laufende Spiele haben die Angaben nicht; neu laden, neues Spiel.
+
 ### 18.10. 12:30 · L · 2026-10-18d – Monster-Bilder, Faktor-Regel, Balancing-Optimierer
 - **Erste Monster-Bilder im Spiel** (Besoffene Penner, Uffug, Mehlmotten mit Kokon und Motte, Betty): Ansicht nach Laufrichtung, Emoji als Rückfall. Prompts und Vorgehen: `team/GRAFIK.md`.
 - Faktor-Regel je Block geprüft: nur Block 7 verletzt (Stein ohne Malus) → Wargreiter Schatten 1,5 / Stein 0,75. Neues Spiel + neu laden.

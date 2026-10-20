@@ -31,7 +31,7 @@
 | Effekt-Abstufung der einzelnen Elemente | offen | Idee F, 16.10.: Wie stark die Effekte (Brennen, Verlangsamen, Fluch, Betäuben usw.) je Stufe wachsen, je Element prüfen und abstufen. Noch nicht besprochen. |
 | **Makrobalancing (L), Beschluss 18.10.:** F macht Mikrobalancing mit Einzelwünschen direkt im Spiel, L arbeitet am Makrobalancing im Spiegel (`spiegel.json`). Zusammenführen erst, wenn alle Prüfpunkte erfüllt sind und das Spielgefühl passt (wie Branch → Merge) | L | Stand und nächste Schritte: `BALANCING.md` → „Makrobalancing: nächste Schritte“ |
 | Optimierer-Ergebnis Durchgang 1 | L | Kern: Upgrades flacher (P8a). Element-Kraft daraus **nicht** übernehmen (P8 dominierte). `node tools/balance/optimierer.js bericht` |
-| Monster-Bilder erzeugen | L | Prompts für alle fehlenden Monster im Claude-Projekt (nicht im Repo, wegen Überraschung ab Runde 21); Füchse liegen schon vor, nur einbauen |
+| Monster-Bilder erzeugen | erledigt 21.10. (21a) | alle außer einem Schwarm-Monster eingebaut; offen: einzelne fehlende Rückansichten, ggf. weitere Laufbilder (siehe `GRAFIK.md`) |
 | Monster 21–40: Werte über Balancing-Skript, Testspiel | L | eingebaut 16.10. (16b), Werte sind Startwerte; Inhalt bleibt Überraschung für F |
 | Handy-Hänger (Safari) beobachten | L + F | Speicher-Anzeige oben; beim nächsten Hänger erst Server lesen, dann neues Spiel |
 

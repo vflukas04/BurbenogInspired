@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-19f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-21a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1791,8 +1791,18 @@ const TURRET = { Schaden:'cannon', Reichweite:'barrel', 'Fläche':'wide', Effekt
 const SPR = {}, TINT = {};
 /* Monster-Bilder (18.10., L): je Monster 3 Ansichten in assets/monster/<name>-seite|vorne|hinten.png (Seite blickt nach rechts, nach links gespiegelt).
    Fehlt ein Bild, bleibt das Emoji. Raupe: Kokon = Raupe mit weißer Hülle, Motte fliegt. Herkunft und Prompts: team/GRAFIK.md */
-const MONSTER_IMG = { 'Besoffene Penner':'penner', 'Uffug (Boss)':'uffug', 'Mehlmottenraupen':'raupe', 'Betty (Boss)':'betty' };
+const MONSTER_IMG = { 'Silberfische':'silberfisch', 'Kellerasseln':'assel', 'Nacktschnecken':'schnecke', 'Ohrenkneifer':'ohrenkneifer', 'Mäuse':'maus', 'Maus-Boss':'maus',
+  'Kleine Hunde':'hund', 'Ratten':'ratte', 'Katzen':'katze', 'Spatzen':'spatz', 'Füchse':'fuchs', 'Fuchs-Boss':'fuchs', 'Habichte':'habicht', 'Dachse':'dachs',
+  'Oktopusse':'oktopus', 'Wildschweine':'wildschwein', 'Schäferhunde':'schaeferhund', 'Schäferhund-Boss':'schaeferhund', 'Besoffene Penner':'penner',
+  'Wütende Partnerin':'partnerin', 'Wütende Nachbarn':'nachbar', 'Eifersüchtige Geliebte':'geliebte', 'Uffug-Vorhaut':'vorhaut', 'Uffug (Boss)':'uffug',
+  'Roboter':'roboter', 'Sommer-Schneebälle':'schneeball', 'Würfel':'wuerfel', 'Phönixe':'phoenix', 'Fairtrade-Bananen':'banane', 'El Schlucko':'schlucko',
+  'Krieger':'krieger', 'Golems':'golem', 'Albträume':'albtraum', 'Looping-Louie-Flugzeuge':'flugzeug', 'Magier-Novizen':'novize', 'Magiermeister':'magiermeister',
+  'E-Scooter-Fahrer':'escooter', 'Wargreiter':'wargreiter', 'Warg':'warg', 'Ork':'ork', 'Fledermäuse':'fledermaus', 'Lehrer':'lehrer', 'Schulleiter':'schulleiter',
+  'Violine':'geige', 'Bratsche':'geige', 'Cello':'geige', 'Kontrabass':'geige', 'Streichquartett':'geige', 'Heisenbergs':'chemiker',
+  'Mehlmottenraupen':'raupe', 'Nazgul':'schattenreiter', 'GNTModels':'model', 'Betty (Boss)':'betty' };   // 21.10. (L): alle außer Lindner-Spezialisten
+const MONSTER_ANIM = { betty:[8, 8] };   // 21.10. (L): Laufbilder <name>-lauf-0..n-1.png für die Seitenansicht [Anzahl, Bilder je Sekunde]
 const MIMG = {};
+for (const k of ['assel-hinten', 'dachs-hinten', 'schneeball-vorne', 'schneeball-hinten', 'chemiker-vorne', 'chemiker-hinten', 'fuchs-hinten']) MIMG[k] = null;   // fehlen → Seitenansicht
 function monsterImg(key, view){
   const k = key + '-' + view; if (k in MIMG) return MIMG[k] && MIMG[k].complete && MIMG[k].naturalWidth ? MIMG[k] : null;
   const im = new Image(); im.onerror = () => { MIMG[k] = null; }; im.src = 'assets/monster/' + k + '.png'; MIMG[k] = im; return null;
@@ -1980,11 +1990,13 @@ function draw(i, cv){
     m.lx = x; m.ly = y;
     let ikey = MONSTER_IMG[m.def.name] || MONSTER_IMG[MONSTERS[m.type] && MONSTERS[m.type].name];
     if (ikey === 'raupe' && m.coc && m.coc.fly) ikey = 'motte';
-    const view = Math.abs(m.vx || 1) >= Math.abs(m.vy || 0) ? 'seite' : (m.vy > 0 ? 'vorne' : 'hinten');
-    const im = ikey && monsterImg(ikey, view);
+    let view = Math.abs(m.vx || 1) >= Math.abs(m.vy || 0) ? 'seite' : (m.vy > 0 ? 'vorne' : 'hinten');
+    if (ikey && view !== 'seite' && MIMG[ikey + '-' + view] === null) view = 'seite';   // fehlende Ansicht → Seite
+    const lauf = ikey && view === 'seite' && MONSTER_ANIM[ikey] && !(m.strip > 0) ? Math.floor(time * MONSTER_ANIM[ikey][1] + m.id) % MONSTER_ANIM[ikey][0] : -1;
+    const im = ikey && ((lauf >= 0 && monsterImg(ikey, 'lauf-' + lauf)) || monsterImg(ikey, view));
     c.textAlign = 'center'; c.textBaseline = 'middle';
     if (im) {
-      const S = r * 2.5 * (m.def.boss || m.def.mini ? 1.15 : 1), walk = !(m.coc && !m.coc.fly && !m.coc.walk) && !(m.strip > 0) && !flying(m);
+      const S = r * 2.5 * (m.def.boss || m.def.mini ? 1.15 : 1), walk = lauf < 0 && !(m.coc && !m.coc.fly && !m.coc.walk) && !(m.strip > 0) && !flying(m);
       const sq = walk ? 1 + .05 * Math.sin(time * 11 + m.id * 3) : 1;   // Wippen beim Gehen
       c.save(); c.translate(X, Y + r * .75); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.scale(1 / sq, sq);
       c.drawImage(im, -S / 2, -S, S, S); c.restore();
