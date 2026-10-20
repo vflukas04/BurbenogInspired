@@ -12,7 +12,11 @@
 // Aufruf: node tools/balance/turm.js [bericht | anpassen]   (Spiegel wird angewandt; anpassen schreibt tools/balance/spiegel-A.json, nie spiegel.json)
 const fs = require('fs'), path = require('path');
 const C = require('./core'), { G } = C, S = require('./spiegel');
-const UP = [1, 0.9, 1.0, 1.1, 1.2, 1.3], TREPPE = 1.055, LUFT = 1.5, BODEN = 1.1, HP = 1000;
+// REAL=1 (Variante): echte Leben (Monster sterben, Überschuss zählt nicht), nur Tage im Einsatzfenster des Turms
+//   (ab dem Tag, an dem man sich den Turm auf dieser Stufe zweimal leisten könnte, bis Spielende)
+const REAL = !!process.env.REAL;
+const UP = [1, 0.9, 1.0, 1.1, 1.2, 1.3], TREPPE = 1.055, LUFT = 1.5, BODEN = 1.1, HP = REAL ? 1 : 1000;
+const BUDGET = (() => { const { budget } = require('./p2'); return G.MONSTERS.map((_, d) => budget(d).gold); })();
 const TAGE = G.MONSTERS.map((m, i) => i).filter(i => !G.MONSTERS[i].boss && !G.MONSTERS[i].mini);
 const FLIEG = new Set(TAGE.filter(i => G.MONSTERS[i].fly)), MAPS = [0, 2];
 const REF = { el:2, idx:0 };   // Referenzturm für Effekte: Schatten-Schemen (Einzelziel, kein Effekt)
@@ -28,7 +32,9 @@ function schaden(towers, d){
   return hpIn - s.leaked.reduce((a, m) => a + m.hp, 0);
 }
 const gold = (e, k, lvl) => { let g = G.towerBase(e, k).cost; for (let l = 1; l < lvl; l++) g += Math.round(G.towerBase(e, k).cost * Math.pow(G.CONFIG.upgradeCost, l)); return g; };
-const tageVon = (e, k) => { const b = G.towerBase(e, k); return b.air ? [...FLIEG] : b.hitsFly ? TAGE : TAGE.filter(d => !FLIEG.has(d)); };
+const tageVon = (e, k, lvl = 1) => { const b = G.towerBase(e, k); let t = b.air ? [...FLIEG] : b.hitsFly ? TAGE : TAGE.filter(d => !FLIEG.has(d));
+  if (REAL) { const g = gold(e, k, lvl), ab = BUDGET.findIndex(x => x >= 2 * g); t = t.filter(d => ab >= 0 && d >= ab); if (!t.length) t = [TAGE[TAGE.length - 1]]; }
+  return t; };
 function platz(e, k, lvl, besetzt){ return C.mask(e, k, lvl, 0.5).cells.find(c => !besetzt.has(c.x + ',' + c.y)); }
 
 // Kraft je Gold für Turm (e,k) auf Stufe lvl, gemittelt über Maps und Tage
@@ -42,7 +48,7 @@ function kjg(e, k, lvl){
       const frei = C.free.filter(([x, y]) => !(x === ref.x && y === ref.y)).sort((a, b) => Math.hypot(a[0] - ref.x, a[1] - ref.y) - Math.hypot(b[0] - ref.x, b[1] - ref.y));
       c = { x:frei[0][0], y:frei[0][1] }; }
     const t = { x:c.x, y:c.y, el:e, idx:k, lvl }, g = gold(e, k, lvl), refGold = G.towerBase(REF.el, REF.idx).cost;
-    for (const d of tageVon(e, k)) {
+    for (const d of tageVon(e, k, lvl)) {
       const eigen = schaden([t], d), r0 = schaden([refT], d), r1 = schaden([refT, t], d) - eigen;   // Referenzschaden mit diesem Turm daneben
       const m = r0 > 0 ? r1 / r0 : 1;
       sum += (eigen + Math.max(0, m - 1) * (r0 / refGold) * g) / g; n++;
@@ -112,4 +118,4 @@ if (arg === 'probe') { const [e, k, l] = process.argv.slice(3).map(Number), t0 =
 const A = arg === 'anpassen' ? anpassen() : auswerten(tabelle());
 drucken(A);
 fs.mkdirSync(path.join(__dirname, 'ergebnisse'), { recursive:true });
-fs.writeFileSync(path.join(__dirname, 'ergebnisse', `turm-${arg}.json`), JSON.stringify(A, null, 1));
+fs.writeFileSync(path.join(__dirname, 'ergebnisse', `turm-${arg}${REAL ? '-real' : ''}.json`), JSON.stringify(A, null, 1));
