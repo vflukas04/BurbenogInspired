@@ -15,6 +15,7 @@ const tagWelle = d => ({ type:d, players:SPIELER, tag:true });
 /* Vorausschau (19.10., L): VORAUS=1 → der Bot bewertet Käufe an heute (×1), morgen (×0,5) und übermorgen (×0,25) statt nur an heute,
    und prüft Freischaltungen als Investition über HORIZONT Tage (Standard 5) mit dem bis dahin erwarteten Einkommen.
    Ohne VORAUS rechnet P2 wie bisher (Vergleichbarkeit mit älteren Läufen). Gemeldet wird R immer nur für heute. */
+const KONSOL = process.env.KONSOL !== '0';   // 20.10.: Konsolidieren standardmäßig an (KONSOL=0 = alter Bot)
 const VORAUS = !!process.env.VORAUS, HORIZONT = +process.env.HORIZONT || 5, GEWICHTE = [1, 0.5, 0.25];
 const voraus = (d, n) => VORAUS ? GEWICHTE.map((wt, k) => d + k < n ? { ...tagWelle(d + k), wt } : null).filter(Boolean) : [tagWelle(d)];
 const einkommen = d => G.monsterDef(d, SPIELER).bounty * (G.MONSTERS[d].count || G.CONFIG.perWave);   // Kopfgeld eines Spielers an Tag d (alle getötet)
@@ -50,7 +51,11 @@ function forschung(setup, frei, waves, d, opt){
         let plus = 0; for (let i = d; i < bis; i++) plus += einkommen(i);
         const zw = [{ ...tagWelle(bis), wt:1 }, ...(bis - 1 > d ? [{ ...tagWelle(bis - 1), wt:0.5 }] : [])];
         const gold = frei + plus + B.spent(setup);
-        const ohne = B.greedy(setup.el, gold, zw, { cells:2 }, setup).score, mit = B.greedy(setup.el, gold - anteil, zw, { cells:2 }, s).score;
+        const neu = F.grp === 't5' ? [4, 5] : [6, 7];
+        const ohne = B.greedy(setup.el, gold, zw, { cells:2 }, setup).score;
+        let m = B.greedy(setup.el, gold - anteil, zw, { cells:2 }, s); if (KONSOL) m = konsolidieren(m, gold - anteil, zw, neu);
+        if (!m.setup.towers.some(t => neu.includes(t.idx))) continue;   // 20.10.: nur kaufen, wenn im Horizont auch ein neuer Turm gebaut würde
+        const mit = m.score;
         if (mit > ohne * 1.02) { const g = Math.log(mit / ohne) / anteil * 1e3; if (!best || g > best.g) best = { s, g, F }; } continue; }
       if (F.grp === 't5' || F.grp === 't7' || F.grp === 'cheap') {
         if (d % 3) continue;
@@ -63,13 +68,38 @@ function forschung(setup, frei, waves, d, opt){
   }
   return setup;
 }
+/* Konsolidieren (20.10., L): Der gierige Aufbau kauft in kleinen Schritten und findet teure Türme oft nicht (Pfadabhängigkeit:
+   ohne Vorausschau hatte Feuer zufällig früh einen Turm 4, mit Vorausschau nie → R an Tag 25 0,6 statt 2,7).
+   Je freigeschaltetem Turmtyp ab Nummer 2: billigste Türme ohne Stein abreißen, bis der Typ bezahlbar ist, ihn auf sein bestes Feld
+   setzen, Rest gierig auffüllen. Übernommen nur, wenn die Bewertung um > 1 % steigt. nur = Liste erlaubter Typen (für die Investitionsprüfung). */
+function konsolidieren(r, gold, waves, nur){
+  const el = r.setup.el, res = new Set(r.setup.res || []);
+  for (let k = 1; k < 8; k++) {
+    if (nur && !nur.includes(k)) continue;
+    if (G.LOCKS[k] && !res.has(G.LOCKS[k])) continue;
+    const preis = G.towerBase(el, k).cost; if (preis > gold || preis < 0.05 * gold && !nur) continue;
+    let s = r.setup, frei = gold - B.spent(s);
+    const weg = s.towers.filter(t => !t.gem).sort((a, b) => (a.inv || 0) - (b.inv || 0));
+    while (frei < preis * 1.3 && weg.length) { const t = weg.shift(); s = { ...s, towers:s.towers.filter(u => u !== t) }; frei += t.inv || 0; }
+    const used = new Set(s.towers.map(t => t.x + ',' + t.y)), c = C.mask(el, k, 1, 0.8).cells.find(c => !used.has(c.x + ',' + c.y));
+    if (!c) continue;
+    const cost = G.buildCost(el, k, C.LANE, c.x, c.y); if (cost > frei) continue;
+    s = { ...s, towers:[...s.towers, { x:c.x, y:c.y, el, idx:k, lvl:1, inv:cost }] };
+    const g = B.greedy(el, gold, waves, { cells:3 }, s);
+    if (g.score > r.score * 1.01) r = g;
+  }
+  return r;
+}
 // Edelsteine: neue Steine auf die Türme mit dem meisten Gold, jeweils die Option mit dem größten Zuwachs
 function steine(setup, n, waves){
   // KONVERT=1 (Sonderprüfung 16.10.): Steine dürfen auch Türme in ein anderes Element umwandeln (gleiche Nummer und Stufe, Gold bleibt)
   const konv = !!process.env.KONVERT;
   for (let k = setup.used || 0; k < n; k++) {
     const R = waves.map(w => C.reserveDay(setup, w)), fRef = R.map(r => r * 1.25), base = B.quick(setup, waves, fRef);
-    const top = setup.towers.map((t, i) => [t, i]).filter(([t]) => !t.gem && !t.conv).sort((a, b) => (b[0].inv || 0) - (a[0].inv || 0)).slice(0, konv ? 8 : 4);
+    // 20.10.: Kandidaten = 4 Türme mit dem meisten Gold + der teuerste Turm jedes Typs (sonst landen Steine nur auf hochgezogenen Billigtürmen
+    // und starke Fähigkeiten anderer Türme werden nie geprüft – z. B. hing Feuer stark davon ab, ob zufällig das Glutbecken einen Stein bekam)
+    const frei = setup.towers.map((t, i) => [t, i]).filter(([t]) => !t.gem && !t.conv).sort((a, b) => (b[0].inv || 0) - (a[0].inv || 0));
+    const top = [...new Set([...frei.slice(0, konv ? 8 : 4), ...[...Array(8).keys()].map(k => frei.find(([t]) => t.idx === k)).filter(Boolean)])];
     let best = null;
     const tryS = s => { const v = B.quick(s, waves, fRef) - base; if (!best || v > best.v) best = { s:{ ...s, used:k + 1 }, v }; };
     for (const [t, i] of top) {
@@ -106,6 +136,7 @@ function lauf(e, lane, seed, bis){
     const cheap = r.setup.towers.map((t, i) => [t, i]).filter(([t]) => !t.gem).sort((a, b) => (a[0].inv || 0) - (b[0].inv || 0)).slice(0, 2);
     for (const [t] of cheap) { const rest = { ...r.setup, towers:r.setup.towers.filter(u => u !== t) }, g = B.greedy(e, turmGold, waves, { cells:3 }, rest);
       if (g.score > r.score * 1.01) r = g; }
+    if (KONSOL) r = konsolidieren(r, turmGold, waves);
     setup = steine(r.setup, gems, waves);
     const R = C.reserveDay(setup, w), r1 = C.runDay(setup, w, 1);
     tage.push({ tag:d + 1, monster:G.MONSTERS[d].name, R:+R.toFixed(3), kills:r1.kills, n:r1.n, durch:r1.durch, gold:Math.round(gesamt), kasse:resCost(setup.res),
