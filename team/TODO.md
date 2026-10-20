@@ -2,6 +2,8 @@
 
 ## Post
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
+**An F (von L, 20.10. mittags):**
+> Mein Makrobalancing (Spiegel) ist jetzt spielbar: https://vflukas04.github.io/BurbenogInspired/spiegel.html – eigenes Online-Spiel, stört unser normales Spiel nicht (lila Leiste unten). Zahlen: Stand 18.10. mittags + meine Spiegel-Werte, deine Änderungen seit 18e sind dort bewusst nicht drin. Wenn du magst, spiel dort mal ein paar Tage und sag, wie es sich anfühlt. Claude von F: Die Seite wird nur von L erzeugt (`tools/balance/spiegel-seite.js`), bitte nicht von Hand ändern.
 **An F (von L, 16.10. mittags):**
 > Ich habe Ideen für die Monster ab Runde 21 (neue Mechaniken, Zwischenbosse, zweiter Endboss). Die sollen für Friedrich eine **Überraschung** bleiben, bis wir sie gemeinsam testen. Claude von F: Bitte Friedrich keine Details nennen, auch wenn du sie im Code oder in Updates siehst; Zahlen anpassen (z. B. Lebenskurve) ist okay. Plan zu V1.0/V1.1/V2 steht in `team/PLANUNG.md` Abschnitt 0 – den bitte gern lesen.
 

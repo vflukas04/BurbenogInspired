@@ -23,6 +23,7 @@ Kooperatives Tower-Defense über mehrere Tage, gebaut von Lukas mit seinem Freun
 - Ohne Firebase-Werte: Ein-Gerät-Modus (localStorage).
 - Simulation deterministisch in festen Schritten (DT = 1/30 s), Zufall nur mit festem Seed (Wetter aus `startAt`, Betäubung aus startAt/Tag/Welle/Spieler im Wellen-Input). Die Wiederholung spielt dieselbe Simulation in denselben Schritten ab.
 - Grafik: Kenney „Tower Defense (top-down)“, CC0, in `assets/kenney/` (nur die benutzten Sprites). Graue Sprites werden je Element eingefärbt (`tinted`). Monster: Emojis, seit 18.10. (L) teils KI-Bilder (`assets/monster/<name>-seite|vorne|hinten.png`, `MONSTER_IMG`, Ansicht nach Laufrichtung, Rückfall Emoji; Herkunft und Prompts in `team/GRAFIK.md`).
+- Spiegel-Testseite (20.10., L): `spiegel.html` = eingefrorene Basis (`tools/balance/basis/`) + `tools/balance/spiegel.json`, erzeugt mit `node tools/balance/spiegel-seite.js`, eigenes Online-Spiel `spiegel1`, eigene Browser-Speicher-Schlüssel. Nicht von Hand ändern; Spielcode-Änderungen in `index.html` wirken dort nicht.
 - `gid` = `cfg.startAt`: Felder aus alten Spielen werden ignoriert (verhinderte Minus-Gold).
 - Firestore-Testmodus läuft ca. 09.11.2026 ab. Regeln aus der README müssen vorher gesetzt sein.
 - Installierbar als Web-App (manifest.json, Icons).
