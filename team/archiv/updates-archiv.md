@@ -1,5 +1,11 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 18.10. 12:30 · L · 2026-10-18d – Monster-Bilder, Faktor-Regel, Balancing-Optimierer
+- **Erste Monster-Bilder im Spiel** (Besoffene Penner, Uffug, Mehlmotten mit Kokon und Motte, Betty): Ansicht nach Laufrichtung, Emoji als Rückfall. Prompts und Vorgehen: `team/GRAFIK.md`.
+- Faktor-Regel je Block geprüft: nur Block 7 verletzt (Stein ohne Malus) → Wargreiter Schatten 1,5 / Stein 0,75. Neues Spiel + neu laden.
+- Balancing: neue Prüfpunkte P6 ±5 %, P8a Turmstufen, P8 Turmnutzung, P9 Edelsteine, P10 Forschung; `optimierer.js` (zufällige Reihenfolge, nur Verbesserungen werden übernommen) läuft, alles im Spiegel. Befund: Upgrades schlagen höhere Türme je Gold. Stein-Fläche/Kiesel: Vorschlag nur im Spiegel, **erst mit F absprechen**.
+- Einwände aus Testspielen werden in `BALANCING.md` als Learning fürs Skript eingetragen (F's Kiesel-Einwand ist der erste).
+
 ### 18.10. 11:30 · F · 2026-10-18c – Zweite einzigartige Edelstein-Fähigkeit je Turm
 - Jeder Turm hat jetzt **4 Edelstein-Wahlmöglichkeiten** (2 Basics, 2 Uniques): neu `ABILITIES[e][8..15]` = Nummer 8 + Turmnummer. Beispiele: Funkenregen, Dauerglut, Stichflamme, Flächenbrand, Zenit (Feuer); Tiefschnee, Frostbiss, Nullpunkt (Eis); Schattenstreich, Todesblick, Entkräften (Schatten); Streuschuss, Zerschmettern, Königlicher Befehl (Stein). Irrlicht: Geisterlicht.
 - Neue Merkmale in `hit`/`kill`: `burnBonus`, `chillBonus`, `sun`, `crit`, `execute`, `fresh`, `drain`, `curseSlow`, `freeze`, `burnWave`; Rest über vorhandene Hebel (Schüsse, Reichweite, Pool, Explosion, Rüstungsschaden).
