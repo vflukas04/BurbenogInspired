@@ -58,7 +58,8 @@ function normturm(e, k, g){   // Schadensturm mit dem Preis am nächsten am inve
 }
 function kjgKontext(e, k, lvl){
   let sum = 0, n = 0, eig = 0;
-  const g = gold(e, k, lvl), j = normturm(e, k, g), cj = G.towerBase(e, j).cost, anzahl = Math.max(1, Math.round(3 * g / cj));
+  // 21.10.: Kontext nach dem Grundpreis (Stufe 1) – für alle Stufen derselbe Aufbau, sonst wächst die Umgebung mit dem Upgrade mit und verzerrt A1
+  const g = gold(e, k, lvl), g1 = gold(e, k, 1), j = normturm(e, k, g1), cj = G.towerBase(e, j).cost, anzahl = Math.max(1, Math.round(3 * g1 / cj));
   for (const lane of MAPS) {
     C.useMap(lane, null);
     const besetzt = new Set(), aufbau = [];
@@ -109,7 +110,7 @@ function tabelle(){
 // Abweichung von den Zielen
 function auswerten(T){
   const z = [], gew = (e, k) => { const b = G.towerBase(e, k); return b.air ? LUFT : b.hitsFly ? 1 : BODEN; };
-  const passt = (e, k) => (ANTEIL[e + ',' + k] ?? 1) >= 0.3;   // 21.10.: nur reine Hilfstürme (eigener Schaden < 30 %) außen vor
+  const passt = (e, k) => METHODE === 'kontext' ? true : (ANTEIL[e + ',' + k] ?? 1) >= 0.3;   // Kontext-Messung: alle Türme; alte Messung: Hilfstürme außen vor
   let err = 0, nErr = 0;
   for (let e = 0; e < 4; e++) {
     // Anker der Treppe: geometrisches Mittel über die Schadenstürme (kein einzelner Turm als Maßstab)
@@ -139,6 +140,7 @@ function drucken(A){
    2) A1: Schadensfaktor je Element und Stufe (ELEMENTS[e].upDmg) aus dem Median der Türme
    3) A1 je Turm: Steigung upT (Code-Patch 2)
    4) A2/A3 alle Türme außer reinen Hilfstürmen: Schaden, Fläche, bei Effekt-Türmen Effektstärke */
+const DAEMPF = +process.env.DAEMPF || 0.5;
 const SCHWERPUNKT = { rangeSteps:[0, 0.3, 0, 0, 0.2], durSteps:[1, 1, 1, 1.2, 1], effSteps:[1, 1, 1, 1.15, 1] };
 function anpassen(){
   const sp = { ...C.SPIEGEL };
@@ -153,7 +155,7 @@ function anpassen(){
       const up = upOf(e);
       for (let s = 1; s < 6; s++) {
         const q = A.z[e].tuerme.map(t => t.a1[s] / t.a1[s - 1]).filter(Number.isFinite).sort((a, b) => a - b), med = q[q.length >> 1];
-        up[s - 1] = Math.max(1.0, up[s - 1] / Math.pow(med, 0.8));
+        up[s - 1] = Math.max(1.0, up[s - 1] / Math.pow(med, DAEMPF));
       }
       Object.keys(sp).filter(p => p.startsWith(`ELEMENTS.${e}.upDmg.`)).forEach(p => delete sp[p]);
       G.ELEMENTS[e].upDmg = up; set(`ELEMENTS.${e}.upDmg`, up);
@@ -162,15 +164,17 @@ function anpassen(){
       const upT = [...G.ELEMENTS[e].upT];
       for (let k = 0; k < 8; k++) { const a = A.z[e].tuerme[k].a1; let num = 0, den = 0;
         for (let s2 = 1; s2 < 6; s2++) if (a[s2] > 0) { num += s2 * Math.log(a[s2]); den += s2 * s2; }
-        if (den) upT[k] = Math.min(1.6, Math.max(0.6, upT[k] * Math.exp(-0.8 * num / den))); }
+        if (den) upT[k] = Math.min(1.6, Math.max(0.6, upT[k] * Math.exp(-DAEMPF * num / den))); }
       G.ELEMENTS[e].upT = upT; set(`ELEMENTS.${e}.upT`, upT);
-      // A2/A3: alle Türme außer reinen Hilfstürmen (eigener Schaden < 30 %): Schaden (kraftT) ×q^0,7, Fläche ×q^0,3, bei Effekt-Türmen auch Effektstärke ×q^0,3
+      // A2/A3 (21.10. nachmittags): alle Türme. Hebel nach Anteil des eigenen Schadens a: Schaden (kraftT) ×q^a, Effektstärke ×q^(1−a),
+      // Fläche ×q^0,3 (wenn vorhanden); Licht-Turm: Verstärkung (buff − 1) ×q
       for (let k = 0; k < 8; k++) {
-        const t = A.z[e].tuerme[k]; if ((t.anteil ?? 1) < 0.3 || !(t.a2 > 0)) continue;
-        const q = Math.pow(1 / t.a2, 0.8), tw = G.ELEMENTS[e].towers[k], fl = tw[8] || 0;
-        set(`ELEMENTS.${e}.kraftT.${k}`, Math.min(4, Math.max(0.03, G.ELEMENTS[e].kraftT[k] * Math.pow(q, fl > 0 ? 0.7 : 1))));
+        const t = A.z[e].tuerme[k]; if (!(t.a2 > 0)) continue;
+        const a = Math.min(1, Math.max(0, t.anteil ?? 1)), q = Math.pow(1 / t.a2, DAEMPF), tw = G.ELEMENTS[e].towers[k], fl = tw[8] || 0, o = tw[9] || {};
+        if (o.buff) { set(`ELEMENTS.${e}.towers.${k}.9.buff`, o.buff.map(b => 1 + Math.max(0.02, (b - 1) * q))); continue; }
+        set(`ELEMENTS.${e}.kraftT.${k}`, Math.min(4, Math.max(0.03, G.ELEMENTS[e].kraftT[k] * Math.pow(q, fl > 0 ? 0.7 * a : a))));
         if (fl > 0) set(`ELEMENTS.${e}.towers.${k}.8`, Math.max(0.3, fl * Math.pow(q, 0.3)));
-        if ((t.anteil ?? 1) < 0.7 && tw[6] > 0) set(`ELEMENTS.${e}.towers.${k}.6`, Math.max(0.02, tw[6] * Math.pow(q, 0.3)));
+        if (a < 1 && tw[6] > 0) set(`ELEMENTS.${e}.towers.${k}.6`, Math.max(0.02, tw[6] * Math.pow(q, 1 - a)));
       }
     }
     T = tabelle(); A = auswerten(T); console.error(`Runde ${runde + 1}: ${(100 * A.rms).toFixed(1)} %`);
