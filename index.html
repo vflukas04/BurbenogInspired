@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-21c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-21d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2013,9 +2013,12 @@ function draw(i, cv){
       const ht = m.hitT !== undefined ? time - m.hitT : 9, hf = ht >= 0 && ht < .15 ? 1 - ht / .15 : 0;   // Treffer: kurz weiß und zurückgestoßen
       const vl = Math.hypot(m.vx || 0, m.vy || 0) || 1, kb = hf * r * .25;
       c.save(); c.translate(X - (m.vx || 0) / vl * kb, Y + r * .75 - (m.vy || 0) / vl * kb); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.scale(1 / sq, sq);
-      c.drawImage(im, -S / 2, -S, S, S);
+      const crown = m.def.mini && ikey === MONSTER_IMG[MONSTERS[m.type - 1] && MONSTERS[m.type - 1].name];   // Zwischenboss mit dem Bild seines Monsters: goldener Schimmer
+      if (crown) { c.shadowColor = '#ffd54a'; c.shadowBlur = r * (.8 + .4 * Math.sin(time * 4)); }
+      c.drawImage(im, -S / 2, -S, S, S); c.shadowBlur = 0;
       if (hf > 0) { c.globalAlpha = ghost * .7 * hf; c.drawImage(whiteOf(im), -S / 2, -S, S, S); c.globalAlpha = ghost; }
       c.restore(); m.top = Y + r * .75 - S;
+      if (crown) { c.font = `${r * 1.1}px serif`; c.fillText('👑', X, m.top + r * .2); }
       if (m.coc && !m.coc.fly && !m.coc.walk) {   // Kokon: weiße, halbdurchsichtige Hülle über der Raupe
         c.fillStyle = '#ffffffb8'; c.strokeStyle = '#ffffff'; c.lineWidth = 1; c.beginPath();
         c.ellipse(X, Y + r * .75 - S * .3, (view === 'seite' ? S * .5 : S * .28), (view === 'seite' ? S * .24 : S * .45), 0, 0, Math.PI * 2); c.fill(); c.stroke(); }
