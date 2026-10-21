@@ -41,7 +41,7 @@ const gold = (e, k, lvl) => { let g = G.towerBase(e, k).cost; for (let l = 1; l 
 const tageVon = (e, k, lvl = 1) => { const b = G.towerBase(e, k); let t = b.air ? [...FLIEG] : b.hitsFly ? TAGE : TAGE.filter(d => !FLIEG.has(d));
   if (REAL) { const g = gold(e, k, lvl), ab = BUDGET.findIndex(x => x >= 2 * g); t = t.filter(d => ab >= 0 && d >= ab); if (!t.length) t = [TAGE[TAGE.length - 1]]; }
   return t; };
-function platz(e, k, lvl, besetzt){ return C.mask(e, k, lvl, 0.5).cells.find(c => !besetzt.has(c.x + ',' + c.y)); }
+function platz(e, k, lvl, besetzt){ return C.mask(e, k, lvl, 0.5).cells.find(c => !besetzt.has(c.x + ',' + c.y)) || C.mask(e, k, lvl, 0).cells.find(c => !besetzt.has(c.x + ',' + c.y)); }
 
 /* Kontext-Messung (21.10., Standard; METHODE=ref = alte Referenzturm-Messung):
    Ein Aufbau aus Schadenstürmen desselben Elements im Wert des 3-Fachen des geprüften Turms (Normturm = Schadensturm mit dem Preis
@@ -50,19 +50,19 @@ function platz(e, k, lvl, besetzt){ return C.mask(e, k, lvl, 0.5).cells.find(c =
    Licht-Türme kommen auf das freie Feld mit den meisten Aufbau-Türmen im Lichtkreis. */
 const METHODE = process.env.METHODE || 'kontext';
 const istSchaden = (e, j) => { const b = G.towerBase(e, j); return !b.air && !b.light && !b.buff && ['Schaden', 'Fläche', 'Reichweite'].includes(b.role); };
-function normturm(e, k){
-  const g = G.towerBase(e, k).cost; let best = -1;
+function normturm(e, k, g){   // Schadensturm mit dem Preis am nächsten am investierten Gold g
+  let best = -1;
   for (let j = 0; j < 8; j++) if (istSchaden(e, j))   // auch der Turm selbst (dann zählen z. B. nicht stapelndes Brennen und Überlappung mit)
     if (best < 0 || Math.abs(Math.log(G.towerBase(e, j).cost / g)) < Math.abs(Math.log(G.towerBase(e, best).cost / g))) best = j;
   return best;
 }
 function kjgKontext(e, k, lvl){
   let sum = 0, n = 0, eig = 0;
-  const g = gold(e, k, lvl), j = normturm(e, k), cj = G.towerBase(e, j).cost, anzahl = Math.max(1, Math.round(3 * g / cj));
+  const g = gold(e, k, lvl), j = normturm(e, k, g), cj = G.towerBase(e, j).cost, anzahl = Math.max(1, Math.round(3 * g / cj));
   for (const lane of MAPS) {
     C.useMap(lane, null);
     const besetzt = new Set(), aufbau = [];
-    for (const c of C.mask(e, j, 1, 0.3).cells) { if (aufbau.length >= anzahl) break; aufbau.push({ x:c.x, y:c.y, el:e, idx:j, lvl:1 }); besetzt.add(c.x + ',' + c.y); }
+    for (const c of C.mask(e, j, 1, 0).cells) { if (aufbau.length >= anzahl) break; aufbau.push({ x:c.x, y:c.y, el:e, idx:j, lvl:1 }); besetzt.add(c.x + ',' + c.y); }
     let c;
     if (G.towerBase(e, k).light || G.towerBase(e, k).buff) {
       const r = G.tdef({ el:e, idx:k, lvl, x:0, y:0 }).light || 2;
