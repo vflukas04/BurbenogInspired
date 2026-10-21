@@ -45,4 +45,4 @@ fs.writeFileSync(ziel, html);
 // Prüfen: Seite lädt in der Simulation, Werte sind angekommen
 const G = require('./sim').load(ziel), bad = Object.entries(werte).filter(([p, v]) => {
   let o = G; for (let k of p.split('.')) { if (Array.isArray(o) && isNaN(+k)) k = o.findIndex(x => x && x.name === k); o = o[k]; } return JSON.stringify(o) !== JSON.stringify(v); });
-console.log(`spiegel.html erzeugt: Version ${G.VERSION}, ${Object.keys(werte).length} Spiegel-Werte, ${bad.length ? 'FEHLT: ' + bad.map(b => b[0]).join(', ') : 'alle angekommen'}`);
+console.log(`${path.basename(ziel)} erzeugt: Version ${G.VERSION}, ${Object.keys(werte).length} Spiegel-Werte, ${bad.length ? 'FEHLT: ' + bad.map(b => b[0]).join(', ') : 'alle angekommen'}`);
