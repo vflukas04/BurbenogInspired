@@ -21,7 +21,11 @@ const ANTEIL = {};   // Anteil des eigenen Schadens an der Kraft je Turm (Stufe 
 const BUDGET = (() => { const { budget } = require('./p2'); return G.MONSTERS.map((_, d) => budget(d).gold); })();
 const TAGE = G.MONSTERS.map((m, i) => i).filter(i => !G.MONSTERS[i].boss && !G.MONSTERS[i].mini);
 const FLIEG = new Set(TAGE.filter(i => G.MONSTERS[i].fly)), MAPS = [0, 2];
-const REF = { el:2, idx:0 };   // Referenzturm für Effekte: Schatten-Schemen (Einzelziel, kein Effekt)
+// Referenzturm für Effekte (21.10. korrigiert): Kopie des Schatten-Schemen OHNE Fluch als 9. Turm (Index 8), Werte fest vom Start.
+// Vorher verfluchte der echte Schemen selbst (Effekt 0,1) und machte so jeden geprüften Turm scheinbar zum Effekt-Turm (Lavaturm m = 17).
+G.ELEMENTS[2].towers[8] = [...G.ELEMENTS[2].towers[0]]; G.ELEMENTS[2].towers[8][6] = 0;
+G.TOWER_POWER[8] = G.TOWER_POWER[0]; G.TOWER_COST[8] = G.TOWER_COST[0]; if (G.ELEMENTS[2].kraftT) G.ELEMENTS[2].kraftT[8] = 1;
+const REF = { el:2, idx:8 };
 
 function welle(d){   // 20 Monster des Tages (gemischte Wellen mit Varianten), unsterblich
   const M = G.monsterDef(d, 2), n = G.MONSTERS[d].count || G.CONFIG.perWave, mix = G.waveMix ? G.waveMix(d, n) : [];
