@@ -15,8 +15,9 @@
 - Figuren über Kleidung, Haltung, Requisiten beschreiben, **nicht über Herkunft oder Hautfarbe** (öffentliches Spiel; Edits an der Hautfarbe kosteten außerdem viele Versuche und Farbstiche).
 
 ## Stand 21.10.: alle Monster eingebaut
-- Fast alle Monster haben jetzt Bilder (Krea 3 auf Civitai, 19.–20.10.); nur ein Schwarm-Monster bleibt Emoji. Zwischenbosse nutzen die Bilder ihres Monsters, Varianten (z. B. Reiter/Reittier) haben eigene. Auswahl und Dateinamen ab Runde 21 im Claude-Projekt (Überraschung für F).
+- Alle Monster haben Bilder (Krea 3 auf Civitai, 19.–21.10.). Zwischenbosse nutzen die Bilder ihres Monsters, Varianten (z. B. Reiter/Reittier) haben eigene. Auswahl und Dateinamen ab Runde 21 im Claude-Projekt (Überraschung für F).
 - Fehlt eine Ansicht (z. B. Asseln und Dachse von hinten, Füchse von hinten), nimmt das Spiel die Seitenansicht (`MIMG[...] = null` vorbelegt). Alle Bilder werden beim Start geladen (`preloadMonsterImgs`).
+- 21.10. (21c): Bilder neu aus den Originalen erzeugt: Seitenansicht fliegender Monster waagerecht gedreht (vor dem Verkleinern, kein Qualitätsverlust); Vorder-/Rückansichten, deren Fläche mehr als 1,25× über dem Median der drei Ansichten liegt, verkleinert (min. ×0,6, Seite nie), damit Monster in Kurven nicht springen. Fehlende Rückansicht der Asseln = Vorderansicht gespiegelt.
 - 21.10. (21b): Zeichengröße `r * 3.2` (vorher 2,5), Trefferreaktion (weiße Silhouette `whiteOf` + kleiner Rückstoß, `m.hitT` aus `hit`, nur Anzeige).
 - Erstes **Laufbild**: Betty (Endboss) hat 8 Laufbilder für die Seitenansicht (`betty-lauf-0..7.png`, aus einem Krea-Video, `MONSTER_ANIM` = [Anzahl, Bilder/s]). Andere Monster wippen weiter.
 - Bilder auf 128 Farben verkleinert (alle zusammen ca. 0,9 MB).
