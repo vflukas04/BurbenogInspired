@@ -32,11 +32,17 @@ function welle(d){   // 20 Monster des Tages (gemischte Wellen mit Varianten), u
   return [...Array(n)].map((_, k) => { const v = mix[k], q = v ? G.variantDef(M, v) : M;
     return v ? { type:d, hops:0, v, hp:q.hp * HP, ap:q.armorPts } : { type:d, hops:0, hp:M.hp * HP, ap:M.armorPts }; });
 }
-function schaden(towers, d){
+// partner = true (21.10., L): Schaden, den die mitgenommenen Effekte (Brennen) danach auf einer leeren Partner-Map noch anrichten, zählt mit
+// (ganztägiges Brennen wirkt über die eigene Map hinaus; die Brennstärke wird dafür eingepasst statt die Dauer zu kürzen)
+function schaden(towers, d, partner){
   const inc = welle(d), hpIn = inc.reduce((a, m) => a + m.hp, 0);
   const s = G.simulate({ lane:C.LANE, players:2, towers, res:[], incoming:inc, dark:false, weather:0, seed:7 });
-  return hpIn - s.leaked.reduce((a, m) => a + m.hp, 0);
+  const rest = s.leaked.reduce((a, m) => a + m.hp, 0);
+  if (!partner || !s.leaked.length) return hpIn - rest;
+  const p = G.simulate({ lane:C.LANE, players:2, towers:[], res:[], incoming:s.leaked, dark:false, weather:0, seed:7 });
+  return hpIn - p.leaked.reduce((a, m) => a + m.hp, 0);
 }
+const PARTNER = process.env.PARTNER !== '0';
 const gold = (e, k, lvl) => { let g = G.towerBase(e, k).cost; for (let l = 1; l < lvl; l++) g += Math.round(G.towerBase(e, k).cost * Math.pow(G.CONFIG.upgradeCost, l)); return g; };
 const tageVon = (e, k, lvl = 1) => { const b = G.towerBase(e, k); let t = b.air ? [...FLIEG] : b.hitsFly ? TAGE : TAGE.filter(d => !FLIEG.has(d));
   if (REAL) { const g = gold(e, k, lvl), ab = BUDGET.findIndex(x => x >= 2 * g); t = t.filter(d => ab >= 0 && d >= ab); if (!t.length) t = [TAGE[TAGE.length - 1]]; }
@@ -73,7 +79,7 @@ function kjgKontext(e, k, lvl){
     } else c = platz(e, k, lvl, besetzt);
     const t = { x:c.x, y:c.y, el:e, idx:k, lvl };
     for (const d of tageVon(e, k, lvl)) {
-      const ohne = schaden(aufbau, d), mit = schaden([...aufbau, t], d), allein = schaden([t], d);
+      const ohne = schaden(aufbau, d, PARTNER), mit = schaden([...aufbau, t], d, PARTNER), allein = schaden([t], d, PARTNER);
       sum += Math.max(0, mit - ohne) / g; eig += Math.min(allein, Math.max(0, mit - ohne)) / g; n++;
     }
   }
