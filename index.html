@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-21e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-22a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1804,11 +1804,11 @@ const MONSTER_IMG = { 'Silberfische':'silberfisch', 'Kellerasseln':'assel', 'Nac
   'Roboter':'roboter', 'Eiswürfel':'schneeball', 'Würfel':'wuerfel', 'Phönixe':'phoenix', 'Fairtrade-Bananen':'banane', 'El Schlucko':'schlucko',
   'Krieger':'krieger', 'Golems':'golem', 'Albträume':'albtraum', 'Looping-Louie-Flugzeuge':'flugzeug', 'Magier-Novizen':'novize', 'Magiermeister':'magiermeister',
   'E-Scooter-Fahrer':'escooter', 'Lindner-Spezialisten':'lindner', 'Wargreiter':'wargreiter', 'Warg':'warg', 'Ork':'ork', 'Fledermäuse':'fledermaus', 'Lehrer':'lehrer', 'Schulleiter':'schulleiter',
-  'Violine':'geige', 'Bratsche':'geige', 'Cello':'geige', 'Kontrabass':'geige', 'Streichquartett':'geige', 'The one who knocks':'chemiker',
+  'Violine':'geige', 'Bratsche':'geige', 'Cello':'cello', 'Kontrabass':'bass', 'Streichquartett':'geige', 'The one who knocks':'chemiker',
   'Mehlmottenraupen':'raupe', 'Nazgul':'schattenreiter', 'GNTModels':'model', 'Betty (Boss)':'betty' };   // 21.10. (L): alle Monster
 const MONSTER_ANIM = { betty:[8, 8] };   // 21.10. (L): Laufbilder <name>-lauf-0..n-1.png für die Seitenansicht [Anzahl, Bilder je Sekunde]
 const MIMG = {};
-for (const k of []) MIMG[k] = null;   // fehlende Ansichten hier eintragen → Seitenansicht (21.10.: keine mehr)
+for (const k of ['bass-hinten']) MIMG[k] = null;   // fehlende Ansichten hier eintragen → Seitenansicht (21.10.: keine mehr)
 // 21.10.: alle Bilder beim Start laden (sonst kurz Emoji, wenn eine Ansicht zum ersten Mal gebraucht wird, z. B. in Kurven)
 function preloadMonsterImgs(){ for (const k of new Set([...Object.values(MONSTER_IMG), 'motte', 'roboterrot'])) { for (const v of ['seite', 'vorne', 'hinten']) monsterImg(k, v);
   if (MONSTER_ANIM[k]) for (let j = 0; j < MONSTER_ANIM[k][0]; j++) monsterImg(k, 'lauf-' + j); } }
