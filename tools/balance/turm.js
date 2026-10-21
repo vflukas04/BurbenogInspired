@@ -43,8 +43,44 @@ const tageVon = (e, k, lvl = 1) => { const b = G.towerBase(e, k); let t = b.air 
   return t; };
 function platz(e, k, lvl, besetzt){ return C.mask(e, k, lvl, 0.5).cells.find(c => !besetzt.has(c.x + ',' + c.y)); }
 
+/* Kontext-Messung (21.10., Standard; METHODE=ref = alte Referenzturm-Messung):
+   Ein Aufbau aus Schadenstürmen desselben Elements im Wert des 3-Fachen des geprüften Turms (Normturm = Schadensturm mit dem Preis
+   am nächsten am geprüften, keine reine Luftabwehr; auch der Turm selbst), Stufe 1, beste Plätze. Wert des geprüften Turms =
+   Mehrschaden des ganzen Aufbaus, wenn er dazukommt. Gleiche Methode für Schadens-, Effekt- und Hilfstürme (Synergie, Licht, Rüstungsschaden).
+   Licht-Türme kommen auf das freie Feld mit den meisten Aufbau-Türmen im Lichtkreis. */
+const METHODE = process.env.METHODE || 'kontext';
+const istSchaden = (e, j) => { const b = G.towerBase(e, j); return !b.air && !b.light && !b.buff && ['Schaden', 'Fläche', 'Reichweite'].includes(b.role); };
+function normturm(e, k){
+  const g = G.towerBase(e, k).cost; let best = -1;
+  for (let j = 0; j < 8; j++) if (istSchaden(e, j))   // auch der Turm selbst (dann zählen z. B. nicht stapelndes Brennen und Überlappung mit)
+    if (best < 0 || Math.abs(Math.log(G.towerBase(e, j).cost / g)) < Math.abs(Math.log(G.towerBase(e, best).cost / g))) best = j;
+  return best;
+}
+function kjgKontext(e, k, lvl){
+  let sum = 0, n = 0, eig = 0;
+  const g = gold(e, k, lvl), j = normturm(e, k), cj = G.towerBase(e, j).cost, anzahl = Math.max(1, Math.round(3 * g / cj));
+  for (const lane of MAPS) {
+    C.useMap(lane, null);
+    const besetzt = new Set(), aufbau = [];
+    for (const c of C.mask(e, j, 1, 0.3).cells) { if (aufbau.length >= anzahl) break; aufbau.push({ x:c.x, y:c.y, el:e, idx:j, lvl:1 }); besetzt.add(c.x + ',' + c.y); }
+    let c;
+    if (G.towerBase(e, k).light || G.towerBase(e, k).buff) {
+      const r = G.tdef({ el:e, idx:k, lvl, x:0, y:0 }).light || 2;
+      c = C.free.filter(([x, y]) => !besetzt.has(x + ',' + y)).map(([x, y]) => ({ x, y, z:aufbau.filter(t => Math.hypot(t.x - x, t.y - y) <= r).length }))
+        .sort((a, b) => b.z - a.z)[0];
+    } else c = platz(e, k, lvl, besetzt);
+    const t = { x:c.x, y:c.y, el:e, idx:k, lvl };
+    for (const d of tageVon(e, k, lvl)) {
+      const ohne = schaden(aufbau, d), mit = schaden([...aufbau, t], d), allein = schaden([t], d);
+      sum += Math.max(0, mit - ohne) / g; eig += Math.min(allein, Math.max(0, mit - ohne)) / g; n++;
+    }
+  }
+  if (lvl === 1) ANTEIL[e + ',' + k] = sum > 0 ? eig / sum : 0;
+  return sum / n;
+}
 // Kraft je Gold für Turm (e,k) auf Stufe lvl, gemittelt über Maps und Tage
 function kjg(e, k, lvl){
+  if (METHODE === 'kontext') return kjgKontext(e, k, lvl);
   let sum = 0, n = 0, eig = 0;
   for (const lane of MAPS) {
     C.useMap(lane, null);
@@ -139,9 +175,10 @@ function anpassen(){
     }
     T = tabelle(); A = auswerten(T); console.error(`Runde ${runde + 1}: ${(100 * A.rms).toFixed(1)} %`);
     if (A.rms < best.A.rms) best = { A, sp:{ ...sp } };
+    S.speichern({ ...best.sp, _stand:`Turm-Prüfstand Zwischenstand Runde ${runde + 1}, ${METHODE}, Abweichung ${(100 * best.A.rms).toFixed(1)} %` }, path.join(__dirname, process.env.AUSGABE_A || 'spiegel-A.json'));
   }
-  best.sp._stand = `Turm-Prüfstand ${new Date().toISOString().slice(0, 16)}, Treppe ${TREPPE}, Abweichung ${(100 * best.A.rms).toFixed(1)} %`;
-  S.speichern(best.sp, path.join(__dirname, 'spiegel-A.json'));
+  best.sp._stand = `Turm-Prüfstand ${new Date().toISOString().slice(0, 16)}, ${METHODE}, Treppe ${TREPPE}, Abweichung ${(100 * best.A.rms).toFixed(1)} %`;
+  S.speichern(best.sp, path.join(__dirname, process.env.AUSGABE_A || 'spiegel-A.json'));
   return best.A;
 }
 const arg = process.argv[2] || 'bericht';
