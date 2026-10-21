@@ -1808,7 +1808,7 @@ const MONSTER_IMG = { 'Silberfische':'silberfisch', 'Kellerasseln':'assel', 'Nac
   'Mehlmottenraupen':'raupe', 'Nazgul':'schattenreiter', 'GNTModels':'model', 'Betty (Boss)':'betty' };   // 21.10. (L): alle Monster
 const MONSTER_ANIM = { betty:[8, 8] };   // 21.10. (L): Laufbilder <name>-lauf-0..n-1.png für die Seitenansicht [Anzahl, Bilder je Sekunde]
 const MIMG = {};
-for (const k of ['dachs-hinten', 'fuchs-hinten']) MIMG[k] = null;   // fehlen → Seitenansicht
+for (const k of []) MIMG[k] = null;   // fehlende Ansichten hier eintragen → Seitenansicht (21.10.: keine mehr)
 // 21.10.: alle Bilder beim Start laden (sonst kurz Emoji, wenn eine Ansicht zum ersten Mal gebraucht wird, z. B. in Kurven)
 function preloadMonsterImgs(){ for (const k of new Set([...Object.values(MONSTER_IMG), 'motte', 'roboterrot'])) { for (const v of ['seite', 'vorne', 'hinten']) monsterImg(k, v);
   if (MONSTER_ANIM[k]) for (let j = 0; j < MONSTER_ANIM[k][0]; j++) monsterImg(k, 'lauf-' + j); } }
