@@ -102,6 +102,11 @@ Ergebnisse in `tools/balance/ergebnisse/spiegel-v2*` (nicht im Repo). Der neue B
 - **Effekt-Türme objektiv messen (Vorschlag Claude, 21.10.):** statt eines einzelnen Referenzturms ein *Kontext-Aufbau*: Schadenstürme des eigenen Elements im Wert des 3-Fachen des geprüften Turms (nach der Treppe gewählt, beste Plätze). Wert des Turms = Mehrschaden des ganzen Aufbaus, wenn er dazukommt, verglichen mit demselben Gold in weiteren Schadenstürmen. Erfasst Synergie (Bremsen hilft Flächentürmen mehr), Licht/Verstärkung im Kreis und Rüstungsschaden. Mit Weiterlauf der Leaks auf eine Partner-Map ergibt sich daraus auch A4 (eigene Map ↔ Partner).
 - **Zu entscheiden (L):** Effekt-Türme werden über die Effektstärke mitgezogen (Fluchstein, Frosthauch). A4 (eigene Map ↔ Partner) ist noch nicht gemessen. Nächster Schritt: Spielläufe P2/Paare auf Kandidat A (laufen), danach Ebene B (Leben je Block, Kraft je Element).
 
+## Entscheidungen 21.10. nachmittags
+- **Schwelbrand (L unschlüssig, Claude entschieden):** kein ganztägiges Brennen mehr, sondern 8 s (Kills bleiben eher auf der eigenen Map, Upgrades bekommen wieder Wert). Upgrades vor allem über direkten Schaden, Brennen wächst leicht mit. „Glut hält den ganzen Tag“ wird Kandidat für eine Edelstein-Fähigkeit (Schritt Edelsteine, L-Idee).
+- **Irrlicht (L überlässt Claude):** Für Licht-Türme wächst der Kontext-Aufbau mit dem investierten Gold (Hilfstürme wirken auf alles im Kreis); Upgrade-Kurve über die Verstärkung je Stufe.
+- Gezielte Turmrunde nur Feuer und Schatten läuft (`ELEM=0,2`).
+
 ## Spielläufe auf Kandidat A (L, 21.10. mittags; Bot mit Vorausschau, 2 Maps)
 - **Kurve:** viel näher am Ziel als vorher: Runde 1–5 ×1,25, danach ×0,79–1,11 (vorher bis ×2,30). Die Turmregeln haben die späte Übermacht also weitgehend beseitigt.
 - **Elemente:** Feuer 0,56 · Eis 1,29 · Schatten 1,00 · Stein 1,40 – Spreizung größer als vorher; Aufgabe von Ebene B (`kraft` je Element), weil Ebene A nur innerhalb eines Elements abgleicht. Vorschlag aus dem Bericht: Feuer ×1,80, Eis ×0,77, Stein ×0,72.

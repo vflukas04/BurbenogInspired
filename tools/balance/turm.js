@@ -59,7 +59,8 @@ function normturm(e, k, g){   // Schadensturm mit dem Preis am nächsten am inve
 function kjgKontext(e, k, lvl){
   let sum = 0, n = 0, eig = 0;
   // 21.10.: Kontext nach dem Grundpreis (Stufe 1) – für alle Stufen derselbe Aufbau, sonst wächst die Umgebung mit dem Upgrade mit und verzerrt A1
-  const g = gold(e, k, lvl), g1 = gold(e, k, 1), j = normturm(e, k, g1), cj = G.towerBase(e, j).cost, anzahl = Math.max(1, Math.round(3 * g1 / cj));
+  const hilfe = !!(G.towerBase(e, k).light || G.towerBase(e, k).buff);   // 21.10. (L überlässt Claude): Licht-Türme wirken auf alles im Kreis → Aufbau wächst mit
+  const g = gold(e, k, lvl), g1 = hilfe ? g : gold(e, k, 1), j = normturm(e, k, g1), cj = G.towerBase(e, j).cost, anzahl = Math.max(1, Math.round(3 * g1 / cj));
   for (const lane of MAPS) {
     C.useMap(lane, null);
     const besetzt = new Set(), aufbau = [];
@@ -102,7 +103,7 @@ function kjg(e, k, lvl){
 }
 function tabelle(){
   const T = [];
-  for (let e = 0; e < 4; e++) { T[e] = [];
+  for (let e = 0; e < 4; e++) { T[e] = []; if (!ELEM.includes(e)) continue;
     for (let k = 0; k < 8; k++) { T[e][k] = []; for (let l = 1; l <= 6; l++) T[e][k][l] = kjg(e, k, l);
       if (process.env.LAUT) console.error(`${G.ELEMENTS[e].name} ${G.towerBase(e, k).name}: ${T[e][k].slice(1).map(v => v.toFixed(3)).join(' ')}`); } }
   return T;
@@ -113,6 +114,7 @@ function auswerten(T){
   const passt = (e, k) => METHODE === 'kontext' ? true : (ANTEIL[e + ',' + k] ?? 1) >= 0.3;   // Kontext-Messung: alle Türme; alte Messung: Hilfstürme außen vor
   let err = 0, nErr = 0;
   for (let e = 0; e < 4; e++) {
+    if (!ELEM.includes(e)) continue;
     // Anker der Treppe: geometrisches Mittel über die Schadenstürme (kein einzelner Turm als Maßstab)
     const ks = [...Array(8).keys()].filter(k => passt(e, k));
     const basis = Math.exp(ks.reduce((a, k) => a + Math.log(T[e][k][1] / (Math.pow(TREPPE, k) * gew(e, k))), 0) / ks.length);
@@ -141,6 +143,7 @@ function drucken(A){
    3) A1 je Turm: Steigung upT (Code-Patch 2)
    4) A2/A3 alle Türme außer reinen Hilfstürmen: Schaden, Fläche, bei Effekt-Türmen Effektstärke */
 const DAEMPF = +process.env.DAEMPF || 0.5;
+const ELEM = process.env.ELEM ? process.env.ELEM.split(',').map(Number) : [0, 1, 2, 3];   // nur diese Elemente messen/anpassen
 const SCHWERPUNKT = { rangeSteps:[0, 0.3, 0, 0, 0.2], durSteps:[1, 1, 1, 1.2, 1], effSteps:[1, 1, 1, 1.15, 1] };
 function anpassen(){
   const sp = { ...C.SPIEGEL };
@@ -151,10 +154,11 @@ function anpassen(){
   let T = tabelle(), A = auswerten(T); console.error(`Start (mit Schwerpunkt): ${(100 * A.rms).toFixed(1)} %`);
   let best = { A, sp:{ ...sp } };
   for (let runde = 0; runde < (+process.env.RUNDEN || 6); runde++) {
-    for (let e = 0; e < 4; e++) {
+    for (const e of ELEM) {
+      const Z = A.z.find(z => z.el === G.ELEMENTS[e].name);
       const up = upOf(e);
       for (let s = 1; s < 6; s++) {
-        const q = A.z[e].tuerme.map(t => t.a1[s] / t.a1[s - 1]).filter(Number.isFinite).sort((a, b) => a - b), med = q[q.length >> 1];
+        const q = Z.tuerme.map(t => t.a1[s] / t.a1[s - 1]).filter(Number.isFinite).sort((a, b) => a - b), med = q[q.length >> 1];
         up[s - 1] = Math.max(1.0, up[s - 1] / Math.pow(med, DAEMPF));
       }
       Object.keys(sp).filter(p => p.startsWith(`ELEMENTS.${e}.upDmg.`)).forEach(p => delete sp[p]);
@@ -162,14 +166,19 @@ function anpassen(){
       // A1 je Turm: Steigung (upT) aus der mittleren Abweichung über die Stufen (log a1[s] ≈ c·s)
       if (!G.ELEMENTS[e].upT) { G.ELEMENTS[e].upT = Array(8).fill(1); sp[`ELEMENTS.${e}.upT`] = [...G.ELEMENTS[e].upT]; }
       const upT = [...G.ELEMENTS[e].upT];
-      for (let k = 0; k < 8; k++) { const a = A.z[e].tuerme[k].a1; let num = 0, den = 0;
+      for (let k = 0; k < 8; k++) { const a = Z.tuerme[k].a1; let num = 0, den = 0;
         for (let s2 = 1; s2 < 6; s2++) if (a[s2] > 0) { num += s2 * Math.log(a[s2]); den += s2 * s2; }
         if (den) upT[k] = Math.min(1.6, Math.max(0.6, upT[k] * Math.exp(-DAEMPF * num / den))); }
       G.ELEMENTS[e].upT = upT; set(`ELEMENTS.${e}.upT`, upT);
+      for (let k = 0; k < 8; k++) { const o = G.ELEMENTS[e].towers[k][9] || {}; if (!o.buff) continue;   // Licht-Turm: Verstärkung je Stufe einpassen
+        const a = Z.tuerme[k].a1, b = [...o.buff];
+        for (let l = 1; l < 6; l++) if (a[l] > 0) b[l] = 1 + Math.max(0.02, (b[l] - 1) * Math.pow(1 / a[l], DAEMPF));
+        for (let l = 1; l < 6; l++) b[l] = Math.max(b[l], b[l - 1]);   // nie schwächer als die Stufe davor
+        set(`ELEMENTS.${e}.towers.${k}.9.buff`, b); }
       // A2/A3 (21.10. nachmittags): alle Türme. Hebel nach Anteil des eigenen Schadens a: Schaden (kraftT) ×q^a, Effektstärke ×q^(1−a),
       // Fläche ×q^0,3 (wenn vorhanden); Licht-Turm: Verstärkung (buff − 1) ×q
       for (let k = 0; k < 8; k++) {
-        const t = A.z[e].tuerme[k]; if (!(t.a2 > 0)) continue;
+        const t = Z.tuerme[k]; if (!(t.a2 > 0)) continue;
         const a = Math.min(1, Math.max(0, t.anteil ?? 1)), q = Math.pow(1 / t.a2, DAEMPF), tw = G.ELEMENTS[e].towers[k], fl = tw[8] || 0, o = tw[9] || {};
         if (o.buff) { set(`ELEMENTS.${e}.towers.${k}.9.buff`, o.buff.map(b => 1 + Math.max(0.02, (b - 1) * q))); continue; }
         set(`ELEMENTS.${e}.kraftT.${k}`, Math.min(4, Math.max(0.03, G.ELEMENTS[e].kraftT[k] * Math.pow(q, fl > 0 ? 0.7 * a : a))));
