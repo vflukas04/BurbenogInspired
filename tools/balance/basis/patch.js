@@ -8,6 +8,9 @@
 //     Dadurch machte ein schwacher Dauereffekt (z. B. Schwelbrand: ganzer Tag) jeden starken kurzen Effekt anderer Türme zum
 //     starken Dauereffekt. Neu: Der stärkste aktive Effekt wirkt mit seiner eigenen Dauer; ein schwächerer, aber längerer bleibt als
 //     Rückfall (v2/t2) und übernimmt, wenn der starke abläuft. Gilt für alle Effekte (Brennen, Bremsen, Fluch …), auch über Leaks.
+//  4) Brennen stapelt sich teilweise (21.10., L): Jeder brennende Turm hat seinen eigenen Brand am Monster (Liste fx.burn.L je Turm);
+//     wirksam ist die Summe nach Stärke sortiert mit 100 % / 50 % / 25 % / 10 % / danach je 5 %. Läuft ein starker Brand ab,
+//     rücken die anderen nach. Vorher wirkte nur der stärkste (Feuer verlor mit vielen Türmen ~30 % je Turm). Brände wandern mit den Leaks.
 const ERSETZEN = [
   ['const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;',
    'const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;\n// 21.10. (L, Spiegel): Upgrade-Schwerpunkt je Stufe\nconst upProd = (a, d, n) => a ? a.slice(0, n).reduce((x, v) => x * v, 1) : Math.pow(d, n), upSum = (a, d, n) => a ? a.slice(0, n).reduce((x, v) => x + v, 0) : d * n;'],
@@ -25,8 +28,30 @@ const ERSETZEN = [
   if (r) { c.v2 = r[0]; c.t2 = r[1]; } else { delete c.v2; delete c.t2; }`],
   [`    for (const k in m.fx) m.fx[k].t -= dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1);`,
    `    for (const k in m.fx) { const c = m.fx[k], dec = dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1); c.t -= dec;
-      if (c.t2 !== undefined) { c.t2 -= dec; if (c.t <= 0 && c.t2 > 0) { c.v = c.v2; c.t = c.t2; delete c.v2; delete c.t2; } } }`],
+      if (c.t2 !== undefined) { c.t2 -= dec; if (c.t <= 0 && c.t2 > 0) { c.v = c.v2; c.t = c.t2; delete c.v2; delete c.t2; } }
+      if (c.L) { for (const i in c.L) { c.L[i][1] -= dec; if (c.L[i][1] <= 0) delete c.L[i]; } c.v = burnSum(c); c.t = Math.max(0, ...Object.values(c.L).map(x => x[1])); } }`],
   [`keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };`,
-   `{ keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 }; if (fx[k].t2 > 0) { keep[k].v2 = +fx[k].v2.toFixed(3); keep[k].t2 = Math.round(fx[k].t2 * 10) / 10; } }`],
+   `{ keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 }; if (fx[k].t2 > 0) { keep[k].v2 = +fx[k].v2.toFixed(3); keep[k].t2 = Math.round(fx[k].t2 * 10) / 10; }
+        if (fx[k].L) { keep[k].L = {}; for (const [i, e] of Object.entries(fx[k].L)) if (e[1] > 0) keep[k].L['x' + i] = [+e[0].toFixed(3), Math.round(e[1] * 10) / 10]; } }`],
+  [`function hit(s, m, def, dmg){`,
+   `// 21.10. (L, Spiegel): teilweise stapelndes Brennen
+const BURN_W = [1, 0.5, 0.25, 0.1], BURN_REST = 0.05; let BURN_ID = 0;
+function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return v; }
+function addBurn(m, id, val, t, w){
+  if (!(val > 0) || !(t > 0)) return;
+  let c = m.fx.burn;
+  if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx.burn = { v:0, t:0, L:{} }; if (alt) c.L.alt = alt; }
+  if (w) c.w = true;
+  const e = c.L[id]; c.L[id] = e ? [Math.max(e[0], val), Math.max(e[1], t)] : [val, t];
+  c.v = burnSum(c); c.t = Math.max(...Object.values(c.L).map(x => x[1]));
+}
+function hit(s, m, def, dmg){`],
+  [`.sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addFx(o, 'burn', bn.v, bn.t));`,
+   `.sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addBurn(o, 'welle', bn.v, bn.t));`],
+  [`    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); if (def.burnWave) c.w = true; }
+    else addFx(m, 'burn', v, t, def.burnWave);`,
+   `    const bid = def._bid || (def._bid = ++BURN_ID);
+    addBurn(m, bid, v, t, def.burnWave);
+    if (def.burnStack && on(m, 'burn')) addBurn(m, 'g' + bid, v * (def.burnStack - 1) * bh, t, def.burnWave);   // Glutnest: zusätzlicher eigener Brand`],
 ];
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };
