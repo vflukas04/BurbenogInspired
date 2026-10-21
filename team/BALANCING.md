@@ -102,6 +102,14 @@ Ergebnisse in `tools/balance/ergebnisse/spiegel-v2*` (nicht im Repo). Der neue B
 - **Effekt-Türme objektiv messen (Vorschlag Claude, 21.10.):** statt eines einzelnen Referenzturms ein *Kontext-Aufbau*: Schadenstürme des eigenen Elements im Wert des 3-Fachen des geprüften Turms (nach der Treppe gewählt, beste Plätze). Wert des Turms = Mehrschaden des ganzen Aufbaus, wenn er dazukommt, verglichen mit demselben Gold in weiteren Schadenstürmen. Erfasst Synergie (Bremsen hilft Flächentürmen mehr), Licht/Verstärkung im Kreis und Rüstungsschaden. Mit Weiterlauf der Leaks auf eine Partner-Map ergibt sich daraus auch A4 (eigene Map ↔ Partner).
 - **Zu entscheiden (L):** Effekt-Türme werden über die Effektstärke mitgezogen (Fluchstein, Frosthauch). A4 (eigene Map ↔ Partner) ist noch nicht gemessen. Nächster Schritt: Spielläufe P2/Paare auf Kandidat A (laufen), danach Ebene B (Leben je Block, Kraft je Element).
 
+## Spielläufe auf Kandidat A (L, 21.10. mittags; Bot mit Vorausschau, 2 Maps)
+- **Kurve:** viel näher am Ziel als vorher: Runde 1–5 ×1,25, danach ×0,79–1,11 (vorher bis ×2,30). Die Turmregeln haben die späte Übermacht also weitgehend beseitigt.
+- **Elemente:** Feuer 0,56 · Eis 1,29 · Schatten 1,00 · Stein 1,40 – Spreizung größer als vorher; Aufgabe von Ebene B (`kraft` je Element), weil Ebene A nur innerhalb eines Elements abgleicht. Vorschlag aus dem Bericht: Feuer ×1,80, Eis ×0,77, Stein ×0,72.
+- **Paare (Durchbrüche ganzes Spiel, Grenze 30):** Schatten+Stein 11,5 · Eis+Stein 13 · Eis+Schatten 27,5 · Feuer+Schatten 75 · Feuer+Stein 76 · Feuer+Eis 89,5 → alle Feuer-Paare verlieren (Feuer zu schwach).
+- **C1 (erster Durchlauf ohne Leak, Ziel ≤ 15 %):** Feuer 2 % · Schatten 32 % · Eis 40 % · Stein 45 %.
+- **P8 neu (Ziel 80 %):** 6–83 %, sehr schwankend zwischen den Maps (Schatten 83 % / 6 %) → Bot-Entscheidung kippt leicht.
+- Weiter: Turmrunde mit Kontext-Messung und Reichweiten 80 %/90 % läuft; danach Ebene B.
+
 ## Turm-Prüfstand, erster Bericht – Zahlen überhöht, siehe Korrektur oben (L, 20.10. nachts; Basis + Spiegel, `node tools/balance/turm.js bericht`)
 Mittlere Abweichung von A1–A3: **130 %**. Die Richtung ist eindeutig, die Größenordnung hängt kaum an der Messart (Variante `REAL=1` mit echten Leben im Einsatzfenster liefert z. B. für Bergkönig und Kiesel dieselben Werte).
 - **A2 Turmtreppe:** Kraft je Gold auf Stufe 1, Turm 8 gegenüber Turm 1 (Soll ×1,45): Feuer ×5 (Lavaturm ×8,6, Sonnenturm ×9,6), Eis ×6–18 (Blizzard), Schatten ×3, **Stein ×44 (Bergkönig)**. Der Grundschaden je Gold ist fast flach (Kraft/Preis steigt nur ~4 % je Turm, wie gewollt); den Sprung machen **Fläche, Reichweite und Effekte** der hohen Türme (20 Monster gleichzeitig im Bereich, Betäuben hält sie dort).
