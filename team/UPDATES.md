@@ -5,6 +5,11 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 21.10. 23:20 · L · 2026-10-21e – Effekte: stärkster aktiver wirkt (Fehler behoben)
+- Fehler: Trafen zwei gleiche Effekte zusammen, wurden Stärke und Dauer getrennt maximiert. Ein schwacher Ganztags-Effekt (Schwelbrand, Ewiges Eis, Ewige Nacht) machte so jeden starken kurzen Brand/Bremsen/Fluch anderer Türme ganztägig.
+- Neu (`addFx`, Effekt-Ablauf in `step`, Leaks): Der stärkste aktive Effekt wirkt mit seiner eigenen Dauer; ein schwächerer, aber längerer bleibt als Rückfall (`v2`/`t2`) und übernimmt, wenn der starke abläuft – auch beim Nachbarn.
+- Folge: Kombinationen mit Ganztags-Türmen werden schwächer (vorher bis zu ×30 im Prüfstand). Keine Zahlen geändert. Neues Spiel + neu laden.
+
 ### 21.10. 10:15 · L · 2026-10-21d – Zwischenbosse mit Krone
 - Maus-, Fuchs- und Schäferhund-Boss tragen eine Krone und schimmern golden (sonst sahen sie aus wie das normale Monster). Nur Anzeige; neu laden reicht.
 
@@ -60,7 +65,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 
 ### 19.10. 09:20 · F · 2026-10-19a – Stein Tag 3 wieder Malus
 - Mit Stein-Block-Faktor 0,6 (18k) war Stein an Tag 3 mit Faktor 0,5 nur noch bei 0,9 (Bot). Damit Tag 3 wieder der Stein-Malus ist: Nacktschnecken Stein-Faktor 0,5 → 0,3 (Bot: Bedarf ÷ verfügbar 2,23). Faktorspanne jetzt 0,3–1,75. Stein Tag 2/4/5 liegen bei 0,68/0,90/0,98 (leicht), Feuer wird weiter getestet. Neues Spiel + neu laden.
-
-### 18.10. 23:45 · F · 2026-10-18k – Stein-Block-Faktor 0,34 → 0,6
-- Grund: Testspiel 18j (Stein + Feuer, zwei Spiele, beide nach Tag 2 verloren): Beide Spieler hatten nur Turm 1 (Gold reichte nicht für mehr), Stein-Kiesel mit Kraft ×0,4 × Block ×0,34 schaffte in Tag 2 (10 Uhr) 0 Kills. Der Bot kauft sofort Schleuder und sieht das nicht.
-- `ELEMENTS.Stein.kraftBlock[0]` 0,6. Bot (Tendenz): Stein Tag 2–5 jetzt 0,68 / 0,90 / 0,90 / 0,98, also zu leicht; Stein-Malus an Tag 3 ist damit weg. Wird nach dem nächsten Testspiel feiner gestellt (Kiesel-Anteil `kraftT` eher als Block-Faktor). Neues Spiel + neu laden.

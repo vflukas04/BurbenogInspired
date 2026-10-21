@@ -1,5 +1,9 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 18.10. 23:45 · F · 2026-10-18k – Stein-Block-Faktor 0,34 → 0,6
+- Grund: Testspiel 18j (Stein + Feuer, zwei Spiele, beide nach Tag 2 verloren): Beide Spieler hatten nur Turm 1 (Gold reichte nicht für mehr), Stein-Kiesel mit Kraft ×0,4 × Block ×0,34 schaffte in Tag 2 (10 Uhr) 0 Kills. Der Bot kauft sofort Schleuder und sieht das nicht.
+- `ELEMENTS.Stein.kraftBlock[0]` 0,6. Bot (Tendenz): Stein Tag 2–5 jetzt 0,68 / 0,90 / 0,90 / 0,98, also zu leicht; Stein-Malus an Tag 3 ist damit weg. Wird nach dem nächsten Testspiel feiner gestellt (Kiesel-Anteil `kraftT` eher als Block-Faktor). Neues Spiel + neu laden.
+
 ### 18.10. 23:30 · F · 2026-10-18j – Block 1 (Tag 1–6) neu abgestimmt, Anzeige ohne Zahlen
 - Ziel: Jedes Element hat genau einen schweren Tag (Malus, Bedarf ÷ verfügbar höchstens etwa 2) und einen leichten (Bonus, etwa 1,0); an dem Tag ist nur dieses eine Element schwer, die anderen etwa 1,5, damit der Partner auffängt. Ringregel als Ganzes (Leben, Rüstung, Faktoren), nicht nur der Schadensfaktor.
 - Gemessen (Bot, Tendenz): Feuer Tag 2 2,09, Stein Tag 3 2,23, Eis Tag 4 1,90, Schatten Tag 5 2,13; Bonus-Tage Stein T2 0,89, Eis T3 1,07, Schatten T4 1,28, Feuer T5 1,08; Maus-Boss etwa 1,6–2,0. Neue Stellschraube `kraftBlock` (Feuer 1,466 / Eis 1,12 / Schatten 1 / Stein 0,34 in Runde 1–5), Faktoren Tag 2–5 und Boss in MONSTERS, Kellerasseln Rüstung 13 %, Maus-Boss Leben ×5,5. Faktorspanne jetzt 0,5–1,75.

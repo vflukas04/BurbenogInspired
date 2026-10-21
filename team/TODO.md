@@ -2,6 +2,8 @@
 
 ## Post
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
+**An F (von L, 21.10. abends):**
+> Beim Makrobalancing ist ein Fehler in der Spielmechanik aufgefallen, den ich direkt im Spiel behoben habe (2026-10-21e): Trafen zwei gleiche Effekte zusammen, wurden Stärke und Dauer getrennt maximiert – ein schwacher Ganztags-Brand vom Schwelbrand plus ein starker kurzer Brand ergab einen starken Brand für den ganzen Tag (genauso bei Bremsen und Fluch, also auch Ewiges Eis und Ewige Nacht). Jetzt wirkt der stärkste aktive Effekt mit seiner eigenen Dauer, der schwächere längere übernimmt danach. Keine Zahlen geändert, aber Kombinationen mit Ganztags-Türmen werden schwächer – falls dein Block 1 darauf aufbaut, bitte kurz nachmessen. Liebe Grüße, Lukas
 **An F (von L, 20.10. mittags):**
 > Mein Makrobalancing (Spiegel) ist jetzt spielbar: https://vflukas04.github.io/BurbenogInspired/spiegel.html – eigenes Online-Spiel, stört unser normales Spiel nicht (lila Leiste unten). Zahlen: Stand 18.10. mittags + meine Spiegel-Werte, deine Änderungen seit 18e sind dort bewusst nicht drin. Wenn du magst, spiel dort mal ein paar Tage und sag, wie es sich anfühlt. Claude von F: Die Seite wird nur von L erzeugt (`tools/balance/spiegel-seite.js`), bitte nicht von Hand ändern.
 **An F (von L, 16.10. mittags):**

@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-21d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-21e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -777,11 +777,15 @@ function kill(s, m, def){
     splashAt(s, ex, m.x, m.y, def.explode.r, m);
   }
 }
-function addFx(m, kind, val, t, w){        // stärkerer Wert gewinnt, längere Dauer gewinnt
-  if (!(val > 0) || !(t > 0)) return;
+function addFx(m, kind, val, t, w){        // 21.10. (L): stärkster aktiver Effekt wirkt mit seiner eigenen Dauer; ein schwächerer, aber längerer bleibt als Rückfall (v2/t2)
+  if (!(val > 0) || !(t > 0)) return;      // vorher: Stärke und Dauer getrennt maximiert → schwacher Ganztags-Effekt + starker kurzer = starker Ganztags-Effekt
   const c = m.fx[kind];
-  if (!c || c.t <= 0) m.fx[kind] = w ? { v:val, t, w:true } : { v:val, t };
-  else { c.v = Math.max(c.v, val); c.t = Math.max(c.t, t); if (w) c.w = true; }
+  if (!c || c.t <= 0) { m.fx[kind] = w ? { v:val, t, w:true } : { v:val, t }; return; }
+  if (w) c.w = true;
+  const L = [[c.v, c.t], [val, t]]; if (c.t2 > 0) L.push([c.v2, c.t2]);
+  L.sort((a, b) => b[0] - a[0] || b[1] - a[1]); c.v = L[0][0]; c.t = L[0][1];
+  const r = L.slice(1).filter(x => x[1] > c.t).sort((a, b) => b[0] - a[0])[0];
+  if (r) { c.v2 = r[0]; c.t2 = r[1]; } else { delete c.v2; delete c.t2; }
 }
 const on = (m, k) => m.fx[k] && m.fx[k].t > 0;
 function hit(s, m, def, dmg){
@@ -933,7 +937,8 @@ function step(s, dt){
   else if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { const q = s.queue.shift(); spawn(s, q); s.spawnT = CONFIG.spawnGap * (MONSTERS[q.type].gap || 1); } }
   for (const m of s.monsters) {
     if (m.dead) continue;
-    for (const k in m.fx) m.fx[k].t -= dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1);
+    for (const k in m.fx) { const c = m.fx[k], dec = dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1); c.t -= dec;   // 21.10. (L): Rückfall-Effekt übernimmt
+      if (c.t2 !== undefined) { c.t2 -= dec; if (c.t <= 0 && c.t2 > 0) { c.v = c.v2; c.t = c.t2; delete c.v2; delete c.t2; } } }
     const fx = m.fx, on = k => fx[k] && fx[k].t > 0;
     if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * dt;
     if (m.hp <= 0) { kill(s, m); continue; }
@@ -966,7 +971,7 @@ function step(s, dt){
     }
     if (m.d >= s.map.len) {
       m.dead = m.gone = true;
-      const keep = {}; for (const k in fx) if (fx[k].t > 0 && !['stun', 'fear', 'grounded'].includes(k)) keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };
+      const keep = {}; for (const k in fx) if (fx[k].t > 0 && !['stun', 'fear', 'grounded'].includes(k)) { keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 }; if (fx[k].t2 > 0) { keep[k].v2 = +fx[k].v2.toFixed(3); keep[k].t2 = Math.round(fx[k].t2 * 10) / 10; } }
       const rec = { type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), ap:Math.max(0, Math.round(m.ap)), fx:keep, at:+s.t.toFixed(2) };
       if (m.v) rec.v = m.v; if (m.weak) rec.weak = m.weak;
       s.leaked.push(rec);   // nie 0: sonst käme es mit vollem Leben wieder
