@@ -10,7 +10,7 @@
 //     Rückfall (v2/t2) und übernimmt, wenn der starke abläuft. Gilt für alle Effekte (Brennen, Bremsen, Fluch …), auch über Leaks.
 //  4) Brennen stapelt sich teilweise (21.10., L): Jeder brennende Turm hat seinen eigenen Brand am Monster (Liste fx.burn.L je Turm);
 //     wirksam ist die Summe nach Stärke sortiert mit 100 % / 50 % / 25 % / 10 % / danach je 5 %. Läuft ein starker Brand ab,
-//     rücken die anderen nach. Auch mehrere Treffer desselben Turms stapeln (höchstens 3 Brände je Turm, reihum ersetzt). Vorher wirkte nur der stärkste (Feuer verlor mit vielen Türmen ~30 % je Turm). Brände wandern mit den Leaks.
+//     rücken die anderen nach. Jeder Treffer ist ein eigener Brand, auch vom selben Turm; gewertet werden die 10 stärksten (höchstens ×2,3). Vorher wirkte nur der stärkste (Feuer verlor mit vielen Türmen ~30 % je Turm). Brände wandern mit den Leaks.
 const ERSETZEN = [
   ['const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;',
    'const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;\n// 21.10. (L, Spiegel): Upgrade-Schwerpunkt je Stufe\nconst upProd = (a, d, n) => a ? a.slice(0, n).reduce((x, v) => x * v, 1) : Math.pow(d, n), upSum = (a, d, n) => a ? a.slice(0, n).reduce((x, v) => x + v, 0) : d * n;'],
@@ -35,7 +35,7 @@ const ERSETZEN = [
         if (fx[k].L) { keep[k].L = {}; for (const [i, e] of Object.entries(fx[k].L)) if (e[1] > 0) keep[k].L['x' + i] = [+e[0].toFixed(3), Math.round(e[1] * 10) / 10]; } }`],
   [`function hit(s, m, def, dmg){`,
    `// 21.10. (L, Spiegel): teilweise stapelndes Brennen
-const BURN_W = [1, 0.5, 0.25, 0.1], BURN_REST = 0.05, BURN_JE_TURM = 3; let BURN_ID = 0;
+const BURN_W = [1, 0.5, 0.25, 0.1], BURN_REST = 0.05, BURN_MAX = 10; let BURN_ID = 0;   // höchstens ×2,3
 function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return v; }
 function addBurn(m, id, val, t, w){
   if (!(val > 0) || !(t > 0)) return;
@@ -43,6 +43,7 @@ function addBurn(m, id, val, t, w){
   if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx.burn = { v:0, t:0, L:{} }; if (alt) c.L.alt = alt; }
   if (w) c.w = true;
   const e = c.L[id]; c.L[id] = e ? [Math.max(e[0], val), Math.max(e[1], t)] : [val, t];
+  const ks = Object.keys(c.L); if (ks.length > BURN_MAX) ks.sort((a, b) => c.L[b][0] - c.L[a][0] || c.L[b][1] - c.L[a][1]).slice(BURN_MAX).forEach(k => delete c.L[k]);   // nur die stärksten behalten
   c.v = burnSum(c); c.t = Math.max(...Object.values(c.L).map(x => x[1]));
 }
 function hit(s, m, def, dmg){`],
@@ -50,8 +51,8 @@ function hit(s, m, def, dmg){`],
    `.sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addBurn(o, 'welle', bn.v, bn.t));`],
   [`    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); if (def.burnWave) c.w = true; }
     else addFx(m, 'burn', v, t, def.burnWave);`,
-   `    // 21.10. (L): auch Treffer desselben Turms stapeln; höchstens BURN_JE_TURM Brände je Turm (reihum ersetzt), sonst wüchsen Ganztags-Brände endlos
-    const bid = (def._bid || (def._bid = ++BURN_ID)) + ':' + ((def._bc = ((def._bc || 0) + 1) % BURN_JE_TURM));
+   `    // 21.10. (L): jeder Treffer ist ein eigener Brand (auch vom selben Turm); gewertet werden die BURN_MAX stärksten
+    const bid = (def._bid || (def._bid = ++BURN_ID)) + ':' + (def._bc = (def._bc || 0) + 1);
     addBurn(m, bid, v, t, def.burnWave);
     if (def.burnStack && on(m, 'burn')) addBurn(m, 'g' + def._bid, v * (def.burnStack - 1) * bh, t, def.burnWave);   // Glutnest: zusätzlicher eigener Brand`],
 ];
