@@ -5,6 +5,11 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 21.10. 10:00 · L · 2026-10-21b – Monster größer, Trefferreaktion
+- Monster-Bilder ca. 30 % größer, Lebensbalken über dem Bild. Alle Bilder werden beim Start geladen (vorher kurz Emojis, wenn eine Ansicht zum ersten Mal kam, z. B. in Kurven).
+- Treffer: Monster blitzt kurz weiß auf und wird leicht zurückgestoßen (nur Anzeige). Ein Monster ab Runde 21 hat eine kleine optische Überraschung.
+- Nur Anzeige, keine Regeländerung; neu laden reicht.
+
 ### 21.10. 06:30 · L · (keine Spieländerung) – Turm-Prüfstand, Kandidat A
 - `node tools/balance/turm.js` misst Kraft je Gold je Turm und Stufe (Ebene A). Kandidat `tools/balance/spiegel-A.json`: Turmwerte und Upgrade-Schwerpunkt je Stufe (Code-Patch nur im Spiegel, `basis/patch.js`), Abweichung 16 %. Spielbar: `spiegel-a.html` (eigenes Spiel `spiegel2`).
 - Befund: Upgrades waren vor allem über die Reichweite zu stark. Erster Bericht vom 20.10. hatte einen Messfehler (Referenzturm verfluchte), Zahlen dort überhöht.
@@ -61,8 +66,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 
 ### 18.10. 23:00 · F · 2026-10-18i – Tag 2 und 4 etwas leichter
 - Kellerasseln: Rüstung 20 % → 13 % (Schatten ignoriert Rüstung nicht, daher traf es ihn am meisten): Schatten Tag 2 Bedarf 1,75 → 1,4. Ohrenkneifer: Stein-Faktor 1,0 → 1,1 (Stein Tag 4 1,71 → 1,55). Bot-Tendenz. Neues Spiel + neu laden.
-
-### 18.10. 23:10 · F · 2026-10-18h – Tag 1–6: Malus/Bonus kräftiger, neue Stellschraube kraftBlock
-- Neu: `ELEMENTS[e].kraftBlock` (Schaden je Element und 5er-Block, neutral 1; Zwischenbosse neutral). Block 1: Feuer ×1,466, Eis ×1,12, Schatten ×1, Stein ×0,34 (Kiesel wird in Tag 1–5 damit noch schwächer, Stein-Fläche bleibt vorn).
-- Faktoren Tag 2–5 (Ringregel bleibt): Malus 0,75, Bonus 1,75 (T2 Feuer 0,75/Stein 1,75; T3 Stein 0,75/Eis 1,3; T4 Eis 0,8/Schatten 1,75; T5 Schatten 0,75/Feuer 1,75).
-- Gemessen (Bot, Bedarf ÷ verfügbares Gold): Ø Tag 1–5 etwa 1,5 je Element; Malus-Zellen 1,3–2,4. Grenzen: Eis T4 bleibt bei 2,4 (Stufenwerte des Bots), Stein T3 nur 1,5. Tendenz, kein Spielgefühl. Neues Spiel + neu laden.

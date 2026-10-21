@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-21a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-21b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -489,7 +489,7 @@ const MONSTERS = [
   /* Runde 21–40 (16.10., L): neue Mechaniken. „Immun“ (Faktor 0) = 50 % Schaden und kein Effekt des Elements. Werte sind Startwerte fürs Balancing-Skript.
      Block 5–8 wie bisher: erste Runde neutral, danach je Element einmal Bonus und Malus (Block 7: Lehrer gemischt, Block 8: Vorhaut nicht neutral). */
   ['Roboter',           {emo:'🤖', ar:[0.3, 0.5], speed:0.9, hpMul:1.1, weak:[1, 1, 1, 1]}],
-  ['Sommer-Schneebälle',{emo:'⛄', ar:[0.45, 0.7], speed:1.0, weak:[1.5, 0, 1, 1], info:'rollen mit dicker Schale – Eis kann ihnen kaum etwas anhaben'}],
+  ['Eiswürfel',         {emo:'⛄', ar:[0.45, 0.7], speed:1.0, weak:[1.5, 0, 1, 1], info:'rollen mit dicker Schale – Eis kann ihnen kaum etwas anhaben'}],
   ['Würfel',            {emo:'🎲', ar:[0.2, 0.3], speed:1.1, weak:[1, 1, 1.5, 0.75]}],
   ['Phönixe',           {emo:'🐦‍🔥', ar:[0.1, 0.2], fly:true, speed:1.4, weak:[0, 1.5, 1, 1], info:'aus Feuer geboren – Feuer wirkt kaum'}],
   ['Fairtrade-Bananen', {emo:'🍌', speed:1.2, hpMul:0.95, weak:[1, 1, 0.75, 1.5]}],
@@ -507,7 +507,7 @@ const MONSTERS = [
   ['Lehrer',            {emo:'🧑‍🏫', ar:[0.2, 0.3], speed:1.0, mixed:true, weak:[1, 1, 1, 1], info:'jeder Lehrer hat eigene Stärken und Schwächen: eine „Immunität“, ein Bonus, der Rest gemischt'}],
   ['Schulleiter',       {emo:'🎓', mini:true, ar:[0.2, 0.3], speed:1.0, hpMul:5, count:1, lives:2, weatherBoss:true, weak:[1, 1, 1, 1], info:'macht auf jeder Map das Wetter, das dem Element dort am meisten schadet (Stein ist wetterfest)'}],
   ['Streichquartett',   {emo:'🎻', ar:[0.15, 0.3], speed:1.0, hpMul:1.05, quartet:true, weak:[1, 1, 1, 1], info:'gemischte Welle (Farbe und Größe zeigen die Sorte): 7 Violinen (gelb, leicht), 6 Bratschen (orange, verwirrt, laufen immer wieder rückwärts), 4 Celli (braun, stärker), 3 Kontrabässe (dunkelrot, groß, etwas langsamer, geben Monstern in ihrer Nähe +20 Punkte Rüstung)'}],
-  ['Heisenbergs',       {emo:'🧪', ar:[0.3, 0.4], speed:1.15, night:true, weak:[0.75, 1, 1.5, 1]}],
+  ['The one who knocks', {emo:'🧪', ar:[0.3, 0.4], speed:1.15, night:true, weak:[0.75, 1, 1.5, 1]}],
   ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'krabbeln erst kurz als Raupe, dann abwechselnd Kokon und Motte – als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
   ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, hpMul:0.8, weak:[1, 1, 0.75, 1.5]}],
   ['GNTModels',         {emo:'💃', speed:1.3, heart:{ t:1, cd:1 }, weak:[1, 1.5, 1, 0.75], info:'nach jedem Treffer kurz ein Herz – dann zielt kein Turm auf sie'}],
@@ -786,6 +786,7 @@ function addFx(m, kind, val, t, w){        // stärkerer Wert gewinnt, längere 
 const on = (m, k) => m.fx[k] && m.fx[k].t > 0;
 function hit(s, m, def, dmg){
   if (m.dead) return;
+  m.hitT = s.t;   // nur Anzeige (Trefferreaktion), die Simulation liest das nicht
   const w = (m.weak || m.def.weak)[def.el], f = w || CONFIG.immune, imm = !w;   // „immun“ = weniger Schaden und (seit 16.10.) kein Effekt des Elements; Lehrer: Faktoren je Exemplar (m.weak)
   const vuln = 1 + (on(m, 'curse') ? m.fx.curse.v : 0) + (on(m, 'smolder') ? m.fx.smolder.v : 0);
   if (def.groundHalf && !flying(m)) dmg *= 0.5;               // Feuerregen: Bodenmonster halb
@@ -1795,20 +1796,29 @@ const MONSTER_IMG = { 'Silberfische':'silberfisch', 'Kellerasseln':'assel', 'Nac
   'Kleine Hunde':'hund', 'Ratten':'ratte', 'Katzen':'katze', 'Spatzen':'spatz', 'Füchse':'fuchs', 'Fuchs-Boss':'fuchs', 'Habichte':'habicht', 'Dachse':'dachs',
   'Oktopusse':'oktopus', 'Wildschweine':'wildschwein', 'Schäferhunde':'schaeferhund', 'Schäferhund-Boss':'schaeferhund', 'Besoffene Penner':'penner',
   'Wütende Partnerin':'partnerin', 'Wütende Nachbarn':'nachbar', 'Eifersüchtige Geliebte':'geliebte', 'Uffug-Vorhaut':'vorhaut', 'Uffug (Boss)':'uffug',
-  'Roboter':'roboter', 'Sommer-Schneebälle':'schneeball', 'Würfel':'wuerfel', 'Phönixe':'phoenix', 'Fairtrade-Bananen':'banane', 'El Schlucko':'schlucko',
+  'Roboter':'roboter', 'Eiswürfel':'schneeball', 'Würfel':'wuerfel', 'Phönixe':'phoenix', 'Fairtrade-Bananen':'banane', 'El Schlucko':'schlucko',
   'Krieger':'krieger', 'Golems':'golem', 'Albträume':'albtraum', 'Looping-Louie-Flugzeuge':'flugzeug', 'Magier-Novizen':'novize', 'Magiermeister':'magiermeister',
   'E-Scooter-Fahrer':'escooter', 'Wargreiter':'wargreiter', 'Warg':'warg', 'Ork':'ork', 'Fledermäuse':'fledermaus', 'Lehrer':'lehrer', 'Schulleiter':'schulleiter',
-  'Violine':'geige', 'Bratsche':'geige', 'Cello':'geige', 'Kontrabass':'geige', 'Streichquartett':'geige', 'Heisenbergs':'chemiker',
+  'Violine':'geige', 'Bratsche':'geige', 'Cello':'geige', 'Kontrabass':'geige', 'Streichquartett':'geige', 'The one who knocks':'chemiker',
   'Mehlmottenraupen':'raupe', 'Nazgul':'schattenreiter', 'GNTModels':'model', 'Betty (Boss)':'betty' };   // 21.10. (L): alle außer Lindner-Spezialisten
 const MONSTER_ANIM = { betty:[8, 8] };   // 21.10. (L): Laufbilder <name>-lauf-0..n-1.png für die Seitenansicht [Anzahl, Bilder je Sekunde]
 const MIMG = {};
-for (const k of ['assel-hinten', 'dachs-hinten', 'schneeball-vorne', 'schneeball-hinten', 'chemiker-vorne', 'chemiker-hinten', 'fuchs-hinten']) MIMG[k] = null;   // fehlen → Seitenansicht
+for (const k of ['assel-hinten', 'dachs-hinten', 'schneeball-vorne', 'fuchs-hinten']) MIMG[k] = null;   // fehlen → Seitenansicht
+// 21.10.: alle Bilder beim Start laden (sonst kurz Emoji, wenn eine Ansicht zum ersten Mal gebraucht wird, z. B. in Kurven)
+function preloadMonsterImgs(){ for (const k of new Set([...Object.values(MONSTER_IMG), 'motte', 'roboterrot'])) { for (const v of ['seite', 'vorne', 'hinten']) monsterImg(k, v);
+  if (MONSTER_ANIM[k]) for (let j = 0; j < MONSTER_ANIM[k][0]; j++) monsterImg(k, 'lauf-' + j); } }
+// Trefferreaktion: weiße Silhouette je Bild (einmal erzeugt)
+const WHITE = new Map();
+function whiteOf(im){ let w = WHITE.get(im); if (w) return w;
+  w = document.createElement('canvas'); w.width = im.naturalWidth; w.height = im.naturalHeight; const g = w.getContext('2d');
+  g.drawImage(im, 0, 0); g.globalCompositeOperation = 'source-in'; g.fillStyle = '#fff'; g.fillRect(0, 0, w.width, w.height); WHITE.set(im, w); return w; }
 function monsterImg(key, view){
   const k = key + '-' + view; if (k in MIMG) return MIMG[k] && MIMG[k].complete && MIMG[k].naturalWidth ? MIMG[k] : null;
   const im = new Image(); im.onerror = () => { MIMG[k] = null; }; im.src = 'assets/monster/' + k + '.png'; MIMG[k] = im; return null;
 }
 function loadSprites(){
   if (typeof Image === 'undefined') return;
+  preloadMonsterImgs();
   for (const [k,n] of Object.entries(SPRITES)) { const im = new Image();
     im.onload = () => { SPR[k] = im; if (G) { drawAll(); if (!replay) renderPalette(); } };
     im.src = `assets/kenney/towerDefense_tile${String(n).padStart(3,'0')}.png`; }
@@ -1990,26 +2000,33 @@ function draw(i, cv){
     m.lx = x; m.ly = y;
     let ikey = MONSTER_IMG[m.def.name] || MONSTER_IMG[MONSTERS[m.type] && MONSTERS[m.type].name];
     if (ikey === 'raupe' && m.coc && m.coc.fly) ikey = 'motte';
+    if (ikey === 'roboter' && m.ap <= 0) ikey = 'roboterrot';   // 21.10.: Rüstung weg → Auge leuchtet rot
     let view = Math.abs(m.vx || 1) >= Math.abs(m.vy || 0) ? 'seite' : (m.vy > 0 ? 'vorne' : 'hinten');
     if (ikey && view !== 'seite' && MIMG[ikey + '-' + view] === null) view = 'seite';   // fehlende Ansicht → Seite
+    if (m.strip > 0) view = 'vorne';   // Betty dreht sich zum Betrachter
     const lauf = ikey && view === 'seite' && MONSTER_ANIM[ikey] && !(m.strip > 0) ? Math.floor(time * MONSTER_ANIM[ikey][1] + m.id) % MONSTER_ANIM[ikey][0] : -1;
     const im = ikey && ((lauf >= 0 && monsterImg(ikey, 'lauf-' + lauf)) || monsterImg(ikey, view));
     c.textAlign = 'center'; c.textBaseline = 'middle';
     if (im) {
-      const S = r * 2.5 * (m.def.boss || m.def.mini ? 1.15 : 1), walk = lauf < 0 && !(m.coc && !m.coc.fly && !m.coc.walk) && !(m.strip > 0) && !flying(m);
+      const S = r * 3.2 * (m.def.boss || m.def.mini ? 1.15 : 1), walk = lauf < 0 && !(m.coc && !m.coc.fly && !m.coc.walk) && !(m.strip > 0) && !flying(m);
       const sq = walk ? 1 + .05 * Math.sin(time * 11 + m.id * 3) : 1;   // Wippen beim Gehen
-      c.save(); c.translate(X, Y + r * .75); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.scale(1 / sq, sq);
-      c.drawImage(im, -S / 2, -S, S, S); c.restore();
+      const ht = m.hitT !== undefined ? time - m.hitT : 9, hf = ht >= 0 && ht < .15 ? 1 - ht / .15 : 0;   // Treffer: kurz weiß und zurückgestoßen
+      const vl = Math.hypot(m.vx || 0, m.vy || 0) || 1, kb = hf * r * .25;
+      c.save(); c.translate(X - (m.vx || 0) / vl * kb, Y + r * .75 - (m.vy || 0) / vl * kb); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.scale(1 / sq, sq);
+      c.drawImage(im, -S / 2, -S, S, S);
+      if (hf > 0) { c.globalAlpha = ghost * .7 * hf; c.drawImage(whiteOf(im), -S / 2, -S, S, S); c.globalAlpha = ghost; }
+      c.restore(); m.top = Y + r * .75 - S;
       if (m.coc && !m.coc.fly && !m.coc.walk) {   // Kokon: weiße, halbdurchsichtige Hülle über der Raupe
         c.fillStyle = '#ffffffb8'; c.strokeStyle = '#ffffff'; c.lineWidth = 1; c.beginPath();
         c.ellipse(X, Y + r * .75 - S * .3, (view === 'seite' ? S * .5 : S * .28), (view === 'seite' ? S * .24 : S * .45), 0, 0, Math.PI * 2); c.fill(); c.stroke(); }
-    } else { c.font = `${r*1.9}px serif`; c.fillText(emo, X, Y + 1); }
+    } else { c.font = `${r*1.9}px serif`; c.fillText(emo, X, Y + 1); m.top = Y - r; }
     c.globalAlpha = 1;
-    if (m.strip > 0) {                         // Betty „zieht sich aus“: hautfarben verpixelt, schwarzer Balken
-      const n = 4, q = 2*r/n, skin = ['#f1c6a7', '#e8b494', '#d9a07f', '#f6d3b8'];
-      for (let a = 0; a < n; a++) for (let b = 0; b < n; b++) { c.fillStyle = skin[(a*3 + b + Math.floor(time*6)) % 4]; c.fillRect(X - r + a*q, Y - r + b*q, q + .5, q + .5); }
-      c.fillStyle = '#000'; c.fillRect(X - r*1.25, Y - r*.2, r*2.5, r*.5);
-      c.fillStyle = '#fff'; c.font = `700 ${Math.max(7, r*.36)}px ${v('--mono')}`; c.fillText('CENSORED', X, Y + r*.06); }
+    if (m.strip > 0) {                         // Betty „zieht sich aus“: hautfarben verpixelt ab dem Kinn, schwarzer Balken (21.10.: an das Bild angepasst)
+      const S = im ? r * 3.2 * 1.15 : 2*r, top = im ? m.top + S * .2 : Y - r, w = im ? S * .36 : 2*r, h = im ? S * .42 : 2*r;
+      const n = 4, qx = w/n, qy = h/n, skin = ['#f1c6a7', '#e8b494', '#d9a07f', '#f6d3b8'];
+      for (let a = 0; a < n; a++) for (let b = 0; b < n; b++) { c.fillStyle = skin[(a*3 + b + Math.floor(time*6)) % 4]; c.fillRect(X - w/2 + a*qx, top + b*qy, qx + .5, qy + .5); }
+      c.fillStyle = '#000'; c.fillRect(X - w*.7, top, w*1.4, h*.3);
+      c.fillStyle = '#fff'; c.font = `700 ${Math.max(7, w*.2)}px ${v('--mono')}`; c.fillText('CENSORED', X, top + h*.15); }
     if (m.heartT > 0) { c.font = `${r*1.1}px serif`; c.fillText('❤️', X + r*.7, Y - r*.8); }
     if (m.def.bass) { c.strokeStyle = '#c8ccd055'; c.lineWidth = 1; c.setLineDash([3,3]); c.beginPath(); c.arc(X, Y, m.def.bass.r*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]); }
     if (m.def.confused) { c.fillStyle = '#ffe9a8'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.fillText('?', X - r, Y - r); }
@@ -2019,7 +2036,7 @@ function draw(i, cv){
     if (on('fear')) { c.fillStyle = '#e8dcff'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.fillText('!', X - r, Y - r); }
     if (m.hops) { c.fillStyle = v('--accent'); c.font = `700 ${cs*.22}px ${v('--mono')}`; c.fillText(m.hops, X + r, Y - r); }
     const f = Math.max(0, m.hp / m.def.hp);
-    const by = Y - r - 6 < 0 ? Y + r + 2 : Y - r - 6;   // 17.10.: am oberen Rand Balken unter das Monster
+    const bt = Math.min(Y - r, m.top || Y - r) - 6, by = bt < 0 ? Y + r + 2 : bt;   // 17.10.: am oberen Rand Balken unter das Monster; 21.10.: über dem Bild
     c.fillStyle = '#00000088'; c.fillRect(X-r, by, 2*r, 3);
     c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(X-r, by, 2*r*f, 3);
     if (m.def.armorPts && m.ap > 0) { c.fillStyle = '#c8ccd0'; c.fillRect(X-r, by + 3, 2*r*Math.min(1, m.ap / m.def.armorPts), 2); }   // Rüstung: grauer Balken

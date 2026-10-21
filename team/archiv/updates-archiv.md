@@ -1,5 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 18.10. 23:10 · F · 2026-10-18h – Tag 1–6: Malus/Bonus kräftiger, neue Stellschraube kraftBlock
+- Neu: `ELEMENTS[e].kraftBlock` (Schaden je Element und 5er-Block, neutral 1; Zwischenbosse neutral). Block 1: Feuer ×1,466, Eis ×1,12, Schatten ×1, Stein ×0,34 (Kiesel wird in Tag 1–5 damit noch schwächer, Stein-Fläche bleibt vorn).
+- Faktoren Tag 2–5 (Ringregel bleibt): Malus 0,75, Bonus 1,75 (T2 Feuer 0,75/Stein 1,75; T3 Stein 0,75/Eis 1,3; T4 Eis 0,8/Schatten 1,75; T5 Schatten 0,75/Feuer 1,75).
+- Gemessen (Bot, Bedarf ÷ verfügbares Gold): Ø Tag 1–5 etwa 1,5 je Element; Malus-Zellen 1,3–2,4. Grenzen: Eis T4 bleibt bei 2,4 (Stufenwerte des Bots), Stein T3 nur 1,5. Tendenz, kein Spielgefühl. Neues Spiel + neu laden.
+
 ### 18.10. 21:50 · F · 2026-10-18g – Archiv: Türme zu jedem Tagesende statt nur am letzten
 - Fehler im Archiv: `days` (Türme am Tagesende) enthielt meist nur den letzten Tag. Ursache (wahrscheinlich): Jede Welle schrieb `days: {}` mit `merge:true`, und Firestore ersetzt eine leere Map als Ganzes, löschte also die früheren Tage. `archDoc` lässt leere `days`/`slots` jetzt weg. Gilt ab neuem Spiel; alte Archive bleiben lückenhaft.
 - Keine Spielregel geändert.
