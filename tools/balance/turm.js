@@ -43,7 +43,9 @@ function schaden(towers, d, partner){
   return hpIn - p.leaked.reduce((a, m) => a + m.hp, 0);
 }
 const PARTNER = process.env.PARTNER !== '0';
-const gold = (e, k, lvl) => { let g = G.towerBase(e, k).cost; for (let l = 1; l < lvl; l++) g += Math.round(G.towerBase(e, k).cost * Math.pow(G.CONFIG.upgradeCost, l)); return g; };
+// 22.10.: Kraft je Gold mit den Grundpreisen der Basis – Preisänderungen aus Ebene B/C (Form je Element) sollen von der Turmrunde nicht zurückgedreht werden
+const B0 = require('./sim').load(), preis = (e, k) => B0.towerBase(e, k).cost;
+const gold = (e, k, lvl) => { let g = preis(e, k); for (let l = 1; l < lvl; l++) g += Math.round(preis(e, k) * Math.pow(G.CONFIG.upgradeCost, l)); return g; };
 const tageVon = (e, k, lvl = 1) => { const b = G.towerBase(e, k); let t = b.air ? [...FLIEG] : b.hitsFly ? TAGE : TAGE.filter(d => !FLIEG.has(d));
   if (REAL) { const g = gold(e, k, lvl), ab = BUDGET.findIndex(x => x >= 2 * g); t = t.filter(d => ab >= 0 && d >= ab); if (!t.length) t = [TAGE[TAGE.length - 1]]; }
   return t; };
@@ -180,7 +182,12 @@ function anpassen(){
         const a = Z.tuerme[k].a1, b = [...o.buff];
         for (let l = 1; l < 6; l++) if (a[l] > 0) b[l] = 1 + Math.max(0.02, (b[l] - 1) * Math.pow(1 / a[l], DAEMPF));
         for (let l = 1; l < 6; l++) b[l] = Math.max(b[l], b[l - 1]);   // nie schwächer als die Stufe davor
-        set(`ELEMENTS.${e}.towers.${k}.9.buff`, b); }
+        set(`ELEMENTS.${e}.towers.${k}.9.buff`, b);
+        if (o.pierce) {   // 22.10.: Irrlicht-Upgrades wachsen vor allem über „Rüstung ignorieren“ → Zuwachs je Stufe einpassen
+          const pc = [...o.pierce];
+          for (let l = 1; l < 6; l++) if (a[l] > 0) pc[l] = Math.min(1, pc[0] + Math.max(0, (pc[l] - pc[0]) * Math.pow(1 / a[l], DAEMPF)));
+          for (let l = 1; l < 6; l++) pc[l] = Math.max(pc[l], pc[l - 1]);
+          set(`ELEMENTS.${e}.towers.${k}.9.pierce`, pc); } }
       // A2/A3 (21.10. nachmittags): alle Türme. Hebel nach Anteil des eigenen Schadens a: Schaden (kraftT) ×q^a, Effektstärke ×q^(1−a),
       // Fläche ×q^0,3 (wenn vorhanden); Licht-Turm: Verstärkung (buff − 1) ×q
       for (let k = 0; k < 8; k++) {

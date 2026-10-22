@@ -4,7 +4,7 @@
   "ELEMENTS.1.kraft": 0.6133,
   "ELEMENTS.2.kraft": 1.0263,
   "ELEMENTS.3.kraft": 1.8549,
-  "_stand": "Ebene B+C aus kandidat-de (Dämpfung 0.7, Ziel schwächstes Paar 1.2), 2026-10-22T06:29",
+  "_stand": "Ebene B+C aus kandidat-de (Dämpfung 0.7, Ziel schwächstes Paar 1.2), 2026-10-22T06:29 · Schatten Türme 7/8 Preis zurück (P8), Irrlicht-Runde folgt",
   "CONFIG.upgrade.steps.0": 2.402,
   "CONFIG.upgrade.steps.1": 1.917,
   "CONFIG.upgrade.steps.2": 1.661,
@@ -267,8 +267,8 @@
     "3": 125,
     "4": 210,
     "5": 360,
-    "6": 700,
-    "7": 1315
+    "6": 650,
+    "7": 1200
   },
   "ELEMENTS.3.costOverride": {
     "0": 10,
