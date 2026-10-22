@@ -13,7 +13,7 @@
 // Aufruf: SPIEGEL=<Eingang.json> node tools/balance/ebeneC.js <Ordner unter ergebnisse/> <Ausgang.json> [Dämpfung 0,7] [ZIEL 1,15]
 const fs = require('fs'), path = require('path');
 const C = require('./core'), { G } = C, S = require('./spiegel');
-const [ordner, aus, dmp, zl] = process.argv.slice(2), D = +dmp || 0.7, ZIEL = +zl || 1.2, ZIEL_BOSS = { 'Uffug (Boss)':1.15, 'Betty (Boss)':1.1 }, FORM = process.env.FORM !== '0';
+const [ordner, aus, dmp, zl] = process.argv.slice(2), D = +dmp || 0.7, ZIEL = +zl || 1.2, ZIEL_BOSS = { 'Uffug (Boss)':1.15, 'Betty (Boss)':1.1 }, FORM = process.env.FORM !== '0', FORMEXP = +process.env.FORMEXP || 0.5;
 const dir = path.join(__dirname, 'ergebnisse', ordner);
 const daten = JSON.parse(fs.readFileSync(path.join(dir, 'p2-alle.json'), 'utf8')), P = JSON.parse(fs.readFileSync(path.join(dir, 'paare.json'), 'utf8'));
 const gm = a => Math.exp(a.reduce((x, v) => x + Math.log(Math.max(1e-3, v)), 0) / a.length);
@@ -53,8 +53,8 @@ if (FORM) {
     for (let k = 0; k < 8; k++) { const sum = u[k].reduce((a, v) => a + v, 0); gew.push(sum);
       if (!sum) {   // nie gebaut: Block, ab dem man ihn sich zweimal leisten könnte
         const { budget } = require('./p2'); const d0 = [...Array(nT).keys()].find(d => budget(d).gold >= 2 * G.towerBase(e, k).cost);
-        pf.push(d0 === undefined ? 1 : Math.pow(sb[block(d0)][e], 0.5)); continue; }
-      const lg = u[k].reduce((a, v, b) => a + (v / sum) * Math.log(sb[b][e]), 0); pf.push(Math.exp(0.5 * lg)); }
+        pf.push(d0 === undefined ? 1 : Math.pow(sb[block(d0)][e], FORMEXP)); continue; }
+      const lg = u[k].reduce((a, v, b) => a + (v / sum) * Math.log(sb[b][e]), 0); pf.push(Math.exp(FORMEXP * lg)); }
     const norm = 1;   // keine Gold-Normierung: das Gold steckt fast ganz in späten Türmen und würde den Effekt aufheben; das Niveau regelt die Kraft je Element
     const co = { ...(G.ELEMENTS[e].costOverride || {}) }, z = [];
     for (let k = 0; k < 8; k++) { const f = Math.min(1.4, Math.max(0.7, pf[k] / norm)), alt = G.towerBase(e, k).cost, neu = Math.max(5, Math.round(alt * f / 5) * 5 || alt);
