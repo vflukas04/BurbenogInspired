@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-22a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-22b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -464,9 +464,9 @@ let MON_ROUND = 0;   // Runde (für Leben, Kopfgeld, Farbe): Zwischenbosse teile
 const MONSTERS = [
   ['Silberfische',      {emo:'🐛', speed:1.0, weak:[1.1, 0.85, 0.7, 1], eff:[0, 0, 0, 0]}],
   ['Kellerasseln',      {emo:'🪲', ar:[0.13, 0.3], speed:0.9, weak:[0.7, 1.1, 1.3, 1.5], eff:[-1, 0, 0, 1]}],
-  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.2, 1.75, 1.2, 0.6], eff:[0, 1, 0, -1]}],
+  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.2, 1.75, 0.9, 0.6], eff:[0, 1, 0, -1]}],
   ['Ohrenkneifer',      {emo:'🦗', ar:[0.08, 0.15], hpMul:0.7, weak:[0.6, 0.4, 1.1, 0.8], eff:[0, -1, 1, 0]}],
-  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 0.9, 0.7, 1.2], eff:[1, 0, -1, 0]}],
+  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 0.9, 0.55, 1.2], eff:[1, 0, -1, 0]}],
   ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:5.5, night:true, count:1, lives:2, weak:[0.85, 1, 1.25, 1], eff:[0, 0, 0, 0]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
   ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
   ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 1, 0.75]}],   // 12.10.: Tag 7 (vorher 6)
