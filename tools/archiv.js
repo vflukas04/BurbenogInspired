@@ -3,7 +3,7 @@
 // Holt games/<GAME_ID>/archiv aus Firestore (REST, nur lesen) und legt die Rohdaten in tools/archiv-daten/ ab (nicht im Repo).
 // Fehlspiele werden markiert, nicht gelöscht: aufgegeben vor Tag 5, weniger als 3 Tage gespielt, ohne Türme.
 const { execFileSync } = require('child_process'), fs = require('fs'), path = require('path');
-const PROJECT = 'burbenoginspired', GAME_ID = 'spiel1';
+const PROJECT = 'burbenoginspired', GAME_ID = process.env.SPIEL || 'spiel1';   // SPIEL=spiegel2 für die Spiegel-Testseite
 const BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/games/${GAME_ID}/archiv`;
 const get = url => JSON.parse(execFileSync('curl', ['-s', '-m', '20', url], { encoding:'utf8', maxBuffer:64 << 20 }));
 // Firestore-REST-Werte in normales JSON umwandeln
