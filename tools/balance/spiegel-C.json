@@ -4,7 +4,7 @@
   "ELEMENTS.1.kraft": 0.6133,
   "ELEMENTS.2.kraft": 1.0263,
   "ELEMENTS.3.kraft": 1.8549,
-  "_stand": "Ebene B+C aus kandidat-de (Dämpfung 0.7, Ziel schwächstes Paar 1.2), 2026-10-22T06:29 · Schatten Türme 7/8 Preis zurück (P8), Irrlicht-Runde folgt",
+  "_stand": "Turm-Prüfstand 2026-10-22T07:02, kontext, Treppe 1.1, Abweichung 20.0 %",
   "CONFIG.upgrade.steps.0": 2.402,
   "CONFIG.upgrade.steps.1": 1.917,
   "CONFIG.upgrade.steps.2": 1.661,
@@ -35,10 +35,10 @@
   "ELEMENTS.1.kraftT.5": 0.9411,
   "ELEMENTS.1.kraftT.6": 0.8001,
   "ELEMENTS.1.kraftT.7": 1.9489,
-  "ELEMENTS.2.kraftT.4": 0.9906,
-  "ELEMENTS.2.kraftT.5": 1.3089,
-  "ELEMENTS.2.kraftT.6": 0.9164,
-  "ELEMENTS.2.kraftT.7": 1.0128,
+  "ELEMENTS.2.kraftT.4": 0.9812,
+  "ELEMENTS.2.kraftT.5": 1.2956,
+  "ELEMENTS.2.kraftT.6": 0.9074,
+  "ELEMENTS.2.kraftT.7": 1.0085,
   "ELEMENTS.3.kraftT.4": 0.9779,
   "ELEMENTS.3.kraftT.5": 1.4955,
   "ELEMENTS.3.kraftT.6": 1.1208,
@@ -52,7 +52,7 @@
   "ELEMENTS.1.kraftT.0": 0.7443,
   "ELEMENTS.1.kraftT.2": 0.5475,
   "ELEMENTS.1.kraftT.3": 1.2766,
-  "ELEMENTS.2.kraftT.0": 0.9532,
+  "ELEMENTS.2.kraftT.0": 0.9443,
   "CONFIG.upgrade.rangeSteps": [
     0,
     0.3,
@@ -92,13 +92,13 @@
   "ELEMENTS.1.kraftT.1": 1.3691,
   "ELEMENTS.1.towers.4.8": 2.4473,
   "ELEMENTS.2.upDmg": [
-    1.7384,
-    1.5931,
-    1.3803,
-    1.2797,
-    1.1954
+    1.7048,
+    1.578,
+    1.3845,
+    1.2469,
+    1.1722
   ],
-  "ELEMENTS.2.kraftT.2": 0.9211,
+  "ELEMENTS.2.kraftT.2": 0.9133,
   "ELEMENTS.3.upDmg": [
     1.6492,
     1.4938,
@@ -136,20 +136,20 @@
   "ELEMENTS.1.towers.6.8": 1.0523,
   "ELEMENTS.1.towers.6.6": 0.2431,
   "ELEMENTS.2.upT": [
-    1.3036,
-    0.8206,
-    1.3834,
+    1.323,
+    0.6209,
+    1.4055,
     1.6,
-    1.3022,
-    1.3131,
-    1.3493,
+    1.3232,
+    1.3338,
+    1.3703,
     1.6
   ],
-  "ELEMENTS.2.kraftT.3": 1.3472,
-  "ELEMENTS.2.towers.3.6": 0.3075,
+  "ELEMENTS.2.kraftT.3": 1.3804,
+  "ELEMENTS.2.towers.3.6": 0.3205,
   "ELEMENTS.2.towers.4.6": 0.0893,
-  "ELEMENTS.2.towers.6.6": 0.1929,
-  "ELEMENTS.2.towers.7.6": 0.4442,
+  "ELEMENTS.2.towers.6.6": 0.1927,
+  "ELEMENTS.2.towers.7.6": 0.4401,
   "ELEMENTS.3.upT": [
     1.3313,
     1.3598,
@@ -184,16 +184,16 @@
   "ELEMENTS.0.towers.7.6": 0.39,
   "ELEMENTS.1.towers.1.6": 0.2022,
   "ELEMENTS.1.towers.5.6": 0.2031,
-  "ELEMENTS.2.towers.0.6": 0.1,
+  "ELEMENTS.2.towers.0.6": 0.0999,
   "ELEMENTS.2.towers.1.9.buff": [
-    1.386,
-    1.386,
-    1.386,
-    1.386,
-    1.386,
-    1.386
+    1.3866,
+    1.3866,
+    1.3866,
+    1.3866,
+    1.3866,
+    1.3866
   ],
-  "ELEMENTS.2.towers.2.6": 0.1502,
+  "ELEMENTS.2.towers.2.6": 0.1499,
   "ELEMENTS.2.towers.5.6": 0.2002,
   "ELEMENTS.0.towers.4.7": "Tag",
   "MONSTERS.Silberfische.hpMul": 1.1252,
@@ -279,5 +279,13 @@
     "5": 345,
     "6": 670,
     "7": 1090
-  }
+  },
+  "ELEMENTS.2.towers.1.9.pierce": [
+    0.3,
+    0.369,
+    0.3921,
+    0.4939,
+    0.5325,
+    0.5325
+  ]
 }
