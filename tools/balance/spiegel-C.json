@@ -4,7 +4,7 @@
   "ELEMENTS.1.kraft": 0.6133,
   "ELEMENTS.2.kraft": 1.0263,
   "ELEMENTS.3.kraft": 1.8549,
-  "_stand": "Ebene B+C aus kandidat-de (Dämpfung 0.7, Ziel schwächstes Paar 1.15), 2026-10-22T04:20",
+  "_stand": "Ebene B+C aus kandidat-de (Dämpfung 0.7, Ziel schwächstes Paar 1.15), 2026-10-22T06:29",
   "CONFIG.upgrade.steps.0": 2.402,
   "CONFIG.upgrade.steps.1": 1.917,
   "CONFIG.upgrade.steps.2": 1.661,
@@ -17,7 +17,7 @@
   "CONFIG.hpBlock.5": 4.929,
   "CONFIG.hpBlock.6": 7.5474,
   "CONFIG.hpBlock.7": 11.1861,
-  "MONSTERS.Betty (Boss).hpMul": 6.1936,
+  "MONSTERS.Betty (Boss).hpMul": 6.8302,
   "MONSTERS.Nazgul.hpMul": 0.6803,
   "MONSTERS.Fledermäuse.hpMul": 0.7595,
   "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.7411,
@@ -219,7 +219,7 @@
   "MONSTERS.Wütende Nachbarn.hpMul": 1.5364,
   "MONSTERS.Eifersüchtige Geliebte.hpMul": 1.5051,
   "MONSTERS.Uffug-Vorhaut.hpMul": 1.5032,
-  "MONSTERS.Uffug (Boss).hpMul": 13.5841,
+  "MONSTERS.Uffug (Boss).hpMul": 14.9803,
   "MONSTERS.Roboter.hpMul": 1.4699,
   "MONSTERS.Sommer-Schneebälle.hpMul": 1.0333,
   "MONSTERS.Würfel.hpMul": 1.4518,
@@ -239,5 +239,45 @@
   "MONSTERS.Streichquartett.hpMul": 1.0321,
   "MONSTERS.Heisenbergs.hpMul": 1.0398,
   "MONSTERS.Mehlmottenraupen.hpMul": 1.3221,
-  "MONSTERS.GNTModels.hpMul": 1.0042
+  "MONSTERS.GNTModels.hpMul": 1.0042,
+  "ELEMENTS.0.costOverride": {
+    "0": 8,
+    "1": 45,
+    "2": 70,
+    "3": 115,
+    "4": 190,
+    "5": 330,
+    "6": 565,
+    "7": 1145
+  },
+  "ELEMENTS.1.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 75,
+    "3": 125,
+    "4": 210,
+    "5": 375,
+    "6": 715,
+    "7": 1340
+  },
+  "ELEMENTS.2.costOverride": {
+    "0": 10,
+    "1": 30,
+    "2": 75,
+    "3": 125,
+    "4": 210,
+    "5": 360,
+    "6": 700,
+    "7": 1315
+  },
+  "ELEMENTS.3.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 70,
+    "3": 120,
+    "4": 195,
+    "5": 345,
+    "6": 670,
+    "7": 1090
+  }
 }
