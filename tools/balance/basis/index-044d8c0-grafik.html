@@ -1,0 +1,2169 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BurbenogInspired</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" content="#141a17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@600&family=Alegreya+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+[hidden]{display:none!important}
+/* Layout: Kriegstisch bei Nacht – Kopfleiste mit Tageszeit-Leiste, Spielfelder im Raster, Bauleiste unten fest */
+:root{
+  color-scheme: dark;
+  --bg:#141a17; --panel:#1d2521; --line:#33403a; --fg:#e6e2d3; --muted:#9aa49c;
+  --accent:#e0b04a; --danger:#e0604a; --ok:#7cc48a;
+  --grass:#24301f; --grass2:#2a3824; --road:#5a4a35; --road2:#6b5940;
+  --display:"Grenze Gotisch", "Palatino Linotype", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:15px;padding-inline:16px;padding-block:12px 150px}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto}
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;margin-bottom:12px}
+h1{font-family:var(--display);font-weight:600;font-size:2rem;margin:0;letter-spacing:.02em;color:var(--accent)}
+h1 small{font-family:var(--body);font-size:.78rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-left:8px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.stat{display:flex;flex-direction:column}
+.stat b{font-family:var(--mono);font-size:1.2rem;font-variant-numeric:tabular-nums}
+.stat span{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat.bad b{color:var(--danger)}
+.clock{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.slot{border:1px solid var(--line);border-radius:6px;padding:6px 10px;background:var(--panel);font-size:.82rem;color:var(--muted);min-width:0}
+.slot b{font-family:var(--mono);color:var(--fg);display:block;font-size:1rem}
+.slot.now{border-color:var(--accent);color:var(--fg)}
+.slot.done{opacity:.5}
+.slot .wx{font-family:var(--body);font-weight:500;font-size:.8rem;color:var(--muted);margin-left:4px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.btn{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 14px}
+.btn.primary{background:var(--accent);color:#1b1408;border-color:var(--accent);font-weight:700}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn.on{border-color:var(--accent);color:var(--accent)}
+.muted{color:var(--muted);font-size:.85rem}
+.spacer{flex:1}
+.pop{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(150px + env(safe-area-inset-bottom,0px));z-index:9;background:var(--accent);color:#1b1408;font-weight:700;padding:8px 14px;border-radius:8px;box-shadow:0 4px 16px #0008;max-width:calc(100% - 32px)}
+.research{margin-top:16px;border-top:1px solid var(--line);padding-top:10px}
+.research h2{font-family:var(--display);font-weight:600;font-size:1.2rem;margin:0 0 6px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:8px}
+.house{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.house b{font-family:var(--display);font-weight:600;font-size:1.05rem}
+.ritem{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.85rem}
+.ritem .btn{padding:4px 10px;font-size:.8rem;white-space:nowrap}
+.done-r{color:var(--ok);font-size:.8rem}
+.today{margin-bottom:12px;font-size:.9rem;color:var(--muted)}
+.today b{color:var(--fg)}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin:2px 4px 2px 0;font-family:var(--mono);font-size:.8rem}
+.chip.good{border-color:var(--ok);color:var(--ok)}
+.chip.bad{border-color:var(--danger);color:var(--danger)}
+.seats select,.seats input{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;color:var(--fg)}
+.seats{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.lanes{grid-template-columns:1fr}}
+.lane{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0}
+.lane.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.lhead{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:8px}
+.lhead .name{font-weight:700;font-size:1.05rem}
+.el{border:none;background:none;padding:0;font-weight:700}
+.el[disabled]{cursor:default}
+.meta{font-family:var(--mono);font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.meta b{color:var(--fg)}
+.meta .plus{color:var(--ok)}
+.meta.sub{flex-basis:100%;font-size:.7rem;margin-top:-4px}
+.inc{margin-left:auto;font-size:.82rem;color:var(--muted)}
+canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
+.info{font-size:.85rem;color:var(--muted);min-height:1.3em;margin-top:6px}
+.info button{margin-left:8px;padding:2px 8px;font-size:.8rem}
+.cvw{position:relative}
+.tbar{position:absolute;display:flex;gap:6px;transform:translate(-50%,-100%);margin-top:-6px;z-index:5;pointer-events:none}
+.tbar.below{transform:translate(-50%,0);margin-top:6px}
+.tbar button{pointer-events:auto;display:flex;flex-direction:column;align-items:center;min-width:44px;padding:3px 6px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--fg);font-size:.7rem;line-height:1.1;box-shadow:0 2px 6px rgba(0,0,0,.45);cursor:pointer}
+.tbar button b{font-size:1.25rem;line-height:1}
+.tbar .tup b{color:#e5483b}
+.tbar button:disabled{opacity:.4}
+.log{margin-top:16px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.log h2{font-family:var(--display);font-weight:600;color:var(--fg);font-size:1.2rem;margin:0 0 6px}
+.log ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.log li b{font-family:var(--mono);color:var(--fg);font-weight:500;margin-right:6px}
+.palette{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+.ptitle{max-width:1200px;margin:0 auto 6px;font-size:.82rem;color:var(--muted)}
+.ptitle b{color:var(--fg)}
+.prow{max-width:1200px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tw{flex:0 0 auto;width:132px;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;display:flex;flex-direction:column;gap:2px}
+.tw .n{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
+.tw .n img{width:24px;height:24px;flex:0 0 auto}
+.tw .c{font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+.tw .d{font-size:.72rem;color:var(--muted);line-height:1.2}
+.tw.sel{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.tw[disabled]{opacity:.4;cursor:default}
+.banner{margin-bottom:12px;padding:10px 14px;border-radius:6px;border:1px solid var(--accent);font-weight:500}
+.banner.bad{border-color:var(--danger)}
+.setup{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:12px;max-width:560px}
+.setup h2{font-family:var(--display);font-weight:600;margin:0;font-size:1.5rem}
+.setup label{display:flex;flex-direction:column;gap:4px;font-size:.88rem;color:var(--muted)}
+.setup select,.setup input{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.row>label{flex:1 1 160px}
+/* Dialog im Vordergrund: Bauen bestätigen, Monster-Info, Sieg/Niederlage */
+.dlgback{position:fixed;inset:0;background:#000a;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px}
+.dlg{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;max-width:420px;width:100%;max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 10px 40px #000c;display:flex;flex-direction:column;gap:10px}
+.dlg h2{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:0;display:flex;align-items:center;gap:8px}
+.dlg h2 img{width:40px;height:40px}
+.dlgback.sheet{background:#0003;align-items:flex-start;padding-top:max(12px, env(safe-area-inset-top,0px))}
+.dlgback.sheet .dlg{gap:8px;padding:12px 14px}
+.dlgback.sheet dl{grid-template-columns:auto 1fr auto 1fr;font-size:.85rem}
+.dlg .big{font-size:2.6rem;line-height:1}
+.dlg.won{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent),0 10px 40px #000c}
+.dlg.lost{border-color:var(--danger);box-shadow:0 0 0 2px var(--danger),0 10px 40px #000c}
+.dlg dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.92rem}
+.dlg dt{color:var(--muted)} .dlg dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.stat-t{width:100%;border-collapse:collapse;font-size:.85rem}
+.stat-t th,.stat-t td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+.stat-t th{color:var(--muted);font-weight:500}
+.stat-t td{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.dlg .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.ibtn{border:1px solid var(--line);background:var(--bg);border-radius:999px;width:24px;height:24px;padding:0;font-size:.8rem;line-height:22px;margin-left:4px;color:var(--accent)}
+.gem{font-family:var(--mono);font-weight:700;margin-right:4px}
+@keyframes gUp{0%{color:var(--ok);text-shadow:0 0 10px var(--ok)}100%{}}
+@keyframes gDown{0%{color:var(--danger);text-shadow:0 0 10px var(--danger)}100%{}}
+.meta b.up{animation:gUp 1s ease-out}.meta b.down{animation:gDown 1s ease-out}
+.dlg>.btn{text-align:left}
+.rlvl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-left:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1>BurbenogInspired <small id="modeTag">verbinde …</small></h1>
+    <div class="stats" id="stats" hidden>
+      <div class="stat"><b id="sDay"></b><span>Tag</span></div>
+      <div class="stat" id="passBox"><b id="sPass"></b><span>Ganz durchgebrochen</span></div>
+      <div class="stat"><b id="sNext"></b><span id="sNextL">Nächste Welle</span></div>
+    </div>
+  </header>
+
+  <section id="setup" class="setup" hidden>
+    <h2>Neues Spiel</h2>
+    <div class="row">
+      <label for="fPlayers">Spieler<select id="fPlayers"><option>2</option><option>3</option><option selected>4</option></select></label>
+      <label for="fTiming" id="lTiming">Wellen kommen<select id="fTiming">
+        <option value="test">Test: alle paar Minuten</option>
+        <option value="real">Echt: 10, 13, 16, 19 Uhr</option></select></label>
+      <label for="fLive">Spielart<select id="fLive">
+        <option value="0">Uhrzeiten: Leaks kommen zur nächsten Welle</option>
+        <option value="1">Live: Leaks laufen sofort beim Nachbarn weiter</option></select></label>
+      <label for="fDiff">Schwierigkeit<select id="fDiff">
+        <option value="leicht">Leicht: Monster −25 % Leben</option>
+        <option value="normal" selected>Normal</option>
+        <option value="schwer">Schwer: Monster +25 % Leben</option></select></label>
+    </div>
+    <div class="row" id="rowTest"><label for="fInterval">Abstand zwischen Wellen (Minuten)<input id="fInterval" type="number" min="1" max="120" value="3"></label></div>
+    <div class="row" id="rowReal" hidden><label for="fStart">Tag 1 ist<select id="fStart"><option value="0">heute</option><option value="1" selected>morgen</option></select></label></div>
+    <p class="muted" id="setupHint" style="margin:0"></p>
+    <div><button class="btn primary" id="fGo">Spiel starten</button></div>
+  </section>
+
+  <div id="game" hidden>
+    <div class="clock" id="clock"></div>
+    <div id="banner" class="banner" hidden></div>
+    <div id="vbanner" class="banner bad" hidden></div>
+    <div id="pausebanner" class="banner" hidden><b>⏸ Spiel pausiert</b> – keine Welle, bis jemand weiterspielt. <button class="btn primary" id="resumeBtn" style="margin-left:8px">Weiter spielen</button></div>
+    <div id="flybanner" class="banner" hidden></div>
+    <div class="today" id="today"></div>
+    <div class="seats" id="seats"></div>
+    <div class="controls">
+      <button class="btn primary" id="ready" hidden></button>
+      <button class="btn primary" id="go"></button>
+      <button class="btn" id="replay">Letzte Welle ansehen</button>
+      <button class="btn" id="spd" title="Tempo der Wiedergabe">Tempo 3×</button>
+      <button class="btn" id="skip" hidden>Ende zeigen</button>
+      <button class="btn" id="giftBtn">🎁 Schenken</button>
+      <span class="spacer"></span>
+      <button class="btn" id="more" aria-label="Menü">⋯</button>
+    </div>
+    <main class="lanes" id="lanes"></main>
+    <section class="research" id="research"></section>
+    <section class="log"><h2>Chronik</h2><ol id="log"></ol></section>
+  </div>
+</div>
+<div id="pop" class="pop" hidden></div>
+<div id="dlgback" class="dlgback" hidden><div class="dlg" id="dlg" role="dialog" aria-modal="true"></div></div>
+<div class="palette" id="palette" hidden>
+  <div class="ptitle" id="ptitle"></div>
+  <div class="prow" id="prow"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* =====================================================================
+   ONLINE-SPEICHER (Firebase). Hier die Werte aus der Firebase-Konsole
+   einfügen (Projekteinstellungen → Deine Apps → Web-App → firebaseConfig).
+   Leer lassen = Ein-Gerät-Modus.
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDqKXqGho_rQveqs7ltUR_vHykgGClgL1I",
+  authDomain: "burbenoginspired.firebaseapp.com",
+  projectId: "burbenoginspired",
+  appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
+};
+const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
+const VERSION = "2026-10-18e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+
+/* =====================================================================
+   SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
+   */
+const CONFIG = {
+  days: 48,                 // Tage: 40 Runden (je ein Monstertyp) + 6 Zwischenbosse + 2 Endbosse (16.10.: Runde 21–40); 16.10. (L): 5. Monster im Block 4 (Eifersüchtige Geliebte), Endboss teilt sich die Runde der Vorhaut
+  lossLimit: 30,            // mehr ganz durchgebrochene Monster = verloren
+  startGold: 30,
+  perWave: 20,              // Monster pro Welle (Boss: 1)
+  /* Leben: baseHp × Runde^hpExp × hpMul × Spielerfaktor. Ausgelegt auf 40 Runden (Test: 20).
+     Richtwert (11.10. nachts): Mit den Anfangstürmen schafft ein Spieler in den ersten Runden
+     ca. 12 von 20 (2 Spieler), 8 (3 Spieler), 6 (4 Spieler). Kalibriert mit tools/kalibrieren.js. */
+  baseHp: 14,               // 12.10.: neu kalibriert für 16 × 16
+  playerHp: { 2:1, 3:1.25, 4:1.5 },
+  hpExp: 1.38,              // 12.10. 15:38: etwas steiler (vorher 1,3; davor 1,5). Runde 2: ×2,6 · 5: ×9,2 · 10: ×24 · 20: ×63
+  hpBlock: [1, 1.002, 1.081, 1.942, 3.518, 5.766, 8.289, 14.922],   // 17.10. (L): aus Balancing-Schleife 9;   // 16.10.: Lebensfaktor je Block (Runde 1–5, 6–10, …, 36–40), Stellschraube Balancing-Skript
+  hpCutFrom: 3, hpCut: 0.95,  // 12.10.: ab Runde 3 (Nacktschnecken) alle Monster 5 % weniger Leben
+  // Wellenzeiten je Spielerzahl: keine leeren Wellen, 19 Uhr (dunkel) ist immer dabei
+  slotPlan: { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 16, 19] },
+  darkFrom: 19,             // ab 19 Uhr ist es dunkel: Schatten trifft nachtaktive Monster nur im Irrlicht-Kreis
+  firstWaveDelay: 1,        // Testmodus: erste Welle erst nach 1 Minute
+  maxLevel: 6,              // Stufe 1 + 5 Upgrades
+  upgradeCost: 1.5,         // jedes Upgrade kostet 1,5 × so viel wie das vorige
+  upgrade: { dmg:2.1, firstDmg:2.35, steps:[2.35, 2.1, 1.85, 1.7, 1.6], range:0.2, dur:1.3, eff:1.15 },  // 12.10. 11:01: erstes Upgrade ×2,2, danach je ×2,1. Schaden/s je Stufe auf 0,1 aufgerundet
+   // pro Upgrade: Schaden ×2, Reichweite +0,2, Effektdauer ×1,3, Effektstärke ×1,15
+  giftFee: 0.10, giftStep: 10,
+  weatherChange: 0.35,      // Chance, dass das Wetter vor einer Welle umschlägt
+  spawnGap: 0.9,            // Sekunden zwischen zwei Monstern (früher 0,5: Flächenschaden war zu stark)
+  immune: 0.5,              // Schadensfaktor bei weak = 0 (war 0,25)
+  splashEdge: 0.7,          // Flächenschaden fällt nach außen ab: Mitte 100 %, Rand 70 % (11.10. abends: war 40 %)
+  shotSpeed: 9, lobSpeed: 6.5, lobMid: 1.4, lobFast: 1.8,   // Wurf: siehe lobSpeedOf  // Geschosse in Feldern/s: gezielte fliegen dem Ziel nach, Flächen-Geschosse (Wurf) fliegen auf den Punkt, wo das Ziel beim Abschuss war
+  stunMax: 5,               // Betäubung höchstens 5 s
+  sellRefund: 0.5
+};
+const DAY = 'Tag';
+// Gelände: Bauen kostet je nach Feld mehr. Stein zahlt keinen Aufschlag.
+const TERRAIN = [
+  { name:'Wiese', extra:0,  col:['#24301f','#2a3824'] },
+  { name:'Wald',  extra:10, col:['#17271a','#1b2e1e'] },
+  { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] },
+  { name:'Felsen', extra:30, stoneExtra:30, col:['#2c2c30','#323237'] }   // 13.10. (F): Felsen +15 % Reichweite für alle, Stein macht mehr Schaden. 14.10. (L): alle zahlen +30
+];
+const ROCK = { rangeMul:1.15, stoneDmg:1.3, min:6, max:8 };   // Felsen je Karte 6–8, neu gewürfelt bei jedem neuen Spiel
+const TERRAIN_MAX = 26;     // Wald- und Sumpffelder je Karte bei 63 Feldern Weg, kürzerer Weg = etwas weniger
+// Forschung: drei Gebäude, alle zahlen gemeinsam aus der Gemeinschaftskasse (ohne Gebühr).
+// 14.10. (L): jede Verbesserung in 3 Stufen, Stufe 1 billig (früh relevant). Freischaltungen ungestuft, teurer als ein Turm der freigeschalteten Stufe.
+const RESEARCH_GROUPS = [
+  { grp:'t5',    house:'Bauhütte',     name:'Türme 5–6 freischalten', costs:[250] },
+  { grp:'t7',    house:'Bauhütte',     name:'Türme 7–8 freischalten', costs:[700], need:'t5:1' },
+  { grp:'cheap', house:'Bauhütte',     name:'Upgrades billiger',      costs:[40, 80, 130],  steps:[0.07, 0.14, 0.2],  fmt:v => '−' + Math.round(v*100) + ' %' },
+  { grp:'el0',   house:'Elementlabor', name:'Feuer Schaden',          costs:[25, 40, 55],   steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:0 },
+  { grp:'el1',   house:'Elementlabor', name:'Eis Schaden',            costs:[25, 40, 55],   steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:1 },
+  { grp:'el2',   house:'Elementlabor', name:'Schatten Schaden',       costs:[25, 40, 55],   steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:2 },
+  { grp:'el3',   house:'Elementlabor', name:'Stein Schaden',          costs:[25, 40, 55],   steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:3 },
+  { grp:'dur',   house:'Akademie',     name:'Effekte halten länger',  costs:[40, 60, 100],  steps:[0.1, 0.2, 0.3],    fmt:v => '+' + Math.round(v*100) + ' %' },
+  { grp:'rng',   house:'Akademie',     name:'Reichweite',             costs:[40, 60, 100],  steps:[0.1, 0.2, 0.3],    fmt:v => '+' + String(v).replace('.', ',') },
+  { grp:'gold',  house:'Akademie',     name:'Kopfgeld',               costs:[60, 100, 140], steps:[0.07, 0.14, 0.2],  fmt:v => '+' + Math.round(v*100) + ' %' }
+];
+const RESEARCH = RESEARCH_GROUPS.flatMap(R => R.costs.map((cost, k) => ({ id:R.grp + ':' + (k+1), grp:R.grp, lvl:k+1, house:R.house, cost,
+  name: R.steps ? `${R.name} ${R.fmt(R.steps[k])}` : R.name, need: k ? R.grp + ':' + k : R.need })));
+const resLvl = (res, grp) => res ? [1,2,3].filter(k => res.has(grp + ':' + k)).length : 0;
+const resVal = (res, grp) => { const n = resLvl(res, grp); return n ? RESEARCH_GROUPS.find(R => R.grp === grp).steps[n-1] : 0; };
+const LOCKS = { 4:'t5:1', 5:'t5:1', 6:'t7:1', 7:'t7:1' };   // Turm-Index → nötige Forschung
+/* Wetter (12.10. 11:47: alle Abweichungen von ×1 halbiert): wechselt im Lauf des Tages (Chance je Welle: CONFIG.weatherChange). Stein ist wetterfest.
+   el: je Element [Feuer, Eis, Schatten] → dmg = Schaden, eff = Effektstärke, dur = Effektdauer
+   range = Reichweite aller Türme außer Stein, burnDecay = Brennen erlischt schneller, flySpeed = Fliegende schneller/langsamer */
+const WEATHER = [
+  { name:'Sonnig',   sym:'☀', w:3,   el:{ 0:{dmg:1.125, eff:1.125}, 1:{dur:0.85}, 2:{dmg:1.075} } },
+  { name:'Bewölkt',  sym:'☁', w:3,   el:{ 1:{dur:1.075}, 2:{dmg:0.85, eff:0.9} } },
+  { name:'Regen',    sym:'☂', w:2,   el:{ 0:{dmg:0.9, dur:0.7}, 1:{eff:1.125, dmg:1.05}, 2:{dmg:0.925} }, burnDecay:1.75 },
+  { name:'Gewitter', sym:'ϟ', w:1,   el:{ 0:{dmg:0.9, dur:0.7}, 1:{eff:1.075}, 2:{dmg:0.8} }, burnDecay:1.5, flySpeed:0.85 },
+  { name:'Nebel',    sym:'≡', w:1.5, el:{ 2:{dmg:1.15, eff:1.15} }, range:0.875 },
+  { name:'Frost',    sym:'❄', w:1,   el:{ 0:{dmg:0.925}, 1:{eff:1.15, dur:1.25, dmg:1.05} } },
+  { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.25, eff:1.15}, 1:{eff:0.85, dur:0.75} } },
+  { name:'Wind',     sym:'≋', w:1.5, el:{ 0:{dmg:0.95, eff:1.2} }, flySpeed:1.2 }
+];          // Effektdauer „ganzer Tag“: hält über alle vier Wellen
+// Kopfgeld je Monster, flach: Runde 1–5: 2, 6–10: 3, 11–15: 5, 16–20: 8, 21–25: 12, 26–30: 17, 31–35: 23, 36–40: 30
+// 11.10.: insgesamt × 0,8 (gerundet), damit das Spiel nicht zu leicht wird
+const BOUNTY = [2, 3, 5, 8, 12, 17, 23, 30];
+function bountyFor(r){ return BOUNTY[Math.min(BOUNTY.length - 1, Math.floor((r - 1) / 5))]; }
+
+// Turm 1–8: Preis und „Kraft“ (Gesamtschaden/s bei Anteil 1,0)
+// Flache Baukurve (11.10. nachts): Turm 8 erreicht man in 20 Runden praktisch nicht, erst im 40-Runden-Spiel.
+const TOWER_COST  = [10, 45, 70, 120, 200, 350, 650, 1200];
+const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold steigt leicht mit dem Preis
+/* Jeder Turm: [Name, Rolle, Reichweite, Schüsse/s, Geschosse, Schadensanteil, Effektstärke, Effektdauer (s oder DAY), Fläche, Optionen]
+   Rolle: Schaden · Effekt · Reichweite · Fläche · Luftabwehr · Licht (nur Anzeige)
+   Effekt je Element:
+     Feuer    Brennen: Stärke = Brennschaden als Anteil der Turmkraft, ignoriert Rüstung
+     Eis      Verlangsamen: Stärke = Anteil (0,4 = 40 % langsamer), wirkt nicht auf Fliegende
+     Schatten Fluch: Ziel nimmt +Stärke mehr Schaden von allen Türmen. Schatten-Geschosse ignorieren Rüstung.
+     Stein    Betäuben (nur 2 Türme): Stärke = Sekunden Stillstand, wirkt nur mit „chance“ pro Treffer (fester Seed)
+   Optionen (10. Feld):
+     effect   anderer Effekt als das Element      rateUp  Feuerrate × Wert pro Upgrade
+     fly      true/false: trifft Fliegende (Standard: ja, bei Stein nein)
+     air      trifft NUR Fliegende (Luftabwehr)
+     chance   Betäubungschance pro Treffer, chanceUp = + pro Upgrade (höchstens 40 %)
+     nova     wirkt sofort im Umkreis „Fläche“ um den Turm, ohne Geschoss
+     light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
+const ELEMENTS = [
+  { name:'Feuer', kraft:0.622, kraftT:[1, 1, 1, 1, 1, 1, 1, 1], emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', armorDmg:0.5, costOverride:{0:8}, towers:[
+    ['Funke',        'Schaden',   2.0, 1,   1, 0.8, 0.17, 3],   // 1,6 Schaden/s (Brennen ist ein Bonus)   // 8 statt 10 Gold. Türme 1–3 aller Elemente am 12.10. per Simulation angeglichen
+    ['Glutbecken',   'Effekt',    1.6, 1,   2, 1.19, 0.43, 5, 0, {fly:false}],
+    ['Flammenwerfer','Schaden',   1.5, 4,   1, 1.21, 0.14, 2],
+    ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.36, 6, 0, {air:true}],
+    ['Schwelbrand',  'Effekt',    2.5, 0.5, 3, 0.35,0.26, DAY],
+    ['Lavaturm',     'Fläche',    2.0, 0.35,1, 1.5, 0.36, 4, 0.9, {fly:false}],   // 14.10. (L): halb so oft, doppelter Schaden je Wurf (gleicher Schaden/s)
+    ['Sonnenturm',   'Schaden',   3.0, 0.6, 2, 1.4, 0.36, 8],
+    ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.65, DAY] ]},
+  { name:'Eis', kraftT:[1, 1, 1, 1, 1, 1, 1, 1], kraft:0.864, emo:'❄️', color:'#7ec8e8', note:'verlangsamt (Fliegende nur mit Eiszapfen)', effect:'slow', armorDmg:0.6, towers:[
+    ['Frostsplitter','Effekt',    2.0, 1,   1, 1.1, 0.25, 3],
+    ['Schneeball',   'Fläche',    2.3, 1,   2, 1.15, 0.2, 4, 0.6],
+    ['Eiszapfen',    'Luftabwehr',3.6, 0.8, 2, 2.4, 0.3, 4, 0, {air:true, slowFly:true}],   // nur Fliegende, bremst sie auch
+    ['Frosthauch',   'Effekt',    1.6, 2,   3, 1.05, 0.45, 8],
+    ['Frostnova',    'Effekt',    2.0, 1/8, 1, 0.15, 3,    0, 1.6, {effect:'stun', rateUp:Math.pow(8/6, 1/5), fly:false, nova:true, chance:0.45, chanceUp:0.04, chanceMax:0.65}],  // friert im Umkreis 3 s ein (45–65 % je Stufe), alle 8 s (Stufe 6: alle 6 s)
+    ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
+    ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
+    ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
+  { name:'Schatten', kraftT:[1, 1, 1, 1, 1, 1, 1, 1], kraft:1.082, emo:'🌑', color:'#a58ad8', upDmg:[2.35, 2.1, 1.85, 1.6, 1.5],   // 17.10. (L): Balancing-Schleife 5;   // 13.10. (F): Schaden je Upgrade ab Stufe 4 flacher (Irrlicht-Verstärkung + Rüstung ignorieren ab Runde 10 zu stark)
+    note:'Fluch (mehr Schaden, Rüstung bröckelt für alle) · Irrlicht verstärkt und durchdringt Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis', effect:'curse', armorDmg:0, dayOnly:true, costOverride:{1:30}, towers:[
+    ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
+    ['Irrlicht',     'Licht',     // 30 statt 45 Gold (12.10.: Schatten nachts sonst zu schwach)
+                          1.8, 1,   1, 0,   0,   0, 0, {light:2.2, buff:[1.3, 1.4, 1.5, 1.6, 1.7, 1.8], pierce:[0.3, 0.45, 0.6, 0.75, 0.9, 1]}],   // schießt nicht. Schatten-Türme im Lichtkreis: Schaden ×buff und ignorieren pierce der Rüstung (12.10. 14:07)
+    ['Nachtauge',    'Reichweite',3.8, 0.6, 1, 1.01, 0.15, 5],
+    ['Fluchstein',   'Effekt',    2.5, 0.7, 3, 0.3, 0.3, 12, 0, {fly:false}],
+    ['Seelenfresser','Schaden',   2.0, 0.8, 2, 1.4, 0.1, 5],
+    ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
+    ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
+    ['Ewige Nacht',  'Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
+  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 3, 6, 8', kraft:2.256, kraftT:[0.4, 1.0, 1.3, 1.3, 1, 1, 1, 1], costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
+    ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.55, 0,   0, 0.7],
+    ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.89, 0,   0, 0.9],
+    ['Katapult',     'Reichweite',3.8, 0.25,2, 0.72, 0,   0, 1.0, {fly:true}],
+    ['Felsbrocken',  'Fläche',    2.5, 0.25,1, 0.5, 0,   0, 1.1],
+    ['Erdbeben',     'Effekt',    1.8, 0.25,1, 0.36, 2.0, 0, 2.2, {nova:true, chance:0.15, chanceUp:0.05}],
+    ['Granitwächter','Fläche',    2.0, 0.33,3, 0.58, 0,   0, 1.2, {fly:true}],
+    ['Lawine',       'Fläche',    3.0, 0.25,3, 0.55, 0,   0, 1.6],
+    ['Bergkönig',    'Effekt',    3.2, 0.2, 2, 0.5, 3.0, 0, 2.5, {fly:true, chance:0.25, chanceUp:0.03}] ]}
+];
+/* Edelsteine (14.10., L): Wer einen Zwischenboss oder Boss besiegt, bekommt einen Stein in der Farbe des Turms, der ihn getötet hat
+   (Tod durch Brennen oder Lava = Feuer). Tauschen/Schenken ohne Gebühr. Einsatz:
+   – Stein des eigenen Elements: Turm bekommt seine Fähigkeit (unten, je Turm eine)
+   – Stein eines anderen Elements: Turm wird zum Turm gleicher Nummer und Stufe dieses Elements (Fähigkeit geht verloren)
+   Verkauf: Stein ist weg. Alle Zahlen hier sind Startwerte fürs Balancing. */
+const GEMS = [
+  { name:'Rubin',    col:'#ff4d6d' },
+  { name:'Saphir',   col:'#4d9dff' },
+  { name:'Amethyst', col:'#b57cff' },
+  { name:'Quarz',    col:'#f1ead8' }
+];
+const ABILITIES = [
+  [ ['Zündschnur', 'Stirbt ein Monster durch einen Schuss, explodiert es: Schaden im Umkreis 1,6 und setzt in Brand'],
+    ['Glutnest', 'Brand stapelt sich bis doppelt so stark'],
+    ['Weite Flamme', 'Reichweite +50 %'],
+    ['Feuerregen', 'trifft auch die andere Zielart mit halbem Schaden (Luftabwehr den Boden, Bodenturm die Fliegenden); nicht bei Türmen, die schon beides treffen'],
+    ['Schwelglut', 'Monster, die durch diesen Turm brennen, nehmen +15 % Schaden von allen Türmen'],
+    ['Lavapfütze', 'Einschlagstelle bleibt 4 s Lava: Schaden und Brennen (eine Pfütze je Schuss, auch bei mehreren Geschossen; Pfützen zählen nicht doppelt; ohne Fläche kleiner Kreis)'],
+    ['Sonnenfeuer', 'Geschoss springt nach dem Treffer aufs nächste Monster (60 % Schaden)'],
+    ['Fegefeuer', 'Brand wirkt auch auf feuer-immune Monster (halb so stark)'] ],
+  [ ['Zersplittern', 'Stirbt ein Monster durch einen Schuss, zersplittert es: Schaden und Verlangsamung im Umkreis 1,6'],
+    ['Großer Ball', 'Fläche +30 % (ohne Fläche: kleine Fläche), verlangsamt auch Fliegende'],
+    ['Absturz', 'der Turm trifft Fliegende; getroffene fallen 2 s zu Boden: dann treffen sie alle Türme und Verlangsamung wirkt'],
+    ['Haut vereist', '4 s lang trifft der Rüstungsschaden aller Türme zusätzlich die Leben'],
+    ['Dauerfrost', 'Effekt +50 % stärker, trifft auch Fliegende'],
+    ['Durchbohren', 'Speer fliegt in gerader Linie über die ganze Karte und trifft alles darauf (Frostnova wird zum Speer)'],
+    ['Großer Sturm', 'Fläche +25 %, Schaden +20 %'],
+    ['Eisblock', 'Treffer auf schon verlangsamte Monster frieren sie 0,35 s ein (Bosse 0,18 s)'] ],
+  [ ['Angst', '10 % je Treffer: Monster läuft 1,5 s rückwärts (Bosse 0,75 s)'],
+    ['Mottenplage', 'um den Turm schwirren Motten und treffen bis zu 3 Monster (Schaden wächst mit der Stufe; Irrlicht: im ganzen Lichtkreis)'],
+    ['Nachtjäger', 'schießt 25 % schneller und trifft nachtaktive Monster nachts auch ohne Irrlicht'],
+    ['Fluchwelle', 'stirbt ein so verfluchtes Monster, springt der Fluch auf 2 Nachbarn'],
+    ['Hunger', '+20 % Schaden je Kill dieses Turms in dieser Welle (höchstens +200 %)'],
+    ['Geisterpfeile', 'ignoriert die ganze Rüstung, auch ohne Irrlicht'],
+    ['Todesstoß', '3 % je Treffer: Monster stirbt sofort (Bosse: −5 % ihrer Leben)'],
+    ['Tiefe Nacht', 'Fluch addiert sich zu anderen Flüchen (sonst zählt nur der stärkste)'] ],
+  [ ['Prellstein', 'hüpft an derselben Stelle zweimal nach (30 % und 15 % Schaden)'],
+    ['Steilschuss', 'trifft auch Fliegende (nicht bei Türmen, die sie schon treffen)'],
+    ['Erschütterung', '+10 Punkte Betäubungschance, mindestens 2 s (Bosse 1 s)'],
+    ['Salve', 'jeder 2. Wurf: zwei weitere Brocken seitlich neben dem Ziel (voller Schaden)'],
+    ['Nachbeben', 'nach 1 s ein zweiter Einschlag/Beben mit 25 % Schaden'],
+    ['Flügelbruch', 'der Turm trifft Fliegende; 10 % je Treffer (Bosse 5 %): Fliegender stürzt ab und bleibt bis Wellenende am Boden, dort 30 % langsamer'],
+    ['Geröll', 'Einschlagstelle bremst 3 s lang um 30 %'],
+    ['Gipfelstoß', 'Betäubungschance +15 Punkte (ohne Betäubung: 1,5 s)'] ]
+];
+/* 18.10. (F): zweite einzigartige Fähigkeit je Turm = Nummer 8 + Turmnummer (0-basiert). Je Turm jetzt 4 Wahlmöglichkeiten (2 Basics, 2 Uniques). */
+[ [ ['Funkenregen', 'ein zusätzlicher Funke je Schuss (65 % Schaden je Funke, insgesamt +30 %)'],
+    ['Dauerglut', 'Brennen hält 80 % länger und ist 15 % stärker'],
+    ['Stichflamme', '+40 % Schaden gegen Monster, die schon brennen'],
+    ['Brandspitze', 'Pfeil ignoriert die Hälfte der Rüstung'],
+    ['Flächenbrand', 'stirbt ein brennendes Monster, springt der Brand auf 2 Nachbarn'],
+    ['Magmaschmelze', 'Rüstungsschaden dieses Turms ×2'],
+    ['Zenit', '+40 % Schaden bei Tageswellen (nicht um 19 Uhr)'],
+    ['Inferno', 'Brennen +50 % stärker, Schaden +10 %'] ],
+  [ ['Splitterhagel', 'ein zusätzlicher Splitter je Schuss (65 % Schaden je Splitter, insgesamt +30 %)'],
+    ['Tiefschnee', 'Einschlagstelle bleibt 3 s Schneefeld: bremst um 25 %'],
+    ['Zapfensturm', 'schießt 30 % schneller'],
+    ['Frostbiss', '+35 % Schaden gegen verlangsamte Monster'],
+    ['Kältepuls', 'Frostnova pulsiert 30 % schneller'],
+    ['Gefrierstich', 'Verlangsamung +50 % stärker'],
+    ['Eisnebel', 'Fläche +15 %, Dauer des Effekts +60 %'],
+    ['Nullpunkt', '5 % je Treffer: Monster friert 1,5 s ein (Bosse 0,75 s)'] ],
+  [ ['Schattenstreich', '25 % Chance auf Doppelschaden (×2,2; Bosse halb)'],
+    ['Geisterlicht', 'Lichtkreis +20 %, Verstärkung +0,1, ignoriert zusätzlich 10 % Rüstung'],
+    ['Todesblick', '+60 % Schaden gegen Monster unter 25 % Leben'],
+    ['Verderben', 'verfluchte Monster werden 20 % langsamer'],
+    ['Seelensplitter', 'stirbt ein Monster durch diesen Turm, nehmen Nachbarn im Umkreis 1,6 60 % Schaden'],
+    ['Phantomschritt', 'zwei zusätzliche Schüsse (insgesamt +30 %)'],
+    ['Entkräften', 'jeder Treffer zersetzt 2 % der Rüstungspunkte des Ziels (Bosse halb)'],
+    ['Nachtschleier', 'Fluch +40 % stärker, Verfluchte werden 20 % langsamer'] ],
+  [ ['Streuschuss', 'ein zusätzlicher Kiesel je Wurf (insgesamt +30 %)'],
+    ['Wuchtwurf', 'Schaden +15 %, Fläche +15 %'],
+    ['Belagerung', 'Rüstungsschaden ×1,8'],
+    ['Zerschmettern', '+35 % Schaden gegen Monster mit mehr als 70 % Leben'],
+    ['Dauerbeben', 'Beben 30 % schneller'],
+    ['Wächterblick', 'Reichweite +20 %, Fläche +20 %'],
+    ['Steinschlag', 'ein zusätzlicher Brocken je Wurf (insgesamt +30 %)'],
+    ['Königlicher Befehl', 'Betäubung dauert 50 % länger'] ] ].forEach((a, e) => ABILITIES[e].push(...a));
+/* Edelstein-Kompromiss (16.10., L+F): je Turm 3 Wahlmöglichkeiten – 2 Basics (dürfen bei mehreren Türmen vorkommen)
+   und 1 Unique = die Fähigkeit aus ABILITIES mit der Nummer des Turms (an den Turmtyp gebunden). Zielwert je Option ca. +30 % Wirkung.
+   Gespeichert in tw.ab: Zahl = Fähigkeit aus ABILITIES (alte Steine: freie Wahl von F), Text = Basic (Schlüssel aus BASICS). */
+const BASICS = {
+  dmg:  ['Wucht',       'Schaden +30 %'],
+  rng:  ['Weitblick',   'Reichweite +30 %'],
+  eff:  ['Verstärkt',   'Effekt +30 % (Stärke und Dauer)'],
+  area: ['Breite',      'Fläche +30 %'],
+  light:['Leuchtkraft', 'Lichtkreis +30 %'],
+  buff: ['Glanz',       'Verstärkung im Lichtkreis +0,15']
+};
+const BASIC_BY_ROLE = { Schaden:['dmg','rng'], Effekt:['dmg','eff'], Reichweite:['dmg','rng'], Fläche:['dmg','area'], Luftabwehr:['dmg','rng'], Licht:['light','buff'] };
+const uniqOf = (el, idx) => ELEMENTS[el].uniq ? ELEMENTS[el].uniq[idx] : idx;   // Nummer der eigenen Fähigkeit eines Turms (17.10.: Stein 3↔4 getauscht)
+const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], uniqOf(el, idx), 8 + idx];   // 18.10. (F): zweites Unique je Turm
+/* 20 Monster, eins pro Runde. weak = Schadensfaktor je Element [Feuer, Eis, Schatten, Stein]
+   Spanne 0,6–1,75 (11.10. abends verkleinert, vorher 0,25–3); 0 = „immun“: nur CONFIG.immune Schaden und (seit 16.10.) kein Effekt des Elements (kein Brennen, Bremsen, Einfrieren, Fluch, Betäuben).
+   Wirkt auch auf die Effektstärke. fly = fliegt, hpMul = Extra-Leben,
+   lives = so viele „Durchbrüche“ zählt das Monster (Boss: 3),
+   night = nachtaktiv: Nur diese Monster sieht Schatten im Dunkeln (19 Uhr) bloß im Lichtkreis eines Irrlichts.
+   Runde 1–5 (12.10.): Runde 1 neutral, Runde 2–5 je ein Element ×1,2 und eins ×0,8 – nach 5 Runden hat jedes Element genau einmal Bonus und Malus.
+   Seit 13.10. gilt das je Block (1–5, 6–10, 11–15, 16–20): erste Runde neutral, danach je Element einmal Bonus und einmal Malus.
+   Block 4: Boss neutral – Tag 17–19 decken nur 3 Elemente ab, es fehlen Stein-Bonus und Schatten-Malus. */
+let MON_ROUND = 0;   // Runde (für Leben, Kopfgeld, Farbe): Zwischenbosse teilen sich die Runde des Monsters davor; day = Tag im Spiel
+const MONSTERS = [
+  ['Silberfische',      {emo:'🐛', speed:1.0, weak:[1, 1, 1, 1]}],
+  ['Kellerasseln',      {emo:'🪲', ar:[0.2, 0.3], speed:0.9, weak:[0.8, 1, 1, 1.2]}],
+  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1, 1.2, 1, 0.8]}],
+  ['Ohrenkneifer',      {emo:'🦗', ar:[0.15, 0.3], weak:[1, 0.8, 1.2, 1]}],
+  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 1, 0.8, 1]}],
+  ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:4.5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
+  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
+  ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 1, 0.75]}],   // 12.10.: Tag 7 (vorher 6)
+  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.75, 1, 1]}],
+  ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 0.75, 1.5, 1]}],
+  ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 1, 0.75, 1.5]}],
+  ['Fuchs-Boss',        {emo:'🦊', mini:true, ar:[0.2, 0.4], speed:1.4, hpMul:5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 10
+  ['Habichte',          {emo:'🦅', ar:[0.1, 0.2], fly:true, speed:1.8, weak:[1, 1, 1, 1]}],
+  ['Dachse',            {emo:'🦡', ar:[0.35, 0.6], speed:0.9, hpMul:1.3, weak:[1, 1, 0.75, 1.5]}],
+  ['Oktopusse',         {emo:'🐙', water:true, speed:0.8, hpMul:1.15, weak:[0, 1.75, 1, 1]}],
+  ['Wildschweine',      {emo:'🐗', ar:[0.4, 0.6], speed:1.2, hpMul:1.3, night:true, weak:[1, 0.75, 1.5, 1]}],
+  ['Schäferhunde',      {emo:'🐕‍🦺', ar:[0.25, 0.4], speed:1.6, hpMul:1.1, weak:[1.5, 1, 1, 0.75]}],
+  ['Schäferhund-Boss',  {emo:'🐕‍🦺', mini:true, ar:[0.25, 0.4], speed:1.6, hpMul:5.5, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 15
+  ['Besoffene Penner',  {emo:'🍺', ar:[0.1, 0.3], speed:0.7, hpMul:1.9, night:true, weak:[1, 1, 1, 1]}],
+  ['Wütende Partnerin', {emo:'😠', ar:[0.3, 0.4], speed:1.3, weak:[0.75, 1.75, 1, 1]}],
+  ['Wütende Nachbarn',  {emo:'😡', ar:[0.45, 0.6], speed:1.1, hpMul:1.2, weak:[1, 0.75, 1.25, 1]}],
+  ['Eifersüchtige Geliebte', {emo:'💔', ar:[0.25, 0.4], speed:1.25, hpMul:1.1, weak:[1, 1, 0.75, 1.5]}],   // 16.10. (L): 5. Monster im Block 4; trägt den dort fehlenden Stein-Bonus und Schatten-Malus
+  ['Uffug-Vorhaut',     {emo:'👺', ar:[0.2, 0.4], fly:true, weak:[1.25, 1, 1, 0.75]}],
+  ['Uffug (Boss)',      {emo:'👹', ar:[0.5, 0.5], speed:0.6, hpMul:17.3, count:1, boss:true, lives:5, weak:[1, 1, 1, 1]}],   // 13.10.: neutral (vorher Schatten ×0,7)
+  /* Runde 21–40 (16.10., L): neue Mechaniken. „Immun“ (Faktor 0) = 50 % Schaden und kein Effekt des Elements. Werte sind Startwerte fürs Balancing-Skript.
+     Block 5–8 wie bisher: erste Runde neutral, danach je Element einmal Bonus und Malus (Block 7: Lehrer gemischt, Block 8: Vorhaut nicht neutral). */
+  ['Roboter',           {emo:'🤖', ar:[0.3, 0.5], speed:0.9, hpMul:1.1, weak:[1, 1, 1, 1]}],
+  ['Eiswürfel',         {emo:'⛄', ar:[0.45, 0.7], speed:1.0, weak:[1.5, 0, 1, 1], info:'rollen mit dicker Schale – Eis kann ihnen kaum etwas anhaben'}],
+  ['Würfel',            {emo:'🎲', ar:[0.2, 0.3], speed:1.1, weak:[1, 1, 1.5, 0.75]}],
+  ['Phönixe',           {emo:'🐦‍🔥', ar:[0.1, 0.2], fly:true, speed:1.4, weak:[0, 1.5, 1, 1], info:'aus Feuer geboren – Feuer wirkt kaum'}],
+  ['Fairtrade-Bananen', {emo:'🍌', speed:1.2, hpMul:0.95, weak:[1, 1, 0.75, 1.5]}],
+  ['El Schlucko',       {emo:'🎒', mini:true, fly:true, speed:1.0, hpMul:4.75, count:1, lives:2, weak:[1, 1, 1, 1], info:'ein riesiger Rucksack voller Bananen – fliegt!'}],
+  ['Krieger',           {emo:'🗡️', ar:[0.5, 0.7], speed:0.9, hpMul:1.15, weak:[1, 1, 1, 1]}],
+  ['Golems',            {emo:'🗿', ar:[0.35, 0.5], speed:0.7, hpMul:1.4, weak:[1, 1.5, 1, 0], info:'aus Fels – Stein wirkt kaum'}],
+  ['Albträume',         {emo:'👻', speed:1.3, night:true, weak:[1.5, 1, 0, 1], info:'Wesen der Nacht – Schatten wirkt kaum'}],
+  ['Looping-Louie-Flugzeuge', {emo:'✈️', ar:[0.1, 0.2], fly:true, speed:1.7, hpMul:0.8, weak:[0.75, 1, 1, 1.5]}],
+  ['Magier-Novizen',    {emo:'🧙', ar:[0.15, 0.3], speed:1.1, blink:{ every:4, dur:1.5 }, weak:[1, 0.75, 1.5, 1], info:'werden immer wieder kurz unsichtbar – nur Flächenschaden trifft sie dann'}],
+  ['Magiermeister',     {emo:'🧙‍♂️', mini:true, ar:[0.15, 0.3], speed:1.1, hpMul:5, count:1, lives:2, teleport:{ n:6, stay:2.5 }, weak:[1, 1, 1, 1], info:'geht erst ein Stück wie ein normales Monster, dann springt er kreuz und quer über den Weg; die letzten Felder geht er zu Fuß'}],
+  ['E-Scooter-Fahrer',  {emo:'🛴', speed:1.9, hpMul:0.85, weak:[1, 1, 1, 1], info:'sehr schnell'}],
+  ['Lindner-Spezialisten', {emo:'🍻', speed:1.0, hpMul:0.5, count:40, gap:0.5, bountyMul:0.5, weak:[1.5, 0.75, 1, 1], info:'ein Schwarm: doppelt so viele, halbe Leben, halbes Kopfgeld'}],
+  ['Wargreiter',        {emo:'🐺', ar:[0.3, 0.35], speed:1.1, hpMul:1.3, rider:true, weak:[1, 1, 1.5, 0.75], info:'ist die Rüstung weg, steigt der Ork ab: der Warg flieht schnell weiter, der Ork geht möglichst gerade zum Ausgang (um Türme, Felsen und Sumpf herum, durch Wald – dort unsichtbar)'}],
+  ['Fledermäuse',       {emo:'🦇', fly:true, night:true, speed:1.6, hpMul:0.8, weak:[0.75, 1.5, 1, 1]}],
+  ['Lehrer',            {emo:'🧑‍🏫', ar:[0.2, 0.3], speed:1.0, mixed:true, weak:[1, 1, 1, 1], info:'jeder Lehrer hat eigene Stärken und Schwächen: eine „Immunität“, ein Bonus, der Rest gemischt'}],
+  ['Schulleiter',       {emo:'🎓', mini:true, ar:[0.2, 0.3], speed:1.0, hpMul:5, count:1, lives:2, weatherBoss:true, weak:[1, 1, 1, 1], info:'macht auf jeder Map das Wetter, das dem Element dort am meisten schadet (Stein ist wetterfest)'}],
+  ['Streichquartett',   {emo:'🎻', ar:[0.15, 0.3], speed:1.0, hpMul:1.05, quartet:true, weak:[1, 1, 1, 1], info:'gemischte Welle (Farbe und Größe zeigen die Sorte): 7 Violinen (gelb, leicht), 6 Bratschen (orange, verwirrt, laufen immer wieder rückwärts), 4 Celli (braun, stärker), 3 Kontrabässe (dunkelrot, groß, etwas langsamer, geben Monstern in ihrer Nähe +20 Punkte Rüstung)'}],
+  ['The one who knocks', {emo:'🧪', ar:[0.3, 0.4], speed:1.15, night:true, weak:[0.75, 1, 1.5, 1]}],
+  ['Mehlmottenraupen',  {emo:'🪱', ar:[0.9, 0.35], speed:1.0, cocoon:{ ground:3, fly:1.2, pct:0.9, speed:2.4 }, weak:[1.5, 0.75, 1, 1], info:'krabbeln erst kurz als Raupe, dann abwechselnd Kokon und Motte – als Kokon fast unverwundbar (90 % Rüstung, Stein zertrümmert sie), dann kurz als Motte fliegend und schnell'}],
+  ['Nazgul',            {emo:'🐲', ar:[0.3, 0.4], fly:true, speed:1.5, hpMul:0.8, weak:[1, 1, 0.75, 1.5]}],
+  ['GNTModels',         {emo:'💃', speed:1.3, heart:{ t:1, cd:1 }, weak:[1, 1.5, 1, 0.75], info:'nach jedem Treffer kurz ein Herz – dann zielt kein Turm auf sie'}],
+  ['Betty (Boss)',      {emo:'👩‍🦱', ar:[0.4, 0.5], speed:0.6, hpMul:12.1, count:1, boss:true, lives:5, charm:{ every:6, show:1.5, stop:3 }, weak:[1, 1, 1, 1], info:'zieht sich alle paar Sekunden aus und bleibt dabei kurz stehen – Türme in Reichweite verlieben sich und schießen 3 s nicht'}]
+].map(([name,o],k) => { if (!o.mini && !o.boss) MON_ROUND++; const r = MON_ROUND;   // 16.10.: auch der Endboss teilt sich die Runde der Vorhaut
+  return { name, speed:1, hpMul:1, weak:[1,1,1,1], ...o, round:r, day:k+1,
+  color:`hsl(${((r-1)*47)%360} 45% ${o.boss?45:62}%)`, size:o.boss?.42:o.mini?.34:o.fly?.2:.24 }; });
+/* ===================== Ende Spieldaten ===================== */
+
+/* Feines Raster (11.10. nachts): 24 × 16 Felder statt 12 × 8, gleiche Fläche. Alle Längen in den Spieldaten
+   (Reichweite, Fläche, Licht, Tempo) sind in „alten“ Feldern angegeben und werden mit GRID umgerechnet. */
+const GRID = 2, COLS = 8 * GRID, ROWS = 8 * GRID;   // 16 × 16, quadratisch (12.10.)
+/* Jeder Spieler hat eine eigene Karte: Eingang links, eine Runde (Schleife mit Kreuzung), Ausgang rechts.
+   16 × 16, Wege 62–64 Felder, mind. 2 Bauplätze zwischen parallelen Stücken. Geprüft per Skript (Länge, genau 1 Kreuzung, Abstände). */
+const MAP_WPS = [
+  [[-0.5,7.5],[13.5,7.5],[13.5,0.5],[3.5,0.5],[3.5,14.5],[10.5,14.5],[10.5,10.5],[16.5,10.5]],
+  [[-0.5,7.5],[13.5,7.5],[13.5,14.5],[3.5,14.5],[3.5,0.5],[10.5,0.5],[10.5,4.5],[16.5,4.5]],
+  [[-0.5,3.5],[11.5,3.5],[11.5,7.5],[14.5,7.5],[14.5,14.5],[3.5,14.5],[3.5,0.5],[16.5,0.5]],
+  [[-0.5,11.5],[11.5,11.5],[11.5,7.5],[14.5,7.5],[14.5,0.5],[3.5,0.5],[3.5,14.5],[16.5,14.5]]
+];
+function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+// Gelände neu würfeln: Seed aus dem Spielstart (alle Handys bekommen dasselbe), Felsen nur nahe am Weg
+let TSEED = 0;
+function genTerrain(map, seed){
+  const r = rng(seed + 1000 + map.k * 77), cnt = Math.round(TERRAIN_MAX * map.len / 63), free = [], near = [];
+  for (let y = 0; y < ROWS; y++) { map.terrain[y] = Array(COLS).fill(0); for (let x = 0; x < COLS; x++) if (!map.cells.has(x+','+y)) free.push([x,y]); }
+  const road = [...map.cells].map(q => q.split(',').map(Number));
+  const shuffle = a => { for (let j = a.length - 1; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [a[j], a[q]] = [a[q], a[j]]; } return a; };
+  shuffle(free);
+  const rocks = ROCK.min + Math.floor(r() * (ROCK.max - ROCK.min + 1)), isNear = ([x,y]) => road.some(([a,b]) => Math.abs(a-x) <= 2 && Math.abs(b-y) <= 2);
+  const fels = free.filter(isNear).slice(0, rocks); fels.forEach(([x,y]) => map.terrain[y][x] = 3);
+  const rest = free.filter(([x,y]) => !map.terrain[y][x]);
+  rest.slice(0, cnt).forEach(([x,y]) => map.terrain[y][x] = 1);
+  rest.slice(cnt, 2 * cnt).forEach(([x,y]) => map.terrain[y][x] = 2);
+}
+function ensureTerrain(startAt){
+  const sd = Math.floor((startAt || 0) / 1000);
+  if (sd === TSEED) return; TSEED = sd; MAPS.forEach(m => genTerrain(m, sd));
+  if (typeof BG !== 'undefined') for (let q = 0; q < BG.length; q++) BG[q] = null;
+}
+function buildMap(k){
+  const wp = MAP_WPS[k], seg = []; let len = 0;
+  for (let i = 0; i < wp.length - 1; i++) { const [ax,ay] = wp[i], [bx,by] = wp[i+1], l = Math.hypot(bx-ax, by-ay); seg.push({ax,ay,bx,by,len:l,start:len}); len += l; }
+  const map = { k, wp, seg, len, cells:new Set(), terrain:[] };
+  for (let d = 0; d < len; d += 0.1) { const [x,y] = posAt(map, d); const cx = Math.floor(x), cy = Math.floor(y); if (cx>=0&&cx<COLS&&cy>=0&&cy<ROWS) map.cells.add(cx+','+cy); }
+  genTerrain(map, 0);
+  return map;
+}
+function posAt(map, d){
+  for (const s of map.seg) if (d <= s.start + s.len) { const f = (d - s.start) / s.len; return [s.ax + (s.bx-s.ax)*f, s.ay + (s.by-s.ay)*f]; }
+  const s = map.seg[map.seg.length-1]; return [s.bx, s.by];
+}
+const MAPS = [0,1,2,3].map(buildMap);
+function buildCost(el, idx, lane, x, y){
+  const b = towerBase(el, idx), T = TERRAIN[MAPS[lane].terrain[y][x]];
+  if (ELEMENTS[el].terrainFree) return b.cost + (T.stoneExtra || 0);
+  return b.cost + T.extra;
+}
+// Wellenzeiten und Wetter eines Spiels
+const slotsOf = g => (g && g.cfg.slots) || CONFIG.slotPlan[4];
+const isDark = h => h >= CONFIG.darkFrom;
+function pickWeather(r){ const tot = WEATHER.reduce((a,w) => a + w.w, 0); let x = r() * tot; for (let k = 0; k < WEATHER.length; k++) { x -= WEATHER[k].w; if (x < 0) return k; } return 0; }
+function weatherDay(g, day){
+  const r = rng(Math.floor((g.cfg.startAt || 1) / 1000) + day * 7919), out = [pickWeather(r)];
+  for (let k = 1; k < slotsOf(g).length; k++) out.push(r() < CONFIG.weatherChange ? pickWeather(r) : out[k-1]);
+  return out;
+}
+function weatherText(W){
+  const p = [], pct = v => (v > 1 ? '+' : '−') + Math.round(Math.abs(v - 1) * 100) + ' %';
+  ['Feuer','Eis','Schatten'].forEach((n,k) => { const e = W.el[k]; if (!e) return;
+    const q = []; if (e.dmg) q.push('Schaden ' + pct(e.dmg)); if (e.eff) q.push('Effekt ' + pct(e.eff)); if (e.dur) q.push('Dauer ' + pct(e.dur));
+    p.push(n + ' ' + q.join(', ')); });
+  if (W.range) p.push('Reichweite ' + pct(W.range));
+  if (W.burnDecay) p.push('Brennen erlischt schneller');
+  if (W.flySpeed) p.push('Fliegende ' + (W.flySpeed > 1 ? 'schneller' : 'langsamer'));
+  return p.join(' · ');
+}
+const hh = h => String(h).padStart(2,'0') + ':00';
+const $ = id => document.getElementById(id);
+
+/* ---------- Zustand ----------
+   G = Spielstand (Tag, Uhrzeit, verdientes Gold, Leaks, Chronik, letzte Welle)
+   L = Felder der Spieler (Element, Türme, ausgegebenes Gold) – jeder schreibt nur sein eigenes */
+let MODE = null, DB = null, ME = null;
+let G = null, L = [];
+let seat = 0, selTower = null, selCell = null, speed = 3;
+let replay = null, seenRun = null;
+
+// Turmwerte aus Element, Turmnummer (idx 0–7) und Stufe (lvl 1–6)
+function towerBase(el, idx){
+  const E = ELEMENTS[el], [name, role, range, rate, shots, share, eff, dur, splash, opt = {}] = E.towers[idx];
+  const cost = (E.costOverride && E.costOverride[idx]) || TOWER_COST[idx];
+  return { name, role, cost, range: range * GRID, rate, shots, dps: TOWER_POWER[idx] * share * (E.kraft || 1) * (E.kraftT ? E.kraftT[idx] : 1), eff, dur, splash: (splash || 0) * GRID,   // E.kraft: Stellschraube Balancing-Skript (16.10.)
+    effect:opt.effect || E.effect, rateUp:opt.rateUp || 1, dayOnly:!!E.dayOnly, pierceArr:opt.pierce || null,
+    hitsFly: opt.fly !== undefined ? opt.fly : !E.noFly, air:!!opt.air, slowFly:!!opt.slowFly, nova:!!opt.nova, light:(opt.light || 0) * GRID, buffArr:opt.buff || null, buff:opt.buff ? opt.buff[0] : 0, pierce:opt.pierce ? opt.pierce[0] : 0,
+    chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };
+}
+const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;
+function tdef(tw, lane){
+  const b = towerBase(tw.el, tw.idx), n = (tw.lvl || 1) - 1, U = CONFIG.upgrade;
+  // Schaden/s Stufe für Stufe hochrechnen und jeweils auf eine Nachkommastelle aufrunden (lesbare Zahlen)
+  let dpsNow = ceil1(b.dps); for (let k = 1; k <= n; k++) dpsNow = ceil1(dpsNow * (ELEMENTS[tw.el].upDmg ? ELEMENTS[tw.el].upDmg[k - 1] : U.steps ? U.steps[k - 1] : (k === 1 ? U.firstDmg : U.dmg)));   // U.steps (16.10.): Schaden je Upgrade-Stufe, Stellschraube Balancing-Skript
+  let eff = b.eff * Math.pow(U.eff, n);
+  if (b.effect === 'slow') eff = Math.min(0.85, eff);
+  if (b.effect === 'curse') eff = Math.min(1.5, eff);
+  if (b.effect === 'stun') eff = Math.min(CONFIG.stunMax, eff);
+  const rate = b.rate * Math.pow(b.rateUp, n);
+  const d = { ...b, lvl:n + 1, rate, dpsNow, dmg: dpsNow / rate / b.shots, eff,
+    chance: b.chance ? Math.min(b.chanceMax, b.chance + b.chanceUp * n) : 0, light: b.light ? b.light + U.range * GRID * n : 0, buff: b.buffArr ? b.buffArr[Math.min(n, b.buffArr.length - 1)] : 0, pierce: b.pierceArr ? b.pierceArr[Math.min(n, b.pierceArr.length - 1)] : 0,
+    dur: b.dur === DAY ? DAY : b.dur * Math.pow(U.dur, n), range: b.range + U.range * GRID * n, onRock:false };
+  if (tw.gem) gemMods(d, tw.ab !== undefined ? tw.ab : tw.idx);   // Fähigkeit frei wählbar (15.10., F): ab = Nummer 0–7; alte Steine ohne ab → Fähigkeit der Turmnummer
+  return lane !== undefined && tw.x !== undefined && MAPS[lane].terrain[tw.y][tw.x] === 3 ? onRock(d) : d;
+}
+// Edelstein-Fähigkeit: verändert die Turmwerte oder setzt Merkmale, die die Simulation auswertet
+function gemMods(d, ab){
+  d.gem = true; d.gemAb = ab; const R = GRID;
+  if (typeof ab === 'string') {   // Basic (16.10.)
+    if (ab === 'dmg') { d.dpsNow *= 1.3; d.dmg *= 1.3; }
+    if (ab === 'rng') d.range *= 1.3;
+    if (ab === 'eff') { d.eff *= 1.3; if (d.dur !== DAY) d.dur *= 1.3; if (d.chance) d.chance = Math.min(0.75, d.chance * 1.3);
+      if (d.effect === 'slow') d.eff = Math.min(0.85, d.eff); if (d.effect === 'curse') d.eff = Math.min(1.5, d.eff); if (d.effect === 'stun' && !d.nova) d.eff = Math.min(CONFIG.stunMax, d.eff); }
+    if (ab === 'area') d.splash = d.splash ? d.splash * 1.3 : 0.4 * R;
+    if (ab === 'light') d.light *= 1.3;
+    if (ab === 'buff') d.buff += 0.15;
+    return d;
+  }
+  const F = [
+    [ () => d.explode = { r:0.8*R, mul:1 },  () => d.burnStack = 2,  () => d.range *= 1.5,
+      () => { if (d.air) { d.air = false; d.groundHalf = true; } else if (!d.hitsFly) { d.hitsFly = true; d.flyHalf = true; } },
+      () => d.smolder = 0.15,  () => d.pool = { r:Math.max(d.splash, 0.9*R), t:4, dpsMul:0.2 },  () => d.bounce = { r:1.5*R, mul:0.6 },  () => d.burnImmune = true ],
+    [ () => d.explode = { r:0.8*R, mul:1 },  () => { d.splash = d.splash ? d.splash * 1.3 : 0.5*R; d.slowFly = true; },  () => { d.groundHit = 2; d.hitsFly = true; },  () => d.brittle = 3,
+      () => { d.eff *= 1.5; d.hitsFly = true; },  () => { d.lance = true; if (d.nova) { d.nova = false; d.splash = 0; } },
+      () => { if (d.splash) d.splash *= 1.25; d.dpsNow *= 1.2; d.dmg *= 1.2; },
+      () => d.iceBlock = 0.35 ],
+    [ () => d.fear = { chance:0.1, t:1.5 },
+      () => { let m = TOWER_POWER[1] * 0.5; for (let k = 0; k < d.lvl - 1; k++) m *= ELEMENTS[2].upDmg[k]; d.moths = { dps:m, n:3, r:d.light || 1.6*R }; },
+      () => { d.nightSight = true; d.rate *= 1.25; d.dpsNow *= 1.25; },  () => d.curseWave = true,
+      () => { d.hunger = 0.2; d.hungerMax = 2; },  () => d.pierce = 1,  () => d.deathChance = 0.03,  () => d.curseStack = 2 ],
+    [ () => d.rebound = [0.3, 0.15],  () => d.hitsFly = true,  () => { d.eff = Math.max(d.eff, 2); d.chance = Math.min(0.75, (d.chance || 0) + 0.1); d.stunBossHalf = true; },  () => d.salvo = { every:2, spread:0.9*(d.splash || R), mul:1 },   // Salve (18.10., F; vorher Weitwurf)
+     
+      () => d.aftershock = { t:1, mul:0.25 },  () => { d.wingBreak = 0.1; d.hitsFly = true; },  () => d.pool = { r:d.splash, t:3, slow:0.3 },
+      () => { if (!(d.eff > 0)) d.eff = 1.5; d.chance = Math.min(0.75, (d.chance || 0) + 0.15); } ]
+  ];
+  // 18.10. (F): zweite Uniques (8 + Turmnummer)
+  const more = n => { d.shots += n; d.dpsNow *= 1.3; d.dmg = d.dpsNow / d.rate / d.shots; };   // zusätzliche Geschosse: insgesamt +30 %
+  const F2 = [
+    [ () => more(1),  () => { if (d.dur !== DAY) d.dur *= 1.8; d.eff *= 1.15; },  () => d.burnBonus = 0.4,  () => d.pierce = 0.5,
+      () => d.burnWave = true,  () => d.armorMul = 2,  () => d.sun = 1.4,  () => { d.eff *= 1.5; d.dpsNow *= 1.1; d.dmg *= 1.1; } ],
+    [ () => more(1),  () => d.pool = { r:Math.max(d.splash, 0.9*R), t:3, slow:0.25 },  () => { d.rate *= 1.3; d.dpsNow *= 1.3; },  () => d.chillBonus = 0.35,
+      () => d.rate *= 1.3,  () => d.eff = Math.min(0.85, d.eff * 1.5),  () => { if (d.splash) d.splash *= 1.15; if (d.dur !== DAY) d.dur *= 1.6; },  () => d.freeze = { chance:0.05, t:1.5 } ],
+    [ () => d.crit = { chance:0.25, mul:2.2 },  () => { d.light *= 1.2; d.buff += 0.1; d.pierce = Math.min(1, (d.pierce || 0) + 0.1); },  () => d.execute = { thr:0.25, mul:1.6 },  () => d.curseSlow = 0.2,
+      () => d.explode = { r:0.8*R, mul:0.6 },  () => more(2),  () => d.drain = 0.02,  () => { d.eff = Math.min(1.5, d.eff * 1.4); d.curseSlow = 0.2; } ],
+    [ () => more(1),  () => { d.dpsNow *= 1.15; d.dmg *= 1.15; if (d.splash) d.splash *= 1.15; },  () => d.armorMul = 1.8,  () => d.fresh = { thr:0.7, mul:1.35 },
+      () => d.rate *= 1.3,  () => { d.range *= 1.2; if (d.splash) d.splash *= 1.2; },  () => more(1),  () => { d.eff = Math.min(CONFIG.stunMax, d.eff * 1.5); } ]
+  ];
+  if (typeof ab === 'number' && ab >= 8) F2[d.el][ab - 8](); else F[d.el][ab]();
+  return d;
+}
+// Welche Fähigkeit ein Turm hat (alte Steine ohne ab: Fähigkeit der Turmnummer) und ob eine Fähigkeit bei ihm sinnlos wäre
+const abIdx = tw => tw.ab !== undefined ? tw.ab : uniqOf(tw.el, tw.idx);
+function abilityBlocked(tw, k){
+  const b = towerBase(tw.el, tw.idx);
+  if (tw.el === 2 && b.buff) return k === 1 || k === 9 ? '' : 'Irrlicht schießt nicht – nur Mottenplage und Geisterlicht wirken';
+  if (tw.el === 0 && k === 3 && !b.air && b.hitsFly) return 'trifft schon Boden und Luft';
+  if (tw.el === 3 && k === 1 && b.hitsFly) return 'trifft schon Fliegende';
+  return '';
+}
+// 16.10. (Kompromiss L+F): Die Regel „jede Fähigkeit nur einmal je Map“ (15.10., F) entfällt – das Unique hängt am Turmtyp, Basics dürfen sich wiederholen
+const abilityTaken = () => false;
+// Felsen: alle Türme +15 % Reichweite, Stein-Türme zusätzlich mehr Schaden
+function onRock(d){
+  const m = ELEMENTS[d.el].terrainFree ? ROCK.stoneDmg : 1;
+  return { ...d, range:d.range * ROCK.rangeMul, dpsNow:d.dpsNow * m, dmg:d.dmg * m, onRock:true };
+}
+const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (1 - resVal(curRes(), 'cheap')));
+const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
+// Schwierigkeit (17.10., L): wird beim Spielstart gewählt (G.cfg.diff) und wirkt nur auf die Leben; alte Spiele = normal
+const DIFFS = { leicht:{ name:'leicht', hp:0.75 }, normal:{ name:'normal', hp:1 }, schwer:{ name:'schwer', hp:1.25 } };
+const diffHp = () => (G && G.cfg && DIFFS[G.cfg.diff] || DIFFS.normal).hp;
+function monsterDef(type, players){ const M = MONSTERS[type], r = M.round;
+  const d = { ...M, hp: hpBase(r) * M.hpMul * (CONFIG.playerHp[players || 2] || 1) * (r >= CONFIG.hpCutFrom ? CONFIG.hpCut : 1) * (CONFIG.hpBlock[Math.ceil(r / 5) - 1] || 1) * diffHp(),
+    bounty: M.mini ? 0 : Math.max(1, Math.round(bountyFor(r) * (M.bountyMul || 1))) }; d.armorPct = (M.ar || [0, 0])[0]; d.armorPts = Math.round((M.ar || [0, 0])[1] * d.hp); return d; }
+const armorText = d => d.armorPct ? `${Math.round(d.armorPct*100)} % · ${d.armorPts} Punkte` : 'keine';
+const fmtFactor = f => f === 0 ? '×' + String(CONFIG.immune).replace('.', ',') + ' · kein Effekt' : '×' + String(f).replace('.', ',');
+
+/* ---------- Simulation (deterministisch) ----------
+   Einziger Zufall: Betäubungschance, gewürfelt mit festem Seed (Spielstart, Tag, Welle, Spieler) –
+   Auswertung und Wiedergabe kommen auf allen Handys zum selben Ergebnis.
+   Effekte (fx) und Leben wandern mit den Leaks zum nächsten Spieler. Dauer DAY = bis Tagesende. */
+const FOREVER = 1e6, DT = 1/30;
+// Leuchtet ein Irrlicht (gleiches Feld) auf diesen Turm? Dann keine Dunkelheit und kein Wettermalus für Schatten.
+function isLit(tw, towers){
+  return towers.some(o => { if (o.el !== tw.el) return false; const L = tdef(o).light; return L && Math.hypot(o.x - tw.x, o.y - tw.y) <= L + 1e-6; });
+}
+function makeSim(inp){
+  const res = new Set(inp.res || []), raw = inp.towers || [];
+  let wIdx = inp.weather || 0;
+  if (raw.length && (inp.incoming || []).some(q => MONSTERS[q.type] && MONSTERS[q.type].weatherBoss)) {   // Schulleiter: schlimmstes Wetter für das Element der Map
+    const cnt = [0,0,0,0]; raw.forEach(t => cnt[t.el]++); const el = cnt.indexOf(Math.max(...cnt));
+    if (!ELEMENTS[el].weatherproof) wIdx = worstWeather(el); }
+  const W = WEATHER[wIdx];
+  if (inp.tseed !== undefined) ensureTerrain(inp.tseed);
+  const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw, inp.lane || 0), W, res) }));
+  // Lichtkreise der Irrlichter: Im Dunkeln treffen Schatten-Türme nur Monster, die gerade darin sind
+  const lights = towers.filter(t => t.def.light).map(t => ({ x:t.x + .5, y:t.y + .5, r:t.def.light }));
+  // Verstärker (Irrlicht): Schatten-Türme in seinem Lichtkreis machen mehr Schaden, zu jeder Tageszeit. Mehrere Kreise: der stärkste zählt.
+  const amps = towers.filter(t => t.def.buff);
+  // Leuchtfeuer (Amethyst): verstärkt auch Türme anderer Elemente (ohne Rüstung zu ignorieren)
+  for (const t of towers) { if (t.def.buff) continue;
+    const near = amps.filter(a => (a.el === t.el || a.def.allBuff) && Math.hypot(a.x - t.x, a.y - t.y) <= a.def.light + 1e-6);
+    if (near.length) { const m = Math.max(...near.map(a => a.el === t.el ? a.def.buff : a.def.allBuff)), p = Math.max(t.def.pierce || 0, ...near.map(a => a.el === t.el ? a.def.pierce : 0));
+      t.def = { ...t.def, dpsNow:t.def.dpsNow * m, dmg:t.def.dmg * m, amp:m, pierce:p }; } }
+  return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, wIdx, rand:rng(inp.seed || 1),
+    queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, bSum:0, kills:0, gems:[0,0,0,0], pools:[], later:[], spawnT:0, t:0 };
+}
+const simBusy = s => s.queue.length || s.monsters.length || s.shots.length || s.later.length;
+function wdef(def, W, res){          // Turmwerte mit Forschung und unter dem aktuellen Wetter
+  let d = { ...def };
+  if (res) {
+    const e = 1 + resVal(res, 'el' + def.el); d.dpsNow *= e; d.dmg *= e;
+    if (d.dur !== DAY) d.dur *= 1 + resVal(res, 'dur');
+    d.range += resVal(res, 'rng') * GRID;
+  }
+  if (!W || ELEMENTS[def.el].weatherproof) return d;
+  const e = W.el[def.el] || {}, ok = v => v;
+  if (e.dmg) { d.dpsNow *= ok(e.dmg); d.dmg *= ok(e.dmg); }
+  if (e.eff) { d.eff *= ok(e.eff); if (d.effect === 'slow') d.eff = Math.min(0.85, d.eff); }
+  if (e.dur && d.dur !== DAY) d.dur *= ok(e.dur);
+  if (W.range) d.range *= ok(W.range);
+  return d;
+}
+const isBossy = m => !!(m.def.mini || m.def.boss);
+// Fliegt das Monster gerade? (Absturz: 2 s am Boden)
+// 16.10.: Mehlmottenraupen fliegen nur als Motte (m.coc.fly)
+const flier = m => !!(m.def.fly || (m.coc && m.coc.fly));
+const flying = m => flier(m) && !(m.fx.grounded && m.fx.grounded.t > 0);
+// Nicht anvisierbar (16.10.): unsichtbar (Magier-Novizen), Herz (GNTModels), Ork im Wald. Flächenschaden trifft trotzdem.
+const hidden = m => !!(m.inv || m.heartT > 0 || m.inForest);
+const armorPctOf = m => m.def.cocoon ? (m.coc && m.coc.fly ? 0 : m.def.cocoon.pct) : m.def.armorPct;
+// Tod: Gold, Kills, Edelstein (Zwischenboss/Boss: Farbe des tötenden Turms, Brennen/Lava = Feuer), Fähigkeiten, die beim Tod auslösen
+function kill(s, m, def){
+  if (m.dead) return; m.dead = true;
+  s.bSum += m.def.bounty; s.earned = Math.round(s.bSum * (1 + resVal(s.res, 'gold'))); s.kills++;   // 15.10. (F): Akademie-Bonus auf die Summe der Kopfgelder der Welle, nicht je Monster gerundet (bei 2–5 Gold kam sonst fast nichts an)
+  if (isBossy(m)) s.gems[def ? def.el : 0]++;
+  if (def && def.hunger) def.feast = (def.feast || 0) + 1;
+  const c = m.fx.curse;
+  if (c && c.t > 0 && c.w) {                 // Fluchwelle: Fluch springt auf die 2 nächsten Monster
+    s.monsters.filter(o => !o.dead && o !== m).map(o => [o, Math.hypot(o.x - m.x, o.y - m.y)]).filter(([,r]) => r <= 1.5 * GRID)
+      .sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addFx(o, 'curse', c.v, c.t, true));
+  }
+  const bn = m.fx.burn;
+  if (bn && bn.t > 0 && bn.w) {              // Flächenbrand: Brand springt auf die 2 nächsten Monster (ohne weiter zu springen)
+    s.monsters.filter(o => !o.dead && o !== m).map(o => [o, Math.hypot(o.x - m.x, o.y - m.y)]).filter(([,r]) => r <= 1.5 * GRID)
+      .sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addFx(o, 'burn', bn.v, bn.t));
+  }
+  if (def && def.explode) {                  // Zündschnur / Zersplittern: nur bei Tod durch einen Schuss dieses Turms
+    const ex = { ...def, explode:null, bounce:null, hunger:0, dmg:def.dmg * def.explode.mul };
+    s.fx.push({ kind:'boom', x:m.x, y:m.y, r:def.explode.r, t:.3, t0:.3, el:def.el });
+    splashAt(s, ex, m.x, m.y, def.explode.r, m);
+  }
+}
+function addFx(m, kind, val, t, w){        // stärkerer Wert gewinnt, längere Dauer gewinnt
+  if (!(val > 0) || !(t > 0)) return;
+  const c = m.fx[kind];
+  if (!c || c.t <= 0) m.fx[kind] = w ? { v:val, t, w:true } : { v:val, t };
+  else { c.v = Math.max(c.v, val); c.t = Math.max(c.t, t); if (w) c.w = true; }
+}
+const on = (m, k) => m.fx[k] && m.fx[k].t > 0;
+function hit(s, m, def, dmg){
+  if (m.dead) return;
+  m.hitT = s.t;   // nur Anzeige (Trefferreaktion), die Simulation liest das nicht
+  const w = (m.weak || m.def.weak)[def.el], f = w || CONFIG.immune, imm = !w;   // „immun“ = weniger Schaden und (seit 16.10.) kein Effekt des Elements; Lehrer: Faktoren je Exemplar (m.weak)
+  const vuln = 1 + (on(m, 'curse') ? m.fx.curse.v : 0) + (on(m, 'smolder') ? m.fx.smolder.v : 0);
+  if (def.groundHalf && !flying(m)) dmg *= 0.5;               // Feuerregen: Bodenmonster halb
+  if (def.flyHalf && flying(m)) dmg *= 0.5;                   // Feuerregen bei Bodentürmen: Fliegende halb
+  if (def.flyMul && flying(m)) dmg *= def.flyMul;             // Steilschuss: Fliegende 60 %
+  const bossy = isBossy(m), bh = bossy ? 0.5 : 1;                // Edelstein-Fähigkeiten wirken bei Bossen nur halb (15.10.)
+  if (def.hunger) dmg *= 1 + Math.min(def.hungerMax || 0.45, def.hunger * (def.feast || 0)) * bh;
+  // 18.10. (F): zweite Uniques
+  if (def.burnBonus && on(m, 'burn')) dmg *= 1 + def.burnBonus * bh;                                   // Stichflamme
+  if (def.chillBonus && on(m, 'slow')) dmg *= 1 + def.chillBonus * bh;                                 // Frostbiss
+  if (def.sun && !s.dark) dmg *= 1 + (def.sun - 1) * bh;                                               // Zenit (nur Tageswellen)
+  if (def.execute && m.hp < def.execute.thr * m.def.hp) dmg *= 1 + (def.execute.mul - 1) * bh;         // Todesblick
+  if (def.fresh && m.hp > def.fresh.thr * m.def.hp) dmg *= 1 + (def.fresh.mul - 1) * bh;               // Zerschmettern
+  if (def.crit && s.rand() < def.crit.chance) dmg *= 1 + (def.crit.mul - 1) * bh;                      // Schattenstreich
+  if (def.drain && m.ap > 0) m.ap -= def.drain * m.def.armorPts * bh;                                  // Entkräften
+  // Rüstung (12.10. 14:07): Solange Rüstungspunkte übrig sind, kommt der Schaden um armorPct verringert an.
+  // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
+  let pct = m.ap > 0 ? Math.min(0.95, armorPctOf(m) + (m.aura || 0)) : 0;   // Kontrabass in der Nähe: +Rüstung
+  const ad = dmg * f * (ELEMENTS[def.el].armorDmg || 0) * (def.armorMul ? 1 + (def.armorMul - 1) * bh : 1);
+  if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0) * (def.gemAb === 5 && def.el === 2 ? bh : 1); m.ap -= ad; }
+  m.hp -= dmg * f * vuln * (1 - pct);
+  if (on(m, 'brittle')) m.hp -= ad * bh;                           // Haut vereist: Rüstungsschaden trifft auch die Leben
+  const t = def.dur === DAY ? FOREVER : def.dur;
+  if (def.effect === 'burn' && (w || def.burnImmune)) {
+    const v = def.eff * def.dpsNow / def.shots * f;
+    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); if (def.burnWave) c.w = true; }
+    else addFx(m, 'burn', v, t, def.burnWave);
+    if (def.smolder) addFx(m, 'smolder', def.smolder * bh, t);
+  }
+  if (!imm) {
+  if (def.iceBlock && on(m, 'slow') && !flying(m)) addFx(m, 'stun', 1, def.iceBlock * (isBossy(m) ? 0.5 : 1));
+  if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);
+  if (def.effect === 'curse') {
+    if (def.curseStack && on(m, 'curse')) { const c = m.fx.curse; c.v = Math.min(def.curseStack, c.v + def.eff * f * bh); c.t = Math.max(c.t, t); }   // Tiefe Nacht: Fluch addiert sich
+    else addFx(m, 'curse', def.eff * f, t, def.curseWave);
+    if (def.curseSlow) addFx(m, 'slow', def.curseSlow, t);   // Verderben / Nachtschleier
+    }
+  if (def.effect === 'stun' && def.eff > 0 && (!def.chance || s.rand() < def.chance)) addFx(m, 'stun', 1, Math.min(CONFIG.stunMax, def.eff * f) * (def.stunBossHalf ? bh : 1));
+  if (def.wingBreak && flying(m) && s.rand() < def.wingBreak * bh) addFx(m, 'grounded', 1, FOREVER);   // Flügelbruch: bis Wellenende am Boden
+  if (def.groundHit && flier(m)) addFx(m, 'grounded', 1, def.groundHit * (isBossy(m) ? 0.5 : 1));
+  if (def.brittle) addFx(m, 'brittle', 1, def.brittle);
+  if (def.freeze && s.rand() < def.freeze.chance) addFx(m, 'stun', 1, def.freeze.t * (isBossy(m) ? 0.5 : 1));   // Nullpunkt
+  if (def.fear && s.rand() < def.fear.chance) addFx(m, 'fear', 1, def.fear.t * (isBossy(m) ? 0.5 : 1));
+  }
+  if (def.deathChance && m.hp > 0 && s.rand() < def.deathChance) { if (isBossy(m)) m.hp -= 0.05 * m.def.hp; else m.hp = 0; }
+  if (m.hp <= 0) { kill(s, m, def); return; }
+  if (m.def.heart && !(m.heartCd > 0)) { m.heartT = m.def.heart.t; m.heartCd = m.def.heart.t + m.def.heart.cd; }   // GNTModels: nach Treffer kurz ein Herz, nicht anvisierbar
+  if (m.def.rider && m.ap <= 0 && !m.v) splitRider(s, m);                                                         // Wargreiter: Rüstung weg → Warg und Ork
+}
+/* ---------- Besondere Monster (16.10., ab Runde 21) ---------- */
+// Wargreiter-Teile: Warg flieht schnell den Weg entlang, Ork geht möglichst gerade zum Ausgang (Wegsuche auf dem Raster)
+function variantDef(d, v){
+  const b = Math.ceil(d.bounty / 2);
+  if (v === 'warg') return { ...d, name:'Warg', emo:'🐺', speed:d.speed * 1.6, armorPct:0, armorPts:0, rider:null, bounty:b, hp:d.hp * 0.5 };
+  if (v === 'ork')  return { ...d, name:'Ork', emo:'🧌', speed:0.6, armorPct:0, armorPts:0, rider:null, ork:true, bounty:b, hp:d.hp * 0.5 };
+  const Q = QUARTET[v]; if (Q) { const hp = d.hp * Q.hp, pct = Q.ar ? Q.ar[0] : d.armorPct;   // Streichquartett (16.10.)
+    return { ...d, name:Q.name, speed:d.speed * Q.speed, size:d.size * Q.size, color:Q.color, confused:Q.confused, bass:Q.bass, hp, armorPct:pct, armorPts:Math.round((Q.ar ? Q.ar[1] : (d.ar || [0, 0])[1]) * hp) }; }
+  return d;
+}
+// Streichquartett (16.10., L): gemischte Welle, je 5 Stück in fester, gemischter Reihenfolge
+const QUARTET = {
+  violine: { name:'Violine',    hp:0.7,  speed:1,   size:0.8,  color:'#e9c46a' },
+  bratsche:{ name:'Bratsche',   hp:0.85, speed:1,   size:0.95, color:'#e07a3f', confused:{ every:3.5, back:1 } },   // läuft alle 3,5 s für 1 s rückwärts
+  cello:   { name:'Cello',      hp:1.3,  speed:1,   size:1.15, color:'#9c5a2e' },
+  bass:    { name:'Kontrabass', hp:2.0,  speed:0.9, size:1.4,  color:'#6b2f2a', ar:[0.35, 0.5], bass:{ r:1.5, pct:0.2 } }   // etwas langsamer; Monster in 1,5 Feldern: +20 Punkte Rüstung
+};
+// 16.10. (L): 3 Bässe, 4 Celli, 6 Bratschen, 7 Violinen – gemischt, Bässe über die Welle verteilt
+const QUARTET_ORDER = ['violine','bass','bratsche','violine','cello','bratsche','violine','violine','bass','cello','bratsche','violine','bratsche','cello','violine','bass','bratsche','cello','violine','bratsche'];
+const waveMix = (type, n) => MONSTERS[type].quartet ? [...Array(n)].map((_, k) => QUARTET_ORDER[k % QUARTET_ORDER.length]) : [...Array(n)].map(() => undefined);
+function splitRider(s, m){
+  const base = monsterDef(m.type, s.players), H = Math.max(0.01, m.hp);
+  m.v = 'warg'; m.def = variantDef(base, 'warg'); m.hp = H * 0.5; m.ap = 0;
+  const o = { id:m.id + .5, type:m.type, v:'ork', def:variantDef(base, 'ork'), hp:H * 0.5, ap:0, d:m.d, x:m.x, y:m.y, fx:JSON.parse(JSON.stringify(m.fx)), hops:m.hops, age:0 };
+  o.route = orkRoute(s, m.x, m.y); o.od = 0;
+  s.monsters.push(o); s.fx.push({ kind:'boom', x:m.x, y:m.y, r:0.5 * GRID, t:.3, t0:.3, el:3 });
+}
+// Weg des Orks: kürzester Weg auf dem Raster (8 Richtungen) vom Absteigen bis zum Ausgang. Türme, Felsen und Sumpf sind Hindernisse,
+// Wald ist begehbar (dort ist er nicht anvisierbar). Der Weg ist nie verbaut, also gibt es immer eine Verbindung.
+function orkRoute(s, x0, y0){
+  const map = s.map, block = new Set(s.towers.map(t => t.x + ',' + t.y)), cl = (v, n) => Math.max(0, Math.min(n - 1, Math.floor(v)));
+  const ok = (x, y) => x >= 0 && x < COLS && y >= 0 && y < ROWS && !block.has(x + ',' + y) && !(map.terrain[y][x] === 2 || map.terrain[y][x] === 3) || map.cells.has(x + ',' + y);
+  const [ex, ey] = map.wp[map.wp.length - 1], gx = cl(ex, COLS), gy = cl(ey, ROWS), sx = cl(x0, COLS), sy = cl(y0, ROWS);
+  const D = new Map(), P = new Map(), K = (x, y) => x + ',' + y, open = [[0, sx, sy]]; D.set(K(sx, sy), 0);
+  while (open.length) {
+    let bi = 0; for (let i = 1; i < open.length; i++) if (open[i][0] < open[bi][0]) bi = i;
+    const [c, x, y] = open.splice(bi, 1)[0]; if (c > D.get(K(x, y))) continue; if (x === gx && y === gy) break;
+    for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]) {
+      const nx = x + dx, ny = y + dy; if (!ok(nx, ny)) continue;
+      if (dx && dy && (!ok(x + dx, y) || !ok(x, y + dy))) continue;
+      const nc = c + (dx && dy ? Math.SQRT2 : 1); if (nc < (D.has(K(nx, ny)) ? D.get(K(nx, ny)) : Infinity)) { D.set(K(nx, ny), nc); P.set(K(nx, ny), [x, y]); open.push([nc, nx, ny]); }
+    }
+  }
+  const cells = []; let cur = [gx, gy]; if (!D.has(K(gx, gy))) cur = null;
+  while (cur) { cells.unshift(cur); cur = P.get(K(cur[0], cur[1])); }
+  const pts = [[x0, y0], ...cells.slice(1).map(([x, y]) => [x + .5, y + .5]), [ex, ey]];
+  const seg = []; let len = 0; for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i+1][0] - pts[i][0], pts[i+1][1] - pts[i][1]); seg.push({ ax:pts[i][0], ay:pts[i][1], bx:pts[i+1][0], by:pts[i+1][1], len:l, start:len }); len += l; }
+  return { seg, len };
+}
+// Magiermeister: geht erst ein Stück wie ein normales Monster (17.10.), steht dann auf N Wegpunkten mit gleichem Abstand,
+// in gemischter Reihenfolge (fester Seed), danach die letzten Felder zu Fuß
+function teleportPlan(s, d){
+  const n = d.teleport.n, L = s.map.len, list = [...Array(n)].map((_, k) => L * (0.16 + 0.66 * k / (n - 1)));
+  for (let j = n - 1; j > 0; j--) { const q = Math.floor(s.rand() * (j + 1)); [list[j], list[q]] = [list[q], list[j]]; }
+  return { list, i:0, t:d.teleport.stay, walk:L * 0.1 };
+}
+// Lehrer: jeder hat eine eigene Mischung aus Faktoren (eine „Immunität“, einen Bonus, der Rest gemischt)
+function mixedWeak(r){
+  const w = [0, 1.5, [0.75, 1, 1.25][Math.floor(r() * 3)], [0.75, 1, 1.25][Math.floor(r() * 3)]];
+  for (let j = 3; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [w[j], w[q]] = [w[q], w[j]]; }
+  return w;
+}
+// Schulleiter: auf jeder Map das Wetter, das dem Element der Map am meisten schadet (Stein ist wetterfest)
+function worstWeather(el){
+  let best = 0, bv = Infinity;
+  WEATHER.forEach((W, k) => { const e = W.el[el] || {}, v = (e.dmg || 1) * Math.sqrt((e.eff || 1) * (e.dur || 1)) * (W.range || 1); if (v < bv) { bv = v; best = k; } });
+  return best;
+}
+function spawn(s, sp){
+  let d = monsterDef(sp.type, s.players); if (sp.v) d = variantDef(d, sp.v);
+  const [x,y] = posAt(s.map, 0);
+  const m = { id:s.t + s.monsters.length * .37, type:sp.type, def:d, hp: sp.hp > 0 ? sp.hp : d.hp, ap: sp.ap !== undefined ? sp.ap : d.armorPts, d:0, x, y, fx: sp.fx || {}, hops:sp.hops, age:0, v:sp.v };
+  if (sp.weak || d.mixed) m.weak = sp.weak || mixedWeak(s.rand);
+  if (d.teleport) m.tp = teleportPlan(s, d);
+  if (d.cocoon) m.coc = { fly:false, walk:true, t:0.3 + 2.2 * s.rand() };   // 17.10.: erst kurz als Raupe laufen (zufällig lang), damit nicht alle an derselben Stelle einpuppen
+  if (d.blink) m.blinkPh = s.rand() * d.blink.every;                         // 17.10.: jeder Novize mit eigenem Takt
+  if (d.charm) m.charmCd = d.charm.every;
+  if (d.ork) { m.route = orkRoute(s, x, y); m.od = 0; }
+  s.monsters.push(m);
+}
+/* Welt = alle Felder einer Welle, im selben Takt. „Live“: Wer durchkommt, taucht sofort beim nächsten Spieler auf
+   (behält Leben und Effekte). Sonst wandern die Leaks erst zur nächsten Wellenzeit. */
+function makeWorld(run){ const sims = run.inputs.map(makeSim); sims.forEach(s => s.sent = 0); return { sims, live:!!run.live, n:run.inputs.length }; }
+const worldBusy = w => w.sims.some(simBusy);
+function stepWorld(w, dt){
+  w.sims.forEach(s => step(s, dt));
+  if (w.live) w.sims.forEach((s, i) => { while (s.sent < s.leaked.length) { const m = s.leaked[s.sent++]; if (m.hops < w.n) spawn(w.sims[(i+1) % w.n], JSON.parse(JSON.stringify(m))); } });
+}
+function simulateWorld(run){ const w = makeWorld(run); let g = 0; while (worldBusy(w) && g++ < 600000) stepWorld(w, DT); return w; }
+const canHit = (def, m) => !flier(m) ? (!def.air || !!def.groundHalf) : flying(m) ? def.hitsFly : true;   // abgestürzte Fliegende treffen alle
+function step(s, dt){
+  s.t += dt;
+  // Neue Welle: alle 0,9 s ein Monster. Leaks vom Nachbarn: in denselben Abständen, in denen sie dort ins Ziel kamen (at = Sekunden ab dem ersten).
+  if (s.queue.length && s.queue[0].at !== undefined) { while (s.queue.length && s.queue[0].at <= s.t) spawn(s, s.queue.shift()); }
+  else if (s.queue.length) { s.spawnT -= dt; if (s.spawnT <= 0) { const q = s.queue.shift(); spawn(s, q); s.spawnT = CONFIG.spawnGap * (MONSTERS[q.type].gap || 1); } }
+  for (const m of s.monsters) {
+    if (m.dead) continue;
+    for (const k in m.fx) m.fx[k].t -= dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1);
+    const fx = m.fx, on = k => fx[k] && fx[k].t > 0;
+    if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * dt;
+    if (m.hp <= 0) { kill(s, m); continue; }
+    m.age += dt; const D = m.def;
+    if (m.heartT > 0) m.heartT -= dt; if (m.heartCd > 0) m.heartCd -= dt;
+    if (D.blink) m.inv = ((m.age + (m.blinkPh || 0)) % D.blink.every) > D.blink.every - D.blink.dur;   // Magier-Novizen: kurz unsichtbar, versetzt
+    if (m.coc) { m.coc.t -= dt; if (m.coc.t <= 0) { m.coc.fly = !m.coc.walk && !m.coc.fly; m.coc.walk = false;          // Raupe → Kokon ↔ Motte, Dauer je ±25 %
+      m.coc.t = (m.coc.fly ? D.cocoon.fly : D.cocoon.ground) * (0.75 + 0.5 * s.rand()); } }
+    if (D.charm) { m.charmCd -= dt; if (m.strip > 0) m.strip -= dt;                    // Betty: Türme in Reichweite verlieben sich
+      if (m.charmCd <= 0) { m.charmCd = D.charm.every; m.strip = D.charm.show;
+        for (const tw of s.towers) { const r = tw.def.nova ? tw.def.splash : tw.def.buff ? tw.def.light : tw.def.range; if (Math.hypot(m.x - tw.x - .5, m.y - tw.y - .5) <= r) tw.love = D.charm.stop; } } }
+    if (D.confused) m.back = (m.age % D.confused.every) > D.confused.every - D.confused.back;   // Bratsche: verwirrt, kurz rückwärts
+    const slow = on('stun') ? 1 : Math.max(on('slow') ? fx.slow.v : 0, on('grounded') ? 0.3 : 0);
+    const spd = m.strip > 0 ? 0 : m.coc ? (m.coc.fly ? D.cocoon.speed : m.coc.walk ? D.speed : 0) : D.speed;   // Betty bleibt stehen, solange sie „censored“ ist (17.10.)
+    const v = GRID * spd * (flying(m) && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;
+    if (m.tp && m.tp.i < m.tp.list.length && (m.tp.walk < 0 || m.d >= m.tp.walk)) {   // Magiermeister: erst gehen, dann stehen und springen
+      if (m.tp.walk >= 0) { m.tp.walk = -1; s.fx.push({ kind:'boom', x:m.x, y:m.y, r:0.4 * GRID, t:.3, t0:.3, el:2 }); }
+      m.d = m.tp.list[m.tp.i]; m.tp.t -= dt;
+      if (m.tp.t <= 0) { s.fx.push({ kind:'boom', x:m.x, y:m.y, r:0.4 * GRID, t:.3, t0:.3, el:2 }); m.tp.i++; m.tp.t = D.teleport.stay;
+        if (m.tp.i >= m.tp.list.length) m.d = s.map.len * 0.88; }
+      [m.x, m.y] = posAt(s.map, m.d);
+    } else if (m.route) {                                                                // Ork: eigener Weg
+      m.od = on('fear') ? Math.max(0, m.od - v) : m.od + v;
+      [m.x, m.y] = posAt(m.route, m.od); m.d = s.map.len * Math.min(1, m.od / Math.max(0.1, m.route.len));
+      const cx = Math.floor(m.x), cy = Math.floor(m.y); m.inForest = cx >= 0 && cx < COLS && cy >= 0 && cy < ROWS && s.map.terrain[cy][cx] === 1 && !s.map.cells.has(cx + ',' + cy);
+      if (m.od >= m.route.len) m.d = s.map.len;
+    } else {
+      m.d = on('fear') || m.back ? Math.max(0, m.d - v) : m.d + v;     // Angst (und verwirrte Bratschen): läuft rückwärts, höchstens bis zum Eingang
+      [m.x, m.y] = posAt(s.map, m.d);
+    }
+    if (m.d >= s.map.len) {
+      m.dead = m.gone = true;
+      const keep = {}; for (const k in fx) if (fx[k].t > 0 && !['stun', 'fear', 'grounded'].includes(k)) keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };
+      const rec = { type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), ap:Math.max(0, Math.round(m.ap)), fx:keep, at:+s.t.toFixed(2) };
+      if (m.v) rec.v = m.v; if (m.weak) rec.weak = m.weak;
+      s.leaked.push(rec);   // nie 0: sonst käme es mit vollem Leben wieder
+    }
+  }
+  // Kontrabass: Monster in seiner Nähe bekommen zusätzliche Rüstung (Prozentpunkte), solange er lebt
+  const basses = s.monsters.filter(b => !b.dead && b.def.bass);
+  for (const m of s.monsters) m.aura = basses.some(b => b !== m && Math.hypot(b.x - m.x, b.y - m.y) <= b.def.bass.r) ? basses[0].def.bass.pct : 0;
+  // Bodenfelder (Lavapfütze, Geröll): jedes Monster zählt je Art nur einmal, auch in mehreren Feldern
+  for (const P of s.pools) { P.t -= dt; }
+  s.pools = s.pools.filter(P => P.t > 0);
+  if (s.pools.length) for (const m of s.monsters) { if (m.dead || flying(m)) continue;
+    const lava = s.pools.find(P => P.dps && Math.hypot(m.x - P.x, m.y - P.y) <= P.r);
+    if (lava) hit(s, m, lava.def, lava.dps * dt);
+    if (!m.dead && (m.weak || m.def.weak)[3] !== 0 && s.pools.some(P => P.slow && Math.hypot(m.x - P.x, m.y - P.y) <= P.r)) addFx(m, 'slow', 0.3, 0.2); }
+  for (const L of s.later) L.t -= dt;      // Nachbeben
+  s.later.filter(L => L.t <= 0).forEach(L => { if (L.at) { splashAt(s, L.def, L.at[0], L.at[1], L.def.splash); s.fx.push({ kind:'boom', x:L.at[0], y:L.at[1], r:L.def.splash, t:.3, t0:.3, el:L.def.el }); } else nova(s, L.tw, L.def); });
+  s.later = s.later.filter(L => L.t > 0);
+  for (const tw of s.towers) {
+    const def = tw.def;
+    if (tw.love > 0) { tw.love -= dt; continue; }   // Betty: verliebt, schießt nicht
+    if (def.moths) {                       // Mottenplage: Motten im Lichtkreis treffen bis zu 3 Monster, zweimal je Sekunde
+      tw.mcd = (tw.mcd || 0) - dt;
+      if (tw.mcd <= 0) { tw.mcd = 0.5; const cx = tw.x + .5, cy = tw.y + .5;
+        s.monsters.filter(m => !m.dead && !hidden(m) && Math.hypot(m.x - cx, m.y - cy) <= def.moths.r).sort((a, b) => b.d - a.d).slice(0, def.moths.n)
+          .forEach(m => { hit(s, m, { ...def, moths:null, dmg:0, dpsNow:0 }, def.moths.dps * 0.5); s.fx.push({ kind:'spark', x:m.x, y:m.y, t:.15, t0:.15, el:2 }); }); }
+    }
+    if (def.buff) continue;                // Irrlicht schießt nicht selbst
+    const night = def.dayOnly && s.dark && !def.nightSight;   // 12.10.: Dunkelheit gilt nur gegen nachtaktive Monster
+    tw.cd -= dt; if (tw.cd > 0) continue;
+    const cx = tw.x + .5, cy = tw.y + .5, reach = def.nova ? def.splash : def.range;
+    const inRange = s.monsters.filter(m => !m.dead && !hidden(m) && canHit(def, m) && Math.hypot(m.x-cx, m.y-cy) <= reach &&
+      (!night || !m.def.night || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));
+    if (!inRange.length) continue;
+    tw.cd = 1 / def.rate;
+    if (def.nova) { nova(s, tw, def); if (def.aftershock) s.later.push({ t:def.aftershock.t, tw, def:{ ...def, aftershock:null, rebound:null, pool:null, dmg:def.dmg * def.aftershock.mul } }); continue; }
+    inRange.sort((a,b) => b.d - a.d);
+    if (def.lance) { lance(s, tw, def, inRange); continue; }
+    inRange.slice(0, def.shots).forEach((m, k) => launch(s, tw, def, m, k === 0));
+  }
+  for (const p of s.shots) {
+    if (!p.lob && !p.tgt.dead) { p.tx = p.tgt.x; p.ty = p.tgt.y; }
+    const dx = p.tx - p.x, dy = p.ty - p.y, dist = Math.hypot(dx, dy), mv = p.sp * dt;
+    if (dist <= mv) { p.x = p.tx; p.y = p.ty; p.done = true; impact(s, p); }
+    else { p.x += dx / dist * mv; p.y += dy / dist * mv; }
+  }
+  s.shots = s.shots.filter(p => !p.done);
+  for (const f of s.fx) f.t -= dt;
+  s.fx = s.fx.filter(f => f.t > 0);
+  s.monsters = s.monsters.filter(m => !m.dead);
+}
+/* Wurfgeschwindigkeit (15.10., L): bisheriger Wert, aber im Korridor
+   – schnell genug, dass Monster mit Tempo 1,4 (oberes Drittel) bei voller Reichweite noch am Rand der Fläche getroffen werden,
+   – nicht schneller als nötig für das schnellste Monster (Tempo 1,8). Passt sich an Reichweite (Upgrade, Forschung, Felsen) und Fläche an. */
+function lobSpeedOf(def){
+  const base = ELEMENTS[def.el].lobSpeed || CONFIG.lobSpeed, q = def.range / Math.max(0.1, def.splash);
+  return Math.min(CONFIG.lobFast * q, Math.max(CONFIG.lobMid * q, base));
+}
+// Geschoss abfeuern. Flächen-Geschosse werden geworfen: Sie landen dort, wo das Ziel beim Abschuss war.
+function launch(s, tw, def, target, first = true){
+  const x = tw.x + .5, y = tw.y + .5, lob = def.splash > 0, sp = GRID * (lob ? lobSpeedOf(def) : CONFIG.shotSpeed);
+  tw.aim = Math.atan2(target.y - y, target.x - x);       // nur für die Grafik
+  s.shots.push({ x, y, x0:x, y0:y, tx:target.x, ty:target.y, tgt:target, lob, sp, def, el:def.el, idx:def.idx, noPool:!first && def.el === 0 });   // Lavapfütze (Feuer): nur das erste Geschoss je Schuss legt eine
+  if (def.salvo && lob && first) {            // Salve (Katapult): jeder n-te Schuss wirft zwei weitere Brocken seitlich daneben
+    tw.sn = (tw.sn || 0) + 1;
+    if (tw.sn % def.salvo.every === 0) { const a = tw.aim + Math.PI / 2, d2 = { ...def, salvo:null, dmg:def.dmg * def.salvo.mul };
+      for (const sg of [-1, 1]) s.shots.push({ x, y, x0:x, y0:y, tx:target.x + Math.cos(a) * sg * def.salvo.spread, ty:target.y + Math.sin(a) * sg * def.salvo.spread, tgt:target, lob, sp, def:d2, el:def.el, idx:def.idx, noPool:true }); }
+  }
+  s.fx.push({ kind:'flash', x, y, t:.12, t0:.12, el:def.el, tw });
+}
+function splashAt(s, def, x, y, R){   // Flächenschaden um einen Punkt
+  for (const o of s.monsters) { if (o.dead || !canHit(def, o)) continue;
+    const r = Math.hypot(o.x - x, o.y - y), E = ELEMENTS[def.el], c = E.splashCenter || 1, e = E.splashEdge ?? CONFIG.splashEdge;
+    if (r <= R) hit(s, o, def, def.dmg * (c - (c - e) * r / R)); }   // Stein: Mitte 120 %, Rand 80 %
+}
+function impact(s, p){
+  const def = p.def;
+  if (def.splash) { splashAt(s, def, p.tx, p.ty, def.splash); s.fx.push({ kind:'boom', x:p.tx, y:p.ty, r:def.splash, t:.3, t0:.3, el:def.el }); }
+  else if (!p.tgt.dead) { hit(s, p.tgt, def, def.dmg); s.fx.push({ kind:'spark', x:p.tx, y:p.ty, t:.15, t0:.15, el:def.el }); }
+  if (def.aftershock) s.later.push({ t:def.aftershock.t, at:[p.tx, p.ty], def:{ ...def, aftershock:null, rebound:null, pool:null, dmg:def.dmg * def.aftershock.mul } });   // Nachbeben bei Wurf-Türmen
+  if (def.pool && !p.noPool) {             // Lavapfütze / Geröll
+    s.pools.push({ x:p.tx, y:p.ty, r:def.pool.r, t:def.pool.t, t0:def.pool.t, el:def.el, slow:def.pool.slow || 0,
+      dps:def.pool.dpsMul ? def.dpsNow * def.pool.dpsMul : 0, def:{ ...def, pool:null, bounce:null, explode:null } });
+  }
+  if (def.rebound) def.rebound.forEach((mul, k) => s.later.push({ t:0.4 * (k + 1), at:[p.tx, p.ty], def:{ ...def, rebound:null, pool:null, dmg:def.dmg * mul } }));   // Prellstein: hüpft an derselben Stelle nach
+  if (def.bounce) {                        // Sonnenfeuer (bis 16.10. Phönixflug): einmal weiter zum nächsten Monster
+    const nx = s.monsters.filter(o => !o.dead && !hidden(o) && o !== p.tgt && canHit(def, o)).map(o => [o, Math.hypot(o.x - p.tx, o.y - p.ty)])
+      .filter(([,r]) => r <= def.bounce.r && r > 0.3).sort((a, b) => a[1] - b[1])[0];
+    if (nx) { const d2 = { ...def, bounce:null, pool:null, dmg:def.dmg * def.bounce.mul }, o = nx[0];
+      s.shots.push({ x:p.tx, y:p.ty, x0:p.tx, y0:p.ty, tx:o.x, ty:o.y, tgt:o, lob:p.lob, sp:p.sp, def:d2, el:def.el, idx:def.idx }); }
+  }
+}
+// Durchbohren (Eisspeer): gerade Linie über die ganze Karte, Richtung so, dass möglichst viele Monster getroffen werden
+function lance(s, tw, def, inRange){
+  const x = tw.x + .5, y = tw.y + .5, W = 0.5;
+  const along = (a) => s.monsters.filter(o => { if (o.dead || !canHit(def, o)) return false;
+    const dx = o.x - x, dy = o.y - y, pr = dx * Math.cos(a) + dy * Math.sin(a); return pr > 0 && Math.abs(-dx * Math.sin(a) + dy * Math.cos(a)) <= W; });
+  let best = null, bn = -1;
+  for (const m of inRange) { const a = Math.atan2(m.y - y, m.x - x), n = along(a).length; if (n > bn) { bn = n; best = a; } }
+  tw.aim = best;
+  along(best).forEach(o => hit(s, o, def, def.dmg));
+  const L = COLS * 1.5;
+  s.fx.push({ kind:'lance', x, y, x1:x + Math.cos(best) * L, y1:y + Math.sin(best) * L, t:.25, t0:.25, el:def.el });
+  s.fx.push({ kind:'flash', x, y, t:.12, t0:.12, el:def.el, tw });
+}
+function nova(s, tw, def){                  // Erdbeben, Frostnova: wirkt sofort rund um den Turm
+  const x = tw.x + .5, y = tw.y + .5;
+  splashAt(s, def, x, y, def.splash);
+  s.fx.push({ kind: def.el === 3 ? 'quake' : 'nova', x, y, r:def.splash, t:.5, t0:.5, el:def.el, tw });
+  if (def.rebound) def.rebound.forEach((mul, k) => s.later.push({ t:0.4 * (k + 1), tw, def:{ ...def, rebound:null, aftershock:null, pool:null, dmg:def.dmg * mul } }));   // Prellstein bei Beben-Türmen
+  if (def.pool) s.pools.push({ x, y, r:def.pool.r, t:def.pool.t, t0:def.pool.t, el:def.el, slow:def.pool.slow || 0, dps:0, def:{ ...def, pool:null, rebound:null, aftershock:null } });   // Geröll bei Beben-Türmen
+}
+function simulate(inp){ const s = makeSim(inp); let g = 0; while (simBusy(s) && g++ < 400000) step(s, DT); return s; }
+
+/* ---------- Spielregeln ---------- */
+const NP = () => G.cfg.players;
+const P_STATE = 'games/' + GAME_ID, P_LANES = 'games/' + GAME_ID + '/lanes';
+function waveSpecs(day){ const m = MONSTERS[day-1]; if (!m) return []; return waveMix(day-1, m.count || CONFIG.perWave).map(v => v ? { type:day-1, hops:0, v } : { type:day-1, hops:0 }); }
+function incomingFor(g, i){ const n = g.cfg.players; return g.slot === 0 ? waveSpecs(g.day) : ((g.leaked || {})[(i-1+n)%n] || []); }
+// Gold = Start + Kopfgeld − Ausgaben − verschenkt + erhalten (nach Gebühr). Geschenke stehen im Feld des Schenkenden.
+function giftsIn(i){ let x = 0; L.forEach((_,k) => (laneOf(k).gifts || []).forEach(g => { if (g.to === i) x += Math.floor(g.amt * (1 - CONFIG.giftFee)); })); return x; }
+function giftsOut(i){ return (laneOf(i).gifts || []).reduce((a,g) => a + g.amt, 0); }
+function goldOf(i){ const l = laneOf(i); return (G.cfg.startGold ?? CONFIG.startGold) + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i) - (l.pot||0); }
+// Gold wird erst sichtbar, wenn die Monster in der Wiedergabe sterben
+// Gold aus der laufenden Wiedergabe erscheint erst, wenn die Monster sterben – aber nur beim ersten Ansehen der neuesten Welle.
+// (Fehler bis 11.10.: „Letzte Welle ansehen“ zog bereits ausgegebenes Gold nochmal ab → Minus-Gold.)
+const pendingOf = (i, k) => replay && replay.pending ? Math.max(0, (replay.final[k][i] || 0) - (replay.sims[i] ? replay.sims[i][k] : 0)) : 0;
+function goldAvail(i){ return goldOf(i) - pendingOf(i, 'earned'); }
+const killsOf = i => ((G.kills || [])[i] || 0) - pendingOf(i, 'kills');
+function researchSet(lanes){ const r = new Set(); lanes.forEach(l => (l && l.research || []).forEach(id => r.add(id))); return r; }
+const curRes = () => researchSet(L.map((_,k) => laneOf(k)));
+function potOf(){ const lanes = L.map((_,k) => laneOf(k)), r = researchSet(lanes);
+  return lanes.reduce((a,l) => a + (l.pot || 0), 0) - [...r].reduce((a,id) => a + (RESEARCH.find(x => x.id === id) || {cost:0}).cost, 0); }
+// Ein Feld gehört nur zum aktuellen Spiel (gid). Alte Felder aus früheren Spielen zählen nicht – sonst wäre Minus-Gold möglich.
+const gidOf = g => g ? g.cfg.startAt : 0;
+function laneOf(i){ const l = L[i];
+  if (!l || (G && l.gid !== gidOf(G))) return { el:i % ELEMENTS.length, towers:[], spent:0, gifts:[], gid:gidOf(G) };
+  return l; }
+function newGameState(cfg){
+  return { cfg, day:1, slot:0, passed:0, over:null, earned:Array(cfg.players).fill(0), kills:Array(cfg.players).fill(0),
+    leaked:{}, log:[{ when:'Tag 1', text:`Neues Spiel mit ${cfg.players} Spielern. Wellen um ${cfg.slots.map(hh).join(', ')}. Zuerst kommen ${MONSTERS[0].name}.` }], lastRun:null };
+}
+function resolveSlot(g, lanes){
+  g = JSON.parse(JSON.stringify(g));
+  const resAll = researchSet([...Array(g.cfg.players)].map((_,i) => lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : null));
+  const n = g.cfg.players, SL = slotsOf(g), time = hh(SL[g.slot]), next = SL[g.slot+1], weather = weatherDay(g, g.day)[g.slot];
+  const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : { el:i % ELEMENTS.length, towers:[] };
+    return { lane:i, players:n, res:[...resAll], el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:isDark(SL[g.slot]), weather,
+      tseed: g.cfg.startAt || 0, seed: (Math.floor((g.cfg.startAt || 1) / 1000) * 31 + g.day * 977 + g.slot * 131 + i * 17) >>> 0 }; });
+  const live = !!g.cfg.live, res = simulateWorld({ inputs, live }).sims;
+  const leaked = {}; let broke = 0; const log = [];
+  res.forEach((r,i) => {
+    g.earned[i] = (g.earned[i]||0) + r.earned;
+    g.kills = g.kills || []; g.kills[i] = (g.kills[i]||0) + r.kills;
+    // Edelsteine: als Objekt {Spieler: [Feuer, Eis, Schatten, Stein]} – Firestore erlaubt keine Listen in Listen
+    g.gems = g.gems || {}; const gm = g.gems[i] || [0,0,0,0]; g.gems[i] = gm.map((v, e) => v + (r.gems[e] || 0));
+    const pass = r.leaked.filter(m => m.hops < n), outs = r.leaked.filter(m => m.hops >= n), out = outs.length;
+    if (pass.length) { const t0 = Math.min(...pass.map(m => m.at || 0)); pass.forEach(m => m.at = +((m.at || 0) - t0).toFixed(2)); pass.sort((a,b) => a.at - b.at); }
+    leaked[i] = live ? [] : pass; broke += outs.reduce((a,m) => a + (MONSTERS[m.type].lives || 1), 0);
+    if (!inputs[i].incoming.length && !r.kills && !r.leaked.length) return;
+    const gemTxt = r.gems.map((v, e) => v ? `${v} ${GEMS[e].name}` : '').filter(Boolean).join(', ');
+    log.push(`Spieler ${i+1}: ${r.kills} besiegt (+${r.earned} Gold${gemTxt ? ', 💎 ' + gemTxt : ''}), ${r.leaked.length} durch` +
+      (pass.length ? ` → Spieler ${(i+1)%n+1}${live ? ' (sofort)' : next ? ' um ' + hh(next) : ''}` : '') + (out ? ' → ganz durchgebrochen' : ''));
+  });
+  g.leaked = leaked; g.passed += broke;
+  log.reverse().forEach(text => g.log.unshift({ when:`Tag ${g.day} ${time} ${WEATHER[weather].sym}`, text }));
+  let added = log.length;
+  g.lastRun = { id:`${g.day}-${g.slot}-${Date.now()}`, day:g.day, slot:g.slot, inputs, live };
+  if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
+  else {
+    // Uhrzeiten-Modus: Wellen, bei denen bei niemandem etwas ankommt, werden übersprungen
+    const none = () => !live && !Object.values(g.leaked).some(a => a && a.length);
+    const skipped = []; g.slot++;
+    while (g.slot < SL.length && none()) { skipped.push(hh(SL[g.slot])); g.slot++; }
+    if (skipped.length) { added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Nichts im Anmarsch um ${skipped.join(', ')} – übersprungen.` }); }
+    if (g.slot < SL.length) { /* nächste Welle desselben Tages */ }
+    else if (g.day >= CONFIG.days) { g.slot = SL.length - 1; g.over = 'won'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Gewonnen! ${CONFIG.days} Tage gehalten, ${g.passed} durchgebrochen.` }); }
+    else { g.day++; g.slot = 0; g.leaked = {}; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Neuer Tag. Um 10:00 kommen ${MONSTERS[g.day-1] ? MONSTERS[g.day-1].name : 'Monster'}.` }); }
+  }
+  g.lastRun.newLog = added; g.lastRun.broke = broke;   // für die Wiedergabe: erst zeigen, wenn es passiert
+  g.log = g.log.slice(0, 60);
+  return g;
+}
+function dueTime(g){
+  const c = g.cfg; if (c.timing === 'manual') return null;
+  if (c.timing === 'test') return c.startAt + (c.shift || 0) + (c.slots ? CONFIG.firstWaveDelay * 60000 : 0) + ((g.day-1)*slotsOf(g).length + g.slot) * c.interval * 60000;
+  const d = new Date(c.day1); d.setDate(d.getDate() + g.day - 1); d.setHours(slotsOf(g)[g.slot], 0, 0, 0); return d.getTime();
+}
+
+/* ---------- Speichern: online (geteilte Datenbank) oder lokal (dieses Gerät) ---------- */
+function lsGet(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+let writeChain = Promise.resolve();
+// 12.10. 14:36: Hing ein Schreibvorgang (Safari), blieben alle weiteren in der Schlange liegen (Element-Wahl kam nie an).
+// Jetzt: Zeitlimit 10 s je Versuch, ein zweiter Versuch, danach geht die Schlange trotzdem weiter.
+const withTimeout = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit beim Speichern')), ms))]);
+// Speicher-Anzeige oben (12.10. 14:39, Fehlersuche Fairphone): speichert … / ✓ gespeichert / ⚠ Fehler mit Meldung
+let writesOpen = 0, writeErr = null, writeOkAt = 0;
+function saveStatus(){ const t = $('modeTag'); if (!t || MODE !== 'online') return;
+  t.textContent = 'Prototyp 3 · online · ' + (writeErr ? '⚠ ' + writeErr : writesOpen ? 'speichert …' : writeOkAt ? '✓ gespeichert' : 'bereit'); }
+function queueWrite(fn){ const once = () => withTimeout(Promise.resolve().then(fn), 10000);
+  writesOpen++; saveStatus();
+  writeChain = writeChain.then(() => once().catch(e => { console.warn(e); writeErr = 'nochmal: ' + (e && e.message || e); saveStatus(); return once(); }))
+    .then(() => { writeErr = null; writeOkAt = Date.now(); })
+    .catch(e => { console.warn(e); writeErr = 'Fehler: ' + (e && (e.code || e.message) || e); toast('Speichern hat nicht geklappt: ' + (e && (e.code || e.message) || e)); })
+    .finally(() => { writesOpen--; saveStatus(); }); return writeChain; }
+// Jede eigene Änderung bekommt eine Versionsnummer (rev). Ältere Stände vom Server überschreiben das eigene Feld nicht mehr
+// (12.10. 14:34: Server-Abfrage kam mit altem Stand zurück → gewähltes Element sprang auf Feuer zurück).
+function takeLane(k, data){ const cur = L[k];
+  if (cur && cur.rev && data && data.gid === cur.gid && !((data.rev || 0) >= cur.rev)) return;
+  L[k] = data; }
+async function saveLane(i){
+  if (MODE !== 'local') L[i] = { ...laneOf(i), rev: Math.max(Date.now(), ((L[i] && L[i].rev) || 0) + 1) };
+  if (MODE === 'local') return lsSet('ww2-local', { G, L });
+  const body = JSON.parse(JSON.stringify({ ...laneOf(i), gid:gidOf(G) })); await queueWrite(() => DB.doc(P_LANES + '/p' + i).set(body));
+}
+async function saveGame(){
+  if (MODE === 'local') return lsSet('ww2-local', { G, L });
+  const body = JSON.parse(JSON.stringify(G)); await queueWrite(() => DB.doc(P_STATE).set(body));
+}
+let resolving = false, resolvingAt = 0;
+// Gibt true zurück, wenn ausgewertet werden konnte (für den Bereit-Knopf: sonst später nochmal versuchen)
+/* Archiv (15.10., L): Jedes online gespielte Spiel wird mitgeschrieben, für die Eichung des Balancing-Skripts.
+   games/<GAME_ID>/archiv/<startAt>: je Welle Kills, Gold, Durchbrüche (slots), je Tagesende alle Türme (days).
+   Fehlspiele (z. B. früh aufgegeben) werden erst beim Auslesen aussortiert (tools/archiv.js). */
+const P_ARCH = 'games/' + GAME_ID + '/archiv';
+const archLanes = (lanes, g) => [...Array(g.cfg.players)].map((_, i) => { const l = lanes[i];
+  if (!l || l.gid !== gidOf(g)) return null;
+  return { el:l.el, spent:l.spent || 0, pot:l.pot || 0, research:l.research || [], gemUsed:l.gemUsed || [],
+    gifts:(l.gifts || []).reduce((a, x) => a + x.amt, 0),
+    towers:(l.towers || []).map(t => ({ x:t.x, y:t.y, el:t.el, idx:t.idx, lvl:t.lvl || 1, inv:t.invested || 0, gem:!!t.gem, ab:t.ab ?? null })) }; });
+function archSlot(b, g, lanes, arch){
+  const n = g.cfg.players, d = (a, c, i) => ((a || [])[i] || 0) - ((c || [])[i] || 0);
+  arch.slots[`${b.day}-${b.slot}`] = { kills:[...Array(n)].map((_, i) => d(g.kills, b.kills, i)), earned:[...Array(n)].map((_, i) => d(g.earned, b.earned, i)),
+    broke:(g.lastRun && g.lastRun.broke) || 0, passed:g.passed, weather:g.lastRun && g.lastRun.inputs[0] ? g.lastRun.inputs[0].weather || 0 : 0,
+    leaked:[...Array(n)].map((_, i) => ((g.leaked || {})[i] || []).length) };
+  if (g.day !== b.day || g.over) arch.days[b.day] = { lanes:archLanes(lanes, g), earned:g.earned, kills:g.kills, gems:g.gems || {}, passed:g.passed };
+}
+const archDoc = (g, arch) => JSON.parse(JSON.stringify({ cfg:g.cfg, version:VERSION, updated:Date.now(), day:g.day, slot:g.slot, over:g.over || null,
+  gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...arch }));
+async function tryResolve(force, onlyKey){
+  if (resolving && Date.now() - resolvingAt > 20000) resolving = false;   // hängende Verbindung: nicht ewig blockieren
+  if (!G || G.over || G.paused || resolving || replay) return false;
+  if (MODE === 'local') { G = resolveSlot(G, L); lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return true; }
+  resolving = true; resolvingAt = Date.now(); let ok = false;
+  try {
+    const ls = await DB.collection(P_LANES).get();
+    const lanes = []; ls.docs.forEach(d => { const k = +d.id.slice(1); lanes[k] = d.data(); });
+    const arch = { slots:{}, days:{} }; let archOut = null;
+    const advance = g => { let n = 0;
+      if (g.paused) return null;   // Pause: keine Welle, auch nicht per Knopf
+      if (onlyKey && readyKey(g) !== onlyKey) return null;   // „Bereit“: nur diese eine Welle, nie doppelt
+      while (!g.over && n < 30) { const due = dueTime(g); if (!(force && n === 0) && !(due && Date.now() >= due)) break; const b = g; g = resolveSlot(g, lanes); n++;
+        try { archSlot(b, g, lanes, arch); } catch(e) { console.warn(e); } }
+      return n ? g : null; };
+    const ref = DB.doc(P_STATE);
+    if (DB.tx) {            // Firebase: Transaktion verhindert doppelte Auswertung
+      await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists) return;
+        const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) { tr.set(ref, g); archOut = g; } });
+      // Archiv erst nach der Transaktion und getrennt: ein Fehler dort darf die Auswertung nie blockieren
+      if (archOut) { const ag = archOut; Promise.resolve().then(() => DB.doc(P_ARCH + '/' + ag.cfg.startAt).set(archDoc(ag, arch), { merge:true })).catch(e => console.warn(e)); }
+    } else {                // Claude-Artifact: kurze Sperre statt Transaktion
+      const lease = await ref.acquire({ holder: ME, ttlMs: 15000 });
+      if (!lease.acquired) return;
+      const snap = await ref.get(); if (!snap.exists) return;
+      const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) await ref.set(g);
+    }
+    ok = true;
+  } catch(e) { console.warn(e); }
+  finally { resolving = false; }
+  if (ok) refreshFromServer();   // Ergebnis sofort holen, nicht auf die Live-Verbindung warten
+  return ok;
+}
+
+/* ---------- Wiedergabe der letzten Welle ---------- */
+function startReplay(run, rewatch){
+  if (!run) return;
+  seenRun = run.id; lsSet('ww2-seen', seenRun);
+  const w = makeWorld(run), end = simulateWorld(run).sims;
+  replay = { run, acc:0, w, sims:w.sims, pending:!rewatch, final:{ earned:end.map(s => s.earned), kills:end.map(s => s.kills), gems:end.map(s => s.gems) } };
+  selCell = null; render(); kickLoop();
+}
+// Jede Schleife hat eine Nummer: Startet der Wächter neu, läuft trotzdem nie zweimal gleichzeitig.
+function kickLoop(){ if (!replay) return; const tok = replay.tok = (replay.tok || 0) + 1; replay.last = performance.now(); requestAnimationFrame(now => loop(now, tok)); }
+function loop(now, tok){
+  if (!replay || replay.tok !== tok) return;
+  // feste Schritte wie bei der Auswertung, sonst weicht die Wiedergabe ab
+  replay.acc += Math.min(0.1, (now - replay.last) / 1000) * speed; replay.last = now;
+  try { while (replay.acc >= DT) { stepWorld(replay.w, DT); replay.acc -= DT; } }
+  catch(e) { console.warn(e); replay = null; render(); return; }   // Fehler: Wiedergabe abbrechen statt ewig „läuft“
+  try { drawAll(); updateLaneHeads(); } catch(e) { console.warn(e); }   // Zeichenfehler dürfen die Wiedergabe nicht anhalten
+  if (!worldBusy(replay.w)) { replay = null; render(); nextReplay(); return; }
+  requestAnimationFrame(n => loop(n, tok));
+}
+function endReplay(){ if (!replay) return; let g = 0; while (worldBusy(replay.w) && g++ < 600000) stepWorld(replay.w, DT); replay = null; render(); nextReplay(); }
+// Kam während einer Wiedergabe schon die nächste Welle (z. B. Mitspieler drückt „Bereit“), sofort danach zeigen –
+// vorher wurde sie übersprungen und erschien erst nach Neuladen.
+function nextReplay(){ if (G && G.lastRun && G.lastRun.id !== seenRun) startReplay(G.lastRun); }
+
+/* ---------- Bauen ---------- */
+// Bauen und Upgraden geht jederzeit, auch während eine Welle abgespielt wird (wirkt ab der nächsten Welle)
+// 14.10.: erst gesperrt, wenn das Spielende auch im Bild angekommen ist – sonst verrät die Leiste die Niederlage vorab
+const mayBuild = i => G && !overShown() && !G.paused && (MODE === 'local' || i === seat);
+function clickCell(i, x, y){
+  if (!G) return;
+  if (MODE === 'local' && seat !== i) { seat = i; selTower = null; }
+  if (MAPS[i].cells.has(x+','+y)) { selCell = null; return render(); }
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y);
+  if (tw || selTower === null || !mayBuild(i)) { selCell = { i, x, y }; return render(); }
+  if (LOCKS[selTower] && !curRes().has(LOCKS[selTower])) { pop('Erst in der Bauhütte freischalten.'); return; }
+  const cost = buildCost(l.el, selTower, i, x, y);
+  if (goldAvail(i) < cost) { pop(`Zu wenig Gold (hier ${cost}).`); return; }
+  pending = { i, x, y, k:selTower }; selCell = { i, x, y }; render(); showBuildDialog();
+}
+// Bauen erst nach Bestätigung im Dialog (Kosten, Reichweite, Wirkung)
+let pending = null;
+function showBuildDialog(){
+  const { i, x, y, k } = pending, l = laneOf(i), d = tdef({ el:l.el, idx:k, lvl:1, x, y }, i), cost = buildCost(l.el, k, i, x, y), T = TERRAIN[MAPS[i].terrain[y][x]], ic = towerIcon(l.el, k);
+  const extra = cost - d.cost;
+  openDlg(`<h2>${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</h2>
+    <dl><dt>Kosten</dt><dd>${cost} Gold${extra ? ` (${d.cost} + ${extra} ${T.name})` : ''}</dd>
+    <dt>Danach</dt><dd>${goldAvail(i) - cost} Gold</dd>
+    ${d.buff ? '' : `<dt>Schaden/s</dt><dd>${num(d.dpsNow)}</dd><dt>Reichweite</dt><dd>${num(d.range)}</dd>`}</dl>
+    <div class="muted">${d.role}${fxText(d) ? ' · ' + fxText(d) : ''} · ${d.buff ? 'Lichtkreis' : 'Reichweite'} gestrichelt im Feld</div>
+    <div class="acts"><button class="btn" id="bNo">Abbrechen</button><button class="btn primary" id="bYes">Wirklich bauen</button></div>`, '', true);
+  // Spielfeld unter den Dialog scrollen, damit die Reichweite sichtbar bleibt
+  const r = $('cv'+i).getBoundingClientRect(), bottom = innerHeight - ($('palette').offsetHeight || 0) - 8;
+  if (r.bottom > bottom || r.top < $('dlg').offsetHeight + 20) window.scrollBy(0, r.bottom - bottom);
+  $('bNo').onclick = () => { pending = null; closeDlg(); render(); };
+  $('bYes').onclick = () => { const p = pending; pending = null; closeDlg(); doBuild(p.i, p.x, p.y, p.k); };
+  $('bYes').focus();
+}
+function doBuild(i, x, y, k){
+  const l = laneOf(i); if (!mayBuild(i) || l.towers.some(t => t.x === x && t.y === y)) return render();
+  const cost = buildCost(l.el, k, i, x, y);
+  if (goldAvail(i) < cost) { pop(`Zu wenig Gold (hier ${cost}).`); return render(); }
+  pop(`Gebaut: −${cost} Gold`);
+  L[i] = { ...l, towers:[...l.towers, { x, y, el:l.el, idx:k, lvl:1, invested:cost }], spent:(l.spent||0) + cost };
+  selCell = { i, x, y }; render(); saveLane(i);
+}
+const refundOf = tw => Math.floor((tw.invested || towerBase(tw.el, tw.idx).cost) * CONFIG.sellRefund);
+// Verkaufen und Upgrade: erst nach Bestätigung im Fenster (wie beim Bauen)
+function sellDialog(i, x, y){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
+  const d = tdef(tw, i), ic = towerIcon(tw.el, tw.idx);
+  openDlg(`<h2>${ic ? `<img src="${ic}" alt="">` : ''}${d.name} verkaufen?</h2>
+    <dl><dt>Stufe</dt><dd>${d.lvl}/${CONFIG.maxLevel}</dd><dt>Erlös</dt><dd>+${refundOf(tw)} Gold (${Math.round(CONFIG.sellRefund*100)} % von ${tw.invested || d.cost})</dd>
+    <dt>Danach</dt><dd>${goldAvail(i) + refundOf(tw)} Gold</dd></dl>
+    ${tw.gem ? `<div class="muted" style="color:var(--danger)">Der eingesetzte ${GEMS[tw.el].name} geht dabei verloren.</div>` : ''}
+    <div class="acts"><button class="btn" id="sNo">Abbrechen</button><button class="btn primary" id="sYes">Verkaufen</button></div>`);
+  $('sNo').onclick = closeDlg; $('sYes').onclick = () => { closeDlg(); sell(i, x, y); }; $('sYes').focus();
+}
+function sell(i, x, y){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
+  pop(`Verkauft: +${refundOf(tw)} Gold`);
+  L[i] = { ...l, towers:l.towers.filter(t => t !== tw), spent:(l.spent||0) - refundOf(tw) };
+  selCell = null; render(); saveLane(i);
+}
+function upgradeDialog(i, x, y){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
+  const a = tdef(tw, i), b = tdef({ ...tw, lvl:(tw.lvl || 1) + 1 }, i), cost = upgradeCost(tw), ic = towerIcon(tw.el, tw.idx);
+  const row = (n, u, v) => `<dt>${n}</dt><dd>${u} → <b>${v}</b></dd>`;
+  openDlg(`<h2>${ic ? `<img src="${ic}" alt="">` : ''}${a.name}: Stufe ${a.lvl} → ${b.lvl}</h2>
+    <dl><dt>Kosten</dt><dd>${cost} Gold</dd><dt>Danach</dt><dd>${goldAvail(i) - cost} Gold</dd>
+    ${a.buff ? row('Lichtkreis', num(a.light), num(b.light)) + row('Verstärkung', '×' + a.buff, '×' + b.buff) :
+      row('Schaden/s', num(a.dpsNow), num(b.dpsNow)) + row('Reichweite', num(a.range), num(b.range))}</dl>
+    <div class="muted">Neu: ${fxText(b) || '–'}</div>
+    <div class="acts"><button class="btn" id="uNo">Abbrechen</button><button class="btn primary" id="uYes" ${goldAvail(i) < cost ? 'disabled' : ''}>Upgrade</button></div>`, '', true);
+  $('uNo').onclick = closeDlg; $('uYes').onclick = () => { closeDlg(); upgrade(i, x, y); }; $('uYes').focus();
+}
+function upgrade(i, x, y){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
+  const lvl = tw.lvl || 1, cost = upgradeCost(tw);
+  if (lvl >= CONFIG.maxLevel) return;
+  if (goldAvail(i) < cost) { pop('Zu wenig Gold.'); return; }
+  pop(`Upgrade: −${cost} Gold`);
+  const inv = (tw.invested || towerBase(tw.el, tw.idx).cost) + cost;
+  L[i] = { ...l, towers:l.towers.map(t => t === tw ? { ...t, lvl:lvl + 1, invested:inv } : t), spent:(l.spent||0) + cost };
+  render(); saveLane(i);
+}
+/* ---------- Edelsteine ----------
+   Gewonnen: G.gems[i] (Auswertung). Eingesetzt: Feld gemUsed (Liste der Elemente). Verschenkt: Feld gemGifts [{to, el}]. */
+function gemsOf(i){
+  const out = [0,0,0,0], l = laneOf(i), won = (G && G.gems && G.gems[i]) || [];
+  won.forEach((v, e) => out[e] += v || 0);
+  (l.gemUsed || []).forEach(e => out[e]--);
+  (l.gemGifts || []).forEach(g => out[g.el]--);
+  L.forEach((_, k) => { if (k !== i) (laneOf(k).gemGifts || []).forEach(g => { if (g.to === i) out[g.el]++; }); });
+  if (replay && replay.pending && replay.sims[i]) out.forEach((_, e) => out[e] -= Math.max(0, (replay.final.gems[i][e] || 0) - replay.sims[i].gems[e]));
+  return out;
+}
+const gemDot = (e, n) => `<span class="gem" style="color:${GEMS[e].col}" title="${GEMS[e].name}">◆${n !== undefined ? n : ''}</span>`;
+const abilityOf = (el, ab) => typeof ab === 'string' ? BASICS[ab] : ABILITIES[el][ab];
+function gemDialog(i, x, y){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
+  const have = gemsOf(i), d = tdef(tw, i), cur = abilityOf(tw.el, abIdx(tw));
+  const conv = ELEMENTS.map((E, e) => e === tw.el || have[e] < 1 ? '' :
+    `<button class="btn" data-conv="${e}">${gemDot(e)} In ${tw.idx+1}. ${E.towers[tw.idx][0]} (<span style="color:${E.color}">${E.name}</span>) umwandeln</button>`).join('');
+  const opts = gemOptions(tw.el, tw.idx);
+  const list = opts.map(k => { const [an, at] = abilityOf(tw.el, k), why = typeof k === 'number' ? abilityBlocked(tw, k) : '';
+    return `<button class="btn" data-ab="${k}" ${why ? 'disabled' : ''} style="display:block;width:100%;text-align:left;margin:4px 0">${gemDot(tw.el)}<b>${an}</b>${typeof k === 'number' ? ' <span class="muted">(nur dieser Turm)</span>' : ''}<br><span class="muted">${why || at}</span></button>`; }).join('');
+  openDlg(`<h2>💎 ${d.name}</h2>
+    ${tw.gem ? `<div><b>Fähigkeit ${gemDot(tw.el)} ${cur[0]}</b><br><span class="muted">${cur[1]}</span></div><div class="done-r">schon eingesetzt</div>`
+      : have[tw.el] > 0 ? `<div><b>Fähigkeit wählen</b> <span class="muted">(kostet 1 ${GEMS[tw.el].name}, eine von 4)</span></div>${list}`
+      : `<div class="muted">Braucht 1 ${GEMS[tw.el].name}. Mit dem Stein wählt man eine von 4 Fähigkeiten:</div>${gemOptions(tw.el, tw.idx).map(k => abilityOf(tw.el, k)[0]).join(' · ')}`}
+    ${conv ? `<div><b>Umwandeln</b><br><span class="muted">Gleiche Nummer und Stufe, investiertes Gold bleibt${tw.gem ? ', die Fähigkeit geht verloren' : ''}.</span></div><div class="acts" style="justify-content:flex-start">${conv}</div>` : ''}
+    <div class="muted">Deine Steine: ${have.map((n, e) => n > 0 ? gemDot(e, n) : '').join(' ') || 'keine'} · Schenken über „🎁 Schenken“.</div>
+    <div class="acts"><button class="btn" id="gNo">Schließen</button></div>`);
+  $('gNo').onclick = closeDlg;
+  $('dlg').querySelectorAll('[data-ab]').forEach(b => b.onclick = () => { closeDlg(); const v = b.dataset.ab; useGem(i, x, y, tw.el, isNaN(+v) ? v : +v); });
+  $('dlg').querySelectorAll('[data-conv]').forEach(b => b.onclick = () => { closeDlg(); useGem(i, x, y, +b.dataset.conv); });
+}
+function useGem(i, x, y, e, ab){
+  const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i) || gemsOf(i)[e] < 1) return;
+  if (e === tw.el && (tw.gem || ab === undefined || !gemOptions(tw.el, tw.idx).includes(ab) || (typeof ab === 'number' && abilityBlocked(tw, ab)))) return;
+  const { ab: _old, ...rest } = tw;
+  const nt = e === tw.el ? { ...rest, gem:true, ab } : { ...rest, el:e, gem:false };
+  pop(e === tw.el ? `Fähigkeit: ${abilityOf(tw.el, ab)[0]}` : `Umgewandelt: ${ELEMENTS[e].towers[tw.idx][0]}`);
+  L[i] = { ...l, towers:l.towers.map(t => t === tw ? nt : t), gemUsed:[...(l.gemUsed || []), e] };
+  render(); saveLane(i);
+}
+function giveGem(from, to, e){
+  if (!mayBuild(from) || to === from || gemsOf(from)[e] < 1) return;
+  const l = laneOf(from); L[from] = { ...l, gemGifts:[...(l.gemGifts || []), { to, el:e }] };
+  pop(`${GEMS[e].name} an Spieler ${to+1} geschenkt`); render(); saveLane(from);
+}
+const canSwitchEl = i => mayBuild(i) && G.day === 1 && G.slot === 0 && !laneOf(i).towers.length;
+
+/* ---------- Darstellung ---------- */
+const num = v => v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1).replace('.0','') : v.toFixed(2).replace(/0$/,'');
+const durText = d => d.dur === DAY ? 'ganzer Tag' : `${num(d.dur)} s`;
+function fxText(d){
+  if (d.buff) return `schießt nicht · Lichtkreis ${num(d.light)}: Schatten-Türme darin ×${String(+d.buff.toFixed(2)).replace('.', ',')} Schaden und ignorieren ${Math.round(d.pierce*100)} % Rüstung, nachts treffen sie dort auch nachtaktive Monster`;
+  const p = [];
+  if (d.shots > 1) p.push(`${d.shots} Geschosse`);
+  if (d.eff > 0) {
+    if (d.effect === 'burn') p.push(`brennt ${Math.round(d.eff*100)} %, ${durText(d)}`);
+    if (d.effect === 'slow') p.push(`bremst ${Math.round(d.eff*100)} %, ${durText(d)}`);
+    if (d.effect === 'curse') p.push(`Fluch +${Math.round(d.eff*100)} % Schaden, Rüstung −${Math.round(d.eff*100)} %, ${durText(d)}`);
+    if (d.effect === 'stun') p.push(`${d.chance ? Math.round(d.chance*100) + ' %: ' : ''}${d.el === 1 ? 'friert' : 'betäubt'} ${num(d.eff)} s${d.el === 1 ? ' ein' : ''}`);
+  }
+  if (d.splash) p.push(d.nova ? `Umkreis ${num(d.splash)}` : 'Fläche');
+  if (d.light) p.push(`Lichtkreis ${num(d.light)}: nachts treffen Schatten-Türme nachtaktive Monster darin`);
+  if (d.air) p.push('nur Fliegende');
+  else if (!d.hitsFly) p.push('keine Fliegenden');
+  return p.join(' · ');
+}
+function giveGold(from, to, amt){
+  if (!mayBuild(from) || to === from || amt < CONFIG.giftStep || amt % CONFIG.giftStep) return;
+  if (goldAvail(from) < amt) { pop('Zu wenig Gold.'); return; }
+  const l = laneOf(from);
+  L[from] = { ...l, gifts:[...(l.gifts || []), { to, amt }] };
+  pop(`Gesendet: −${amt} Gold · Spieler ${to+1} bekommt ${Math.floor(amt * (1 - CONFIG.giftFee))}`); render(); saveLane(from);
+}
+// Schenken im Fenster: Empfänger wählen, Betrag mit Knöpfen, „Senden“ nur wenn genug Gold. Edelsteine ohne Gebühr.
+let giftTo = null, giftAmt = 0;
+function giftDialog(){
+  const i = seat, n = NP(), others = [...Array(n)].map((_, k) => k).filter(k => k !== i);
+  if (!mayBuild(i) || !others.length) return;
+  if (!others.includes(giftTo)) giftTo = others[0];
+  const gold = goldAvail(i), step = CONFIG.giftStep, have = gemsOf(i);
+  giftAmt = Math.max(0, Math.min(giftAmt, Math.floor(gold / step) * step));
+  const add = v => `<button class="btn" data-add="${v}">${v === 'half' ? 'Hälfte' : '+' + v}</button>`;
+  openDlg(`<h2>🎁 Schenken</h2>
+    <div class="acts" style="justify-content:flex-start"><span class="muted">an</span>${others.map(k => `<button class="btn ${giftTo === k ? 'on' : ''}" data-to="${k}">Spieler ${k+1}</button>`).join('')}</div>
+    <div><b>Gold</b> <span class="muted">(${Math.round(CONFIG.giftFee*100)} % Gebühr · du hast ${gold})</span></div>
+    <div class="acts" style="justify-content:flex-start">${add(10)}${add(50)}${add(100)}${add('half')}<button class="btn" data-add="0">0</button></div>
+    <dl><dt>Betrag</dt><dd><b>${giftAmt}</b> Gold</dd><dt>Kommt an</dt><dd>${Math.floor(giftAmt * (1 - CONFIG.giftFee))} Gold</dd></dl>
+    <button class="btn primary" id="gSend" ${giftAmt < step || giftAmt > gold ? 'disabled' : ''}>${giftAmt} Gold senden</button>
+    <div><b>Edelsteine</b> <span class="muted">(ohne Gebühr)</span></div>
+    <div class="acts" style="justify-content:flex-start">${have.some(v => v > 0) ? have.map((v, e) => v > 0 ? `<button class="btn" data-gem="${e}">${gemDot(e, v)} 1 ${GEMS[e].name} geben</button>` : '').join('') : '<span class="muted">keine</span>'}</div>
+    <div class="acts"><button class="btn" id="gClose">Schließen</button></div>`);
+  const D = $('dlg');
+  D.querySelectorAll('[data-to]').forEach(b => b.onclick = () => { giftTo = +b.dataset.to; giftDialog(); });
+  D.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { const v = b.dataset.add;
+    giftAmt = v === 'half' ? Math.floor(gold / 2 / step) * step : +v === 0 ? 0 : giftAmt + +v; giftDialog(); });
+  $('gSend').onclick = () => { const a = giftAmt; giftAmt = 0; closeDlg(); giveGold(i, giftTo, a); };
+  D.querySelectorAll('[data-gem]').forEach(b => b.onclick = () => { giveGem(i, giftTo, +b.dataset.gem); giftDialog(); });
+  $('gClose').onclick = closeDlg;
+}
+// Menü ⋯: seltene Knöpfe (Neues Spiel mit Rückfrage, Wetter-Animation)
+let wxAnim = lsGet('ww2-wxanim') !== false;
+function menuDialog(){
+  openDlg(`<h2>Menü</h2>
+    <button class="btn" id="mWx">Wetter-Animation: ${wxAnim ? 'an' : 'aus'}</button>
+    <button class="btn" id="mNew">Neues Spiel …</button>
+    ${G && !G.over ? (G.paused ? '<button class="btn" id="mPause">Weiter spielen</button>' : '<button class="btn" id="mPause">Spiel pausieren …</button>') : ''}
+    ${G && !G.over ? '<button class="btn" id="mGive">Spiel aufgeben …</button>' : ''}
+    <div class="acts"><button class="btn primary" id="mClose">Schließen</button></div>`);
+  $('mWx').onclick = () => { wxAnim = !wxAnim; lsSet('ww2-wxanim', wxAnim); menuDialog(); drawAll(); };
+  $('mNew').onclick = () => { openDlg(`<h2>Neues Spiel?</h2><p style="margin:0">Das laufende Spiel wird für alle beendet.</p>
+    <div class="acts"><button class="btn" id="nNo">Abbrechen</button><button class="btn primary" id="nYes">Neues Spiel</button></div>`);
+    $('nNo').onclick = closeDlg; $('nYes').onclick = () => { closeDlg(); resetGame(); }; };
+  const mp = $('mPause'); if (mp) mp.onclick = () => { if (G.paused) { closeDlg(); resumeGame(); return; }
+    openDlg(`<h2>Spiel pausieren?</h2><p style="margin:0">Das Spiel pausiert für alle: Es kommt keine Welle, und niemand kann bauen. Der Stand bleibt gespeichert, ihr spielt beim nächsten Mal genau hier weiter.</p>
+    <div class="acts"><button class="btn" id="pNo">Abbrechen</button><button class="btn primary" id="pYes">Pausieren</button></div>`);
+    $('pNo').onclick = closeDlg; $('pYes').onclick = () => { closeDlg(); pauseGame(); }; };
+  const mg = $('mGive'); if (mg) mg.onclick = () => { openDlg(`<h2>Spiel aufgeben?</h2><p style="margin:0">Das Spiel gilt für alle als verloren und die Statistik erscheint. Danach kannst du ein neues Spiel starten.</p>
+    <div class="acts"><button class="btn" id="gNo">Abbrechen</button><button class="btn primary" id="gYes">Aufgeben</button></div>`);
+    $('gNo').onclick = closeDlg; $('gYes').onclick = () => { closeDlg(); giveUp(); }; };
+  $('mClose').onclick = closeDlg;
+}
+// Pause (17.10., F): G.paused = {at}. Keine Auswertung, kein Bauen. Beim Weiterspielen werden die Wellenzeiten nach hinten
+// geschoben (Uhrzeiten: ganze Tage, bis die aktuelle Welle wieder in der Zukunft liegt; Testzeit: um die Pausendauer).
+function setPause(on){
+  if (!G || G.over) return;
+  if (replay) endReplay();
+  const mark = g => { if (g.over) return g;
+    if (on) { if (!g.paused) g.paused = { at:Date.now() }; return g; }
+    if (!g.paused) return g;
+    const now = Date.now();
+    if (g.cfg.timing === 'test') g.cfg.shift = (g.cfg.shift || 0) + Math.max(0, now - g.paused.at);
+    else if (g.cfg.timing === 'real') for (let k = 0; k < 400; k++) { const due = dueTime(g); if (!due || due >= now) break; const d = new Date(g.cfg.day1); d.setDate(d.getDate() + 1); g.cfg.day1 = d.getTime(); }
+    delete g.paused; return g; };
+  if (MODE === 'local') { G = mark(G); lsSet('ww2-local', { G, L }); render(); return; }
+  const ref = DB.doc(P_STATE);
+  queueWrite(async () => {
+    if (DB.tx) await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists) return; tr.set(ref, mark(JSON.parse(JSON.stringify(snap.data())))); });
+    else { const snap = await ref.get(); if (snap.exists) await ref.set(mark(JSON.parse(JSON.stringify(snap.data())))); }
+  }).then(() => refreshFromServer());
+}
+const pauseGame = () => setPause(true), resumeGame = () => setPause(false);
+// Aufgeben: Spiel sofort als verloren beenden (für alle; online per Transaktion, damit nichts doppelt oder gegen eine Auswertung läuft)
+function giveUp(){
+  if (!G || G.over) return;
+  if (replay) endReplay();
+  const mark = g => { g.over = 'lost'; g.gaveUp = true; g.log.unshift({ when:`Tag ${g.day}`, text:`Aufgegeben nach ${g.passed} Durchbrüchen.` }); return g; };
+  if (MODE === 'local') { G = mark(G); lsSet('ww2-local', { G, L }); render(); return; }
+  const ref = DB.doc(P_STATE);
+  queueWrite(async () => {
+    if (DB.tx) { let ag = null; await DB.tx(async tr => { const snap = await tr.get(ref); if (!snap.exists || snap.data().over) return; ag = mark(JSON.parse(JSON.stringify(snap.data()))); tr.set(ref, ag); });
+      if (ag) Promise.resolve().then(() => DB.doc(P_ARCH + '/' + ag.cfg.startAt).set(archDoc(ag, {}), { merge:true })).catch(e => console.warn(e)); }
+    else { const snap = await ref.get(); if (snap.exists && !snap.data().over) await ref.set(mark(JSON.parse(JSON.stringify(snap.data())))); }
+  }).then(() => refreshFromServer());
+}
+function resetGame(){
+  replay = null;
+  if (MODE === 'local') { try { localStorage.removeItem('ww2-local'); } catch(e){} onGame(null); }
+  else queueWrite(() => DB.doc(P_STATE).delete());
+}
+function deposit(i, amt){
+  if (!mayBuild(i) || !(amt > 0)) return;
+  if (goldAvail(i) < amt) { pop('Zu wenig Gold.'); return; }
+  const l = laneOf(i); L[i] = { ...l, pot:(l.pot || 0) + amt };
+  pop(`In die Gemeinschaftskasse: −${amt} Gold`); render(); saveLane(i);
+}
+function buyResearch(i, id){
+  const R = RESEARCH.find(x => x.id === id), have = curRes();
+  if (!mayBuild(i) || !R || have.has(id) || (R.need && !have.has(R.need))) return;
+  if (potOf() < R.cost) { pop('Zu wenig in der Gemeinschaftskasse.'); return; }
+  const l = laneOf(i); L[i] = { ...l, research:[...(l.research || []), id] };
+  pop(`Erforscht: ${R.name} (−${R.cost} aus der Kasse)`); render(); saveLane(i);
+}
+function openDlg(html, cls, sheet){ const d = $('dlg'); d.className = 'dlg' + (cls ? ' ' + cls : ''); d.innerHTML = html;
+  $('dlgback').className = 'dlgback' + (sheet ? ' sheet' : ''); $('dlgback').hidden = false; }
+function closeDlg(){ $('dlgback').hidden = true; $('dlg').innerHTML = ''; }
+// Kurzinfo zu einem Monster
+function showMonster(r){
+  const M = MONSTERS[r-1], MD = monsterDef(r-1, NP());
+  const strong = ELEMENTS.filter((E,k) => M.weak[k] > 1).map(E => E.name), weak = ELEMENTS.filter((E,k) => M.weak[k] < 1).map(E => E.name);
+  const tempo = M.speed >= 1.4 ? 'schnell' : M.speed <= 0.8 ? 'langsam' : 'normal';
+  openDlg(`<h2><span class="big">${M.emo}</span>${M.name}</h2>
+    <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
+    <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${armorText(MD)}</dd>
+    <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : M.cocoon ? 'zeitweise (als Motte)' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
+    <dt>Kopfgeld</dt><dd>${M.mini ? 'kein Gold, dafür 💎 Edelstein' : MD.bounty + ' Gold' + (M.boss ? ' + 💎 Edelstein' : '')}</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
+    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${M.mixed ? '?' : fmtFactor(M.weak[k])}</span>`).join('')}</div>
+    ${M.info ? `<div><b>Besonderheit:</b> ${M.info}</div>` : ''}
+    <div class="muted">${M.mixed ? 'Faktoren je Lehrer verschieden.' : (strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : '')}</div>
+    <div class="acts"><button class="btn primary" id="mOk">OK</button></div>`);
+  $('mOk').onclick = closeDlg; $('mOk').focus();
+}
+let overSeen = lsGet('ww2-over');
+function showGameOver(){
+  const won = G.over === 'won'; overSeen = G.cfg.startAt + G.over; lsSet('ww2-over', overSeen);
+  openDlg(`<h2><span class="big">${won ? '🏆' : '💀'}</span>${won ? 'Gewonnen!' : 'Verloren'}</h2>
+    <p style="margin:0">${won ? `Ihr habt alle ${CONFIG.days} Tage gehalten.` : G.gaveUp ? `Aufgegeben am Tag ${G.day}.` : `Am Tag ${G.day} war Schluss.`} ${G.passed} von ${CONFIG.lossLimit} erlaubten Monstern sind ganz durchgebrochen.</p>
+    <table class="stat-t"><thead><tr><th>Spieler</th><th>⚔ Kills</th><th>Gold verdient</th><th>Geschenkt</th><th>In die Kasse</th></tr></thead><tbody>
+    ${[...Array(NP())].map((_,i) => { const l = laneOf(i), gifts = {};
+      (l.gifts || []).forEach(g => gifts[g.to] = (gifts[g.to] || 0) + g.amt);
+      const gt = Object.entries(gifts).map(([to,a]) => `${a} an S${+to+1}`).join(', ') || '–';
+      return `<tr><td>${i+1} <span style="color:${ELEMENTS[l.el].color}">${ELEMENTS[l.el].name}</span></td><td>${(G.kills||[])[i]||0}</td><td>${G.earned[i]||0}</td><td>${gt}</td><td>${l.pot||0}</td></tr>`; }).join('')}
+    </tbody></table>
+    <div class="acts"><button class="btn primary" id="oOk">Schließen</button></div>`, won ? 'won' : 'lost');
+  $('oOk').onclick = closeDlg; $('oOk').focus();
+}
+$('dlgback').addEventListener('click', e => { if (e.target.id !== 'dlgback') return; const was = pending; pending = null; closeDlg(); if (was) render(); });   // daneben tippen = abbrechen
+// Versionen: Spiel und Handy müssen dieselben Regeln haben, sonst rechnen sie verschieden
+let newerVersion = null;
+function checkVersion(gameV){
+  const vb = $('vbanner'), other = newerVersion || (gameV && gameV > VERSION ? gameV : null);
+  let msg = '';
+  if (other) msg = 'Es gibt eine neue Version des Spiels. Bitte neu laden.';
+  else if (gameV && gameV < VERSION) msg = 'Dieses Spiel wurde mit einer älteren Version gestartet. Für die neuen Regeln „Neues Spiel“ starten.';
+  else if (G && !gameV) msg = 'Dieses Spiel stammt aus einer älteren Version. Für die neuen Regeln „Neues Spiel“ starten.';
+  vb.hidden = !msg; if (!msg) return;
+  vb.innerHTML = msg + (other ? ' <button class="btn" id="vReload" style="margin-left:8px">Neu laden</button>' : '');
+  if (other) $('vReload').onclick = () => location.reload();
+}
+async function pollVersion(){       // fragt die Seite ohne Cache ab und vergleicht VERSION
+  try { const t = await (await fetch(location.pathname + '?v=' + Date.now(), { cache:'no-store' })).text();
+    const m = t.match(/const VERSION = "([^"]+)"/); if (m && m[1] !== VERSION) { newerVersion = m[1]; if (G) checkVersion(G.cfg.version); } } catch(e){}
+}
+// „Bereit“-Knopf (online): Wenn alle Spieler bereit sind, startet die nächste Welle sofort.
+const readyKey = g => `${g.cfg.startAt}-${g.day}-${g.slot}`;
+const isReady = i => laneOf(i).ready === readyKey(G);
+function toggleReady(){
+  if (!mayBuild(seat)) return; const l = laneOf(seat);
+  L[seat] = { ...l, ready: isReady(seat) ? null : readyKey(G) }; render(); saveLane(seat);
+}
+let readyFired = null, readyAt = 0;
+function checkReady(){
+  if (MODE !== 'online' || !G || G.over || G.paused || replay) return;
+  const key = readyKey(G);
+  // 12.10.: Früher nur ein Versuch – lief gerade eine Wiedergabe oder hakte das Netz, startete die Welle erst nach Neuladen.
+  if ((readyFired === key && Date.now() - readyAt < 8000) || ![...Array(NP())].every((_,i) => isReady(i))) return;
+  readyFired = key; readyAt = Date.now();
+  tryResolve(true, key).then(ok => { if (!ok && readyFired === key) readyAt = 0; });
+}
+// Während die neueste Welle zum ersten Mal abgespielt wird, zeigt die Anzeige nur, was schon passiert ist
+// (Durchbrüche, Verloren/Gewonnen, Chronik). Ausgewertet ist die Welle da längst.
+const runPending = () => !!(replay && replay.pending);
+function brokeSoFar(){ const n = replay.sims.length;
+  return replay.sims.reduce((a, s) => a + s.leaked.filter(m => m.hops >= n).reduce((b, m) => b + (MONSTERS[m.type].lives || 1), 0), 0); }
+const passedShown = () => G.passed - (runPending() ? Math.max(0, (replay.run.broke || 0) - brokeSoFar()) : 0);
+const overShown = () => G.over && !runPending();
+let popT;
+function pop(msg){ const b = $('pop'); b.textContent = msg; b.hidden = false; clearTimeout(popT); popT = setTimeout(() => b.hidden = true, 2200); }
+let toastT;
+function toast(msg){ const b = $('banner'); b.hidden = false; b.className = 'banner'; b.textContent = msg; clearTimeout(toastT); toastT = setTimeout(render, 2500); }
+let lanesBuilt = 0;
+function buildLanes(){
+  const n = NP(); lanesBuilt = n;
+  $('lanes').innerHTML = [...Array(n)].map((_,i) => `
+    <section class="lane" id="lane${i}">
+      <div class="lhead">
+        <span class="name">Spieler ${i+1}</span>
+        <button class="el" id="el${i}" title="Element wechseln (nur vor dem ersten Turm an Tag 1)"></button>
+        <span class="meta">Gold <b id="g${i}"></b> <span class="plus" id="p${i}"></span> <span id="gm${i}"></span></span>
+        <span class="inc" id="inc${i}"></span>
+        <span class="meta sub">verdient <b id="e${i}"></b> · ⚔ <b id="k${i}"></b></span>
+      </div>
+      <div class="cvw"><canvas id="cv${i}"></canvas><div class="tbar" id="tb${i}" hidden></div></div>
+      <div class="info" id="info${i}"></div>
+    </section>`).join('');
+  for (let i = 0; i < n; i++) {
+    const cv = $('cv'+i);
+    cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), cs = r.width / COLS;
+      clickCell(i, Math.floor((e.clientX - r.left) / cs), Math.floor((e.clientY - r.top) / cs)); });
+    $('el'+i).addEventListener('click', () => { if (!canSwitchEl(i)) return; const l = laneOf(i);
+      L[i] = { ...l, el:(l.el + 1) % ELEMENTS.length }; selTower = null; saveLane(i); render(); });
+  }
+}
+function showPassed(){ const p = passedShown(); $('sPass').textContent = `${p}/${CONFIG.lossLimit}`; $('passBox').classList.toggle('bad', p > CONFIG.lossLimit * 0.6); }
+function updateLaneHeads(){
+  if (G) showPassed();
+  for (let i = 0; i < NP(); i++) {
+    const s = replay && replay.sims[i];
+    $('p'+i).textContent = s && s.earned ? `+${s.earned}` : '';
+    if (s) $('inc'+i).textContent = `${s.queue.length + s.monsters.length} unterwegs`;
+    $('k'+i).textContent = killsOf(i); setGold(i);
+    $('e'+i).textContent = (G.earned[i] || 0) - pendingOf(i, 'earned');   // insgesamt verdient (erscheint wie das Gold erst beim Sterben)
+    const gm = gemsOf(i), gh = gm.map((v, e) => v > 0 ? gemDot(e, v) : '').join('');
+    if ($('gm'+i).innerHTML !== gh) $('gm'+i).innerHTML = gh;
+  }
+}
+// Goldstand blinkt kurz: grün bei mehr, rot bei weniger (Bestätigung fürs Schenken, Bauen, Verkaufen)
+const lastGold = [];
+function setGold(i){
+  const v = goldAvail(i), el = $('g'+i), old = lastGold[i]; lastGold[i] = v;
+  if (el.textContent !== String(v)) el.textContent = v;
+  if (old === undefined || old === v || (v > old && runPending())) return;
+  el.classList.remove('up', 'down'); void el.offsetWidth; el.classList.add(v > old ? 'up' : 'down');
+}
+function fmtLeft(ms){ if (ms <= 0) return 'jetzt'; const m = Math.ceil(ms/60000); return m < 60 ? `in ${m} min` : `in ${Math.floor(m/60)} h ${m%60} min`; }
+function renderClock(){
+  if (!G) return;
+  const due = dueTime(G);
+  $('sNext').textContent = overShown() ? '–' : (due ? fmtLeft(due - Date.now()) : 'per Knopf');
+  $('sNextL').textContent = overShown() ? 'Spiel vorbei' : `Welle ${hh(slotsOf(G)[G.slot])}`;
+}
+function render(){
+  $('modeTag').textContent = MODE === 'online' ? 'Prototyp 3 · online' : (MODE === 'local' ? 'Prototyp 3 · ein Gerät' : 'verbinde …'); saveStatus();
+  const has = !!G;
+  $('setup').hidden = has || !MODE; $('game').hidden = !has; $('stats').hidden = !has; $('palette').hidden = !has;
+  if (!has) { renderSetup(); return; }
+  ensureTerrain(G.cfg.startAt);
+  if (lanesBuilt !== NP()) buildLanes();
+  const n = NP();
+  $('sDay').textContent = `${Math.min(G.day, CONFIG.days)}/${CONFIG.days}`;
+  showPassed();
+  renderClock();
+  const showSlot = replay ? replay.run.slot : G.slot;
+  const SL = slotsOf(G), wd = weatherDay(G, Math.min(G.day, CONFIG.days));
+  $('clock').style.gridTemplateColumns = `repeat(${SL.length}, minmax(0,1fr))`;
+  $('clock').innerHTML = SL.map((h,k) => { const W = WEATHER[wd[k]];
+    return `<div class="slot ${k===showSlot&&!G.over?'now':''} ${k<showSlot?'done':''}" title="${W.name}: ${weatherText(W)}"><b>${hh(h)} <span class="wx">${W.sym} ${W.name}</span></b>${k===0?'Welle für alle' + (G.cfg.diff && G.cfg.diff !== 'normal' ? ' · ' + DIFFS[G.cfg.diff].name : ''):'Leaks vom Nachbarn'}${isDark(h)?' · dunkel':''}</div>`; }).join('');
+  const b = $('banner');
+  checkVersion(G.cfg.version);
+  b.hidden = !overShown(); b.className = 'banner' + (G.over === 'lost' ? ' bad' : '');
+  $('pausebanner').hidden = !(G.paused && !G.over);
+  const fw = flyWarn(), fb = $('flybanner');
+  fb.hidden = !fw; if (fw) { fb.className = 'banner' + (fw.bad ? ' bad' : ''); fb.textContent = fw.text; }
+  if (G.over) b.textContent = G.over === 'won' ? `Gewonnen: ${CONFIG.days} Tage gehalten, ${G.passed} Monster ganz durchgebrochen.` : (G.gaveUp ? `Aufgegeben am Tag ${G.day}: ${G.passed} Monster sind ganz durchgebrochen.` : `Verloren: ${G.passed} Monster sind ganz durchgebrochen.`);
+  $('seats').innerHTML = MODE === 'online'
+    ? `<span class="muted">Ich spiele:</span>` + [...Array(n)].map((_,i) => `<button class="btn ${seat===i?'on':''}" data-seat="${i}">Spieler ${i+1}</button>`).join('')
+    : `<span class="muted">Ein Gerät für alle: Feld antippen, um für diesen Spieler zu bauen.</span>`;
+  if (canSwitchEl(seat)) $('seats').innerHTML += `<span class="muted" style="margin-left:12px">Mein Element:</span>` +
+    ELEMENTS.map((E,k) => `<button class="btn ${laneOf(seat).el===k?'on':''}" data-el="${k}" style="color:${E.color}">${E.emo} ${E.name}</button>`).join('');
+  $('seats').querySelectorAll('[data-el]').forEach(x => x.onclick = () => { const l = laneOf(seat); L[seat] = { ...l, el:+x.dataset.el }; selTower = null; saveLane(seat); render(); });
+  $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
+  const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.day-1, n);
+  const NX = MONSTERS[G.day];   // nächster Tag
+  $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.day}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · ${M.mini ? '<b>💎 Edelstein</b> für den, der ihn besiegt (kein Gold)' : `Kopfgeld ${MD.bounty}${M.boss ? ' + 💎 Edelstein' : ''}`} &nbsp;` +
+    ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
+    (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
+    (NX ? `<br>Nächstes Monster (Tag ${NX.day}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.day}" aria-label="Info zu ${NX.name}">i</button>` : '') +
+    `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;
+  $('today').querySelectorAll('[data-mon]').forEach(x => x.onclick = () => showMonster(+x.dataset.mon));
+  if (G.over && overSeen !== G.cfg.startAt + G.over && !replay) showGameOver();
+  $('giftBtn').hidden = !mayBuild(seat) || n < 2;
+  const go = $('go');
+  go.textContent = replay ? 'Welle läuft …' : (MODE === 'local' ? `Welle ${hh(SL[G.slot])} starten` : `Welle ${hh(SL[G.slot])} jetzt auslösen`);
+  go.disabled = !!replay || !!G.over || !!G.paused;
+  const rb = $('ready'), nReady = [...Array(n)].filter((_,i) => isReady(i)).length;
+  rb.hidden = MODE !== 'online' || !!G.over; rb.disabled = !!replay || !mayBuild(seat) || !!G.paused;
+  rb.textContent = (isReady(seat) ? '✓ Bereit' : 'Bereit') + ` (${nReady}/${n})`; rb.classList.toggle('on', isReady(seat));
+  if (MODE === 'online') { go.className = 'btn'; go.textContent = replay ? 'Welle läuft …' : `Sofort auslösen`; }
+  checkReady();
+  $('replay').disabled = !!replay || !G.lastRun;
+  $('skip').hidden = !replay;
+  $('spd').textContent = `Tempo ${speed}×`;
+  for (let i = 0; i < n; i++) {
+    const l = laneOf(i), E = ELEMENTS[l.el];
+    $('lane'+i).classList.toggle('active', seat === i);
+    $('lane'+i).style.order = MODE === 'online' ? (i - seat + n) % n : 0;   // eigener Spieler oben, dann die Nachfolger
+    const eb = $('el'+i); eb.textContent = E.name + (canSwitchEl(i) ? ' ⇄' : ''); eb.style.color = E.color; eb.disabled = !canSwitchEl(i);
+    setGold(i);
+    if (!replay) { const inc = incomingFor(G, i); $('inc'+i).textContent = G.over ? '' : (inc.length ? `${hh(SL[G.slot])}: ${inc.length} ${MONSTERS[inc[0].type].name}` : `${hh(SL[G.slot])}: nichts im Anmarsch`); }
+    const info = $('info'+i); $('tb'+i).hidden = true;
+    const tw = selCell && selCell.i === i ? l.towers.find(t => t.x === selCell.x && t.y === selCell.y) : null;
+    if (tw) { const d = tdef(tw, i), uc = upgradeCost(tw), maxed = d.lvl >= CONFIG.maxLevel;
+      const [an, at] = abilityOf(tw.el, abIdx(tw)), gm = gemsOf(i), anyGem = gm.some(v => v > 0);
+      info.innerHTML = `<b style="color:${ELEMENTS[tw.el].color}">${d.name}</b> Stufe ${d.lvl}/${CONFIG.maxLevel}${d.buff ? '' : ` · ${num(d.dpsNow)} Schaden/s · Reichweite ${num(d.range)}`}${fxText(d) ? ' · ' + fxText(d) : ''}` +
+        (tw.gem ? `<br>${gemDot(tw.el)}<b style="color:var(--fg)">${an}</b>: ${at}` : `<br><span>${gemDot(tw.el)}Mit ${GEMS[tw.el].name}: ${gemOptions(tw.el, tw.idx).map(k => abilityOf(tw.el, k)[0]).join(' / ')}</span>`) +
+        '';
+      const tb = $('tb'+i), can = mayBuild(i);
+      tb.hidden = !can; tb.className = 'tbar' + (tw.y < 2 ? ' below' : '');
+      tb.style.left = Math.min(88, Math.max(12, (tw.x + .5) / COLS * 100)) + '%'; tb.style.top = (tw.y + (tw.y < 2 ? 1 : 0)) / ROWS * 100 + '%';
+      tb.innerHTML = (maxed ? '' : `<button class="tup" id="up${i}" title="Upgrade" ${goldAvail(i) < uc ? 'disabled' : ''}><b>⬆</b>${uc}</button>`) + `<button id="sell${i}" title="Verkaufen"><b>💰</b>+${refundOf(tw)}</button>` + (anyGem ? `<button id="gem${i}" title="Edelstein"><b>💎</b></button>` : '');
+      const sb = $('sell'+i); if (sb) sb.onclick = e => { e.stopPropagation(); sellDialog(i, tw.x, tw.y); };
+      const ub = $('up'+i); if (ub) ub.onclick = e => { e.stopPropagation(); upgradeDialog(i, tw.x, tw.y); };
+      const gb = $('gem'+i); if (gb) gb.onclick = e => { e.stopPropagation(); gemDialog(i, tw.x, tw.y); };
+    } else if (selCell && selCell.i === i) { const T = TERRAIN[MAPS[i].terrain[selCell.y][selCell.x]];
+      const tf = ELEMENTS[l.el].terrainFree, ex = tf ? (T.stoneExtra || 0) : T.extra;   // Felsen: alle +30
+      info.textContent = `${T.name}: Bauen ${ex ? '+' + ex + ' Gold' : 'zum normalen Preis'}${tf && T.extra && !T.stoneExtra ? ' (Stein zahlt keinen Aufschlag)' : ''}${T.name === 'Felsen' ? ` · Reichweite +${Math.round((ROCK.rangeMul-1)*100)} %${tf ? `, Stein-Schaden +${Math.round((ROCK.stoneDmg-1)*100)} %` : ''}` : ''}.` + (selTower === null && mayBuild(i) ? ' Erst unten einen Turm wählen.' : '');
+    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. Wald +10, Sumpf +20, Felsen +30 Gold (Felsen: Reichweite +15 %, Stein auch mehr Schaden). Zwischenbosse bringen Edelsteine 💎.' : '';
+  }
+  updateLaneHeads();
+  renderPalette();
+  renderResearch();
+  $('log').innerHTML = G.log.slice(runPending() ? (replay.run.newLog || 0) : 0).map(e => `<li><b>${e.when}</b>${e.text}</li>`).join('');
+  drawAll();
+}
+function renderPalette(){
+  const l = laneOf(seat), E = ELEMENTS[l.el], gold = goldAvail(seat), can = mayBuild(seat), RS = curRes();
+  $('ptitle').innerHTML = `Bauen für <b>Spieler ${seat+1}</b> · <span style="color:${E.color}">${E.name}</span> (${E.note}) · <b>${gold}</b> Gold`;
+  $('prow').innerHTML = E.towers.map((_,k) => towerBase(l.el, k)).map((d,k) => { const lock = LOCKS[k] && !RS.has(LOCKS[k]), ic = towerIcon(l.el, k);
+    return `<button class="tw ${selTower===k?'sel':''}" data-k="${k}" ${!can||gold<d.cost||lock?'disabled':''}>
+      <span class="n" style="color:${E.color}">${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</span><span class="c">${lock ? '🔒 Bauhütte' : d.cost + ' Gold'}</span>
+      <span class="d">${d.role}${d.buff ? '' : ` · ${num(d.dps)} Schaden/s · ${num(d.range)} weit`}${fxText(d) ? '<br>' + fxText(d) : ''}</span></button>`; }).join('');
+  $('prow').querySelectorAll('.tw').forEach(x => x.onclick = () => { const k = +x.dataset.k; selTower = selTower === k ? null : k; render(); });
+}
+function renderResearch(){
+  const RS = curRes(), pot = potOf(), can = mayBuild(seat);
+  const houses = [...new Set(RESEARCH_GROUPS.map(r => r.house))];
+  const keep = $('potAmt') ? $('potAmt').value : '50';
+  $('research').innerHTML = `<h2>Forschung · Gemeinschaftskasse <span style="font-family:var(--mono)">${pot}</span> Gold</h2>
+    <div class="seats"><span class="muted">Einzahlen (ohne Gebühr):</span><input id="potAmt" type="number" min="1" value="${keep}" style="width:90px"><button class="btn" id="potGo" ${can?'':'disabled'}>Einzahlen</button></div>
+    <div class="rgrid">${houses.map(h => `<div class="house"><b>${h}</b>${RESEARCH_GROUPS.filter(R => R.house === h).map(R => {
+      const n = resLvl(RS, R.grp), max = R.costs.length, next = RESEARCH.find(r => r.grp === R.grp && r.lvl === n + 1), blocked = next && next.need && !RS.has(next.need);
+      const label = R.steps ? `${R.name} <span class="rlvl">${n ? R.fmt(R.steps[n-1]) : '–'}${max > 1 ? ` · ${n}/${max}` : ''}</span>` : R.name;
+      return `<div class="ritem"><span>${label}</span>${!next ? '<span class="done-r">erforscht</span>' :
+        `<button class="btn" data-r="${next.id}" ${!can||blocked||pot<next.cost?'disabled':''}>${blocked ? 'erst ' + RESEARCH.find(x => x.id === next.need).name.split(' ')[1] : (R.steps ? R.fmt(R.steps[n]) + ' · ' : '') + next.cost + ' Gold'}</button>`}</div>`; }).join('')}</div>`).join('')}</div>`;
+  $('potGo').onclick = () => deposit(seat, Math.floor(+$('potAmt').value || 0));
+  $('research').querySelectorAll('[data-r]').forEach(x => x.onclick = () => buyResearch(seat, x.dataset.r));
+}
+/* Fliegende-Warnung (15.10., F): am Vortag und vor der 10-Uhr-Welle zeigt ein Banner, dass Fliegende kommen, welche Türme des eigenen Elements sie treffen und wie viele man davon hat. */
+function flyWarn(){
+  if (!G || G.over) return null;
+  const d = G.day, isFly = k => !!(MONSTERS[k - 1] && (MONSTERS[k - 1].fly || MONSTERS[k - 1].cocoon));
+  let when, name;
+  if (G.slot === 0 && isFly(d)) { when = 'Um 10:00 kommen'; name = MONSTERS[d - 1].name; }
+  else if (isFly(d + 1)) { when = 'Morgen kommen'; name = MONSTERS[d].name; }
+  else return null;
+  const l = laneOf(seat), E = ELEMENTS[l.el];
+  const hits = d0 => !!(d0.hitsFly || d0.air) && !d0.buff;
+  const names = E.towers.map((_, k) => towerBase(l.el, k)).filter(hits).map(b => b.name);
+  const mine = l.towers.map(tw => ({ tw, d:tdef({ ...tw, lvl:tw.lvl || 1 }, seat) })).filter(x => hits(x.d));
+  const best = mine.reduce((a, x) => Math.max(a, x.tw.lvl || 1), 0);
+  const text = `✈ ${when} ${name} – Fliegende! Nur Türme, die Fliegende treffen, wirken. ${E.emo} ${E.name}: ${names.join(', ')}. Du hast ${mine.length ? mine.length + ' davon (stärkster Stufe ' + best + ')' : 'noch keinen davon'}.`;
+  return { text, bad: mine.length < 2 };
+}
+function renderSetup(){
+  const online = MODE === 'online';
+  $('fTiming').disabled = !online; $('lTiming').hidden = !online;
+  const tm = online ? $('fTiming').value : 'manual';
+  $('rowTest').hidden = tm !== 'test'; $('rowReal').hidden = tm !== 'real';
+  $('setupHint').textContent = online
+    ? 'Alle Mitspieler öffnen diesen Link, wählen oben ihren Spieler und bauen auf dem eigenen Handy. Die Wellen laufen automatisch, sobald jemand die Seite offen hat.'
+    : 'Lokaler Modus: Alle spielen an diesem einen Gerät, die Welle startet per Knopf.';
+}
+
+/* ---------- Grafik: Kenney „Tower Defense (top-down)“, CC0 (assets/kenney) ----------
+   Graue Sprites werden je Element eingefärbt. Ohne geladene Bilder wird einfach gezeichnet. */
+const SPRITES = { smoke:19, debris:20, boom:21, star:22, tree:130, bush:131, rock1:135, rock2:136, rock3:137,
+  base:181, base2:180, castle:203, rockets:205, cannon:226, wide:227, barrel:229, missile:252, bulletY:272, bullet:275, flameS:295, flame:296 };
+const TURRET = { Schaden:'cannon', Reichweite:'barrel', 'Fläche':'wide', Effekt:'castle', Luftabwehr:'rockets', Licht:null };
+const SPR = {}, TINT = {};
+/* Monster-Bilder (18.10., L): je Monster 3 Ansichten in assets/monster/<name>-seite|vorne|hinten.png (Seite blickt nach rechts, nach links gespiegelt).
+   Fehlt ein Bild, bleibt das Emoji. Raupe: Kokon = Raupe mit weißer Hülle, Motte fliegt. Herkunft und Prompts: team/GRAFIK.md */
+const MONSTER_IMG = { 'Silberfische':'silberfisch', 'Kellerasseln':'assel', 'Nacktschnecken':'schnecke', 'Ohrenkneifer':'ohrenkneifer', 'Mäuse':'maus', 'Maus-Boss':'maus',
+  'Kleine Hunde':'hund', 'Ratten':'ratte', 'Katzen':'katze', 'Spatzen':'spatz', 'Füchse':'fuchs', 'Fuchs-Boss':'fuchs', 'Habichte':'habicht', 'Dachse':'dachs',
+  'Oktopusse':'oktopus', 'Wildschweine':'wildschwein', 'Schäferhunde':'schaeferhund', 'Schäferhund-Boss':'schaeferhund', 'Besoffene Penner':'penner',
+  'Wütende Partnerin':'partnerin', 'Wütende Nachbarn':'nachbar', 'Eifersüchtige Geliebte':'geliebte', 'Uffug-Vorhaut':'vorhaut', 'Uffug (Boss)':'uffug',
+  'Roboter':'roboter', 'Eiswürfel':'schneeball', 'Würfel':'wuerfel', 'Phönixe':'phoenix', 'Fairtrade-Bananen':'banane', 'El Schlucko':'schlucko',
+  'Krieger':'krieger', 'Golems':'golem', 'Albträume':'albtraum', 'Looping-Louie-Flugzeuge':'flugzeug', 'Magier-Novizen':'novize', 'Magiermeister':'magiermeister',
+  'E-Scooter-Fahrer':'escooter', 'Lindner-Spezialisten':'lindner', 'Wargreiter':'wargreiter', 'Warg':'warg', 'Ork':'ork', 'Fledermäuse':'fledermaus', 'Lehrer':'lehrer', 'Schulleiter':'schulleiter',
+  'Violine':'geige', 'Bratsche':'geige', 'Cello':'cello', 'Kontrabass':'bass', 'Streichquartett':'geige', 'The one who knocks':'chemiker',
+  'Mehlmottenraupen':'raupe', 'Nazgul':'schattenreiter', 'GNTModels':'model', 'Betty (Boss)':'betty' };   // 21.10. (L): alle Monster
+const MONSTER_ANIM = { betty:[8, 8] };   // 21.10. (L): Laufbilder <name>-lauf-0..n-1.png für die Seitenansicht [Anzahl, Bilder je Sekunde]
+const MIMG = {};
+for (const k of ['bass-hinten']) MIMG[k] = null;   // fehlende Ansichten hier eintragen → Seitenansicht (21.10.: keine mehr)
+// 21.10.: alle Bilder beim Start laden (sonst kurz Emoji, wenn eine Ansicht zum ersten Mal gebraucht wird, z. B. in Kurven)
+function preloadMonsterImgs(){ for (const k of new Set([...Object.values(MONSTER_IMG), 'motte', 'roboterrot'])) { for (const v of ['seite', 'vorne', 'hinten']) monsterImg(k, v);
+  if (MONSTER_ANIM[k]) for (let j = 0; j < MONSTER_ANIM[k][0]; j++) monsterImg(k, 'lauf-' + j); } }
+// Trefferreaktion: weiße Silhouette je Bild (einmal erzeugt)
+const WHITE = new Map();
+function whiteOf(im){ let w = WHITE.get(im); if (w) return w;
+  w = document.createElement('canvas'); w.width = im.naturalWidth; w.height = im.naturalHeight; const g = w.getContext('2d');
+  g.drawImage(im, 0, 0); g.globalCompositeOperation = 'source-in'; g.fillStyle = '#fff'; g.fillRect(0, 0, w.width, w.height); WHITE.set(im, w); return w; }
+function monsterImg(key, view){
+  const k = key + '-' + view; if (k in MIMG) return MIMG[k] && MIMG[k].complete && MIMG[k].naturalWidth ? MIMG[k] : null;
+  const im = new Image(); im.onerror = () => { MIMG[k] = null; }; im.src = 'assets/monster/' + k + '.png'; MIMG[k] = im; return null;
+}
+function loadSprites(){
+  if (typeof Image === 'undefined') return;
+  preloadMonsterImgs();
+  for (const [k,n] of Object.entries(SPRITES)) { const im = new Image();
+    im.onload = () => { SPR[k] = im; if (G) { drawAll(); if (!replay) renderPalette(); } };
+    im.src = `assets/kenney/towerDefense_tile${String(n).padStart(3,'0')}.png`; }
+}
+function tinted(k, col){                   // Sprite × Farbe, Transparenz bleibt
+  const id = k + col; if (TINT[id]) return TINT[id];
+  const im = SPR[k]; if (!im) return null;
+  const cv = document.createElement('canvas'); cv.width = im.width; cv.height = im.height; const c = cv.getContext('2d');
+  c.drawImage(im, 0, 0); c.globalCompositeOperation = 'multiply'; c.fillStyle = col; c.fillRect(0, 0, cv.width, cv.height);
+  c.globalCompositeOperation = 'destination-in'; c.drawImage(im, 0, 0);
+  return TINT[id] = cv;
+}
+function spr(c, img, x, y, size, rot, alpha){
+  if (!img) return false;
+  c.save(); c.translate(x, y); if (rot) c.rotate(rot); if (alpha !== undefined) c.globalAlpha = alpha;
+  c.drawImage(img, -size/2, -size/2, size, size); c.restore(); return true;
+}
+const BASE_TINT = ['#d9a48a', '#b9dcea', '#b7a8d6', '#d6c8a8'];
+const PROJ_TINT = ['#ffb35c', '#dff6ff', '#9b6ad8', '#b8a98c'];
+// Turm: Sockel + Aufsatz (je Rolle), dreht sich zum letzten Ziel
+function drawTower(c, tw, px, py, cs, aim, glow){
+  const E = ELEMENTS[tw.el], b = towerBase(tw.el, tw.idx), cx = px + cs/2, cy = py + cs/2;
+  if (b.light) {                            // Irrlicht: weicher Lichtschein
+    const r = tdef(tw).light * cs, g = c.createRadialGradient(cx, cy, 0, cx, cy, r);
+    g.addColorStop(0, '#fff4c040'); g.addColorStop(1, '#fff4c000'); c.fillStyle = g; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI*2); c.fill();
+  }
+  const base = tinted(tw.idx >= 4 ? 'base' : 'base2', BASE_TINT[tw.el]);
+  if (!spr(c, base, cx, cy, cs * .92)) { c.fillStyle = E.color; c.beginPath(); c.roundRect(px+cs*.14, py+cs*.14, cs*.72, cs*.72, cs*.12); c.fill(); }
+  const t = TURRET[b.role];
+  if (t && SPR[t]) spr(c, tinted(t, E.color), cx, cy, cs * (tw.idx >= 6 ? .86 : .74), (aim || 0) + Math.PI/2);
+  else if (b.light) { c.fillStyle = '#fff4c0'; c.shadowColor = '#ffe08a'; c.shadowBlur = cs*.4; c.beginPath(); c.arc(cx, cy, cs*.16, 0, Math.PI*2); c.fill(); c.shadowBlur = 0; }
+  if (glow > 0) { const g = c.createRadialGradient(cx, cy, 0, cx, cy, cs*.55);    // kurzes Aufleuchten beim Schuss
+    g.addColorStop(0, '#ffffff' + Math.round(glow * 200).toString(16).padStart(2,'0')); g.addColorStop(1, '#ffffff00'); c.fillStyle = g; c.fillRect(px, py, cs, cs); }
+  if (cs >= 14) { c.font = `700 ${Math.max(7, cs*.3)}px ${cssVar('--mono')}`; c.textAlign = 'left'; c.textBaseline = 'top';
+    c.lineWidth = 2.5; c.strokeStyle = '#000b'; c.strokeText(tw.idx+1, px+1, py); c.fillStyle = '#fff'; c.fillText(tw.idx+1, px+1, py); }
+  if (tw.gem) {                              // Edelstein eingesetzt: kleiner Stein unten links
+    const gx = px + cs*.2, gy = py + cs*.8, r = cs*.15;
+    c.fillStyle = '#000b'; c.beginPath(); c.arc(gx, gy, r*1.15, 0, Math.PI*2); c.fill();
+    c.fillStyle = GEMS[tw.el].col; c.beginPath(); c.moveTo(gx, gy - r); c.lineTo(gx + r*.8, gy); c.lineTo(gx, gy + r); c.lineTo(gx - r*.8, gy); c.closePath(); c.fill();
+    c.fillStyle = '#fff8'; c.beginPath(); c.moveTo(gx, gy - r); c.lineTo(gx + r*.35, gy - r*.1); c.lineTo(gx - r*.3, gy - r*.1); c.closePath(); c.fill();
+  }
+  for (let k = 1; k < (tw.lvl || 1); k++) { c.fillStyle = '#000a'; c.fillRect(px + cs - 4 - k*cs*.1, py + cs - cs*.12, cs*.08, cs*.08);
+    c.fillStyle = cssVar('--accent'); c.fillRect(px + cs - 3.5 - k*cs*.1, py + cs - cs*.12 + .5, cs*.08 - 1, cs*.08 - 1); }
+}
+function drawShot(c, p, cs, time){
+  const dx = p.tx - p.x, dy = p.ty - p.y, dir = Math.atan2(dy, dx);
+  const tot = Math.hypot(p.tx - p.x0, p.ty - p.y0) || 1, left = Math.hypot(dx, dy);
+  const k = cs * GRID * .7;                 // Geschosse in alter Feldgröße
+  let x = p.x*cs, y = p.y*cs, h = 0;
+  if (p.lob) {                              // Wurf: Bogen nach oben, Schatten am Boden
+    const tAll = Math.hypot(p.x - p.x0, p.y - p.y0) + left, prog = tAll ? 1 - left / tAll : 1;
+    h = Math.sin(Math.PI * prog) * Math.min(1.2 * GRID, tAll * .35) * cs;
+    c.fillStyle = '#0006'; c.beginPath(); c.ellipse(x, y, k*.12, k*.06, 0, 0, Math.PI*2); c.fill();
+  }
+  y -= h;
+  const def = p.def, sz = k * (p.lob ? .42 : .3);
+  if (p.el === 0 && def.air) {               // Brandpfeil: Pfeil mit Glut
+    c.save(); c.translate(x, y); c.rotate(dir); c.strokeStyle = '#f3d9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(-k*.22, 0); c.lineTo(k*.12, 0); c.stroke();
+    c.fillStyle = '#ff9a4a'; c.beginPath(); c.moveTo(k*.18, 0); c.lineTo(k*.08, -k*.05); c.lineTo(k*.08, k*.05); c.fill(); c.restore(); return;
+  }
+  if (p.el === 0) { if (!spr(c, SPR.flame, x, y, sz * 1.2, dir - Math.PI/2)) dot(c, x, y, sz*.3, '#ff9a4a'); return; }
+  if (p.el === 1) { c.fillStyle = '#dff6ff55'; c.beginPath(); c.arc(x - Math.cos(dir)*k*.1, y - Math.sin(dir)*k*.1, sz*.25, 0, Math.PI*2); c.fill();
+    if (!spr(c, tinted('bullet', PROJ_TINT[1]), x, y, sz * (p.lob ? 1.3 : 1))) dot(c, x, y, sz*.25, '#dff6ff'); return; }
+  if (p.el === 2) { if (!spr(c, tinted('smoke', PROJ_TINT[2]), x, y, sz * 1.4, time * 6, .9)) dot(c, x, y, sz*.3, '#9b6ad8');
+    dot(c, x, y, sz*.12, '#e8dcff'); return; }
+  if (!spr(c, tinted(['rock1','rock3','rock2'][p.idx % 3], '#c9b089'), x, y, sz * (p.idx >= 6 ? 1.7 : 1.35), time * 8)) dot(c, x, y, sz*.3, '#b8a98c');
+}
+const dot = (c, x, y, r, col) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, Math.PI*2); c.fill(); };
+function drawFx(c, f, cs, time){
+  const k = 1 - f.t / f.t0, x = f.x*cs, y = f.y*cs, col = ELEMENTS[f.el].color;
+  if (f.kind === 'boom') {                  // Flächentreffer: Mitte hell, nach außen schwächer (wie der Schaden)
+    const R = f.r * cs, g = c.createRadialGradient(x, y, 0, x, y, R);
+    g.addColorStop(0, col + 'aa'); g.addColorStop(.6, col + '44'); g.addColorStop(1, col + '00');
+    c.globalAlpha = 1 - k; c.fillStyle = g; c.beginPath(); c.arc(x, y, R * (.6 + .4*k), 0, Math.PI*2); c.fill();
+    const sp = f.el === 3 ? 'debris' : f.el === 2 ? 'smoke' : 'boom';
+    spr(c, f.el === 3 ? SPR.debris : tinted(sp, PROJ_TINT[f.el]), x, y, R * (.5 + .7*k), k, 1 - k);
+    c.globalAlpha = 1; return;
+  }
+  if (f.kind === 'spark') { c.globalAlpha = 1 - k; c.strokeStyle = col; c.lineWidth = 2;
+    for (let j = 0; j < 5; j++) { const a = j * 1.26 + f.x * 7, r1 = cs*.06, r2 = cs*(.12 + .12*k);
+      c.beginPath(); c.moveTo(x + Math.cos(a)*r1, y + Math.sin(a)*r1); c.lineTo(x + Math.cos(a)*r2, y + Math.sin(a)*r2); c.stroke(); }
+    c.globalAlpha = 1; return; }
+  if (f.kind === 'nova') { c.globalAlpha = 1 - k; c.strokeStyle = '#dff6ff'; c.lineWidth = 3; c.beginPath(); c.arc(x, y, f.r*cs*k, 0, Math.PI*2); c.stroke();
+    for (let j = 0; j < 6; j++) { const a = j * Math.PI / 3 + k; spr(c, SPR.star, x + Math.cos(a)*f.r*cs*k, y + Math.sin(a)*f.r*cs*k, cs*.3); }
+    c.globalAlpha = 1; return; }
+  if (f.kind === 'lance') { c.globalAlpha = 1 - k; c.strokeStyle = '#dff6ff'; c.lineWidth = Math.max(2, cs*.12) * (1 - k*.5);
+    c.beginPath(); c.moveTo(x, y); c.lineTo(f.x1*cs, f.y1*cs); c.stroke(); c.globalAlpha = 1; return; }
+  if (f.kind === 'quake') { c.globalAlpha = (1 - k) * .8; c.strokeStyle = '#d6c8a8'; c.lineWidth = 2;
+    for (let j = 0; j < 3; j++) { c.beginPath(); c.arc(x, y, f.r*cs*Math.min(1, k + j*.25), 0, Math.PI*2); c.stroke(); }
+    spr(c, SPR.debris, x, y, f.r*cs*1.2, 0, (1 - k) * .7); c.globalAlpha = 1; }
+}
+let cssCache = null;
+function cssVar(n){ if (!cssCache) cssCache = getComputedStyle(document.documentElement); return cssCache.getPropertyValue(n).trim(); }
+const BG = [];
+function drawAll(){ if (G) for (let i = 0; i < NP(); i++) draw(i, $('cv'+i)); }
+function draw(i, cv){
+  if (!cv) return;
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth; if (!W) return;
+  const cs = W / COLS, H = cs * ROWS;
+  if (cv.width !== Math.round(W*dpr)) { cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); cv.style.height = H + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); const map = MAPS[i], v = cssVar;
+  const s = replay && replay.sims[i], time = s ? s.t : 0;
+  c.fillStyle = v('--bg'); c.fillRect(0, 0, W, H);
+  const quake = s && s.fx.find(f => f.kind === 'quake');   // Erdbeben: das ganze Feld wackelt
+  if (quake) { const a = (quake.t / quake.t0) * cs * .06; c.translate(Math.sin(time * 90) * a, Math.cos(time * 77) * a); }
+  // Hintergrund (Boden, Weg, Gelände) nur einmal zeichnen und zwischenspeichern – spart auf dem Handy viel Zeit
+  const bgKey = [W, dpr, Object.keys(SPR).length].join('-');
+  if (!BG[i] || BG[i].key !== bgKey) {
+    const bc = document.createElement('canvas'); bc.width = cv.width; bc.height = cv.height; const g = bc.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
+  for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
+    const road = map.cells.has(x+','+y), T = TERRAIN[map.terrain[y][x]];
+    g.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : T.col[(x+y)%2];
+    g.fillRect(x*cs, y*cs, cs+.5, cs+.5);
+  }
+  for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
+    if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
+    if (t === 1) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
+    if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
+      if (!spr(g, tinted('bush', '#6f8a66'), (x+.72)*cs, (y+.3)*cs, cs*.38, h, .7)) { g.strokeStyle = '#4a6260'; g.lineWidth = 1; for (const dy of [.35,.65]) { g.beginPath(); g.moveTo((x+.2)*cs, (y+dy)*cs); g.lineTo((x+.8)*cs, (y+dy)*cs); g.stroke(); } } }
+    if (t === 3) { const bx = (x+.5)*cs, by = (y+.88)*cs, w = cs*.46, ht = cs*.78;   // kleiner Berg: Schatten, helle und dunkle Flanke, Schneekappe
+      g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(bx, by, w*1.05, cs*.1, 0, 0, Math.PI*2); g.fill();
+      const px = bx - w*.08, py = by - ht;
+      g.fillStyle = '#6d6a66'; g.beginPath(); g.moveTo(bx - w, by); g.lineTo(px, py); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
+      g.fillStyle = '#4a4845'; g.beginPath(); g.moveTo(px, py); g.lineTo(bx + w, by); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
+      g.fillStyle = '#4f4d49'; g.beginPath(); g.moveTo(bx - w*.1, by); g.lineTo(bx - w*.55, by - ht*.38); g.lineTo(bx - w*.2, by - ht*.5); g.closePath(); g.fill();
+      g.fillStyle = '#f1f3f5'; g.beginPath(); g.moveTo(px, py); g.lineTo(px - w*.3, py + ht*.28); g.lineTo(px - w*.08, py + ht*.2); g.lineTo(px + w*.1, py + ht*.3); g.lineTo(px + w*.34, py + ht*.27); g.closePath(); g.fill(); }
+    if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
+  }
+  const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
+  g.fillStyle = v('--danger'); g.beginPath(); g.arc(ex*cs, ey*cs, cs*.4, 0, Math.PI*2); g.fill();
+  g.strokeStyle = v('--accent'); g.lineWidth = 2; g.fillStyle = v('--accent') + '55';   // Ziel: Portal in der Mitte der Schleife
+  g.beginPath(); g.arc(ox*cs, oy*cs, cs*.55, 0, Math.PI*2); g.fill(); g.stroke();
+    BG[i] = { key:bgKey, cv:bc };
+  }
+  c.drawImage(BG[i].cv, 0, 0, W, H);
+  const towers = laneOf(i).towers;
+  if (selCell && selCell.i === i) {
+    const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
+    c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.strokeRect(selCell.x*cs+1, selCell.y*cs+1, cs-2, cs-2);
+    if (tw) { const td = tdef(tw, i), r = td.buff ? td.light : td.range;
+      c.beginPath(); c.arc((tw.x+.5)*cs, (tw.y+.5)*cs, r*cs, 0, Math.PI*2); c.setLineDash([4,4]); c.stroke(); c.setLineDash([]); }
+  }
+  if (pending && pending.i === i) { const d = tdef({ el:laneOf(i).el, idx:pending.k, lvl:1, x:pending.x, y:pending.y }, i);
+    c.globalAlpha = .55; drawTower(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x*cs, pending.y*cs, cs, -Math.PI/2, 0); c.globalAlpha = 1;
+    c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.setLineDash([4,4]); c.beginPath(); c.arc((pending.x+.5)*cs, (pending.y+.5)*cs, (d.buff ? d.light : d.range)*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
+    c.fillStyle = v('--accent') + '18'; c.fill(); }
+  if (s) for (const P of s.pools) {          // Lavapfütze (rot glühend) / Geröll (graue Steine)
+    const a = Math.min(1, P.t / P.t0 * 1.5), g = c.createRadialGradient(P.x*cs, P.y*cs, 0, P.x*cs, P.y*cs, P.r*cs);
+    if (P.dps) { g.addColorStop(0, `rgba(255,120,40,${.55*a})`); g.addColorStop(.7, `rgba(200,50,20,${.35*a})`); g.addColorStop(1, 'rgba(120,20,0,0)'); }
+    else { g.addColorStop(0, `rgba(200,190,160,${.45*a})`); g.addColorStop(1, 'rgba(120,110,90,0)'); }
+    c.fillStyle = g; c.beginPath(); c.arc(P.x*cs, P.y*cs, P.r*cs, 0, Math.PI*2); c.fill(); }
+  if (s) for (const f of s.fx) if (f.kind === 'boom' || f.kind === 'quake' || f.kind === 'nova' || f.kind === 'lance') drawFx(c, f, cs, time);
+  for (const tw of towers) {
+    const st = s && s.towers.find(o => o.x === tw.x && o.y === tw.y), fl = s && s.fx.find(f => f.kind === 'flash' && f.tw === st);
+    const dark = s && s.dark && st && st.def.dayOnly && !s.lights.length && s.monsters.some(m => m.def.night);
+    if (dark) c.globalAlpha = .45;
+    drawTower(c, tw, tw.x*cs, tw.y*cs, cs, st ? st.aim : (tw.x + tw.y) * .7, fl ? fl.t / fl.t0 : 0);
+    c.globalAlpha = 1;
+    if (st && st.love > 0) { c.font = `${cs*.45}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('💕', (tw.x+.5)*cs, (tw.y+.15)*cs + Math.sin(time*6)*cs*.05); }
+    if (map.terrain[tw.y][tw.x] === 3) {   // Turm steht auf Felsen: kleines Berg-Symbol oben rechts
+      const ox = (tw.x+.8)*cs, oy = (tw.y+.2)*cs, r = cs*.17;
+      c.fillStyle = 'rgba(20,20,24,.85)'; c.beginPath(); c.arc(ox, oy, r, 0, Math.PI*2); c.fill();
+      c.strokeStyle = '#ffd35a'; c.lineWidth = Math.max(1, cs*.03); c.stroke();
+      c.fillStyle = '#d8dce0'; c.beginPath(); c.moveTo(ox - r*.7, oy + r*.5); c.lineTo(ox - r*.1, oy - r*.6); c.lineTo(ox + r*.25, oy); c.lineTo(ox + r*.45, oy - r*.25); c.lineTo(ox + r*.8, oy + r*.5); c.closePath(); c.fill();
+    }
+  }
+  if (!s) return;
+  for (const m of s.monsters) {
+    const x = m.x, y = m.y, r = m.def.size*cs*GRID*.8, on = k => m.fx[k] && m.fx[k].t > 0;
+    const bob = flying(m) ? Math.sin(time*8 + m.id) * cs*.04 - cs*.12 : 0;
+    c.fillStyle = '#0005'; c.beginPath(); c.ellipse(x*cs, y*cs + r*.7, r*.8, r*.3, 0, 0, Math.PI*2); c.fill();
+    const X = x*cs, Y = y*cs + bob, ghost = m.inv ? .18 + .1 * Math.sin(time*25 + m.id) : m.inForest ? .35 : 1;   // unsichtbar flimmert, Ork im Wald halb
+    c.globalAlpha = ghost;
+    c.fillStyle = m.def.color; c.globalAlpha = .35 * ghost; c.beginPath(); c.arc(X, Y, r, 0, Math.PI*2); c.fill(); c.globalAlpha = ghost;
+    if (on('slow')) { c.fillStyle = '#9fdcf540'; c.beginPath(); c.arc(X, Y, r*1.15, 0, Math.PI*2); c.fill(); }
+    const emo = m.coc ? (m.coc.fly ? '🦋' : m.def.emo) : m.def.emo;
+    // Laufrichtung aus der Bewegung seit dem letzten Bild (nur Anzeige, die Simulation liest das nicht)
+    if (m.lx !== undefined) { const dx = x - m.lx, dy = y - m.ly; if (Math.abs(dx) + Math.abs(dy) > 1e-4) { m.vx = (m.vx || 0) * .7 + dx * .3; m.vy = (m.vy || 0) * .7 + dy * .3; } }
+    m.lx = x; m.ly = y;
+    let ikey = MONSTER_IMG[m.def.name] || MONSTER_IMG[MONSTERS[m.type] && MONSTERS[m.type].name];
+    if (ikey === 'raupe' && m.coc && m.coc.fly) ikey = 'motte';
+    if (ikey === 'roboter' && m.ap <= 0) ikey = 'roboterrot';   // 21.10.: Rüstung weg → Auge leuchtet rot
+    let view = Math.abs(m.vx || 1) >= Math.abs(m.vy || 0) ? 'seite' : (m.vy > 0 ? 'vorne' : 'hinten');
+    if (ikey && view !== 'seite' && MIMG[ikey + '-' + view] === null) view = 'seite';   // fehlende Ansicht → Seite
+    if (m.strip > 0) view = 'vorne';   // Betty dreht sich zum Betrachter
+    const lauf = ikey && view === 'seite' && MONSTER_ANIM[ikey] && !(m.strip > 0) ? Math.floor(time * MONSTER_ANIM[ikey][1] + m.id) % MONSTER_ANIM[ikey][0] : -1;
+    const im = ikey && ((lauf >= 0 && monsterImg(ikey, 'lauf-' + lauf)) || monsterImg(ikey, view));
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    if (im) {
+      const S = r * 3.2 * (m.def.boss || m.def.mini ? 1.15 : 1), walk = lauf < 0 && !(m.coc && !m.coc.fly && !m.coc.walk) && !(m.strip > 0) && !flying(m);
+      const sq = walk ? 1 + .05 * Math.sin(time * 11 + m.id * 3) : 1;   // Wippen beim Gehen
+      const ht = m.hitT !== undefined ? time - m.hitT : 9, hf = ht >= 0 && ht < .15 ? 1 - ht / .15 : 0;   // Treffer: kurz weiß und zurückgestoßen
+      const vl = Math.hypot(m.vx || 0, m.vy || 0) || 1, kb = hf * r * .25;
+      c.save(); c.translate(X - (m.vx || 0) / vl * kb, Y + r * .75 - (m.vy || 0) / vl * kb); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.scale(1 / sq, sq);
+      const crown = m.def.mini && ikey === MONSTER_IMG[MONSTERS[m.type - 1] && MONSTERS[m.type - 1].name];   // Zwischenboss mit dem Bild seines Monsters: goldener Schimmer
+      if (crown) { c.shadowColor = '#ffd54a'; c.shadowBlur = r * (.8 + .4 * Math.sin(time * 4)); }
+      c.drawImage(im, -S / 2, -S, S, S); c.shadowBlur = 0;
+      if (hf > 0) { c.globalAlpha = ghost * .7 * hf; c.drawImage(whiteOf(im), -S / 2, -S, S, S); c.globalAlpha = ghost; }
+      c.restore(); m.top = Y + r * .75 - S;
+      if (crown) { c.font = `${r * 1.1}px serif`; c.fillText('👑', X, m.top + r * .2); }
+      if (m.coc && !m.coc.fly && !m.coc.walk) {   // Kokon: weiße, halbdurchsichtige Hülle über der Raupe
+        c.fillStyle = '#ffffffb8'; c.strokeStyle = '#ffffff'; c.lineWidth = 1; c.beginPath();
+        c.ellipse(X, Y + r * .75 - S * .3, (view === 'seite' ? S * .5 : S * .28), (view === 'seite' ? S * .24 : S * .45), 0, 0, Math.PI * 2); c.fill(); c.stroke(); }
+    } else { c.font = `${r*1.9}px serif`; c.fillText(emo, X, Y + 1); m.top = Y - r; }
+    c.globalAlpha = 1;
+    if (m.strip > 0) {                         // Betty „zieht sich aus“: hautfarben verpixelt ab dem Kinn, schwarzer Balken (21.10.: an das Bild angepasst)
+      const S = im ? r * 3.2 * 1.15 : 2*r, top = im ? m.top + S * .2 : Y - r, w = im ? S * .36 : 2*r, h = im ? S * .42 : 2*r;
+      const n = 4, qx = w/n, qy = h/n, skin = ['#f1c6a7', '#e8b494', '#d9a07f', '#f6d3b8'];
+      for (let a = 0; a < n; a++) for (let b = 0; b < n; b++) { c.fillStyle = skin[(a*3 + b + Math.floor(time*6)) % 4]; c.fillRect(X - w/2 + a*qx, top + b*qy, qx + .5, qy + .5); }
+      c.fillStyle = '#000'; c.fillRect(X - w*.7, top, w*1.4, h*.3);
+      c.fillStyle = '#fff'; c.font = `700 ${Math.max(7, w*.2)}px ${v('--mono')}`; c.fillText('CENSORED', X, top + h*.15); }
+    if (m.heartT > 0) { c.font = `${r*1.1}px serif`; c.fillText('❤️', X + r*.7, Y - r*.8); }
+    if (m.def.bass) { c.strokeStyle = '#c8ccd055'; c.lineWidth = 1; c.setLineDash([3,3]); c.beginPath(); c.arc(X, Y, m.def.bass.r*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]); }
+    if (m.def.confused) { c.fillStyle = '#ffe9a8'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.fillText('?', X - r, Y - r); }
+    if (on('curse')) spr(c, tinted('smoke', PROJ_TINT[2]), X, Y, r*2.4, time*2, .45);
+    if (on('burn')) spr(c, SPR.flameS, X + r*.55, Y - r*.5 + Math.sin(time*20 + m.id)*1.5, r*.9, 0, .9);
+    if (on('stun')) for (let j = 0; j < 3; j++) { const a = time*5 + j*2.1; spr(c, SPR.star, X + Math.cos(a)*r, Y - r + Math.sin(a)*r*.3, r*.6); }
+    if (on('fear')) { c.fillStyle = '#e8dcff'; c.font = `700 ${r*1.1}px ${v('--mono')}`; c.fillText('!', X - r, Y - r); }
+    if (m.hops) { c.fillStyle = v('--accent'); c.font = `700 ${cs*.22}px ${v('--mono')}`; c.fillText(m.hops, X + r, Y - r); }
+    const f = Math.max(0, m.hp / m.def.hp);
+    const bt = Math.min(Y - r, m.top || Y - r) - 6, by = bt < 0 ? Y + r + 2 : bt;   // 17.10.: am oberen Rand Balken unter das Monster; 21.10.: über dem Bild
+    c.fillStyle = '#00000088'; c.fillRect(X-r, by, 2*r, 3);
+    c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(X-r, by, 2*r*f, 3);
+    if (m.def.armorPts && m.ap > 0) { c.fillStyle = '#c8ccd0'; c.fillRect(X-r, by + 3, 2*r*Math.min(1, m.ap / m.def.armorPts), 2); }   // Rüstung: grauer Balken
+  }
+  for (const p of s.shots) drawShot(c, p, cs, time);
+  for (const f of s.fx) if (f.kind === 'spark') drawFx(c, f, cs, time);
+  if (s.dark) { c.fillStyle = '#05081a55'; c.fillRect(0, 0, W, H);   // Nacht: dunkler, Irrlichter leuchten durch
+    for (const tw of s.towers) if (tw.def.light) { const g = c.createRadialGradient((tw.x+.5)*cs, (tw.y+.5)*cs, 0, (tw.x+.5)*cs, (tw.y+.5)*cs, tw.def.light*cs);
+      g.addColorStop(0, '#fff4c033'); g.addColorStop(1, '#fff4c000'); c.fillStyle = g; c.fillRect(0, 0, W, H); } }
+  drawWeather(c, i, s, W, H, cs, time);
+}
+// Wetter auf der Karte: Symbol oben rechts; während der Wiedergabe leichter Regen bzw. Gewitterblitze (im Menü abschaltbar)
+function weatherIdx(i){
+  if (replay && replay.run && replay.run.inputs[i]) return replay.run.inputs[i].weather || 0;
+  if (!G || G.over) return null; return weatherDay(G, Math.min(G.day, CONFIG.days))[G.slot];
+}
+function drawWeather(c, i, s, W, H, cs, time){
+  const k = s && s.wIdx !== undefined && s.wIdx !== weatherIdx(i) ? s.wIdx : weatherIdx(i); if (k === null || k === undefined) return; const Wx = WEATHER[k];   // Schulleiter: Wetter dieser Map
+  if (s && wxAnim && (Wx.name === 'Regen' || Wx.name === 'Gewitter')) {
+    c.strokeStyle = '#a9c8ff55'; c.lineWidth = 1; c.beginPath();
+    for (let j = 0; j < 40; j++) { const sx = ((j * 0.6180339) % 1) * W, sp = H * 1.4;
+      const y0 = ((time * sp + j * 53.7) % (H + 30)) - 15, x0 = (sx + time * 25) % W;
+      c.moveTo(x0, y0); c.lineTo(x0 - cs*.12, y0 + cs*.45); }
+    c.stroke();
+    if (Wx.name === 'Gewitter' && (time % 5) < 0.12) { c.fillStyle = '#ffffff40'; c.fillRect(0, 0, W, H); }
+  }
+  const r = cs * .85, x = W - r - 4, y = 4;
+  c.fillStyle = '#000a'; c.beginPath(); c.roundRect(x, y, r, r, r*.25); c.fill();
+  c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(Wx.sym, x + r/2, y + r/2 + 1);
+}
+// Turm-Symbol für die Bauleiste
+const ICONS = {};
+function towerIcon(el, k){
+  const id = el + '-' + k; if (ICONS[id]) return ICONS[id];
+  if (!SPR.base || typeof document === 'undefined') return null;
+  const cv = document.createElement('canvas'); cv.width = cv.height = 64; const c = cv.getContext('2d');
+  drawTower(c, { el, idx:k, lvl:1, x:0, y:0 }, 0, 0, 64, -Math.PI/4, 0);
+  return ICONS[id] = cv.toDataURL();
+}
+
+/* ---------- Start ---------- */
+async function newGame(){
+  const players = +$('fPlayers').value, timing = MODE === 'online' ? $('fTiming').value : 'manual';
+  const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), live: $('fLive').value === '1', diff: $('fDiff').value, startGold: CONFIG.startGold, version: VERSION };
+  cfg.slots = cfg.live ? [10] : CONFIG.slotPlan[players];   // Live: eine Welle am Tag, alles läuft ineinander
+  if (timing === 'real') { const d = new Date(); d.setDate(d.getDate() + (+$('fStart').value)); d.setHours(0,0,0,0); cfg.day1 = d.getTime(); }
+  G = newGameState(cfg);
+  L = [...Array(players)].map((_,i) => ({ el:i % ELEMENTS.length, towers:[], spent:0, gifts:[], gid:cfg.startAt }));
+  seat = 0; selTower = null; selCell = null; replay = null; lanesBuilt = 0;
+  if (MODE === 'local') lsSet('ww2-local', { G, L });
+  else { await queueWrite(async () => { for (let i = 0; i < 4; i++) await DB.doc(P_LANES + '/p' + i).set(L[i] || { el:i, towers:[], spent:0, gifts:[], gid:cfg.startAt }); await DB.doc(P_STATE).set(JSON.parse(JSON.stringify(G))); }); }
+  render();
+}
+function onGame(g){
+  const prevPlayers = G && G.cfg.players;
+  G = g;
+  if (!G) { lanesBuilt = 0; render(); return; }
+  if (seat >= NP()) seat = 0;
+  if (prevPlayers !== G.cfg.players) lanesBuilt = 0;
+  if (G.lastRun && G.lastRun.id !== seenRun && !replay) { if (seenRun) startReplay(G.lastRun); else { seenRun = G.lastRun.id; lsSet('ww2-seen', seenRun); } }
+  render();
+}
+
+$('fTiming').onchange = renderSetup;
+$('fGo').onclick = newGame;
+$('go').onclick = () => tryResolve(true);
+$('resumeBtn').onclick = resumeGame;
+$('ready').onclick = toggleReady;
+$('replay').onclick = () => G && startReplay(G.lastRun, true);
+$('skip').onclick = endReplay;
+$('spd').onclick = () => { speed = speed === 1 ? 3 : speed === 3 ? 10 : 1; render(); };
+$('giftBtn').onclick = giftDialog;
+$('more').onclick = menuDialog;
+window.addEventListener('resize', () => { for (let i = 0; i < 4; i++) { const cv = $('cv'+i); if (cv) cv.width = 0; } drawAll(); });
+setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   // Sicherheitsnetz: keine Welle verpassen
+   // Wächter: Steht die Wiedergabe seit 3 s still, obwohl die Seite sichtbar ist, neu anstoßen
+   if (replay && !document.hidden && performance.now() - replay.last > 3000) kickLoop();
+   checkReady();
+   if (MODE === 'online' && G && !G.over && !G.paused) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
+
+function startLocal(){
+  MODE = 'local';
+  const s = lsGet('ww2-local');
+  if (s && s.G) { L = s.L || []; seenRun = s.G.lastRun && s.G.lastRun.id; onGame(s.G); } else render();
+}
+async function startOnline(db){
+  MODE = 'online'; DB = db;
+  if (!DB.tx) { try { const u = await window.claude.use('user'); ME = u && await u.id(); } catch(e){} }
+  if (!ME) { ME = lsGet('ww2-holder') || ('h' + Math.random().toString(36).slice(2)); lsSet('ww2-holder', ME); }
+  seat = lsGet('ww2-seat') || 0; seenRun = lsGet('ww2-seen');
+  DB.collection(P_LANES).onSnapshot(snap => {
+    snap.docs.forEach(d => { const k = +d.id.slice(1); if (!d.metadata.hasPendingWrites || !L[k]) takeLane(k, d.data()); });
+    if (G) render();
+  }, e => console.warn(e));
+  DB.doc(P_STATE).onSnapshot(snap => onGame(snap.exists ? snap.data() : null), e => { console.warn(e); toast('Verbindung verloren. Bitte Seite neu laden.'); });
+  // Zweite Leitung: Handys lassen die Live-Verbindung oft einschlafen (App-Wechsel, Bildschirm aus).
+  // Deshalb alle 10 s und beim Zurückkehren den Stand direkt vom Server holen.
+  // Wer selbst „Bereit“ gedrückt hat und wartet, fragt alle 2 s (Safari meldet die Live-Änderung oft nicht), sonst alle 10 s.
+  let pollTick = 0;
+  setInterval(() => { pollTick++; const waiting = G && !G.over && !replay && isReady(seat);
+    if (waiting || pollTick % 5 === 0) refreshFromServer(); }, 2000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshFromServer(); });
+  window.addEventListener('focus', refreshFromServer); window.addEventListener('online', refreshFromServer);
+  render();
+}
+let refreshing = false;
+async function refreshFromServer(){
+  if (MODE !== 'online' || refreshing || (typeof document !== 'undefined' && document.hidden)) return;
+  refreshing = true;
+  try {
+    // Zeitlimit: Eine hängende Abfrage blockierte vorher alle weiteren (refreshing blieb true) – dann half nur Neuladen
+    const limit = new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit Server-Abfrage')), 8000));
+    const [st, ls] = await Promise.race([Promise.all([DB.doc(P_STATE).get({ source:'server' }), DB.collection(P_LANES).get({ source:'server' })]), limit]);
+    ls.docs.forEach(d => { const k = +d.id.slice(1); takeLane(k, d.data()); });
+    const g = st.exists ? st.data() : null;
+    const stamp = x => x ? `${x.cfg && x.cfg.startAt}-${x.day}-${x.slot}-${x.lastRun ? x.lastRun.id : ''}-${x.over}` : 'leer';
+    if (stamp(g) !== stamp(G)) onGame(g); else if (G) render();
+  } catch(e) { console.warn(e); }
+  finally { refreshing = false; }
+}
+(async () => {
+  render();
+  if (FIREBASE_CONFIG.projectId && window.firebase) {
+    try { firebase.initializeApp(FIREBASE_CONFIG); const fs = firebase.firestore();
+      try { fs.settings({ experimentalForceLongPolling: true, experimentalAutoDetectLongPolling: false, merge: true }); } catch(e) { console.warn(e); }   // Safari: WebChannel-Verbindung hängt oft, Long Polling ist der bekannte Ausweg
+      return startOnline({ doc:p => fs.doc(p), collection:p => fs.collection(p), tx:fn => fs.runTransaction(fn) });
+    } catch(e) { console.warn(e); }
+  }
+  if (!window.claude || !window.claude.use) return startLocal();
+  let db = null; try { db = await window.claude.use('db'); } catch(e){}
+  if (db) startOnline(db); else startLocal();
+})();
+loadSprites();
+if (typeof fetch !== 'undefined' && location.protocol.startsWith('http')) { pollVersion(); setInterval(pollVersion, 5 * 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) pollVersion(); }); }
+document.fonts && document.fonts.ready.then(drawAll);
+</script>
+</body>
+</html>

@@ -8,8 +8,12 @@ const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const S = require('./spiegel'), { datei } = require('./sim');
 const sp = S.lesen(), basis = sp._basis;
 if (!basis) throw new Error('spiegel.json ohne _basis');
-let html = require('./basis/patch')(fs.readFileSync(datei(), 'utf8'));   // Code-Änderungen des Spiegels (basis/patch.js)
-const werte = Object.fromEntries(Object.entries(sp).filter(([k]) => !k.startsWith('_')));
+// Grafik (22.10., L): Basis mit den Grafik-Commits seit 044d8c0 (Monster-Bilder 21a–21e, 22a; keine Spielzahlen, Simulation geprüft gleich).
+// Zwei Monster heißen dort anders – Spiegel-Schlüssel werden umbenannt. GRAFIK=0 nimmt die reine Basis.
+const GRAFIK_DATEI = path.join(__dirname, 'basis', `index-${basis}-grafik.html`), GRAFIK = process.env.GRAFIK !== '0' && fs.existsSync(GRAFIK_DATEI);
+const NAMEN_NEU = GRAFIK ? { 'Sommer-Schneebälle':'Eiswürfel', 'Heisenbergs':'The one who knocks' } : {};
+let html = require('./basis/patch')(fs.readFileSync(GRAFIK ? GRAFIK_DATEI : datei(), 'utf8'));   // Code-Änderungen des Spiegels (basis/patch.js)
+const werte = Object.fromEntries(Object.entries(sp).filter(([k]) => !k.startsWith('_')).map(([k, v]) => [k.split('.').map(t => NAMEN_NEU[t] || t).join('.'), v]));
 const kenn = crypto.createHash('md5').update(JSON.stringify(werte)).digest('hex').slice(0, 6);
 
 function ersetze(alt, neu){ if (!html.includes(alt)) throw new Error('nicht gefunden: ' + alt.slice(0, 60)); html = html.replace(alt, neu); }
@@ -45,4 +49,4 @@ fs.writeFileSync(ziel, html);
 // Prüfen: Seite lädt in der Simulation, Werte sind angekommen
 const G = require('./sim').load(ziel), bad = Object.entries(werte).filter(([p, v]) => {
   let o = G; for (let k of p.split('.')) { if (Array.isArray(o) && isNaN(+k)) k = o.findIndex(x => x && x.name === k); o = o[k]; } return JSON.stringify(o) !== JSON.stringify(v); });
-console.log(`${path.basename(ziel)} erzeugt: Version ${G.VERSION}, ${Object.keys(werte).length} Spiegel-Werte, ${bad.length ? 'FEHLT: ' + bad.map(b => b[0]).join(', ') : 'alle angekommen'}`);
+console.log(`${path.basename(ziel)} erzeugt${GRAFIK ? ' (mit Grafik)' : ''}: Version ${G.VERSION}, ${Object.keys(werte).length} Spiegel-Werte, ${bad.length ? 'FEHLT: ' + bad.map(b => b[0]).join(', ') : 'alle angekommen'}`);
