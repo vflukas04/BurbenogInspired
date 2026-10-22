@@ -102,6 +102,14 @@ Ergebnisse in `tools/balance/ergebnisse/spiegel-v2*` (nicht im Repo). Der neue B
 - **Effekt-Türme objektiv messen (Vorschlag Claude, 21.10.):** statt eines einzelnen Referenzturms ein *Kontext-Aufbau*: Schadenstürme des eigenen Elements im Wert des 3-Fachen des geprüften Turms (nach der Treppe gewählt, beste Plätze). Wert des Turms = Mehrschaden des ganzen Aufbaus, wenn er dazukommt, verglichen mit demselben Gold in weiteren Schadenstürmen. Erfasst Synergie (Bremsen hilft Flächentürmen mehr), Licht/Verstärkung im Kreis und Rüstungsschaden. Mit Weiterlauf der Leaks auf eine Partner-Map ergibt sich daraus auch A4 (eigene Map ↔ Partner).
 - **Zu entscheiden (L):** Effekt-Türme werden über die Effektstärke mitgezogen (Fluchstein, Frosthauch). A4 (eigene Map ↔ Partner) ist noch nicht gemessen. Nächster Schritt: Spielläufe P2/Paare auf Kandidat A (laufen), danach Ebene B (Leben je Block, Kraft je Element).
 
+## Stand 22.10. nachmittags (L): Bestätigungslauf spiegel-C
+- **Elemente:** Feuer 0,93 · Eis 1,01 · Schatten 0,98 · Stein 1,08 (vorher 0,85/1,05/1,04/1,08).
+- **Paare (Durchbrüche ganzes Spiel):** Schatten+Stein 4 · Eis+Stein 7,5 · Eis+Schatten 12,5 · Feuer+Schatten 14 · Feuer+Stein 28,5 · Feuer+Eis 44,5 (davon 26 an einem Tag, Wütende Nachbarn). Schwächstes Paar je Spiel: R 0,66–1,16.
+- **C1 (erster Durchlauf ohne Leak, Ziel ≤ 15 %):** 19–27 % (vorher 24–39 %).
+- **Kurve je Block (Solo-Bot):** Runde 16–30 jetzt zu schwer (×0,69–0,85), Runde 1–5 ×1,24 – Folge der Leben je Tag nach dem schwächsten Paar; das Solo-Ziel 1,4–2,0 ist damit nicht mehr maßgeblich (Paare zählen).
+- **P8 (Ziel 80 %):** Eis 84–108 % ✓, Feuer 68–75 %, Stein 28–64 %, Schatten 0–37 %.
+- **Nächster Schritt `spiegel-C2.json`:** ebeneC aus diesem Lauf (Kraft Feuer ×1,05, Stein ×0,95; Leben je Tag; Form über Preise) + für P8 Schatten Türme 6–8 ×0,86 und Stein Türme 6–8 ×0,9 im Preis. Testseite `spiegel-a.html` zeigt diesen Stand.
+
 ## Stand 22.10. früh (L): Feuer-Brand-Regel, Ebene B+C
 - **Feuer-Turmrunde** mit neuer Brand-Regel und Brennanteil ×0,6: Feuer-Türme 6 % Abweichung.
 - **Spielläufe (Basis + spiegel-B + neue Feuer-Werte):** Elemente Feuer 0,85 · Eis 1,05 · Schatten 1,04 · Stein 1,08 (vorher 0,56/1,51/0,89/1,32). Kurve ab Runde 6 ×0,87–1,01; Runde 1–5 ×1,57. Verlauf: Feuer Runde 31–40 noch 0,61–0,68, Eis 1,36–1,38.

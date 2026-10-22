@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiegel2";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18e-S54b03a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18e-Sd13283";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -529,8 +529,8 @@ const MAP_WPS = [
   [[-0.5,11.5],[11.5,11.5],[11.5,7.5],[14.5,7.5],[14.5,0.5],[3.5,0.5],[3.5,14.5],[16.5,14.5]]
 ];
 
-/* SPIEGEL (L, Makrobalancing): Werte aus tools/balance/spiegel.json, Basis 044d8c0, Stand Turm-Prüfstand 2026-10-21T15:55, kontext, Treppe 1.1, Abweichung 16.1 % – erzeugt von tools/balance/spiegel-seite.js, nicht von Hand ändern */
-(function(){ const SP = {"ELEMENTS.0.kraft":0.596,"ELEMENTS.1.kraft":0.851,"ELEMENTS.2.kraft":0.974,"ELEMENTS.3.kraft":2.368,"CONFIG.upgrade.steps.0":2.402,"CONFIG.upgrade.steps.1":1.917,"CONFIG.upgrade.steps.2":1.661,"CONFIG.upgrade.steps.3":1.531,"CONFIG.upgrade.steps.4":1.449,"CONFIG.hpBlock.1":1,"CONFIG.hpBlock.2":1,"CONFIG.hpBlock.3":1.728,"CONFIG.hpBlock.4":3.362,"CONFIG.hpBlock.5":5.579,"CONFIG.hpBlock.6":6.848,"CONFIG.hpBlock.7":11.624,"MONSTERS.Betty (Boss).hpMul":12.1,"MONSTERS.Nazgul.hpMul":0.8,"MONSTERS.Fledermäuse.hpMul":0.8,"MONSTERS.Looping-Louie-Flugzeuge.hpMul":0.8,"ELEMENTS.3.splashCenter":1,"ELEMENTS.3.splashEdge":0.5,"ELEMENTS.3.kraftT.0":1.5433,"ELEMENTS.3.kraftT.1":1.0846,"ELEMENTS.3.kraftT.2":1.2402,"ELEMENTS.3.kraftT.3":1.5745,"ELEMENTS.0.kraftT.4":1.5767,"ELEMENTS.0.kraftT.5":0.9034,"ELEMENTS.0.kraftT.6":1.4633,"ELEMENTS.0.kraftT.7":1.2956,"ELEMENTS.1.kraftT.4":2.2673,"ELEMENTS.1.kraftT.5":0.9411,"ELEMENTS.1.kraftT.6":0.8001,"ELEMENTS.1.kraftT.7":1.9489,"ELEMENTS.2.kraftT.4":0.9906,"ELEMENTS.2.kraftT.5":1.3089,"ELEMENTS.2.kraftT.6":0.9164,"ELEMENTS.2.kraftT.7":1.0128,"ELEMENTS.3.kraftT.4":0.9779,"ELEMENTS.3.kraftT.5":1.4955,"ELEMENTS.3.kraftT.6":1.1208,"ELEMENTS.3.kraftT.7":0.3729,"RESEARCH.0.cost":210,"RESEARCH.1.cost":600,"ELEMENTS.0.kraftT.0":1.7004,"ELEMENTS.0.kraftT.1":0.8757,"ELEMENTS.0.kraftT.2":1.7721,"ELEMENTS.0.kraftT.3":0.9554,"ELEMENTS.1.kraftT.0":0.7443,"ELEMENTS.1.kraftT.2":0.5475,"ELEMENTS.1.kraftT.3":1.2766,"ELEMENTS.2.kraftT.0":0.9532,"CONFIG.upgrade.rangeSteps":[0,0.3,0,0,0.2],"CONFIG.upgrade.durSteps":[1,1,1,1.2,1],"CONFIG.upgrade.effSteps":[1,1,1,1.15,1],"ELEMENTS.0.upDmg":[1.4112,1.3821,1.3412,1.1448,1.2594],"ELEMENTS.1.upDmg":[2.1919,1.5906,1.3269,1.1565,1.1115],"ELEMENTS.1.towers.1.8":0.6287,"ELEMENTS.1.kraftT.1":1.3691,"ELEMENTS.1.towers.4.8":2.4473,"ELEMENTS.2.upDmg":[1.7384,1.5931,1.3803,1.2797,1.1954],"ELEMENTS.2.kraftT.2":0.9211,"ELEMENTS.3.upDmg":[1.6492,1.4938,1.3623,1.2718,1.2287],"ELEMENTS.3.towers.0.8":1.15,"ELEMENTS.3.towers.1.8":0.9122,"ELEMENTS.3.towers.2.8":0.918,"ELEMENTS.0.upT":[1.2838,1.3516,1.3156,1.4754,1.4442,1.2559,1.2001,1.3685],"ELEMENTS.0.towers.3.6":0.3535,"ELEMENTS.0.towers.4.6":0.26,"ELEMENTS.1.upT":[1.6,1.2487,1.6,1.5853,1.404,1.344,1.2311,1.5536],"ELEMENTS.1.towers.3.6":0.2809,"ELEMENTS.1.towers.4.6":3.0289,"ELEMENTS.1.towers.6.8":1.0523,"ELEMENTS.1.towers.6.6":0.2431,"ELEMENTS.2.upT":[1.3036,0.8206,1.3834,1.6,1.3022,1.3131,1.3493,1.6],"ELEMENTS.2.kraftT.3":1.3472,"ELEMENTS.2.towers.3.6":0.3075,"ELEMENTS.2.towers.4.6":0.0893,"ELEMENTS.2.towers.6.6":0.1929,"ELEMENTS.2.towers.7.6":0.4442,"ELEMENTS.3.upT":[1.3313,1.3598,1.4076,1.3705,1.4862,1.3179,1.4131,1.6],"ELEMENTS.3.towers.3.8":1.1765,"ELEMENTS.3.towers.4.8":2.0747,"ELEMENTS.3.towers.4.6":1.7224,"ELEMENTS.3.towers.5.8":1.3724,"ELEMENTS.0.towers.5.8":0.8269,"ELEMENTS.1.towers.7.6":0.2968,"ELEMENTS.3.towers.6.8":1.6186,"ELEMENTS.3.towers.7.8":1.4015,"ELEMENTS.2.towers.2.2":3.04,"ELEMENTS.1.towers.5.2":3.04,"ELEMENTS.3.towers.2.2":3.04,"ELEMENTS.0.towers.3.2":3.24,"ELEMENTS.1.towers.2.2":3.24,"ELEMENTS.1.towers.0.6":0.2186,"ELEMENTS.1.towers.2.6":0.2159,"ELEMENTS.3.towers.7.6":1.7729,"ELEMENTS.0.towers.0.6":0.17,"ELEMENTS.0.towers.1.6":0.4328,"ELEMENTS.0.towers.2.6":0.14,"ELEMENTS.0.towers.5.6":0.36,"ELEMENTS.0.towers.6.6":0.36,"ELEMENTS.0.towers.7.6":0.65,"ELEMENTS.1.towers.1.6":0.2022,"ELEMENTS.1.towers.5.6":0.2031,"ELEMENTS.2.towers.0.6":0.1,"ELEMENTS.2.towers.1.9.buff":[1.386,1.386,1.386,1.386,1.386,1.386],"ELEMENTS.2.towers.2.6":0.1502,"ELEMENTS.2.towers.5.6":0.2002,"ELEMENTS.0.towers.4.7":"Tag"};
+/* SPIEGEL (L, Makrobalancing): Werte aus tools/balance/spiegel.json, Basis 044d8c0, Stand Ebene B+C aus kandidat-f (Dämpfung 0.7, Ziel schwächstes Paar 1.2), 2026-10-22T11:53 · P8: Schatten T6–8 ×0,86, Stein T6–8 ×0,9 – erzeugt von tools/balance/spiegel-seite.js, nicht von Hand ändern */
+(function(){ const SP = {"ELEMENTS.0.kraft":1.0515,"ELEMENTS.1.kraft":0.6079,"ELEMENTS.2.kraft":1.0406,"ELEMENTS.3.kraft":1.7588,"CONFIG.upgrade.steps.0":2.402,"CONFIG.upgrade.steps.1":1.917,"CONFIG.upgrade.steps.2":1.661,"CONFIG.upgrade.steps.3":1.531,"CONFIG.upgrade.steps.4":1.449,"CONFIG.hpBlock.1":0.9015,"CONFIG.hpBlock.2":0.9769,"CONFIG.hpBlock.3":1.6508,"CONFIG.hpBlock.4":3.2788,"CONFIG.hpBlock.5":4.929,"CONFIG.hpBlock.6":7.5474,"CONFIG.hpBlock.7":11.1861,"MONSTERS.Betty (Boss).hpMul":5.6408,"MONSTERS.Nazgul.hpMul":0.6515,"MONSTERS.Fledermäuse.hpMul":0.7853,"MONSTERS.Looping-Louie-Flugzeuge.hpMul":0.7537,"ELEMENTS.3.splashCenter":1,"ELEMENTS.3.splashEdge":0.5,"ELEMENTS.3.kraftT.0":1.5433,"ELEMENTS.3.kraftT.1":1.0846,"ELEMENTS.3.kraftT.2":1.2402,"ELEMENTS.3.kraftT.3":1.5745,"ELEMENTS.0.kraftT.4":1.6847,"ELEMENTS.0.kraftT.5":0.857,"ELEMENTS.0.kraftT.6":1.2654,"ELEMENTS.0.kraftT.7":1.4218,"ELEMENTS.1.kraftT.4":2.2673,"ELEMENTS.1.kraftT.5":0.9411,"ELEMENTS.1.kraftT.6":0.8001,"ELEMENTS.1.kraftT.7":1.9489,"ELEMENTS.2.kraftT.4":0.9812,"ELEMENTS.2.kraftT.5":1.2956,"ELEMENTS.2.kraftT.6":0.9074,"ELEMENTS.2.kraftT.7":1.0085,"ELEMENTS.3.kraftT.4":0.9779,"ELEMENTS.3.kraftT.5":1.4955,"ELEMENTS.3.kraftT.6":1.1208,"ELEMENTS.3.kraftT.7":0.3729,"RESEARCH.0.cost":210,"RESEARCH.1.cost":600,"ELEMENTS.0.kraftT.0":1.6028,"ELEMENTS.0.kraftT.1":1.0028,"ELEMENTS.0.kraftT.2":1.6504,"ELEMENTS.0.kraftT.3":1.0109,"ELEMENTS.1.kraftT.0":0.7443,"ELEMENTS.1.kraftT.2":0.5475,"ELEMENTS.1.kraftT.3":1.2766,"ELEMENTS.2.kraftT.0":0.9443,"CONFIG.upgrade.rangeSteps":[0,0.3,0,0,0.2],"CONFIG.upgrade.durSteps":[1,1,1,1.2,1],"CONFIG.upgrade.effSteps":[1,1,1,1.15,1],"ELEMENTS.0.upDmg":[1.4684,1.4034,1.3567,1.1581,1.2482],"ELEMENTS.1.upDmg":[2.1919,1.5906,1.3269,1.1565,1.1115],"ELEMENTS.1.towers.1.8":0.6287,"ELEMENTS.1.kraftT.1":1.3691,"ELEMENTS.1.towers.4.8":2.4473,"ELEMENTS.2.upDmg":[1.7048,1.578,1.3845,1.2469,1.1722],"ELEMENTS.2.kraftT.2":0.9133,"ELEMENTS.3.upDmg":[1.6492,1.4938,1.3623,1.2718,1.2287],"ELEMENTS.3.towers.0.8":1.15,"ELEMENTS.3.towers.1.8":0.9122,"ELEMENTS.3.towers.2.8":0.918,"ELEMENTS.0.upT":[1.3414,1.3308,1.3236,1.4543,1.4557,1.3116,1.2711,1.3076],"ELEMENTS.0.towers.3.6":0.2121,"ELEMENTS.0.towers.4.6":0.156,"ELEMENTS.1.upT":[1.6,1.2487,1.6,1.5853,1.404,1.344,1.2311,1.5536],"ELEMENTS.1.towers.3.6":0.2809,"ELEMENTS.1.towers.4.6":3.0289,"ELEMENTS.1.towers.6.8":1.0523,"ELEMENTS.1.towers.6.6":0.2431,"ELEMENTS.2.upT":[1.323,0.6209,1.4055,1.6,1.3232,1.3338,1.3703,1.6],"ELEMENTS.2.kraftT.3":1.3804,"ELEMENTS.2.towers.3.6":0.3205,"ELEMENTS.2.towers.4.6":0.0893,"ELEMENTS.2.towers.6.6":0.1927,"ELEMENTS.2.towers.7.6":0.4401,"ELEMENTS.3.upT":[1.3313,1.3598,1.4076,1.3705,1.4862,1.3179,1.4131,1.6],"ELEMENTS.3.towers.3.8":1.1765,"ELEMENTS.3.towers.4.8":2.0747,"ELEMENTS.3.towers.4.6":1.7224,"ELEMENTS.3.towers.5.8":1.3724,"ELEMENTS.0.towers.5.8":0.8083,"ELEMENTS.1.towers.7.6":0.2968,"ELEMENTS.3.towers.6.8":1.6186,"ELEMENTS.3.towers.7.8":1.4015,"ELEMENTS.2.towers.2.2":3.04,"ELEMENTS.1.towers.5.2":3.04,"ELEMENTS.3.towers.2.2":3.04,"ELEMENTS.0.towers.3.2":3.24,"ELEMENTS.1.towers.2.2":3.24,"ELEMENTS.1.towers.0.6":0.2186,"ELEMENTS.1.towers.2.6":0.2159,"ELEMENTS.3.towers.7.6":1.7729,"ELEMENTS.0.towers.0.6":0.102,"ELEMENTS.0.towers.1.6":0.2597,"ELEMENTS.0.towers.2.6":0.084,"ELEMENTS.0.towers.5.6":0.216,"ELEMENTS.0.towers.6.6":0.216,"ELEMENTS.0.towers.7.6":0.39,"ELEMENTS.1.towers.1.6":0.2022,"ELEMENTS.1.towers.5.6":0.2031,"ELEMENTS.2.towers.0.6":0.0999,"ELEMENTS.2.towers.1.9.buff":[1.3866,1.3866,1.3866,1.3866,1.3866,1.3866],"ELEMENTS.2.towers.2.6":0.1499,"ELEMENTS.2.towers.5.6":0.2002,"ELEMENTS.0.towers.4.7":"Tag","MONSTERS.Silberfische.hpMul":1.171,"MONSTERS.Kellerasseln.hpMul":1.3207,"MONSTERS.Nacktschnecken.hpMul":2.3934,"MONSTERS.Ohrenkneifer.hpMul":1.2287,"MONSTERS.Mäuse.hpMul":1.0044,"MONSTERS.Maus-Boss.hpMul":7.7483,"MONSTERS.Kleine Hunde.hpMul":1.0762,"MONSTERS.Ratten.hpMul":0.9786,"MONSTERS.Katzen.hpMul":1.1231,"MONSTERS.Spatzen.hpMul":0.8225,"MONSTERS.Füchse.hpMul":0.966,"MONSTERS.Fuchs-Boss.hpMul":5.0256,"MONSTERS.Habichte.hpMul":0.8093,"MONSTERS.Dachse.hpMul":1.2828,"MONSTERS.Oktopusse.hpMul":1.9382,"MONSTERS.Wildschweine.hpMul":1.415,"MONSTERS.Schäferhunde.hpMul":1.3262,"MONSTERS.Schäferhund-Boss.hpMul":7.3398,"MONSTERS.Besoffene Penner.hpMul":1.8825,"MONSTERS.Wütende Partnerin.hpMul":1.3823,"MONSTERS.Wütende Nachbarn.hpMul":0.9917,"MONSTERS.Eifersüchtige Geliebte.hpMul":1.3462,"MONSTERS.Uffug-Vorhaut.hpMul":1.6376,"MONSTERS.Uffug (Boss).hpMul":12.7999,"MONSTERS.Roboter.hpMul":1.4869,"MONSTERS.Sommer-Schneebälle.hpMul":0.9948,"MONSTERS.Würfel.hpMul":1.5165,"MONSTERS.Phönixe.hpMul":0.7883,"MONSTERS.Fairtrade-Bananen.hpMul":1.419,"MONSTERS.El Schlucko.hpMul":4.8083,"MONSTERS.Krieger.hpMul":1.3117,"MONSTERS.Golems.hpMul":1.507,"MONSTERS.Albträume.hpMul":1.0675,"MONSTERS.Magier-Novizen.hpMul":1.4844,"MONSTERS.Magiermeister.hpMul":4.5907,"MONSTERS.E-Scooter-Fahrer.hpMul":0.831,"MONSTERS.Lindner-Spezialisten.hpMul":0.8379,"MONSTERS.Wargreiter.hpMul":1.3426,"MONSTERS.Lehrer.hpMul":1.3319,"MONSTERS.Schulleiter.hpMul":4.9476,"MONSTERS.Streichquartett.hpMul":1.1687,"MONSTERS.Heisenbergs.hpMul":1.0355,"MONSTERS.Mehlmottenraupen.hpMul":1.2293,"MONSTERS.GNTModels.hpMul":1.0042,"ELEMENTS.0.costOverride":{"0":8,"1":45,"2":65,"3":110,"4":190,"5":310,"6":520,"7":1165},"ELEMENTS.1.costOverride":{"0":10,"1":45,"2":80,"3":135,"4":225,"5":405,"6":815,"7":1560},"ELEMENTS.2.costOverride":{"0":10,"1":30,"2":75,"3":135,"4":210,"5":315,"6":605,"7":1090},"ELEMENTS.3.costOverride":{"0":10,"1":45,"2":70,"3":115,"4":190,"5":310,"6":580,"7":940},"ELEMENTS.2.towers.1.9.pierce":[0.3,0.369,0.3921,0.4939,0.5325,0.5325]};
   const W = { CONFIG, ELEMENTS, MONSTERS, RESEARCH };
   for (const [p, v] of Object.entries(SP)) { const t = p.split('.'); let o = W[t[0]];
     for (let i = 1; i < t.length - 1; i++) { let k = t[i]; if (Array.isArray(o) && isNaN(+k)) k = o.findIndex(x => x && x.name === k); o = o[k]; }
@@ -771,7 +771,7 @@ function kill(s, m, def){
   const bn = m.fx.burn;
   if (bn && bn.t > 0 && bn.w) {              // Flächenbrand: Brand springt auf die 2 nächsten Monster (ohne weiter zu springen)
     s.monsters.filter(o => !o.dead && o !== m).map(o => [o, Math.hypot(o.x - m.x, o.y - m.y)]).filter(([,r]) => r <= 1.5 * GRID)
-      .sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addFx(o, 'burn', bn.v, bn.t));
+      .sort((a, b) => a[1] - b[1]).slice(0, 2).forEach(([o]) => addBurn(o, 'welle', bn.v, bn.t));
   }
   if (def && def.explode) {                  // Zündschnur / Zersplittern: nur bei Tod durch einen Schuss dieses Turms
     const ex = { ...def, explode:null, bounce:null, hunger:0, dmg:def.dmg * def.explode.mul };
@@ -790,6 +790,18 @@ function addFx(m, kind, val, t, w){        // stärkerer Wert gewinnt, längere 
   if (r) { c.v2 = r[0]; c.t2 = r[1]; } else { delete c.v2; delete c.t2; }
 }
 const on = (m, k) => m.fx[k] && m.fx[k].t > 0;
+// 21.10. (L, Spiegel): teilweise stapelndes Brennen
+const BURN_W = [1, 0.5, 0.25, 0.1], BURN_REST = 0.05, BURN_MAX = 10; let BURN_ID = 0;   // höchstens ×2,3
+function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return v; }
+function addBurn(m, id, val, t, w){
+  if (!(val > 0) || !(t > 0)) return;
+  let c = m.fx.burn;
+  if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx.burn = { v:0, t:0, L:{} }; if (alt) c.L.alt = alt; }
+  if (w) c.w = true;
+  const e = c.L[id]; c.L[id] = e ? [Math.max(e[0], val), Math.max(e[1], t)] : [val, t];
+  const ks = Object.keys(c.L); if (ks.length > BURN_MAX) ks.sort((a, b) => c.L[b][0] - c.L[a][0] || c.L[b][1] - c.L[a][1]).slice(BURN_MAX).forEach(k => delete c.L[k]);   // nur die stärksten behalten
+  c.v = burnSum(c); c.t = Math.max(...Object.values(c.L).map(x => x[1]));
+}
 function hit(s, m, def, dmg){
   if (m.dead) return;
   const w = (m.weak || m.def.weak)[def.el], f = w || CONFIG.immune, imm = !w;   // „immun“ = weniger Schaden und (seit 16.10.) kein Effekt des Elements; Lehrer: Faktoren je Exemplar (m.weak)
@@ -817,8 +829,10 @@ function hit(s, m, def, dmg){
   const t = def.dur === DAY ? FOREVER : def.dur;
   if (def.effect === 'burn' && (w || def.burnImmune)) {
     const v = def.eff * def.dpsNow / def.shots * f;
-    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); if (def.burnWave) c.w = true; }
-    else addFx(m, 'burn', v, t, def.burnWave);
+    // 21.10. (L): jeder Treffer ist ein eigener Brand (auch vom selben Turm); gewertet werden die BURN_MAX stärksten
+    const bid = (def._bid || (def._bid = ++BURN_ID)) + ':' + (def._bc = (def._bc || 0) + 1);
+    addBurn(m, bid, v, t, def.burnWave);
+    if (def.burnStack && on(m, 'burn')) addBurn(m, 'g' + def._bid, v * (def.burnStack - 1) * bh, t, def.burnWave);   // Glutnest: zusätzlicher eigener Brand
     if (def.smolder) addFx(m, 'smolder', def.smolder * bh, t);
   }
   if (!imm) {
@@ -939,7 +953,8 @@ function step(s, dt){
   for (const m of s.monsters) {
     if (m.dead) continue;
     for (const k in m.fx) { const c = m.fx[k], dec = dt * (k === 'burn' && s.W.burnDecay ? s.W.burnDecay : 1); c.t -= dec;
-      if (c.t2 !== undefined) { c.t2 -= dec; if (c.t <= 0 && c.t2 > 0) { c.v = c.v2; c.t = c.t2; delete c.v2; delete c.t2; } } }
+      if (c.t2 !== undefined) { c.t2 -= dec; if (c.t <= 0 && c.t2 > 0) { c.v = c.v2; c.t = c.t2; delete c.v2; delete c.t2; } }
+      if (c.L) { for (const i in c.L) { c.L[i][1] -= dec; if (c.L[i][1] <= 0) delete c.L[i]; } c.v = burnSum(c); c.t = Math.max(0, ...Object.values(c.L).map(x => x[1])); } }
     const fx = m.fx, on = k => fx[k] && fx[k].t > 0;
     if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * dt;
     if (m.hp <= 0) { kill(s, m); continue; }
@@ -972,7 +987,8 @@ function step(s, dt){
     }
     if (m.d >= s.map.len) {
       m.dead = m.gone = true;
-      const keep = {}; for (const k in fx) if (fx[k].t > 0 && !['stun', 'fear', 'grounded'].includes(k)) { keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 }; if (fx[k].t2 > 0) { keep[k].v2 = +fx[k].v2.toFixed(3); keep[k].t2 = Math.round(fx[k].t2 * 10) / 10; } }
+      const keep = {}; for (const k in fx) if (fx[k].t > 0 && !['stun', 'fear', 'grounded'].includes(k)) { keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 }; if (fx[k].t2 > 0) { keep[k].v2 = +fx[k].v2.toFixed(3); keep[k].t2 = Math.round(fx[k].t2 * 10) / 10; }
+        if (fx[k].L) { keep[k].L = {}; for (const [i, e] of Object.entries(fx[k].L)) if (e[1] > 0) keep[k].L['x' + i] = [+e[0].toFixed(3), Math.round(e[1] * 10) / 10]; } }
       const rec = { type:m.type, hops:m.hops + 1, hp:Math.max(0.01, +m.hp.toFixed(2)), ap:Math.max(0, Math.round(m.ap)), fx:keep, at:+s.t.toFixed(2) };
       if (m.v) rec.v = m.v; if (m.weak) rec.weak = m.weak;
       s.leaked.push(rec);   // nie 0: sonst käme es mit vollem Leben wieder
