@@ -7,12 +7,13 @@
 //   Form (22.10., L): Turmpreise je Element so verschieben, dass ein Element nicht früh zu stark und spät zu schwach ist (oder umgekehrt):
 //      Stärke je Block (nach Ausgleich des Niveaus) × Anteil des Golds, das im Block in diesem Turm steckt → Preisfaktor je Turm (gedämpft ^0,5,
 //      0,7–1,4); die Form je Block ist je Element auf Mittel 1 bezogen, das Niveau regelt die Kraft je Element. Z. B. Feuer spät schwach → Türme 5–8 billiger.
-//   Endbosse (Uffug, Betty; L 22.10.): schwer, für den Bot gerade schaffbar → Ziel schwächstes Paar ZIEL_BOSS (1,0).
+//   Ziele (L 22.10.): schwächstes Paar normale Tage 1,2 (Standard ZIEL), Uffug 1,15, Betty 1,1 – Endbosse als schwerere Spitzen;
+//   insgesamt schwerer/leichter über die Schwierigkeitsstufe.
 //   Alle Tage inklusive Runde 1–5 (L 22.10.: im Makrobalancing erlaubt).
 // Aufruf: SPIEGEL=<Eingang.json> node tools/balance/ebeneC.js <Ordner unter ergebnisse/> <Ausgang.json> [Dämpfung 0,7] [ZIEL 1,15]
 const fs = require('fs'), path = require('path');
 const C = require('./core'), { G } = C, S = require('./spiegel');
-const [ordner, aus, dmp, zl] = process.argv.slice(2), D = +dmp || 0.7, ZIEL = +zl || 1.15, ZIEL_BOSS = +process.env.ZIEL_BOSS || 1.0, FORM = process.env.FORM !== '0';
+const [ordner, aus, dmp, zl] = process.argv.slice(2), D = +dmp || 0.7, ZIEL = +zl || 1.2, ZIEL_BOSS = { 'Uffug (Boss)':1.15, 'Betty (Boss)':1.1 }, FORM = process.env.FORM !== '0';
 const dir = path.join(__dirname, 'ergebnisse', ordner);
 const daten = JSON.parse(fs.readFileSync(path.join(dir, 'p2-alle.json'), 'utf8')), P = JSON.parse(fs.readFileSync(path.join(dir, 'paare.json'), 'utf8'));
 const gm = a => Math.exp(a.reduce((x, v) => x + Math.log(Math.max(1e-3, v)), 0) / a.length);
@@ -27,7 +28,7 @@ namen.forEach((x, e) => { const p = `ELEMENTS.${e}.kraft`; alt[p] = G.ELEMENTS[e
 const zeilen = [];
 for (let d = 0; d < nT; d++) {
   const r = Object.entries(P.R).map(([k, v]) => { const [a, b] = k.split('+').map(n => namen.indexOf(n)); return gm(v[d]) * Math.sqrt(kf[a] * kf[b]); });
-  const zielTag = G.MONSTERS[d].boss ? ZIEL_BOSS : ZIEL;
+  const zielTag = ZIEL_BOSS[G.MONSTERS[d].name] || ZIEL;
   const min = Math.min(...r), f = Math.min(2, Math.max(0.5, Math.pow(min / zielTag, D)));
   const M = G.MONSTERS[d], p = `MONSTERS.${M.name}.hpMul`, h = M.hpMul || 1;
   alt[p] = h; sp[p] = +(h * f).toFixed(4);
