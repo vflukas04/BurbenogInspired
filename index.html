@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-22b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-23a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2001,7 +2001,7 @@ function draw(i, cv){
     if (on('slow')) { c.fillStyle = '#9fdcf540'; c.beginPath(); c.arc(X, Y, r*1.15, 0, Math.PI*2); c.fill(); }
     const emo = m.coc ? (m.coc.fly ? '🦋' : m.def.emo) : m.def.emo;
     // Laufrichtung aus der Bewegung seit dem letzten Bild (nur Anzeige, die Simulation liest das nicht)
-    if (m.lx !== undefined) { const dx = x - m.lx, dy = y - m.ly; if (Math.abs(dx) + Math.abs(dy) > 1e-4) { m.vx = (m.vx || 0) * .7 + dx * .3; m.vy = (m.vy || 0) * .7 + dy * .3; } }
+    if (m.lx !== undefined) { const dx = x - m.lx, dy = y - m.ly; if (Math.abs(dx) + Math.abs(dy) > 1e-4) { m.vx = (m.vx || 0) * .7 + dx * .3; m.vy = (m.vy || 0) * .7 + dy * .3; const stepLen = Math.max(.35, r / cs * .9); m.ph = (m.ph || 0) + Math.min(Math.hypot(dx, dy), stepLen * .5) / stepLen * Math.PI; } }   // 23.10.: Schrittphase aus der zurückgelegten Strecke (ein Schritt = π), nur Anzeige
     m.lx = x; m.ly = y;
     let ikey = MONSTER_IMG[m.def.name] || MONSTER_IMG[MONSTERS[m.type] && MONSTERS[m.type].name];
     if (ikey === 'raupe' && m.coc && m.coc.fly) ikey = 'motte';
@@ -2014,10 +2014,10 @@ function draw(i, cv){
     c.textAlign = 'center'; c.textBaseline = 'middle';
     if (im) {
       const S = r * 3.2 * (m.def.boss || m.def.mini ? 1.15 : 1), walk = lauf < 0 && !(m.coc && !m.coc.fly && !m.coc.walk) && !(m.strip > 0) && !flying(m);
-      const sq = walk ? 1 + .05 * Math.sin(time * 11 + m.id * 3) : 1;   // Wippen beim Gehen
+      const ph = (m.ph || 0) + m.id, sq = walk ? 1 + .05 * Math.cos(2 * ph) : 1, hop = walk ? Math.abs(Math.sin(ph)) * r * .14 : 0, tilt = walk ? .06 * Math.sin(ph) : 0;   // 23.10.: Wippen im Schritt (steht ein Monster, steht das Bild), Aufsetzen und leichtes Kippen
       const ht = m.hitT !== undefined ? time - m.hitT : 9, hf = ht >= 0 && ht < .15 ? 1 - ht / .15 : 0;   // Treffer: kurz weiß und zurückgestoßen
       const vl = Math.hypot(m.vx || 0, m.vy || 0) || 1, kb = hf * r * .25;
-      c.save(); c.translate(X - (m.vx || 0) / vl * kb, Y + r * .75 - (m.vy || 0) / vl * kb); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.scale(1 / sq, sq);
+      c.save(); c.translate(X - (m.vx || 0) / vl * kb, Y + r * .75 - hop - (m.vy || 0) / vl * kb); if (view === 'seite' && (m.vx || 0) < 0) c.scale(-1, 1); c.rotate(tilt); c.scale(1 / sq, sq);
       const crown = m.def.mini && ikey === MONSTER_IMG[MONSTERS[m.type - 1] && MONSTERS[m.type - 1].name];   // Zwischenboss mit dem Bild seines Monsters: goldener Schimmer
       if (crown) { c.shadowColor = '#ffd54a'; c.shadowBlur = r * (.8 + .4 * Math.sin(time * 4)); }
       c.drawImage(im, -S / 2, -S, S, S); c.shadowBlur = 0;

@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 19.10. 21:25 · F · 2026-10-19c – Tag 2 näher an Tag 1
+- Kellerasseln: Eis-Faktor 1 → 0,7, Stein 1,75 → 1,0 (Anzeige bleibt: Feuer ineffektiv, Stein effektiv, Eis/Schatten neutral). Bot (Tendenz): Tag 2 Feuer 2,09 / Eis 1,40 / Schatten 1,40 / Stein 1,08 (vorher 2,09 / 0,98 / 1,40 / 0,68); Ø 1,49 gegen Tag 1 Ø 1,37. Neues Spiel + neu laden.
+
 ### 19.10. 21:15 · F · 2026-10-19b – Stein Tag 2/4/5 schwerer, Kiesel gleicht aus
 - Stein-Block-Faktor 0,6 → 0,5; zum Ausgleich Kiesel `kraftT` 0,4 → 0,48 (Kiesel bleibt netto bei 0,24, Schleuder & Co. werden in Runde 1–5 schwächer). Stein-Faktoren: Tag 3 0,3 → 0,4, Tag 4 1,1 → 0,75, Tag 5 1,3 → 0,9. Faktorspanne 0,4–1,75.
 - Bot (Tendenz, Bedarf ÷ verfügbar): Stein Tag 2 0,68, Tag 3 1,99, Tag 4 1,58, Tag 5 1,46; die anderen Elemente unverändert. Neues Spiel + neu laden.
