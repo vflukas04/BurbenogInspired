@@ -35,7 +35,9 @@ const ERSETZEN = [
         if (fx[k].L) { keep[k].L = {}; for (const [i, e] of Object.entries(fx[k].L)) if (e[1] > 0) keep[k].L['x' + i] = [+e[0].toFixed(3), Math.round(e[1] * 10) / 10]; } }`],
   [`function hit(s, m, def, dmg){`,
    `// 21.10. (L, Spiegel): teilweise stapelndes Brennen
-const BURN_W = ${process.env.BURN_W ? JSON.stringify(process.env.BURN_W.split(',').map(Number)) : '[1, 0.5, 0.25, 0.1]'}, BURN_REST = ${process.env.BURN_REST || 0.05}, BURN_MAX = 10; let BURN_ID = 0;   // Test: BURN_W=1,0.1 BURN_REST=0.1
+// 23.10. (L, ab C8): stärkster Brand voll, jeder weitere 20 %, höchstens die 6 stärksten (×2,0). Bis C7: 1/0,5/0,25/0,1, Rest 0,05, höchstens 10
+// (alt nachstellen: BURN_W=1,0.5,0.25,0.1 BURN_REST=0.05 BURN_MAX=10)
+const BURN_W = ${process.env.BURN_W ? JSON.stringify(process.env.BURN_W.split(',').map(Number)) : '[1]'}, BURN_REST = ${process.env.BURN_REST || 0.2}, BURN_MAX = ${process.env.BURN_MAX || 6}; let BURN_ID = 0;
 function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return v; }
 function addBurn(m, id, val, t, w){
   if (!(val > 0) || !(t > 0)) return;
