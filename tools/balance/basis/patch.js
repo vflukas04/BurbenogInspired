@@ -35,7 +35,7 @@ const ERSETZEN = [
         if (fx[k].L) { keep[k].L = {}; for (const [i, e] of Object.entries(fx[k].L)) if (e[1] > 0) keep[k].L['x' + i] = [+e[0].toFixed(3), Math.round(e[1] * 10) / 10]; } }`],
   [`function hit(s, m, def, dmg){`,
    `// 21.10. (L, Spiegel): teilweise stapelndes Brennen
-const BURN_W = [1, 0.5, 0.25, 0.1], BURN_REST = 0.05, BURN_MAX = 10; let BURN_ID = 0;   // höchstens ×2,3
+const BURN_W = ${process.env.BURN_W ? JSON.stringify(process.env.BURN_W.split(',').map(Number)) : '[1, 0.5, 0.25, 0.1]'}, BURN_REST = ${process.env.BURN_REST || 0.05}, BURN_MAX = 10; let BURN_ID = 0;   // Test: BURN_W=1,0.1 BURN_REST=0.1
 function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return v; }
 function addBurn(m, id, val, t, w){
   if (!(val > 0) || !(t > 0)) return;
@@ -52,7 +52,7 @@ function hit(s, m, def, dmg){`],
   [`    if (def.burnStack && on(m, 'burn')) { const c = m.fx.burn; c.v = Math.min(c.v + v, (1 + (def.burnStack - 1) * bh) * Math.max(c.v, v)); c.t = Math.max(c.t, t); if (def.burnWave) c.w = true; }
     else addFx(m, 'burn', v, t, def.burnWave);`,
    `    // 21.10. (L): jeder Treffer ist ein eigener Brand (auch vom selben Turm); gewertet werden die BURN_MAX stärksten
-    const bid = (def._bid || (def._bid = ++BURN_ID)) + ':' + (def._bc = (def._bc || 0) + 1);
+    const bid = (def._bid || (def._bid = ++BURN_ID)) + ${process.env.BURN_JE_TURM ? "''" : "':' + (def._bc = (def._bc || 0) + 1)"};
     addBurn(m, bid, v, t, def.burnWave);
     if (def.burnStack && on(m, 'burn')) addBurn(m, 'g' + def._bid, v * (def.burnStack - 1) * bh, t, def.burnWave);   // Glutnest: zusätzlicher eigener Brand`],
 ];
