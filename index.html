@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-23b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-23c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -350,7 +350,7 @@ const ELEMENTS = [
     ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
     ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
     ['Ewige Nacht',  'Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
-  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 3, 6, 8', kraft:2.256, kraftBlock:[0.3, 1, 1, 1, 1, 1, 1, 1], kraftT:[1.58, 1.0, 1.3, 1.3, 1, 1, 1, 1], costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
+  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 3, 6, 8', kraft:2.256, kraftBlock:[0.3, 0.6, 1, 1, 1, 1, 1, 1], kraftT:[1.58, 1.0, 1.3, 1.3, 1, 1, 1, 1], costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.55, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.89, 0,   0, 0.9],
     ['Katapult',     'Reichweite',3.8, 0.25,2, 0.72, 0,   0, 1.0, {fly:true}],
@@ -468,7 +468,7 @@ const MONSTERS = [
   ['Ohrenkneifer',      {emo:'🦗', ar:[0.08, 0.15], hpMul:0.7, weak:[0.6, 0.4, 1.1, 0.8], eff:[0, -1, 1, 0]}],
   ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 0.9, 0.55, 1.2], eff:[1, 0, -1, 0]}],
   ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:5.5, night:true, count:1, lives:2, weak:[0.85, 1, 1.25, 1], eff:[0, 0, 0, 0]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
-  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
+  ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, hpMul:0.85, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
   ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 1, 0.75]}],   // 12.10.: Tag 7 (vorher 6)
   ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.75, 1, 1]}],
   ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 0.75, 1.5, 1]}],

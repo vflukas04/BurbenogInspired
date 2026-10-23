@@ -5,6 +5,11 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 23.10. 12:45 · F · 2026-10-23c – Block 2: Tag 7 leichter, Stein-Faktor Block 2
+- Testspiel 22a: Tag 7 (Kleine Hunde, alle neutral) nur 1 und 2 von 20 Kills. Hunde `hpMul` 1 → 0,85 (Nachbau mit den echten Türmen: Schatten/Eis etwa 5–8 über Wetter 0/1/2). Tag 8–11 im Testspiel im Rahmen, nicht angefasst.
+- Stein `kraftBlock[1]` 1 → 0,6: Der Bot (Kiesel 1,58) machte in Block 2 an jedem Tag 12–15 Kills, auch am Malus-Tag 8. Mit 0,6: Tag 8 etwa 2–4, Tag 11 (Bonus) etwa 10–11, Tag 7 5–11. Tag 9 (Katzen) bleibt für Stein bei 1 (zu schwer, Katzen Tempo 1,6), offen.
+- Bot ist nur Tendenz (Stein im Spiel noch nicht gegengeprüft). Neues Spiel + neu laden.
+
 ### 23.10. 11:05 · F · 2026-10-23b – Laufbilder folgen der Schrittphase, Werkzeug `tools/lauf.py`
 - Laufbilder (`MONSTER_ANIM`) laufen jetzt nach Strecke statt nach Uhr (steht ein Monster, steht das Bild). Betty läuft dadurch in ihrem eigenen Tempo.
 - Neu `tools/lauf.py`: baut aus Video/Einzelbildern die Dateien `<name>-lauf-N.png` (freigestellt, 192 px, 128 Farben, gleicher Ausschnitt). Mit einem künstlichen Test geprüft, noch kein echtes Monster. Ablauf und Prompt in `GRAFIK.md`. Die Bilder selbst muss L oder F in Krea erzeugen (ich kann hier keine erzeugen). Neu laden reicht.
@@ -60,8 +65,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 - Testspiel 19e (Stein + Feuer): Der Stein-Spieler baute nur Kiesel und hob ihn an (Schleuder erst Tag 5), verdiente ab Tag 3 ein Drittel des Feuer-Spielers (Kills im ersten Durchlauf Tag 2–5: Stein 3/0/2/3, Feuer 1/12/13/13). Der Bot kaufte bisher sofort den teuersten Turm und sah das nicht.
 - Neu im Test: Menschen-Strategie (`HUM=3`: nur Turm 1, höchstens 3 Türme, danach Upgrades). Damit bildet der Bot das echte Spiel nach. Faktoren (Feuer/Eis/Schatten/Stein): Tag 2 0,7/1,1/1,3/1,5; Tag 3 1,2/1,75/1,2/0,6; Tag 4 0,6/0,4/1,1/0,8; Tag 5 1,2/0,9/0,7/1,2. Stein: Block-Faktor 0,5 → 0,3 und Kiesel 0,95 → 1,58 (Kiesel netto 0,47), damit Schleuder & Co. in Block 1 nicht davonlaufen.
 - Kills im ersten Durchlauf (Mensch, Feuer/Eis/Schatten/Stein): Tag 2 2/8/5/14; Tag 3 6/15/7/2; Tag 4 5/2/16/8; Tag 5 14/6/2/6. Neues Spiel + neu laden.
-
-### 19.10. 22:10 · F · 2026-10-19e – Tag 2–5 nach Kills im ersten Durchlauf eingestellt
-- Ziel (F): Auf neutralen Tagen macht ein Element im ersten Durchlauf etwa 5–8 von 20 Kills, der Partner räumt den Rest auf; Bonus 12–18, Malus 1–3. Messung: Bot mit dem verfügbaren Gold je Tag (30/70/110/150/190), Mittel über Wetter 0/1/2.
-- Faktoren (Feuer/Eis/Schatten/Stein): Tag 2 0,6/0,8/0,7/1,0; Tag 3 1,2/0,8/0,8/0,2; Tag 4 0,7/0,7/1,75/0,6; Tag 5 1,2/0,95/0,7/0,7. Ohrenkneifer (Tag 4): Leben ×0,7, Rüstung 8 %/15 % (sonst schaffte kein Element mehr als ~6). Faktorspanne jetzt 0,2–1,75.
-- Ergebnis (Kills, Mittel): Tag 2 2/7/6/18, Tag 3 7/16/6/3, Tag 4 6/2/15/6, Tag 5 15/6/1/5. Anzeige unverändert über `eff`. Neues Spiel + neu laden.

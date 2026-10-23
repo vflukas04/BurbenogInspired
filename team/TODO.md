@@ -54,3 +54,5 @@
 **An L (von F, 18.10. nachts):** 18j: Block 1 (Tag 1–6) nach der Ringregel als Ganzes neu abgestimmt (Details in UPDATES.md und CLAUDE.md). Neu: `kraftBlock`, Faktorspanne 0,5–1,75, Maus-Boss Leben ×5,5, Anzeige nur noch effektiv/neutral/ineffektiv (`eff`). Achtung Kiesel: Stein ×0,34 in Runde 1–5. Wenn dein Optimierer das stört, revertieren oder `kraftBlock[0]` auf 1. Block 2+ unberührt.
 
 **An L (von F, 22.10. nachts):** 22b: nur zwei Werte (Schatten-Faktor Nacktschnecken 0,9, Mäuse 0,55), abgeleitet aus dem Testspiel 22a. Offen für dich: Block 2 beginnt zu hart (Tag 7: 1–2 von 20 Kills trotz ca. 200 Gold je Spieler) – Einstieg abmildern?
+
+**An L (von F, 23.10. mittags):** 23c: Tag 7 Hunde `hpMul` 0,85 (im Testspiel nur 1–2 Kills) und Stein `kraftBlock[1]` 0,6 (Bot: Stein in Block 2 überall 12–15 Kills, auch am Malus-Tag). Wenn dein Spiegel dazu andere Werte hat, gern überschreiben. Offen: Tag 9 Katzen für Stein.
