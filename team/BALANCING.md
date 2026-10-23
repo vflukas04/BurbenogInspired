@@ -102,6 +102,10 @@ Ergebnisse in `tools/balance/ergebnisse/spiegel-v2*` (nicht im Repo). Der neue B
 - **Effekt-Türme objektiv messen (Vorschlag Claude, 21.10.):** statt eines einzelnen Referenzturms ein *Kontext-Aufbau*: Schadenstürme des eigenen Elements im Wert des 3-Fachen des geprüften Turms (nach der Treppe gewählt, beste Plätze). Wert des Turms = Mehrschaden des ganzen Aufbaus, wenn er dazukommt, verglichen mit demselben Gold in weiteren Schadenstürmen. Erfasst Synergie (Bremsen hilft Flächentürmen mehr), Licht/Verstärkung im Kreis und Rüstungsschaden. Mit Weiterlauf der Leaks auf eine Partner-Map ergibt sich daraus auch A4 (eigene Map ↔ Partner).
 - **Zu entscheiden (L):** Effekt-Türme werden über die Effektstärke mitgezogen (Fluchstein, Frosthauch). A4 (eigene Map ↔ Partner) ist noch nicht gemessen. Nächster Schritt: Spielläufe P2/Paare auf Kandidat A (laufen), danach Ebene B (Leben je Block, Kraft je Element).
 
+## Stand 23.10. (L): Lauf spiegel-C4 → spiegel-C5
+- **C4 (Bot):** Elemente Feuer 0,86 · Eis 1,03 · Schatten 1,04 · Stein 1,08. Paare: Eis+Stein 1 · Eis+Schatten 1,5 · Schatten+Stein 2,5 · Feuer+Stein 6,5 · Feuer+Eis 7 · Feuer+Schatten 15,5 (12 davon Oktopusse, Feuer-immun). Schwächstes Paar R 0,92–1,32. Block 1–2: Feuer jetzt 0,96–0,97 ✓, Stein Block 1 noch 1,41. Feuer Runde 11–25 und 31–40 0,73–0,88. P8: Feuer 83–94 %, Eis 54–64 %, Schatten 11–55 %, Stein 39–43 %. C1 16–40 %.
+- **C5:** ebeneC Dämpfung 0,6 (Feuer ×1,1), Preisform ^0,25, frühe Türme (Stein Kiesel/Schleuder ×0,84, Eis/Schatten früh leicht stärker).
+
 ## Stand 23.10. nachts (L): Lauf spiegel-C3 und Eichung
 - **C3 (Bot):** Elemente Feuer 0,86 · Eis 1,00 · Schatten 1,05 · Stein 1,11. Paare (Durchbrüche ganzes Spiel): Eis+Stein 2 · Eis+Schatten 5 · Schatten+Stein 5 · Feuer+Schatten 6,5 · Feuer+Stein 13,5 · Feuer+Eis 32. Schwächstes Paar je Spiel R 0,95–1,24. C1 16–29 %.
 - **Eichung P13 mit C3-Bot (4 Testspiele):** Mensch ÷ Bot 0,81 (Feuer+Stein, 20 Tage) · 0,82 (Schatten+Eis, 2 Tage) · 0,67 (Feuer+Eis, 3 Tage) · 0,80 (Stein+Eis, 13 Tage) → **etwa 0,78**, am Anfang niedriger.
