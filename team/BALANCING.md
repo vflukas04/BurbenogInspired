@@ -104,7 +104,7 @@ Ergebnisse in `tools/balance/ergebnisse/spiegel-v2*` (nicht im Repo). Der neue B
 
 ## Stand 23.10. vormittags (L): Lauf spiegel-C5 → spiegel-C6
 - **C5 (Bot):** Elemente Feuer 0,93 · Eis 1,02 · Schatten 1,11 · Stein 0,95 → **Feuer–Stein ausgeglichen** (vorher 0,86/1,08), dafür Schatten zu stark. Paare (Durchbrüche ganzes Spiel): Feuer+Schatten 0,5 · Feuer+Eis 2,5 · Schatten+Stein 2,5 · Eis+Schatten 4 · Eis+Stein 9 · Feuer+Stein 14 (Tage 17/20 je 3–4). Block: Feuer Runde 11–20 noch 0,77–0,80, Stein Block 1 1,20 / Block 2 0,80 (Schleuder-Kürzung zu stark), Schatten Runde 11–15 1,29. P8 (ab Runde 30, Forschung + Türme 6–8): Feuer 78–81 %, Eis 47–49 %, Stein 42–52 %, Schatten 8–23 %. C1: Feuer 17 %, Eis 23 %, Schatten 38 %, Stein 15 %.
-- Oktopusse (Feuer immun): Spanne der Paare 1,58–4,11 (normale Tage 1,5–2,2). Vorschlag an L: Feuer 0 → 0,6 (nicht mehr immun), offen.
+- Oktopusse (Feuer immun): Spanne der Paare 1,58–4,11 (normale Tage 1,5–2,2). **Beschlossen (L, 23.10.): Feuer 0 → 0,6 (nicht mehr immun)**, kommt in C7 (C6 lief schon). Auch im aktiven Spiel noch 0 – beim Zusammenführen mit F übernehmen.
 - **C6:** ebeneC Dämpfung 0,6, Preisform ^0,25, **Ziel schwächstes Paar 1,3 statt 1,2** (bei R 1,2 noch zu viele Durchbrüche, R misst 97 % der Leben), Bosse unverändert 1,15/1,1. Frühe Türme: Turm 1 nach Block-1-Form, Turm 2–3 nach Block-2-Form (^-0,5): Stein Kiesel ×0,91, Schleuder/Katapult ×1,12; Schatten Schemen ×1,06, Irrlicht/Nachtauge ×0,93; Eis Frostsplitter ×1,05.
 
 ## Stand 23.10. (L): Lauf spiegel-C4 → spiegel-C5
