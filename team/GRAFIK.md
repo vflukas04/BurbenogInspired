@@ -165,3 +165,9 @@ The same bird, same style. It flies directly towards the viewer. Seen slightly f
 The same bird, same style. It flies directly away from the viewer - up. Seen from behind and above, wings spread.
 ```
 
+
+## Laufbilder (Weg 1, seit 23.10., F; mit L abgestimmt)
+- Ziel: Seitenansicht mit echten Beinschritten, 4 Bilder je Monster, zuerst nur Hund, Ratte, Katze, Fuchs (sichtbare Beine). Vorne/hinten bleiben beim Wippen (`m.ph`, Schrittphase aus der Strecke).
+- Bauen: Video (oder Einzelbilder) auf weißem Hintergrund erzeugen, genau ein Schrittzyklus, dann `python3 tools/lauf.py <name> <video|ordner> --n 4 --von <s> --bis <s>` (z. B. `hund`). Es entstehen `assets/monster/<name>-lauf-0..3.png` (192 px, freigestellt, 128 Farben, gleicher Ausschnitt und Fußlinie).
+- Einbauen: in `index.html` `MONSTER_ANIM = { betty:[8, 8], hund:[4, 6] }` (Anzahl, zweiter Wert ungenutzt). Das Bild folgt der Schrittphase: steht das Monster, steht das Bild. Fehlt ein Laufbild, zeigt das Spiel die Seitenansicht.
+- Videoprompt-Vorschlag (Krea): „The same <Tier> as in the reference image, walking directly to the right in a seamless loop, one full walking cycle, side view slightly from above, plain white background, camera static, no zoom.“ Nur einen Schrittzyklus nehmen, die Ränder müssen ineinander übergehen.

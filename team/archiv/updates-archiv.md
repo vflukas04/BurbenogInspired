@@ -1,5 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 19.10. 21:40 · F · 2026-10-19d – Tag 1: Anfangstürme schaffen etwa 5–8 von 20
+- Testspiel 19c (Stein + Feuer): Stein-Kiesel schaffte in Tag 1 nur 2 von 20, Feuer 18 (der Partner räumte auf). Ziel jetzt: Auf neutralen Tagen macht jedes Element im ersten Durchlauf etwa 5–8 Kills, den Rest räumt der Partner auf.
+- Kiesel `kraftT` 0,48 → 0,95 (Bot, 30 Gold: Stein 7/20; bei 1,0 springt er auf 15). Silberfische: Faktoren 1/1/1/1 → 1,1 / 0,85 / 0,7 / 1 (Anzeige weiter neutral, `eff`), weil Schatten (20) und Eis (9) mit 30 Gold sonst viel zu viel schaffen. Bot (30 Gold, Wetter 0/1/2): Feuer 8/5/3, Eis 6/6/6, Schatten 5/3/4, Stein 7/7/7.
+- Tag 2–5 nicht angefasst: Dort stimmen die Kills im ersten Durchlauf noch nicht überall (z. B. Schatten Tag 3 17, Eis und Stein Tag 5 je ~20). Nächster Schritt. Neues Spiel + neu laden.
+
 ### 19.10. 21:25 · F · 2026-10-19c – Tag 2 näher an Tag 1
 - Kellerasseln: Eis-Faktor 1 → 0,7, Stein 1,75 → 1,0 (Anzeige bleibt: Feuer ineffektiv, Stein effektiv, Eis/Schatten neutral). Bot (Tendenz): Tag 2 Feuer 2,09 / Eis 1,40 / Schatten 1,40 / Stein 1,08 (vorher 2,09 / 0,98 / 1,40 / 0,68); Ø 1,49 gegen Tag 1 Ø 1,37. Neues Spiel + neu laden.
 

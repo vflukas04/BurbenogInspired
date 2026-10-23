@@ -5,6 +5,10 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 23.10. 11:05 · F · 2026-10-23b – Laufbilder folgen der Schrittphase, Werkzeug `tools/lauf.py`
+- Laufbilder (`MONSTER_ANIM`) laufen jetzt nach Strecke statt nach Uhr (steht ein Monster, steht das Bild). Betty läuft dadurch in ihrem eigenen Tempo.
+- Neu `tools/lauf.py`: baut aus Video/Einzelbildern die Dateien `<name>-lauf-N.png` (freigestellt, 192 px, 128 Farben, gleicher Ausschnitt). Mit einem künstlichen Test geprüft, noch kein echtes Monster. Ablauf und Prompt in `GRAFIK.md`. Die Bilder selbst muss L oder F in Krea erzeugen (ich kann hier keine erzeugen). Neu laden reicht.
+
 ### 23.10. 10:50 · F · 2026-10-23a – Monster gehen im Schritt (nur Anzeige)
 - Das Wippen hängt jetzt an der zurückgelegten Strecke statt an der Uhr: Schnecken trippeln langsam, Hunde schnell, ein stehendes Monster steht still. Dazu Aufsetzen (kleiner Hüpfer) und leichtes Kippen. Keine Regel- und keine Balance-Änderung.
 - Echte Beinbewegung bräuchte Laufbilder wie bei Betty (`MONSTER_ANIM`). Mit L abgestimmt: erst mit wenigen Monstern mit sichtbaren Beinen (Hunde, Ratten, Katzen, Füchse) testen, 4 Bilder, nur Seitenansicht. Neu laden reicht.
@@ -61,8 +65,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 - Ziel (F): Auf neutralen Tagen macht ein Element im ersten Durchlauf etwa 5–8 von 20 Kills, der Partner räumt den Rest auf; Bonus 12–18, Malus 1–3. Messung: Bot mit dem verfügbaren Gold je Tag (30/70/110/150/190), Mittel über Wetter 0/1/2.
 - Faktoren (Feuer/Eis/Schatten/Stein): Tag 2 0,6/0,8/0,7/1,0; Tag 3 1,2/0,8/0,8/0,2; Tag 4 0,7/0,7/1,75/0,6; Tag 5 1,2/0,95/0,7/0,7. Ohrenkneifer (Tag 4): Leben ×0,7, Rüstung 8 %/15 % (sonst schaffte kein Element mehr als ~6). Faktorspanne jetzt 0,2–1,75.
 - Ergebnis (Kills, Mittel): Tag 2 2/7/6/18, Tag 3 7/16/6/3, Tag 4 6/2/15/6, Tag 5 15/6/1/5. Anzeige unverändert über `eff`. Neues Spiel + neu laden.
-
-### 19.10. 21:40 · F · 2026-10-19d – Tag 1: Anfangstürme schaffen etwa 5–8 von 20
-- Testspiel 19c (Stein + Feuer): Stein-Kiesel schaffte in Tag 1 nur 2 von 20, Feuer 18 (der Partner räumte auf). Ziel jetzt: Auf neutralen Tagen macht jedes Element im ersten Durchlauf etwa 5–8 Kills, den Rest räumt der Partner auf.
-- Kiesel `kraftT` 0,48 → 0,95 (Bot, 30 Gold: Stein 7/20; bei 1,0 springt er auf 15). Silberfische: Faktoren 1/1/1/1 → 1,1 / 0,85 / 0,7 / 1 (Anzeige weiter neutral, `eff`), weil Schatten (20) und Eis (9) mit 30 Gold sonst viel zu viel schaffen. Bot (30 Gold, Wetter 0/1/2): Feuer 8/5/3, Eis 6/6/6, Schatten 5/3/4, Stein 7/7/7.
-- Tag 2–5 nicht angefasst: Dort stimmen die Kills im ersten Durchlauf noch nicht überall (z. B. Schatten Tag 3 17, Eis und Stein Tag 5 je ~20). Nächster Schritt. Neues Spiel + neu laden.

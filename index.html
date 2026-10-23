@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-23a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-23b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1806,7 +1806,7 @@ const MONSTER_IMG = { 'Silberfische':'silberfisch', 'Kellerasseln':'assel', 'Nac
   'E-Scooter-Fahrer':'escooter', 'Lindner-Spezialisten':'lindner', 'Wargreiter':'wargreiter', 'Warg':'warg', 'Ork':'ork', 'Fledermäuse':'fledermaus', 'Lehrer':'lehrer', 'Schulleiter':'schulleiter',
   'Violine':'geige', 'Bratsche':'geige', 'Cello':'cello', 'Kontrabass':'bass', 'Streichquartett':'geige', 'The one who knocks':'chemiker',
   'Mehlmottenraupen':'raupe', 'Nazgul':'schattenreiter', 'GNTModels':'model', 'Betty (Boss)':'betty' };   // 21.10. (L): alle Monster
-const MONSTER_ANIM = { betty:[8, 8] };   // 21.10. (L): Laufbilder <name>-lauf-0..n-1.png für die Seitenansicht [Anzahl, Bilder je Sekunde]
+const MONSTER_ANIM = { betty:[8, 8] };   // 21.10. (L): Laufbilder <name>-lauf-0..n-1.png für die Seitenansicht [Anzahl, (ungenutzt seit 23.10.)]; bauen mit tools/lauf.py
 const MIMG = {};
 for (const k of ['bass-hinten']) MIMG[k] = null;   // fehlende Ansichten hier eintragen → Seitenansicht (21.10.: keine mehr)
 // 21.10.: alle Bilder beim Start laden (sonst kurz Emoji, wenn eine Ansicht zum ersten Mal gebraucht wird, z. B. in Kurven)
@@ -2009,7 +2009,7 @@ function draw(i, cv){
     let view = Math.abs(m.vx || 1) >= Math.abs(m.vy || 0) ? 'seite' : (m.vy > 0 ? 'vorne' : 'hinten');
     if (ikey && view !== 'seite' && MIMG[ikey + '-' + view] === null) view = 'seite';   // fehlende Ansicht → Seite
     if (m.strip > 0) view = 'vorne';   // Betty dreht sich zum Betrachter
-    const lauf = ikey && view === 'seite' && MONSTER_ANIM[ikey] && !(m.strip > 0) ? Math.floor(time * MONSTER_ANIM[ikey][1] + m.id) % MONSTER_ANIM[ikey][0] : -1;
+    const lauf = ikey && view === 'seite' && MONSTER_ANIM[ikey] && !(m.strip > 0) ? Math.floor((((m.ph || 0) + m.id) % (Math.PI * 2)) / (Math.PI * 2) * MONSTER_ANIM[ikey][0]) : -1;   // 23.10.: Bild aus der Schrittphase (ein Zyklus = 2 Schritte), steht das Monster, steht das Bild
     const im = ikey && ((lauf >= 0 && monsterImg(ikey, 'lauf-' + lauf)) || monsterImg(ikey, view));
     c.textAlign = 'center'; c.textBaseline = 'middle';
     if (im) {
