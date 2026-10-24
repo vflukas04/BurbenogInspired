@@ -87,6 +87,15 @@ Deutung (vorläufig): Fluch ≈ 1 + 1,2 × Fluchwert (wirkt auf alle Türme, Dau
 - **Fluch** ≈ 1 + 1,2 × Fluchwert, Dauer zweitrangig. **Brennen** ≈ 1 + Stärke × wirksame Dauer; ganztägig wirkt über die Leaks weiter (+7 %).
 - **Bremsen auf Einzelziel ist fast nichts wert** – geprüft, dass es wirkt (Test: 4 Bremstürme 50 %, letzte Ankunft 56,5 → 62,9 s, Schaden +4 %). Grund: in dichten Wellen trifft ein Turm immer nur ein Monster, die anderen laufen ungebremst; die Türme schießen ohnehin ununterbrochen. **Bremsen bekommt seinen Wert erst über Fläche** (Schneeball, Frostnova) → als Kombination Bremsen × Fläche messen.
 
+## D2d Effekte mit Fläche (ganzer Tag, Reserve 2,0)
+| | ohne Effekt | + Bremsen 20 % 2 s | + Bremsen 35 % 4 s | + Fluch 20 % 4 s | + Brennen 30 % 6 s |
+|---|---|---|---|---|---|
+| Fläche 1,5 | 1,14 | 1,29 | 1,49 | 1,44 | 1,48 |
+| Fläche 2 | 1,32 | 1,46 | 1,70 | 1,70 | 1,72 |
+
+Zusatzwert des Effekts gegenüber „nur Fläche“: Bremsen 35 % 4 s ×1,31/1,29 (einzeln 0,99), Fluch 20 % ×1,27/1,29 (einzeln 1,24), Brennen 30 % 6 s ×1,30/1,31 (einzeln 1,28).
+→ **Bremsen wirkt nur in der Fläche**, dort etwa so stark wie Fluch/Brennen. Fluch und Brennen gewinnen durch Fläche nur wenig. Für das Modell: Wert(Effekt) = 1 + k_Effekt × Stärke × f(Dauer) × (Flächenfaktor nur bei Bremsen).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
