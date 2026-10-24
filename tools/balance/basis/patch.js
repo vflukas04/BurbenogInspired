@@ -70,8 +70,8 @@ function hit(s, m, def, dmg){`],
 ];
 if (process.env.STAPEL_ALLE) ERSETZEN.push(
   [`if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);`,
-   // Bremsen (L 24.10.): Prozent wie bisher, je Turm höchstens 40 % → mit der Stapelregel höchstens 80 % (kein eigener Deckel)
-   `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), Math.min(0.4, def.eff * f), t, false, 0);`],
+   // Bremsen (L 24.10.): Prozent wie bisher, je Turm höchstens 30 % (BREMS_MAX) → mit der Stapelregel höchstens 60 % (kein eigener Deckel)
+   `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), Math.min(+(process.env.BREMS_MAX || 0.3), def.eff * f), t, false, 0);`],
   [`    else addFx(m, 'curse', def.eff * f, t, def.curseWave);`,
    `    else addStack(m, 'curse', (def._bid || (def._bid = ++BURN_ID)) + ':c' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, def.curseWave, 0);`]);   // Fluch ohne Deckel: Stapelregel begrenzt auf 2 × stärksten
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };
