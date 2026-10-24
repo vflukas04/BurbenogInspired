@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-24c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-24d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1121,7 +1121,8 @@ function resolveSlot(g, lanes){
   const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : { el:i % ELEMENTS.length, towers:[] };
     return { lane:i, players:n, res:[...resAll], el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:isDark(SL[g.slot]), weather,
       tseed: g.cfg.startAt || 0, seed: (Math.floor((g.cfg.startAt || 1) / 1000) * 31 + g.day * 977 + g.slot * 131 + i * 17) >>> 0 }; });
-  const live = !!g.cfg.live, res = simulateWorld({ inputs, live }).sims;
+  const liveMode = !!g.cfg.live, bossLive = !liveMode && g.slot === 0 && !!(MONSTERS[g.day-1] && MONSTERS[g.day-1].mini);   // 24.10. (F): Zwischenboss-Tage laufen wie Live – ein durchgebrochener Boss erscheint sofort beim nächsten Spieler (ohne Kopfgeld gibt es in der Pause nichts zu bauen)
+  const live = liveMode || bossLive, res = simulateWorld({ inputs, live }).sims;
   const leaked = {}; let broke = 0; const log = [];
   res.forEach((r,i) => {
     g.earned[i] = (g.earned[i]||0) + r.earned;
@@ -1143,7 +1144,7 @@ function resolveSlot(g, lanes){
   if (g.passed > CONFIG.lossLimit) { g.over = 'lost'; added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Verloren: ${g.passed} Monster sind ganz durchgebrochen.` }); }
   else {
     // Uhrzeiten-Modus: Wellen, bei denen bei niemandem etwas ankommt, werden übersprungen
-    const none = () => !live && !Object.values(g.leaked).some(a => a && a.length);
+    const none = () => !liveMode && !Object.values(g.leaked).some(a => a && a.length);
     const skipped = []; g.slot++;
     while (g.slot < SL.length && none()) { skipped.push(hh(SL[g.slot])); g.slot++; }
     if (skipped.length) { added++; g.log.unshift({ when:`Tag ${g.day}`, text:`Nichts im Anmarsch um ${skipped.join(', ')} – übersprungen.` }); }
