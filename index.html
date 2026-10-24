@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-23d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-24a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -288,13 +288,13 @@ const LOCKS = { 4:'t5:1', 5:'t5:1', 6:'t7:1', 7:'t7:1' };   // Turm-Index → n�
    el: je Element [Feuer, Eis, Schatten] → dmg = Schaden, eff = Effektstärke, dur = Effektdauer
    range = Reichweite aller Türme außer Stein, burnDecay = Brennen erlischt schneller, flySpeed = Fliegende schneller/langsamer */
 const WEATHER = [
-  { name:'Sonnig',   sym:'☀', w:3,   el:{ 0:{dmg:1.125, eff:1.125}, 1:{dur:0.85}, 2:{dmg:1.075} } },
+  { name:'Sonnig',   sym:'☀', w:3,   el:{ 0:{dmg:1.075, eff:1.075}, 1:{dur:0.85}, 2:{dmg:1.075} } },
   { name:'Bewölkt',  sym:'☁', w:3,   el:{ 1:{dur:1.075}, 2:{dmg:0.85, eff:0.9} } },
-  { name:'Regen',    sym:'☂', w:2,   el:{ 0:{dmg:0.9, dur:0.7}, 1:{eff:1.125, dmg:1.05}, 2:{dmg:0.925} }, burnDecay:1.75 },
-  { name:'Gewitter', sym:'ϟ', w:1,   el:{ 0:{dmg:0.9, dur:0.7}, 1:{eff:1.075}, 2:{dmg:0.8} }, burnDecay:1.5, flySpeed:0.85 },
+  { name:'Regen',    sym:'☂', w:2,   el:{ 0:{dmg:0.95, dur:0.8}, 1:{eff:1.125, dmg:1.05}, 2:{dmg:0.925} }, burnDecay:1.5 },
+  { name:'Gewitter', sym:'ϟ', w:1,   el:{ 0:{dmg:0.95, dur:0.8}, 1:{eff:1.075}, 2:{dmg:0.8} }, burnDecay:1.35, flySpeed:0.85 },
   { name:'Nebel',    sym:'≡', w:1.5, el:{ 2:{dmg:1.15, eff:1.15} }, range:0.875 },
   { name:'Frost',    sym:'❄', w:1,   el:{ 0:{dmg:0.925}, 1:{eff:1.15, dur:1.25, dmg:1.05} } },
-  { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.25, eff:1.15}, 1:{eff:0.85, dur:0.75} } },
+  { name:'Hitze',    sym:'♨', w:1,   el:{ 0:{dmg:1.15, eff:1.1}, 1:{eff:0.85, dur:0.75} } },
   { name:'Wind',     sym:'≋', w:1.5, el:{ 0:{dmg:0.95, eff:1.2} }, flySpeed:1.2 }
 ];          // Effektdauer „ganzer Tag“: hält über alle vier Wellen
 // Kopfgeld je Monster, flach: Runde 1–5: 2, 6–10: 3, 11–15: 5, 16–20: 8, 21–25: 12, 26–30: 17, 31–35: 23, 36–40: 30
@@ -470,7 +470,7 @@ const MONSTERS = [
   ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:5.5, night:true, count:1, lives:2, weak:[0.85, 1, 1.25, 1], eff:[0, 0, 0, 0]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
   ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, hpMul:0.85, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
   ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 1, 0.55]}],   // 12.10.: Tag 7 (vorher 6)
-  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.4, 1, 1]}],
+  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.4, 1.3, 1]}],
   ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 0.75, 1.5, 1]}],
   ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 1, 0.75, 1.5]}],
   ['Fuchs-Boss',        {emo:'🦊', mini:true, ar:[0.2, 0.4], speed:1.4, hpMul:5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 10
