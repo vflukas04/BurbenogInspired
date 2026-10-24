@@ -7,7 +7,7 @@ const DPS = G.TOWER_POWER[0] / G.TOWER_COST[0] * (+process.env.DPSMUL || 1), COS
 G.ELEMENTS.forEach(E => { E.armorDmg = 0; }); G.MONSTERS.forEach(m => { m.weak = [1, 1, 1, 1]; delete m.eff; });   // Faktoren je Element neutral
 G.ELEMENTS[3].splashCenter = 1; G.ELEMENTS[3].splashEdge = 1;
 function turm(el, t){ const E = G.ELEMENTS[el];
-  E.towers[SL] = ['D-Turm', 'Schaden', 4 / G.GRID, 1, 1, 1, t.eff || 0, t.dur || 1, 0, { effect:t.effect || 'none', fly:true }];
+  E.towers[SL] = ['D-Turm', 'Schaden', 4 / G.GRID, 1, 1, 1, t.eff || 0, t.dur || 1, (t.splash || 0) / G.GRID, { effect:t.effect || 'none', fly:true }];
   if (E.costOverride) E.costOverride[SL] = COST; if (E.kraftT) E.kraftT[SL] = 1; E.kraftBlock = null;
   E._pw = DPS * COST / (E.kraft || 1); }
 function power(){ G.TOWER_COST[SL] = COST; }   // Kosten gleich; Schaden/s je Element über kraft ausgeglichen (TOWER_POWER gilt für alle Elemente)
@@ -28,6 +28,7 @@ const basis = wert(null, {}), ctrl = [0, 1, 2].map(el => wert(el, { effect:'none
 console.log(`Kontext: Grundtürme, ⅓ ersetzt durch Effekt-Türme gleichen Schadens/s · ${tage.length} Tage × Maps 0/2 · Reserve ohne Effekt ${basis.toFixed(3)}`);
 console.log(`Kontrolle ohne Effekt je Element (Rest-Unterschiede, werden herausgerechnet): Feuer ${ctrl[0].toFixed(3)} · Eis ${ctrl[1].toFixed(3)} · Schatten ${ctrl[2].toFixed(3)}`);
 const z = (n, el, t) => console.log(n.padEnd(30) + (wert(el, t) / basis / ctrl[el]).toFixed(3));
+if (process.env.FLAECHE) { for (const s of [1.5, 2]) { z(`Fläche ${s} ohne Effekt`, 1, { splash:s }); for (const [e, d] of [[0.2, 2], [0.35, 4]]) z(`Fläche ${s} + Bremsen ${e * 100} %, ${d} s`, 1, { effect:'slow', eff:e, dur:d, splash:s }); z(`Fläche ${s} + Fluch 20 %, 4 s`, 2, { effect:'curse', eff:0.2, dur:4, splash:s }); z(`Fläche ${s} + Brennen 30 %, 6 s`, 0, { effect:'burn', eff:0.3, dur:6, splash:s }); } process.exit(0); }
 for (const [e, d] of [[0.2, 2], [0.35, 2], [0.35, 4], [0.5, 4]]) z(`Bremsen ${e * 100} %, ${d} s`, 1, { effect:'slow', eff:e, dur:d });
 for (const [e, d] of [[0.1, 4], [0.2, 4], [0.2, 8], [0.35, 8]]) z(`Fluch ${e * 100} %, ${d} s`, 2, { effect:'curse', eff:e, dur:d });
 for (const [e, d] of [[0.15, 3], [0.3, 3], [0.3, 6], [0.15, 1e9]]) z(`Brennen ${e * 100} %, ${d > 1e6 ? 'ganzer Tag' : d + ' s'}`, 0, { effect:'burn', eff:e, dur:d > 1e6 ? 'Tag' : d });
