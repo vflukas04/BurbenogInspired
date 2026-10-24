@@ -31,6 +31,32 @@ Mittel der 5 besten Bauplätze (≥ 2 Felder auseinander), Maps 0–3 als Wiese:
 Im Bereich der Türme (3–7) wächst die Wegstrecke etwa mit Reichweite^1,4 (lokal 1,0–1,6). Die Maps unterscheiden sich kaum (±5 %).
 **Wichtig [Hypothese]:** Bei 20 Monstern im Abstand 0,9 s ist meist mehr als ein Monster in Reichweite – ein Turm schießt dann ohnehin ununterbrochen. Reichweite bringt dann nicht „mehr Schüsse je Monster“, sondern vor allem längere **Wirkzeit** je Welle (vorne früher, hinten länger) und mehr Zeit für Nachzügler/Leaks. Erwarteter Wert ≈ (Wellendauer + Wegstrecke ÷ Tempo) – deutlich flacher als die Wegstrecke selbst. Muss per Simulation geprüft werden.
 
+## D2 Wechselkurse Rate, Geschosse, Reichweite, Fläche (24.10. früh, `d/kurse.js`)
+Grundturm: Rate 1, Reichweite 4, 1 Geschoss, 70 Gold, Budget des Tages ganz in diesem Turm, echte Leben, 10-Uhr-Welle, alle Nicht-Flieger-Tage ohne Bosse, Maps 0–3. Wert relativ zum Grundturm bei **gleichem Schaden/s** (Wert > 1 = Merkmal ist etwas wert, Schaden/s müsste um diesen Faktor sinken):
+
+| Merkmal | Runde 1–10 | 11–20 | 21–30 | 31–40 | Mittel |
+|---|---|---|---|---|---|
+| Rate ×0,35 | 0,29 | 1,00 | 1,03 | 1,05 | 0,75 |
+| Rate ×0,5 | 0,87 | 1,03 | 1,04 | 1,05 | 0,99 |
+| Rate ×2 | 0,99 | 0,96 | 0,96 | 0,95 | 0,96 |
+| Rate ×4 | 1,01 | 0,96 | 0,96 | 0,94 | 0,97 |
+| 2 Geschosse | 1,01 | 0,98 | 0,97 | 0,93 | 0,98 |
+| 3 Geschosse | 0,98 | 0,94 | 0,91 | 0,83 | 0,91 |
+| Reichweite 3 | 0,97 | 0,97 | 0,89 | 0,86 | 0,92 |
+| Reichweite 5 | 1,09 | 1,04 | 1,05 | 1,14 | 1,08 |
+| Reichweite 6 | 1,11 | 1,09 | 1,12 | 1,23 | 1,14 |
+| Reichweite 7 | 1,07 | 1,10 | 1,16 | 1,28 | 1,15 |
+| Fläche 0,5 | 0,84 | 0,85 | 0,86 | 0,80 | 0,84 |
+| Fläche 1 | 0,92 | 0,92 | 0,93 | 1,01 | 0,94 |
+| Fläche 1,5 | 1,21 | 1,33 | 1,47 | 1,47 | 1,37 |
+| Fläche 2 | 1,74 | 1,78 | 1,85 | 1,84 | 1,80 |
+
+Deutung:
+- **Rate** ist bei gleichem Schaden/s fast neutral (±5 %). Ausnahme: sehr langsame Türme am Anfang (Rate ×0,35 in Runde 1–10: 0,29) – Überschuss an schwachen Monstern, wie L vermutet. Schnelle Türme sind leicht schlechter (0,95), Ursache offen [Vermutung: Flugzeit/Zielwechsel].
+- **Reichweite** ist viel flacher als die Wegstrecke (Hypothese bestätigt): etwa Wert ≈ (Reichweite ÷ 4)^0,3, sättigt ab 6–7, wächst in späten Runden etwas (Leaks/lange Wellen).
+- **Fläche** ist nicht linear: kleine Fläche (0,5–1) ist **schlechter als keine** (Würfe landen dort, wo das Ziel beim Abschuss war, und verfehlen), ab 1,5 deutlich mehr wert (×1,4–1,8). Das trifft heute alle Türme mit kleiner Fläche.
+- Gemessen bei Reserve ≈ 0,4 (Grundturm ohne Boni); bei höherer Reserve kann sich der Überschuss-Effekt verschieben → später mit Reserve ≈ 1,3 wiederholen.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
