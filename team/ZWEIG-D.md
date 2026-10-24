@@ -99,6 +99,24 @@ Zusatzwert des Effekts gegenüber „nur Fläche“: Bremsen 35 % 4 s ×1,31/1,2
 ## Stapelregel (L 24.10.)
 Alle Effekte außer Stein stapeln wie Brennen: stärkster voll, jeder weitere 20 %, höchstens 6; Deckel wie im Spiel (Bremsen 0,85, Fluch 1,5). Im Spiegel per `STAPEL_ALLE=1` (`basis/patch.js`), nur für Zweig D. Faktor je Effekt wird bei ⅙, ⅓ und ½ Anteil Effekt-Türme gemessen (`ANTEIL=`).
 
+## D2e Effekte mit gemeinsamer Stapelregel, Anteil ⅙ / ⅓ / ½ (ganzer Tag, Reserve 2,0)
+| Effekt | ⅙ | ⅓ | ½ |
+|---|---|---|---|
+| Bremsen 35 % 4 s | 0,99 | 1,03 | 1,08 |
+| Bremsen 50 % 4 s | 1,06 | 1,16 | 1,32 |
+| Fluch 10 % 4 s | 1,15 | 1,19 | 1,23 |
+| Fluch 20 % 4 s | 1,28 | 1,36 | 1,43 |
+| Fluch 35 % 8 s | 1,51 | 1,61 | 1,70 |
+| Brennen 15 % 3 s | 1,07 | 1,09 | 1,11 |
+| Brennen 30 % 6 s | 1,23 | 1,28 | 1,34 |
+| Brennen 15 % ganzer Tag | 1,30 | 1,32 | 1,36 |
+
+Wert je Effekt-Turm hängt am Anteil – drei verschiedene Formen:
+- **Fluch: früh gesättigt.** Schon wenige Fluch-Türme bringen fast alles (⅙ → +28 %, ½ → +43 % bei 20 %); jeder weitere bringt weniger. Mit Stapelung steigt der Wert gegenüber „nur der stärkste“ (⅓: 1,36 statt 1,24).
+- **Brennen: etwa linear, leicht fallend** (+23/+28/+34 % bei 30 % 6 s).
+- **Bremsen (ohne Fläche): braucht Masse** – erst ab hohem Anteil und hoher Stärke spürbar (50 % 4 s: +6/+16/+32 %).
+→ Ein fester Faktor je Effekt gilt nur für einen Bezugs-Anteil. Vorschlag: Bezug ⅓, dazu je Effekt die Steigung als zweiter Wert (Fluch fallend, Bremsen steigend). Für das Spielgefühl heißt das: ein, zwei Fluch-Türme lohnen immer, viele kaum; Bremsen lohnt nur flächig oder in Masse.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
