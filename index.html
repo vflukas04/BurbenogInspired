@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-24b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-24c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -321,7 +321,7 @@ const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold 
      nova     wirkt sofort im Umkreis „Fläche“ um den Turm, ohne Geschoss
      light    Lichtradius: Schatten-Türme darin schießen auch im Dunkeln und ohne Wettermalus */
 const ELEMENTS = [
-  { name:'Feuer', kraft:0.622, kraftBlock:[1.466, 1.25, 1, 1, 1, 1, 1, 1], kraftT:[1, 1, 1, 1, 1, 1, 1, 1], emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', armorDmg:0.5, costOverride:{0:8}, towers:[
+  { name:'Feuer', kraft:0.622, kraftBlock:[1.30, 1.15, 1, 1, 1, 1, 1, 1], kraftT:[1, 1, 1, 1, 1, 1, 1, 1], emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', armorDmg:0.5, costOverride:{0:8}, towers:[
     ['Funke',        'Schaden',   2.0, 1,   1, 0.8, 0.17, 3],   // 1,6 Schaden/s (Brennen ist ein Bonus)   // 8 statt 10 Gold. Türme 1–3 aller Elemente am 12.10. per Simulation angeglichen
     ['Glutbecken',   'Effekt',    1.6, 1,   2, 1.19, 0.43, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 1.21, 0.14, 2],
@@ -463,14 +463,14 @@ const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], 
 let MON_ROUND = 0;   // Runde (für Leben, Kopfgeld, Farbe): Zwischenbosse teilen sich die Runde des Monsters davor; day = Tag im Spiel
 const MONSTERS = [
   ['Silberfische',      {emo:'🐛', speed:1.0, weak:[1.1, 0.85, 0.7, 1], eff:[0, 0, 0, 0]}],
-  ['Kellerasseln',      {emo:'🪲', ar:[0.13, 0.3], speed:0.9, weak:[0.7, 1.1, 1.3, 1.5], eff:[-1, 0, 0, 1]}],
-  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.2, 1.75, 0.9, 0.6], eff:[0, 1, 0, -1]}],
+  ['Kellerasseln',      {emo:'🪲', ar:[0.13, 0.3], speed:0.9, weak:[0.55, 1.1, 1.3, 1.5], eff:[-1, 0, 0, 1]}],
+  ['Nacktschnecken',    {emo:'🐌', speed:0.6, hpMul:1.5, weak:[1.2, 1.75, 0.9, 0.45], eff:[0, 1, 0, -1]}],
   ['Ohrenkneifer',      {emo:'🦗', ar:[0.08, 0.15], hpMul:0.7, weak:[0.6, 0.4, 1.1, 0.8], eff:[0, -1, 1, 0]}],
-  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.2, 0.9, 0.55, 1.2], eff:[1, 0, -1, 0]}],
+  ['Mäuse',             {emo:'🐭', speed:1.19, hpMul:0.9, night:true, weak:[1.65, 0.9, 0.55, 1.2], eff:[1, 0, -1, 0]}],
   ['Maus-Boss',         {emo:'🐭', mini:true, speed:1.19, hpMul:5.5, night:true, count:1, lives:2, weak:[0.85, 1, 1.25, 1], eff:[0, 0, 0, 0]}],   // Zwischenboss nach Tag 5: Leben ×5 der Mäuse, neutral
   ['Kleine Hunde',      {emo:'🐕', ar:[0.1, 0.2], speed:1.5, hpMul:0.85, weak:[1, 1, 1, 1]}],   // 12.10.: Tag 6 (vorher 7)
-  ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.5, 1, 1, 0.55]}],   // 12.10.: Tag 7 (vorher 6)
-  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.75, 1.4, 1.3, 1], eff:[-1, 1, 0, 0]}],
+  ['Ratten',            {emo:'🐀', ar:[0.15, 0.3], speed:1.3, weak:[1.75, 1, 1, 0.4]}],   // 12.10.: Tag 7 (vorher 6)
+  ['Katzen',            {emo:'🐈', ar:[0.1, 0.2], speed:1.6, night:true, weak:[0.55, 1.4, 1.3, 1], eff:[-1, 1, 0, 0]}],
   ['Spatzen',           {emo:'🐦', fly:true, speed:1.5, weak:[1, 0.75, 1.5, 1]}],
   ['Füchse',            {emo:'🦊', ar:[0.2, 0.4], speed:1.4, night:true, weak:[1, 1, 0.75, 1.5]}],
   ['Fuchs-Boss',        {emo:'🦊', mini:true, ar:[0.2, 0.4], speed:1.4, hpMul:5, night:true, count:1, lives:2, weak:[1, 1, 1, 1]}],   // nach Tag 10
