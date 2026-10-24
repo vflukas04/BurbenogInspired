@@ -135,6 +135,18 @@ Wert je Effekt-Turm hängt am Anteil – drei verschiedene Formen:
 - Ohne Fläche: Bremsen ≈ wertlos, Fluch ×1,43 (20 %), Brennen ×1,34 (30 % 6 s).
 - Mit Fläche: Bremsen gestapelt bleibt der stärkste Effekt (×2,4 gegenüber „nur Fläche“ bei 30 % 4 s), Fluch ×1,5, Brennen ×1,3. Bei schwachen Bremsern (10–20 %) deutlich weniger.
 
+## D2g Durchbrüche statt Lebensanteil (KILLS=1, Paar-Kontext, Stapelregel, Bremsen max. 30 %)
+Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort brechen 54 % der Monster durch). Umrechnung über „Schaden aller Türme ×q“: ×1,05 → 45 %, ×1,1 → 34 %, ×1,2 → 10 %, ×1,35 → 0 %.
+
+| Effekt (ohne Fläche) | Durchbrüche (ohne Effekt ≈ 52 %) | entspricht Schaden aller Türme | zum Vergleich Lebensanteil-Messung |
+|---|---|---|---|
+| Bremsen 35 % 4 s (→ 30 %) | 34 % | ≈ ×1,10 | ×1,01 |
+| Fluch 20 % 4 s | 10 % | ≈ ×1,19 | ×1,43 |
+| Brennen 30 % 6 s | 2 % | ≈ ×1,3 | ×1,34 |
+
+→ **Bremsen auf Einzelziel wirkt über die Kills** (L vermutete das): es verteilt den Schaden so, dass weniger Monster knapp überleben – im Lebensanteil kaum sichtbar, bei den Durchbrüchen etwa +10 % Schaden wert. Fluch ist nach Durchbrüchen weniger wert als nach Lebensanteil. Für die Wechselkurse zählt, was Spiele entscheidet: **Durchbrüche als Hauptmaß**, Lebensanteil als Gegenprobe.
+- Annäherung der Bremsarten (L): Einzelziel höherer Höchstwert (Vorschlag 45 %), Fläche niedriger (30 %).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

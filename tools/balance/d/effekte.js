@@ -27,11 +27,12 @@ function wert(el, t){ if (el !== null) turm(el, t); const r = [];
     for (const d of tage) for (const lane of [0, 2]) { C.useMap(lane, null); const n = Math.max(3, Math.round(budget(d).gold / COST)), k = el === null ? 0 : Math.max(1, Math.round(n * (+process.env.ANTEIL || 1 / 3)));
       const key = d + ':' + lane, setup = aufbau(n, k, el === null ? 3 : el), w = { type:d, players:2 };
       if (!(key in FIX)) FIX[key] = C.reserveDay(setup, w) * 1.15;   // etwas über der Grenze, damit überall etwas durchkommt
-      const x = C.runDay(setup, w, FIX[key]); dur += x.durch; n0 += x.n; }
+      const x = C.runDay(setup, w, FIX[key] / (+process.env.KILLS_DIV || 1)); dur += x.durch; n0 += x.n; }
     return 1 + dur / n0; }   // Kennzahl: 1 + Durchbrüche je Monster (kleiner = besser)
   for (const d of tage) for (const lane of [0, 2]) { C.useMap(lane, null); const n = Math.max(3, Math.round(budget(d).gold / COST)), k = el === null ? 0 : Math.max(1, Math.round(n * (+process.env.ANTEIL || 1 / 3)));
     r.push(TAG ? C.reserveDay(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 }) : C.reserveHp(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 })); }
   return Math.exp(r.reduce((a, v) => a + Math.log(v), 0) / r.length); }
+if (process.env.NUR_BASIS) { const b0 = wert(null, {}); for (const q of [1.05, 1.1, 1.2, 1.35, 1.5]) { process.env.KILLS_DIV = q; console.log(`Schaden ×${q}: Durchbrüche je Monster ${(wert(null, {}) - 1).toFixed(3)} (ohne: ${(b0 - 1).toFixed(3)})`); } process.exit(0); }
 const basis = wert(null, {}), ctrl = [0, 1, 2].map(el => wert(el, { effect:'none' }) / basis);
 console.log(`Kontext: Grundtürme, ⅓ ersetzt durch Effekt-Türme gleichen Schadens/s · ${tage.length} Tage × Maps 0/2 · Reserve ohne Effekt ${basis.toFixed(3)}`);
 console.log(`Kontrolle ohne Effekt je Element (Rest-Unterschiede, werden herausgerechnet): Feuer ${ctrl[0].toFixed(3)} · Eis ${ctrl[1].toFixed(3)} · Schatten ${ctrl[2].toFixed(3)}`);
