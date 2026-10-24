@@ -145,7 +145,7 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 | Brennen 30 % 6 s | 2 % | ≈ ×1,3 | ×1,34 |
 
 → **Bremsen auf Einzelziel wirkt über die Kills** (L vermutete das): es verteilt den Schaden so, dass weniger Monster knapp überleben – im Lebensanteil kaum sichtbar, bei den Durchbrüchen etwa +10 % Schaden wert. Fluch ist nach Durchbrüchen weniger wert als nach Lebensanteil. **Beschluss (L):** Lebensanteil bleibt Hauptmaß, Durchbrüche werden immer mitgemessen.
-- **Bremsen (L):** Einzelziel höchstens 45 % je Turm (gestapelt 90 %), Fläche/Nova höchstens 30 % (gestapelt 60 %); Flächenbremser und starke Bremser machen über den Wechselkurs weniger Schaden.
+- **Bremsen (L):** Einzelziel höchstens 40 % je Turm (gestapelt 80 %; 45 % hätte mit 90 % fast Stillstand ergeben – Einzelziel-Bremser stapeln am vordersten Monster; bei Endbossen gerade wertvoll), Fläche/Nova höchstens 30 % (gestapelt 60 %); Flächenbremser und starke Bremser machen über den Wechselkurs weniger Schaden.
 
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
