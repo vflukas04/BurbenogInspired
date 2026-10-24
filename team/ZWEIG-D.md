@@ -117,6 +117,12 @@ Wert je Effekt-Turm hängt am Anteil – drei verschiedene Formen:
 - **Bremsen (ohne Fläche): braucht Masse** – erst ab hohem Anteil und hoher Stärke spürbar (50 % 4 s: +6/+16/+32 %).
 → Ein fester Faktor je Effekt gilt nur für einen Bezugs-Anteil. Vorschlag: Bezug ⅓, dazu je Effekt die Steigung als zweiter Wert (Fluch fallend, Bremsen steigend). Für das Spielgefühl heißt das: ein, zwei Fluch-Türme lohnen immer, viele kaum; Bremsen lohnt nur flächig oder in Masse.
 
+## Stapelregel überarbeitet (L 24.10. mittags)
+- Im Spiel tragen **alle** Türme eines Elements den Effekt → Bezug für die Kurse: eigene Hälfte nur Effekt-Türme, Partner-Hälfte Grundtürme (`ANTEIL=0.5`).
+- Für Brennen, Bremsen und Fluch dieselbe Regel: Effekte je Monster **nach Stärke sortiert**, stärkster voll, jeder weitere 20 %, höchstens 6 → nie mehr als 2 × der stärkste; **keine eigenen Deckel** mehr.
+- **Bremspunkte:** Turmwert s (Prozent) → Punkte s ÷ (1 − s) (50 % = 1 Punkt), Tempo = 1 ÷ (1 + gestapelte Punkte) → nie Stillstand. Beispiel: 6 Türme je 50 % → 1 + 5 × 0,2 = 2 Punkte → Tempo ⅓.
+- Mehr als 6 Türme lohnen weiter: der Direktschaden addiert sich ohne Grenze, die Grenze gilt je Monster (6 Türme können nicht alle Monster gleichzeitig belegen), und stärkere Effekte (Upgrades) heben die Grenze, weil sie am stärksten Effekt hängt. Effektlastige Türme verlieren mit vielen Kopien an Grenzwert – gewollt (Mischung lohnt).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

@@ -70,7 +70,14 @@ function hit(s, m, def, dmg){`],
 ];
 if (process.env.STAPEL_ALLE) ERSETZEN.push(
   [`if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);`,
-   `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, false, 0.85);`],
+   // Bremspunkte (L 24.10.): Turmwert s (Prozent) → Punkte s/(1−s); Tempo = 1 ÷ (1 + gestapelte Punkte) – nie Stillstand, kein Deckel
+   `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) { const sp = Math.min(0.95, def.eff * f); addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), sp / (1 - sp), t, false, 0); }`],
   [`    else addFx(m, 'curse', def.eff * f, t, def.curseWave);`,
-   `    else addStack(m, 'curse', (def._bid || (def._bid = ++BURN_ID)) + ':c' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, def.curseWave, 1.5);`]);
+   `    else addStack(m, 'curse', (def._bid || (def._bid = ++BURN_ID)) + ':c' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, def.curseWave, 0);`],   // Fluch ohne Deckel: Stapelregel begrenzt auf 2 × stärksten
+  [`const slow = on('stun') ? 1 : Math.max(on('slow') ? fx.slow.v : 0, on('grounded') ? 0.3 : 0);`,
+   `const slow = on('stun') ? 1 : Math.max(on('slow') ? fx.slow.v / (1 + fx.slow.v) : 0, on('grounded') ? 0.3 : 0);`],
+  [`P.slow && Math.hypot(m.x - P.x, m.y - P.y) <= P.r)) addFx(m, 'slow', 0.3, 0.2);`,
+   `P.slow && Math.hypot(m.x - P.x, m.y - P.y) <= P.r)) addFx(m, 'slow', 0.3 / 0.7, 0.2);`],
+  [`if (def.curseSlow) addFx(m, 'slow', def.curseSlow, t);`,
+   `if (def.curseSlow) addFx(m, 'slow', def.curseSlow / (1 - def.curseSlow), t);`]);
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };
