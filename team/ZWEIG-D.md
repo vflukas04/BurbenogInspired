@@ -120,7 +120,7 @@ Wert je Effekt-Turm hängt am Anteil – drei verschiedene Formen:
 ## Stapelregel überarbeitet (L 24.10. mittags)
 - Im Spiel tragen **alle** Türme eines Elements den Effekt → Bezug für die Kurse: eigene Hälfte nur Effekt-Türme, Partner-Hälfte Grundtürme (`ANTEIL=0.5`).
 - Für Brennen, Bremsen und Fluch dieselbe Regel: Effekte je Monster **nach Stärke sortiert**, stärkster voll, jeder weitere 20 %, höchstens 6 → nie mehr als 2 × der stärkste; **keine eigenen Deckel** mehr.
-- **Bremspunkte:** Turmwert s (Prozent) → Punkte s ÷ (1 − s) (50 % = 1 Punkt), Tempo = 1 ÷ (1 + gestapelte Punkte) → nie Stillstand. Beispiel: 6 Türme je 50 % → 1 + 5 × 0,2 = 2 Punkte → Tempo ⅓.
+- **Bremsen (L, ersetzt die Bremspunkte):** Prozent wie bisher, je Turm höchstens 40 % → mit der Stapelregel höchstens 80 %, ohne eigenen Deckel und ohne Umrechnungsformel (die Formel hätte zusammen mit der Stapelung doppelt geschwächt). Türme mit mehr als 40 % werden über den Wechselkurs entschädigt.
 - Mehr als 6 Türme lohnen weiter: der Direktschaden addiert sich ohne Grenze, die Grenze gilt je Monster (6 Türme können nicht alle Monster gleichzeitig belegen), und stärkere Effekte (Upgrades) heben die Grenze, weil sie am stärksten Effekt hängt. Effektlastige Türme verlieren mit vielen Kopien an Grenzwert – gewollt (Mischung lohnt).
 
 ## Nächste Schritte
