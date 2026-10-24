@@ -20,7 +20,15 @@ function aufbau(n, k, el){ const used = new Set(), tw = [];
 const TAG = !!process.env.TAG;   // TAG=1: ganzer Tag (10 Uhr + Leaks um 19 Uhr durch dieselbe Aufstellung, Effekte wandern mit)
 const alle = G.MONSTERS.map((m, i) => i).filter(i => !G.MONSTERS[i].boss && !G.MONSTERS[i].mini && !G.MONSTERS[i].fly);
 const tage = process.env.TAGE ? process.env.TAGE.split(',').map(x => +x - 1) : alle.filter((_, i) => i % 2 === 0);
+// KILLS=1: statt Reserve die Durchbrüche bei festem Leben-Faktor (= Reserve des Kontexts ohne Effekt je Tag/Map) – zählt Kills statt Lebensanteil
+const FIX = {};
 function wert(el, t){ if (el !== null) turm(el, t); const r = [];
+  if (process.env.KILLS) { let dur = 0, n0 = 0;
+    for (const d of tage) for (const lane of [0, 2]) { C.useMap(lane, null); const n = Math.max(3, Math.round(budget(d).gold / COST)), k = el === null ? 0 : Math.max(1, Math.round(n * (+process.env.ANTEIL || 1 / 3)));
+      const key = d + ':' + lane, setup = aufbau(n, k, el === null ? 3 : el), w = { type:d, players:2 };
+      if (!(key in FIX)) FIX[key] = C.reserveDay(setup, w) * 1.15;   // etwas über der Grenze, damit überall etwas durchkommt
+      const x = C.runDay(setup, w, FIX[key]); dur += x.durch; n0 += x.n; }
+    return 1 + dur / n0; }   // Kennzahl: 1 + Durchbrüche je Monster (kleiner = besser)
   for (const d of tage) for (const lane of [0, 2]) { C.useMap(lane, null); const n = Math.max(3, Math.round(budget(d).gold / COST)), k = el === null ? 0 : Math.max(1, Math.round(n * (+process.env.ANTEIL || 1 / 3)));
     r.push(TAG ? C.reserveDay(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 }) : C.reserveHp(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 })); }
   return Math.exp(r.reduce((a, v) => a + Math.log(v), 0) / r.length); }
