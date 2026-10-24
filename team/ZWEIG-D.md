@@ -68,6 +68,25 @@ Kontext: Budget in Grundtürmen, ⅓ ersetzt durch Effekt-Türme mit gleichem Sc
 
 Deutung (vorläufig): Fluch ≈ 1 + 1,2 × Fluchwert (wirkt auf alle Türme, Dauer kaum wichtig). Brennen ≈ 1 + Stärke × Dauer-Anteil auf der eigenen Map (ganztägig hier nur eigene Map gemessen, Partner fehlt; Wert für „ganzer Tag“ unplausibel niedrig → prüfen). **Bremsen fast wertlos** in dichten 10-Uhr-Wellen: die Türme schießen ohnehin ununterbrochen (wie bei der Reichweite) – Bremsen wirkt vermutlich erst bei Leaks/Nachzüglern und bei Reserve nahe 1. Wird mit spielnaher Reserve (DPSMUL=5) wiederholt, ebenso D2.
 
+## D2c Wiederholung bei spielnaher Reserve (DPSMUL = 5) und mit ganzem Tag (24.10. morgens)
+- Rate/Reichweite/Fläche bei Reserve ≈ 1,9 (statt 0,4): **praktisch identisch** mit D2 → die Kurse hängen kaum an der Gesamtstärke und können als feste Faktoren gelten.
+- Effekte, 10 Uhr (Reserve 1,0) bzw. ganzer Tag mit Leaks um 19 Uhr (Reserve 2,0, Effekte wandern mit):
+
+| Effekt | 10 Uhr | ganzer Tag |
+|---|---|---|
+| Bremsen 20 % 2 s | 0,99 | 0,97 |
+| Bremsen 50 % 4 s | 1,05 | 1,04 |
+| Fluch 10 % 4 s | 1,13 | 1,12 |
+| Fluch 20 % 4 s | 1,25 | 1,24 |
+| Fluch 35 % 8 s | 1,43 | 1,43 |
+| Brennen 15 % 3 s | 1,08 | 1,09 |
+| Brennen 30 % 6 s | 1,24 | 1,28 |
+| Brennen 15 % ganzer Tag | 1,25 | 1,32 |
+
+(Der Wert „ganzer Tag“ in D2b war ein Skriptfehler: 1 s statt Tag.)
+- **Fluch** ≈ 1 + 1,2 × Fluchwert, Dauer zweitrangig. **Brennen** ≈ 1 + Stärke × wirksame Dauer; ganztägig wirkt über die Leaks weiter (+7 %).
+- **Bremsen auf Einzelziel ist fast nichts wert** – geprüft, dass es wirkt (Test: 4 Bremstürme 50 %, letzte Ankunft 56,5 → 62,9 s, Schaden +4 %). Grund: in dichten Wellen trifft ein Turm immer nur ein Monster, die anderen laufen ungebremst; die Türme schießen ohnehin ununterbrochen. **Bremsen bekommt seinen Wert erst über Fläche** (Schneeball, Frostnova) → als Kombination Bremsen × Fläche messen.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
