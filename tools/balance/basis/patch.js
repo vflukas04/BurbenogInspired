@@ -38,7 +38,17 @@ const ERSETZEN = [
 // 23.10. (L, ab C8): stärkster Brand voll, jeder weitere 20 %, höchstens die 6 stärksten (×2,0). Bis C7: 1/0,5/0,25/0,1, Rest 0,05, höchstens 10
 // (alt nachstellen: BURN_W=1,0.5,0.25,0.1 BURN_REST=0.05 BURN_MAX=10)
 const BURN_W = ${process.env.BURN_W ? JSON.stringify(process.env.BURN_W.split(',').map(Number)) : '[1]'}, BURN_REST = ${process.env.BURN_REST || 0.2}, BURN_MAX = ${process.env.BURN_MAX || 6}; let BURN_ID = 0;
-function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return v; }
+function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return c.cap ? Math.min(c.cap, v) : v; }
+// Zweig D (L, 24.10.): dieselbe Stapelregel für Bremsen und Fluch (STAPEL_ALLE=1), mit Deckel wie im Spiel (Bremsen 0,85, Fluch 1,5)
+function addStack(m, kind, id, val, t, w, cap){
+  if (!(val > 0) || !(t > 0)) return;
+  let c = m.fx[kind];
+  if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx[kind] = { v:0, t:0, L:{}, cap }; if (alt) c.L.alt = alt; }
+  if (w) c.w = true;
+  const e = c.L[id]; c.L[id] = e ? [Math.max(e[0], val), Math.max(e[1], t)] : [val, t];
+  const ks = Object.keys(c.L); if (ks.length > BURN_MAX) ks.sort((p, q) => c.L[q][0] - c.L[p][0] || c.L[q][1] - c.L[p][1]).slice(BURN_MAX).forEach(k => delete c.L[k]);
+  c.v = burnSum(c); c.t = Math.max(...Object.values(c.L).map(x => x[1]));
+}
 function addBurn(m, id, val, t, w){
   if (!(val > 0) || !(t > 0)) return;
   let c = m.fx.burn;
@@ -58,4 +68,9 @@ function hit(s, m, def, dmg){`],
     addBurn(m, bid, v, t, def.burnWave);
     if (def.burnStack && on(m, 'burn')) addBurn(m, 'g' + def._bid, v * (def.burnStack - 1) * bh, t, def.burnWave);   // Glutnest: zusätzlicher eigener Brand`],
 ];
+if (process.env.STAPEL_ALLE) ERSETZEN.push(
+  [`if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);`,
+   `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, false, 0.85);`],
+  [`    else addFx(m, 'curse', def.eff * f, t, def.curseWave);`,
+   `    else addStack(m, 'curse', (def._bid || (def._bid = ++BURN_ID)) + ':c' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, def.curseWave, 1.5);`]);
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };

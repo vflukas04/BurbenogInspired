@@ -104,7 +104,7 @@ Ergebnisse in `tools/balance/ergebnisse/spiegel-v2*` (nicht im Repo). Der neue B
 
 ## Stand 24.10. vormittags (L): Lauf spiegel-C10 → spiegel-C11
 - **C10 (Bot):** Elemente Feuer 1,05 · Eis 0,96 · Schatten 0,99 · Stein 1,00 (alle ±5 %). Paare schlechter: Summe 58,5 (Eis+Schatten 22, Eis+Stein 16, Schatten+Stein 8, Feuer+Stein 6,5, Feuer+Eis 5,5, Feuer+Schatten 0,5). Ballung: Nazgul 13,5, Uffug (Boss) 10, Mehlmottenraupen 5,5, Betty 5. C1 14–19 %. P8: Feuer 83–90 %, Eis 44–59 %, Stein 47–50 %, Schatten 12–26 %.
-- Strukturproblem: **Nazgul (fliegend) gibt Stein den Bonus 1,45** – Stein trifft Fliegende nur mit Turm 3/6/8, der Bonus verpufft; Schatten hat den Malus 0,55. Vorschlag an L: an Fliegertagen den Bonus nicht an Stein (Tausch innerhalb des Blocks, z. B. Nazgul Eis+/Stein−, GNTModels Schatten−/Stein+) und Spreizung ab Block 7 bei 1,35/0,65 deckeln. Offen.
+- Strukturproblem: **Nazgul (fliegend) gibt Stein den Bonus 1,45** – Stein trifft Fliegende nur mit Turm 3/6/8, der Bonus verpufft; Schatten hat den Malus 0,55. **Beschlossen (L 24.10., ab C12):** (1) An Fliegertagen ist Stein neutral (weder Bonus noch Malus), Tausch innerhalb des Blocks: Uffug-Vorhaut Feuer+/Eis− (Wütende Nachbarn Stein−/Schatten+), Looping-Louie Feuer−/Schatten+ (Magier-Novizen Eis−/Stein+), Nazgul Feuer+/Schatten− (Mehlmottenraupen Eis−/Stein+). (2) Bonus/Malus-Treppe mit Pause im Elementar-Block und Deckel: Block 1–8 = 1,10/0,90 · 1,15/0,85 · 1,20/0,80 · 1,25/0,75 · 1,25/0,75 · 1,25/0,75 · 1,30/0,70 · 1,35/0,65; Immunität bleibt 0 / Partner 1,5.
 - Die Summe der Paar-Durchbrüche schwankt zwischen Läufen stark (26,5–58,5); Leben je Tag schwingen um die Ballungstage.
 - **C11:** ebeneC aus C10 (Standard), läuft.
 

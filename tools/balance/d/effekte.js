@@ -21,7 +21,7 @@ const TAG = !!process.env.TAG;   // TAG=1: ganzer Tag (10 Uhr + Leaks um 19 Uhr 
 const alle = G.MONSTERS.map((m, i) => i).filter(i => !G.MONSTERS[i].boss && !G.MONSTERS[i].mini && !G.MONSTERS[i].fly);
 const tage = process.env.TAGE ? process.env.TAGE.split(',').map(x => +x - 1) : alle.filter((_, i) => i % 2 === 0);
 function wert(el, t){ if (el !== null) turm(el, t); const r = [];
-  for (const d of tage) for (const lane of [0, 2]) { C.useMap(lane, null); const n = Math.max(3, Math.round(budget(d).gold / COST)), k = el === null ? 0 : Math.round(n / 3);
+  for (const d of tage) for (const lane of [0, 2]) { C.useMap(lane, null); const n = Math.max(3, Math.round(budget(d).gold / COST)), k = el === null ? 0 : Math.max(1, Math.round(n * (+process.env.ANTEIL || 1 / 3)));
     r.push(TAG ? C.reserveDay(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 }) : C.reserveHp(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 })); }
   return Math.exp(r.reduce((a, v) => a + Math.log(v), 0) / r.length); }
 const basis = wert(null, {}), ctrl = [0, 1, 2].map(el => wert(el, { effect:'none' }) / basis);

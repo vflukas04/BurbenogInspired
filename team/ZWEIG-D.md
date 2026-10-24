@@ -96,6 +96,9 @@ Deutung (vorläufig): Fluch ≈ 1 + 1,2 × Fluchwert (wirkt auf alle Türme, Dau
 Zusatzwert des Effekts gegenüber „nur Fläche“: Bremsen 35 % 4 s ×1,31/1,29 (einzeln 0,99), Fluch 20 % ×1,27/1,29 (einzeln 1,24), Brennen 30 % 6 s ×1,30/1,31 (einzeln 1,28).
 → **Bremsen wirkt nur in der Fläche**, dort etwa so stark wie Fluch/Brennen. Fluch und Brennen gewinnen durch Fläche nur wenig. Für das Modell: Wert(Effekt) = 1 + k_Effekt × Stärke × f(Dauer) × (Flächenfaktor nur bei Bremsen).
 
+## Stapelregel (L 24.10.)
+Alle Effekte außer Stein stapeln wie Brennen: stärkster voll, jeder weitere 20 %, höchstens 6; Deckel wie im Spiel (Bremsen 0,85, Fluch 1,5). Im Spiegel per `STAPEL_ALLE=1` (`basis/patch.js`), nur für Zweig D. Faktor je Effekt wird bei ⅙, ⅓ und ½ Anteil Effekt-Türme gemessen (`ANTEIL=`).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
