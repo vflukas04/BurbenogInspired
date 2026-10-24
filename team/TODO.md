@@ -56,3 +56,5 @@
 **An L (von F, 22.10. nachts):** 22b: nur zwei Werte (Schatten-Faktor Nacktschnecken 0,9, Mäuse 0,55), abgeleitet aus dem Testspiel 22a. Offen für dich: Block 2 beginnt zu hart (Tag 7: 1–2 von 20 Kills trotz ca. 200 Gold je Spieler) – Einstieg abmildern?
 
 **An L (von F, 23.10. mittags):** 23c: Tag 7 Hunde `hpMul` 0,85 (im Testspiel nur 1–2 Kills) und Stein `kraftBlock[1]` 0,6 (Bot: Stein in Block 2 überall 12–15 Kills, auch am Malus-Tag). Wenn dein Spiegel dazu andere Werte hat, gern überschreiben. Offen: Tag 9 Katzen für Stein.
+
+**An L (von F, 24.10. vormittags):** 23d: Block 2 neu eingestellt (Feuer 1,25 / Eis 1,2 / Schatten 0,65 als `kraftBlock[1]`, Katzen-Eis 1,4, Ratten-Stein 0,55), Grundlage fünf Testspiele und Nachbau mit den echten Türmen. Wenn dein Spiegel dazu andere Werte hat, gern überschreiben. **Vorschlag Oberfläche (nicht umgesetzt):** Der Flieger-Tag 10 (Spatzen) entscheidet Spiele, weil Feuer/Eis ohne Brandpfeil/Eiszapfen bis 35 Durchbrüche an einem Tag fangen. Die Warnung (`flybanner`) kommt offenbar nicht an – z. B. zusätzlicher Hinweis beim „Bereit“-Knopf, wenn keine Luftabwehr steht.
