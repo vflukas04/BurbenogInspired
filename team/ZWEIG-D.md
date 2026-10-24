@@ -57,6 +57,17 @@ Deutung:
 - **Fläche** ist nicht linear: kleine Fläche (0,5–1) ist **schlechter als keine** (Würfe landen dort, wo das Ziel beim Abschuss war, und verfehlen), ab 1,5 deutlich mehr wert (×1,4–1,8). Das trifft heute alle Türme mit kleiner Fläche.
 - Gemessen bei Reserve ≈ 0,4 (Grundturm ohne Boni); bei höherer Reserve kann sich der Überschuss-Effekt verschieben → später mit Reserve ≈ 1,3 wiederholen.
 
+## D2b Effekte (24.10. früh, `d/effekte.js`, Kontext schwach: Reserve 0,2)
+Kontext: Budget in Grundtürmen, ⅓ ersetzt durch Effekt-Türme mit gleichem Schaden/s, Faktoren je Element neutral, Rüstungsschaden aus, 17 Tage × Maps 0/2. Wert relativ zum Kontext ohne Effekt:
+
+| Effekt | Wert |
+|---|---|
+| Bremsen 20 % 2 s / 35 % 2 s / 35 % 4 s / 50 % 4 s | 0,99 / 0,99 / 1,00 / 1,05 |
+| Fluch 10 % 4 s / 20 % 4 s / 20 % 8 s / 35 % 8 s | 1,13 / 1,25 / 1,27 / 1,43 |
+| Brennen 15 % 3 s / 30 % 3 s / 30 % 6 s / 15 % ganzer Tag | 1,08 / 1,16 / 1,24 / 1,04 |
+
+Deutung (vorläufig): Fluch ≈ 1 + 1,2 × Fluchwert (wirkt auf alle Türme, Dauer kaum wichtig). Brennen ≈ 1 + Stärke × Dauer-Anteil auf der eigenen Map (ganztägig hier nur eigene Map gemessen, Partner fehlt; Wert für „ganzer Tag“ unplausibel niedrig → prüfen). **Bremsen fast wertlos** in dichten 10-Uhr-Wellen: die Türme schießen ohnehin ununterbrochen (wie bei der Reichweite) – Bremsen wirkt vermutlich erst bei Leaks/Nachzüglern und bei Reserve nahe 1. Wird mit spielnaher Reserve (DPSMUL=5) wiederholt, ebenso D2.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

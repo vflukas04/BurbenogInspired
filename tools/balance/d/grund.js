@@ -3,7 +3,7 @@
 // Schaden/s ∝ Gold (DPS_JE_GOLD), Rate, Reichweite, Geschosse, Fläche frei wählbar. Merkmale werden später einzeln dazugeschaltet.
 const C = require('../core'), { G } = C;
 const SL = 8, E = G.ELEMENTS[2];
-const DPS_JE_GOLD = G.TOWER_POWER[0] / G.TOWER_COST[0];   // Schaden/s je Gold wie Turm 1 der Grunddaten (2 / 10)
+const DPS_JE_GOLD = G.TOWER_POWER[0] / G.TOWER_COST[0] * (+process.env.DPSMUL || 1);   // DPSMUL: Kontext auf spielnahe Reserve heben   // Schaden/s je Gold wie Turm 1 der Grunddaten (2 / 10)
 const GRUND = { rate:1, range:4, shots:1, splash:0, cost:70 };   // Reichweite in Feldern (neues Raster), Kosten etwa Turm 3
 // Turm definieren: m = Abweichungen vom Grundturm; dpsMul = Schaden/s-Faktor (der „Preis“ der Merkmale)
 function setze(m = {}){

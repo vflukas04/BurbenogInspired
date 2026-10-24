@@ -3,7 +3,7 @@
 // Wert = Reserve mit Effekt-Türmen ÷ Reserve nur mit Grundtürmen. Rüstungsschaden der Elemente für die Messung aus (nur der Effekt zählt).
 // Effekt-Türme: Platz 8 des Elements (Feuer = Brennen, Eis = Bremsen, Schatten = Fluch), Grundturm: Platz 8 von Stein ohne Fläche.
 const C = require('../core'), { G } = C, { budget } = require('../p2');
-const DPS = G.TOWER_POWER[0] / G.TOWER_COST[0], COST = 70, SL = 8;
+const DPS = G.TOWER_POWER[0] / G.TOWER_COST[0] * (+process.env.DPSMUL || 1), COST = 70, SL = 8;   // DPSMUL: Kontext auf spielnahe Reserve heben
 G.ELEMENTS.forEach(E => { E.armorDmg = 0; }); G.MONSTERS.forEach(m => { m.weak = [1, 1, 1, 1]; delete m.eff; });   // Faktoren je Element neutral
 G.ELEMENTS[3].splashCenter = 1; G.ELEMENTS[3].splashEdge = 1;
 function turm(el, t){ const E = G.ELEMENTS[el];
