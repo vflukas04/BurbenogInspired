@@ -17,11 +17,12 @@ turm(3, {});   // Grundturm (Stein-Platz 8, ohne Fläche, ohne Rüstungsschaden)
 function aufbau(n, k, el){ const used = new Set(), tw = [];
   const add = (e, cnt) => { for (const c of C.mask(e, SL, 1, 0).cells) { if (cnt <= 0) break; const key = c.x + ',' + c.y; if (used.has(key)) continue; used.add(key); tw.push({ x:c.x, y:c.y, el:e, idx:SL, lvl:1 }); cnt--; } };
   add(el, k); add(3, n - k); return { el:3, towers:tw, res:[] }; }
+const TAG = !!process.env.TAG;   // TAG=1: ganzer Tag (10 Uhr + Leaks um 19 Uhr durch dieselbe Aufstellung, Effekte wandern mit)
 const alle = G.MONSTERS.map((m, i) => i).filter(i => !G.MONSTERS[i].boss && !G.MONSTERS[i].mini && !G.MONSTERS[i].fly);
 const tage = process.env.TAGE ? process.env.TAGE.split(',').map(x => +x - 1) : alle.filter((_, i) => i % 2 === 0);
 function wert(el, t){ if (el !== null) turm(el, t); const r = [];
   for (const d of tage) for (const lane of [0, 2]) { C.useMap(lane, null); const n = Math.max(3, Math.round(budget(d).gold / COST)), k = el === null ? 0 : Math.round(n / 3);
-    r.push(C.reserveHp(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 })); }
+    r.push(TAG ? C.reserveDay(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 }) : C.reserveHp(aufbau(n, k, el === null ? 3 : el), { type:d, players:2 })); }
   return Math.exp(r.reduce((a, v) => a + Math.log(v), 0) / r.length); }
 const basis = wert(null, {}), ctrl = [0, 1, 2].map(el => wert(el, { effect:'none' }) / basis);
 console.log(`Kontext: Grundtürme, ⅓ ersetzt durch Effekt-Türme gleichen Schadens/s · ${tage.length} Tage × Maps 0/2 · Reserve ohne Effekt ${basis.toFixed(3)}`);
@@ -29,4 +30,4 @@ console.log(`Kontrolle ohne Effekt je Element (Rest-Unterschiede, werden herausg
 const z = (n, el, t) => console.log(n.padEnd(30) + (wert(el, t) / basis / ctrl[el]).toFixed(3));
 for (const [e, d] of [[0.2, 2], [0.35, 2], [0.35, 4], [0.5, 4]]) z(`Bremsen ${e * 100} %, ${d} s`, 1, { effect:'slow', eff:e, dur:d });
 for (const [e, d] of [[0.1, 4], [0.2, 4], [0.2, 8], [0.35, 8]]) z(`Fluch ${e * 100} %, ${d} s`, 2, { effect:'curse', eff:e, dur:d });
-for (const [e, d] of [[0.15, 3], [0.3, 3], [0.3, 6], [0.15, 1e9]]) z(`Brennen ${e * 100} %, ${d > 1e6 ? 'ganzer Tag' : d + ' s'}`, 0, { effect:'burn', eff:e, dur:d > 1e6 ? G.DAY : d });
+for (const [e, d] of [[0.15, 3], [0.3, 3], [0.3, 6], [0.15, 1e9]]) z(`Brennen ${e * 100} %, ${d > 1e6 ? 'ganzer Tag' : d + ' s'}`, 0, { effect:'burn', eff:e, dur:d > 1e6 ? 'Tag' : d });
