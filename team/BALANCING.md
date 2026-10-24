@@ -102,6 +102,11 @@ Ergebnisse in `tools/balance/ergebnisse/spiegel-v2*` (nicht im Repo). Der neue B
 - **Effekt-Türme objektiv messen (Vorschlag Claude, 21.10.):** statt eines einzelnen Referenzturms ein *Kontext-Aufbau*: Schadenstürme des eigenen Elements im Wert des 3-Fachen des geprüften Turms (nach der Treppe gewählt, beste Plätze). Wert des Turms = Mehrschaden des ganzen Aufbaus, wenn er dazukommt, verglichen mit demselben Gold in weiteren Schadenstürmen. Erfasst Synergie (Bremsen hilft Flächentürmen mehr), Licht/Verstärkung im Kreis und Rüstungsschaden. Mit Weiterlauf der Leaks auf eine Partner-Map ergibt sich daraus auch A4 (eigene Map ↔ Partner).
 - **Zu entscheiden (L):** Effekt-Türme werden über die Effektstärke mitgezogen (Fluchstein, Frosthauch). A4 (eigene Map ↔ Partner) ist noch nicht gemessen. Nächster Schritt: Spielläufe P2/Paare auf Kandidat A (laufen), danach Ebene B (Leben je Block, Kraft je Element).
 
+## Stand 24.10. abends (L): Lauf spiegel-C13 – Rauschgrenze der C-Kette
+- **C13 (Bot, ebeneC aus C12, Dämpfung 0,5):** Elemente Feuer 0,99 · Eis 1,00 · Schatten 1,04 · Stein 0,97 (±4 %), aber Paare wieder Summe 46 (Feuer+Stein 14,5, Eis+Schatten 12, Schatten+Stein 11, Feuer+Schatten 6,5). C1 11–31 %. P8 Schatten 5–6 %.
+- **Deutung:** Die Elemente liegen seit C8 innerhalb ±5–7 %; die Paar-Durchbrüche springen zwischen Läufen (10,5 ↔ 46 ↔ 58,5), weil die Leben je Tag an Bot-Rauschen angepasst werden. Weitere ebeneC-Schritte verbessern nichts mehr. **Vorschlag: C-Kette mit C12 als Ergebnis einfrieren**, Rechenzeit auf Zweig D.
+- Prüfung, ob C12 nur Glück war: Wiederholungslauf `kandidat-q2` = C12 auf anderen Maps (1:5, 3:17), läuft.
+
 ## Stand 24.10. nachmittags (L): Lauf spiegel-C12 – bester Stand bisher
 - **C12 (Bot, Treppe mit Pause/Deckel, Fliegertage ohne Stein-B/M):** Elemente Feuer 0,99 · Eis 1,07 · Schatten 0,95 · Stein 0,99. **Paare: Summe 10,5** (Eis+Stein 3,5 · Feuer+Eis 2 · Feuer+Schatten 1,5 · Feuer+Stein 1,5 · Eis+Schatten 1,5 · Schatten+Stein 0,5), **kein Tag über 1,5 Durchbrüche** → C2 klar erfüllt (C10: 58,5). C1: Schatten 15 % ✓, Feuer 19 %, Stein 18 %, Eis 23 %. P8: Feuer 84–86 %, Eis 39–60 %, Stein 42–52 %, Schatten 5–26 %.
 - Noch offen: Form je Block (Feuer Runde 11–20 0,73–0,82, Schatten Runde 1–5 0,85 und 26–40 0,82–0,89, Stein Runde 1–5 1,17), P8 Schatten/Eis/Stein, C1.
