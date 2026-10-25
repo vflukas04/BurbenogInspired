@@ -193,6 +193,13 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Effekte sind sehr viel wert, wenn alle eigenen Türme sie tragen** (das ist die Lage im Spiel: ein Element = ein Effekt). Mit Stapelregel addieren sich die Effekte der vielen eigenen Türme. Brennen 30 % 6 s verdreifacht die Leistung, Bremsen mit Fläche ebenso.
 - Folge für die Annäherung an die heutigen Türme: Effekt-Türme müssen deutlich weniger Direktschaden haben – oder die Effektstärken werden so gewählt, dass der Wechselkurs moderat bleibt (≈ 1,2–1,5). Das ist die zentrale Designentscheidung für D2.
 
+## Beschlüsse L (25.10. mittags)
+- **Kein „anvisiertes Monster immer voll“** – Abfall zum Rand bleibt (langsame Flächentürme treffen das Ziel kaum, dafür andere). Kleine Fläche ist dann einfach weniger wert → über den Wechselkurs mehr Schaden. Kopplung Wurfgeschwindigkeit ↔ Radius bestimmt, wie weit das Ziel bis zum Aufschlag läuft.
+- **Effekte: beide Wege, je Turm.** Weg 2 (schwächere Effekte, Wert ≈ 1,2–1,5, mehr Direktschaden) als Regel; Weg 1 (starker Effekt, wenig Schaden) als seltene Ausnahme – bei Eis gut, bei Feuer selten, bei Schatten eher nicht (Irrlicht ist schon ein Sonderturm).
+- **Mehrere Geschosse seltener** (heute 22 von 32 Türmen mit 2–6 Geschossen).
+- **Reichweite** darf kleiner werden – kleinsten sinnvollen Wert messen.
+- **Idee L: Schatten-Leuchtfackel** (Standard-Turm oder Kristall): Treffer erleuchtet das Monster kurz, es kann dann auch nachts außerhalb von Irrlichtern getroffen werden.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

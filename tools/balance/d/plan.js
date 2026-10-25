@@ -15,7 +15,8 @@ function umsetzen(towers){
   return bleib;
 }
 function lauf(){ const out = [];
-  for (let d = t0 - 1; d < t1; d++) { const r = PLAENE.map(p => { C.useMap(p.lane, p.seed); const s = p.tage[d].setup;
+  for (let d = t0 - 1; d < t1; d++) { if (process.env.TAGART === 'flieg' && !G.MONSTERS[d].fly) continue; if (process.env.TAGART === 'boden' && G.MONSTERS[d].fly) continue;   // TAGART: nur Flieger- bzw. Bodentage
+    const r = PLAENE.map(p => { C.useMap(p.lane, p.seed); const s = p.tage[d].setup;
       return C.reserveDay({ el, towers:umsetzen(s.towers), res:s.res }, { type:d, players:2 }); });
     out.push({ d, r, m:Math.sqrt(r[0] * r[1]) }); }
   return out; }
