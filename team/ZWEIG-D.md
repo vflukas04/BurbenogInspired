@@ -233,6 +233,14 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Nova ist schwach** (nur Monster direkt um den Turm, seltene Pulse) – braucht Betäuben/Einfrieren, um sich zu lohnen.
 - **Kombinationen** liegen nahe am Produkt der Einzelwerte (Fluch genau, Brennen mit Fläche +4 %). Gute Nachricht für das Modell: Wert ≈ Produkt der Einzelkurse, kleine Zuschläge für Synergien.
 
+## D2 Komplettversuch (25.10. nachmittags, `d/d2.js` → `spiegel-D2.json`)
+32 Türme als Grundturm + Merkmale (Weg 2 als Regel; Mehrfachgeschosse 7 Türme; Reichweiten 1,5–6; Irrlicht vorerst normaler Fluch-Turm), **Schaden nur aus den Wechselkursen**. Schnelldurchlauf je Element, alle Turmtypen auf eigene Plätze neu gesetzt.
+- Korrekturen am Werkzeug: Luftabwehr-Typen im Plan an Bodentagen durch Gold-gleichen Bodenturm ersetzen; Element-Forschung des Plans (Feuer) auf das geprüfte Element umschreiben.
+- **Befund Wetter:** Mit identischen Standardtürmen liegen die Elemente ohne Wetter bei 0,99–1,03, mit Wetter bei 0,99–1,14 – das heutige Wetter bevorzugt Feuer um ≈ 12 % (Sonnig ×3 Gewicht, Hitze), benachteiligt Stein (wetterfest heißt: nie Bonus). → Vorschlag: Wetterwirkungen je Element so normieren, dass das gewichtete Mittel 1 ist.
+- **Befund Bremsen:** Im gemischten Aufbau ist Bremsen etwa doppelt so viel wert wie in der Einzelmessung (es hilft den stärkeren anderen Türmen) → Wechselkurs Bremsen (V − 1) × 2 (`SLOW_K`).
+- **Ergebnis ohne Wetter (Plan-Reserve, D0 mit Standardtürmen 0,99–1,03):** Feuer 0,98 · Eis 1,03 · Schatten 0,97 · Stein 0,93. **Alle Elemente innerhalb ±5 % aus reinen Wechselkursen** (Stein −5 %: Fläche/Betäuben leicht überbewertet). Mit heutigem Wetter: 1,14 / 1,01 / 1,04 / 0,93.
+- Noch nicht drin: Irrlicht als Sonderturm, Paare (Partner fängt auf), Fliegertage im Detail, Kristalle.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

@@ -4,6 +4,8 @@
 const fs = require('fs'), path = require('path'), C = require('../core'), { G } = C, S = require('../spiegel');
 const PL = ['standard-map0', 'standard-map2'].map(o => require(path.join(__dirname, 'plaene', o + '.json')).erg.Feuer[0]);
 const ZIEL48 = +process.env.ZIEL48 || 1.05;
+// Kalibrierung mit neutralen Faktoren (25.10.): sonst passt sich die Kurve dem Element des Plans an (Feuer) und alle anderen liegen darunter
+const WEAK = G.MONSTERS.map(m => m.weak); G.MONSTERS.forEach(m => { m.weak = [1, 1, 1, 1]; });
 // Kills am Menschen-Start (L): Tag 1 drei Turm 1 Stufe 1 (30 Gold), Tag 2 drei Turm 1 Stufe 2 (75 Gold ≈ Budget 70); Maps 0–3 (Wiese), beste Plätze
 const start = (lvl) => ({ el:0, towers:C.mask(0, 0, lvl, 0).cells.slice(0, 3).map(c => ({ x:c.x, y:c.y, el:0, idx:0, lvl })), res:[] });
 const kills = (d, f) => { let s = 0; for (let l = 0; l < 4; l++) { C.useMap(l, null); s += C.runWave(start(d + 1), { type:d, players:2 }, f).kills; } return s / 4; };
