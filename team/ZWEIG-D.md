@@ -156,6 +156,13 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Testläufe (L):** statt voller Bot-Läufe gezielte Prüfszenarien mit bestimmten Monstertypen (schnell, gepanzert, Schwarm, Fliegende, Boss, Leaks am Abend); voller Bot-Lauf erst am Ende.
 - **Geschossgeschwindigkeit:** gezielte Geschosse fliegen fest 9 Felder/s und folgen dem Ziel (kein Merkmal). Wurfgeschosse landen dort, wo das Ziel beim Abschuss war – daher verfehlt kleine Fläche (Wert 0,84 bei 0,5). Vorschlag: Wurfgeschwindigkeit an den Flächenradius koppeln (feste Regel, kein eigener Wechselkurs).
 
+## D0 Standardtürme und Monster (25.10. vormittags, L)
+- **Standardtürme** (`spiegel-D0.json`): je Element gleich, 8 Stufen, Rate 1, 1 gezieltes Geschoss, Reichweite 3,5 Felder (L: Reichweiten im Spiel eher zu groß), kein Effekt, trifft Fliegende. Schaden/s = 0,233 × Gold × 1,10^Turm, Upgrades so, dass Kraft je Gold 1/0,9/1,0/1,1/1,2/1,3 (Stufe 1–6). Elemente ohne Sondermerkmale (kein Rüstungsschaden, keine Nachtregel, Gelände/Wetter normal). Faktoren der Monster wie C12.
+- Monster-Änderungen (nur D, L): Betty – verliebte Türme schießen 4,5 s nicht (statt 3), Magier-Novizen alle 6 s für 2,5 s unsichtbar (statt 4/1,5), Motten fliegen 2,4 s und Kokon 6 s (statt 1,2/3).
+- **Ausbauplan (L):** Der Bot sucht einmal den besten Ausbau mit Standardtürmen (Feuer, Maps 0:11 und 2:23, 35 min) → `d/plaene/standard-map0.json`, `standard-map2.json`. Map 0: viele Turm-1 auf Stufe 6 plus Turm 3/4; Map 2: wenige höhere Türme (4–6). Zwei sehr verschiedene Spielweisen – gut gegen Einseitigkeit; weitere Pläne („hochziehen“, „breit“) folgen.
+- **Leben je Tag** = Leben × Reserve des Plans ÷ 1,5 (Reserve ist genau der Leben-Faktor) → Plan-Reserve 1,50 im Mittel (Map 0 ≈ 1,3, Map 2 ≈ 1,7). Leben liegen bei 0,2–1,1 × C12f (Standardtürme schwächer als die heutigen).
+- **Schnelldurchlauf `d/plan.js`:** fester Plan, nur variierte Turmtypen (`VAR=`) werden auf eigene beste Plätze neu gesetzt. Ganzes Spiel, beide Pläne: **17 Sekunden** (statt Stunden).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

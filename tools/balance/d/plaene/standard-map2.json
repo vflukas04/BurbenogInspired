@@ -1,0 +1,4802 @@
+{
+ "version": "2026-10-18e",
+ "spiegel": {
+  "_basis": "044d8c0",
+  "MONSTERS.Betty (Boss).hpMul": 6.7527,
+  "MONSTERS.Nazgul.hpMul": 0.4233,
+  "MONSTERS.Fledermäuse.hpMul": 0.8276,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.8111,
+  "MONSTERS.Silberfische.hpMul": 1.3156,
+  "MONSTERS.Kellerasseln.hpMul": 1.7365,
+  "MONSTERS.Nacktschnecken.hpMul": 2.4616,
+  "MONSTERS.Ohrenkneifer.hpMul": 1.6051,
+  "MONSTERS.Mäuse.hpMul": 1.362,
+  "MONSTERS.Maus-Boss.hpMul": 8.1195,
+  "MONSTERS.Kleine Hunde.hpMul": 1.4629,
+  "MONSTERS.Ratten.hpMul": 1.4015,
+  "MONSTERS.Katzen.hpMul": 1.3546,
+  "MONSTERS.Spatzen.hpMul": 1.369,
+  "MONSTERS.Füchse.hpMul": 1.2236,
+  "MONSTERS.Fuchs-Boss.hpMul": 5.6487,
+  "MONSTERS.Habichte.hpMul": 1.122,
+  "MONSTERS.Dachse.hpMul": 1.7026,
+  "MONSTERS.Oktopusse.hpMul": 2.6192,
+  "MONSTERS.Wildschweine.hpMul": 1.6837,
+  "MONSTERS.Schäferhunde.hpMul": 1.3938,
+  "MONSTERS.Schäferhund-Boss.hpMul": 5.7113,
+  "MONSTERS.Besoffene Penner.hpMul": 1.8807,
+  "MONSTERS.Wütende Partnerin.hpMul": 1.15,
+  "MONSTERS.Wütende Nachbarn.hpMul": 1.1669,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 1.5888,
+  "MONSTERS.Uffug-Vorhaut.hpMul": 2.0131,
+  "MONSTERS.Uffug (Boss).hpMul": 14.5839,
+  "MONSTERS.Roboter.hpMul": 1.5451,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.9716,
+  "MONSTERS.Würfel.hpMul": 1.5842,
+  "MONSTERS.Phönixe.hpMul": 0.9532,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 1.5511,
+  "MONSTERS.El Schlucko.hpMul": 6.5514,
+  "MONSTERS.Krieger.hpMul": 1.2208,
+  "MONSTERS.Golems.hpMul": 1.429,
+  "MONSTERS.Albträume.hpMul": 0.8647,
+  "MONSTERS.Magier-Novizen.hpMul": 1.4265,
+  "MONSTERS.Magiermeister.hpMul": 5.4658,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.786,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.6375,
+  "MONSTERS.Wargreiter.hpMul": 1.1753,
+  "MONSTERS.Lehrer.hpMul": 1.3756,
+  "MONSTERS.Schulleiter.hpMul": 6.4959,
+  "MONSTERS.Streichquartett.hpMul": 1.2071,
+  "MONSTERS.Heisenbergs.hpMul": 0.9428,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.8878,
+  "MONSTERS.GNTModels.hpMul": 0.8803,
+  "MONSTERS.Kellerasseln.weak": [
+   0.9,
+   1,
+   1,
+   1.1
+  ],
+  "MONSTERS.Nacktschnecken.weak": [
+   1,
+   1.1,
+   1,
+   0.9
+  ],
+  "MONSTERS.Ohrenkneifer.weak": [
+   1,
+   0.9,
+   1.1,
+   1
+  ],
+  "MONSTERS.Mäuse.weak": [
+   1.1,
+   1,
+   0.9,
+   1
+  ],
+  "MONSTERS.Ratten.weak": [
+   1.15,
+   1,
+   1,
+   0.85
+  ],
+  "MONSTERS.Katzen.weak": [
+   0.85,
+   1.15,
+   1,
+   1
+  ],
+  "MONSTERS.Spatzen.weak": [
+   1,
+   0.85,
+   1.15,
+   1
+  ],
+  "MONSTERS.Füchse.weak": [
+   1,
+   1,
+   0.85,
+   1.15
+  ],
+  "MONSTERS.Dachse.weak": [
+   1,
+   1,
+   0.8,
+   1.2
+  ],
+  "MONSTERS.Oktopusse.weak": [
+   0.8,
+   1.2,
+   1,
+   1
+  ],
+  "MONSTERS.Wildschweine.weak": [
+   1,
+   0.8,
+   1.2,
+   1
+  ],
+  "MONSTERS.Schäferhunde.weak": [
+   1.2,
+   1,
+   1,
+   0.8
+  ],
+  "MONSTERS.Wütende Partnerin.weak": [
+   0.75,
+   1.25,
+   1,
+   1
+  ],
+  "MONSTERS.Eifersüchtige Geliebte.weak": [
+   1,
+   1,
+   0.75,
+   1.25
+  ],
+  "MONSTERS.Würfel.weak": [
+   1,
+   1,
+   1.25,
+   0.75
+  ],
+  "MONSTERS.Fairtrade-Bananen.weak": [
+   1,
+   1,
+   0.75,
+   1.25
+  ],
+  "MONSTERS.Looping-Louie-Flugzeuge.weak": [
+   0.75,
+   1,
+   1.25,
+   1
+  ],
+  "MONSTERS.Magier-Novizen.weak": [
+   1,
+   0.75,
+   1,
+   1.25
+  ],
+  "MONSTERS.Lindner-Spezialisten.weak": [
+   1.3,
+   0.7,
+   1,
+   1
+  ],
+  "MONSTERS.Wargreiter.weak": [
+   1,
+   1,
+   1.3,
+   0.7
+  ],
+  "MONSTERS.Fledermäuse.weak": [
+   0.7,
+   1.3,
+   1,
+   1
+  ],
+  "MONSTERS.Lehrer.weak": [
+   1,
+   1,
+   0.7,
+   1.3
+  ],
+  "MONSTERS.Heisenbergs.weak": [
+   0.65,
+   1,
+   1.35,
+   1
+  ],
+  "MONSTERS.Mehlmottenraupen.weak": [
+   1,
+   0.65,
+   1,
+   1.35
+  ],
+  "MONSTERS.Nazgul.weak": [
+   1.35,
+   1,
+   0.65,
+   1
+  ],
+  "MONSTERS.GNTModels.weak": [
+   1,
+   1.35,
+   1,
+   0.65
+  ],
+  "MONSTERS.Wütende Nachbarn.weak": [
+   1,
+   1,
+   1.25,
+   0.75
+  ],
+  "MONSTERS.Uffug-Vorhaut.weak": [
+   1.25,
+   0.75,
+   1,
+   1
+  ],
+  "ELEMENTS.0.towers.0": [
+   "Turm 1",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.0": 1.16452,
+  "ELEMENTS.0.towers.1": [
+   "Turm 2",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.1": 1.21998,
+  "ELEMENTS.0.towers.2": [
+   "Turm 3",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.2": 1.28098,
+  "ELEMENTS.0.towers.3": [
+   "Turm 4",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.3": 1.34781,
+  "ELEMENTS.0.towers.4": [
+   "Turm 5",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.4": 1.45105,
+  "ELEMENTS.0.towers.5": [
+   "Turm 6",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.5": 1.52655,
+  "ELEMENTS.0.towers.6": [
+   "Turm 7",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.6": 1.61562,
+  "ELEMENTS.0.towers.7": [
+   "Turm 8",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.0.kraftT.7": 1.70733,
+  "ELEMENTS.0.kraft": 1,
+  "ELEMENTS.0.costOverride": {
+   "0": 10,
+   "1": 45,
+   "2": 70,
+   "3": 120,
+   "4": 200,
+   "5": 350,
+   "6": 650,
+   "7": 1200
+  },
+  "ELEMENTS.0.upDmg": [
+   2.25,
+   2.1111,
+   1.8816,
+   1.7706,
+   1.7071
+  ],
+  "ELEMENTS.0.upT": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "ELEMENTS.0.armorDmg": 0,
+  "ELEMENTS.0.dayOnly": false,
+  "ELEMENTS.0.noFly": false,
+  "ELEMENTS.0.weatherproof": false,
+  "ELEMENTS.0.terrainFree": false,
+  "ELEMENTS.0.kraftBlock": null,
+  "ELEMENTS.1.towers.0": [
+   "Turm 1",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.0": 1.16452,
+  "ELEMENTS.1.towers.1": [
+   "Turm 2",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.1": 1.21998,
+  "ELEMENTS.1.towers.2": [
+   "Turm 3",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.2": 1.28098,
+  "ELEMENTS.1.towers.3": [
+   "Turm 4",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.3": 1.34781,
+  "ELEMENTS.1.towers.4": [
+   "Turm 5",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.4": 1.45105,
+  "ELEMENTS.1.towers.5": [
+   "Turm 6",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.5": 1.52655,
+  "ELEMENTS.1.towers.6": [
+   "Turm 7",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.6": 1.61562,
+  "ELEMENTS.1.towers.7": [
+   "Turm 8",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.1.kraftT.7": 1.70733,
+  "ELEMENTS.1.kraft": 1,
+  "ELEMENTS.1.costOverride": {
+   "0": 10,
+   "1": 45,
+   "2": 70,
+   "3": 120,
+   "4": 200,
+   "5": 350,
+   "6": 650,
+   "7": 1200
+  },
+  "ELEMENTS.1.upDmg": [
+   2.25,
+   2.1111,
+   1.8816,
+   1.7706,
+   1.7071
+  ],
+  "ELEMENTS.1.upT": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "ELEMENTS.1.armorDmg": 0,
+  "ELEMENTS.1.dayOnly": false,
+  "ELEMENTS.1.noFly": false,
+  "ELEMENTS.1.weatherproof": false,
+  "ELEMENTS.1.terrainFree": false,
+  "ELEMENTS.1.kraftBlock": null,
+  "ELEMENTS.2.towers.0": [
+   "Turm 1",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.0": 1.16452,
+  "ELEMENTS.2.towers.1": [
+   "Turm 2",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.1": 1.21998,
+  "ELEMENTS.2.towers.2": [
+   "Turm 3",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.2": 1.28098,
+  "ELEMENTS.2.towers.3": [
+   "Turm 4",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.3": 1.34781,
+  "ELEMENTS.2.towers.4": [
+   "Turm 5",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.4": 1.45105,
+  "ELEMENTS.2.towers.5": [
+   "Turm 6",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.5": 1.52655,
+  "ELEMENTS.2.towers.6": [
+   "Turm 7",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.6": 1.61562,
+  "ELEMENTS.2.towers.7": [
+   "Turm 8",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.2.kraftT.7": 1.70733,
+  "ELEMENTS.2.kraft": 1,
+  "ELEMENTS.2.costOverride": {
+   "0": 10,
+   "1": 45,
+   "2": 70,
+   "3": 120,
+   "4": 200,
+   "5": 350,
+   "6": 650,
+   "7": 1200
+  },
+  "ELEMENTS.2.upDmg": [
+   2.25,
+   2.1111,
+   1.8816,
+   1.7706,
+   1.7071
+  ],
+  "ELEMENTS.2.upT": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "ELEMENTS.2.armorDmg": 0,
+  "ELEMENTS.2.dayOnly": false,
+  "ELEMENTS.2.noFly": false,
+  "ELEMENTS.2.weatherproof": false,
+  "ELEMENTS.2.terrainFree": false,
+  "ELEMENTS.2.kraftBlock": null,
+  "ELEMENTS.3.towers.0": [
+   "Turm 1",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.0": 1.16452,
+  "ELEMENTS.3.towers.1": [
+   "Turm 2",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.1": 1.21998,
+  "ELEMENTS.3.towers.2": [
+   "Turm 3",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.2": 1.28098,
+  "ELEMENTS.3.towers.3": [
+   "Turm 4",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.3": 1.34781,
+  "ELEMENTS.3.towers.4": [
+   "Turm 5",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.4": 1.45105,
+  "ELEMENTS.3.towers.5": [
+   "Turm 6",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.5": 1.52655,
+  "ELEMENTS.3.towers.6": [
+   "Turm 7",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.6": 1.61562,
+  "ELEMENTS.3.towers.7": [
+   "Turm 8",
+   "Schaden",
+   1.75,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0,
+   {
+    "effect": "none",
+    "fly": true
+   }
+  ],
+  "ELEMENTS.3.kraftT.7": 1.70733,
+  "ELEMENTS.3.kraft": 1,
+  "ELEMENTS.3.costOverride": {
+   "0": 10,
+   "1": 45,
+   "2": 70,
+   "3": 120,
+   "4": 200,
+   "5": 350,
+   "6": 650,
+   "7": 1200
+  },
+  "ELEMENTS.3.upDmg": [
+   2.25,
+   2.1111,
+   1.8816,
+   1.7706,
+   1.7071
+  ],
+  "ELEMENTS.3.upT": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "ELEMENTS.3.armorDmg": 0,
+  "ELEMENTS.3.dayOnly": false,
+  "ELEMENTS.3.noFly": false,
+  "ELEMENTS.3.weatherproof": false,
+  "ELEMENTS.3.terrainFree": false,
+  "ELEMENTS.3.kraftBlock": null,
+  "MONSTERS.Betty (Boss).charm.stop": 4.5,
+  "MONSTERS.Magier-Novizen.blink.every": 6,
+  "MONSTERS.Magier-Novizen.blink.dur": 2.5,
+  "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
+  "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
+  "_stand": "Zweig D0 (L, 25.10.): Standardtürme (Rate 1, Reichweite 3,5 Felder, 1 Geschoss, kein Effekt, trifft Fliegende, Schaden/s ∝ Gold × 1,10^Turm × Upgrade 0,9/1,0/1,1/1,2/1,3), Elemente neutral; Monster: Faktoren und Leben wie C12f (werden kalibriert); Betty 4,5 s, Novizen alle 6 s für 2,5 s, Motten fliegen 2,4 s / Kokon 6 s"
+ },
+ "maps": [
+  [
+   2,
+   23
+  ]
+ ],
+ "erg": {
+  "Feuer": [
+   {
+    "lane": 2,
+    "seed": 23,
+    "tage": [
+     {
+      "tag": 1,
+      "monster": "Silberfische",
+      "R": 1.747,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 30,
+      "kasse": 0,
+      "wert": 30,
+      "tuerme": 3,
+      "stufen": "1.1 1.1 1.1",
+      "forschung": "",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": []
+      }
+     },
+     {
+      "tag": 2,
+      "monster": "Kellerasseln",
+      "R": 1.008,
+      "kills": 19,
+      "n": 20,
+      "durch": 1,
+      "gold": 70,
+      "kasse": 0,
+      "wert": 70,
+      "tuerme": 1,
+      "stufen": "3.1",
+      "forschung": "",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        }
+       ],
+       "res": []
+      }
+     },
+     {
+      "tag": 3,
+      "monster": "Nacktschnecken",
+      "R": 0.919,
+      "kills": 11,
+      "n": 20,
+      "durch": 9,
+      "gold": 110,
+      "kasse": 0,
+      "wert": 110,
+      "tuerme": 5,
+      "stufen": "1.1 1.1 1.1 1.1 3.1",
+      "forschung": "",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": []
+      }
+     },
+     {
+      "tag": 4,
+      "monster": "Ohrenkneifer",
+      "R": 1.156,
+      "kills": 18,
+      "n": 20,
+      "durch": 2,
+      "gold": 150,
+      "kasse": 0,
+      "wert": 150,
+      "tuerme": 4,
+      "stufen": "1.1 1.1 1.1 4.1",
+      "forschung": "",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": []
+      }
+     },
+     {
+      "tag": 5,
+      "monster": "Mäuse",
+      "R": 1.443,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 190,
+      "kasse": 25,
+      "wert": 175,
+      "tuerme": 3,
+      "stufen": "1.1 2.1 4.1",
+      "forschung": "el0:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1"
+       ]
+      }
+     },
+     {
+      "tag": 6,
+      "monster": "Maus-Boss",
+      "R": 1.147,
+      "kills": 1,
+      "n": 1,
+      "durch": 0,
+      "gold": 230,
+      "kasse": 65,
+      "wert": 190,
+      "tuerme": 2,
+      "stufen": "3.1 4.1",
+      "forschung": "el0:1 rng:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1"
+       ]
+      }
+     },
+     {
+      "tag": 7,
+      "monster": "Kleine Hunde",
+      "R": 0.963,
+      "kills": 16,
+      "n": 20,
+      "durch": 4,
+      "gold": 230,
+      "kasse": 65,
+      "wert": 190,
+      "tuerme": 2,
+      "stufen": "3.1 4.1*",
+      "forschung": "el0:1 rng:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1"
+       ]
+      }
+     },
+     {
+      "tag": 8,
+      "monster": "Ratten",
+      "R": 1.113,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 290,
+      "kasse": 165,
+      "wert": 200,
+      "tuerme": 3,
+      "stufen": "1.1 3.1 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2"
+       ]
+      }
+     },
+     {
+      "tag": 9,
+      "monster": "Katzen",
+      "R": 0.878,
+      "kills": 14,
+      "n": 20,
+      "durch": 6,
+      "gold": 354,
+      "kasse": 165,
+      "wert": 270,
+      "tuerme": 5,
+      "stufen": "1.1 1.1 1.1 4.1 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2"
+       ]
+      }
+     },
+     {
+      "tag": 10,
+      "monster": "Spatzen",
+      "R": 1.165,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 418,
+      "kasse": 165,
+      "wert": 330,
+      "tuerme": 4,
+      "stufen": "2.1 2.1 4.1 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2"
+       ]
+      }
+     },
+     {
+      "tag": 11,
+      "monster": "Füchse",
+      "R": 1.183,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 483,
+      "kasse": 220,
+      "wert": 370,
+      "tuerme": 4,
+      "stufen": "1.1 4.1 4.1 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3"
+       ]
+      }
+     },
+     {
+      "tag": 12,
+      "monster": "Fuchs-Boss",
+      "R": 1.277,
+      "kills": 1,
+      "n": 1,
+      "durch": 0,
+      "gold": 547,
+      "kasse": 220,
+      "wert": 430,
+      "tuerme": 4,
+      "stufen": "3.1 4.1 4.1 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3"
+       ]
+      }
+     },
+     {
+      "tag": 13,
+      "monster": "Habichte",
+      "R": 1.317,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 547,
+      "kasse": 220,
+      "wert": 430,
+      "tuerme": 4,
+      "stufen": "3.1 4.1 4.1* 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3"
+       ]
+      }
+     },
+     {
+      "tag": 14,
+      "monster": "Dachse",
+      "R": 0.839,
+      "kills": 8,
+      "n": 20,
+      "durch": 12,
+      "gold": 654,
+      "kasse": 320,
+      "wert": 490,
+      "tuerme": 5,
+      "stufen": "1.1 4.1 4.1 4.1* 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2"
+       ]
+      }
+     },
+     {
+      "tag": 15,
+      "monster": "Oktopusse",
+      "R": 0.698,
+      "kills": 6,
+      "n": 20,
+      "durch": 14,
+      "gold": 768,
+      "kasse": 320,
+      "wert": 587,
+      "tuerme": 6,
+      "stufen": "1.2 1.4 4.1 4.1 4.1* 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 4,
+         "inv": 82
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 2,
+         "inv": 25
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2"
+       ]
+      }
+     },
+     {
+      "tag": 16,
+      "monster": "Wildschweine",
+      "R": 0.814,
+      "kills": 7,
+      "n": 20,
+      "durch": 13,
+      "gold": 882,
+      "kasse": 320,
+      "wert": 714,
+      "tuerme": 6,
+      "stufen": "1.2 1.6 4.1 4.1 4.1* 4.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 6,
+         "inv": 209
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 2,
+         "inv": 25
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2"
+       ]
+      }
+     },
+     {
+      "tag": 17,
+      "monster": "Schäferhunde",
+      "R": 1.248,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 996,
+      "kasse": 570,
+      "wert": 710,
+      "tuerme": 4,
+      "stufen": "4.1 4.1* 4.1* 6.1",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 350
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1"
+       ]
+      }
+     },
+     {
+      "tag": 18,
+      "monster": "Schäferhund-Boss",
+      "R": 1.287,
+      "kills": 1,
+      "n": 1,
+      "durch": 0,
+      "gold": 1110,
+      "kasse": 630,
+      "wert": 790,
+      "tuerme": 5,
+      "stufen": "1.1 1.1 4.1* 4.2* 6.1",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 2,
+         "inv": 300,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 350
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2"
+       ]
+      }
+     },
+     {
+      "tag": 19,
+      "monster": "Besoffene Penner",
+      "R": 0.731,
+      "kills": 7,
+      "n": 20,
+      "durch": 13,
+      "gold": 1110,
+      "kasse": 630,
+      "wert": 790,
+      "tuerme": 5,
+      "stufen": "1.1 2.1 2.1* 4.1* 4.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2"
+       ]
+      }
+     },
+     {
+      "tag": 20,
+      "monster": "Wütende Partnerin",
+      "R": 0.599,
+      "kills": 3,
+      "n": 20,
+      "durch": 17,
+      "gold": 1292,
+      "kasse": 770,
+      "wert": 900,
+      "tuerme": 5,
+      "stufen": "2.1 2.1* 4.1 4.1* 4.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 21,
+      "monster": "Wütende Nachbarn",
+      "R": 0.742,
+      "kills": 6,
+      "n": 20,
+      "durch": 14,
+      "gold": 1484,
+      "kasse": 770,
+      "wert": 1090,
+      "tuerme": 6,
+      "stufen": "1.1 2.1 2.1* 4.1 4.2* 4.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 2,
+         "inv": 300,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 1,
+         "inv": 120
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 22,
+      "monster": "Eifersüchtige Geliebte",
+      "R": 0.783,
+      "kills": 6,
+      "n": 20,
+      "durch": 14,
+      "gold": 1676,
+      "kasse": 770,
+      "wert": 1284,
+      "tuerme": 4,
+      "stufen": "2.3* 4.2* 4.3* 5.1",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 2,
+         "inv": 300,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 3,
+         "inv": 214,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 23,
+      "monster": "Uffug-Vorhaut",
+      "R": 0.955,
+      "kills": 12,
+      "n": 20,
+      "durch": 8,
+      "gold": 1868,
+      "kasse": 770,
+      "wert": 1481,
+      "tuerme": 5,
+      "stufen": "2.1 2.4* 4.2* 4.3* 5.1",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 2,
+         "inv": 300,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 4,
+         "inv": 366,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 1,
+         "inv": 45
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 24,
+      "monster": "Uffug (Boss)",
+      "R": 0.742,
+      "kills": 0,
+      "n": 1,
+      "durch": 5,
+      "gold": 2060,
+      "kasse": 770,
+      "wert": 1674,
+      "tuerme": 5,
+      "stufen": "1.1 2.5* 4.2* 4.3* 5.1",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 2,
+         "inv": 300,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 25,
+      "monster": "Roboter",
+      "R": 0.564,
+      "kills": 4,
+      "n": 20,
+      "durch": 16,
+      "gold": 2070,
+      "kasse": 770,
+      "wert": 1684,
+      "tuerme": 6,
+      "stufen": "1.1 1.1 2.5* 4.2* 4.3* 5.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 2,
+         "inv": 300,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 26,
+      "monster": "Sommer-Schneebälle",
+      "R": 1.139,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 2358,
+      "kasse": 770,
+      "wert": 1969,
+      "tuerme": 6,
+      "stufen": "1.1 1.2 2.5* 4.3* 4.3* 5.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 2,
+         "inv": 25
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 27,
+      "monster": "Würfel",
+      "R": 0.693,
+      "kills": 5,
+      "n": 20,
+      "durch": 15,
+      "gold": 2646,
+      "kasse": 770,
+      "wert": 2246,
+      "tuerme": 7,
+      "stufen": "1.1 1.4 2.5* 4.3* 4.3* 5.1 5.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 4,
+         "inv": 82
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 220
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 28,
+      "monster": "Phönixe",
+      "R": 0.618,
+      "kills": 4,
+      "n": 20,
+      "durch": 16,
+      "gold": 2934,
+      "kasse": 770,
+      "wert": 2546,
+      "tuerme": 7,
+      "stufen": "1.1 1.4 2.5* 4.3* 4.3* 5.1 5.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 4,
+         "inv": 82
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 220
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 29,
+      "monster": "Fairtrade-Bananen",
+      "R": 0.948,
+      "kills": 15,
+      "n": 20,
+      "durch": 5,
+      "gold": 3222,
+      "kasse": 770,
+      "wert": 2829,
+      "tuerme": 7,
+      "stufen": "1.2 2.5* 4.3* 4.3* 5.1 5.2* 6.1",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 2,
+         "inv": 25
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3"
+       ]
+      }
+     },
+     {
+      "tag": 30,
+      "monster": "El Schlucko",
+      "R": 1.499,
+      "kills": 1,
+      "n": 1,
+      "durch": 0,
+      "gold": 3510,
+      "kasse": 870,
+      "wert": 3058,
+      "tuerme": 8,
+      "stufen": "1.2 1.6 2.5* 4.3* 4.3* 5.1 5.2* 6.1",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 6,
+         "inv": 209
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 0,
+         "lvl": 2,
+         "inv": 45
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 31,
+      "monster": "Krieger",
+      "R": 0.442,
+      "kills": 2,
+      "n": 20,
+      "durch": 18,
+      "gold": 3510,
+      "kasse": 870,
+      "wert": 3069,
+      "tuerme": 8,
+      "stufen": "1.2 2.5* 3.1 4.3* 4.3* 5.2* 6.1 6.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 5,
+         "inv": 594,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 2,
+         "inv": 25
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 32,
+      "monster": "Golems",
+      "R": 0.568,
+      "kills": 5,
+      "n": 20,
+      "durch": 15,
+      "gold": 3918,
+      "kasse": 870,
+      "wert": 3468,
+      "tuerme": 8,
+      "stufen": "1.4 2.6* 3.1 4.3* 4.3* 5.2* 6.1 6.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 4,
+         "inv": 82
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 33,
+      "monster": "Albträume",
+      "R": 1.929,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 4326,
+      "kasse": 870,
+      "wert": 3873,
+      "tuerme": 8,
+      "stufen": "1.4 2.6* 3.1 4.3* 4.4* 5.2* 6.1 6.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 3,
+         "inv": 570,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 4,
+         "inv": 82
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 34,
+      "monster": "Looping-Louie-Flugzeuge",
+      "R": 0.807,
+      "kills": 11,
+      "n": 20,
+      "durch": 9,
+      "gold": 4734,
+      "kasse": 870,
+      "wert": 4278,
+      "tuerme": 8,
+      "stufen": "1.4 2.6* 3.1 4.4* 4.4* 5.2* 6.1 6.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 1,
+         "inv": 70
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 4,
+         "inv": 82
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 35,
+      "monster": "Magier-Novizen",
+      "R": 0.748,
+      "kills": 6,
+      "n": 20,
+      "durch": 14,
+      "gold": 5142,
+      "kasse": 870,
+      "wert": 4676,
+      "tuerme": 8,
+      "stufen": "2.6* 4.4* 4.4* 5.1 5.2* 6.1 6.1 6.1*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 500,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 350
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 36,
+      "monster": "Magiermeister",
+      "R": 1.008,
+      "kills": 0,
+      "n": 1,
+      "durch": 2,
+      "gold": 5550,
+      "kasse": 870,
+      "wert": 5111,
+      "tuerme": 7,
+      "stufen": "1.1 2.6* 4.4* 4.4* 5.3* 6.1 6.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 37,
+      "monster": "E-Scooter-Fahrer",
+      "R": 0.963,
+      "kills": 16,
+      "n": 20,
+      "durch": 4,
+      "gold": 5550,
+      "kasse": 870,
+      "wert": 5111,
+      "tuerme": 7,
+      "stufen": "1.1 2.6* 4.4* 4.4* 5.3* 6.1* 6.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 0,
+         "lvl": 1,
+         "inv": 10
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 38,
+      "monster": "Lindner-Spezialisten",
+      "R": 1.147,
+      "kills": 40,
+      "n": 40,
+      "durch": 0,
+      "gold": 6102,
+      "kasse": 870,
+      "wert": 5665,
+      "tuerme": 8,
+      "stufen": "2.3 2.6* 4.4* 4.4* 5.3* 6.1 6.1* 6.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 370,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 3,
+         "inv": 214
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 350
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 39,
+      "monster": "Wargreiter",
+      "R": 0.657,
+      "kills": 5,
+      "n": 20,
+      "durch": 15,
+      "gold": 6678,
+      "kasse": 870,
+      "wert": 6190,
+      "tuerme": 8,
+      "stufen": "2.3 2.6* 4.4* 4.4* 5.3* 6.1 6.2* 6.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 3,
+         "inv": 214
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 350
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3"
+       ]
+      }
+     },
+     {
+      "tag": 40,
+      "monster": "Fledermäuse",
+      "R": 0.754,
+      "kills": 8,
+      "n": 20,
+      "durch": 12,
+      "gold": 7230,
+      "kasse": 910,
+      "wert": 6755,
+      "tuerme": 8,
+      "stufen": "2.3 2.6* 4.4* 4.5* 5.3* 6.1 6.2* 6.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 4,
+         "inv": 975,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 3,
+         "inv": 214
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 350
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 41,
+      "monster": "Lehrer",
+      "R": 0.495,
+      "kills": 7,
+      "n": 20,
+      "durch": 13,
+      "gold": 7782,
+      "kasse": 910,
+      "wert": 7320,
+      "tuerme": 8,
+      "stufen": "2.3 2.6* 4.5* 4.5* 5.3* 6.1 6.2* 6.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 3,
+         "inv": 214
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 5,
+         "lvl": 1,
+         "inv": 350
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 42,
+      "monster": "Schulleiter",
+      "R": 0.826,
+      "kills": 0,
+      "n": 1,
+      "durch": 2,
+      "gold": 8334,
+      "kasse": 910,
+      "wert": 7841,
+      "tuerme": 8,
+      "stufen": "2.6 2.6* 4.5* 4.5* 5.1 5.3* 6.2* 6.2*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 885
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 43,
+      "monster": "Streichquartett",
+      "R": 0.547,
+      "kills": 12,
+      "n": 20,
+      "durch": 8,
+      "gold": 8334,
+      "kasse": 910,
+      "wert": 7856,
+      "tuerme": 8,
+      "stufen": "2.6* 3.2 4.5* 4.5* 5.1* 5.3* 6.2* 6.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 950,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 3,
+         "inv": 1627,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 1,
+         "inv": 200,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 2,
+         "inv": 168
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 44,
+      "monster": "Heisenbergs",
+      "R": 0.385,
+      "kills": 2,
+      "n": 20,
+      "durch": 18,
+      "gold": 9054,
+      "kasse": 910,
+      "wert": 8595,
+      "tuerme": 7,
+      "stufen": "2.6* 4.5* 4.5* 5.2* 5.4* 6.2* 6.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 4,
+         "inv": 1578,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 3,
+         "inv": 1627,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 2,
+         "inv": 479,
+         "gem": true,
+         "ab": "dmg"
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 45,
+      "monster": "Mehlmottenraupen",
+      "R": 0.51,
+      "kills": 3,
+      "n": 20,
+      "durch": 17,
+      "gold": 9774,
+      "kasse": 910,
+      "wert": 9182,
+      "tuerme": 8,
+      "stufen": "2.6* 3.2 4.5* 4.5* 5.3* 5.4* 6.2* 6.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 4,
+         "inv": 1578,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 3,
+         "inv": 1627,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 898,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 2,
+         "inv": 168
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 46,
+      "monster": "Nazgul",
+      "R": 1.643,
+      "kills": 20,
+      "n": 20,
+      "durch": 0,
+      "gold": 10494,
+      "kasse": 910,
+      "wert": 10029,
+      "tuerme": 8,
+      "stufen": "2.6* 3.2 4.5* 4.6* 5.3* 5.4* 6.2* 6.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 6,
+         "inv": 2387,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 4,
+         "inv": 1578,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 3,
+         "inv": 1627,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 3,
+         "inv": 898,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 2,
+         "inv": 168
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 47,
+      "monster": "GNTModels",
+      "R": 0.963,
+      "kills": 15,
+      "n": 20,
+      "durch": 5,
+      "gold": 11214,
+      "kasse": 910,
+      "wert": 10657,
+      "tuerme": 8,
+      "stufen": "2.6* 3.2 4.5* 4.6* 5.4* 5.4* 6.2* 6.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 6,
+         "inv": 2387,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 4,
+         "inv": 1578,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 3,
+         "inv": 1627,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 2,
+         "inv": 895,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 4,
+         "inv": 1526,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 2,
+         "inv": 168
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     },
+     {
+      "tag": 48,
+      "monster": "Betty (Boss)",
+      "R": 0.503,
+      "kills": 0,
+      "n": 1,
+      "durch": 5,
+      "gold": 11934,
+      "kasse": 910,
+      "wert": 11389,
+      "tuerme": 8,
+      "stufen": "2.6* 3.2 4.5* 4.6* 5.4* 5.4* 6.3* 6.3*",
+      "forschung": "el0:1 rng:1 gold:1 el0:2 el0:3 gold:2 t5:1 rng:2 gold:3 rng:3 cheap:1",
+      "setup": {
+       "towers": [
+        {
+         "x": 5,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 6,
+         "inv": 2387,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 2,
+         "el": 0,
+         "idx": 3,
+         "lvl": 5,
+         "inv": 1540,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 1,
+         "el": 0,
+         "idx": 1,
+         "lvl": 6,
+         "inv": 936,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 6,
+         "y": 2,
+         "el": 0,
+         "idx": 4,
+         "lvl": 4,
+         "inv": 1578,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 3,
+         "inv": 1627,
+         "gem": true,
+         "ab": 5
+        },
+        {
+         "x": 5,
+         "y": 1,
+         "el": 0,
+         "idx": 5,
+         "lvl": 3,
+         "inv": 1627,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 4,
+         "y": 4,
+         "el": 0,
+         "idx": 4,
+         "lvl": 4,
+         "inv": 1526,
+         "gem": true,
+         "ab": "dmg"
+        },
+        {
+         "x": 2,
+         "y": 2,
+         "el": 0,
+         "idx": 2,
+         "lvl": 2,
+         "inv": 168
+        }
+       ],
+       "res": [
+        "el0:1",
+        "rng:1",
+        "gold:1",
+        "el0:2",
+        "el0:3",
+        "gold:2",
+        "t5:1",
+        "rng:2",
+        "gold:3",
+        "rng:3",
+        "cheap:1"
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ }
+}
