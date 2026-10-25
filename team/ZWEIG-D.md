@@ -168,6 +168,15 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - Achtung Kippkante: Bei 20 gleichen Monstern im gleichen Abstand kippen die Kills fast sprunghaft (Tag 1: 15–20 Kills bei Leben ×1,0, 3–6 bei ×1,2). „12“ liegt genau an der Kante – im Spiel streuen Gelände und Wetter das.
 - Silberfische bleiben wie sie sind (L), 12 Kills an der Kippkante; im Testspiel beobachten.
 
+## D1 Fläche im Schnelldurchlauf (25.10. mittags, `d/merkmal.js`: alle Standardtürme bekommen das Merkmal bei gleichem Schaden/s)
+| Radius (Felder) | 0,5 | 1 | 1,5 | 2 |
+|---|---|---|---|---|
+| Wert, Abfall wie heute (Mitte 100 %, Rand 70 %) | 0,84 | 0,90 | 1,19 | 1,52 |
+| Wert, **anvisiertes Monster voll** (`D_PRIMAER=1`) | 0,97 | 1,04 | 1,32 | 1,65 |
+
+- Ursache des Knicks bei kleiner Fläche: nicht die Wurfgeschwindigkeit (die ist bei kleinem Radius schon hoch, `lobSpeedOf`), sondern der **Abfall zum Rand** – das anvisierte Monster ist bis zum Aufschlag weitergelaufen und bekommt nur 70–90 %. Vorschlag für D: das anvisierte Monster bekommt immer vollen Schaden, die übrigen im Radius mit Abfall. Damit ist Fläche nie schlechter als keine.
+- Wechselkurs Fläche (mit `D_PRIMAER`): Wert ≈ 1 + 0,5 × (Radius − 0,75)^1,25 (Radius in Feldern; 0,5 → 1,0, 1 → 1,09, 1,5 → 1,35, 2 → 1,66).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

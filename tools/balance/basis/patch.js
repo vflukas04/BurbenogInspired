@@ -68,6 +68,18 @@ function hit(s, m, def, dmg){`],
     addBurn(m, bid, v, t, def.burnWave);
     if (def.burnStack && on(m, 'burn')) addBurn(m, 'g' + def._bid, v * (def.burnStack - 1) * bh, t, def.burnWave);   // Glutnest: zusätzlicher eigener Brand`],
 ];
+// Zweig D (L 25.10.): Flächen-Geschoss trifft das anvisierte Monster immer voll (wenn es im Radius ist), die anderen mit Abfall zum Rand (D_PRIMAER=1)
+if (process.env.D_PRIMAER) ERSETZEN.push(
+  [`function splashAt(s, def, x, y, R){   // Flächenschaden um einen Punkt
+  for (const o of s.monsters) { if (o.dead || !canHit(def, o)) continue;
+    const r = Math.hypot(o.x - x, o.y - y), E = ELEMENTS[def.el], c = E.splashCenter || 1, e = E.splashEdge ?? CONFIG.splashEdge;
+    if (r <= R) hit(s, o, def, def.dmg * (c - (c - e) * r / R)); }`,
+   `function splashAt(s, def, x, y, R, prim){   // Flächenschaden um einen Punkt
+  for (const o of s.monsters) { if (o.dead || !canHit(def, o)) continue;
+    const r = Math.hypot(o.x - x, o.y - y), E = ELEMENTS[def.el], c = E.splashCenter || 1, e = E.splashEdge ?? CONFIG.splashEdge;
+    if (r <= R) hit(s, o, def, def.dmg * (o === prim ? c : (c - (c - e) * r / R))); }`],
+  [`if (def.splash) { splashAt(s, def, p.tx, p.ty, def.splash);`,
+   `if (def.splash) { splashAt(s, def, p.tx, p.ty, def.splash, p.tgt);`]);
 if (process.env.STAPEL_ALLE) ERSETZEN.push(
   [`if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);`,
    // Bremsen (L 24.10.): Prozent wie bisher, je Turm höchstens 40 % ohne Fläche (BREMS_MAX) bzw. 30 % mit Fläche/Nova (BREMS_MAX_FL) → gestapelt höchstens 80 % bzw. 60 % (kein eigener Deckel)
