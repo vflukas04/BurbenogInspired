@@ -177,6 +177,22 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - Ursache des Knicks bei kleiner Fläche: nicht die Wurfgeschwindigkeit (die ist bei kleinem Radius schon hoch, `lobSpeedOf`), sondern der **Abfall zum Rand** – das anvisierte Monster ist bis zum Aufschlag weitergelaufen und bekommt nur 70–90 %. Vorschlag für D: das anvisierte Monster bekommt immer vollen Schaden, die übrigen im Radius mit Abfall. Damit ist Fläche nie schlechter als keine.
 - Wechselkurs Fläche (mit `D_PRIMAER`): Wert ≈ 1 + 0,5 × (Radius − 0,75)^1,25 (Radius in Feldern; 0,5 → 1,0, 1 → 1,09, 1,5 → 1,35, 2 → 1,66).
 
+## D1 Merkmale im Schnelldurchlauf (alle Türme der Map haben das Merkmal, gleicher Schaden/s, `D_PRIMAER=1`, Stapelregel)
+| Merkmal | Wert |
+|---|---|
+| Reichweite 3 / 4 / 5 / 6 Felder (Standard 3,5) | 0,97 / 1,02 / 1,06 / 1,09 |
+| Rate ×0,5 / ×2 | 1,03 / 0,97 |
+| 2 / 3 Geschosse | 0,89 / 0,80 |
+| Bremsen 20 % 2 s / 40 % 4 s | 1,23 / 1,49 |
+| Fluch 10 % 4 s / 20 % 4 s / 30 % 8 s | 1,51 / 1,86 / 2,26 |
+| Brennen 15 % 3 s / 30 % 6 s / 15 % ganzer Tag | 1,73 / 3,00 / 2,53 |
+| Fläche 1,5 + Bremsen 20 % 2 s / 30 % 4 s | 3,04 / 3,38 |
+| keine Fliegenden / nur Fliegende | 0,50 / 0,04 (Mittel über alle Tage – muss je Tagart gerechnet werden) |
+
+- Reichweite und Rate sind fast neutral (±10 %), mehrere Geschosse kosten (Schaden verteilt sich).
+- **Effekte sind sehr viel wert, wenn alle eigenen Türme sie tragen** (das ist die Lage im Spiel: ein Element = ein Effekt). Mit Stapelregel addieren sich die Effekte der vielen eigenen Türme. Brennen 30 % 6 s verdreifacht die Leistung, Bremsen mit Fläche ebenso.
+- Folge für die Annäherung an die heutigen Türme: Effekt-Türme müssen deutlich weniger Direktschaden haben – oder die Effektstärken werden so gewählt, dass der Wechselkurs moderat bleibt (≈ 1,2–1,5). Das ist die zentrale Designentscheidung für D2.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
