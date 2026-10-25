@@ -218,6 +218,21 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Weg-2-Stärken für Wert ≈ 1,3–1,5:** Fluch ≈ 5 %, Brennen ≈ 8 % 3 s bzw. 5 % ganzer Tag. **Bremsen mit Fläche ist auch bei 10 % schon ×1,6–1,7** (gebremste Monster ballen sich → mehr Flächentreffer) – für Eis mit Fläche reichen ≈ 5 %.
 - Fliegende: „keine Fliegenden“ kostet an Bodentagen nichts, ist an Fliegertagen wertlos; „nur Fliegende“ umgekehrt. Der Wechselkurs ist damit eine Designfrage (Häufigkeit der Fliegertage, Partner fängt auf): bleibt bei L-Regel +10 % bzw. +50 % an Fliegertagen.
 
+## D1c restliche Merkmale (alle Türme, gleicher Schaden/s)
+| Merkmal | Wert |
+|---|---|
+| Betäuben 15 % Chance, 1 s / 30 %, 2 s (Einzelziel) | 1,86 / 2,96 |
+| Nova (Fläche 2 Felder um den Turm, 1 Puls je 4 s) / mit Betäuben 30 % 2 s | 0,56 / 0,87 |
+| Rüstungsschaden 0,5 / 1,5 (Element) | 1,07 / 1,18 |
+| Nachtregel (trifft nachtaktive um 19 Uhr nur im Licht) | 0,86 |
+| Reichweite 1,5 | 0,75 |
+| Fläche 1 + Brennen 8 % 3 s (einzeln 0,90 × 1,40 = 1,26) | 1,31 |
+| Fläche 1 + Fluch 5 % 4 s (einzeln 0,90 × 1,28 = 1,15) | 1,15 |
+
+- **Betäuben ist der stärkste Effekt**, wenn alle Türme ihn haben: schon 15 % für 1 s fast ×1,9 (die ganze Welle steht immer wieder). Für Weg 2 eher 5 % / 0,5 s.
+- **Nova ist schwach** (nur Monster direkt um den Turm, seltene Pulse) – braucht Betäuben/Einfrieren, um sich zu lohnen.
+- **Kombinationen** liegen nahe am Produkt der Einzelwerte (Fluch genau, Brennen mit Fläche +4 %). Gute Nachricht für das Modell: Wert ≈ Produkt der Einzelkurse, kleine Zuschläge für Synergien.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
