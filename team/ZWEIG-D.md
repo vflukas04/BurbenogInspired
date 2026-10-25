@@ -163,6 +163,11 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Leben je Tag** = Leben × Reserve des Plans ÷ 1,5 (Reserve ist genau der Leben-Faktor) → Plan-Reserve 1,50 im Mittel (Map 0 ≈ 1,3, Map 2 ≈ 1,7). Leben liegen bei 0,2–1,1 × C12f (Standardtürme schwächer als die heutigen).
 - **Schnelldurchlauf `d/plan.js`:** fester Plan, nur variierte Turmtypen (`VAR=`) werden auf eigene beste Plätze neu gesetzt. Ganzes Spiel, beide Pläne: **17 Sekunden** (statt Stunden).
 
+## D0 Ziel-Reserve (L 25.10.): sinkt nach Potenzgesetz (`d/ziel.js`)
+- Tag 1: Menschen-Start (3 × Turm 1, Stufe 1) schafft im ersten Durchlauf je Spieler ca. 12 von 20 → Reserve 1,52. Tag 2: 3 × Turm 1 Stufe 2 schafft 5/5/8/8 (Ziel 4–7) → Reserve 1,58. Betty (Tag 48): 1,05 („knapp schaffbar“). Dazwischen Reserve = 1,58 × (Tag/2)^−0,129 (Tag 10: 1,34, Tag 24: 1,17, Tag 36: 1,10).
+- Achtung Kippkante: Bei 20 gleichen Monstern im gleichen Abstand kippen die Kills fast sprunghaft (Tag 1: 15–20 Kills bei Leben ×1,0, 3–6 bei ×1,2). „12“ liegt genau an der Kante – im Spiel streuen Gelände und Wetter das.
+- Plan-Reserve im Mittel jetzt 1,18.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
