@@ -200,6 +200,22 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Reichweite** darf kleiner werden – kleinsten sinnvollen Wert messen.
 - **Idee L: Schatten-Leuchtfackel** (Standard-Turm oder Kristall): Treffer erleuchtet das Monster kurz, es kann dann auch nachts außerhalb von Irrlichtern getroffen werden.
 
+## D1b ohne Primär-Regel (Abfall bleibt), kleine Reichweiten, schwache Effekte (Weg 2), Tagarten
+| Merkmal (alle Türme, gleicher Schaden/s) | Wert |
+|---|---|
+| Reichweite 1,5 / 2 / 2,5 / 3 / 3,5 / 4 / 5 / 6 Felder | 0,75 / 0,87 / 0,94 / 0,97 / 1 / 1,02 / 1,06 / 1,09 |
+| Fläche 0,5 / 1 / 1,5 / 2 Felder | 0,84 / 0,90 / 1,19 / 1,52 |
+| Bremsen 10 % 2 s (Einzelziel) | 1,04 |
+| Fluch 5 % 4 s | 1,28 |
+| Brennen 8 % 3 s / 5 % ganzer Tag | 1,40 / 1,53 |
+| Fläche 1 + Bremsen 10 % 2 s / Fläche 1,5 + Bremsen 10 % 2 s | 1,55 / 1,93 |
+| keine Fliegenden: Bodentage / Fliegertage | 0,97 / 0,02 |
+| nur Fliegende: Fliegertage / Bodentage | 1,00 / 0,02 |
+
+- **Kleinste sinnvolle Reichweite ≈ 2 Felder** (−13 %); bei 1,5 schon −25 %. Formel: Wert ≈ (r ÷ 3,5)^0,3 unter 3,5, (r ÷ 3,5)^0,16 darüber.
+- **Weg-2-Stärken für Wert ≈ 1,3–1,5:** Fluch ≈ 5 %, Brennen ≈ 8 % 3 s bzw. 5 % ganzer Tag. **Bremsen mit Fläche ist auch bei 10 % schon ×1,6–1,7** (gebremste Monster ballen sich → mehr Flächentreffer) – für Eis mit Fläche reichen ≈ 5 %.
+- Fliegende: „keine Fliegenden“ kostet an Bodentagen nichts, ist an Fliegertagen wertlos; „nur Fliegende“ umgekehrt. Der Wechselkurs ist damit eine Designfrage (Häufigkeit der Fliegertage, Partner fängt auf): bleibt bei L-Regel +10 % bzw. +50 % an Fliegertagen.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
