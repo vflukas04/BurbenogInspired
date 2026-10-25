@@ -1,0 +1,460 @@
+{
+  "_basis": "044d8c0",
+  "ELEMENTS.0.kraft": 1.2439,
+  "ELEMENTS.1.kraft": 0.6937,
+  "ELEMENTS.2.kraft": 0.9314,
+  "ELEMENTS.3.kraft": 1.4519,
+  "_stand": "C12f (L, 24.10.): C12 + Feuer Runde 11–20: Glutbecken/Flammenwerfer ×1,25, Schwelbrand ×1,2 und 165→140 Gold; Lavaturm/Sonnenturm/Höllenfeuer ×0,95 (spät schon stark) · Testseite 25.10.: Leben ×0,9, Block 1 ×0,8",
+  "CONFIG.upgrade.steps.0": 2.402,
+  "CONFIG.upgrade.steps.1": 1.917,
+  "CONFIG.upgrade.steps.2": 1.661,
+  "CONFIG.upgrade.steps.3": 1.531,
+  "CONFIG.upgrade.steps.4": 1.449,
+  "CONFIG.hpBlock.1": 0.9015,
+  "CONFIG.hpBlock.2": 0.9769,
+  "CONFIG.hpBlock.3": 1.6508,
+  "CONFIG.hpBlock.4": 3.2788,
+  "CONFIG.hpBlock.5": 4.929,
+  "CONFIG.hpBlock.6": 7.5474,
+  "CONFIG.hpBlock.7": 11.1861,
+  "MONSTERS.Betty (Boss).hpMul": 6.0774,
+  "MONSTERS.Nazgul.hpMul": 0.381,
+  "MONSTERS.Fledermäuse.hpMul": 0.7448,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.73,
+  "ELEMENTS.3.splashCenter": 1,
+  "ELEMENTS.3.splashEdge": 0.5,
+  "ELEMENTS.3.kraftT.0": 0.9332,
+  "ELEMENTS.3.kraftT.1": 0.7258,
+  "ELEMENTS.3.kraftT.2": 1.6435,
+  "ELEMENTS.3.kraftT.3": 1.5745,
+  "ELEMENTS.0.kraftT.4": 3.4441,
+  "ELEMENTS.0.kraftT.5": 0.8334,
+  "ELEMENTS.0.kraftT.6": 1.296,
+  "ELEMENTS.0.kraftT.7": 3.1403,
+  "ELEMENTS.1.kraftT.4": 2.2673,
+  "ELEMENTS.1.kraftT.5": 0.9411,
+  "ELEMENTS.1.kraftT.6": 0.8001,
+  "ELEMENTS.1.kraftT.7": 1.9489,
+  "ELEMENTS.2.kraftT.4": 0.9812,
+  "ELEMENTS.2.kraftT.5": 1.2956,
+  "ELEMENTS.2.kraftT.6": 0.9074,
+  "ELEMENTS.2.kraftT.7": 1.0085,
+  "ELEMENTS.3.kraftT.4": 0.9779,
+  "ELEMENTS.3.kraftT.5": 1.4955,
+  "ELEMENTS.3.kraftT.6": 1.1208,
+  "ELEMENTS.3.kraftT.7": 0.3729,
+  "RESEARCH.0.cost": 210,
+  "RESEARCH.1.cost": 600,
+  "ELEMENTS.0.kraftT.0": 1.3697,
+  "ELEMENTS.0.kraftT.1": 1.4872,
+  "ELEMENTS.0.kraftT.2": 1.4331,
+  "ELEMENTS.0.kraftT.3": 1.2646,
+  "ELEMENTS.1.kraftT.0": 1.0305,
+  "ELEMENTS.1.kraftT.2": 0.4907,
+  "ELEMENTS.1.kraftT.3": 1.2766,
+  "ELEMENTS.2.kraftT.0": 1.3887,
+  "CONFIG.upgrade.rangeSteps": [
+    0,
+    0.3,
+    0,
+    0,
+    0.2
+  ],
+  "CONFIG.upgrade.durSteps": [
+    1,
+    1,
+    1,
+    1.2,
+    1
+  ],
+  "CONFIG.upgrade.effSteps": [
+    1,
+    1,
+    1,
+    1.15,
+    1
+  ],
+  "ELEMENTS.0.upDmg": [
+    1.4684,
+    1.4034,
+    1.3567,
+    1.1581,
+    1.2482
+  ],
+  "ELEMENTS.1.upDmg": [
+    2.1919,
+    1.5906,
+    1.3269,
+    1.1565,
+    1.1115
+  ],
+  "ELEMENTS.1.towers.1.8": 0.6287,
+  "ELEMENTS.1.kraftT.1": 1.8283,
+  "ELEMENTS.1.towers.4.8": 2.4473,
+  "ELEMENTS.2.upDmg": [
+    1.7048,
+    1.578,
+    1.3845,
+    1.2469,
+    1.1722
+  ],
+  "ELEMENTS.2.kraftT.2": 1.144,
+  "ELEMENTS.3.upDmg": [
+    1.6492,
+    1.4938,
+    1.3623,
+    1.2718,
+    1.2287
+  ],
+  "ELEMENTS.3.towers.0.8": 1.15,
+  "ELEMENTS.3.towers.1.8": 0.9122,
+  "ELEMENTS.3.towers.2.8": 0.918,
+  "ELEMENTS.0.upT": [
+    1.3545,
+    1.3329,
+    1.3546,
+    1.4659,
+    1.4549,
+    1.3323,
+    1.2996,
+    1.2899
+  ],
+  "ELEMENTS.0.towers.3.6": 0.1356,
+  "ELEMENTS.0.towers.4.6": 0.0733,
+  "ELEMENTS.1.upT": [
+    1.6,
+    1.2487,
+    1.6,
+    1.5853,
+    1.404,
+    1.344,
+    1.2311,
+    1.5536
+  ],
+  "ELEMENTS.1.towers.3.6": 0.2809,
+  "ELEMENTS.1.towers.4.6": 3.0289,
+  "ELEMENTS.1.towers.6.8": 1.0523,
+  "ELEMENTS.1.towers.6.6": 0.2431,
+  "ELEMENTS.2.upT": [
+    1.323,
+    0.6209,
+    1.4055,
+    1.6,
+    1.3232,
+    1.3338,
+    1.3703,
+    1.6
+  ],
+  "ELEMENTS.2.kraftT.3": 1.3804,
+  "ELEMENTS.2.towers.3.6": 0.3205,
+  "ELEMENTS.2.towers.4.6": 0.0893,
+  "ELEMENTS.2.towers.6.6": 0.1927,
+  "ELEMENTS.2.towers.7.6": 0.4401,
+  "ELEMENTS.3.upT": [
+    1.3313,
+    1.3598,
+    1.4076,
+    1.3705,
+    1.4862,
+    1.3179,
+    1.4131,
+    1.6
+  ],
+  "ELEMENTS.3.towers.3.8": 1.1765,
+  "ELEMENTS.3.towers.4.8": 2.0747,
+  "ELEMENTS.3.towers.4.6": 1.7224,
+  "ELEMENTS.3.towers.5.8": 1.3724,
+  "ELEMENTS.0.towers.5.8": 0.8083,
+  "ELEMENTS.1.towers.7.6": 0.2968,
+  "ELEMENTS.3.towers.6.8": 1.6186,
+  "ELEMENTS.3.towers.7.8": 1.4015,
+  "ELEMENTS.2.towers.2.2": 3.04,
+  "ELEMENTS.1.towers.5.2": 3.04,
+  "ELEMENTS.3.towers.2.2": 3.04,
+  "ELEMENTS.0.towers.3.2": 3.24,
+  "ELEMENTS.1.towers.2.2": 3.24,
+  "ELEMENTS.1.towers.0.6": 0.2186,
+  "ELEMENTS.1.towers.2.6": 0.2159,
+  "ELEMENTS.3.towers.7.6": 1.7729,
+  "ELEMENTS.0.towers.0.6": 0.078,
+  "ELEMENTS.0.towers.1.6": 0.1434,
+  "ELEMENTS.0.towers.2.6": 0.0647,
+  "ELEMENTS.0.towers.5.6": 0.1688,
+  "ELEMENTS.0.towers.6.6": 0.1603,
+  "ELEMENTS.0.towers.7.6": 0.1342,
+  "ELEMENTS.1.towers.1.6": 0.2022,
+  "ELEMENTS.1.towers.5.6": 0.2031,
+  "ELEMENTS.2.towers.0.6": 0.0999,
+  "ELEMENTS.2.towers.1.9.buff": [
+    1.3866,
+    1.3866,
+    1.3866,
+    1.3866,
+    1.3866,
+    1.3866
+  ],
+  "ELEMENTS.2.towers.2.6": 0.1499,
+  "ELEMENTS.2.towers.5.6": 0.2002,
+  "ELEMENTS.0.towers.4.7": "Tag",
+  "MONSTERS.Silberfische.hpMul": 1.0525,
+  "MONSTERS.Kellerasseln.hpMul": 1.3892,
+  "MONSTERS.Nacktschnecken.hpMul": 1.9693,
+  "MONSTERS.Ohrenkneifer.hpMul": 1.2841,
+  "MONSTERS.Mäuse.hpMul": 1.0896,
+  "MONSTERS.Maus-Boss.hpMul": 6.4956,
+  "MONSTERS.Kleine Hunde.hpMul": 1.3166,
+  "MONSTERS.Ratten.hpMul": 1.2613,
+  "MONSTERS.Katzen.hpMul": 1.2191,
+  "MONSTERS.Spatzen.hpMul": 1.2321,
+  "MONSTERS.Füchse.hpMul": 1.1012,
+  "MONSTERS.Fuchs-Boss.hpMul": 5.0838,
+  "MONSTERS.Habichte.hpMul": 1.0098,
+  "MONSTERS.Dachse.hpMul": 1.5323,
+  "MONSTERS.Oktopusse.hpMul": 2.3573,
+  "MONSTERS.Wildschweine.hpMul": 1.5153,
+  "MONSTERS.Schäferhunde.hpMul": 1.2544,
+  "MONSTERS.Schäferhund-Boss.hpMul": 5.1402,
+  "MONSTERS.Besoffene Penner.hpMul": 1.6926,
+  "MONSTERS.Wütende Partnerin.hpMul": 1.035,
+  "MONSTERS.Wütende Nachbarn.hpMul": 1.0502,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 1.4299,
+  "MONSTERS.Uffug-Vorhaut.hpMul": 1.8118,
+  "MONSTERS.Uffug (Boss).hpMul": 13.1255,
+  "MONSTERS.Roboter.hpMul": 1.3906,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.8744,
+  "MONSTERS.Würfel.hpMul": 1.4258,
+  "MONSTERS.Phönixe.hpMul": 0.8579,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 1.396,
+  "MONSTERS.El Schlucko.hpMul": 5.8963,
+  "MONSTERS.Krieger.hpMul": 1.0987,
+  "MONSTERS.Golems.hpMul": 1.2861,
+  "MONSTERS.Albträume.hpMul": 0.7782,
+  "MONSTERS.Magier-Novizen.hpMul": 1.2839,
+  "MONSTERS.Magiermeister.hpMul": 4.9192,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.7074,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.5737,
+  "MONSTERS.Wargreiter.hpMul": 1.0578,
+  "MONSTERS.Lehrer.hpMul": 1.238,
+  "MONSTERS.Schulleiter.hpMul": 5.8463,
+  "MONSTERS.Streichquartett.hpMul": 1.0864,
+  "MONSTERS.Heisenbergs.hpMul": 0.8485,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.799,
+  "MONSTERS.GNTModels.hpMul": 0.7923,
+  "ELEMENTS.0.costOverride": {
+    "0": 8,
+    "1": 45,
+    "2": 65,
+    "3": 105,
+    "4": 140,
+    "5": 300,
+    "6": 510,
+    "7": 1145
+  },
+  "ELEMENTS.1.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 80,
+    "3": 135,
+    "4": 235,
+    "5": 425,
+    "6": 855,
+    "7": 1645
+  },
+  "ELEMENTS.2.costOverride": {
+    "0": 10,
+    "1": 30,
+    "2": 75,
+    "3": 165,
+    "4": 225,
+    "5": 325,
+    "6": 670,
+    "7": 1145
+  },
+  "ELEMENTS.3.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 70,
+    "3": 115,
+    "4": 190,
+    "5": 310,
+    "6": 560,
+    "7": 885
+  },
+  "ELEMENTS.2.towers.1.9.pierce": [
+    0.3,
+    0.369,
+    0.3921,
+    0.4939,
+    0.5325,
+    0.5325
+  ],
+  "ELEMENTS.2.kraftT.1": 1.3763,
+  "MONSTERS.Kellerasseln.weak": [
+    0.9,
+    1,
+    1,
+    1.1
+  ],
+  "MONSTERS.Nacktschnecken.weak": [
+    1,
+    1.1,
+    1,
+    0.9
+  ],
+  "MONSTERS.Ohrenkneifer.weak": [
+    1,
+    0.9,
+    1.1,
+    1
+  ],
+  "MONSTERS.Mäuse.weak": [
+    1.1,
+    1,
+    0.9,
+    1
+  ],
+  "MONSTERS.Ratten.weak": [
+    1.15,
+    1,
+    1,
+    0.85
+  ],
+  "MONSTERS.Katzen.weak": [
+    0.85,
+    1.15,
+    1,
+    1
+  ],
+  "MONSTERS.Spatzen.weak": [
+    1,
+    0.85,
+    1.15,
+    1
+  ],
+  "MONSTERS.Füchse.weak": [
+    1,
+    1,
+    0.85,
+    1.15
+  ],
+  "MONSTERS.Dachse.weak": [
+    1,
+    1,
+    0.8,
+    1.2
+  ],
+  "MONSTERS.Oktopusse.weak": [
+    0.8,
+    1.2,
+    1,
+    1
+  ],
+  "MONSTERS.Wildschweine.weak": [
+    1,
+    0.8,
+    1.2,
+    1
+  ],
+  "MONSTERS.Schäferhunde.weak": [
+    1.2,
+    1,
+    1,
+    0.8
+  ],
+  "MONSTERS.Wütende Partnerin.weak": [
+    0.75,
+    1.25,
+    1,
+    1
+  ],
+  "MONSTERS.Eifersüchtige Geliebte.weak": [
+    1,
+    1,
+    0.75,
+    1.25
+  ],
+  "MONSTERS.Würfel.weak": [
+    1,
+    1,
+    1.25,
+    0.75
+  ],
+  "MONSTERS.Fairtrade-Bananen.weak": [
+    1,
+    1,
+    0.75,
+    1.25
+  ],
+  "MONSTERS.Looping-Louie-Flugzeuge.weak": [
+    0.75,
+    1,
+    1.25,
+    1
+  ],
+  "MONSTERS.Magier-Novizen.weak": [
+    1,
+    0.75,
+    1,
+    1.25
+  ],
+  "MONSTERS.Lindner-Spezialisten.weak": [
+    1.3,
+    0.7,
+    1,
+    1
+  ],
+  "MONSTERS.Wargreiter.weak": [
+    1,
+    1,
+    1.3,
+    0.7
+  ],
+  "MONSTERS.Fledermäuse.weak": [
+    0.7,
+    1.3,
+    1,
+    1
+  ],
+  "MONSTERS.Lehrer.weak": [
+    1,
+    1,
+    0.7,
+    1.3
+  ],
+  "MONSTERS.Heisenbergs.weak": [
+    0.65,
+    1,
+    1.35,
+    1
+  ],
+  "MONSTERS.Mehlmottenraupen.weak": [
+    1,
+    0.65,
+    1,
+    1.35
+  ],
+  "MONSTERS.Nazgul.weak": [
+    1.35,
+    1,
+    0.65,
+    1
+  ],
+  "MONSTERS.GNTModels.weak": [
+    1,
+    1.35,
+    1,
+    0.65
+  ],
+  "MONSTERS.Wütende Nachbarn.weak": [
+    1,
+    1,
+    1.25,
+    0.75
+  ],
+  "MONSTERS.Uffug-Vorhaut.weak": [
+    1.25,
+    0.75,
+    1,
+    1
+  ]
+}
