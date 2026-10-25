@@ -1,0 +1,17 @@
+Turm-Wert im Paar-Kontext (1 = Grundturm gleichen Golds) · Stufen 1/3/6 · STAPEL_ALLE=1
+Schatten Schemen: 0.609 0.690 0.774
+Schatten Irrlicht: Licht-Turm, später
+Schatten Nachtauge: 0.636 0.776 0.906
+Schatten Fluchstein: 0.934 1.185 1.384
+Schatten Seelenfresser: 0.780 0.844 0.810
+Schatten Phantom: 1.153 1.235 0.788
+Schatten Leerenturm: 1.054 1.302 0.474
+Schatten Ewige Nacht: 1.392 0.890 0.454
+Stein Kiesel: 0.555 0.673 0.694
+Stein Schleuder: 0.716 0.712 0.931
+Stein Katapult: 0.883 0.937 1.259
+Stein Felsbrocken: 0.812 0.969 1.135
+Stein Erdbeben: 0.820 0.853 1.053
+Stein Granitwächter: 1.033 1.213 0.849
+Stein Lawine: 1.175 1.102 0.840
+Stein Bergkönig: 0.761 0.799 0.638

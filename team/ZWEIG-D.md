@@ -147,6 +147,12 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 → **Bremsen auf Einzelziel wirkt über die Kills** (L vermutete das): es verteilt den Schaden so, dass weniger Monster knapp überleben – im Lebensanteil kaum sichtbar, bei den Durchbrüchen etwa +10 % Schaden wert. Fluch ist nach Durchbrüchen weniger wert als nach Lebensanteil. **Beschluss (L):** Lebensanteil bleibt Hauptmaß, Durchbrüche werden immer mitgemessen.
 - **Bremsen (L):** Einzelziel höchstens 40 % je Turm (gestapelt 80 %; 45 % hätte mit 90 % fast Stillstand ergeben – Einzelziel-Bremser stapeln am vordersten Monster; bei Endbossen gerade wertvoll), Fläche/Nova höchstens 30 % (gestapelt 60 %); Flächenbremser und starke Bremser machen über den Wechselkurs weniger Schaden.
 
+## D3 Türme (25.10. morgens)
+- **D3a `d/turm-d.js`:** Wert jedes echten Turms (Stufe 1/3/6) im Paar-Kontext, Stapelregel an, nur im Einsatzfenster (eigene Budget-Hälfte bezahlt 1–8 Kopien). Rohwerte: `d/turmwerte-01.txt`, `d/turmwerte-23.txt`. Erste Messung ohne Fenster war verzerrt (unbezahlbare teure Türme früh, 60+ billige Türme spät).
+- Auffällig: Schneeball (Bremsen + Fläche) Wert/Ziel 1,3–1,7, Katapult/Fluchstein 1,1–1,4 → zu stark; Eiszapfen 0,5–0,6, Bergkönig 0,4–0,7, Frostsplitter S1 0,76 → zu schwach. Türme 6–8 auf Stufe 6 sind nie bezahlbar (Budget) – ihre Werte sind Schätzungen.
+- **D3b `d/fit-d.js` → `spiegel-D1.json`:** Ziel Wert je Gold = K × 1,10^Turm × Upgrade (1/1,0/1,3) × Luftabwehr 1,5 / ohne Luftangriff 1,1, eine Konstante K für alle Elemente. Schaden je Turm (kraftT) und je Stufe (upT) über log-Gerade; Türme 6–8 Steigung je Stufe auf 0,93–1,07 begrenzt. Größte Änderungen: Eiszapfen ×1,88, Bergkönig ×1,48, Ewiges Eis ×1,31, Schneeball ×0,72, Katapult ×0,79.
+- Monster in D1 noch wie C12f (D4 folgt). Bot-Prüflauf `kandidat-d1` mit `STAPEL_ALLE=1` läuft.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
