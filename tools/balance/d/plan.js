@@ -9,9 +9,10 @@ if (process.env.D_WETTER === '0') G.WEATHER.forEach(w => { w.el = {}; delete w.b
 const VAR = process.env.VAR ? process.env.VAR.split(',').map(Number) : [];
 const el = +(process.argv[2] || 0), [t0, t1] = (process.argv[3] || '1-48').split('-').map(Number);
 // Reine Luftabwehr (L-Regel, D2): im Plan stehen Standardtürme, die alles treffen. Steht ein Luftabwehr-Typ im Plan,
-// wird er an Tagen ohne Fliegende durch den nächsten Nicht-Luftturm mit möglichst gleichem Gold ersetzt (Stufe nach Gold).
+// wird er durchgehend (alle Tage – Türme werden nicht abgerissen, L 25.10.) durch den nächsten Nicht-Luftturm mit möglichst gleichem Gold ersetzt.
+// Der Wert reiner Luftabwehr wird getrennt bewertet (Fliegertage, Design-Zuschlag ×1,5).
 const goldVon = (e, k, l) => { let g = G.towerBase(e, k).cost; for (let i = 1; i < l; i++) g += Math.round(G.towerBase(e, k).cost * Math.pow(G.CONFIG.upgradeCost, i)); return g; };
-function ersatz(t, d){ if (!G.towerBase(el, t.idx).air || G.MONSTERS[d].fly) return t;
+function ersatz(t, d){ if (!G.towerBase(el, t.idx).air) return t;
   const g = goldVon(el, t.idx, t.lvl); let best = null;
   for (let k = 0; k < 8; k++) { if (G.towerBase(el, k).air) continue; for (let l = 1; l <= 6; l++) { const q = Math.abs(Math.log(goldVon(el, k, l) / g)); if (!best || q < best.q) best = { q, idx:k, lvl:l }; } }
   return { ...t, idx:best.idx, lvl:best.lvl, _ersatz:true }; }

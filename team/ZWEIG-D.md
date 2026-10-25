@@ -240,6 +240,9 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Befund Bremsen:** Im gemischten Aufbau ist Bremsen etwa doppelt so viel wert wie in der Einzelmessung (es hilft den stärkeren anderen Türmen) → Wechselkurs Bremsen (V − 1) × 2 (`SLOW_K`).
 - **Ergebnis ohne Wetter (Plan-Reserve, D0 mit Standardtürmen 0,99–1,03):** Feuer 0,98 · Eis 1,03 · Schatten 0,97 · Stein 0,93. **Alle Elemente innerhalb ±5 % aus reinen Wechselkursen** (Stein −5 %: Fläche/Betäuben leicht überbewertet). Mit heutigem Wetter: 1,14 / 1,01 / 1,04 / 0,93.
 - Noch nicht drin: Irrlicht als Sonderturm, Paare (Partner fängt auf), Fliegertage im Detail, Kristalle.
+- **Korrektur (L 25.10. nachts):** Türme werden nicht abgerissen – die tageweise Ersetzung der Luftabwehr war falsch (sie ließ Luftabwehr nur an Fliegertagen stehen und schönte Feuer). Jetzt durchgehend ersetzt: Feuer 0,88 · Eis 1,02 · Schatten 0,97 · Stein 0,93 (ohne Wetter). Feuer fällt, weil der Plan an Fliegertagen keine Luftabwehr nachkauft. Offen: Regel für Fliegertage im Plan (z. B. Anteil des Golds vorher in fliegertaugliche Türme).
+- **Element-Spezifikation (Idee L):** jedes Element bekommt einen eigenen Nachteil/Vorteil als eigenen Parameter, erst nach dem übrigen Balancing: Schatten Nachtrunde; Stein Wetter neutral + Gelände-Vorteil (Baukosten bis dahin normal); Feuer Wetter (tendenziell kürzeres Brennen); Eis keine Effekte auf Fliegende. Wetter darf mehr Geschmack haben (Nebel/Reichweite gut) – L macht einen Vorschlag.
+- **Irrlicht:** im Code (Basis und aktuelles Spiel) wirkt die Verstärkung auf **Schatten-Türme im Lichtkreis**, die Nachtsicht auf **Monster im Lichtkreis**. L erinnert eine Absprache „wirkt auf die Monster“ – klären.
 
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
