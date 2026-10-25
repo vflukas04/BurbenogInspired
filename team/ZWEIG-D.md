@@ -164,9 +164,9 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Schnelldurchlauf `d/plan.js`:** fester Plan, nur variierte Turmtypen (`VAR=`) werden auf eigene beste Plätze neu gesetzt. Ganzes Spiel, beide Pläne: **17 Sekunden** (statt Stunden).
 
 ## D0 Ziel-Reserve (L 25.10.): sinkt nach Potenzgesetz (`d/ziel.js`)
-- Tag 1: Menschen-Start (3 × Turm 1, Stufe 1) schafft im ersten Durchlauf je Spieler ca. 12 von 20 → Reserve 1,52. Tag 2: 3 × Turm 1 Stufe 2 schafft 5/5/8/8 (Ziel 4–7) → Reserve 1,58. Betty (Tag 48): 1,05 („knapp schaffbar“). Dazwischen Reserve = 1,58 × (Tag/2)^−0,129 (Tag 10: 1,34, Tag 24: 1,17, Tag 36: 1,10).
+- Tag 1: Menschen-Start (3 × Turm 1, Stufe 1) schafft im ersten Durchlauf je Spieler ca. 12 von 20 → Reserve 1,52. Betty (Tag 48): 1,05. **Saubere Kurve ab Tag 1 (L):** Reserve = 1,52 × Tag^−0,096 (Tag 2: 1,42, 5: 1,30, 10: 1,22, 24: 1,12, 36: 1,08). Tag 2 fügt sich ein und wird dadurch etwas schwerer: Menschen-Start mit 3 × Turm 1 Stufe 2 schafft 4/4/6/6 Kills.
 - Achtung Kippkante: Bei 20 gleichen Monstern im gleichen Abstand kippen die Kills fast sprunghaft (Tag 1: 15–20 Kills bei Leben ×1,0, 3–6 bei ×1,2). „12“ liegt genau an der Kante – im Spiel streuen Gelände und Wetter das.
-- Plan-Reserve im Mittel jetzt 1,18.
+- Silberfische bleiben wie sie sind (L), 12 Kills an der Kippkante; im Testspiel beobachten.
 
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).

@@ -11,11 +11,11 @@ const res = d => Math.sqrt(PL.map(p => { C.useMap(p.lane, p.seed); return C.rese
 function fuerKills(d, ziel){ let lo = 0.05, hi = 20; for (let i = 0; i < 30; i++) { const m = Math.sqrt(lo * hi); if (kills(d, m) >= ziel) lo = m; else hi = m; } return Math.sqrt(lo * hi); }
 const sp = { ...C.SPIEGEL }, n = G.MONSTERS.length, R = [...Array(n)].map((_, d) => res(d));
 const f1 = fuerKills(0, 12), f2 = fuerKills(1, 5.5);
-const R1 = R[0] / f1, R2 = R[1] / f2, a = Math.log(R2 / ZIEL48) / Math.log((n) / 2);
-console.log(`Tag 1: Leben ×${f1.toFixed(2)} für 12 Kills → Reserve ${R1.toFixed(2)} · Tag 2: ×${f2.toFixed(2)} für 5,5 Kills → Reserve ${R2.toFixed(2)} · Potenz a = ${a.toFixed(3)} (Betty ${ZIEL48})`);
+const R1 = R[0] / f1, R2 = R[1] / f2, a = Math.log(R1 / ZIEL48) / Math.log(n);   // L 25.10.: saubere Kurve ab Tag 1 (Tag 2 fügt sich ein, darf schwerer sein)
+console.log(`Tag 1: Leben ×${f1.toFixed(2)} für 12 Kills → Reserve ${R1.toFixed(2)} · Tag 2: ×${f2.toFixed(2)} für 5,5 Kills → Reserve ${R2.toFixed(2)} (nur Info) · Potenz a = ${a.toFixed(3)} (Betty ${ZIEL48})`);
 const zeile = [];
-G.MONSTERS.forEach((m, d) => { const ziel = d === 0 ? R1 : R2 * Math.pow((d + 1) / 2, -a), p = `MONSTERS.${m.name}.hpMul`, h = sp[p] ?? m.hpMul ?? 1;
+G.MONSTERS.forEach((m, d) => { const ziel = R1 * Math.pow(d + 1, -a), p = `MONSTERS.${m.name}.hpMul`, h = sp[p] ?? m.hpMul ?? 1;
   sp[p] = +(h * R[d] / ziel).toFixed(4); zeile.push(`${d + 1} ${m.name.slice(0, 12)} ${ziel.toFixed(2)}`); });
-sp._stand = (sp._stand || '').replace(/ · Leben je Tag:.*$/, '') + ` · Leben je Tag: Ziel-Reserve nach Potenzgesetz (Tag 1: 12 Kills, Tag 2: 5,5 Kills, Betty ${ZIEL48}, a = ${a.toFixed(3)}), Standard-Pläne`;
+sp._stand = (sp._stand || '').replace(/ · Leben je Tag:.*$/, '') + ` · Leben je Tag: Ziel-Reserve nach Potenzgesetz (ab Tag 1 mit 12 Kills, Betty ${ZIEL48}, a = ${a.toFixed(3)}), Standard-Pläne`;
 S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D0.json'));
 console.log(zeile.join(' | '));
