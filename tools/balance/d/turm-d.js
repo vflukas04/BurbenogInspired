@@ -20,8 +20,14 @@ function aufbau(e, k, l, nT, nG){ const used = new Set(), tw = [];
   const add = (el, idx, lvl, n) => { for (const c of C.mask(el, idx, lvl, 0).cells) { if (n <= 0) break; const q = c.x + ',' + c.y; if (used.has(q)) continue; used.add(q); tw.push({ x:c.x, y:c.y, el, idx, lvl }); n--; } };
   if (nT) add(e, k, l, nT); add(3, SL, 1, nG); return { el:e, towers:tw, res:[] }; }
 const R0 = {};
+// Einsatzfenster (25.10.): nur Tage, an denen die eigene Budget-Hälfte 1–8 Kopien bezahlt (sonst unbezahlbar bzw. Plätze gehen aus)
+function fenster(e, k, l){ const g = gold(e, k, l), alle = (() => { const b = G.towerBase(e, k); return b.air ? [...FL] : b.hitsFly ? ALLE : ALLE.filter(d => !FL.has(d)); })();
+  let t = alle.filter(d => { const q = budget(d).gold / 2 / g; return q >= 1 && q <= 8; });
+  if (!t.length) t = [alle.reduce((a, d) => Math.abs(Math.log(budget(d).gold / 2 / g / 3)) < Math.abs(Math.log(budget(a).gold / 2 / g / 3)) ? d : a, alle[0])];
+  if (t.length > 12) t = t.filter((_, i) => i % Math.ceil(t.length / 12) === 0);
+  return t; }
 function wert(e, k, l){ const r = [], dq = []; const g = gold(e, k, l);
-  for (const d of tageVon(e, k)) for (const lane of [0, 2]) { C.useMap(lane, null); const half = budget(d).gold / 2, nT = Math.max(1, Math.round(half / g)), nG = Math.max(1, Math.round(half / GC));
+  for (const d of fenster(e, k, l)) for (const lane of [0, 2]) { C.useMap(lane, null); const half = budget(d).gold / 2, nT = Math.max(1, Math.round(half / g)), nG = Math.max(1, Math.round(half / GC));
     const w = { type:d, players:2 }, key = d + ':' + lane + ':' + nG;
     if (!(key in R0)) { grundAn(); R0[key] = C.reserveDay(aufbau(0, 0, 1, 0, 2 * nG), w); }
     grundAn(); const x = C.reserveDay(aufbau(e, k, l, nT, nG), w) / R0[key];
