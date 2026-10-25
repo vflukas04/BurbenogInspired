@@ -6,7 +6,8 @@ const fs = require('fs'), path = require('path'), cp = require('child_process');
 const basis = JSON.parse(fs.readFileSync(process.env.SPIEGEL)), tmp = path.join(require('os').tmpdir(), 'merkmal-' + process.pid + '.json');
 function lauf(m){ const sp = { ...basis };
   for (let e = 0; e < 4; e++) for (let k = 0; k < 8; k++) { const key = `ELEMENTS.${e}.towers.${k}`, row = [...sp[key]]; row[9] = { ...row[9] };
-    for (const [i, v] of Object.entries(m)) { if (i === 'opt') Object.assign(row[9], v); else row[+i] = v; } sp[key] = row; }
+    for (const [i, v] of Object.entries(m)) { if (i === 'opt') Object.assign(row[9], v); else if (i !== 'el') row[+i] = v; } sp[key] = row; }
+  if (m.el) for (let e = 0; e < 4; e++) for (const [k, v] of Object.entries(m.el)) sp[`ELEMENTS.${e}.${k}`] = v;   // Element-Merkmale (Rüstungsschaden, Nachtregel …)
   fs.writeFileSync(tmp, JSON.stringify(sp));
   const out = cp.execFileSync(process.execPath, [path.join(__dirname, 'plan.js'), '0'], { env:{ ...process.env, SPIEGEL:tmp }, encoding:'utf8' });
   return +out.match(/Mittel Reserve ([\d.]+)/)[1]; }

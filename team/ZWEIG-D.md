@@ -196,7 +196,9 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 ## Beschlüsse L (25.10. mittags)
 - **Kein „anvisiertes Monster immer voll“** – Abfall zum Rand bleibt (langsame Flächentürme treffen das Ziel kaum, dafür andere). Kleine Fläche ist dann einfach weniger wert → über den Wechselkurs mehr Schaden. Kopplung Wurfgeschwindigkeit ↔ Radius bestimmt, wie weit das Ziel bis zum Aufschlag läuft.
 - **Effekte: beide Wege, je Turm.** Weg 2 (schwächere Effekte, Wert ≈ 1,2–1,5, mehr Direktschaden) als Regel; Weg 1 (starker Effekt, wenig Schaden) als seltene Ausnahme – bei Eis gut, bei Feuer selten, bei Schatten eher nicht (Irrlicht ist schon ein Sonderturm).
-- **Mehrere Geschosse seltener** (heute 22 von 32 Türmen mit 2–6 Geschossen).
+- **Mehrere Geschosse seltener** (heute 22 von 32 Türmen mit 2–6 Geschossen): insgesamt 5–8 Türme, 4–6 Geschosse nur als Ausnahme (L).
+- **Extremturm mit Reichweite 1,5** erwünscht (L) – Wert 0,75 → entsprechend mehr Schaden.
+- Kombinierte Effekte: jeder fertige Turm wird als Ganzes im Schnelldurchlauf gemessen, nicht nur aus Einzelkursen zusammengesetzt.
 - **Reichweite** darf kleiner werden – kleinsten sinnvollen Wert messen.
 - **Idee L: Schatten-Leuchtfackel** (Standard-Turm oder Kristall): Treffer erleuchtet das Monster kurz, es kann dann auch nachts außerhalb von Irrlichtern getroffen werden.
 
