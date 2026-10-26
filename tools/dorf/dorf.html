@@ -13,10 +13,10 @@ p.n{margin:2px 0 10px;color:#b9c4b0;max-width:900px}
 <div id="out"></div>
 <script>
 const P = {
- f:{n:'Feuer', wall:'#7a4a2a', wallD:'#5a3118', roof:'#c2410c', roofL:'#e8590c', acc:'#ffb347', ground:'#4a2e1c', groundL:'#6d4529', glow:'#ff8a3d', flag:'#d8321a', dark:'#1f0e06', win:'#ffd27a', tunic:'#c2410c', cap:'#7a2a12', fire:'#ff8a3d', fireC:'#ffe08a'},
- e:{n:'Eis', wall:'#d5ecf8', wallD:'#8fc3de', roof:'#eaf8ff', roofL:'#ffffff', acc:'#79c6ee', ground:'#b9d6e6', groundL:'#dff0f8', glow:'#7df9ff', flag:'#3f7fa6', dark:'#2f5a78', win:'#9be8ff', tunic:'#3f7fa6', cap:'#eaf8ff', fire:'#7df9ff', fireC:'#ffffff'},
- s:{n:'Schatten', wall:'#2b2140', wallD:'#150e2b', roof:'#3d2a78', roofL:'#5b3aa8', acc:'#a98bff', ground:'#1a1230', groundL:'#2d2250', glow:'#a98bff', flag:'#7a4be0', dark:'#07040f', win:'#c9b6ff', tunic:'#4d3a8a', cap:'#150e2b', fire:'#a98bff', fireC:'#f0e6ff'},
- st:{n:'Stein', wall:'#a89c84', wallD:'#7d725e', roof:'#8a6238', roofL:'#b08650', acc:'#d9cba6', ground:'#6f6450', groundL:'#8d8270', glow:'#ffb347', flag:'#8d3b2c', dark:'#2a2218', win:'#ffd27a', tunic:'#8a6238', cap:'#5e5646', fire:'#ff9a3d', fireC:'#ffe08a'}
+ f:{n:'Feuer', wall:'#7a4a2a', wallD:'#5a3118', roof:'#c2410c', roofL:'#e8590c', acc:'#ffb347', ground:'#4a2e1c', groundL:'#6d4529', glow:'#ff8a3d', flag:'#d8321a', dark:'#1f0e06', win:'#ffd27a', tunic:'#c2410c', cap:'#7a2a12', fire:'#ff8a3d', fireC:'#ffe08a', stone:'#6b5047', stoneD:'#4a362f', moat:'#ff6a1e', moatD:'#7a2a12', moatL:'#ffd27a'},
+ e:{n:'Eis', wall:'#d5ecf8', wallD:'#8fc3de', roof:'#eaf8ff', roofL:'#ffffff', acc:'#79c6ee', ground:'#b9d6e6', groundL:'#dff0f8', glow:'#7df9ff', flag:'#3f7fa6', dark:'#2f5a78', win:'#9be8ff', tunic:'#3f7fa6', cap:'#eaf8ff', fire:'#7df9ff', fireC:'#ffffff', stone:'#d5ecf8', stoneD:'#8fc3de', moat:'#9be8ff', moatD:'#3f7fa6', moatL:'#ffffff'},
+ s:{n:'Schatten', wall:'#2b2140', wallD:'#150e2b', roof:'#3d2a78', roofL:'#5b3aa8', acc:'#a98bff', ground:'#1a1230', groundL:'#2d2250', glow:'#a98bff', flag:'#7a4be0', dark:'#07040f', win:'#c9b6ff', tunic:'#4d3a8a', cap:'#150e2b', fire:'#a98bff', fireC:'#f0e6ff', stone:'#352a52', stoneD:'#1a1230', moat:'#4d3a8a', moatD:'#150e2b', moatL:'#a98bff'},
+ st:{n:'Stein', wall:'#a89c84', wallD:'#7d725e', roof:'#8a6238', roofL:'#b08650', acc:'#d9cba6', ground:'#6f6450', groundL:'#8d8270', glow:'#ffb347', flag:'#8d3b2c', dark:'#2a2218', win:'#ffd27a', tunic:'#8a6238', cap:'#5e5646', fire:'#ff9a3d', fireC:'#ffe08a', stone:'#a89c84', stoneD:'#7d725e', moat:'#2f7fb3', moatD:'#1f4f73', moatL:'#bfe3f5'}
 };
 const SKIN='#f0c9a0', SKIND='#c99a72';
 const svg=(vb,w,h,inner)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${w}" height="${h}">${inner}</svg>`;
@@ -38,16 +38,33 @@ function tower(p,x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})">
 function fence(p,x1,x2,y){let o='';for(let x=x1;x<=x2;x+=5)o+=`<path d="M${x} ${y}V${y-6}" stroke="${p.wallD}" stroke-width="1.3"/>`;return o+`<path d="M${x1} ${y-4}H${x2}M${x1} ${y-1.5}H${x2}" stroke="${p.wall}" stroke-width=".9"/>`}
 function smoke(p,x,y){return `<g opacity=".55" fill="${p.k==='s'?'#7a4be0':'#cfd6d8'}"><circle cx="${x}" cy="${y}" r="2"/><circle cx="${x+2}" cy="${y-4}" r="2.6"/><circle cx="${x+1}" cy="${y-9}" r="3.2"/></g>`}
 function ground(p,w){return `<ellipse cx="0" cy="1" rx="${w}" ry="${w*.24}" fill="${p.ground}"/><ellipse cx="-4" cy="0" rx="${w*.7}" ry="${w*.15}" fill="${p.groundL}" opacity=".7"/>`}
+// Burg-Bauteile (Vorderansicht, Fuß bei y=0)
+function crenel(x1,x2,y,c){let o='';const n=Math.max(2,Math.round((x2-x1)/4.2)),w=(x2-x1)/(2*n-1);for(let i=0;i<n;i++)o+=`<rect x="${(x1+i*2*w).toFixed(2)}" y="${y-3}" width="${w.toFixed(2)}" height="3.4" fill="${c}"/>`;return o}
+function wallSeg(p,x1,x2,h){let o=`<rect x="${x1}" y="${-h}" width="${x2-x1}" height="${h}" fill="${p.stone}"/><rect x="${x1}" y="${-h}" width="${x2-x1}" height="2" fill="${p.stoneD}" opacity=".5"/>`;
+ for(let y=-3;y>-h;y-=4)o+=`<path d="M${x1} ${y}H${x2}" stroke="${p.stoneD}" stroke-width=".5" opacity=".7"/>`;
+ return o+crenel(x1,x2,-h,p.stone)}
+function towerS(p,x,w,h,roof,flag){const x1=x-w/2;let o=`<rect x="${x1}" y="${-h}" width="${w}" height="${h}" fill="${p.stone}"/><rect x="${x+w*.1}" y="${-h}" width="${w*.4}" height="${h}" fill="${p.stoneD}" opacity=".45"/>`;
+ for(let y=-4;y>-h;y-=4.5)o+=`<path d="M${x1} ${y}H${x1+w}" stroke="${p.stoneD}" stroke-width=".5" opacity=".7"/>`;
+ o+=`<rect x="${x-.9}" y="${-h*.62}" width="1.8" height="${Math.min(6,h*.2)}" rx=".9" fill="${p.win}"/>`;
+ if(roof){o+=`<rect x="${x1-1}" y="${-h-1.4}" width="${w+2}" height="2.6" fill="${p.stoneD}"/><path d="M${x1-1.8} ${-h-1}L${x} ${-h-w*1.15}L${x1+w+1.8} ${-h-1}Z" fill="${p.roof}"/><path d="M${x} ${-h-w*1.15}L${x1+w+1.8} ${-h-1}H${x}Z" fill="${p.roofL}"/>`;
+  if(flag)o+=`<path d="M${x} ${-h-w*1.15}V${-h-w*1.15-8}" stroke="${p.stoneD}" stroke-width="1"/><path d="M${x} ${-h-w*1.15-8}H${x+7}L${x+5} ${-h-w*1.15-5.5}L${x+7} ${-h-w*1.15-3}H${x}Z" fill="${p.flag}"/>`;}
+ else o+=`<rect x="${x1-1}" y="${-h-1}" width="${w+2}" height="2.2" fill="${p.stoneD}"/>`+crenel(x1-1,x1+w+1,-h-1,p.stone);
+ return o}
+function gateS(p,x,w,h){return `<path d="M${x-w/2} 0V${-h+w/2}A${w/2} ${w/2} 0 0 1 ${x+w/2} ${-h+w/2}V0Z" fill="${p.dark}"/><path d="M${x-w/2+1.4} 0V${-h+w/2}M${x} 0V${-h+w/2-1}M${x+w/2-1.4} 0V${-h+w/2}M${x-w/2} ${-h*.5}H${x+w/2}" stroke="${p.wallD}" stroke-width=".7" opacity=".8"/>`}
+function moatS(p,w){return `<ellipse cx="0" cy="4" rx="${w}" ry="6.4" fill="${p.moatD}"/><ellipse cx="0" cy="3.4" rx="${w-1.8}" ry="5" fill="${p.moat}"/><path d="M${-w*.55} 3Q${-w*.4} 1.6 ${-w*.25} 3M${w*.2} 5Q${w*.4} 3.6 ${w*.55} 5" stroke="${p.moatL}" stroke-width=".7" fill="none"/>`}
+function bridgeS(p,x){return `<path d="M${x-4.5} 0H${x+4.5}L${x+6.5} 8H${x-6.5}Z" fill="#6b4a2c"/><path d="M${x-3} 1.5L${x-4.2} 7.5M${x} 1.5V7.5M${x+3} 1.5L${x+4.2} 7.5" stroke="#4a3220" stroke-width=".7"/>`}
+function palisade(p,x1,x2,y){let o='';for(let x=x1;x<=x2;x+=3.4)o+=`<path d="M${x-1.4} ${y}V${y-8}L${x} ${y-10.5}L${x+1.4} ${y-8}V${y}Z" fill="${p.wall}" stroke="${p.wallD}" stroke-width=".4"/>`;return o}
 function village(k,stage){
- const p={...P[k],k}; let b=ground(p,stage<2?16:stage<4?22:29);
- if(stage===1) b+=tent(p,-5,0,1)+fire(p,9,3,1);
- if(stage===2) b+=hut(k,p,-3,0,1)+fire(p,13,3,1);
- if(stage===3) b+=hut(k,p,-9,0,1)+tent(p,12,2,.8)+fire(p,2,5,.8);
- if(stage===4) b+=hut(k,p,-12,-1,1)+hut(k,p,11,0,.9)+well(p,0,5,.9)+crates(p,19,6,.8);
- if(stage===5) b+=hut(k,p,0,-5,.85)+hut(k,p,-15,0,1)+hut(k,p,15,1,1)+well(p,0,6,.9)+banner(p,25,5,.9);
- if(stage===6) b+=tower(p,-21,-3,.9)+hut(k,p,-4,-6,.85)+hut(k,p,14,-1,1)+hut(k,p,-12,3,.9)+well(p,3,6,.8)+banner(p,26,5,.9)+fence(p,-24,-6,8)+smoke(p,18,-24);
+ const p={...P[k],k}; let b='';
+ const g=(w)=>ground(p,w);
  if(stage===0) b=`<ellipse cx="0" cy="1" rx="9" ry="2.4" fill="${p.ground}" opacity=".8"/><path d="M-3 0L0 -3L3 0Z" fill="${p.groundL}"/>`;
- return svg('-34 -50 68 58',204,174,b);
+ if(stage===1) b=g(16)+tent(p,-5,0,1)+fire(p,9,3,1);
+ if(stage===2) b=g(20)+hut(k,p,-3,0,1)+fire(p,13,3,1);
+ if(stage===3) b=g(27)+hut(k,p,-12,-3,.95)+hut(k,p,12,-2,.9)+tower(p,0,-8,1)+palisade(p,-26,26,6)+banner(p,27,4,.8)+smoke(p,-9,-27);          // Dorf mit Palisade und Wachturm
+ if(stage===4) b=g(30)+hut(k,p,9,-4,.7)+wallSeg(p,-24,24,12)+gateS(p,0,9,9)+towerS(p,-24,11,22,false)+towerS(p,24,11,22,p.roof,true)+smoke(p,6,-22);   // erste Steinmauer mit Tor
+ if(stage===5) b=g(32)+towerS(p,0,15,36,p.roof,true)+wallSeg(p,-24,24,13)+gateS(p,0,10,10)+towerS(p,-26,11,24,p.roof)+towerS(p,26,11,24,p.roof)+`<path d="M-4 -4H4" stroke="${p.glow}" stroke-width="1.2" opacity=".9"/>`;    // Burg mit Bergfried
+ if(stage===6) b=moatS(p,33)+g(30)+towerS(p,0,17,40,p.roof,true)+towerS(p,-14,10,30,p.roof)+towerS(p,14,10,30,p.roof,true)+wallSeg(p,-24,24,14)+gateS(p,0,10,11)+towerS(p,-27,12,25,p.roof,true)+towerS(p,27,12,25,p.roof)+bridgeS(p,0);   // Ritterburg
+ return svg('-36 -66 72 76',216,228,b);
 }
 // ---------- Arbeiter ----------
 function worker(k,job,fr){
@@ -104,25 +121,28 @@ function fels(st){
  if(st>=1&&st<4) b+=`<circle cx="${-18+st*3}" cy="7" r="1.2" fill="#c9c4bd"/><circle cx="${20-st*2}" cy="8" r="1" fill="#a8a29a"/>`;
  return svg('-32 -40 64 54',192,162,b);
 }
+function pond(cx,cy,rx,ry){return `<ellipse cx="${cx}" cy="${cy}" rx="${rx+3}" ry="${ry+1.8}" fill="#c9b27a"/><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#2f7fb3"/><ellipse cx="${cx-rx*.12}" cy="${cy-ry*.2}" rx="${rx*.68}" ry="${ry*.58}" fill="#4aa3d6"/>`}
 function see(st){
- const rx=[24,20,16,11,6][st], ry=rx*.34;
- let b=`<ellipse cx="0" cy="1" rx="30" ry="10" fill="#6d5f3a"/><ellipse cx="0" cy="0" rx="${rx+4}" ry="${ry+2}" fill="#c9b27a"/>`;
- if(st<4) b+=`<ellipse cx="0" cy="0" rx="${rx}" ry="${ry}" fill="#2f7fb3"/><ellipse cx="-2" cy="-1" rx="${rx*.7}" ry="${ry*.6}" fill="#4aa3d6"/><path d="M${-rx*.5} -1Q${-rx*.3} -3 ${-rx*.1} -1M${rx*.2} 1Q${rx*.4} -1 ${rx*.55} 1" stroke="#dff6ff" stroke-width=".8" fill="none"/>`;
- if(st===0) b+=`<ellipse cx="9" cy="1" rx="3" ry="1.2" fill="#3f9a4a"/><path d="M-6 -2Q-4 -6 -2 -2" fill="#e8b04a"/>`;
- if(st>=4) b+=`<ellipse cx="0" cy="0" rx="7" ry="2.4" fill="#5a4a2a"/><path d="M-5 -1L-1 1L2 -1L5 1M0 -2V2" stroke="#3a2e18" stroke-width=".7" fill="none"/>`;
- if(st>=3) b+=`<path d="M-9 1L-4 -1L2 1L8 0" stroke="#3a2e18" stroke-width=".6" fill="none" opacity=".7"/>`;
- for(const [x,h] of [[-26,12],[-23,16],[24,13],[27,17],[19,-6+10]]){ if(Math.abs(x)<rx+14||st>2) b+=`<path d="M${x} 3V${-h}" stroke="#4a7a3a" stroke-width="1.2"/><ellipse cx="${x}" cy="${-h}" rx="1.3" ry="3" fill="#6b4a2c"/>`; }
+ let b=`<ellipse cx="0" cy="1" rx="30" ry="10" fill="#5f6a38"/><ellipse cx="-3" cy="0" rx="22" ry="6" fill="#6d7a40" opacity=".7"/>`;
+ const R='M-27 4C-18 -4 -12 6 -3 0S12 -5 18 2S27 3 29 -1';          // Flussverlauf
+ const riv=(wid,col,extra='')=>`<path d="${R}" stroke="${col}" stroke-width="${wid}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`;
+ if(st===0) b+=pond(-2,1,17,5.8)+`<ellipse cx="6" cy="1.5" rx="3" ry="1.1" fill="#3f9a4a"/>`;
+ if(st===1) b+=pond(-9,1,13,4.6)+pond(17,2,6.5,2.5)+`<path d="M2 1.4Q9 2 12 2" stroke="#8a6c3a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-dasharray="1 2.6"/>`;
+ if(st===2) b+=pond(-9,1,13,4.6)+pond(18,2,7.5,2.8)+`<path d="M3 1.4Q9 2 15 2" stroke="#c9b27a" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M3 1.4Q8 2 11.5 2" stroke="#3f8fc4" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M-24 6Q-26 6 -27 5" stroke="#8a6c3a" stroke-width="2" stroke-dasharray="1 2.4" fill="none"/>`;
+ if(st===3) b+=pond(-23,5,5.5,2.4)+riv(8.5,'#c9b27a').replace(R,'M-18 3C-14 -2 -12 4 -4 1S10 -3 18 2')+riv(5.5,'#2f7fb3').replace(R,'M-18 3C-14 -2 -12 4 -4 1S10 -3 18 2')+pond(-3,0.5,9,3.2)+pond(21,2,6.5,2.4)+`<path d="M-26 6C-23 5 -20 4 -18 3" stroke="#8a6c3a" stroke-width="2" stroke-dasharray="1 2.4" fill="none"/>`;
+ if(st===4) b+=riv(10,'#c9b27a')+riv(7,'#2f7fb3')+riv(2.6,'#4aa3d6','opacity=".9"')+`<path d="M-14 1Q-12 -.4 -10 1M6 -2Q8 -3.4 10 -2M20 2Q22 .8 24 2" stroke="#dff6ff" stroke-width=".8" fill="none"/>`+`<ellipse cx="-3" cy="1" rx="6" ry="2.6" fill="#2f7fb3"/><ellipse cx="-3.5" cy="0.6" rx="4" ry="1.5" fill="#4aa3d6"/>`;
+ for(const [x,h] of [[-27,11],[-24,15],[25,13],[28,16]]) b+=`<path d="M${x} 6V${-h}" stroke="#4a7a3a" stroke-width="1.2"/><ellipse cx="${x}" cy="${-h}" rx="1.3" ry="3" fill="#6b4a2c"/>`;
  return svg('-32 -30 64 44',192,132,b);
 }
 // ---------- Sheet ----------
 const out=document.getElementById('out'); let h='';
 const cell=(name,label,s)=>`<div class="sp" data-name="${name}">${s}<span>${label}</span></div>`;
 const KS=['f','e','s','st'], SN={f:'Feuer',e:'Eis',s:'Schatten',st:'Stein'};
-h+=`<h2>1 · Dorf: wächst von Tag zu Tag (7 Stufen, 1 Feld)</h2><p class="n">Stufe 0 = Bauplatz (Tag 1), dann Zelt + Feuer, Hütte, mehr Hütten, Brunnen, Banner, am Ende Wachturm und Zaun (Tag ~40). Der Stil folgt dem Element: Holzhütten, Iglus, schiefe Schattenhäuser, Steinhäuser.</p>`;
+h+=`<h2>1 · Dorf: wächst von Tag zu Tag (7 Stufen, 1 Feld)</h2><p class="n">Stufe 0 = Bauplatz, 1 Zelt + Feuer, 2 Hütte, 3 Dorf mit Palisade und Wachturm, 4 erste Steinmauer mit Tor, 5 Burg mit Bergfried, 6 Ritterburg mit Zugbrücke und Wassergraben (Element-Graben: Lava, Eis, Schattennebel, Wasser). Der Stil folgt dem Element: Holzhütten, Iglus, schiefe Schattenhäuser, Steinhäuser.</p>`;
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<7;i++)h+=cell(`dorf-${k}-${i}`,`Stufe ${i}`,village(k,i));h+='</div>';}
-h+=`<h2>2 · Arbeiter (Holzfäller, Bergarbeiter, Angler), je 2 Bilder pro Tätigkeit</h2><p class="n">Kleidung nimmt die Elementfarbe auf. Bild 1 = Ausholen, Bild 2 = Schlag/Wurf.</p>`;
+h+=`<h2>2 · Arbeiter (Holzfäller, Bergarbeiter, Angler), je 2 Bilder pro Tätigkeit</h2><p class="n">Gewählt: jeweils Bild 1 (Holz 1, Berg 1, Angeln 1). Bild 2 bleibt als Reserve.</p>`;
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(const j of [['holz','Holz'],['berg','Berg'],['fisch','Angeln']])for(let f=0;f<2;f++)h+=cell(`arbeiter-${k}-${j[0]}-${f}`,`${j[1]} ${f+1}`,worker(k,j[0],f));h+='</div>';}
-h+=`<h2>3 · Biome in fünf Stufen (voll → abgebaut)</h2><p class="n">Wald (Bäume werden gefällt, Stümpfe und Holzstapel bleiben), Felsen (werden kleiner, am Ende Geröll), See (ersetzt den Sumpf, schrumpft und trocknet aus).</p>`;
-for(const [n,f,t] of [['wald',wald,'Wald'],['fels',fels,'Felsen'],['see',see,'See']]){h+=`<div class="row"><div class="lab">${t}</div>`;for(let i=0;i<5;i++)h+=cell(`biom-${n}-${i}`,`${i*25}% abgebaut`,f(i));h+='</div>';}
+h+=`<h2>3 · Biome in fünf Stufen (voll → abgebaut)</h2><p class="n">Wald (Bäume werden gefällt, Stümpfe und Holzstapel bleiben), Felsen (werden kleiner, am Ende Geröll), See (ersetzt den Sumpf; der Angler gräbt Gräben zu weiteren Teichen, am Ende entsteht ein kleiner Fluss).</p>`;
+for(const [n,f,t] of [['wald',wald,'Wald'],['fels',fels,'Felsen'],['see',see,'See']]){h+=`<div class="row"><div class="lab">${t}</div>`;for(let i=0;i<5;i++)h+=cell(`biom-${n}-${i}`,(n==='see'?['See','Graben','Teiche verbunden','Kanal','Fluss'][i]:`${i*25}% abgebaut`),f(i));h+='</div>';}
 out.innerHTML=h;
 </script>
