@@ -1,0 +1,52 @@
+<!doctype html><meta charset="utf-8"><title>See-Biom – Vorschläge</title>
+<style>body{margin:0;background:#1d2a1c;color:#e8eadf;font:14px system-ui;padding:16px}h1{font-size:18px}.row{display:flex;gap:14px;flex-wrap:wrap}.c{background:#2a3b28;border-radius:8px;padding:6px;font-size:12px}canvas{display:block}</style>
+<h1>See-Biom: 3 Vorschläge (ohne Strand)</h1><div class="row" id="o"></div>
+<script>
+const hs=(x,y,z=0)=>{let n=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453;return n-Math.floor(n)};
+const CS=110, COLS=5, ROWS=3;
+const LAKE=new Set(['0,1','2,0','2,1','3,1','3,2','4,2']);
+const isL=(x,y)=>LAKE.has(x+','+y);
+function blob(g,cx,cy,r,seed,fill,sx=1){const N=16,P=[];for(let i=0;i<N;i++){const a=i/N*Math.PI*2,k=r*(.86+.22*hs(i,seed,3));P.push([cx+Math.cos(a)*k*sx,cy+Math.sin(a)*k*.92])}
+ g.fillStyle=fill;g.beginPath();g.moveTo((P[0][0]+P[N-1][0])/2,(P[0][1]+P[N-1][1])/2);for(let i=0;i<N;i++){const a=P[i],b=P[(i+1)%N];g.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2)}g.fill()}
+function water(g,x,y,cs,cols,seed){const cx=(x+.5)*cs,cy=(y+.5)*cs;
+ cols.forEach(([col,r],j)=>{blob(g,cx,cy,r*cs,seed+j*5,col);
+  g.fillStyle=col;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]])if(isL(x+dx,y+dy)){const w=r*cs*1.7;g.fillRect(cx+(dx>0?0:dx<0?-cs/2-1:-w/2)+0,cy+(dy>0?0:dy<0?-cs/2-1:-w/2),dx?cs/2+1:w,dy?cs/2+1:w)}})}
+function grass(g){for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){g.fillStyle=(x+y)%2?'#26402a':'#2b4a2b';g.fillRect(x*CS,y*CS,CS+1,CS+1)}}
+function reed(g,x,y,s){g.strokeStyle='#4f8a3a';g.lineWidth=s*.07;for(const [dx,h] of [[-.1,1],[0,1.25],[.1,.9]]){g.beginPath();g.moveTo(x+dx*s,y);g.lineTo(x+dx*s*1.2,y-h*s);g.stroke()}
+ g.fillStyle='#6b4a2c';g.beginPath();g.roundRect(x-.03*s,y-1.3*s,.07*s,.3*s,.03*s);g.fill()}
+function lily(g,x,y,s,flower){g.fillStyle='#3f9a4a';g.beginPath();g.ellipse(x,y,s,s*.55,0,.25,Math.PI*2-.25);g.lineTo(x,y);g.fill();g.fillStyle='#53b25a';g.beginPath();g.ellipse(x-s*.15,y-s*.1,s*.5,s*.25,0,0,Math.PI*2);g.fill();
+ if(flower){g.fillStyle='#f6b9d2';for(let i=0;i<5;i++){g.beginPath();g.ellipse(x+Math.cos(i*1.26)*s*.28,y-s*.2+Math.sin(i*1.26)*s*.16,s*.2,s*.12,i*1.26,0,Math.PI*2);g.fill()}g.fillStyle='#ffd966';g.beginPath();g.arc(x,y-s*.2,s*.1,0,Math.PI*2);g.fill()}}
+function star(g,x,y,s){g.fillStyle='#fff';g.beginPath();g.moveTo(x,y-s);g.lineTo(x+s*.22,y-s*.22);g.lineTo(x+s,y);g.lineTo(x+s*.22,y+s*.22);g.lineTo(x,y+s);g.lineTo(x-s*.22,y+s*.22);g.lineTo(x-s,y);g.lineTo(x-s*.22,y-s*.22);g.fill()}
+function ripple(g,x,y,s,col){g.strokeStyle=col;g.lineWidth=Math.max(1,s*.12);g.beginPath();g.ellipse(x,y,s,s*.4,0,.2,Math.PI-.2);g.stroke()}
+const open=(x,y)=>[[0,-1],[1,0],[0,1],[-1,0]].filter(([dx,dy])=>!isL(x+dx,y+dy));
+const STY={
+A(g){ // Teich mit Schilf
+ for(const k of LAKE){const [x,y]=k.split(',').map(Number);water(g,x,y,CS,[['#3a5a2e',.52],['#2d6f8f',.45],['#3a8aa8',.34],['#1f5470',.14]],x*7+y);}
+ for(const k of LAKE){const [x,y]=k.split(',').map(Number),cx=(x+.5)*CS,cy=(y+.5)*CS;
+  lily(g,cx+.1*CS,cy+.08*CS,CS*.1,hs(x,y,1)>.5);lily(g,cx-.15*CS,cy-.1*CS,CS*.075,false);
+  ripple(g,cx-.05*CS,cy+.22*CS,CS*.06,'#bfe6f4aa');
+  for(const [dx,dy] of open(x,y)){if(hs(x,y,dx+dy*3)>.35)reed(g,cx+dx*CS*.4+(dy?(hs(x,y,5)-.5)*CS*.4:0),cy+dy*CS*.36+CS*.1,CS*.14)}}},
+B(g){ // Bergsee, klar, Felsrand
+ for(const k of LAKE){const [x,y]=k.split(',').map(Number);water(g,x,y,CS,[['#6b6f73',.5],['#0f6f9a',.44],['#1da0c0',.36],['#43d3e0',.2]],x*5+y*3);}
+ for(const k of LAKE){const [x,y]=k.split(',').map(Number),cx=(x+.5)*CS,cy=(y+.5)*CS;
+  for(const [dx,dy] of open(x,y)){for(let j=0;j<3;j++){const t=(j-1)*.28,px=cx+dx*CS*.44+(dy?t*CS:0),py=cy+dy*CS*.4+(dx?t*CS:0);const r=CS*(.07+hs(x,y,j+dx*4+dy*2)*.05);
+    g.fillStyle='#000a';g.beginPath();g.ellipse(px,py+r*.5,r*1.1,r*.5,0,0,Math.PI*2);g.fill();g.fillStyle=hs(x,y,j+9)>.5?'#9aa0a6':'#7e848a';g.beginPath();g.ellipse(px,py,r,r*.75,0,0,Math.PI*2);g.fill();g.fillStyle='#c4c9ce';g.beginPath();g.ellipse(px-r*.25,py-r*.25,r*.5,r*.3,0,0,Math.PI*2);g.fill()}}
+  star(g,cx+.12*CS,cy-.1*CS,CS*.06);if(hs(x,y,4)>.4)star(g,cx-.14*CS,cy+.12*CS,CS*.04);ripple(g,cx+.05*CS,cy+.15*CS,CS*.07,'#e6fbffaa')}},
+C(g){ // Angelteich mit Steg
+ for(const k of LAKE){const [x,y]=k.split(',').map(Number);water(g,x,y,CS,[['#4a3a24',.5],['#2c6fb0',.45],['#3f8fd0',.33]],x*3+y*11);}
+ for(const k of LAKE){const [x,y]=k.split(',').map(Number),cx=(x+.5)*CS,cy=(y+.5)*CS;
+  ripple(g,cx+.1*CS,cy-.12*CS,CS*.07,'#e0f2ffaa');ripple(g,cx-.12*CS,cy+.15*CS,CS*.05,'#e0f2ffaa');
+  for(const [dx,dy] of open(x,y)){if(hs(x,y,dx+dy*3)>.6)reed(g,cx+dx*CS*.42+(dy?(hs(x,y,5)-.5)*CS*.4:0),cy+dy*CS*.36+CS*.1,CS*.12)}}
+ // Steg am einzelnen See (0,1)
+ const sx=0*CS+CS*.5,sy=1*CS+CS*.5;g.fillStyle='#8a5a30';g.fillRect(sx-CS*.08,sy-CS*.62,CS*.16,CS*.5);g.fillStyle='#a8743c';for(let j=0;j<5;j++)g.fillRect(sx-CS*.08,sy-CS*.62+j*CS*.1,CS*.16,CS*.075);
+ g.fillStyle='#5a3a1c';g.fillRect(sx-CS*.1,sy-CS*.14,CS*.04,CS*.1);g.fillRect(sx+CS*.06,sy-CS*.14,CS*.04,CS*.1);
+ g.strokeStyle='#e8e0cc';g.lineWidth=1.2;g.beginPath();g.moveTo(sx,sy-CS*.2);g.lineTo(sx+CS*.2,sy+.0);g.stroke();g.fillStyle='#e8453c';g.beginPath();g.arc(sx+CS*.2,sy,CS*.03,0,Math.PI*2);g.fill();g.fillStyle='#fff';g.fillRect(sx+CS*.185,sy,CS*.03,CS*.02);
+ // Boot + springender Fisch im großen See
+ const bx=3.5*CS,by=1.5*CS;g.fillStyle='#7a4a24';g.beginPath();g.moveTo(bx-CS*.16,by);g.lineTo(bx+CS*.16,by);g.lineTo(bx+CS*.1,by+CS*.07);g.lineTo(bx-CS*.1,by+CS*.07);g.fill();g.strokeStyle='#5a3418';g.lineWidth=2;g.beginPath();g.moveTo(bx,by);g.lineTo(bx,by-CS*.2);g.stroke();g.fillStyle='#e6e0d0';g.beginPath();g.moveTo(bx,by-CS*.2);g.lineTo(bx+CS*.12,by-CS*.04);g.lineTo(bx,by-CS*.04);g.fill();
+ const fx=2.5*CS,fy=.55*CS;g.strokeStyle='#e0f2ffcc';g.lineWidth=1.5;g.beginPath();g.arc(fx,fy+CS*.12,CS*.12,Math.PI,0);g.stroke();g.fillStyle='#e8a43a';g.beginPath();g.ellipse(fx,fy-CS*.04,CS*.09,CS*.04,-.5,0,Math.PI*2);g.fill();g.beginPath();g.moveTo(fx-CS*.07,fy);g.lineTo(fx-CS*.14,fy+CS*.04);g.lineTo(fx-CS*.12,fy-CS*.02);g.fill()}
+};
+const o=document.getElementById('o');
+for(const [k,t] of [['A','A · Teich mit Schilf (organische Form, Seerosen, dunkler Uferrand aus Erde)'],['B','B · Klarer Bergsee (türkis, Felsen am Rand, Glitzern)'],['C','C · Angelteich (Steg, Boot, springender Fisch; passt zum Angler)']]){
+ const d=document.createElement('div');d.className='c';d.dataset.name='see-'+k.toLowerCase();const cv=document.createElement('canvas');cv.width=CS*COLS;cv.height=CS*ROWS;d.appendChild(cv);d.insertAdjacentHTML('beforeend','<div>'+t+'</div>');o.appendChild(d);
+ const g=cv.getContext('2d');grass(g);STY[k](g)}
+</script>
