@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26h";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1881,10 +1881,56 @@ function drawTower(c, tw, px, py, cs, aim, glow, noBody){
 const TIMG = {};   // 26.10. (F): freistehende Turm-Bilder der Schräg-Ansicht, assets/turm/<element>-<nr>.png (88×102-Raster, Fußpunkt bei y=92), Entwürfe/Quelle: team/GRAFIK.md
 const TOWER_NAME = ['feuer', 'eis', 'schatten', 'stein'];
 const TOWER_H = { feuer:[22,42,10,49,52,65.8,52,42], eis:[26,34.5,66.4,57,39.9,58.2,48,66], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
-function towerImg(el, idx){
-  const k = TOWER_NAME[el] + '-' + (idx + 1); if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
+function loadImg(k){
+  if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
   const im = new Image(); im.onerror = () => { TIMG[k] = null; }; im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
 }
+// 26i (F): bewegliche Teile. Jeder Turm hat ein Grundbild (assets/turm/<element>-<nr>.png) und PARTN Teilbilder (…-<nr>p<id>.png, gleiches Raster), die einzeln um einen Drehpunkt bewegt werden
+const PARTN = { feuer:[1,1,2,1,2,2,1,1], eis:[1,1,1,1,1,1,1,2], schatten:[1,1,2,1,2,1,3,2], stein:[1,2,1,1,2,2,2,3] };
+function towerImg(el, idx){
+  const nmE = TOWER_NAME[el], n = nmE + '-' + (idx + 1), b = loadImg(n), cnt = PARTN[nmE][idx], ps = [];
+  for (let i = 0; i < cnt; i++) { const q = loadImg(n + 'p' + i); if (q) ps.push(q); }
+  if (!b || ps.length < cnt) return null;
+  b.parts = ps; return b;
+}
+// Bewegung je Teil: [Drehpunkt x, y (Raster, Fuß = 0), Funktion(t Zeit, g 1→0 nach dem Schuss, w Ausschlag 0→1→0, dx, dy Zielrichtung) → {r Drehung, x, y Verschiebung, sx, sy, a}]
+const PARTS = (() => {
+  const S = Math.sin, PI = Math.PI, sc = v => ({ sx: v, sy: v });
+  return {
+    feuer0: [[0, -2, (t, g) => ({ sx: 1 + .1*S(t*9), sy: 1 + .18*S(t*11) + .5*g, r: .08*S(t*7) })]],
+    feuer1: [[31, -22, (t, g) => ({ r: .15*S(t*8), sy: 1 + .15*S(t*10) + .5*g, sx: 1 + .3*g })]],
+    feuer2: [[6, -4, (t, g, w, dx, dy) => ({ x: -dx*3*g, y: -dy*2*g })], [22, -4, (t, g) => ({ sx: 1 + .5*g + .06*S(t*14), sy: 1 + .3*g + .08*S(t*12) })]],
+    feuer3: [[0, -4, (t, g, w) => ({ y: -16*w })]],
+    feuer4: [[-16.6, -6, (t, g, w, dx, dy) => ({ x: dx*8*w, y: dy*6*w, r: .04*S(t*2) })], [0, -34, (t, g) => ({ sy: 1 + .15*S(t*10) + .4*g, r: .1*S(t*8) })]],
+    feuer5: [[0, -46, (t, g) => ({ sy: 1 + .07*S(t*6) + .25*g, sx: 1 + .04*S(t*5) })], [0, -60, (t, g, w) => ({ y: -3*S(t*4) - 8*w, ...sc(1 + .2*g) })]],
+    feuer6: [[0, -30, (t, g, w) => ({ r: t*.5 + 1.6*w, ...sc(1 + .12*g) })]],
+    feuer7: [[0, -4, (t, g) => ({ sy: 1 + .08*S(t*7) + .3*g, sx: 1 + .05*S(t*9 + 1) + .1*g })]],
+    eis0: [[0, -4, (t, g, w, dx) => ({ y: -2*S(t*3) - 3*w, x: dx*2*w, r: .04*S(t*2) })]],
+    eis1: [[0, -18, (t, g, w) => ({ y: -7*w, sy: 1 - .06*S(t*2), sx: 1 + .03*S(t*2) })]],
+    eis2: [[0, -12, (t, g, w, dx, dy) => ({ x: -dx*4*g, y: -dy*3*g })]],
+    eis3: [[19, -2, (t, g, w) => ({ r: .06*S(t*2) - .25*w, y: -4*w })]],
+    eis4: [[0, -26, (t, g, w) => ({ r: t*.6 + 3*w, ...sc(1 + .15*g) })]],
+    eis5: [[0, -12, (t, g, w) => ({ x: .24*9*w, y: -.97*9*w })]],
+    eis6: [[0, -26, (t, g) => sc(1 + .06*S(t*2) + .2*g)]],
+    eis7: [[0, -30, (t, g) => ({ r: 2*PI*(1 - g) })], [0, -32, (t, g) => sc(1 + .05*S(t*2) + .15*g)]],
+    schatten0: [[0, -4, (t, g, w, dx) => ({ y: -1.5*S(t*2.5) - 2*w, sy: 1 + .03*S(t*2.5), x: dx*3*w })]],
+    schatten1: [[0, -22, (t, g) => sc(1 + .1*S(t*3) + .1*g)]],
+    schatten2: [[0, -30, (t) => ({ sy: S(t*.9) > .985 ? .15 : 1 })], [0, -30, (t, g, w, dx, dy) => ({ x: dx*3, y: dy*2, ...sc(1 + .2*g) })]],
+    schatten3: [[0, -20, (t, g) => ({ ...sc(1 + .06*S(t*4) + .15*g), a: Math.min(1, .75 + .25*S(t*4) + .25*g) })]],
+    schatten4: [[-16, -4, (t, g, w) => ({ r: -.4*w })], [0, -4, (t, g, w) => ({ y: 3*w })]],
+    schatten5: [[0, -4, (t, g, w) => ({ y: -2*S(t*2) - 4*w, sy: 1 + .04*S(t*2) + .1*w })]],
+    schatten6: [[0, -34, (t, g) => sc(1 + .05*S(t*3) + .3*g)], [0, -34, (t, g) => sc(1 + .04*S(t*5) + .15*g)], [0, -34, (t, g) => sc(1 + .05*S(t*3) + .3*g)]],
+    schatten7: [[0, -40, (t) => ({ y: -1.5*S(t*1.5), r: .04*S(t) })], [0, -40, (t, g) => ({ r: t*.15, a: Math.min(1, .55 + .45*S(t*4) + .5*g) })]],
+    stein0: [[.6, -45, (t) => ({ sx: 1 + .25*S(t*6), r: .05*S(t*4 + 1) })]],
+    stein1: [[0, -30, (t, g) => ({ sy: 1 + .5*g })], [0, -22, (t, g) => ({ a: 1 - Math.min(1, g*1.6), y: 5*g })]],
+    stein2: [[0, -34, (t, g, w) => ({ r: .85*w })]],
+    stein3: [[6, -44, (t, g, w, dx, dy) => ({ r: .08*S(t*1.7) - .25*w, x: dx*5*w, y: dy*3*w })]],
+    stein4: [[0, -2, (t, g, w) => ({ y: -4*w, x: S(t*70)*1.2*g })], [0, -12, (t, g, w) => ({ y: -6*w, x: -S(t*60)*1.5*g })]],
+    stein5: [[14, -40, (t, g, w, dx, dy) => ({ x: dx*9*w, y: dy*6*w, r: .03*S(t*1.5) })], [-15, -38, (t, g, w) => ({ r: .04*S(t*1.8) - .12*w })]],
+    stein6: [[0, -18, (t, g, w, dx) => ({ r: .06*S(t*2), y: -1*S(t*3) - 2*w, x: dx*3*w })], [-26, -10, (t, g) => ({ a: Math.min(1, .5 + .2*S(t*5) + .3*g), x: -3*g })]],
+    stein7: [[-26, -52, (t, g, w) => ({ r: .05*S(t*1.4) + .9*w })], [26, -52, (t, g, w) => ({ r: -.05*S(t*1.4 + 1) - .9*w })], [0, -62, (t, g, w) => ({ y: -1.2*S(t*1.4) + 3*w })]]
+  };
+})();
 const FIRE_T = {};   // letzter Schuss je Turm (Simulationszeit), damit die Animation etwas länger läuft als der kurze Blitz
 function drawTower25(c, tw, x, y, cs, aim, glow){
   const sp = towerImg(tw.el, tw.idx);
@@ -1899,15 +1945,23 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
     let sx = 1, sy = 1, ox = 0, oy = 0, rotA = 0;
     sx = 1 + .05*g; sy = 1 - .05*g; ox = -dx*cs*.05*g; oy = -dy*cs*.03*g;        // Standard: Rückstoß
     const nm = TOWER_NAME[tw.el] + tw.idx;
-    if (nm === 'stein2') { rotA = -.16*g; ox = 0; oy = 0; }                       // Katapult: Arm schwingt, Gerät kippt
-    else if (nm === 'stein5') { ox = dx*cs*.14*g; oy = dy*cs*.08*g; sx = sy = 1; }  // Granitwächter: Speerstoß nach vorn
-    else if (nm === 'stein7') { sx = 1 + .1*g; sy = 1 - .1*g; ox = oy = 0; }       // Bergkönig: Aufstampfen
-    else if (nm === 'schatten4') { sx = sy = 1 + .14*g; ox = oy = 0; }               // Seelenfresser: Maul schnappt
-    else if (nm === 'schatten0' || nm === 'schatten5') { oy = -cs*.1*g; sx = sy = 1 + .04*g; ox = 0; }   // Schemen/Phantom: ruckt hoch
+    if (nm === 'stein2') { ox = oy = 0; sx = sy = 1; }                              // Katapult: nur der Arm schwingt (Teilbild)
+    else if (nm === 'stein5') { ox = oy = 0; sx = sy = 1; }                          // Granitwächter: nur Arm und Speer (Teilbild)
+    else if (nm === 'stein7') { sx = 1 + .04*g; sy = 1 - .04*g; ox = oy = 0; }       // Bergkönig: Aufstampfen (Arme als Teilbild)
+    else if (nm === 'schatten4') { sx = sy = 1; ox = oy = 0; }                       // Seelenfresser: Maul schnappt (Teilbilder)
+    else if (nm === 'schatten0' || nm === 'schatten5') { sx = sy = 1; ox = oy = 0; }   // Schemen/Phantom: bewegt sich als Teilbild
     else if (nm === 'schatten1') { ox = 0; oy = Math.sin(now*3 + tw.x) * cs*.05 - cs*.05; sx = sy = 1; }   // Irrlicht schwebt
     else if (nm === 'feuer2' || nm === 'feuer3') { ox = -dx*cs*.07*g; }
     c.save(); c.translate(fx + ox, fy + oy); c.rotate(rotA); c.scale(sx, sy);
     c.drawImage(sp, -44*u, -92*u, 88*u, 102*u);
+    const gp = Math.max(0, 1 - (now - (FIRE_T[key] === undefined ? -9 : FIRE_T[key])) / .5), wp = gp > 0 ? Math.sin(Math.PI * (1 - gp)) : 0, pd = PARTS[nm];   // bewegliche Teile
+    for (let i = 0; i < sp.parts.length; i++) {
+      const d = pd && pd[i];
+      if (!d) { c.drawImage(sp.parts[i], -44*u, -92*u, 88*u, 102*u); continue; }
+      const m = d[2](now + tw.x*.37 + tw.y*.21, gp, wp, dx, dy), px = d[0]*u, py = d[1]*u;
+      c.save(); c.translate(px + (m.x || 0)*u, py + (m.y || 0)*u); c.rotate(m.r || 0); c.scale(m.sx === undefined ? 1 : m.sx, m.sy === undefined ? 1 : m.sy); if (m.a !== undefined) c.globalAlpha = m.a;
+      c.drawImage(sp.parts[i], -44*u - px, -92*u - py, 88*u, 102*u); c.restore();
+    }
     c.restore();
     if (g > 0 && glow !== undefined) {                                              // Mündungseffekt in Elementfarbe (am Turm, in Zielrichtung)
       const mx = fx + dx*cs*.32, my = fy - hh*.55 + dy*cs*.2, col = ELEMENTS[tw.el].color;
@@ -2232,7 +2286,7 @@ function towerIcon(el, k){
   if (view25) {                              // 26d (F): Symbol aus dem Turm-Bild der Schräg-Ansicht, zugeschnitten auf die Zeichnung
     const id = 'v25-' + el + '-' + k; if (ICONS[id]) return ICONS[id];
     const im = towerImg(el, k); if (im) {
-      const w = im.naturalWidth, h = im.naturalHeight, t = document.createElement('canvas'); t.width = w; t.height = h; const tc = t.getContext('2d'); tc.drawImage(im, 0, 0);
+      const w = im.naturalWidth, h = im.naturalHeight, t = document.createElement('canvas'); t.width = w; t.height = h; const tc = t.getContext('2d'); tc.drawImage(im, 0, 0); for (const q of im.parts || []) tc.drawImage(q, 0, 0);
       const d = tc.getImageData(0, 0, w, h).data; let x0 = w, x1 = 0, y0 = h, y1 = 0;   // sichtbarer Bereich der Zeichnung
       for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y*w + x)*4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
       const bw = x1 - x0 + 1, bh = y1 - y0 + 1, sc = Math.min(60 / bw, 60 / bh), cv = document.createElement('canvas'); cv.width = cv.height = 64; const c = cv.getContext('2d');
