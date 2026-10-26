@@ -43,6 +43,10 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 01:30 · F · 2026-10-27s – Arbeiter, Biom-Abbau, Wege wachsen Stück für Stück
+- Arbeiter sind jetzt im Spiel (nur Anzeige): ab Tag 2 alle 2 Tage ein neuer (Holzfäller am Wald, Bergarbeiter am Felsen, Angler am See), nächstgelegene Felder zuerst, je 8 Tage Arbeit. Wald verliert Bäume (Stümpfe, am Ende Holzstapel), Felsen schrumpfen zu Geröll, Angler graben Kanäle zum nächsten See. Arbeiter ≈ ¼ Feld hoch; Geländebonus bleibt unverändert, auch wenn das Feld abgebaut ist. Bilder `assets/dorf/arbeiter-*`.
+- Dorfwege wachsen Stück für Stück: Weg Nr. q ist am Tag 4 + q/0,6 am Turm fertig und wächst 3 Tage lang. Neu laden genügt.
+
 ### 27.10. 00:55 · F · 2026-10-27r – Baumleichen ohne Glut
 - Die verbrannten Bäume im Feuer-Boden haben keine Glutpunkte mehr (war zu unübersichtlich). Nur Anzeige. Neu laden genügt.
 
@@ -56,6 +60,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 
 ### 27.10. 23:50 · F · 2026-10-27o – Seen frieren im Eis-Gebiet zu
 - Auf einer Eis-Map frieren Seen zu (hellblaue Eisfläche mit Rissen), sobald sie im umgewandelten Schnee-Gebiet um das Dorf liegen. Nur Anzeige, der Geländebonus bleibt. Neu laden genügt.
-
-### 27.10. 23:30 · F · 2026-10-27n – Dorfwege nochmal halb so breit
-- Dorfwege nochmal halbiert (Trampelpfad ca. 2 px bei 40 px Feld). Nur Anzeige. Neu laden genügt.

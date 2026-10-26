@@ -1,6 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 27.10. 23:30 · F · 2026-10-27n – Dorfwege nochmal halb so breit
+- Dorfwege nochmal halbiert (Trampelpfad ca. 2 px bei 40 px Feld). Nur Anzeige. Neu laden genügt.
+
+
 ### 27.10. 23:15 · F · 2026-10-27m – Dorfwege halb so breit
 - Die Dorfwege sind nur noch halb so breit (knapp zu sehen). Nur Anzeige. Neu laden genügt.
 
