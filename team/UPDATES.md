@@ -2,6 +2,10 @@
 
 <!-- So geht ein neuer Eintrag: direkt UNTER der Zeile „NEUE EINTRÄGE HIER“ einfügen (nie über ihr, nie in diesen Kopf).
 
+### 27.10. 17:30 · F · 2026-10-27a – Stein-Animationen
+- Schleuder spannt das Gummi und schnellt zurück; Katapult schwingt den Wurfarm über den Kopf; Onyx beißt zu und dehnt den Hals; Erdbeben: gezackter Riss im Kreis; Granitwächter wirft den Speer (neuer wächst nach); Lawine: Steine rollen mit Staub; Bergkönig schlägt mit dem Hammer, ein Riss läuft zu den Monstern.
+- Katapult/Onyx/Wächter/Bergkönig drehen sich zum Ziel (spiegeln). Türmbilder unverändert, nur Teile (Katapult-Stein, Wächter-Speer) getrennt.
+
 ### 26.10. 19:30 · F · 2026-10-26w – Schatten: Schattenturm, Seelenfresser-Silhouette, Phantom, Schattendrache
 - Fluchstein heißt jetzt Schattenturm (dunkler Turm im Schattensee, wie der Lavaturm); Ewige Nacht heißt Schattendrache und speit schwarzes Feuer. Namen nur in der Anzeige.
 - Seelenfresser: durchsichtige Silhouette des Monsters fliegt vom Ziel zum Turm. Phantom schießt ein kleines schwarzes Phantom.
@@ -46,7 +50,4 @@ Neues Spiel → Spielart „Kreativ“ öffnet `?kreativ=1`: nur dieses Gerät, 
 
 ### 26.10. 13:55 · F · 2026-10-26j – Turm-Bilder laden robuster (iPhone)
 Fehlende Symbole auf dem iPhone gemeldet. Bilder, die nicht laden, werden bis zu 3-mal neu versucht; ein endgültig fehlendes Teilbild blockiert den Turm nicht mehr. Ursache am Handy noch nicht bestätigt (am Laptop nicht nachstellbar).
-
-### 26.10. 13:30 · F · 2026-10-26i – Türme mit beweglichen Teilen (Schräg-Ansicht)
-Alle 32 Türme sind in Grundbild + Teilbilder zerlegt (`assets/turm/<element>-<nr>p<id>.png`, 79 Dateien). `PARTS` in index.html: Drehpunkt + Bewegung je Teil (Leerlauf-Wackeln, beim Schuss Ausschlag): z. B. Katapult-Arm schwingt, Bergkönig hebt beide Arme, Granitwächter stößt mit dem Speer, Seelenfresser klappt das Maul, Sonne dreht sich, Schleuder-Stein fliegt weg. Nur Anzeige. Neu laden.
 

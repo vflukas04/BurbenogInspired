@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 26.10. 13:30 · F · 2026-10-26i – Türme mit beweglichen Teilen (Schräg-Ansicht)
+Alle 32 Türme sind in Grundbild + Teilbilder zerlegt (`assets/turm/<element>-<nr>p<id>.png`, 79 Dateien). `PARTS` in index.html: Drehpunkt + Bewegung je Teil (Leerlauf-Wackeln, beim Schuss Ausschlag): z. B. Katapult-Arm schwingt, Bergkönig hebt beide Arme, Granitwächter stößt mit dem Speer, Seelenfresser klappt das Maul, Sonne dreht sich, Schleuder-Stein fliegt weg. Nur Anzeige. Neu laden.
+
 ### 26.10. 13:00 · F · 2026-10-26h – Angriffe der Türme passend zu den Bildern (Schräg-Ansicht)
 Geschosse je Turm eigene Optik (`shot25`: Funke, Feuerball, Flammenstrahl, Eissplitter, Schneeflocke, Speer, Seelen-Orb, Runenstein, Felsbrocken, Onyx-Splitter u. a.), Türme reagieren beim Schuss (`drawTower25`): Rückstoß, Speerstoß beim Granitwächter, Aufstampfen beim Bergkönig, Kippen beim Katapult, Flamme beim Flammenwerfer, Lavafunken beim Lavaturm, Irrlicht schwebt. Nur Anzeige, nur Schräg-Ansicht.
 
