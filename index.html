@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1199,7 +1199,8 @@ async function saveGame(){
   if (MODE === 'local') return lsSet('ww2-local', { G, L });
   const body = JSON.parse(JSON.stringify(G)); await queueWrite(() => DB.doc(P_STATE).set(body));
 }
-let resolving = false, resolvingAt = 0, syncAt = 0, hiddenAt = 0;
+let resolving = false, resolvingAt = 0, syncAt = 0, hiddenAt = 0, lastTouch = Date.now();
+['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, () => lastTouch = Date.now(), { passive:true }));
 // Gibt true zurück, wenn ausgewertet werden konnte (für den Bereit-Knopf: sonst später nochmal versuchen)
 /* Archiv (15.10., L): Jedes online gespielte Spiel wird mitgeschrieben, für die Eichung des Balancing-Skripts.
    games/<GAME_ID>/archiv/<startAt>: je Welle Kills, Gold, Durchbrüche (slots), je Tagesende alle Türme (days).
@@ -1263,7 +1264,9 @@ async function tryResolve(force, onlyKey){
 function startReplay(run, rewatch){
   if (!run) return;
   seenRun = run.id; lsSet('ww2-seen', seenRun);
-  const w = makeWorld(run), end = simulateWorld(run).sims;
+  let w, end;
+  try { w = makeWorld(run); end = simulateWorld(run).sims; }
+  catch(e) { console.warn(e); replay = null; toast('Wiedergabe-Fehler (' + VERSION + '): ' + (e && e.message || e) + ' – bitte Seite neu laden'); pollVersion(); render(); return; }   // 27.10. (F): nicht mehr stumm hängen bleiben
   replay = { run, acc:0, w, sims:w.sims, pending:!rewatch, final:{ earned:end.map(s => s.earned), kills:end.map(s => s.kills), gems:end.map(s => s.gems) } };
   selCell = null; render(); kickLoop();
 }
@@ -2509,6 +2512,8 @@ setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   
    // Wächter: Steht die Wiedergabe seit 3 s still, obwohl die Seite sichtbar ist, neu anstoßen
    if (replay && !document.hidden && performance.now() - replay.last > 3000) kickLoop();
    checkReady(); saveStatus();
+   // 27.10. (F): Seite lief mit alter Version weiter (Laptop stundenlang offen) – bei Ruhe selbst neu laden, damit alle denselben Code haben
+   if (MODE === 'online' && newerVersion && !replay && !resolving && $('dlgback').hidden && Date.now() - lastTouch > 45000 && writesOpen === 0) location.reload();
    if (MODE === 'online' && G && !G.over && !G.paused) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
 
 function startLocal(){

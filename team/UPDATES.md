@@ -2,6 +2,10 @@
 
 <!-- So geht ein neuer Eintrag: direkt UNTER der Zeile „NEUE EINTRÄGE HIER“ einfügen (nie über ihr, nie in diesen Kopf).
 
+### 27.10. 20:00 · F · 2026-10-27f – Seite lädt sich bei neuer Version selbst neu
+- Laptop war dauerhaft offen, Wiedergabe-Hänger war es nicht. Neue Vermutung: veralteter Code (stundenlang offene Seite bei vielen Pushes). Jetzt lädt sich die Seite bei neuer Version selbst neu, wenn Ruhe herrscht (keine Wiedergabe, kein Dialog, 45 s ohne Eingabe, nichts am Speichern).
+- Fehler beim Starten einer Wiedergabe werden als Meldung mit Versionsnummer gezeigt statt stumm zu hängen.
+
 ### 27.10. 19:40 · F · 2026-10-27e – Welle startet nicht am Laptop
 - Vermutete Ursache: Eine stehende Wiedergabe (Tab im Hintergrund, Laptop schlief) blockierte neue Wellen und das Auslösen. Jetzt wird sie beendet, sobald eine neuere Welle da ist oder man nach >20 s zurückkehrt.
 - Statuszeile oben zeigt Tag.Welle, „Stand vor N s“ und ob eine Wiedergabe läuft (zur Fehlersuche, bitte bei Wiederholung Screenshot).
@@ -49,7 +53,4 @@ Flammenwerfer neu gezeichnet (Tank + Düse, passt auf ein Feld; `tools/turm/tuer
 
 ### 26.10. 16:40 · F · 2026-10-26o – Kreativ-Modus: Element jederzeit wechseln
 Im Kreativ-Modus (`KREATIV`) zeigt `canSwitchEl` die Element-Knöpfe immer; bestehende Türme des Feldes wechseln mit (gleiche Nummer und Stufe, ohne Edelstein). Normales Spiel unverändert.
-
-### 26.10. 16:25 · F · 2026-10-26n – Flammenwerfer: Feuerstrahl aus der Mündung bis zum Ziel
-Der Flammenwerfer dreht sich zum Ziel, der Feuerstrahl (`drawShot`, `p.el === 0 && p.idx === 2`) beginnt an der Mündung und reicht bis zum Monster. Nur Anzeige.
 
