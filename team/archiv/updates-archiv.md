@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 21.10. 10:15 · L · 2026-10-21d – Zwischenbosse mit Krone
+- Maus-, Fuchs- und Schäferhund-Boss tragen eine Krone und schimmern golden (sonst sahen sie aus wie das normale Monster). Nur Anzeige; neu laden reicht.
+
 ### 21.10. 10:40 · L · 2026-10-21c – Monster-Bilder nachgeschärft
 - Jetzt haben alle Monster Bilder. Fliegende in der Seitenansicht waagerecht gedreht, zu große Vorderansichten einzelner Tiere verkleinert (kein Größensprung mehr in Kurven). Neu laden reicht.
 

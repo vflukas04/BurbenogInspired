@@ -171,3 +171,9 @@ The same bird, same style. It flies directly away from the viewer - up. Seen fro
 - Bauen: Video (oder Einzelbilder) auf weißem Hintergrund erzeugen, genau ein Schrittzyklus, dann `python3 tools/lauf.py <name> <video|ordner> --n 4 --von <s> --bis <s>` (z. B. `hund`). Es entstehen `assets/monster/<name>-lauf-0..3.png` (192 px, freigestellt, 128 Farben, gleicher Ausschnitt und Fußlinie).
 - Einbauen: in `index.html` `MONSTER_ANIM = { betty:[8, 8], hund:[4, 6] }` (Anzahl, zweiter Wert ungenutzt). Das Bild folgt der Schrittphase: steht das Monster, steht das Bild. Fehlt ein Laufbild, zeigt das Spiel die Seitenansicht.
 - Videoprompt-Vorschlag (Krea): „The same <Tier> as in the reference image, walking directly to the right in a seamless loop, one full walking cycle, side view slightly from above, plain white background, camera static, no zoom.“ Nur einen Schrittzyklus nehmen, die Ränder müssen ineinander übergehen.
+
+
+## Türme der Schräg-Ansicht (26.10., F)
+- Selbst gezeichnete Vektor-Bilder (kein KI-Bild), freistehend ohne Sockel, Fußpunkt unten in der Feldmitte, Größe wächst mit der Turmnummer (`u` in `drawTower25`). Aufsatz dreht sich nicht.
+- Fertig: Schatten (`assets/turm/schatten-1..8.png`, Schemen, Irrlicht, Nachtauge, Fluchstein, Seelenfresser, Phantom, Leerenturm, Ewige Nacht). Feuer/Eis/Stein: Entwürfe werden von F überarbeitet, bis dahin Block-Türme mit den Kenney-Aufsätzen.
+- Neues Element anbinden: PNG `assets/turm/<element>-<nr>.png` (68×90-Raster, Fuß bei y=80) und `towerImg` erweitern.

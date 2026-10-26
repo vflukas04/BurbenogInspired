@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 10:20 · F · 2026-10-26c – Schatten-Türme als freie Bilder (Schräg-Ansicht)
+In der Schräg-Ansicht stehen die 8 Schatten-Türme ohne Sockel als Bilder (`assets/turm/schatten-1..8.png`, `towerImg`, `drawTower25`); Zahl, Edelstein und Stufen liegen flach auf dem Feld. Entwürfe für Feuer/Eis/Stein sind noch in Überarbeitung (F), bis dahin Block-Türme. Draufsicht unverändert. Nur Anzeige.
+
 ### 26.10. 10:00 · F · 2026-10-26b – Schräg-Ansicht (2,5D) für die Maps
 Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (Reichweiten, Explosionen, Licht werden Ellipsen), Türme als Blöcke mit Schatten, Bäume/Berge/Monster stehen aufrecht und werden nach Tiefe sortiert. Nur Anzeige (`view25`, `CUR`, `gyOf`, `drawTower25`), Simulation unberührt; Standard bleibt Draufsicht. Tippen: aufragende Türme zählen zum Feld davor.
 
@@ -66,7 +69,4 @@ Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (R
 - Fehler: Trafen zwei gleiche Effekte zusammen, wurden Stärke und Dauer getrennt maximiert. Ein schwacher Ganztags-Effekt (Schwelbrand, Ewiges Eis, Ewige Nacht) machte so jeden starken kurzen Brand/Bremsen/Fluch anderer Türme ganztägig.
 - Neu (`addFx`, Effekt-Ablauf in `step`, Leaks): Der stärkste aktive Effekt wirkt mit seiner eigenen Dauer; ein schwächerer, aber längerer bleibt als Rückfall (`v2`/`t2`) und übernimmt, wenn der starke abläuft – auch beim Nachbarn.
 - Folge: Kombinationen mit Ganztags-Türmen werden schwächer (vorher bis zu ×30 im Prüfstand). Keine Zahlen geändert. Neues Spiel + neu laden.
-
-### 21.10. 10:15 · L · 2026-10-21d – Zwischenbosse mit Krone
-- Maus-, Fuchs- und Schäferhund-Boss tragen eine Krone und schimmern golden (sonst sahen sie aus wie das normale Monster). Nur Anzeige; neu laden reicht.
 
