@@ -2,6 +2,10 @@
 
 <!-- So geht ein neuer Eintrag: direkt UNTER der Zeile „NEUE EINTRÄGE HIER“ einfügen (nie über ihr, nie in diesen Kopf).
 
+### 27.10. 21:00 · F · 2026-10-27i – Wald als Tannengruppe
+- Waldfelder zeigen jetzt eine Gruppe aus 4–5 kleinen Tannen (Entwurf aus tools/dorf) statt einer einzelnen Tanne, ohne Wiesenfleck am Boden. Nur Optik, Boni und Karten unverändert. Neu laden genügt.
+- Entwurfsbilder Dorf/Arbeiter: Dorf = 1 Feld breit, Arbeiter ≈ ¼ Feld hoch (Montage in assets/dorf-entwurf/_insitu-karte.png).
+
 ### 27.10. 20:30 · F · 2026-10-27h – Verbindung schneller prüfen
 - Rund um die Startzeit einer Welle (±90 s) fragt jedes Gerät alle 2 s den Stand ab (sonst weiter alle 10 s). Bleibt dann 5 s lang der Stand aus, baut die Seite die Verbindung neu auf; sonst nach 25 s.
 - Schlägt eine Abfrage fehl oder dauert über 5 s, wird sofort neu verbunden.
@@ -52,7 +56,4 @@ Lavaturm neu gezeichnet: dunkler Steinturm mitten in einem Lavasee, oben Zinnen 
 
 ### 26.10. 17:40 · F · 2026-10-26r – Feuerteufel wirft brennenden Dreizack
 Der Feuerteufel dreht sich zum Ziel (Dreizack-Seite zeigt zum Monster), der Dreizack dreht sich zum Ziel und verschwindet beim Wurf, ein neuer erscheint nach kurzer Zeit. Geschoss (`shot25`, Feuer Nr. 5): brennender Dreizack mit Flammenschweif, startet in der Hand. Nur Anzeige.
-
-### 26.10. 17:20 · F · 2026-10-26q – Brandpfeil: Bogen zielt, brennender Pfeil fliegt nach vorn
-Brandpfeil neu gezeichnet (Holzbogen auf Dreibein, 2 Teilbilder: Bogen, Pfeil; `PARTN`, `TOWER_H` angepasst). Dreht sich zum Ziel (Spiegelung wie Glumanda/Flammenwerfer), Bogen neigt sich zum Ziel, Pfeil fliegt vorn ab und wird neu aufgelegt. Geschoss (`shot25`, `feuer` Nr. 4): brennender Pfeil mit Flammenschweif, startet vorn am Bogen. Nur Anzeige.
 

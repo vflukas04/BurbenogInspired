@@ -9,7 +9,7 @@ p.n{margin:2px 0 10px;color:#b9c4b0;max-width:900px}
 .lab{width:70px;align-self:center;font-weight:600;color:#e8eadf}
 </style>
 <h1>BurbenogInspired – Dorf, Arbeiter, Biome (Entwurf 26.10.)</h1>
-<p class="n">Nur Bilder zum gemeinsamen Überarbeiten, noch nichts im Spiel. Maßstab: ein Dorf = ein Feld, ein Arbeiter ist etwa ein Drittel Feld hoch.</p>
+<p class="n">Nur Bilder zum gemeinsamen Überarbeiten, noch nichts im Spiel. Maßstab: ein Dorf = genau ein Feld breit, ein Arbeiter ist etwa ein Viertel Feld hoch.</p>
 <div id="out"></div>
 <script>
 const P = {
@@ -100,7 +100,7 @@ function logs(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><re
 function wald(st){
  const T=[[-18,-3,1],[-6,-7,1.1],[8,-4,1],[19,-8,.9],[2,2,.9]];
  const S=[[-18,-3],[-6,-7],[8,-4],[19,-8],[2,2]];
- const dirt=st>=3; let b=`<ellipse cx="0" cy="0" rx="29" ry="9" fill="${dirt?'#5d4a30':'#2f5a2a'}"/><ellipse cx="-3" cy="-1" rx="21" ry="5" fill="${dirt?'#76603f':'#3b7035'}" opacity=".8"/>`;
+ let b='';   // ohne Wiesenfleck: der Boden kommt aus dem Spiel
  const trees=[5,4,3,1,0][st]; const order=[3,0,2,4,1];
  const keep=order.slice(5-trees).sort((a,c)=>T[a][1]-T[c][1]);
  // Stümpfe
