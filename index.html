@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1903,14 +1903,15 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
   c.fillStyle = '#ffffff22'; c.fillRect(sx, sy, cs*.05, hg + fh*.18);
   c.save(); c.translate(gx, gyy - hg); c.scale(1, k); drawTower(c, tw, 0, 0, cs, aim, glow); c.restore();
 }
-function drawMountain(g, x, y, cs){
-  const bx = (x+.5)*cs, by = (y+.88)*cs, w = cs*.46, ht = cs*.78;   // kleiner Berg: Schatten, helle und dunkle Flanke, Schneekappe
-  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(bx, by, w*1.05, cs*.1, 0, 0, Math.PI*2); g.fill();
-  const px = bx - w*.08, py = by - ht;
-  g.fillStyle = '#6d6a66'; g.beginPath(); g.moveTo(bx - w, by); g.lineTo(px, py); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
-  g.fillStyle = '#4a4845'; g.beginPath(); g.moveTo(px, py); g.lineTo(bx + w, by); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
-  g.fillStyle = '#4f4d49'; g.beginPath(); g.moveTo(bx - w*.1, by); g.lineTo(bx - w*.55, by - ht*.38); g.lineTo(bx - w*.2, by - ht*.5); g.closePath(); g.fill();
-  g.fillStyle = '#f1f3f5'; g.beginPath(); g.moveTo(px, py); g.lineTo(px - w*.3, py + ht*.28); g.lineTo(px - w*.08, py + ht*.2); g.lineTo(px + w*.1, py + ht*.3); g.lineTo(px + w*.34, py + ht*.27); g.closePath(); g.fill();
+function drawMountain(g, x, y, cs){          // 26.10. (F): große Felsbrocken statt Berg (Name bleibt wegen der Aufrufe)
+  const boulder = (bx, by, w, ht, sh) => {   // Fußpunkt (bx,by), Breite w, Höhe ht
+    g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(bx + w*.08, by, w*.55, w*.14, 0, 0, Math.PI*2); g.fill();
+    g.fillStyle = '#8f877a'; g.beginPath(); g.moveTo(bx - w*.5, by); g.lineTo(bx - w*.46, by - ht*.55); g.lineTo(bx - w*.2, by - ht*.95); g.lineTo(bx + w*.18, by - ht); g.lineTo(bx + w*.46, by - ht*.62); g.lineTo(bx + w*.5, by); g.closePath(); g.fill();
+    g.fillStyle = '#6f685d'; g.beginPath(); g.moveTo(bx + w*.18, by - ht); g.lineTo(bx + w*.46, by - ht*.62); g.lineTo(bx + w*.5, by); g.lineTo(bx + w*.05, by); g.lineTo(bx + w*.12, by - ht*.5); g.closePath(); g.fill();
+    g.fillStyle = '#b3aa9a'; g.beginPath(); g.moveTo(bx - w*.46, by - ht*.55); g.lineTo(bx - w*.2, by - ht*.95); g.lineTo(bx + w*.18, by - ht); g.lineTo(bx - w*.02, by - ht*.62); g.closePath(); g.fill();
+    g.strokeStyle = '#4d463d'; g.lineWidth = Math.max(1, cs*.03); g.beginPath(); g.moveTo(bx - w*.1, by - ht*.62); g.lineTo(bx - w*.02, by - ht*.35); g.lineTo(bx - w*.16, by - ht*.12); g.stroke(); };
+  boulder((x+.68)*cs, (y+.9)*cs, cs*.46, cs*.4, 0);
+  boulder((x+.4)*cs, (y+.96)*cs, cs*.78, cs*.78, 0);
 }
 function drawShot(c, p, cs, time){
   const dx = p.tx - p.x, dy = p.ty - p.y, dir = Math.atan2(dy, dx);
@@ -1987,7 +1988,7 @@ function draw(i, cv){
     if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
     if (t === 1 && !view25) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
     if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
-      if (!spr(g, tinted('bush', '#6f8a66'), (x+.72)*cs, (y+.3)*cs, cs*.38, h, .7)) { g.strokeStyle = '#4a6260'; g.lineWidth = 1; for (const dy of [.35,.65]) { g.beginPath(); g.moveTo((x+.2)*cs, (y+dy)*cs); g.lineTo((x+.8)*cs, (y+dy)*cs); g.stroke(); } } }
+      if (!view25) spr(g, tinted('tree', '#4a6b60'), (x+.5)*cs, (y+.42)*cs, cs*.82, h*.4, .95); }   // 26.10. (F): Sumpf mit Bäumen statt Büschen (2,5D: aufrecht, siehe unten)
     if (t === 3 && !view25) drawMountain(g, x, y, cs);
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
@@ -2099,7 +2100,8 @@ function draw(i, cv){
     for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
       if (t === 1) objs.push({ y:y + .9, f:() => { c.fillStyle = '#0004'; c.beginPath(); c.ellipse((x+.5)*cs, gy(y+.85), cs*.36, cs*.12, 0, 0, Math.PI*2); c.fill();
         if (!spr(c, tinted('tree', '#5d7a52'), (x+.5)*cs, gy(y+.85) - cs*.5, cs*1.15, h*.05)) { c.font = `${cs*.8}px serif`; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText('🌲', (x+.5)*cs, gy(y+.85)); } } });
-      if (t === 3) objs.push({ y:y + .88, f:() => { c.save(); c.translate(0, gy(y+.88) - (y+.88)*cs); drawMountain(c, x, y, cs); c.restore(); } }); }
+      if (t === 2) objs.push({ y:y + .8, f:() => { c.fillStyle = '#0004'; c.beginPath(); c.ellipse((x+.5)*cs, gy(y+.8), cs*.3, cs*.1, 0, 0, Math.PI*2); c.fill(); spr(c, tinted('tree', '#4a6b60'), (x+.5)*cs, gy(y+.8) - cs*.42, cs*1.0, h*.05); } });
+      if (t === 3) objs.push({ y:y + .88, f:() => { c.save(); c.translate(0, gy(y+1) - (y+1)*cs); drawMountain(c, x, y, cs); c.restore(); } }); }
     if (s) for (const m of s.monsters) objs.push({ y:m.y + (flying(m) ? 1.5 : .05), f:() => drawMon(m) });
     objs.sort((a, b) => a.y - b.y); for (const o of objs) o.f();
     if (!s) return;
