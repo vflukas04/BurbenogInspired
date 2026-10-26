@@ -2,6 +2,9 @@
 
 <!-- So geht ein neuer Eintrag: direkt UNTER der Zeile „NEUE EINTRÄGE HIER“ einfügen (nie über ihr, nie in diesen Kopf).
 
+### 27.10. 18:15 · F · 2026-10-27d – Onyx spuckt Felsbrocken
+- Onyx streckt sich nicht mehr bis zum Ziel, sondern spuckt einen großen Felsbrocken aus dem Maul (Kopf stößt kurz vor).
+
 ### 27.10. 18:00 · F · 2026-10-27c – Bergkönig: Riss schneller
 - Der Riss läuft doppelt so schnell und ist beim Einschlag schon am Monster (vorher kam der Schaden vor dem Riss).
 
@@ -48,7 +51,4 @@ Der Flammenwerfer dreht sich zum Ziel, der Feuerstrahl (`drawShot`, `p.el === 0 
 
 ### 26.10. 16:10 · F · 2026-10-26m – Glumanda schießt aus dem Maul
 Der Salamander dreht sich beim Schuss zum Ziel (Spiegelung in `drawTower25`, nur `feuer1`), Mündungsglühen sitzt am Maul, das Geschoss startet dort (`drawShot`, `p.el === 0 && p.idx === 1`). Nur Anzeige.
-
-### 26.10. 14:45 · F · 2026-10-26l – Kreativ-Modus: alle 48 Tage wählbar
-`KREATIV_MAXTAG` von 24 auf 48 (Friedrich will auch Tag 25+ sehen). Hinweis: Wer die Überraschung Runde 21–40 behalten will, setzt die Konstante wieder auf 24.
 

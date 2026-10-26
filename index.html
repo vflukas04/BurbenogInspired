@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2171,7 +2171,7 @@ function shot25(c, p, x, y, a, cs, time){
   if (i === 0) { rock(q*1.5, '#a89c84', '#cfc3a8', w); return true; }
   if (i === 1) { ball(q*2, '#8d8270', '#b3a78f', null); return true; }
   if (i === 2) { rock(q*4.2, '#8d8270', '#b3a78f', w*.4); return true; }
-  if (i === 3) { rock(q*3.4, '#7d725e', '#b3a78f', w*.5); c.fillStyle = '#5e5646'; for (const sg of [-1, 1]) { c.beginPath(); c.moveTo(x + sg*q*3.4, y); c.lineTo(x + sg*q*5.2, y - q*1.2); c.lineTo(x + sg*q*3.6, y - q*1.6); c.fill(); } return true; }
+  if (i === 3) { const sc2 = Math.min(1, .55 + Math.hypot(p.x - p.x0, p.y - p.y0)*2.2); rock(q*8.5*sc2, '#7d725e', '#b3a78f', w*.4); c.fillStyle = '#5e5646'; c.beginPath(); c.arc(x - q*1.2*sc2, y + q*1.4*sc2, q*1.3*sc2, 0, 7); c.arc(x + q*1.8*sc2, y - q*1.2*sc2, q*.9*sc2, 0, 7); c.fill(); return true; }   // großer Felsbrocken, wächst aus dem Maul
   if (i === 5) { rot(() => { c.fillStyle = '#908a83'; c.beginPath(); c.moveTo(q*6, 0); c.lineTo(-q*4, -q*2.2); c.lineTo(-q*3, 0); c.lineTo(-q*4, q*2.2); c.closePath(); c.fill(); c.fillStyle = '#b8b2aa'; c.beginPath(); c.moveTo(q*6, 0); c.lineTo(-q*4, -q*2.2); c.lineTo(-q*3, 0); c.fill(); }); return true; }
   if (i === 6) { const tr = Math.hypot(p.x - p.x0, p.y - p.y0)*cs, sg = Math.cos(a) < 0 ? -1 : 1, ca = Math.cos(a), sa = Math.sin(a);   // rollende Steine mit Staub
     y -= Math.abs(Math.sin(tr/(q*4)))*q*1.3; c.fillStyle = '#d9cba6'; for (let j = 1; j <= 4; j++) { c.globalAlpha = .5 - j*.1; c.beginPath(); c.arc(x - ca*q*j*2.6, y - sa*q*j*1.3 + q*1.4, q*(1.1 + j*.6), 0, 7); c.fill(); } c.globalAlpha = 1;
@@ -2202,7 +2202,7 @@ function drawShot(c, p, cs, time){
   }
   y -= h + (CUR.k < 1 && !p.lob ? cs*.25 : 0) + (roll ? cs*.06 : 0);
   if (CUR.k < 1 && p.el === 0 && p.idx === 2) JETS['0:' + p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Flammenwerfer: Ziel merken, die Flamme zeichnet der Turm
-  if (CUR.k < 1 && p.el === 3 && (p.idx === 7 || p.idx === 3)) { const jk = '3:' + p.x0 + ',' + p.y0; if (!JETS[jk] || JETS[jk].sh !== p) JETS[jk] = { tx:p.tx, ty:p.ty, t:time, sh:p, dur:Math.max(.2, tot / (p.sp || 6)) }; return; }   // Bergkönig: Riss statt Geschoss, der Turm zeichnet ihn
+  if (CUR.k < 1 && p.el === 3 && p.idx === 7) { const jk = '3:' + p.x0 + ',' + p.y0; if (!JETS[jk] || JETS[jk].sh !== p) JETS[jk] = { tx:p.tx, ty:p.ty, t:time, sh:p, dur:Math.max(.2, tot / (p.sp || 6)) }; return; }   // Bergkönig: Riss statt Geschoss, der Turm zeichnet ihn
   if (CUR.k < 1 && p.el === 2 && p.idx === 7) JETS['2:' + p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Schattendrache: schwarzes Feuer
   if (CUR.k < 1 && p.el === 1 && p.idx === 7) JETS['1:' + p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Eisdrache: Ziel merken, der Turm zeichnet den Eisatem
   if (CUR.k < 1 && p.el === 1 && p.idx === 3) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.eis[3], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 3 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 19 * uu * f; y -= 0; }   // Schneekönig: Speer startet in der Hand
@@ -2213,7 +2213,7 @@ function drawShot(c, p, cs, time){
   if (CUR.k < 1 && p.el === 3) { const pr = 1 - left / tot, f = Math.max(0, 1 - pr*(p.idx === 2 ? 3 : 5)), sg = Math.cos(dir) > 0 ? 1 : -1, H = TOWER_H.stein[p.idx], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + p.idx * .03) / 44)) / H;
     if (p.idx === 1) y -= 27*uu*f;                                  // Schleuder: aus der Tasche
     else if (p.idx === 2) { x += sg*4*uu*f; y -= 61*uu*f; }         // Katapult: vom Arm oben
-    else if (p.idx === 3) { x += sg*16*uu*f; y -= 50*uu*f; }        // Onyx: aus dem Maul
+    else if (p.idx === 3) { x += sg*(26 + 22*Math.abs(Math.cos(dir)))*uu*f; y -= (48 - 8*Math.sin(dir))*uu*f; }        // Onyx: aus dem Maul (Kopf stößt kurz vor)
     else if (p.idx === 5) { x += sg*36*uu*f; y -= 61*uu*f; }
     else if (p.idx === 6) { const f6 = Math.max(0, 1 - pr*7); x += sg*cs*.2*f6; y -= cs*.15*f6; } }   // Lawine: Steine rollen vom Haufen los      // Wächter: Speer aus der Hand
   let ang25 = Math.atan2(dy * CUR.k, dx);
