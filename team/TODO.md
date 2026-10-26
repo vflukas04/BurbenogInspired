@@ -27,7 +27,7 @@
 | Skilltree bei Türmen? | offen | Idee, noch nicht beschlossen: erst Konzept, dann ggf. nach `IDEEN.md` |
 | Grafik: Monster-Bilder | L | Plan und Prompt-Vorlage in `team/GRAFIK.md` (Krea, 3 Ansichten von schräg oben, im Spiel gespiegelt + Wippen). Nächstes: Ansichten für ein zweites Tier testen, dann Einbau mit Emoji als Rückfall |
 | Edelsteine überarbeiten | offen | Anlass: Testspiel 14.10. (Amethyst auf Fluchsteinen Stufe 1, die Fliegende nicht treffen); Stein-Liste bleibt bei L oder F. **Umgesetzt 15.10. (F, 15e): Fähigkeit frei wählbar, siehe `PLANUNG.md`.** Noch offen: Rest der Überarbeitung, Balance der frei wählbaren Fähigkeiten testen (starke Fähigkeit auf billigem Turm).  |
-| Firestore-Regeln setzen | L | **vor ca. 09.11.**, sonst stoppt das Online-Spiel (README) |
+| Firestore-Regeln setzen | L | erledigt 26.10.: Regeln aus der README veröffentlicht, API-Schlüssel auf vflukas04.github.io beschränkt |
 | Türme 4–8 abgleichen | offen | nur Türme 1–3 per Simulation geprüft |
 | Gemeinsame Map statt je einer Map pro Spieler | offen | Idee F, 15.10.: Statt jeweils eine separate Map pro Spieler eine gemeinsame. Noch nicht besprochen oder beschlossen. |
 | Upgrades bei Türmen sind zu stark | erledigt 17.10. (17b): Schadensfaktor je Stufe flacher, über Balancing-Skript | Idee F, 16.10.: Beispiel Schatten T1 – Upgrade 2→3 kostet 38 Gold, macht aber so viel Schaden wie 5 Türme. Hebel: Schadensfaktor je Stufe (aktuell ×2,2 / ×2,1), Kosten ×1,5 je Stufe. Erst nach Balancing-Skript angehen (Balance-Pause, siehe Post). |
