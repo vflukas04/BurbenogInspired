@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27k";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27l";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2412,6 +2412,7 @@ function draw(i, cv){
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
   drawWorldPaths(g, map, i, cs, wl);   // Wege Dorf → Türme
+  for (const key of map.cells) { const [x, y] = key.split(',').map(Number); g.fillStyle = (x+y)%2 ? v('--road') : v('--road2'); g.fillRect(x*cs, y*cs, cs+.5, cs+.5); }   // Monsterweg bleibt immer unverändert (Bodenwandel und Dorfwege laufen nicht darüber)
   const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
   g.fillStyle = v('--danger'); g.beginPath(); g.arc(ex*cs, ey*cs, cs*.4, 0, Math.PI*2); g.fill();
   g.strokeStyle = v('--accent'); g.lineWidth = 2; g.fillStyle = v('--accent') + '55';   // Ziel: Portal in der Mitte der Schleife

@@ -43,6 +43,9 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 23:00 · F · 2026-10-27l – Monsterweg bleibt unberührt
+- Bodenwandel und Dorfwege überdecken den Monsterweg nicht mehr (er wird zuletzt neu gezeichnet, genau wie am Anfang). Nur Anzeige. Neu laden genügt.
+
 ### 27.10. 22:30 · F · 2026-10-27k – Dorf, Weltwandel, Wege, Nachtlicht
 - Nur Anzeige, nichts im Spiel ändert sich. Dorf in der Ecke unten rechts (ein Feld, wächst in 7 Stufen von Tag 1 bis 42; Bilder `assets/dorf/`). Der Boden darum wandelt sich nach Element (Feuer Asche/Lava, Eis Schnee, Schatten Violett, Stein Geröll), Radius wächst bis Tag 42 auf fast die ganze Map. Vom Dorf wachsen geschwungene Wege zu den Türmen (um Wald, Felsen, See herum, Monsterweg wird nur gekreuzt, wenn nötig): ab Tag 4, später breiter, ab Tag 36 gepflastert, ab Tag 42 mit Rand. Alles aus Tag und Türmen berechnet (nichts gespeichert, kein Zufall).
 - Nachts (Wiedergabe der 19-Uhr-Welle): Feuer-Türme geben Feuerschein, Eis- und Stein-Türme tragen eine kleine Fackel mit schwachem Licht, Schatten unverändert.
@@ -55,6 +58,3 @@ Dunklere Farben, wütender Blick mit leuchtend blauem Auge, Reißzähne, lange H
 
 ### 26.10. 18:30 · F · 2026-10-26u – Eis: Speerwurf, dicker Eisspeer, Schneewolke, Eisdrache
 Schneekönig wirft seinen Eisspeer (dreht sich zum Ziel, Speer-Teilbild neu, Geschoss mit Frostschweif). Eisspeer-Geschoss deutlich dicker. Blizzard: Schneewolke über dem Ziel (`drawSnowCloud`), aus der es auf die Monster schneit. Ewiges Eis heißt jetzt **Eisdrache** (nur Anzeige, `spiegel.html` behält den alten Namen): neu gezeichneter Drache auf Eisscholle, Kopf und Flügel als Teilbilder, Eisatem wie beim Flammenwerfer (`drawFlame(..., ice)`, `JETS['1:…']`). `TOWER_H` eis[3] = 62, eis[7] = 60. Nur Anzeige.
-
-### 26.10. 18:10 · F · 2026-10-26t – Höllenfeuer schießt brennende Kometen
-Geschoss (`shot25`, Feuer Nr. 8): Komet mit glühendem Kern und langem, welligem Flammenschweif, der der Flugbahn (Bogen) folgt; startet an der Turmspitze (`drawShot`, `ang25`). Beim Schuss steigen Glut und Funken vom Turm auf. Nur Anzeige.
