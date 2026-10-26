@@ -1,6 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 24.10. 18:10 · F · 2026-10-24b – Katzen: Anzeige wieder „Schatten neutral“
+- Mit Schatten 1,3 (24a) hätte die Anzeige am Tag 9 zwei effektive Elemente gezeigt (Eis und Schatten). `eff:[-1, 1, 0, 0]` legt die Rollen fest, an den Werten ändert sich nichts.
+
+
 ### 24.10. 13:40 · F · 2026-10-24a – Feuer-Wetter enger, Katzen für Schatten
 - Nachbau mit den echten Feuer-Türmen (5 Spieler, Tag 8): Sonnig/Hitze 13, Regen/Gewitter 4 Kills. Sonnig 1,075/1,075, Hitze 1,15/1,1, Regen und Gewitter Schaden 0,95, Dauer 0,8, Brennen erlischt 1,5 bzw. 1,35. Abstand Tag 8: 9,8 → 7,0; gewichtetes Mittel unverändert (~8,4).
 - Katzen (Tag 9, nachtaktiv): Schatten-Faktor 1,0 → 1,3, weil Schatten nachts nur im Lichtkreis trifft (beide Feuer+Schatten-Läufe kippten dort).

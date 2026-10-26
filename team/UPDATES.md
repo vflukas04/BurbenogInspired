@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 16:10 · F · 2026-10-26m – Glumanda schießt aus dem Maul
+Der Salamander dreht sich beim Schuss zum Ziel (Spiegelung in `drawTower25`, nur `feuer1`), Mündungsglühen sitzt am Maul, das Geschoss startet dort (`drawShot`, `p.el === 0 && p.idx === 1`). Nur Anzeige.
+
 ### 26.10. 14:45 · F · 2026-10-26l – Kreativ-Modus: alle 48 Tage wählbar
 `KREATIV_MAXTAG` von 24 auf 48 (Friedrich will auch Tag 25+ sehen). Hinweis: Wer die Überraschung Runde 21–40 behalten will, setzt die Konstante wieder auf 24.
 
@@ -54,6 +57,3 @@ Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (R
 - Feuer `kraftBlock` 1,466/1,25 → 1,30/1,15. `weak` Feuer: Kellerasseln 0,7 → 0,55, Katzen 0,75 → 0,55, Mäuse 1,2 → 1,65, Ratten 1,5 → 1,75. Stein: Nacktschnecken 0,6 → 0,45, Ratten 0,55 → 0,4.
 - Erwartet: Feuer eff ~10 / neutral ~7,6 / ineffektiv ~3; Stein ineffektiv ~3,6. Eis und Schatten unverändert.
 - Neues Spiel + neu laden. Block 1 betroffen, Absprache mit L läuft privat.
-
-### 24.10. 18:10 · F · 2026-10-24b – Katzen: Anzeige wieder „Schatten neutral“
-- Mit Schatten 1,3 (24a) hätte die Anzeige am Tag 9 zwei effektive Elemente gezeigt (Eis und Schatten). `eff:[-1, 1, 0, 0]` legt die Rollen fest, an den Werten ändert sich nichts.
