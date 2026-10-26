@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27q";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27r";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2084,7 +2084,7 @@ function drawForest(g, cx, fy, cs, h, kind){
       g.strokeStyle = '#1b1411'; g.lineCap = 'round'; g.lineWidth = 3.2*k; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x - 2*k, y - 14*k, x + 1*k, y - 26*k); g.stroke();
       g.lineWidth = 1.8*k; g.beginPath(); g.moveTo(x - .5*k, y - 12*k); g.lineTo(x - 9*k, y - 21*k); g.moveTo(x, y - 18*k); g.lineTo(x + 8*k, y - 25*k); g.moveTo(x - 9*k, y - 21*k); g.lineTo(x - 12*k, y - 20*k); g.stroke();
       g.strokeStyle = '#3a2a22'; g.lineWidth = .9*k; g.beginPath(); g.moveTo(x + .8*k, y - 2*k); g.quadraticCurveTo(x - 1*k, y - 13*k, x + 1.8*k, y - 25*k); g.stroke();
-      g.fillStyle = '#ff8a3d'; for (const [ex, ey] of [[-.5, -8], [1, -17], [-8, -20.5]]) { g.beginPath(); g.arc(x + ex*k, y + ey*k, .9*k, 0, Math.PI*2); g.fill(); } return; }
+      return; }
     if (kind === 'cactus') {   // Stein: Kaktus
       const bw = 3.6*k; g.fillStyle = '#477d3a'; g.beginPath(); g.roundRect(x - bw, y - 24*k, bw*2, 24*k, bw); g.fill();
       g.beginPath(); g.roundRect(x - 11*k, y - 17*k, 3.2*k, 9*k, 1.6*k); g.roundRect(x - 11*k, y - 9.5*k, 8*k, 3.2*k, 1.6*k); g.roundRect(x + 7.8*k, y - 20*k, 3.2*k, 10*k, 1.6*k); g.roundRect(x + 3*k, y - 11.5*k, 8*k, 3.2*k, 1.6*k); g.fill();

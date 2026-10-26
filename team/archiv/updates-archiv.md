@@ -1,6 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 27.10. 23:15 · F · 2026-10-27m – Dorfwege halb so breit
+- Die Dorfwege sind nur noch halb so breit (knapp zu sehen). Nur Anzeige. Neu laden genügt.
+
+
 ### 27.10. 23:00 · F · 2026-10-27l – Monsterweg bleibt unberührt
 - Bodenwandel und Dorfwege überdecken den Monsterweg nicht mehr (er wird zuletzt neu gezeichnet, genau wie am Anfang). Nur Anzeige. Neu laden genügt.
 

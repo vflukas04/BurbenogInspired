@@ -43,6 +43,9 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 00:55 · F · 2026-10-27r – Baumleichen ohne Glut
+- Die verbrannten Bäume im Feuer-Boden haben keine Glutpunkte mehr (war zu unübersichtlich). Nur Anzeige. Neu laden genügt.
+
 ### 27.10. 00:40 · F · 2026-10-27q – Dorffeld gesperrt, Feuer-/Stein-Bäume, schwarze Wüste
 - Auf dem Dorffeld gibt es kein Gelände mehr und man kann dort keinen Turm bauen (bestehende Türme bleiben). Das ändert genau ein Feld je Map gegenüber früher gewürfeltem Gelände (Karte unten rechts bzw. oben links, siehe `villageCell`): für laufende Spiele „Neues Spiel + neu laden" empfohlen.
 - Im umgewandelten Boden: Wälder werden bei Feuer zu verbrannten Baumleichen mit Glut, bei Stein zu Kakteen. Schatten-Boden ist jetzt eine schwarze Wüste (Dünen, dunkle Steinchen) statt Violett. Nur Anzeige.
@@ -56,6 +59,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 
 ### 27.10. 23:30 · F · 2026-10-27n – Dorfwege nochmal halb so breit
 - Dorfwege nochmal halbiert (Trampelpfad ca. 2 px bei 40 px Feld). Nur Anzeige. Neu laden genügt.
-
-### 27.10. 23:15 · F · 2026-10-27m – Dorfwege halb so breit
-- Die Dorfwege sind nur noch halb so breit (knapp zu sehen). Nur Anzeige. Neu laden genügt.
