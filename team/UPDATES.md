@@ -2,6 +2,10 @@
 
 <!-- So geht ein neuer Eintrag: direkt UNTER der Zeile „NEUE EINTRÄGE HIER“ einfügen (nie über ihr, nie in diesen Kopf).
 
+### 27.10. 20:30 · F · 2026-10-27h – Verbindung schneller prüfen
+- Rund um die Startzeit einer Welle (±90 s) fragt jedes Gerät alle 2 s den Stand ab (sonst weiter alle 10 s). Bleibt dann 5 s lang der Stand aus, baut die Seite die Verbindung neu auf; sonst nach 25 s.
+- Schlägt eine Abfrage fehl oder dauert über 5 s, wird sofort neu verbunden.
+
 ### 27.10. 20:20 · F · 2026-10-27g – Verbindungswächter + Fehleranzeige
 - Laptop-Hänger (Welle startet nur beim Mitspieler) trat ohne neue Version auf. Statuszeile zeigt jetzt Fehler der letzten 3 Minuten (Abfrage, Auswertung, Seitenfehler).
 - Wächter: Kommt >40 s kein Stand vom Server (Seite sichtbar), baut die Seite die Firestore-Verbindung neu auf; nach 3 Minuten ohne Stand lädt sie sich in Ruhe neu.
@@ -51,7 +55,4 @@ Der Feuerteufel dreht sich zum Ziel (Dreizack-Seite zeigt zum Monster), der Drei
 
 ### 26.10. 17:20 · F · 2026-10-26q – Brandpfeil: Bogen zielt, brennender Pfeil fliegt nach vorn
 Brandpfeil neu gezeichnet (Holzbogen auf Dreibein, 2 Teilbilder: Bogen, Pfeil; `PARTN`, `TOWER_H` angepasst). Dreht sich zum Ziel (Spiegelung wie Glumanda/Flammenwerfer), Bogen neigt sich zum Ziel, Pfeil fliegt vorn ab und wird neu aufgelegt. Geschoss (`shot25`, `feuer` Nr. 4): brennender Pfeil mit Flammenschweif, startet vorn am Bogen. Nur Anzeige.
-
-### 26.10. 17:00 · F · 2026-10-26p – Flammenwerfer: ein Feld groß, zusammenhängende Flamme
-Flammenwerfer neu gezeichnet (Tank + Düse, passt auf ein Feld; `tools/turm/tuerme.html`, Bilder neu erzeugt, `TOWER_H` feuer[2] = 26). Die Flamme (`drawFlame`, gezeichnet im Turm anhand `JETS`) ist ein welliges Band in drei Schichten von der Mündung bis zum Monster, mit Funken und Glut am Ziel. Nur Anzeige.
 

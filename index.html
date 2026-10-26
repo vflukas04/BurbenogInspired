@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27h";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2518,7 +2518,7 @@ setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   
    checkReady(); saveStatus();
    // Verbindungswächter: kam länger als 40 s kein Stand vom Server (Seite sichtbar), Verbindung neu aufbauen; nach 3 Minuten Seite neu laden (in Ruhe)
    if (MODE === 'online' && G && syncAt && !document.hidden) { const age = Date.now() - syncAt;
-     if (age > 40000 && Date.now() - healAt > 40000 && DB.net) { healAt = Date.now(); noteErr('Verbindung neu', 'kein Stand seit ' + Math.round(age/1000) + ' s'); DB.net().then(refreshFromServer).catch(e => noteErr('Neuaufbau', e)); }
+     if (age > (nearDue() ? 5000 : 25000)) heal('kein Stand seit ' + Math.round(age/1000) + ' s');
      if (age > 180000 && !replay && $('dlgback').hidden && writesOpen === 0) location.reload(); }
    // 27.10. (F): Seite lief mit alter Version weiter (Laptop stundenlang offen) – bei Ruhe selbst neu laden, damit alle denselben Code haben
    if (MODE === 'online' && newerVersion && !replay && !resolving && $('dlgback').hidden && Date.now() - lastTouch > 45000 && writesOpen === 0) location.reload();
@@ -2544,25 +2544,27 @@ async function startOnline(db){
   // Wer selbst „Bereit“ gedrückt hat und wartet, fragt alle 2 s (Safari meldet die Live-Änderung oft nicht), sonst alle 10 s.
   let pollTick = 0;
   setInterval(() => { pollTick++; const waiting = G && !G.over && !replay && isReady(seat);
-    if (waiting || pollTick % 5 === 0) refreshFromServer(); }, 2000);
+    if (waiting || nearDue() || pollTick % 5 === 0) refreshFromServer(); }, 2000);   // 27.10. (F): rund um die Startzeit alle 2 s, sonst alle 10 s (spart Abfragen)
   document.addEventListener('visibilitychange', () => { if (document.hidden) hiddenAt = Date.now(); else { if (replay && hiddenAt && Date.now() - hiddenAt > 20000) endReplay();   // war länger weg: nicht ewig in Zeitlupe nachspielen
     refreshFromServer(); } });
   window.addEventListener('focus', refreshFromServer); window.addEventListener('online', refreshFromServer);
   render();
 }
 let refreshing = false;
+const nearDue = () => { if (!G || G.over || G.paused) return false; const d = dueTime(G); return !!d && Math.abs(Date.now() - d) < 90000; };
+function heal(why){ if (MODE !== 'online' || !DB || !DB.net || Date.now() - healAt < 5000) return; healAt = Date.now(); noteErr('Verbindung neu', why); DB.net().then(refreshFromServer).catch(e => noteErr('Neuaufbau', e)); }
 async function refreshFromServer(){
   if (MODE !== 'online' || refreshing || (typeof document !== 'undefined' && document.hidden)) return;
   refreshing = true;
   try {
     // Zeitlimit: Eine hängende Abfrage blockierte vorher alle weiteren (refreshing blieb true) – dann half nur Neuladen
-    const limit = new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit Server-Abfrage')), 8000));
+    const limit = new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit Server-Abfrage')), 5000));
     const [st, ls] = await Promise.race([Promise.all([DB.doc(P_STATE).get({ source:'server' }), DB.collection(P_LANES).get({ source:'server' })]), limit]);
     ls.docs.forEach(d => { const k = +d.id.slice(1); takeLane(k, d.data()); });
     const g = st.exists ? st.data() : null; syncAt = Date.now();
     const stamp = x => x ? `${x.cfg && x.cfg.startAt}-${x.day}-${x.slot}-${x.lastRun ? x.lastRun.id : ''}-${x.over}` : 'leer';
     if (stamp(g) !== stamp(G)) onGame(g); else if (G) render();
-  } catch(e) { console.warn(e); noteErr('Abfrage', e); }
+  } catch(e) { console.warn(e); noteErr('Abfrage', e); heal('Abfrage fehlgeschlagen'); }
   finally { refreshing = false; }
 }
 (async () => {
