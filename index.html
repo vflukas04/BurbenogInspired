@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26t";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26u";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -340,7 +340,7 @@ const ELEMENTS = [
     ['Frostnova',    'Effekt',    2.0, 1/8, 1, 0.15, 3,    0, 1.6, {effect:'stun', rateUp:Math.pow(8/6, 1/5), fly:false, nova:true, chance:0.45, chanceUp:0.04, chanceMax:0.65}],  // friert im Umkreis 3 s ein (45–65 % je Stufe), alle 8 s (Stufe 6: alle 6 s)
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
-    ['Ewiges Eis',   'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
+    ['Eisdrache',    'Effekt',    3.0, 0.5, 6, 0.68, 0.55, DAY, 0, {fly:false}] ]},
   { name:'Schatten', kraftT:[1, 1, 1, 1, 1, 1, 1, 1], kraft:1.082, kraftBlock:[1, 0.65, 1, 1, 1, 1, 1, 1], emo:'🌑', color:'#a58ad8', upDmg:[2.35, 2.1, 1.85, 1.6, 1.5],   // 17.10. (L): Balancing-Schleife 5;   // 13.10. (F): Schaden je Upgrade ab Stufe 4 flacher (Irrlicht-Verstärkung + Rüstung ignorieren ab Runde 10 zu stark)
     note:'Fluch (mehr Schaden, Rüstung bröckelt für alle) · Irrlicht verstärkt und durchdringt Rüstung · nachts (19 Uhr) nachtaktive Monster nur im Lichtkreis', effect:'curse', armorDmg:0, dayOnly:true, costOverride:{1:30}, towers:[
     ['Schemen',      'Schaden',   2.0, 1,   1, 1.1, 0.1, 4],
@@ -1895,7 +1895,7 @@ function drawTower(c, tw, px, py, cs, aim, glow, noBody){
 }
 const TIMG = {};   // 26.10. (F): freistehende Turm-Bilder der Schräg-Ansicht, assets/turm/<element>-<nr>.png (88×102-Raster, Fußpunkt bei y=92), Entwürfe/Quelle: team/GRAFIK.md
 const TOWER_NAME = ['feuer', 'eis', 'schatten', 'stein'];
-const TOWER_H = { feuer:[22,42,26,34,52,69.5,52,42], eis:[26,34.5,66.4,57,39.9,58.2,48,66], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
+const TOWER_H = { feuer:[22,42,26,34,52,69.5,52,42], eis:[26,34.5,66.4,62,39.9,58.2,48,60], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
 function loadImg(k){   // bei Ladefehler bis zu 3 Wiederholungen (Handy-Netz)
   if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
   const im = new Image(); im.onerror = () => { TIMG[k] = null; loadImg.n[k] = (loadImg.n[k] || 0) + 1; if (loadImg.n[k] < 4) setTimeout(() => { delete TIMG[k]; loadImg(k); }, 1500*loadImg.n[k]); }; im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
@@ -1927,11 +1927,13 @@ const PARTS = (() => {
     eis0: [[0, -4, (t, g, w, dx) => ({ y: -2*S(t*3) - 3*w, x: dx*2*w, r: .04*S(t*2) })]],
     eis1: [[0, -18, (t, g, w) => ({ y: -7*w, sy: 1 - .06*S(t*2), sx: 1 + .03*S(t*2) })]],
     eis2: [[0, -12, (t, g, w, dx, dy) => ({ x: -dx*4*g, y: -dy*3*g })]],
-    eis3: [[19, -2, (t, g, w) => ({ r: .06*S(t*2) - .25*w, y: -4*w })]],
+    eis3: [[19, -30, (t, g, w, dx, dy) => { const p = 1 - g, r = Math.atan2(dy, Math.abs(dx)) + PI/2;   // Speer: dreht sich zum Ziel, wird geworfen, neuer erscheint
+        return g <= 0 ? { r: .05*S(t*2) } : p < .1 ? { r: r*(p/.1) } : { r: 0, a: p < .6 ? 0 : Math.min(1, (p - .6)/.25) }; }]],
     eis4: [[0, -26, (t, g, w) => ({ r: t*.6 + 3*w, ...sc(1 + .15*g) })]],
     eis5: [[0, -12, (t, g, w) => ({ x: .24*9*w, y: -.97*9*w })]],
     eis6: [[0, -26, (t, g) => sc(1 + .06*S(t*2) + .2*g)]],
-    eis7: [[0, -30, (t, g) => ({ r: 2*PI*(1 - g) })], [0, -32, (t, g) => sc(1 + .05*S(t*2) + .15*g)]],
+    eis7: [[6, -24, (t, g, w, dx, dy) => ({ r: Math.max(-.6, Math.min(.6, Math.atan2(dy, Math.abs(dx))))*.8 + .04*S(t*1.6) - .18*w })],      // Kopf hebt sich zum Ziel und stößt beim Atem vor
+            [-2, -27, (t, g, w) => ({ r: .1*S(t*2.4) - .4*w })]],
     schatten0: [[0, -4, (t, g, w, dx) => ({ y: -1.5*S(t*2.5) - 2*w, sy: 1 + .03*S(t*2.5), x: dx*3*w })]],
     schatten1: [[0, -22, (t, g) => sc(1 + .1*S(t*3) + .1*g)]],
     schatten2: [[0, -30, (t) => ({ sy: S(t*.9) > .985 ? .15 : 1 })], [0, -30, (t, g, w, dx, dy) => ({ x: dx*3, y: dy*2, ...sc(1 + .2*g) })]],
@@ -1951,17 +1953,17 @@ const PARTS = (() => {
   };
 })();
 const JETS = {};   // Flammenwerfer: letztes Ziel je Turm (Simulationszeit), daraus entsteht die zusammenhängende Flamme
-function drawFlame(c, mx, my, hx, hy, cs, now, a){   // 26o (F): Flamme von der Mündung bis zum Ziel, wellig, in drei Schichten, mit Funken und Einschlag
+function drawFlame(c, mx, my, hx, hy, cs, now, a, ice){   // 26o (F): Flamme von der Mündung bis zum Ziel, wellig, in drei Schichten, mit Funken und Einschlag
   const ang = Math.atan2(hy - my, hx - mx), len = Math.hypot(hx - mx, hy - my); if (len < 3) return;
   c.save(); c.globalAlpha = a; c.translate(mx, my); c.rotate(ang);
   const N = 16, wob = (t, ph) => Math.sin(t*9 - now*34 + ph) * (.03 + .1*t) * cs;
-  [['#d8321a', 1, 0], ['#ff8a3d', .62, 1.7], ['#ffe08a', .3, 3.1]].forEach(([col, wk, ph], j) => {
+  (ice ? [['#2f86b3', 1, 0], ['#79c6ee', .62, 1.7], ['#eaf8ff', .3, 3.1]] : [['#d8321a', 1, 0], ['#ff8a3d', .62, 1.7], ['#ffe08a', .3, 3.1]]).forEach(([col, wk, ph], j) => {
     const L = len * (j === 2 ? .8 : 1), top = [], bot = [];
     for (let k = 0; k <= N; k++) { const t = k / N, w = cs * (.05 + .17*Math.pow(t, .75)) * wk * (1 + .12*Math.sin(now*40 + k*1.3 + j)) * (k === N ? .25 : 1), y0 = wob(t, ph);
       top.push([t*L, y0 - w]); bot.push([t*L, y0 + w]); }
     c.fillStyle = col; c.beginPath(); c.moveTo(top[0][0], top[0][1]); top.forEach(q => c.lineTo(q[0], q[1])); for (let k = N; k >= 0; k--) c.lineTo(bot[k][0], bot[k][1]); c.closePath(); c.fill(); });
-  for (let k = 0; k < 7; k++) { const t = ((now*2.6 + k/7) % 1), y0 = wob(t, 1) + Math.sin(k*5.1) * cs*.12*t; c.fillStyle = k % 2 ? '#ffe08a' : '#ff8a3d'; c.beginPath(); c.arc(t*len, y0, cs*(.035 + .02*Math.sin(k*3 + now*20)), 0, 7); c.fill(); }
-  const gr = c.createRadialGradient(len, 0, 0, len, 0, cs*.42); gr.addColorStop(0, '#ffe08af0'); gr.addColorStop(.45, '#ff8a3d99'); gr.addColorStop(1, '#ff8a3d00');
+  for (let k = 0; k < 7; k++) { const t = ((now*2.6 + k/7) % 1), y0 = wob(t, 1) + Math.sin(k*5.1) * cs*.12*t; c.fillStyle = ice ? (k % 2 ? '#ffffff' : '#bfeaff') : (k % 2 ? '#ffe08a' : '#ff8a3d'); c.beginPath(); c.arc(t*len, y0, cs*(.035 + .02*Math.sin(k*3 + now*20)), 0, 7); c.fill(); }
+  const gr = c.createRadialGradient(len, 0, 0, len, 0, cs*.42); if (ice) { gr.addColorStop(0, '#ffffffee'); gr.addColorStop(.45, '#79c6ee99'); gr.addColorStop(1, '#79c6ee00'); } else { gr.addColorStop(0, '#ffe08af0'); gr.addColorStop(.45, '#ff8a3d99'); gr.addColorStop(1, '#ff8a3d00'); }
   c.fillStyle = gr; c.beginPath(); c.arc(len, 0, cs*(.38 + .05*Math.sin(now*45)), 0, 7); c.fill();
   c.restore();
 }
@@ -1986,7 +1988,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
     else if (nm === 'schatten0' || nm === 'schatten5') { sx = sy = 1; ox = oy = 0; }   // Schemen/Phantom: bewegt sich als Teilbild
     else if (nm === 'schatten1') { ox = 0; oy = Math.sin(now*3 + tw.x) * cs*.05 - cs*.05; sx = sy = 1; }   // Irrlicht schwebt
     else if (nm === 'feuer2' || nm === 'feuer3') { ox = -dx*cs*.07*g; }
-    const flip = (nm === 'feuer1' && Math.cos(aim) > 0) || (nm === 'feuer2' && Math.cos(aim) < 0) || (nm === 'feuer3' && Math.cos(aim) < 0) || (nm === 'feuer4' && Math.cos(aim) > 0);   // Glumanda blickt nach links, Flammenwerfer-Mündung nach rechts   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
+    const flip = (nm === 'feuer1' && Math.cos(aim) > 0) || (nm === 'feuer2' && Math.cos(aim) < 0) || (nm === 'feuer3' && Math.cos(aim) < 0) || (nm === 'feuer4' && Math.cos(aim) > 0) || ((nm === 'eis3' || nm === 'eis7') && Math.cos(aim) < 0);   // Glumanda blickt nach links, Flammenwerfer-Mündung nach rechts   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
     c.save(); c.translate(fx + ox, fy + oy); c.rotate(rotA); c.scale(flip ? -sx : sx, sy);
     c.drawImage(sp, -44*u, -92*u, 88*u, 102*u);
     const gp = Math.max(0, 1 - (now - (FIRE_T[key] === undefined ? -9 : FIRE_T[key])) / .5), wp = gp > 0 ? Math.sin(Math.PI * (1 - gp)) : 0, pd = PARTS[nm];   // bewegliche Teile
@@ -1998,8 +2000,8 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
       c.drawImage(sp.parts[i], -44*u - px, -92*u - py, 88*u, 102*u); c.restore();
     }
     c.restore();
-    if (nm === 'feuer2') { const j = JETS[(tw.x + .5) + ',' + (tw.y + .5)];   // Flamme: von der Mündung zum Ziel, solange der Turm schießt
-      if (j && j.t <= now + .05 && now - j.t < .28) drawFlame(c, fx + (Math.cos(aim) > 0 ? 1 : -1)*17*u, fy - 12*u, j.tx*cs, gyOf(j.ty, cs) - cs*.25, cs, now, Math.min(1, (.28 - (now - j.t)) / .12)); }
+    if (nm === 'feuer2' || nm === 'eis7') { const j = JETS[tw.el + ':' + (tw.x + .5) + ',' + (tw.y + .5)], mxo = nm === 'eis7' ? 24 : 17, myo = nm === 'eis7' ? 43 : 12;   // Flamme / Eisfeuer: von der Mündung zum Ziel, solange der Turm schießt
+      if (j && j.t <= now + .05 && now - j.t < .28) drawFlame(c, fx + (Math.cos(aim) > 0 ? 1 : -1)*mxo*u, fy - myo*u, j.tx*cs, gyOf(j.ty, cs) - cs*.25, cs, now, Math.min(1, (.28 - (now - j.t)) / .12), nm === 'eis7'); }
     if (g > 0 && glow !== undefined) {                                              // Mündungseffekt in Elementfarbe (am Turm, in Zielrichtung)
       const mx = fx + dx*cs*.32, my = fy - hh*.55 + dy*cs*.2, col = ELEMENTS[tw.el].color;
       const fl = (r, cc) => { const gr = c.createRadialGradient(mx, my, 0, mx, my, r); gr.addColorStop(0, cc + 'dd'); gr.addColorStop(1, cc + '00'); c.fillStyle = gr; c.beginPath(); c.arc(mx, my, r, 0, 7); c.fill(); };
@@ -2097,11 +2099,20 @@ function shot25(c, p, x, y, a, cs, time){
     if (i === 0) { rot(() => { c.fillStyle = '#dff6ff'; c.beginPath(); c.moveTo(q*4, 0); c.lineTo(0, -q*1.8); c.lineTo(-q*3, 0); c.lineTo(0, q*1.8); c.fill(); c.fillStyle = '#9fd3ee'; c.beginPath(); c.moveTo(q*4, 0); c.lineTo(0, q*1.8); c.lineTo(-q*3, 0); c.fill(); }); return true; }
     if (i === 1) { ball(q*2.8, '#f4fbff', '#ffffff', '#bfeaff'); return true; }
     if (i === 2) { rot(() => { c.fillStyle = '#bfeaff'; c.beginPath(); c.moveTo(q*7, 0); c.lineTo(-q*5, -q*1.6); c.lineTo(-q*5, q*1.6); c.fill(); c.fillStyle = '#ffffff99'; c.fillRect(-q*5, -q*.5, q*10, q*.7); }); return true; }
-    if (i === 3) { c.save(); c.translate(x, y); c.rotate(w*.3); c.strokeStyle = '#eaf8ff'; c.lineWidth = q*1.1; c.lineCap = 'round'; for (let j = 0; j < 3; j++) { c.rotate(Math.PI/3); c.beginPath(); c.moveTo(-q*3.4, 0); c.lineTo(q*3.4, 0); c.stroke(); } c.restore(); return true; }
+    if (i === 3) { rot(() => { c.scale(1.3, 1.3);   // Eisspeer des Schneekönigs mit Frostschweif
+        for (let j = 3; j >= 1; j--) { c.fillStyle = j === 1 ? '#dff6ffaa' : '#79c6ee55'; c.beginPath(); c.ellipse(-q*(5 + j*3.2), Math.sin(w + j)*q*.4, q*(3.4 - j*.5), q*(1.4 - j*.2), 0, 0, 7); c.fill(); }
+        c.fillStyle = '#8a6a3c'; c.fillRect(-q*7, -q*.5, q*10, q*1); c.fillStyle = '#2f5a78'; c.fillRect(q*2, -q*1.7, q*.9, q*3.4);
+        const gr = c.createRadialGradient(q*4.5, 0, 0, q*4.5, 0, q*5); gr.addColorStop(0, '#dff6ffcc'); gr.addColorStop(1, '#79c6ee00'); c.fillStyle = gr; c.beginPath(); c.arc(q*4.5, 0, q*5, 0, 7); c.fill();
+        c.fillStyle = '#9fd3ee'; c.beginPath(); c.moveTo(q*7.4, 0); c.lineTo(q*3, -q*1.9); c.lineTo(q*3, q*1.9); c.fill(); c.fillStyle = '#eaf8ff'; c.beginPath(); c.moveTo(q*7.4, 0); c.lineTo(q*3, -q*1.9); c.lineTo(q*3, 0); c.fill(); });
+      return true; }
     if (i === 4) { ball(q*2.4, '#79c6ee', '#ffffff', '#79c6ee'); c.strokeStyle = '#eaf8ff'; c.lineWidth = q*.7; c.beginPath(); c.arc(x, y, q*4 + Math.sin(w)*q*.6, 0, 7); c.stroke(); return true; }
-    if (i === 5) { rot(() => { c.strokeStyle = '#9fd3ee'; c.lineWidth = q*1.3; c.beginPath(); c.moveTo(-q*8, 0); c.lineTo(q*4, 0); c.stroke(); c.fillStyle = '#eaf8ff'; c.beginPath(); c.moveTo(q*9, 0); c.lineTo(q*3.4, -q*2.2); c.lineTo(q*3.4, q*2.2); c.fill(); }); return true; }
+    if (i === 5) { rot(() => { const gr = c.createRadialGradient(q*2, 0, 0, q*2, 0, q*9); gr.addColorStop(0, '#bfeaffaa'); gr.addColorStop(1, '#79c6ee00'); c.fillStyle = gr; c.beginPath(); c.arc(q*2, 0, q*9, 0, 7); c.fill();   // dicker Eisspeer
+        c.fillStyle = '#6fb4d8'; c.beginPath(); c.moveTo(-q*10, -q*1.5); c.lineTo(q*4, -q*2.2); c.lineTo(q*4, q*2.2); c.lineTo(-q*10, q*1.5); c.closePath(); c.fill();
+        c.fillStyle = '#bfeaff'; c.beginPath(); c.moveTo(-q*10, -q*.6); c.lineTo(q*4, -q*1.1); c.lineTo(q*4, q*.2); c.lineTo(-q*10, q*.2); c.closePath(); c.fill();
+        c.fillStyle = '#eaf8ff'; c.beginPath(); c.moveTo(q*12, 0); c.lineTo(q*3.4, -q*3.6); c.lineTo(q*3.4, q*3.6); c.fill(); c.fillStyle = '#9fd3ee'; c.beginPath(); c.moveTo(q*12, 0); c.lineTo(q*3.4, q*3.6); c.lineTo(q*3.4, 0); c.fill();
+        c.fillStyle = '#ffffff'; for (let j = 0; j < 3; j++) { c.beginPath(); c.arc(-q*(10 + j*3) , Math.sin(w*2 + j*2)*q*1.6, q*.5, 0, 7); c.fill(); } }); return true; }
     if (i === 6) { c.fillStyle = '#e4f2fa'; for (const [dx, dy, r] of [[-1.8, 0, 2.4], [1.4, -.8, 2.8], [3, .8, 2]]) { c.beginPath(); c.arc(x + dx*q, y + dy*q, r*q, 0, 7); c.fill(); } c.fillStyle = '#fff'; for (let j = 0; j < 4; j++) { c.beginPath(); c.arc(x + Math.sin(w + j*1.7)*q*4, y + q*3 + ((w*.8 + j*2) % 4)*q*.8, q*.5, 0, 7); c.fill(); } return true; }
-    ball(q*3.4, '#79c6ee', '#ffffff', '#bfeaff'); c.fillStyle = '#fff'; for (let j = 0; j < 4; j++) { const t = w*.2 + j*Math.PI/2; c.beginPath(); c.arc(x + Math.cos(t)*q*5, y + Math.sin(t)*q*5, q*.8, 0, 7); c.fill(); } return true;
+    ball(q*1.6, '#dff6ff', '#ffffff', '#79c6ee'); return true;   // Eisdrache: der Atem wird vom Turm gezeichnet (JETS), hier nur die Spitze
   }
   if (el === 2) {
     if (i === 0) { tail(q*7, '#5b4a8666', q*3.2); ball(q*2.6, '#1a1230', '#a98bff', '#7a4be0'); return true; }
@@ -2123,6 +2134,15 @@ function shot25(c, p, x, y, a, cs, time){
   if (i === 7) { rock(q*4.6, '#8f8a84', '#b8b2aa', w*.3); c.fillStyle = '#f1f3f5'; c.beginPath(); c.arc(x - q*1, y - q*2.4, q*1.6, 0, 7); c.fill(); return true; }
   return false;
 }
+function drawSnowCloud(c, gx, gy, cs, a, time, seed){   // 26.10. (F): Schneewolke über dem Ziel, aus der es auf die Monster schneit
+  const cy = gy - cs*1.05, W = cs*.5, sc = .75 + .25*a;
+  c.save(); c.globalAlpha = Math.min(1, a);
+  for (let j = 0; j < 14; j++) { const f = (time*1.4 + j/14 + seed*.37) % 1; c.fillStyle = j % 3 ? '#ffffff' : '#bfeaff'; c.beginPath(); c.arc(gx + Math.sin(j*2.7 + time*2)*W*.55, cy + cs*.15 + f*(gy - cy - cs*.2), cs*.035, 0, 7); c.fill(); }
+  c.fillStyle = '#9db4c6'; c.beginPath(); c.ellipse(gx, cy + cs*.1, W*sc*1.05, cs*.12*sc, 0, 0, 7); c.fill();
+  c.fillStyle = '#dbe8f2'; for (const [dx, dy, r] of [[-.55, 0, .2], [-.2, -.14, .27], [.22, -.1, .24], [.55, .02, .18], [0, .03, .23]]) { c.beginPath(); c.arc(gx + dx*W*sc*1.6, cy + dy*cs*sc, r*cs*sc, 0, 7); c.fill(); }
+  c.fillStyle = '#f4faff'; for (const [dx, dy, r] of [[-.2, -.2, .14], [.2, -.16, .12]]) { c.beginPath(); c.arc(gx + dx*W*sc*1.6, cy + dy*cs*sc, r*cs*sc, 0, 7); c.fill(); }
+  c.restore();
+}
 function drawShot(c, p, cs, time){
   const dx = p.tx - p.x, dy = p.ty - p.y, dir = Math.atan2(dy, dx);
   const tot = Math.hypot(p.tx - p.x0, p.ty - p.y0) || 1, left = Math.hypot(dx, dy);
@@ -2134,7 +2154,10 @@ function drawShot(c, p, cs, time){
     c.fillStyle = '#0006'; c.beginPath(); c.ellipse(x, y, k*.12, k*.06, 0, 0, Math.PI*2); c.fill();
   }
   y -= h + (CUR.k < 1 && !p.lob ? cs*.25 : 0);
-  if (CUR.k < 1 && p.el === 0 && p.idx === 2) JETS[p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Flammenwerfer: Ziel merken, die Flamme zeichnet der Turm
+  if (CUR.k < 1 && p.el === 0 && p.idx === 2) JETS['0:' + p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Flammenwerfer: Ziel merken, die Flamme zeichnet der Turm
+  if (CUR.k < 1 && p.el === 1 && p.idx === 7) JETS['1:' + p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Eisdrache: Ziel merken, der Turm zeichnet den Eisatem
+  if (CUR.k < 1 && p.el === 1 && p.idx === 3) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.eis[3], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 3 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 19 * uu * f; y -= 0; }   // Schneekönig: Speer startet in der Hand
+  if (CUR.k < 1 && p.el === 1 && p.idx === 6) drawSnowCloud(c, p.tx*cs, gyOf(p.ty, cs), cs, Math.min(1, (1 - left / tot) * 4 + .3), time, p.x0 + p.y0);   // Blizzard: Wolke über dem Ziel
   if (CUR.k < 1 && p.el === 0 && p.idx === 3) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.feuer[3], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 3 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 20 * uu * f; }   // Brandpfeil: startet vorn am Bogen
   if (CUR.k < 1 && p.el === 0 && p.idx === 4) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.feuer[4], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 4 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 17 * uu * f; }   // Feuerteufel: Dreizack startet in der Hand
   if (CUR.k < 1 && p.el === 0 && p.idx === 1) { const f = Math.max(0, 1 - (1 - left / tot) * 5), uu = cs * .609 / 26; x += (Math.cos(dir) > 0 ? 1 : -1) * 27 * uu * f; }   // Glumanda: Geschoss startet im Maul
