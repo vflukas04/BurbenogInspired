@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26s";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26t";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2006,6 +2006,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
       if (nm === 'feuer2') { c.save(); c.translate(fx + (Math.cos(aim) > 0 ? 1 : -1)*17*u, fy - 12*u); c.scale(.4, .4); c.rotate(Math.atan2(dy, dx)); c.fillStyle = '#ff8a3dcc'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(cs*.3*g, -cs*.12*g, cs*.6*g, 0); c.quadraticCurveTo(cs*.3*g, cs*.12*g, 0, 0); c.fill(); c.fillStyle = '#ffe08acc'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(cs*.2*g, -cs*.05*g, cs*.38*g, 0); c.quadraticCurveTo(cs*.2*g, cs*.05*g, 0, 0); c.fill(); c.restore(); }
       else if (nm === 'eis2') { const ux = fx, uy = fy - hh*.95; const gr = c.createRadialGradient(ux, uy, 0, ux, uy, cs*.35); gr.addColorStop(0, '#eaf8ffcc'); gr.addColorStop(1, '#eaf8ff00'); c.fillStyle = gr; c.beginPath(); c.arc(ux, uy, cs*.35*g, 0, 7); c.fill(); }
       else if (nm === 'stein2' || nm === 'stein7') { c.fillStyle = '#d9cba6'; c.globalAlpha = .6*g; for (let j = -2; j <= 2; j++) { c.beginPath(); c.ellipse(fx + j*cs*.16*(1.6 - g*.6), fy + cs*.04, cs*.07, cs*.04, 0, 0, 7); c.fill(); } c.globalAlpha = 1; if (nm === 'stein7') { c.strokeStyle = '#d9cba6'; c.globalAlpha = .7*g; c.lineWidth = 2; c.beginPath(); c.ellipse(fx, fy, cs*(.3 + .6*(1 - g)), cs*(.3 + .6*(1 - g))*k*.6, 0, 0, 7); c.stroke(); c.globalAlpha = 1; } }
+      else if (nm === 'feuer7') { c.fillStyle = '#ffb347'; for (let j = 0; j < 8; j++) { c.globalAlpha = g; c.beginPath(); c.arc(fx + (j - 3.5)*cs*.05, fy - hh - (1 - g)*cs*(.3 + j%3*.2), cs*.035, 0, 7); c.fill(); } c.globalAlpha = 1; fl(cs*.4*g, '#ff6a1e'); }
       else if (nm === 'feuer5') { c.fillStyle = '#ff8a3d'; for (let j = 0; j < 5; j++) { c.globalAlpha = g; c.beginPath(); c.arc(fx + (j - 2)*cs*.07, fy - hh - (1 - g)*cs*(.1 + j%3*.1), cs*.03, 0, 7); c.fill(); } c.globalAlpha = 1; }
       else if (nm === 'feuer1') { const mx2 = fx + (flip ? 1 : -1) * 27 * u * (1 + .0*g), my2 = fy - 10 * u, r = cs*.26*g, gr = c.createRadialGradient(mx2, my2, 0, mx2, my2, r);
         gr.addColorStop(0, '#ffe08af0'); gr.addColorStop(.5, '#ff8a3dcc'); gr.addColorStop(1, '#ff8a3d00'); c.fillStyle = gr; c.beginPath(); c.arc(mx2, my2, r, 0, 7); c.fill(); }
@@ -2079,7 +2080,18 @@ function shot25(c, p, x, y, a, cs, time){
       return true; }
     if (i === 5) { ball(q*3, '#8a2a10', '#ff6a1e', '#ff5a1e'); c.fillStyle = '#ff8a3d'; c.beginPath(); c.arc(x + q*1.2, y + q*2.6 + Math.sin(w)*q*.4, q*.9, 0, 7); c.fill(); return true; }
     if (i === 6) { ball(q*2.8, '#ffe08a', '#ffffff', '#ffd27a'); return true; }
-    ball(q*3.2, '#3d1410', '#d83a14', '#c8301a'); c.strokeStyle = '#ff6a1e'; c.lineWidth = q*.8; for (let j = 0; j < 6; j++) { const t = j*Math.PI/3 + w*.3; c.beginPath(); c.moveTo(x + Math.cos(t)*q*3.2, y + Math.sin(t)*q*3.2); c.lineTo(x + Math.cos(t)*q*5.4, y + Math.sin(t)*q*5.4); c.stroke(); } return true;
+    // Höllenfeuer: brennender Komet mit langem Flammenschweif (a = Flugrichtung inkl. Bogen, siehe drawShot)
+    { const fl = 1 + .15*Math.sin(w*2.2);
+      rot(() => { const Ltail = q*17;
+        [['#c8301acc', 1, 0], ['#ff6a1ee6', .66, 1.4], ['#ffe08af0', .34, 2.6]].forEach(([col, wk, ph]) => { c.fillStyle = col; c.beginPath(); c.moveTo(q*1, -q*4.2*wk);
+          for (let k = 1; k <= 8; k++) { const t = k/8; c.lineTo(-Ltail*t*(.78 + .22*wk), -q*4.2*wk*(1 - t*.85) + Math.sin(t*9 - w*2 + ph)*q*.8*t); }
+          for (let k = 8; k >= 1; k--) { const t = k/8; c.lineTo(-Ltail*t*(.78 + .22*wk), q*4.2*wk*(1 - t*.85) + Math.sin(t*9 - w*2 + ph + 2)*q*.8*t); }
+          c.lineTo(q*1, q*4.2*wk); c.closePath(); c.fill(); });
+        const gr = c.createRadialGradient(0, 0, 0, 0, 0, q*7); gr.addColorStop(0, '#ffb347cc'); gr.addColorStop(1, '#ff6a1e00'); c.fillStyle = gr; c.beginPath(); c.arc(0, 0, q*7, 0, 7); c.fill();
+        c.fillStyle = '#3d1410'; c.beginPath(); c.arc(0, 0, q*3.6, 0, 7); c.fill(); c.strokeStyle = '#ff6a1e'; c.lineWidth = q*.9; c.beginPath(); c.arc(0, 0, q*3.3, -1.2, 1.2); c.stroke();
+        c.strokeStyle = '#ff8a3d'; c.lineWidth = q*.6; c.beginPath(); c.moveTo(-q*1.6, -q*1.4); c.lineTo(q*.4, q*.2); c.lineTo(-q*.8, q*1.9); c.stroke();
+        c.fillStyle = '#ffe08a'; for (let j = 0; j < 4; j++) { c.beginPath(); c.arc(-q*(4 + j*3.6) + Math.sin(w*3 + j*2)*q*.8, Math.cos(w*2 + j*3)*q*2.4, q*.5, 0, 7); c.fill(); } });
+      return true; }
   }
   if (el === 1) {
     if (i === 0) { rot(() => { c.fillStyle = '#dff6ff'; c.beginPath(); c.moveTo(q*4, 0); c.lineTo(0, -q*1.8); c.lineTo(-q*3, 0); c.lineTo(0, q*1.8); c.fill(); c.fillStyle = '#9fd3ee'; c.beginPath(); c.moveTo(q*4, 0); c.lineTo(0, q*1.8); c.lineTo(-q*3, 0); c.fill(); }); return true; }
@@ -2126,8 +2138,14 @@ function drawShot(c, p, cs, time){
   if (CUR.k < 1 && p.el === 0 && p.idx === 3) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.feuer[3], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 3 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 20 * uu * f; }   // Brandpfeil: startet vorn am Bogen
   if (CUR.k < 1 && p.el === 0 && p.idx === 4) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.feuer[4], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 4 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 17 * uu * f; }   // Feuerteufel: Dreizack startet in der Hand
   if (CUR.k < 1 && p.el === 0 && p.idx === 1) { const f = Math.max(0, 1 - (1 - left / tot) * 5), uu = cs * .609 / 26; x += (Math.cos(dir) > 0 ? 1 : -1) * 27 * uu * f; }   // Glumanda: Geschoss startet im Maul
+  let ang25 = Math.atan2(dy * CUR.k, dx);
+  if (CUR.k < 1 && p.el === 0 && p.idx === 7) {   // Höllenfeuer: Komet startet an der Turmspitze, Schweif folgt der Flugbahn (Bogen)
+    const f = Math.max(0, 1 - (1 - left / tot) * 4); y -= cs*.7*f;
+    if (p.lob) { const tAll = Math.hypot(p.x - p.x0, p.y - p.y0) + left, prog = tAll ? 1 - left / tAll : 1, Hpx = Math.min(1.2 * GRID, tAll * .35) * cs;
+      ang25 = Math.atan2((p.ty - p.y0) * cs * CUR.k - Math.PI * Math.cos(Math.PI * prog) * Hpx, (p.tx - p.x0) * cs); }
+  }
   const def = p.def, sz = k * (p.lob ? .42 : .3);
-  if (CUR.k < 1 && shot25(c, p, x, y, Math.atan2(dy * CUR.k, dx), cs, time)) return;   // 2,5D: Geschoss passt zum Turm-Bild
+  if (CUR.k < 1 && shot25(c, p, x, y, ang25, cs, time)) return;   // 2,5D: Geschoss passt zum Turm-Bild
   if (p.el === 0 && def.air) {               // Brandpfeil: Pfeil mit Glut
     c.save(); c.translate(x, y); c.rotate(dir); c.strokeStyle = '#f3d9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(-k*.22, 0); c.lineTo(k*.12, 0); c.stroke();
     c.fillStyle = '#ff9a4a'; c.beginPath(); c.moveTo(k*.18, 0); c.lineTo(k*.08, -k*.05); c.lineTo(k*.08, k*.05); c.fill(); c.restore(); return;
