@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+
+### 27.10. 21:30 · F · 2026-10-27j – See statt Sumpf
+- Sumpf-Felder sind jetzt kleine Seen (Wasser, Glanz, Wellen, ab und zu Seerosenblatt), ohne Strand und ohne Trauerweide; benachbarte Seefelder fließen zu Teichen/Flüssen zusammen. Name in der Anzeige „See“, Bonus (+20 Gold) und Karten unverändert. spiegel.html behält „Sumpf“. Neu laden genügt.
 ### 26.10. 18:45 · F · 2026-10-26v – Eisdrache gefährlicher
 Dunklere Farben, wütender Blick mit leuchtend blauem Auge, Reißzähne, lange Hörner, Krallen, Stacheln, eckige Flügel mit Knochenfingern. Mündungspunkt für den Eisatem angepasst. Nur Anzeige.
 
@@ -53,7 +56,3 @@ Geschoss (`shot25`, Feuer Nr. 8): Komet mit glühendem Kern und langem, welligem
 
 ### 26.10. 17:55 · F · 2026-10-26s – Lavaturm: Turm im Lavasee mit Lava-Zinnen
 Lavaturm neu gezeichnet: dunkler Steinturm mitten in einem Lavasee, oben Zinnen aus glühender Lava, nur zwei kurze Rinnsale. Teilbilder: Zinnen (pulsieren), Funken (steigen beim Schuss). `TOWER_H` feuer[5] = 69,5. Nur Anzeige.
-
-### 26.10. 17:40 · F · 2026-10-26r – Feuerteufel wirft brennenden Dreizack
-Der Feuerteufel dreht sich zum Ziel (Dreizack-Seite zeigt zum Monster), der Dreizack dreht sich zum Ziel und verschwindet beim Wurf, ein neuer erscheint nach kurzer Zeit. Geschoss (`shot25`, Feuer Nr. 5): brennender Dreizack mit Flammenschweif, startet in der Hand. Nur Anzeige.
-

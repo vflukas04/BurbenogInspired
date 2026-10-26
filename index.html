@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27j";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -262,7 +262,7 @@ const DAY = 'Tag';
 const TERRAIN = [
   { name:'Wiese', extra:0,  col:['#24301f','#2a3824'] },
   { name:'Wald',  extra:10, col:['#17271a','#1b2e1e'] },
-  { name:'Sumpf', extra:20, col:['#25302f','#2b3735'] },
+  { name:'See', extra:20, col:['#25302f','#2b3735'] },
   { name:'Felsen', extra:30, stoneExtra:30, col:['#2c2c30','#323237'] }   // 13.10. (F): Felsen +15 % Reichweite für alle, Stein macht mehr Schaden. 14.10. (L): alle zahlen +30
 ];
 const ROCK = { rangeMul:1.15, stoneDmg:1.3, min:6, max:8 };   // Felsen je Karte 6–8, neu gewürfelt bei jedem neuen Spiel
@@ -1763,7 +1763,7 @@ function render(){
     } else if (selCell && selCell.i === i) { const T = TERRAIN[MAPS[i].terrain[selCell.y][selCell.x]];
       const tf = ELEMENTS[l.el].terrainFree, ex = tf ? (T.stoneExtra || 0) : T.extra;   // Felsen: alle +30
       info.textContent = `${T.name}: Bauen ${ex ? '+' + ex + ' Gold' : 'zum normalen Preis'}${tf && T.extra && !T.stoneExtra ? ' (Stein zahlt keinen Aufschlag)' : ''}${T.name === 'Felsen' ? ` · Reichweite +${Math.round((ROCK.rangeMul-1)*100)} %${tf ? `, Stein-Schaden +${Math.round((ROCK.stoneDmg-1)*100)} %` : ''}` : ''}.` + (selTower === null && mayBuild(i) ? ' Erst unten einen Turm wählen.' : '');
-    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. Wald +10, Sumpf +20, Felsen +30 Gold (Felsen: Reichweite +15 %, Stein auch mehr Schaden). Zwischenbosse bringen Edelsteine 💎.' : '';
+    } else info.textContent = seat === i && mayBuild(i) ? 'Turm unten wählen, dann auf ein freies Feld tippen. Wald +10, See +20, Felsen +30 Gold (Felsen: Reichweite +15 %, Stein auch mehr Schaden). Zwischenbosse bringen Edelsteine 💎.' : '';
   }
   updateLaneHeads();
   renderPalette();
@@ -2083,6 +2083,16 @@ function drawForest(g, cx, fy, cs, h){
       g.fillStyle = col; g.beginPath(); g.moveTo(x + x1*k, y + y1*k); g.lineTo(x, y + ty2*k); g.lineTo(x + x2*k, y + y1*k); g.closePath(); g.fill();
       g.fillStyle = '#00000026'; g.beginPath(); g.moveTo(x, y + ty2*k); g.lineTo(x + x2*k, y + y1*k); g.lineTo(x, y + y1*k); g.closePath(); g.fill(); }); });
 }
+function drawLake(g, map, x, y, cs, h){   // Wasserfläche im Boden (gilt für flach und schräg), ohne Strand
+  const isL = (a, b) => a >= 0 && b >= 0 && a < COLS && b < ROWS && !map.cells.has(a + ',' + b) && map.terrain[b][a] === 2, cx = (x + .5)*cs, cy = (y + .5)*cs;
+  const water = (col, rx, ry, dx = 0, dy = 0) => { g.fillStyle = col; g.beginPath(); g.ellipse(cx + dx*cs, cy + dy*cs, rx*cs, ry*cs, 0, 0, Math.PI*2); g.fill();
+    for (const [nx, ny] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (isL(x + nx, y + ny)) g.fillRect(cx + (nx ? (nx > 0 ? 0 : -.5) : -rx)*cs + dx*cs, cy + (ny ? (ny > 0 ? 0 : -.5) : -ry)*cs + dy*cs, nx ? .5*cs : rx*2*cs, ny ? .5*cs : ry*2*cs); };
+  water('#2a6a96', .47, .43); water('#33809f'.replace('#33809f', '#3484b8'), .4, .35, 0, -.02);
+  g.fillStyle = '#5fb0dc'; g.beginPath(); g.ellipse(cx - .1*cs, cy - .12*cs, cs*.2, cs*.09, -.2, 0, Math.PI*2); g.fill();
+  g.strokeStyle = '#dff6ffaa'; g.lineWidth = Math.max(1, cs*.03); g.beginPath();
+  const rx0 = cx + ((h % 2) ? .08 : -.14)*cs, ry0 = cy + (.08 + (h % 3)*.05)*cs; g.moveTo(rx0, ry0); g.quadraticCurveTo(rx0 + cs*.05, ry0 - cs*.05, rx0 + cs*.12, ry0); g.stroke();
+  if (h === 2) { g.fillStyle = '#3f9a4a'; g.beginPath(); g.ellipse(cx + .16*cs, cy + .1*cs, cs*.09, cs*.045, 0, 0, Math.PI*2); g.fill(); }   // Seerosenblatt
+}
 function drawTree(g, cx, fy, cs, h, swamp){
   if (!swamp) return drawForest(g, cx, fy, cs, h);   // 26.10. (F): richtige Bäume mit Stamm statt runder Kronen (Wald: Tanne, Sumpf: Trauerweide); Fußpunkt (cx, fy)
   const k = .92 + h * .06;
@@ -2314,8 +2324,7 @@ function draw(i, cv){
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
     if (t === 1 && !view25) drawTree(g, (x+.5)*cs, (y+.92)*cs, cs, h, false);
-    if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
-      if (!view25) drawTree(g, (x+.5)*cs, (y+.9)*cs, cs, h, true); }   // 26.10. (F): Sumpf mit Bäumen statt Büschen (2,5D: aufrecht, siehe unten)
+    if (t === 2) drawLake(g, map, x, y, cs, h);   // 27.10. (F): kleiner See statt Sumpf (ohne Strand), benachbarte Seefelder fließen zusammen
     if (t === 3 && !view25) drawMountain(g, x, y, cs);
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
@@ -2426,7 +2435,6 @@ function draw(i, cv){
     for (const tw of towers) objs.push({ y:tw.y + 1, f:() => drawTw(tw) });
     for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
       if (t === 1) objs.push({ y:y + .9, f:() => drawTree(c, (x+.5)*cs, gy(y+.9), cs, h, false) });
-      if (t === 2) objs.push({ y:y + .8, f:() => drawTree(c, (x+.5)*cs, gy(y+.9), cs, h, true) });
       if (t === 3) objs.push({ y:y + .88, f:() => { c.save(); c.translate(0, gy(y+1) - (y+1)*cs); drawMountain(c, x, y, cs); c.restore(); } }); }
     if (s) for (const m of s.monsters) objs.push({ y:m.y + (flying(m) ? 1.5 : .05), f:() => drawMon(m) });
     objs.sort((a, b) => a.y - b.y); for (const o of objs) o.f();
