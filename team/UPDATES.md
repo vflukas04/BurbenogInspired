@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 17:55 · F · 2026-10-26s – Lavaturm: Turm im Lavasee mit Lava-Zinnen
+Lavaturm neu gezeichnet: dunkler Steinturm mitten in einem Lavasee, oben Zinnen aus glühender Lava, nur zwei kurze Rinnsale. Teilbilder: Zinnen (pulsieren), Funken (steigen beim Schuss). `TOWER_H` feuer[5] = 69,5. Nur Anzeige.
+
 ### 26.10. 17:40 · F · 2026-10-26r – Feuerteufel wirft brennenden Dreizack
 Der Feuerteufel dreht sich zum Ziel (Dreizack-Seite zeigt zum Monster), der Dreizack dreht sich zum Ziel und verschwindet beim Wurf, ein neuer erscheint nach kurzer Zeit. Geschoss (`shot25`, Feuer Nr. 5): brennender Dreizack mit Flammenschweif, startet in der Hand. Nur Anzeige.
 
@@ -45,6 +48,3 @@ In der Schräg-Ansicht zeigen Bauleiste und Dialoge (`towerIcon`) das zugeschnit
 
 ### 26.10. 11:30 · F · 2026-10-26e – Biome: Sumpf mit Bäumen, Felsen als große Felsbrocken
 Sumpf: statt kleiner Büsche dunkelgrüne Sumpfbäume (in der Schräg-Ansicht aufrecht, nach Tiefe sortiert). Felsen: statt Berg mit Schneekappe zwei große Felsbrocken (`drawMountain`, beide Ansichten). Regeln und Gold unverändert (Felsen +30, Reichweite +15 %).
-
-### 26.10. 11:00 · F · 2026-10-26d – Türme aller Elemente als freie Bilder, vier Umbenennungen
-Schräg-Ansicht: alle 32 Türme als freistehende Bilder (`assets/turm/<element>-<nr>.png`, `towerImg`, `TOWER_H`). Quelle/Entwürfe: `tools/turm/tuerme.html`, Bilder neu erzeugen mit `node tools/turm/bilder.js tools/turm/tuerme.html` (aus dem Repo-Wurzelordner, Playwright nötig). **Umbenannt (nur Anzeige, Zahlen unverändert):** Glutbecken → Glumanda, Schwelbrand → Feuerteufel, Frosthauch → Schneekönig, Felsbrocken → Onyx. `spiegel.html` und die Balancing-Skripte (`basis/`) behalten die alten Namen. Draufsicht unverändert.
