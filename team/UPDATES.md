@@ -43,6 +43,10 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 00:40 · F · 2026-10-27q – Dorffeld gesperrt, Feuer-/Stein-Bäume, schwarze Wüste
+- Auf dem Dorffeld gibt es kein Gelände mehr und man kann dort keinen Turm bauen (bestehende Türme bleiben). Das ändert genau ein Feld je Map gegenüber früher gewürfeltem Gelände (Karte unten rechts bzw. oben links, siehe `villageCell`): für laufende Spiele „Neues Spiel + neu laden" empfohlen.
+- Im umgewandelten Boden: Wälder werden bei Feuer zu verbrannten Baumleichen mit Glut, bei Stein zu Kakteen. Schatten-Boden ist jetzt eine schwarze Wüste (Dünen, dunkle Steinchen) statt Violett. Nur Anzeige.
+
 ### 27.10. 00:10 · F · 2026-10-27p – Dörfer: Sockel, Eisburg blau, Spieler 2–4 oben links
 - Alle Dörfer stehen auf einem dunklen Sockel (Feuer Basalt, Eis Eisscholle, Schatten Platte, Stein Steinplatte), die Eisburg hat sattere blaue Wände und hebt sich vom Schnee ab. Neue Bilder in `assets/dorf/` (Quelle `tools/dorf/dorf.html`).
 - Spieler 1 hat das Dorf unten rechts, Spieler 2–4 oben links (zweite Reihe, damit die Burg ins Bild passt). Boden, Wege und zugefrorene Seen richten sich nach der jeweiligen Ecke. Nur Anzeige. Neu laden genügt.
@@ -55,6 +59,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 
 ### 27.10. 23:15 · F · 2026-10-27m – Dorfwege halb so breit
 - Die Dorfwege sind nur noch halb so breit (knapp zu sehen). Nur Anzeige. Neu laden genügt.
-
-### 27.10. 23:00 · F · 2026-10-27l – Monsterweg bleibt unberührt
-- Bodenwandel und Dorfwege überdecken den Monsterweg nicht mehr (er wird zuletzt neu gezeichnet, genau wie am Anfang). Nur Anzeige. Neu laden genügt.
