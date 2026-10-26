@@ -2,6 +2,10 @@
 
 <!-- So geht ein neuer Eintrag: direkt UNTER der Zeile „NEUE EINTRÄGE HIER“ einfügen (nie über ihr, nie in diesen Kopf).
 
+### 27.10. 20:20 · F · 2026-10-27g – Verbindungswächter + Fehleranzeige
+- Laptop-Hänger (Welle startet nur beim Mitspieler) trat ohne neue Version auf. Statuszeile zeigt jetzt Fehler der letzten 3 Minuten (Abfrage, Auswertung, Seitenfehler).
+- Wächter: Kommt >40 s kein Stand vom Server (Seite sichtbar), baut die Seite die Firestore-Verbindung neu auf; nach 3 Minuten ohne Stand lädt sie sich in Ruhe neu.
+
 ### 27.10. 20:00 · F · 2026-10-27f – Seite lädt sich bei neuer Version selbst neu
 - Laptop war dauerhaft offen, Wiedergabe-Hänger war es nicht. Neue Vermutung: veralteter Code (stundenlang offene Seite bei vielen Pushes). Jetzt lädt sich die Seite bei neuer Version selbst neu, wenn Ruhe herrscht (keine Wiedergabe, kein Dialog, 45 s ohne Eingabe, nichts am Speichern).
 - Fehler beim Starten einer Wiedergabe werden als Meldung mit Versionsnummer gezeigt statt stumm zu hängen.
@@ -50,7 +54,4 @@ Brandpfeil neu gezeichnet (Holzbogen auf Dreibein, 2 Teilbilder: Bogen, Pfeil; `
 
 ### 26.10. 17:00 · F · 2026-10-26p – Flammenwerfer: ein Feld groß, zusammenhängende Flamme
 Flammenwerfer neu gezeichnet (Tank + Düse, passt auf ein Feld; `tools/turm/tuerme.html`, Bilder neu erzeugt, `TOWER_H` feuer[2] = 26). Die Flamme (`drawFlame`, gezeichnet im Turm anhand `JETS`) ist ein welliges Band in drei Schichten von der Mündung bis zum Monster, mit Funken und Glut am Ziel. Nur Anzeige.
-
-### 26.10. 16:40 · F · 2026-10-26o – Kreativ-Modus: Element jederzeit wechseln
-Im Kreativ-Modus (`KREATIV`) zeigt `canSwitchEl` die Element-Knöpfe immer; bestehende Türme des Feldes wechseln mit (gleiche Nummer und Stufe, ohne Edelstein). Normales Spiel unverändert.
 

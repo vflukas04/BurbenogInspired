@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1178,7 +1178,7 @@ const withTimeout = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeou
 // Speicher-Anzeige oben (12.10. 14:39, Fehlersuche Fairphone): speichert … / ✓ gespeichert / ⚠ Fehler mit Meldung
 let writesOpen = 0, writeErr = null, writeOkAt = 0;
 function saveStatus(){ const t = $('modeTag'); if (!t || MODE !== 'online') return;
-  t.textContent = 'Prototyp 3 · online · ' + (writeErr ? '⚠ ' + writeErr : writesOpen ? 'speichert …' : writeOkAt ? '✓ gespeichert' : 'bereit') + (G && syncAt ? ` · Tag ${G.day}.${G.slot + 1} · Stand vor ${Math.round((Date.now() - syncAt) / 1000)} s` + (replay ? ' · Wiedergabe' : '') : ''); }   // Diagnose: Stand vom Server, Wiedergabe aktiv?
+  t.textContent = 'Prototyp 3 · online · ' + (writeErr ? '⚠ ' + writeErr : writesOpen ? 'speichert …' : writeOkAt ? '✓ gespeichert' : 'bereit') + (G && syncAt ? ` · Tag ${G.day}.${G.slot + 1} · Stand vor ${Math.round((Date.now() - syncAt) / 1000)} s` + (replay ? ' · Wiedergabe' : '') + (lastErr && Date.now() - lastErr.t < 180000 ? ' · ⚠ ' + lastErr.m : '') : ''); }   // Diagnose: Stand vom Server, Wiedergabe aktiv?
 function queueWrite(fn){ const once = () => withTimeout(Promise.resolve().then(fn), 10000);
   writesOpen++; saveStatus();
   writeChain = writeChain.then(() => once().catch(e => { console.warn(e); writeErr = 'nochmal: ' + (e && e.message || e); saveStatus(); return once(); }))
@@ -1199,7 +1199,11 @@ async function saveGame(){
   if (MODE === 'local') return lsSet('ww2-local', { G, L });
   const body = JSON.parse(JSON.stringify(G)); await queueWrite(() => DB.doc(P_STATE).set(body));
 }
-let resolving = false, resolvingAt = 0, syncAt = 0, hiddenAt = 0, lastTouch = Date.now();
+let resolving = false, resolvingAt = 0, syncAt = 0, hiddenAt = 0, lastTouch = Date.now(), lastErr = null, healAt = 0;
+// 27.10. (F): Fehler sichtbar machen (Statuszeile oben), damit man sieht, woran es hängt
+const noteErr = (what, e) => { lastErr = { t:Date.now(), m:what + ': ' + String(e && (e.code || e.message) || e).slice(0, 80) }; };
+window.addEventListener('error', ev => noteErr('Fehler', ev.message + (ev.lineno ? ' @' + ev.lineno : '')));
+window.addEventListener('unhandledrejection', ev => noteErr('Fehler', ev.reason));
 ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, () => lastTouch = Date.now(), { passive:true }));
 // Gibt true zurück, wenn ausgewertet werden konnte (für den Bereit-Knopf: sonst später nochmal versuchen)
 /* Archiv (15.10., L): Jedes online gespielte Spiel wird mitgeschrieben, für die Eichung des Balancing-Skripts.
@@ -1254,7 +1258,7 @@ async function tryResolve(force, onlyKey){
       const g = advance(JSON.parse(JSON.stringify(snap.data()))); if (g) await ref.set(g);
     }
     ok = true;
-  } catch(e) { console.warn(e); }
+  } catch(e) { console.warn(e); noteErr('Auswertung', e); }
   finally { resolving = false; }
   if (ok) refreshFromServer();   // Ergebnis sofort holen, nicht auf die Live-Verbindung warten
   return ok;
@@ -2512,6 +2516,10 @@ setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   
    // Wächter: Steht die Wiedergabe seit 3 s still, obwohl die Seite sichtbar ist, neu anstoßen
    if (replay && !document.hidden && performance.now() - replay.last > 3000) kickLoop();
    checkReady(); saveStatus();
+   // Verbindungswächter: kam länger als 40 s kein Stand vom Server (Seite sichtbar), Verbindung neu aufbauen; nach 3 Minuten Seite neu laden (in Ruhe)
+   if (MODE === 'online' && G && syncAt && !document.hidden) { const age = Date.now() - syncAt;
+     if (age > 40000 && Date.now() - healAt > 40000 && DB.net) { healAt = Date.now(); noteErr('Verbindung neu', 'kein Stand seit ' + Math.round(age/1000) + ' s'); DB.net().then(refreshFromServer).catch(e => noteErr('Neuaufbau', e)); }
+     if (age > 180000 && !replay && $('dlgback').hidden && writesOpen === 0) location.reload(); }
    // 27.10. (F): Seite lief mit alter Version weiter (Laptop stundenlang offen) – bei Ruhe selbst neu laden, damit alle denselben Code haben
    if (MODE === 'online' && newerVersion && !replay && !resolving && $('dlgback').hidden && Date.now() - lastTouch > 45000 && writesOpen === 0) location.reload();
    if (MODE === 'online' && G && !G.over && !G.paused) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
@@ -2554,7 +2562,7 @@ async function refreshFromServer(){
     const g = st.exists ? st.data() : null; syncAt = Date.now();
     const stamp = x => x ? `${x.cfg && x.cfg.startAt}-${x.day}-${x.slot}-${x.lastRun ? x.lastRun.id : ''}-${x.over}` : 'leer';
     if (stamp(g) !== stamp(G)) onGame(g); else if (G) render();
-  } catch(e) { console.warn(e); }
+  } catch(e) { console.warn(e); noteErr('Abfrage', e); }
   finally { refreshing = false; }
 }
 (async () => {
@@ -2563,7 +2571,7 @@ async function refreshFromServer(){
   if (FIREBASE_CONFIG.projectId && window.firebase) {
     try { firebase.initializeApp(FIREBASE_CONFIG); const fs = firebase.firestore();
       try { fs.settings({ experimentalForceLongPolling: true, experimentalAutoDetectLongPolling: false, merge: true }); } catch(e) { console.warn(e); }   // Safari: WebChannel-Verbindung hängt oft, Long Polling ist der bekannte Ausweg
-      return startOnline({ doc:p => fs.doc(p), collection:p => fs.collection(p), tx:fn => fs.runTransaction(fn) });
+      return startOnline({ doc:p => fs.doc(p), collection:p => fs.collection(p), tx:fn => fs.runTransaction(fn), net:() => fs.disableNetwork().then(() => fs.enableNetwork()) });
     } catch(e) { console.warn(e); }
   }
   if (!window.claude || !window.claude.use) return startLocal();

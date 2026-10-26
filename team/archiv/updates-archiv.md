@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 26.10. 16:40 · F · 2026-10-26o – Kreativ-Modus: Element jederzeit wechseln
+Im Kreativ-Modus (`KREATIV`) zeigt `canSwitchEl` die Element-Knöpfe immer; bestehende Türme des Feldes wechseln mit (gleiche Nummer und Stufe, ohne Edelstein). Normales Spiel unverändert.
+
 ### 26.10. 16:25 · F · 2026-10-26n – Flammenwerfer: Feuerstrahl aus der Mündung bis zum Ziel
 Der Flammenwerfer dreht sich zum Ziel, der Feuerstrahl (`drawShot`, `p.el === 0 && p.idx === 2`) beginnt an der Mündung und reicht bis zum Monster. Nur Anzeige.
 
