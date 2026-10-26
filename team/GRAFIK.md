@@ -175,5 +175,5 @@ The same bird, same style. It flies directly away from the viewer - up. Seen fro
 
 ## Türme der Schräg-Ansicht (26.10., F)
 - Selbst gezeichnete Vektor-Bilder (kein KI-Bild), freistehend ohne Sockel, Fußpunkt unten in der Feldmitte, Größe wächst mit der Turmnummer (`u` in `drawTower25`). Aufsatz dreht sich nicht.
-- Fertig: Schatten (`assets/turm/schatten-1..8.png`, Schemen, Irrlicht, Nachtauge, Fluchstein, Seelenfresser, Phantom, Leerenturm, Ewige Nacht). Feuer/Eis/Stein: Entwürfe werden von F überarbeitet, bis dahin Block-Türme mit den Kenney-Aufsätzen.
-- Neues Element anbinden: PNG `assets/turm/<element>-<nr>.png` (68×90-Raster, Fuß bei y=80) und `towerImg` erweitern.
+- Fertig (26d): alle vier Elemente, `assets/turm/<feuer|eis|schatten|stein>-<1..8>.png` (88×102-Raster, Fuß bei y=92). Quelle: `tools/turm/tuerme.html` (SVG-Zeichnungen je Turm), Erzeugung `tools/turm/bilder.js`; `TOWER_H` in `index.html` = Höhe über dem Fuß (Ausgabe des Skripts). Eigene Zeichnungen, keine bekannten Figuren nachzeichnen.
+- Umbenennungen im Spiel (26d): Glumanda (vorher Glutbecken), Feuerteufel (Schwelbrand), Schneekönig (Frosthauch), Onyx (Felsbrocken).

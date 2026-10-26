@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -323,10 +323,10 @@ const TOWER_POWER = [2, 9.45, 15.4, 27.6, 47, 86, 166, 319];   // Kraft je Gold 
 const ELEMENTS = [
   { name:'Feuer', kraft:0.622, kraftBlock:[1.30, 1.15, 1, 1, 1, 1, 1, 1], kraftT:[1, 1, 1, 1, 1, 1, 1, 1], emo:'🔥', color:'#e4703a', note:'brennt', effect:'burn', armorDmg:0.5, costOverride:{0:8}, towers:[
     ['Funke',        'Schaden',   2.0, 1,   1, 0.8, 0.17, 3],   // 1,6 Schaden/s (Brennen ist ein Bonus)   // 8 statt 10 Gold. Türme 1–3 aller Elemente am 12.10. per Simulation angeglichen
-    ['Glutbecken',   'Effekt',    1.6, 1,   2, 1.19, 0.43, 5, 0, {fly:false}],
+    ['Glumanda',     'Effekt',    1.6, 1,   2, 1.19, 0.43, 5, 0, {fly:false}],
     ['Flammenwerfer','Schaden',   1.5, 4,   1, 1.21, 0.14, 2],
     ['Brandpfeil',   'Luftabwehr',3.6, 1,   2, 1.8, 0.36, 6, 0, {air:true}],
-    ['Schwelbrand',  'Effekt',    2.5, 0.5, 3, 0.35,0.26, DAY],
+    ['Feuerteufel',  'Effekt',    2.5, 0.5, 3, 0.35,0.26, DAY],
     ['Lavaturm',     'Fläche',    2.0, 0.35,1, 1.5, 0.36, 4, 0.9, {fly:false}],   // 14.10. (L): halb so oft, doppelter Schaden je Wurf (gleicher Schaden/s)
     ['Sonnenturm',   'Schaden',   3.0, 0.6, 2, 1.4, 0.36, 8],
     ['Höllenfeuer',  'Effekt',    3.5, 0.5, 3, 0.45, 0.65, DAY] ]},
@@ -334,7 +334,7 @@ const ELEMENTS = [
     ['Frostsplitter','Effekt',    2.0, 1,   1, 1.1, 0.25, 3],
     ['Schneeball',   'Fläche',    2.3, 1,   2, 1.15, 0.2, 4, 0.6],
     ['Eiszapfen',    'Luftabwehr',3.6, 0.8, 2, 2.4, 0.3, 4, 0, {air:true, slowFly:true}],   // nur Fliegende, bremst sie auch
-    ['Frosthauch',   'Effekt',    1.6, 2,   3, 1.05, 0.45, 8],
+    ['Schneekönig',  'Effekt',    1.6, 2,   3, 1.05, 0.45, 8],
     ['Frostnova',    'Effekt',    2.0, 1/8, 1, 0.15, 3,    0, 1.6, {effect:'stun', rateUp:Math.pow(8/6, 1/5), fly:false, nova:true, chance:0.45, chanceUp:0.04, chanceMax:0.65}],  // friert im Umkreis 3 s ein (45–65 % je Stufe), alle 8 s (Stufe 6: alle 6 s)
     ['Eisspeer',     'Schaden',   3.8, 0.5, 1, 2.7, 0.2, 4],
     ['Blizzard',     'Fläche',    2.5, 1.5, 5, 1.5, 0.4, 15, 1.2],
@@ -354,7 +354,7 @@ const ELEMENTS = [
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.55, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.89, 0,   0, 0.9],
     ['Katapult',     'Reichweite',3.8, 0.25,2, 0.72, 0,   0, 1.0, {fly:true}],
-    ['Felsbrocken',  'Fläche',    2.5, 0.25,1, 0.5, 0,   0, 1.1],
+    ['Onyx',         'Fläche',    2.5, 0.25,1, 0.5, 0,   0, 1.1],
     ['Erdbeben',     'Effekt',    1.8, 0.25,1, 0.36, 2.0, 0, 2.2, {nova:true, chance:0.15, chanceUp:0.05}],
     ['Granitwächter','Fläche',    2.0, 0.33,3, 0.58, 0,   0, 1.2, {fly:true}],
     ['Lawine',       'Fläche',    3.0, 0.25,3, 0.55, 0,   0, 1.6],
@@ -1877,18 +1877,20 @@ function drawTower(c, tw, px, py, cs, aim, glow, noBody){
   for (let k = 1; k < (tw.lvl || 1); k++) { c.fillStyle = '#000a'; c.fillRect(px + cs - 4 - k*cs*.1, py + cs - cs*.12, cs*.08, cs*.08);
     c.fillStyle = cssVar('--accent'); c.fillRect(px + cs - 3.5 - k*cs*.1, py + cs - cs*.12 + .5, cs*.08 - 1, cs*.08 - 1); }
 }
-const TIMG = {};   // 26.10. (F): freistehende Turm-Bilder der Schräg-Ansicht (bisher nur Schatten), assets/turm/<element>-<nr>.png, Entwurf in team/GRAFIK.md
+const TIMG = {};   // 26.10. (F): freistehende Turm-Bilder der Schräg-Ansicht, assets/turm/<element>-<nr>.png (88×102-Raster, Fußpunkt bei y=92), Entwürfe/Quelle: team/GRAFIK.md
+const TOWER_NAME = ['feuer', 'eis', 'schatten', 'stein'];
+const TOWER_H = { feuer:[22,42,10,49,52,65.8,52,42], eis:[26,34.5,66.4,57,39.9,58.2,48,66], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
 function towerImg(el, idx){
-  if (el !== 2) return null; const k = 'schatten-' + (idx + 1); if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
-  const im = new Image(); im.onerror = () => { TIMG[k] = null; }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
+  const k = TOWER_NAME[el] + '-' + (idx + 1); if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
+  const im = new Image(); im.onerror = () => { TIMG[k] = null; }; im.onload = () => { if (view25 && typeof drawAll === 'function') drawAll(); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
 }
 function drawTower25(c, tw, x, y, cs, aim, glow){
   const sp = towerImg(tw.el, tw.idx);
   if (sp) {                                 // freistehendes Bild ohne Sockel: Bodenschatten, Bild (Fußpunkt unten in der Feldmitte), Zahl/Stein/Stufen flach auf dem Feld
-    const k = CUR.k, gx = x*cs, gyy = gyOf(y, cs), u = cs / 40 * (1 + tw.idx * .02), fx = gx + cs/2, fy = gyy + k*cs*.82;
+    const k = CUR.k, gx = x*cs, gyy = gyOf(y, cs), u = cs * Math.min(1.5, Math.max(.5, TOWER_H[TOWER_NAME[tw.el]][tw.idx] * (1 + tw.idx * .03) / 44)) / TOWER_H[TOWER_NAME[tw.el]][tw.idx], fx = gx + cs/2, fy = gyy + k*cs*.82;
     c.fillStyle = '#0006'; c.beginPath(); c.ellipse(fx + cs*.04, fy + cs*.02, cs*(.3 + tw.idx*.012), cs*.1, 0, 0, Math.PI*2); c.fill();
     if (glow > 0) { const g = c.createRadialGradient(fx, fy - u*28, 0, fx, fy - u*28, cs*.6); g.addColorStop(0, '#ffffff' + Math.round(glow * 150).toString(16).padStart(2,'0')); g.addColorStop(1, '#ffffff00'); c.fillStyle = g; c.fillRect(fx - cs, fy - cs*1.6, cs*2, cs*2); }
-    c.drawImage(sp, fx - 34*u, fy - 80*u, 68*u, 90*u);
+    c.drawImage(sp, fx - 44*u, fy - 92*u, 88*u, 102*u);
     c.save(); c.translate(gx, gyy); c.scale(1, k); drawTower(c, tw, 0, 0, cs, aim, 0, true); c.restore();
     return;
   }   // Turm als Block: Schatten, Seitenwand, Oberseite (die flache Turm-Zeichnung, gestaucht)

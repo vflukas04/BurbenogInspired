@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 11:00 · F · 2026-10-26d – Türme aller Elemente als freie Bilder, vier Umbenennungen
+Schräg-Ansicht: alle 32 Türme als freistehende Bilder (`assets/turm/<element>-<nr>.png`, `towerImg`, `TOWER_H`). Quelle/Entwürfe: `tools/turm/tuerme.html`, Bilder neu erzeugen mit `node tools/turm/bilder.js tools/turm/tuerme.html` (aus dem Repo-Wurzelordner, Playwright nötig). **Umbenannt (nur Anzeige, Zahlen unverändert):** Glutbecken → Glumanda, Schwelbrand → Feuerteufel, Frosthauch → Schneekönig, Felsbrocken → Onyx. `spiegel.html` und die Balancing-Skripte (`basis/`) behalten die alten Namen. Draufsicht unverändert.
+
 ### 26.10. 10:20 · F · 2026-10-26c – Schatten-Türme als freie Bilder (Schräg-Ansicht)
 In der Schräg-Ansicht stehen die 8 Schatten-Türme ohne Sockel als Bilder (`assets/turm/schatten-1..8.png`, `towerImg`, `drawTower25`); Zahl, Edelstein und Stufen liegen flach auf dem Feld. Entwürfe für Feuer/Eis/Stein sind noch in Überarbeitung (F), bis dahin Block-Türme. Draufsicht unverändert. Nur Anzeige.
 
@@ -64,9 +67,4 @@ Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (R
 
 ### 21.10. 23:50 · L · 2026-10-21e – Fuchs und Dachs von hinten
 - Letzte fehlende Ansichten ergänzt (Fuchs und Dachs laufen jetzt auch nach oben mit Rückansicht). Neu laden reicht.
-
-### 21.10. 23:20 · L · 2026-10-21e – Effekte: stärkster aktiver wirkt (Fehler behoben)
-- Fehler: Trafen zwei gleiche Effekte zusammen, wurden Stärke und Dauer getrennt maximiert. Ein schwacher Ganztags-Effekt (Schwelbrand, Ewiges Eis, Ewige Nacht) machte so jeden starken kurzen Brand/Bremsen/Fluch anderer Türme ganztägig.
-- Neu (`addFx`, Effekt-Ablauf in `step`, Leaks): Der stärkste aktive Effekt wirkt mit seiner eigenen Dauer; ein schwächerer, aber längerer bleibt als Rückfall (`v2`/`t2`) und übernimmt, wenn der starke abläuft – auch beim Nachbarn.
-- Folge: Kombinationen mit Ganztags-Türmen werden schwächer (vorher bis zu ×30 im Prüfstand). Keine Zahlen geändert. Neues Spiel + neu laden.
 
