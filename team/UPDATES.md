@@ -43,6 +43,10 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 00:10 · F · 2026-10-27p – Dörfer: Sockel, Eisburg blau, Spieler 2–4 oben links
+- Alle Dörfer stehen auf einem dunklen Sockel (Feuer Basalt, Eis Eisscholle, Schatten Platte, Stein Steinplatte), die Eisburg hat sattere blaue Wände und hebt sich vom Schnee ab. Neue Bilder in `assets/dorf/` (Quelle `tools/dorf/dorf.html`).
+- Spieler 1 hat das Dorf unten rechts, Spieler 2–4 oben links (zweite Reihe, damit die Burg ins Bild passt). Boden, Wege und zugefrorene Seen richten sich nach der jeweiligen Ecke. Nur Anzeige. Neu laden genügt.
+
 ### 27.10. 23:50 · F · 2026-10-27o – Seen frieren im Eis-Gebiet zu
 - Auf einer Eis-Map frieren Seen zu (hellblaue Eisfläche mit Rissen), sobald sie im umgewandelten Schnee-Gebiet um das Dorf liegen. Nur Anzeige, der Geländebonus bleibt. Neu laden genügt.
 
@@ -54,8 +58,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 
 ### 27.10. 23:00 · F · 2026-10-27l – Monsterweg bleibt unberührt
 - Bodenwandel und Dorfwege überdecken den Monsterweg nicht mehr (er wird zuletzt neu gezeichnet, genau wie am Anfang). Nur Anzeige. Neu laden genügt.
-
-### 27.10. 22:30 · F · 2026-10-27k – Dorf, Weltwandel, Wege, Nachtlicht
-- Nur Anzeige, nichts im Spiel ändert sich. Dorf in der Ecke unten rechts (ein Feld, wächst in 7 Stufen von Tag 1 bis 42; Bilder `assets/dorf/`). Der Boden darum wandelt sich nach Element (Feuer Asche/Lava, Eis Schnee, Schatten Violett, Stein Geröll), Radius wächst bis Tag 42 auf fast die ganze Map. Vom Dorf wachsen geschwungene Wege zu den Türmen (um Wald, Felsen, See herum, Monsterweg wird nur gekreuzt, wenn nötig): ab Tag 4, später breiter, ab Tag 36 gepflastert, ab Tag 42 mit Rand. Alles aus Tag und Türmen berechnet (nichts gespeichert, kein Zufall).
-- Nachts (Wiedergabe der 19-Uhr-Welle): Feuer-Türme geben Feuerschein, Eis- und Stein-Türme tragen eine kleine Fackel mit schwachem Licht, Schatten unverändert.
-- Steht ein Turm auf dem Dorffeld, liegt er vor dem Dorf. Neu laden genügt.

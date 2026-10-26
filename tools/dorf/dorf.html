@@ -14,7 +14,7 @@ p.n{margin:2px 0 10px;color:#b9c4b0;max-width:900px}
 <script>
 const P = {
  f:{n:'Feuer', wall:'#7a4a2a', wallD:'#5a3118', roof:'#c2410c', roofL:'#e8590c', acc:'#ffb347', ground:'#4a2e1c', groundL:'#6d4529', glow:'#ff8a3d', flag:'#d8321a', dark:'#1f0e06', win:'#ffd27a', tunic:'#c2410c', cap:'#7a2a12', fire:'#ff8a3d', fireC:'#ffe08a', stone:'#6b5047', stoneD:'#4a362f', moat:'#ff6a1e', moatD:'#7a2a12', moatL:'#ffd27a'},
- e:{n:'Eis', wall:'#d5ecf8', wallD:'#8fc3de', roof:'#eaf8ff', roofL:'#ffffff', acc:'#79c6ee', ground:'#b9d6e6', groundL:'#dff0f8', glow:'#7df9ff', flag:'#3f7fa6', dark:'#2f5a78', win:'#9be8ff', tunic:'#3f7fa6', cap:'#eaf8ff', fire:'#7df9ff', fireC:'#ffffff', stone:'#d5ecf8', stoneD:'#8fc3de', moat:'#9be8ff', moatD:'#3f7fa6', moatL:'#ffffff'},
+ e:{n:'Eis', wall:'#5f9cc4', wallD:'#386f97', roof:'#cfe9f6', roofL:'#f2fbff', acc:'#2f6389', ground:'#b9d6e6', groundL:'#dff0f8', glow:'#7df9ff', flag:'#3f7fa6', dark:'#2f5a78', win:'#9be8ff', tunic:'#3f7fa6', cap:'#eaf8ff', fire:'#7df9ff', fireC:'#ffffff', stone:'#6aa6cc', stoneD:'#3a6f96', moat:'#9be8ff', moatD:'#3f7fa6', moatL:'#ffffff'},
  s:{n:'Schatten', wall:'#2b2140', wallD:'#150e2b', roof:'#3d2a78', roofL:'#5b3aa8', acc:'#a98bff', ground:'#1a1230', groundL:'#2d2250', glow:'#a98bff', flag:'#7a4be0', dark:'#07040f', win:'#c9b6ff', tunic:'#4d3a8a', cap:'#150e2b', fire:'#a98bff', fireC:'#f0e6ff', stone:'#352a52', stoneD:'#1a1230', moat:'#4d3a8a', moatD:'#150e2b', moatL:'#a98bff'},
  st:{n:'Stein', wall:'#a89c84', wallD:'#7d725e', roof:'#8a6238', roofL:'#b08650', acc:'#d9cba6', ground:'#6f6450', groundL:'#8d8270', glow:'#ffb347', flag:'#8d3b2c', dark:'#2a2218', win:'#ffd27a', tunic:'#8a6238', cap:'#5e5646', fire:'#ff9a3d', fireC:'#ffe08a', stone:'#a89c84', stoneD:'#7d725e', moat:'#2f7fb3', moatD:'#1f4f73', moatL:'#bfe3f5'}
 };
@@ -54,6 +54,11 @@ function gateS(p,x,w,h){return `<path d="M${x-w/2} 0V${-h+w/2}A${w/2} ${w/2} 0 0
 function moatS(p,w){return `<ellipse cx="0" cy="4" rx="${w}" ry="6.4" fill="${p.moatD}"/><ellipse cx="0" cy="3.4" rx="${w-1.8}" ry="5" fill="${p.moat}"/><path d="M${-w*.55} 3Q${-w*.4} 1.6 ${-w*.25} 3M${w*.2} 5Q${w*.4} 3.6 ${w*.55} 5" stroke="${p.moatL}" stroke-width=".7" fill="none"/>`}
 function bridgeS(p,x){return `<path d="M${x-4.5} 0H${x+4.5}L${x+6.5} 8H${x-6.5}Z" fill="#6b4a2c"/><path d="M${x-3} 1.5L${x-4.2} 7.5M${x} 1.5V7.5M${x+3} 1.5L${x+4.2} 7.5" stroke="#4a3220" stroke-width=".7"/>`}
 function palisade(p,x1,x2,y){let o='';for(let x=x1;x<=x2;x+=3.4)o+=`<path d="M${x-1.4} ${y}V${y-8}L${x} ${y-10.5}L${x+1.4} ${y-8}V${y}Z" fill="${p.wall}" stroke="${p.wallD}" stroke-width=".4"/>`;return o}
+function socle(k,st){   // 27.10.: dunkler Sockel unter dem Dorf, damit es sich vom Boden abhebt (wächst mit der Stufe)
+ const C={f:['#1a0e08','#3a2417','#5a3a22','#ff8a3d'],e:['#173a57','#2f6389','#4d8cb5','#bfe3f3'],s:['#0a0618','#1c1236','#2d2250','#a98bff'],st:['#3d3629','#5a5242','#7d7360','#d9cba6']}[k];
+ const r=[0,15,23,27,31,34,34][st]; if(!r) return '';
+ return `<ellipse cx="0" cy="${r*.13+2}" rx="${r}" ry="${r*.3}" fill="${C[0]}"/><ellipse cx="0" cy="${r*.09+1}" rx="${r*.97}" ry="${r*.26}" fill="${C[1]}"/><ellipse cx="-1" cy="${r*.04}" rx="${r*.82}" ry="${r*.19}" fill="${C[2]}"/><path d="M${-r*.8} ${r*.15}l4 -1.5M${r*.55} ${r*.2}l6 -2M${-r*.2} ${r*.28}l4 -.8" stroke="${C[3]}" stroke-width=".9" fill="none" opacity=".85"/>`;
+}
 function village(k,stage){
  const p={...P[k],k}; let b='';
  const g=(w)=>ground(p,w);
@@ -64,7 +69,7 @@ function village(k,stage){
  if(stage===4) b=g(30)+hut(k,p,9,-4,.7)+wallSeg(p,-24,24,12)+gateS(p,0,9,9)+towerS(p,-24,11,22,false)+towerS(p,24,11,22,p.roof,true)+smoke(p,6,-22);   // erste Steinmauer mit Tor
  if(stage===5) b=g(32)+towerS(p,0,15,36,p.roof,true)+wallSeg(p,-24,24,13)+gateS(p,0,10,10)+towerS(p,-26,11,24,p.roof)+towerS(p,26,11,24,p.roof)+`<path d="M-4 -4H4" stroke="${p.glow}" stroke-width="1.2" opacity=".9"/>`;    // Burg mit Bergfried
  if(stage===6) b=moatS(p,33)+g(30)+towerS(p,0,17,40,p.roof,true)+towerS(p,-14,10,30,p.roof)+towerS(p,14,10,30,p.roof,true)+wallSeg(p,-24,24,14)+gateS(p,0,10,11)+towerS(p,-27,12,25,p.roof,true)+towerS(p,27,12,25,p.roof)+bridgeS(p,0);   // Ritterburg
- return svg('-36 -66 72 76',216,228,b);
+ return svg('-40 -66 80 84',240,252,socle(k,stage)+b);
 }
 // ---------- Arbeiter ----------
 function worker(k,job,fr){
@@ -224,15 +229,5 @@ function welt(k,si){
 h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder, Dorf in der Ecke unten rechts (Wege biegen um Wald, Felsen und See und kreuzen den Monsterweg nur, wo es sein muss). Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfade zu 4 Türmen, Tag 22 zu 5, Tag 36 gepflasterte Straße zu allen 6, Tag 42 Straße mit Rand zu allen.</p>`;
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<5;i++)h+=cell(`welt-${k}-${i}`,STG[i].t,welt(k,i));h+='</div>';}
 
-// ---------- Eisburg: Kontrast zum Schnee ----------
-{
- const orig={...P.e}, VAR=[['A · jetzt',{},false],['B · mit Sockel (Eisscholle)',{},true],['C · Sockel + sattere Wände',{stone:'#6aa6cc',stoneD:'#3a6f96',wall:'#5f9cc4',wallD:'#386f97',roofL:'#f2fbff',roof:'#cfe9f6',acc:'#2f6389'},true]];
- const socle=`<ellipse cx="0" cy="5" rx="38" ry="11.5" fill="#173a57"/><ellipse cx="0" cy="3.2" rx="37" ry="10" fill="#2f6389"/><ellipse cx="-2" cy="1.6" rx="31" ry="7" fill="#4d8cb5"/><path d="M-30 5l6 -2M20 7l9 -3M-8 9l5 -1M26 2l5 1" stroke="#bfe3f3" stroke-width=".9" fill="none"/>`;
- let h2=`<h2>5 · Eisburg stärker vom Schnee abheben (Vorschlag)</h2><p class="n">Oben groß (Stufe 4, 5, 6), unten im Spiel-Maßstab (1 Feld) auf Schnee. A = jetzt, B = dunkle Eisscholle als Sockel, C = Sockel und sattere Wände.</p><div id="kontrast" style="display:inline-block">`;
- for(let big=1;big>=0;big--){ for(const [t,pal,sk] of VAR){ Object.assign(P.e,orig,pal); h2+=`<div class="row" style="background:#dcebf4;border-radius:8px;padding:6px;margin-bottom:6px;align-items:flex-end"><div class="lab" style="color:#2f5a78;width:150px">${t}</div>`;
-   for(const st of [4,5,6]){ let v=village('e',st).replace('viewBox="-36 -66 72 76"','viewBox="-44 -66 88 80"'); if(sk) v=v.replace(/(<svg[^>]*>)/,'$1'+socle); if(!big) v=v.replace(/width="216" height="228"/,'width="52" height="55"'); h2+=`<div style="padding:0 18px">${v}</div>`; }
-   h2+='</div>'; } Object.assign(P.e,orig); }
- h2+='</div>'; h+=h2;
-}
 out.innerHTML=h;
 </script>
