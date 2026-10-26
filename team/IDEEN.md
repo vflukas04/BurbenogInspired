@@ -18,3 +18,5 @@ Format: **Idee** – von wem, wann – Stand (offen · dafür · verworfen) – 
 - **Weitere Elemente: Blitz, Pflanze, Licht, Sand** – Oscar (über F), 15.10. – offen – Blitz evtl. mit Kettenreaktion (springt auf nahe Monster). Noch nichts festgelegt, erst nach den 4 bestehenden Elementen prüfen.
 
 - **Feuer: Brennen schwächer, Direktschaden höher** (L, 18.10.): Brennende Monster sterben oft erst beim Nachbarn, Kill und Kopfgeld gehen an ihn. Eigene Kills machen mehr Spaß. Alternative: Kopfgeld für Brand-Kills an den Spieler, der angezündet hat. Noch nicht beschlossen, erst im Bot messen.
+
+- Dorf-Welt (27.10., F): Boden um das Dorf wandelt sich stufenweise zur Element-Welt (Asche/Lava, Schnee, Violett, Geröll), Wege wachsen vom Dorf zu den Türmen (Trampelpfad → Straße → gepflastert). Entwurf: assets/dorf-entwurf/_welt-uebersicht.png (Quelle tools/dorf/dorf.html, Abschnitt 4). Offen: nur Optik oder Spielwirkung? Lesbarkeit von Monsterweg/Gelände.

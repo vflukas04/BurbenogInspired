@@ -144,5 +144,64 @@ h+=`<h2>2 · Arbeiter (Holzfäller, Bergarbeiter, Angler), je 2 Bilder pro Täti
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(const j of [['holz','Holz'],['berg','Berg'],['fisch','Angeln']])for(let f=0;f<2;f++)h+=cell(`arbeiter-${k}-${j[0]}-${f}`,`${j[1]} ${f+1}`,worker(k,j[0],f));h+='</div>';}
 h+=`<h2>3 · Biome in fünf Stufen (voll → abgebaut)</h2><p class="n">Wald (Bäume werden gefällt, Stümpfe und Holzstapel bleiben), Felsen (werden kleiner, am Ende Geröll), See (ersetzt den Sumpf; der Angler gräbt Gräben zu weiteren Teichen, am Ende entsteht ein kleiner Fluss).</p>`;
 for(const [n,f,t] of [['wald',wald,'Wald'],['fels',fels,'Felsen'],['see',see,'See']]){h+=`<div class="row"><div class="lab">${t}</div>`;for(let i=0;i<5;i++)h+=cell(`biom-${n}-${i}`,(n==='see'?['See','Graben','Teiche verbunden','Kanal','Fluss'][i]:`${i*25}% abgebaut`),f(i));h+='</div>';}
+
+// ---------- Welt um das Dorf ----------
+const hs=(x,y,z=0)=>{let n=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453;return n-Math.floor(n)};
+const mix=(a,b,t)=>{const c=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=c(a),B=c(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('')};
+const WORLD={
+ f:{base:'#3b2a1c',hi:'#52361f',acc:'#ff8a3d',acc2:'#ffd27a',road:'#a2703f',roadE:'#5a3118'},
+ e:{base:'#dcebf4',hi:'#f7fcff',acc:'#9bd7f2',acc2:'#ffffff',road:'#9db9c9',roadE:'#6f93a8'},
+ s:{base:'#241a3d',hi:'#33265a',acc:'#a98bff',acc2:'#e0d4ff',road:'#4b3a7a',roadE:'#150e2b'},
+ st:{base:'#6f6a60',hi:'#8d887c',acc:'#b8b2a6',acc2:'#d9cba6',road:'#b7a47c',roadE:'#6a5c3f'}};
+const GRASS=['#2b4a2b','#2f5030'];
+const MON=[[0,1],[3,1],[3,6],[9,6],[9,2],[11,2]];            // Monsterweg (Kacheln)
+const TOW=[[4,3],[5,2],[8,4],[7,5],[2,3],[10,3]];             // Türme, nach Abstand zum Dorf
+const VIL=[6,3];
+const STG=[
+ {t:'Tag 1',v:0,R:0,np:0,pave:0},
+ {t:'Tag 10',v:2,R:2.0,np:1,pave:0},
+ {t:'Tag 22',v:4,R:3.6,np:3,pave:0},
+ {t:'Tag 36',v:5,R:5.2,np:5,pave:1},
+ {t:'Tag 48',v:6,R:7.5,np:6,pave:2}];
+function welt(k,si){
+ const W=WORLD[k],S=STG[si],T=40; let b='';
+ const onMon=new Set();
+ for(let i=0;i<MON.length-1;i++){const [x0,y0]=MON[i],[x1,y1]=MON[i+1];for(let x=Math.min(x0,x1);x<=Math.max(x0,x1);x++)for(let y=Math.min(y0,y1);y<=Math.max(y0,y1);y++)onMon.add(x+','+y)}
+ const cx=(VIL[0]+.5)*T,cy=(VIL[1]+.5)*T;
+ const level=(x,y)=>{if(S.R<=0)return 0;const d=Math.hypot(x-VIL[0],(y-VIL[1])*1.15);return Math.max(0,Math.min(1,(S.R-d+(hs(x,y)-.5)*2.2)/1.4))};
+ for(let y=0;y<8;y++)for(let x=0;x<12;x++){
+  const mon=onMon.has(x+','+y),lv=mon?0:level(x,y),px=x*T,py=y*T;
+  b+=`<rect x="${px}" y="${py}" width="${T}" height="${T}" fill="${mon?'#6b5233':GRASS[(x+y)&1]}"/>`;
+  if(lv>0){ // Bodenwandel: weicher Fleck, wächst mit dem Wert
+   const r=T*(.35+.4*lv);
+   b+=`<ellipse cx="${px+T/2+(hs(x,y,1)-.5)*6}" cy="${py+T/2+(hs(x,y,2)-.5)*6}" rx="${r+4}" ry="${r+2}" fill="${mix(GRASS[0],W.base,.55)}" opacity="${.35+.4*lv}"/>`;
+   if(lv>.55) b+=`<rect x="${px}" y="${py}" width="${T}" height="${T}" fill="${W.base}" opacity="${Math.min(1,(lv-.45)*1.9)}"/>`;
+   const n=Math.round(lv*3);
+   for(let i=0;i<n;i++){const ux=px+4+hs(x,y,i+3)*(T-8),uy=py+4+hs(x,y,i+9)*(T-8),q=hs(x,y,i+15);
+    if(k==='f') b+= q<.4?`<path d="M${ux} ${uy}l5 -2l3 3l5 -1" stroke="${W.acc}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`:`<circle cx="${ux}" cy="${uy}" r="1.3" fill="${q<.7?W.acc2:W.acc}"/>`;
+    if(k==='e') b+= q<.5?`<ellipse cx="${ux}" cy="${uy}" rx="6" ry="2.4" fill="${W.hi}"/>`:q<.8?`<path d="M${ux-3} ${uy}h6M${ux} ${uy-3}v6" stroke="${W.acc}" stroke-width="1"/>`:`<ellipse cx="${ux}" cy="${uy}" rx="5" ry="2" fill="${W.acc}" opacity=".6"/>`;
+    if(k==='s') b+= q<.5?`<circle cx="${ux}" cy="${uy}" r="1.6" fill="${W.acc}" opacity=".8"/>`:`<path d="M${ux} ${uy}q4 -4 8 0q-3 2 -8 0" fill="${W.hi}"/>`;
+    if(k==='st') b+= q<.6?`<ellipse cx="${ux}" cy="${uy}" rx="${2+q*3}" ry="${1.4+q*1.6}" fill="${q<.3?W.hi:W.acc}"/>`:`<path d="M${ux} ${uy}l5 -1l-1 4Z" fill="${W.acc2}" opacity=".7"/>`;
+   }
+  }
+ }
+ // Wege Dorf → Türme
+ const R=W.road,E=W.roadE;
+ const pw=(x,y)=>[(x+.5)*T,(y+.5)*T];
+ for(let i=0;i<S.np;i++){const [tx,ty]=TOW[i],[ax,ay]=pw(VIL[0],VIL[1]),[bx,by]=pw(tx,ty),d=`M${ax} ${ay+10}H${bx}V${by}`;
+  if(S.pave===2) b+=`<path d="${d}" stroke="${E}" stroke-width="17" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${R}" stroke-width="13" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${E}" stroke-width="13" fill="none" stroke-linejoin="round" stroke-dasharray="1.5 7.5" opacity=".55"/>`;
+  else if(S.pave===1) b+=`<path d="${d}" stroke="${E}" stroke-width="13" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${R}" stroke-width="9" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
+  else b+=`<path d="${d}" stroke="${R}" stroke-width="7" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${i?'':'1 0'}" opacity=".95"/>`;
+ }
+ // Türme
+ for(let i=0;i<TOW.length;i++){const [tx,ty]=pw(...TOW[i]),a=W.acc;b+=`<ellipse cx="${tx}" cy="${ty+11}" rx="9" ry="3" fill="#0006"/><rect x="${tx-6}" y="${ty-8}" width="12" height="18" fill="#8a8f98"/><rect x="${tx}" y="${ty-8}" width="6" height="18" fill="#6b7078"/><path d="M${tx-9} ${ty-7}L${tx} ${ty-18}L${tx+9} ${ty-7}Z" fill="${k==='e'?'#79c6ee':k==='s'?'#7a4be0':k==='f'?'#e8590c':'#a4753e'}"/>`}
+ // Dorf (1 Feld)
+ const v=village(k,S.v).replace(/width="216" height="228"/,'width="46" height="48.5"').replace('<svg ','<svg x="'+(cx-23)+'" y="'+(cy-32)+'" ');
+ b+=v;
+ b+=`<text x="8" y="16" font-size="13" font-weight="700" fill="${k==='e'?'#2f5a78':'#fff'}" stroke="${k==='e'?'#fff':'#000'}" stroke-width=".4">${S.t}</text>`;
+ return svg('0 0 480 320',480,320,b);
+}
+h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder. Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfad zu 1 Turm, Tag 22 zu 3, Tag 36 gepflasterte Straße zu 5, Tag 48 Straße mit Rand zu allen.</p>`;
+for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<5;i++)h+=cell(`welt-${k}-${i}`,STG[i].t,welt(k,i));h+='</div>';}
 out.innerHTML=h;
 </script>
