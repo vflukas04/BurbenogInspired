@@ -157,6 +157,7 @@ const GRASS=['#2b4a2b','#2f5030'];
 const MON=[[0,1],[3,1],[3,6],[9,6],[9,2],[11,2]];            // Monsterweg (Kacheln)
 const TOW=[[10,3],[8,4],[7,5],[6,4],[4,3],[2,3]];             // Türme, nach Abstand zum Dorf
 const VIL=[11,7];
+const BIO=[['w',10,4],['w',10,5],['f',10,6],['s',7,3],['s',7,2],['w',5,4],['w',5,5],['w',4,5],['s',2,5],['f',1,4],['w',5,1],['w',6,1],['s',8,1]];
 const STG=[
  {t:'Tag 1',v:0,R:0,np:0,pave:0},
  {t:'Tag 10',v:2,R:2.0,np:4,pave:0},
@@ -185,13 +186,32 @@ function welt(k,si){
    }
   }
  }
- // Wege Dorf → Türme
- const R=W.road,E=W.roadE;
- const pw=(x,y)=>[(x+.5)*T,(y+.5)*T];
- for(let i=0;i<S.np;i++){const [tx,ty]=TOW[i],[ax,ay]=pw(VIL[0],VIL[1]),[bx,by]=pw(tx,ty),d=`M${ax} ${ay}V${by}H${bx}`;
-  if(S.pave===2) b+=`<path d="${d}" stroke="${E}" stroke-width="17" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${R}" stroke-width="13" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${E}" stroke-width="13" fill="none" stroke-linejoin="round" stroke-dasharray="1.5 7.5" opacity=".55"/>`;
+ // Biome (bleiben im umgewandelten Boden sichtbar)
+ for(const [t,x,y] of BIO){const px=x*T,py=y*T;
+  if(t==='w'){for(const [ox,oy,sc] of [[10,26,1],[26,18,1.1],[18,34,.9],[30,32,.8]]){const X=px+ox,Y=py+oy;b+=`<ellipse cx="${X}" cy="${Y+1}" rx="${6*sc}" ry="2" fill="#0005"/><path d="M${X} ${Y-15*sc}L${X-6*sc} ${Y-3*sc}H${X+6*sc}Z" fill="#2f7a3c"/><path d="M${X} ${Y-9*sc}L${X-7*sc} ${Y+1}H${X+7*sc}Z" fill="#3a8c46"/><path d="M${X} ${Y-15*sc}V${Y-3}" stroke="#25602e" stroke-width="0"/>`}}
+  if(t==='s')b+=`<ellipse cx="${px+20}" cy="${py+21}" rx="19" ry="16" fill="#2a6a96"/><ellipse cx="${px+19}" cy="${py+19}" rx="15" ry="12" fill="#3484b8"/><ellipse cx="${px+14}" cy="${py+14}" rx="6" ry="3" fill="#5fb0dc"/>`;
+  if(t==='f')b+=`<ellipse cx="${px+20}" cy="${py+33}" rx="15" ry="4" fill="#0005"/><path d="M${px+6} ${py+33}L${px+9} ${py+14}L${px+19} ${py+6}L${px+31} ${py+13}L${px+35} ${py+33}Z" fill="#8f8b84"/><path d="M${px+19} ${py+6}L${px+31} ${py+13}L${px+35} ${py+33}H${px+22}Z" fill="#6f6b65"/>`;
+ }
+ // Wege Dorf → Türme: um Biome herum, geschwungen, wachsen als Astwerk (Start = Dorf oder nächstes Wegstück)
+ const R=W.road,E=W.roadE,pw=(x,y)=>[(x+.5)*T,(y+.5)*T];
+ const blocked=new Set(BIO.map(([t,x,y])=>x+','+y)),towSet=new Set(TOW.map(t=>t.join(',')));
+ const have=[VIL.join(',')],segs=[];
+ for(let i=0;i<6;i++){const tgt=TOW[i].join(',');
+  const dist={},prev={},q=[];for(const k0 of have){dist[k0]=0;q.push(k0)}
+  while(q.length){q.sort((u,v)=>dist[u]-dist[v]);const c=q.shift();if(c===tgt)break;const [cx0,cy0]=c.split(',').map(Number);
+   for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){if(!dx&&!dy)continue;const nx=cx0+dx,ny=cy0+dy,nk=nx+','+ny;if(nx<0||ny<0||nx>11||ny>7)continue;
+    if(blocked.has(nk)||(towSet.has(nk)&&nk!==tgt))continue;if(dx&&dy&&(blocked.has((cx0+dx)+','+cy0)||blocked.has(cx0+','+(cy0+dy))))continue;
+    const w=(dx&&dy?1.45:1)*(onMon.has(nk)?4:1)+hs(nx,ny,5)*.5,nd=dist[c]+w;if(dist[nk]===undefined||nd<dist[nk]-1e-9){dist[nk]=nd;prev[nk]=c;if(!q.includes(nk))q.push(nk)}}}
+  const pts=[];let c=tgt;while(c&&!have.includes(c)){pts.unshift(c);c=prev[c]}pts.unshift(c);
+  for(const k0 of pts)if(!have.includes(k0))have.push(k0);segs.push(pts);}
+ const curve=(pts,i)=>{const P=pts.map((k0,j)=>{const [x,y]=k0.split(',').map(Number),[px,py]=pw(x,y);return j===0||j===pts.length-1?[px,py]:[px+(hs(x,y,7+i)-.5)*12,py+(hs(x,y,8+i)-.5)*12]});
+  if(P.length<2)return '';let d=`M${P[0][0]} ${P[0][1]}`;
+  for(let j=0;j<P.length-1;j++){const p0=P[Math.max(0,j-1)],p1=P[j],p2=P[j+1],p3=P[Math.min(P.length-1,j+2)];
+   d+=`C${p1[0]+(p2[0]-p0[0])/6} ${p1[1]+(p2[1]-p0[1])/6} ${p2[0]-(p3[0]-p1[0])/6} ${p2[1]-(p3[1]-p1[1])/6} ${p2[0]} ${p2[1]}`}return d};
+ for(let i=0;i<S.np;i++){const d=curve(segs[i],i);if(!d)continue;
+  if(S.pave===2) b+=`<path d="${d}" stroke="${E}" stroke-width="17" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${R}" stroke-width="13" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${E}" stroke-width="13" fill="none" stroke-dasharray="1.5 7.5" opacity=".55"/>`;
   else if(S.pave===1) b+=`<path d="${d}" stroke="${E}" stroke-width="13" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" stroke="${R}" stroke-width="9" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
-  else b+=`<path d="${d}" stroke="${R}" stroke-width="7" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${i?'':'1 0'}" opacity=".95"/>`;
+  else b+=`<path d="${d}" stroke="${R}" stroke-width="7" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity=".95"/>`;
  }
  // Türme
  for(let i=0;i<TOW.length;i++){const [tx,ty]=pw(...TOW[i]),a=W.acc;b+=`<ellipse cx="${tx}" cy="${ty+11}" rx="9" ry="3" fill="#0006"/><rect x="${tx-6}" y="${ty-8}" width="12" height="18" fill="#8a8f98"/><rect x="${tx}" y="${ty-8}" width="6" height="18" fill="#6b7078"/><path d="M${tx-9} ${ty-7}L${tx} ${ty-18}L${tx+9} ${ty-7}Z" fill="${k==='e'?'#79c6ee':k==='s'?'#7a4be0':k==='f'?'#e8590c':'#a4753e'}"/>`}
@@ -201,7 +221,7 @@ function welt(k,si){
  b+=`<text x="8" y="16" font-size="13" font-weight="700" fill="${k==='e'?'#2f5a78':'#fff'}" stroke="${k==='e'?'#fff':'#000'}" stroke-width=".4">${S.t}</text>`;
  return svg('0 0 480 320',480,320,b);
 }
-h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder, Dorf in der Ecke unten rechts (Wege kreuzen den Monsterweg, laufen darüber hinweg). Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfade zu 4 Türmen, Tag 22 zu 5, Tag 36 gepflasterte Straße zu allen 6, Tag 42 Straße mit Rand zu allen.</p>`;
+h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder, Dorf in der Ecke unten rechts (Wege biegen um Wald, Felsen und See und kreuzen den Monsterweg nur, wo es sein muss). Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfade zu 4 Türmen, Tag 22 zu 5, Tag 36 gepflasterte Straße zu allen 6, Tag 42 Straße mit Rand zu allen.</p>`;
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<5;i++)h+=cell(`welt-${k}-${i}`,STG[i].t,welt(k,i));h+='</div>';}
 out.innerHTML=h;
 </script>
