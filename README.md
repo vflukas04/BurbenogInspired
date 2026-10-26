@@ -14,11 +14,17 @@ Das Spiel steckt in `index.html`, die Grafiken liegen in `assets/`.
    rules_version = '2';
    service cloud.firestore {
      match /databases/{database}/documents {
-       match /games/{document=**} { allow read, write: if true; }
+       match /games/{game} {
+         allow read, write: if true;                       // Spielstand (Neues Spiel löscht ihn)
+         match /lanes/{lane} { allow read, write: if true; }
+         match /archiv/{eintrag} { allow read, create, update: if true; allow delete: if false; }   // Archiv nie löschen
+       }
      }
    }
    ```
-   Das heißt: Wer den Link kennt, kann mitspielen. Für ein Spiel unter Freunden reicht das.
+   Das heißt: Wer den Link kennt, kann mitspielen. Für ein Spiel unter Freunden reicht das. Alles außerhalb von `games/` ist gesperrt.
+
+   **Hinweis zum `apiKey` (26.10.):** GitHub meldet ihn als „Secret“, er ist aber bei Firebase-Web-Apps kein Geheimnis – er steht zwangsläufig in jeder ausgelieferten Seite und weist nur das Projekt aus. Geschützt wird über die Regeln oben (nicht im Testmodus lassen, der läuft ohnehin ab) und am besten zusätzlich über eine Einschränkung des Schlüssels in der Google Cloud Console (APIs & Dienste → Anmeldedaten → Browserschlüssel: Websites `https://vflukas04.github.io/*`, APIs: Cloud Firestore API, Identity Toolkit API). Die GitHub-Meldung danach als „False positive / öffentlich nötig“ schließen.
 4. **Projekteinstellungen (Zahnrad) → Deine Apps → Web (`</>`)**: App registrieren, Hosting nicht ankreuzen. Aus dem angezeigten `firebaseConfig` die Werte `apiKey`, `authDomain`, `projectId`, `appId` oben in `index.html` bei `FIREBASE_CONFIG` eintragen.
 
 ### 2. Link zum Teilen: GitHub Pages (kostenlos)
