@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 16:40 · F · 2026-10-26o – Kreativ-Modus: Element jederzeit wechseln
+Im Kreativ-Modus (`KREATIV`) zeigt `canSwitchEl` die Element-Knöpfe immer; bestehende Türme des Feldes wechseln mit (gleiche Nummer und Stufe, ohne Edelstein). Normales Spiel unverändert.
+
 ### 26.10. 16:25 · F · 2026-10-26n – Flammenwerfer: Feuerstrahl aus der Mündung bis zum Ziel
 Der Flammenwerfer dreht sich zum Ziel, der Feuerstrahl (`drawShot`, `p.el === 0 && p.idx === 2`) beginnt an der Mündung und reicht bis zum Monster. Nur Anzeige.
 
@@ -49,8 +52,3 @@ Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (R
 - Umsetzung in `tools/balance/basis/irrlicht.js` (dieselbe Änderung gilt im Spiegel über `basis/patch.js`); `amps` jetzt am Sim-Objekt, Wirkung in `hit` (`litP`). Leuchtfeuer (allBuff) analog für andere Elemente.
 - Geprüft: Syntax, `fxText` aller Türme, Testaufbau 2 Schemen S3 + Irrlicht S3: ×1,47 Schaden.
 - Neues Spiel + neu laden. F: Falls es dein Mikro-Balancing stört, gern zurückdrehen – bitte kurz in TODO melden.
-
-### 24.10. 23:15 · F · 2026-10-24d – Boss-Tage laufen wie Live
-- Zwischenboss-Tage (6, 12, 18, …): Ein durchgebrochener Boss erscheint sofort beim nächsten Spieler (`bossLive`), der 19-Uhr-Slot entfällt. Grund: Zwischenbosse geben kein Kopfgeld, in der Pause gibt es also nichts zu bauen.
-- Geprüft: Syntax und ein Lauf mit absichtlich schwachen Türmen (Boss geht über beide Maps, danach Tag 7). Nicht geprüft: Nachtaktive Bosse (Maus-/Fuchs-Boss) werden nicht mehr bei Dunkelheit gespielt, Schatten braucht dort keinen Irrlicht-Kreis mehr.
-- Neues Spiel + neu laden. Regeländerung, Absprache mit L läuft privat.

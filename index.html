@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26n";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26o";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1411,7 +1411,7 @@ function giveGem(from, to, e){
   const l = laneOf(from); L[from] = { ...l, gemGifts:[...(l.gemGifts || []), { to, el:e, d:G ? G.day : 0, s:G ? G.slot : 0, at:Date.now() }] };
   pop(`${GEMS[e].name} an Spieler ${to+1} geschenkt`); render(); saveLane(from);
 }
-const canSwitchEl = i => mayBuild(i) && G.day === 1 && G.slot === 0 && !laneOf(i).towers.length;
+const canSwitchEl = i => mayBuild(i) && (KREATIV || G.day === 1 && G.slot === 0 && !laneOf(i).towers.length);
 
 /* ---------- Darstellung ---------- */
 const num = v => v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1).replace('.0','') : v.toFixed(2).replace(/0$/,'');
@@ -1708,7 +1708,8 @@ function render(){
     : `<span class="muted">Ein Gerät für alle: Feld antippen, um für diesen Spieler zu bauen.</span>`;
   if (canSwitchEl(seat)) $('seats').innerHTML += `<span class="muted" style="margin-left:12px">Mein Element:</span>` +
     ELEMENTS.map((E,k) => `<button class="btn ${laneOf(seat).el===k?'on':''}" data-el="${k}" style="color:${E.color}">${E.emo} ${E.name}</button>`).join('');
-  $('seats').querySelectorAll('[data-el]').forEach(x => x.onclick = () => { const l = laneOf(seat); L[seat] = { ...l, el:+x.dataset.el }; selTower = null; saveLane(seat); render(); });
+  $('seats').querySelectorAll('[data-el]').forEach(x => x.onclick = () => { const l = laneOf(seat); const ne = +x.dataset.el; L[seat] = { ...l, el:ne, towers:KREATIV ? l.towers.map(t => ({ ...t, el:ne, gem:undefined, ab:undefined })) : l.towers }; selTower = null;   // Kreativ: bestehende Türme wechseln mit (gleiche Nummer und Stufe)
+     saveLane(seat); render(); });
   $('seats').querySelectorAll('[data-seat]').forEach(x => x.onclick = () => { seat = +x.dataset.seat; lsSet('ww2-seat', seat); selTower = null; render(); });
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.day-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag

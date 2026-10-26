@@ -1,6 +1,12 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 24.10. 23:15 · F · 2026-10-24d – Boss-Tage laufen wie Live
+- Zwischenboss-Tage (6, 12, 18, …): Ein durchgebrochener Boss erscheint sofort beim nächsten Spieler (`bossLive`), der 19-Uhr-Slot entfällt. Grund: Zwischenbosse geben kein Kopfgeld, in der Pause gibt es also nichts zu bauen.
+- Geprüft: Syntax und ein Lauf mit absichtlich schwachen Türmen (Boss geht über beide Maps, danach Tag 7). Nicht geprüft: Nachtaktive Bosse (Maus-/Fuchs-Boss) werden nicht mehr bei Dunkelheit gespielt, Schatten braucht dort keinen Irrlicht-Kreis mehr.
+- Neues Spiel + neu laden. Regeländerung, Absprache mit L läuft privat.
+
+
 ### 24.10. 19:35 · F · 2026-10-24c – Feuer-Rollen schärfer, Stein-Malus tiefer (Nachbau aller Paare)
 - Nachbau mit dem Bauverhalten aus dem Eis-Stein-Spiel (6 Paare, beide Rollen, 12 Wetterfolgen, Tag 1–12, mit Edelsteinen): Feuer neutral 11 / ineffektiv 10 Kills (Ziel 5–8 / 1–3), Stein ineffektiv 6,5.
 - Feuer `kraftBlock` 1,466/1,25 → 1,30/1,15. `weak` Feuer: Kellerasseln 0,7 → 0,55, Katzen 0,75 → 0,55, Mäuse 1,2 → 1,65, Ratten 1,5 → 1,75. Stein: Nacktschnecken 0,6 → 0,45, Ratten 0,55 → 0,4.
