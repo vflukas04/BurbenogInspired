@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26u";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26v";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1895,7 +1895,7 @@ function drawTower(c, tw, px, py, cs, aim, glow, noBody){
 }
 const TIMG = {};   // 26.10. (F): freistehende Turm-Bilder der Schräg-Ansicht, assets/turm/<element>-<nr>.png (88×102-Raster, Fußpunkt bei y=92), Entwürfe/Quelle: team/GRAFIK.md
 const TOWER_NAME = ['feuer', 'eis', 'schatten', 'stein'];
-const TOWER_H = { feuer:[22,42,26,34,52,69.5,52,42], eis:[26,34.5,66.4,62,39.9,58.2,48,60], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
+const TOWER_H = { feuer:[22,42,26,34,52,69.5,52,42], eis:[26,34.5,66.4,62,39.9,58.2,48,62], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
 function loadImg(k){   // bei Ladefehler bis zu 3 Wiederholungen (Handy-Netz)
   if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
   const im = new Image(); im.onerror = () => { TIMG[k] = null; loadImg.n[k] = (loadImg.n[k] || 0) + 1; if (loadImg.n[k] < 4) setTimeout(() => { delete TIMG[k]; loadImg(k); }, 1500*loadImg.n[k]); }; im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
@@ -2000,7 +2000,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
       c.drawImage(sp.parts[i], -44*u - px, -92*u - py, 88*u, 102*u); c.restore();
     }
     c.restore();
-    if (nm === 'feuer2' || nm === 'eis7') { const j = JETS[tw.el + ':' + (tw.x + .5) + ',' + (tw.y + .5)], mxo = nm === 'eis7' ? 24 : 17, myo = nm === 'eis7' ? 43 : 12;   // Flamme / Eisfeuer: von der Mündung zum Ziel, solange der Turm schießt
+    if (nm === 'feuer2' || nm === 'eis7') { const j = JETS[tw.el + ':' + (tw.x + .5) + ',' + (tw.y + .5)], mxo = nm === 'eis7' ? 27 : 17, myo = nm === 'eis7' ? 42 : 12;   // Flamme / Eisfeuer: von der Mündung zum Ziel, solange der Turm schießt
       if (j && j.t <= now + .05 && now - j.t < .28) drawFlame(c, fx + (Math.cos(aim) > 0 ? 1 : -1)*mxo*u, fy - myo*u, j.tx*cs, gyOf(j.ty, cs) - cs*.25, cs, now, Math.min(1, (.28 - (now - j.t)) / .12), nm === 'eis7'); }
     if (g > 0 && glow !== undefined) {                                              // Mündungseffekt in Elementfarbe (am Turm, in Zielrichtung)
       const mx = fx + dx*cs*.32, my = fy - hh*.55 + dy*cs*.2, col = ELEMENTS[tw.el].color;

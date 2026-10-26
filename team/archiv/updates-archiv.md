@@ -1,6 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 26.10. 12:30 · F · 2026-10-26g – Richtige Bäume, Bauleiste für alle Elemente
+Wald: Tannen mit Stamm, Sumpf: Trauerweiden (`drawTree`, beide Ansichten) statt runder Kronen, die wie Büsche aussahen. Turm-Bilder werden beim Start vorgeladen, damit die Bauleiste bei jedem Element (nicht nur Feuer) die neuen Symbole zeigt.
+
+
 ### 26.10. 12:00 · F · 2026-10-26f – Bauleiste mit den neuen Turm-Bildern
 In der Schräg-Ansicht zeigen Bauleiste und Dialoge (`towerIcon`) das zugeschnittene Turm-Bild statt des alten Kenney-Symbols (Symbolgröße 30 px). Das Felsen-Zeichen auf Türmen ist jetzt ein Felsbrocken statt eines Bergs. Draufsicht behält die alten Symbole.
 

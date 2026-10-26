@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 18:45 · F · 2026-10-26v – Eisdrache gefährlicher
+Dunklere Farben, wütender Blick mit leuchtend blauem Auge, Reißzähne, lange Hörner, Krallen, Stacheln, eckige Flügel mit Knochenfingern. Mündungspunkt für den Eisatem angepasst. Nur Anzeige.
+
 ### 26.10. 18:30 · F · 2026-10-26u – Eis: Speerwurf, dicker Eisspeer, Schneewolke, Eisdrache
 Schneekönig wirft seinen Eisspeer (dreht sich zum Ziel, Speer-Teilbild neu, Geschoss mit Frostschweif). Eisspeer-Geschoss deutlich dicker. Blizzard: Schneewolke über dem Ziel (`drawSnowCloud`), aus der es auf die Monster schneit. Ewiges Eis heißt jetzt **Eisdrache** (nur Anzeige, `spiegel.html` behält den alten Namen): neu gezeichneter Drache auf Eisscholle, Kopf und Flügel als Teilbilder, Eisatem wie beim Flammenwerfer (`drawFlame(..., ice)`, `JETS['1:…']`). `TOWER_H` eis[3] = 62, eis[7] = 60. Nur Anzeige.
 
@@ -45,6 +48,3 @@ Alle 32 Türme sind in Grundbild + Teilbilder zerlegt (`assets/turm/<element>-<n
 
 ### 26.10. 13:00 · F · 2026-10-26h – Angriffe der Türme passend zu den Bildern (Schräg-Ansicht)
 Geschosse je Turm eigene Optik (`shot25`: Funke, Feuerball, Flammenstrahl, Eissplitter, Schneeflocke, Speer, Seelen-Orb, Runenstein, Felsbrocken, Onyx-Splitter u. a.), Türme reagieren beim Schuss (`drawTower25`): Rückstoß, Speerstoß beim Granitwächter, Aufstampfen beim Bergkönig, Kippen beim Katapult, Flamme beim Flammenwerfer, Lavafunken beim Lavaturm, Irrlicht schwebt. Nur Anzeige, nur Schräg-Ansicht.
-
-### 26.10. 12:30 · F · 2026-10-26g – Richtige Bäume, Bauleiste für alle Elemente
-Wald: Tannen mit Stamm, Sumpf: Trauerweiden (`drawTree`, beide Ansichten) statt runder Kronen, die wie Büsche aussahen. Turm-Bilder werden beim Start vorgeladen, damit die Bauleiste bei jedem Element (nicht nur Feuer) die neuen Symbole zeigt.
