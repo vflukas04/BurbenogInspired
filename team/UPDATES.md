@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 17:00 · F · 2026-10-26p – Flammenwerfer: ein Feld groß, zusammenhängende Flamme
+Flammenwerfer neu gezeichnet (Tank + Düse, passt auf ein Feld; `tools/turm/tuerme.html`, Bilder neu erzeugt, `TOWER_H` feuer[2] = 26). Die Flamme (`drawFlame`, gezeichnet im Turm anhand `JETS`) ist ein welliges Band in drei Schichten von der Mündung bis zum Monster, mit Funken und Glut am Ziel. Nur Anzeige.
+
 ### 26.10. 16:40 · F · 2026-10-26o – Kreativ-Modus: Element jederzeit wechseln
 Im Kreativ-Modus (`KREATIV`) zeigt `canSwitchEl` die Element-Knöpfe immer; bestehende Türme des Feldes wechseln mit (gleiche Nummer und Stufe, ohne Edelstein). Normales Spiel unverändert.
 
@@ -46,9 +49,3 @@ In der Schräg-Ansicht stehen die 8 Schatten-Türme ohne Sockel als Bilder (`ass
 ### 26.10. 10:00 · F · 2026-10-26b – Schräg-Ansicht (2,5D) für die Maps
 Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (Reichweiten, Explosionen, Licht werden Ellipsen), Türme als Blöcke mit Schatten, Bäume/Berge/Monster stehen aufrecht und werden nach Tiefe sortiert. Nur Anzeige (`view25`, `CUR`, `gyOf`, `drawTower25`), Simulation unberührt; Standard bleibt Draufsicht. Tippen: aufragende Türme zählen zum Feld davor.
 
-
-### 26.10. 08:40 · L · 2026-10-26a – Irrlicht wirkt auf die Monster im Lichtkreis
-- So war es gedacht (L): Schatten-Türme machen gegen Monster, die gerade in einem Lichtkreis sind, mehr Schaden (×buff) und ignorieren dort Rüstung (pierce) – egal, wo der Turm steht. Vorher galt die Verstärkung nur für Schatten-Türme, die im Kreis standen. Nachtsicht unverändert.
-- Umsetzung in `tools/balance/basis/irrlicht.js` (dieselbe Änderung gilt im Spiegel über `basis/patch.js`); `amps` jetzt am Sim-Objekt, Wirkung in `hit` (`litP`). Leuchtfeuer (allBuff) analog für andere Elemente.
-- Geprüft: Syntax, `fxText` aller Türme, Testaufbau 2 Schemen S3 + Irrlicht S3: ×1,47 Schaden.
-- Neues Spiel + neu laden. F: Falls es dein Mikro-Balancing stört, gern zurückdrehen – bitte kurz in TODO melden.

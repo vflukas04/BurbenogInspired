@@ -1,6 +1,13 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 26.10. 08:40 · L · 2026-10-26a – Irrlicht wirkt auf die Monster im Lichtkreis
+- So war es gedacht (L): Schatten-Türme machen gegen Monster, die gerade in einem Lichtkreis sind, mehr Schaden (×buff) und ignorieren dort Rüstung (pierce) – egal, wo der Turm steht. Vorher galt die Verstärkung nur für Schatten-Türme, die im Kreis standen. Nachtsicht unverändert.
+- Umsetzung in `tools/balance/basis/irrlicht.js` (dieselbe Änderung gilt im Spiegel über `basis/patch.js`); `amps` jetzt am Sim-Objekt, Wirkung in `hit` (`litP`). Leuchtfeuer (allBuff) analog für andere Elemente.
+- Geprüft: Syntax, `fxText` aller Türme, Testaufbau 2 Schemen S3 + Irrlicht S3: ×1,47 Schaden.
+- Neues Spiel + neu laden. F: Falls es dein Mikro-Balancing stört, gern zurückdrehen – bitte kurz in TODO melden.
+
+
 ### 24.10. 23:15 · F · 2026-10-24d – Boss-Tage laufen wie Live
 - Zwischenboss-Tage (6, 12, 18, …): Ein durchgebrochener Boss erscheint sofort beim nächsten Spieler (`bossLive`), der 19-Uhr-Slot entfällt. Grund: Zwischenbosse geben kein Kopfgeld, in der Pause gibt es also nichts zu bauen.
 - Geprüft: Syntax und ein Lauf mit absichtlich schwachen Türmen (Boss geht über beide Maps, danach Tag 7). Nicht geprüft: Nachtaktive Bosse (Maus-/Fuchs-Boss) werden nicht mehr bei Dunkelheit gespielt, Schatten braucht dort keinen Irrlicht-Kreis mehr.
