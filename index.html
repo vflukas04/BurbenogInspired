@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26q";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26r";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1919,7 +1919,8 @@ const PARTS = (() => {
     feuer2: [[7, -12, (t, g, w, dx, dy) => ({ x: -dx*2*g, y: -dy*1.5*g })], [17, -12, (t, g) => ({ sx: 1 + .5*g + .06*S(t*14), sy: 1 + .3*g + .08*S(t*12) })]],
     feuer3: [[0, -20, (t, g, w, dx, dy) => ({ r: Math.max(-.9, Math.min(.9, Math.atan2(dy, Math.abs(dx)))) + .03*S(t*3) - .05*w })],      // Bogen richtet sich auf das Ziel
              [0, -20, (t, g, w, dx, dy) => { const p = 1 - g; return { r: Math.max(-.9, Math.min(.9, Math.atan2(dy, Math.abs(dx)))), x: p < .2 ? 60*(p/.2) : 0, a: p < .2 ? 1 : p < .55 ? 0 : Math.min(1, (p - .55)/.25) }; }]],   // Pfeil fliegt vorn über den Bogen ab, neuer wird aufgelegt
-    feuer4: [[-16.6, -6, (t, g, w, dx, dy) => ({ x: dx*8*w, y: dy*6*w, r: .04*S(t*2) })], [0, -34, (t, g) => ({ sy: 1 + .15*S(t*10) + .4*g, r: .1*S(t*8) })]],
+    feuer4: [[-16.6, -26, (t, g, w, dx, dy) => { const p = 1 - g, ph = Math.atan2(dy, -Math.abs(dx)), rA = ph + PI/2 > PI ? ph + PI/2 - 2*PI : ph + PI/2;   // Dreizack: dreht sich zum Ziel, wird geworfen, neuer erscheint
+        return g <= 0 ? { r: .04*S(t*2) } : p < .1 ? { r: rA*(p/.1) } : { r: 0, a: p < .6 ? 0 : Math.min(1, (p - .6)/.25) }; }], [0, -34, (t, g) => ({ sy: 1 + .15*S(t*10) + .4*g, r: .1*S(t*8) })]],
     feuer5: [[0, -46, (t, g) => ({ sy: 1 + .07*S(t*6) + .25*g, sx: 1 + .04*S(t*5) })], [0, -60, (t, g, w) => ({ y: -3*S(t*4) - 8*w, ...sc(1 + .2*g) })]],
     feuer6: [[0, -30, (t, g, w) => ({ r: t*.5 + 1.6*w, ...sc(1 + .12*g) })]],
     feuer7: [[0, -4, (t, g) => ({ sy: 1 + .08*S(t*7) + .3*g, sx: 1 + .05*S(t*9 + 1) + .1*g })]],
@@ -1985,7 +1986,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
     else if (nm === 'schatten0' || nm === 'schatten5') { sx = sy = 1; ox = oy = 0; }   // Schemen/Phantom: bewegt sich als Teilbild
     else if (nm === 'schatten1') { ox = 0; oy = Math.sin(now*3 + tw.x) * cs*.05 - cs*.05; sx = sy = 1; }   // Irrlicht schwebt
     else if (nm === 'feuer2' || nm === 'feuer3') { ox = -dx*cs*.07*g; }
-    const flip = (nm === 'feuer1' && Math.cos(aim) > 0) || (nm === 'feuer2' && Math.cos(aim) < 0) || (nm === 'feuer3' && Math.cos(aim) < 0);   // Glumanda blickt nach links, Flammenwerfer-Mündung nach rechts   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
+    const flip = (nm === 'feuer1' && Math.cos(aim) > 0) || (nm === 'feuer2' && Math.cos(aim) < 0) || (nm === 'feuer3' && Math.cos(aim) < 0) || (nm === 'feuer4' && Math.cos(aim) > 0);   // Glumanda blickt nach links, Flammenwerfer-Mündung nach rechts   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
     c.save(); c.translate(fx + ox, fy + oy); c.rotate(rotA); c.scale(flip ? -sx : sx, sy);
     c.drawImage(sp, -44*u, -92*u, 88*u, 102*u);
     const gp = Math.max(0, 1 - (now - (FIRE_T[key] === undefined ? -9 : FIRE_T[key])) / .5), wp = gp > 0 ? Math.sin(Math.PI * (1 - gp)) : 0, pd = PARTS[nm];   // bewegliche Teile
@@ -2068,7 +2069,14 @@ function shot25(c, p, x, y, a, cs, time){
         c.fillStyle = '#ff8a3d'; c.beginPath(); c.ellipse(q*2.2, 0, q*3.2*fl, q*1.8, 0, 0, 7); c.fill(); c.fillStyle = '#ffe08a'; c.beginPath(); c.ellipse(q*2.6, 0, q*1.8, q*1, 0, 0, 7); c.fill();
         c.fillStyle = '#ffb347'; for (let j = 0; j < 3; j++) { c.beginPath(); c.arc(-q*(2 + j*3.5) + Math.sin(w*3 + j*2)*q, Math.cos(w*2 + j*3)*q*2, q*.45, 0, 7); c.fill(); } });
       return true; }
-    if (i === 4) { tail(q*6, '#c8301a88', q*2); ball(q*2.4, '#c8301a', '#ffb347', '#ff3a1e'); c.fillStyle = '#3d1410'; for (const sg of [-1, 1]) { c.beginPath(); c.moveTo(x + sg*q*1.4, y - q*2); c.lineTo(x + sg*q*2.8, y - q*4.4); c.lineTo(x + sg*q*.4, y - q*2.6); c.fill(); } return true; }
+    if (i === 4) { rot(() => { c.scale(1.35, 1.35); const fl = 1 + .18*Math.sin(w*2.1), f2 = Math.sin(w*5);   // brennender Dreizack
+        for (let j = 3; j >= 1; j--) { c.fillStyle = j === 1 ? '#ffb347aa' : '#ff6a1e66'; c.beginPath(); c.ellipse(-q*(4 + j*3.4), Math.sin(w + j)*q*.4, q*(3.6 - j*.6)*fl, q*(1.7 - j*.25), 0, 0, 7); c.fill(); }
+        c.fillStyle = '#4a3022'; c.fillRect(-q*6, -q*.4, q*9, q*.8);
+        c.strokeStyle = '#c9c9cf'; c.lineWidth = q*.7; c.lineCap = 'round'; c.beginPath(); c.moveTo(q*2.6, -q*1.9); c.lineTo(q*2.6, q*1.9); c.moveTo(q*2.6, -q*1.9); c.lineTo(q*5.4, -q*1.9); c.moveTo(q*2.6, q*1.9); c.lineTo(q*5.4, q*1.9); c.moveTo(q*2.6, 0); c.lineTo(q*6.2, 0); c.stroke();
+        const gr = c.createRadialGradient(q*4, 0, 0, q*4, 0, q*5.5); gr.addColorStop(0, '#ffb347aa'); gr.addColorStop(1, '#ff6a1e00'); c.fillStyle = gr; c.beginPath(); c.arc(q*4, 0, q*5.5, 0, 7); c.fill();
+        for (const yy of [-1.9, 0, 1.9]) { c.fillStyle = '#ff8a3d'; c.beginPath(); c.ellipse(q*(4.2 + (yy ? 0 : .6)), q*yy, q*2.4*fl, q*.95, 0, 0, 7); c.fill(); c.fillStyle = '#ffe08a'; c.beginPath(); c.ellipse(q*(4.6 + (yy ? 0 : .6)), q*yy, q*1.2, q*.45, 0, 0, 7); c.fill(); }
+        c.fillStyle = '#ffb347'; for (let j = 0; j < 3; j++) { c.beginPath(); c.arc(-q*(2 + j*3.5) + Math.sin(w*3 + j*2)*q, Math.cos(w*2 + j*3)*q*2.2 + f2*q*.2, q*.45, 0, 7); c.fill(); } });
+      return true; }
     if (i === 5) { ball(q*3, '#8a2a10', '#ff6a1e', '#ff5a1e'); c.fillStyle = '#ff8a3d'; c.beginPath(); c.arc(x + q*1.2, y + q*2.6 + Math.sin(w)*q*.4, q*.9, 0, 7); c.fill(); return true; }
     if (i === 6) { ball(q*2.8, '#ffe08a', '#ffffff', '#ffd27a'); return true; }
     ball(q*3.2, '#3d1410', '#d83a14', '#c8301a'); c.strokeStyle = '#ff6a1e'; c.lineWidth = q*.8; for (let j = 0; j < 6; j++) { const t = j*Math.PI/3 + w*.3; c.beginPath(); c.moveTo(x + Math.cos(t)*q*3.2, y + Math.sin(t)*q*3.2); c.lineTo(x + Math.cos(t)*q*5.4, y + Math.sin(t)*q*5.4); c.stroke(); } return true;
@@ -2116,6 +2124,7 @@ function drawShot(c, p, cs, time){
   y -= h + (CUR.k < 1 && !p.lob ? cs*.25 : 0);
   if (CUR.k < 1 && p.el === 0 && p.idx === 2) JETS[p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Flammenwerfer: Ziel merken, die Flamme zeichnet der Turm
   if (CUR.k < 1 && p.el === 0 && p.idx === 3) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.feuer[3], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 3 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 20 * uu * f; }   // Brandpfeil: startet vorn am Bogen
+  if (CUR.k < 1 && p.el === 0 && p.idx === 4) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.feuer[4], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 4 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 17 * uu * f; }   // Feuerteufel: Dreizack startet in der Hand
   if (CUR.k < 1 && p.el === 0 && p.idx === 1) { const f = Math.max(0, 1 - (1 - left / tot) * 5), uu = cs * .609 / 26; x += (Math.cos(dir) > 0 ? 1 : -1) * 27 * uu * f; }   // Glumanda: Geschoss startet im Maul
   const def = p.def, sz = k * (p.lob ? .42 : .3);
   if (CUR.k < 1 && shot25(c, p, x, y, Math.atan2(dy * CUR.k, dx), cs, time)) return;   // 2,5D: Geschoss passt zum Turm-Bild
