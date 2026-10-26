@@ -18,7 +18,10 @@ const V = {
   nova: 0.56, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
 };
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
-const FELS = process.env.STEIN_LUFT === '2' ? 1 : 0, SCHL = process.env.STEIN_LUFT === '2' ? 0 : 1;   // STEIN_LUFT=2: Schleuder statt Felsbrocken trifft Fliegende
+// Stein und Fliegende (L 26.10. abends): Turm 4 (Felsbrocken) ohne Luftangriff; Turm 2 (Schleuder) „schwach gegen Fliegende“ (Boden 100 %, Fliegende SCHWACH)
+// STEIN_LUFT=2468: Felsbrocken trifft Fliegende zusätzlich (Variante)
+const SCHWACH = +(process.env.SCHWACH || 0.5), FELS = process.env.STEIN_LUFT === '2468' ? 0 : 1;
+const SCHL_DEF = { r:3.5, n:2, f:0.5, luft:[1, SCHWACH] };
 // ---- Türme: r Reichweite, q Rate, n Geschosse, f Fläche, eff/dur Effekt, nova, noFly, air ----
 const T = {
   0: [ ['Funke', { r:3, eff:0.08, dur:3 }], ['Glutbecken', { r:2, q:0.8, n:2, eff:0.1, dur:4, noFly:1 }], ['Flammenwerfer', { r:1.5, q:3, eff:0.06, dur:2 }],
@@ -30,7 +33,7 @@ const T = {
   2: [ ['Schemen', { r:3, eff:0.05, dur:4 }], ['Irrlicht', { r:3, eff:0.05, dur:4 }], ['Nachtauge', { r:5, eff:0.05, dur:5, luft:LUFT }],
        ['Fluchstein', { r:3, q:0.5, n:3, eff:0.08, dur:8, noFly:1 }], ['Seelenfresser', { r:3, q:1.5, eff:0.04, dur:4 }], ['Phantom', { r:4, n:4, eff:0.05, dur:6 }],
        ['Leerenturm', { r:4, f:1.5, eff:0.06, dur:6 }], ['Ewige Nacht', { r:5, q:0.5, eff:0.1, dur:'Tag' }] ],
-  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', { r:3.5, n:2, f:0.5, noFly:SCHL }], ['Katapult', { r:5, f:1 }],
+  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', SCHL_DEF], ['Katapult', { r:5, f:1 }],
        ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:FELS }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
 const STEIN_K = +process.env.STEIN_K || 0.8;   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
@@ -46,7 +49,7 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   if (m.luft) w *= Math.exp((1 - LUFT_ANTEIL) * Math.log(m.luft[0]) + LUFT_ANTEIL * Math.log(m.luft[1]));
   const zuschlag = m.air ? 1.5 : m.noFly ? 1.1 : 1;
   const opt = { effect:m.stun ? 'stun' : m.eff ? EFF[e] : 'none', fly:!m.noFly };
-  if (m.air) opt.air = true; if (m.luft) { opt.groundHalf = true; opt.flyMul = m.luft[1]; } if (m.slowFly) opt.slowFly = true; if (m.nova) opt.nova = true; if (m.stun) opt.chance = m.stun[0];
+  if (m.air) opt.air = true; if (m.luft) { opt.groundMul = m.luft[0]; opt.flyMul = m.luft[1]; } if (m.slowFly) opt.slowFly = true; if (m.nova) opt.nova = true; if (m.stun) opt.chance = m.stun[0];
   const effWert = m.stun ? m.stun[1] : m.eff || 0, dur = m.stun ? 1 : m.dur || 1;
   sp[`ELEMENTS.${e}.towers.${k}`] = [name, 'Schaden', (m.nova ? m.r : m.r) / G0, q, n, 1, effWert, dur, (m.nova ? m.r : f) / G0, opt];
   const korr = e === 3 ? STEIN_K : 1;   // Stein: Fläche + Rüstungsschaden + Betäuben wirken im gemischten Aufbau stärker als einzeln gemessen (wie Bremsen)
