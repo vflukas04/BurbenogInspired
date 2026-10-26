@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiegel2";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-18e-Sc74a6c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-18e-S8d9e1d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -723,15 +723,11 @@ function makeSim(inp){
   const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw, inp.lane || 0), W, res) }));
   // Lichtkreise der Irrlichter: Im Dunkeln treffen Schatten-Türme nur Monster, die gerade darin sind
   const lights = towers.filter(t => t.def.light).map(t => ({ x:t.x + .5, y:t.y + .5, r:t.def.light }));
-  // Verstärker (Irrlicht): Schatten-Türme in seinem Lichtkreis machen mehr Schaden, zu jeder Tageszeit. Mehrere Kreise: der stärkste zählt.
-  const amps = towers.filter(t => t.def.buff);
-  // Leuchtfeuer (Amethyst): verstärkt auch Türme anderer Elemente (ohne Rüstung zu ignorieren)
-  for (const t of towers) { if (t.def.buff) continue;
-    const near = amps.filter(a => (a.el === t.el || a.def.allBuff) && Math.hypot(a.x - t.x, a.y - t.y) <= a.def.light + 1e-6);
-    if (near.length) { const m = Math.max(...near.map(a => a.el === t.el ? a.def.buff : a.def.allBuff)), p = Math.max(t.def.pierce || 0, ...near.map(a => a.el === t.el ? a.def.pierce : 0));
-      t.def = { ...t.def, dpsNow:t.def.dpsNow * m, dmg:t.def.dmg * m, amp:m, pierce:p }; } }
+  // Verstärker (Irrlicht, 26.10. L): wirkt auf die MONSTER im Lichtkreis – Schatten-Türme machen gegen sie mehr Schaden und ignorieren Rüstung,
+  // egal wo der Turm steht (zu jeder Tageszeit). Mehrere Kreise: der stärkste zählt. Leuchtfeuer (allBuff): auch andere Elemente, ohne Rüstung zu ignorieren.
+  const amps = towers.filter(t => t.def.buff).map(t => ({ x:t.x + .5, y:t.y + .5, r:t.def.light, el:t.el, buff:t.def.buff, pierce:t.def.pierce || 0, allBuff:t.def.allBuff || 0 }));
   return { towers, dark:!!inp.dark, players:inp.players || 2, res, map:MAPS[inp.lane || 0], W, wIdx, rand:rng(inp.seed || 1),
-    queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, monsters:[], shots:[], fx:[], leaked:[], earned:0, bSum:0, kills:0, gems:[0,0,0,0], pools:[], later:[], spawnT:0, t:0 };
+    queue:(inp.incoming || []).map(s => JSON.parse(JSON.stringify(s))), lights, amps, monsters:[], shots:[], fx:[], leaked:[], earned:0, bSum:0, kills:0, gems:[0,0,0,0], pools:[], later:[], spawnT:0, t:0 };
 }
 const simBusy = s => s.queue.length || s.monsters.length || s.shots.length || s.later.length;
 function wdef(def, W, res){          // Turmwerte mit Forschung und unter dem aktuellen Wetter
@@ -824,6 +820,10 @@ function hit(s, m, def, dmg){
   if (def.flyMul && flying(m)) dmg *= def.flyMul;             // Steilschuss: Fliegende 60 %
   const bossy = isBossy(m), bh = bossy ? 0.5 : 1;                // Edelstein-Fähigkeiten wirken bei Bossen nur halb (15.10.)
   if (def.hunger) dmg *= 1 + Math.min(def.hungerMax || 0.45, def.hunger * (def.feast || 0)) * bh;
+  let litP = 0;   // Irrlicht (26.10.): Monster im Lichtkreis nimmt mehr Schaden, Schatten ignoriert dort Rüstung
+  if (s.amps && s.amps.length) { let mul = 1;
+    for (const a of s.amps) if (Math.hypot(m.x - a.x, m.y - a.y) <= a.r + 1e-6) { if (a.el === def.el) { mul = Math.max(mul, a.buff); litP = Math.max(litP, a.pierce); } else if (a.allBuff) mul = Math.max(mul, a.allBuff); }
+    dmg *= mul; }
   // 18.10. (F): zweite Uniques
   if (def.burnBonus && on(m, 'burn')) dmg *= 1 + def.burnBonus * bh;                                   // Stichflamme
   if (def.chillBonus && on(m, 'slow')) dmg *= 1 + def.chillBonus * bh;                                 // Frostbiss
@@ -836,7 +836,7 @@ function hit(s, m, def, dmg){
   // Fluch senkt die Prozent (für alle Türme), Irrlicht lässt Schatten einen Teil ignorieren. Rüstungsschaden trifft nur die Punkte.
   let pct = m.ap > 0 ? Math.min(0.95, armorPctOf(m) + (m.aura || 0)) : 0;   // Kontrabass in der Nähe: +Rüstung
   const ad = dmg * f * (ELEMENTS[def.el].armorDmg || 0) * (def.armorMul ? 1 + (def.armorMul - 1) * bh : 1);
-  if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - (def.pierce || 0) * (def.gemAb === 5 && def.el === 2 ? bh : 1); m.ap -= ad; }
+  if (pct > 0) { if (on(m, 'curse')) pct = Math.max(0, pct - m.fx.curse.v); pct *= 1 - Math.max((def.pierce || 0) * (def.gemAb === 5 && def.el === 2 ? bh : 1), litP); m.ap -= ad; }
   m.hp -= dmg * f * vuln * (1 - pct);
   if (on(m, 'brittle')) m.hp -= ad * bh;                           // Haut vereist: Rüstungsschaden trifft auch die Leben
   const t = def.dur === DAY ? FOREVER : def.dur;
@@ -1435,7 +1435,7 @@ const canSwitchEl = i => mayBuild(i) && G.day === 1 && G.slot === 0 && !laneOf(i
 const num = v => v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1).replace('.0','') : v.toFixed(2).replace(/0$/,'');
 const durText = d => d.dur === DAY ? 'ganzer Tag' : `${num(d.dur)} s`;
 function fxText(d){
-  if (d.buff) return `schießt nicht · Lichtkreis ${num(d.light)}: Schatten-Türme darin ×${String(+d.buff.toFixed(2)).replace('.', ',')} Schaden und ignorieren ${Math.round(d.pierce*100)} % Rüstung, nachts treffen sie dort auch nachtaktive Monster`;
+  if (d.buff) return `schießt nicht · Lichtkreis ${num(d.light)}: Monster darin nehmen von Schatten-Türmen ×${String(+d.buff.toFixed(2)).replace('.', ',')} Schaden, ${Math.round(d.pierce*100)} % ihrer Rüstung zählen nicht, nachts sind dort auch nachtaktive Monster zu treffen`;
   const p = [];
   if (d.shots > 1) p.push(`${d.shots} Geschosse`);
   if (d.eff > 0) {

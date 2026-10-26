@@ -14,7 +14,7 @@ const GRAFIK_DATEI = path.join(__dirname, 'basis', `index-${basis}-grafik.html`)
 const NAMEN_NEU = GRAFIK ? { 'Sommer-Schneebälle':'Eiswürfel', 'Heisenbergs':'The one who knocks' } : {};
 let html = require('./basis/patch')(fs.readFileSync(GRAFIK ? GRAFIK_DATEI : datei(), 'utf8'));   // Code-Änderungen des Spiegels (basis/patch.js)
 const werte = Object.fromEntries(Object.entries(sp).filter(([k]) => !k.startsWith('_')).map(([k, v]) => [k.split('.').map(t => NAMEN_NEU[t] || t).join('.'), v]));
-const kenn = crypto.createHash('md5').update(JSON.stringify(werte)).digest('hex').slice(0, 6);
+const kenn = crypto.createHash('md5').update(JSON.stringify(werte) + fs.readFileSync(path.join(__dirname, 'basis', 'patch.js'), 'utf8') + fs.readFileSync(path.join(__dirname, 'basis', 'irrlicht.js'), 'utf8')).digest('hex').slice(0, 6);   // 26.10.: auch Code-Änderungen des Spiegels ändern die Version
 
 function ersetze(alt, neu){ if (!html.includes(alt)) throw new Error('nicht gefunden: ' + alt.slice(0, 60)); html = html.replace(alt, neu); }
 // 1) eigenes Spiel, eigene Version
