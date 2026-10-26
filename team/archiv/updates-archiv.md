@@ -1,5 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 22.10. 23:50 · F · 2026-10-22b – Schatten Tag 3 und 5 an echtes Spiel angepasst
+- Auswertung Testspiel 22a (Schatten + Eis): Die Simulation bildet das Spiel mit den echten Türmen exakt nach. Schatten machte an Tag 3 (neutral) 20 statt 5–8 und an Tag 5 (Malus) 8 statt 1–3; der Bot unterschätzt hier die Platzierung der Spieler.
+- Nacktschnecken Schatten-Faktor 1,2 → 0,9, Mäuse Schatten 0,7 → 0,55 (Nachbau: Tag 3 etwa 10/7/8, Tag 5 etwa 3 Kills über Wetter 0/1/2). Tag 4 unverändert (20/20 ist die Obergrenze).
+- Schatten-Spieler hatte Irrlicht und Nachtaktivität vergessen: Tag 5/6 um 19 Uhr 15 Durchbrüche, nicht zu werten. Auch ohne das wäre das Spiel in Block 2 verloren (Tag 7: 1–2 Kills) – mit L besprechen. Neues Spiel + neu laden.
+
 ### 22.10. 00:15 · L · 2026-10-22a – Eigene Bilder für zwei Varianten
 - Zwei Monster-Varianten haben eigene Bilder statt eines gemeinsamen (eine Rückansicht fehlt noch, dort Seitenansicht). Neu laden reicht.
 

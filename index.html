@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26g";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1833,6 +1833,7 @@ function monsterImg(key, view){
 function loadSprites(){
   if (typeof Image === 'undefined') return;
   preloadMonsterImgs();
+  if (view25) for (let e = 0; e < 4; e++) for (let k = 0; k < 8; k++) towerImg(e, k);   // alle Turm-Bilder vorladen (Bauleiste zeigt alle Elemente)
   for (const [k,n] of Object.entries(SPRITES)) { const im = new Image();
     im.onload = () => { SPR[k] = im; if (G) { drawAll(); if (!replay) renderPalette(); } };
     im.src = `assets/kenney/towerDefense_tile${String(n).padStart(3,'0')}.png`; }
@@ -1902,6 +1903,22 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
   c.fillStyle = gr; c.fillRect(sx, sy, sw, hg + fh*.18);
   c.fillStyle = '#ffffff22'; c.fillRect(sx, sy, cs*.05, hg + fh*.18);
   c.save(); c.translate(gx, gyy - hg); c.scale(1, k); drawTower(c, tw, 0, 0, cs, aim, glow); c.restore();
+}
+function drawTree(g, cx, fy, cs, h, swamp){   // 26.10. (F): richtige Bäume mit Stamm statt runder Kronen (Wald: Tanne, Sumpf: Trauerweide); Fußpunkt (cx, fy)
+  const k = .92 + h * .06;
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(cx + cs*.04, fy, cs*.3*k, cs*.08, 0, 0, Math.PI*2); g.fill();
+  if (!swamp) {
+    g.fillStyle = '#5a3d27'; g.fillRect(cx - cs*.05*k, fy - cs*.2*k, cs*.1*k, cs*.2*k);
+    const tiers = [[.62, .3, .02], [.5, .3, .22], [.36, .3, .42]], cols = ['#2c6236', '#37773f', '#448a4c'];
+    tiers.forEach(([w, ht, off], i) => { const by = fy - (.14 + off + ht) * cs * k + ht * cs * k, ty = by - ht * cs * k * 1.25;
+      g.fillStyle = cols[i]; g.beginPath(); g.moveTo(cx - w*cs*k/2, by); g.lineTo(cx, ty); g.lineTo(cx + w*cs*k/2, by); g.closePath(); g.fill();
+      g.fillStyle = '#00000030'; g.beginPath(); g.moveTo(cx, ty); g.lineTo(cx + w*cs*k/2, by); g.lineTo(cx, by); g.closePath(); g.fill(); });
+  } else {
+    g.strokeStyle = '#6b6154'; g.lineWidth = Math.max(2, cs*.09*k); g.lineCap = 'round'; g.beginPath(); g.moveTo(cx, fy); g.quadraticCurveTo(cx - cs*.1, fy - cs*.25*k, cx + cs*.03, fy - cs*.45*k); g.stroke();
+    g.fillStyle = '#3f6f63'; g.beginPath(); g.ellipse(cx, fy - cs*.55*k, cs*.34*k, cs*.22*k, 0, 0, Math.PI*2); g.fill();
+    g.fillStyle = '#4f8576'; g.beginPath(); g.ellipse(cx - cs*.08*k, fy - cs*.6*k, cs*.2*k, cs*.12*k, 0, 0, Math.PI*2); g.fill();
+    g.strokeStyle = '#3f6f63'; g.lineWidth = Math.max(1.5, cs*.05); for (const dx of [-.26, -.13, .13, .26]) { g.beginPath(); g.moveTo(cx + dx*cs*k, fy - cs*.5*k); g.lineTo(cx + dx*cs*k*1.1, fy - cs*(.22 + (dx > 0 ? .02 : .06))*k); g.stroke(); }
+  }
 }
 function drawMountain(g, x, y, cs){          // 26.10. (F): große Felsbrocken statt Berg (Name bleibt wegen der Aufrufe)
   const boulder = (bx, by, w, ht, sh) => {   // Fußpunkt (bx,by), Breite w, Höhe ht
@@ -1986,9 +2003,9 @@ function draw(i, cv){
   }
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
-    if (t === 1 && !view25) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
+    if (t === 1 && !view25) drawTree(g, (x+.5)*cs, (y+.92)*cs, cs, h, false);
     if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
-      if (!view25) spr(g, tinted('tree', '#4a6b60'), (x+.5)*cs, (y+.42)*cs, cs*.82, h*.4, .95); }   // 26.10. (F): Sumpf mit Bäumen statt Büschen (2,5D: aufrecht, siehe unten)
+      if (!view25) drawTree(g, (x+.5)*cs, (y+.9)*cs, cs, h, true); }   // 26.10. (F): Sumpf mit Bäumen statt Büschen (2,5D: aufrecht, siehe unten)
     if (t === 3 && !view25) drawMountain(g, x, y, cs);
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
@@ -2098,9 +2115,8 @@ function draw(i, cv){
     const objs = [];
     for (const tw of towers) objs.push({ y:tw.y + 1, f:() => drawTw(tw) });
     for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
-      if (t === 1) objs.push({ y:y + .9, f:() => { c.fillStyle = '#0004'; c.beginPath(); c.ellipse((x+.5)*cs, gy(y+.85), cs*.36, cs*.12, 0, 0, Math.PI*2); c.fill();
-        if (!spr(c, tinted('tree', '#5d7a52'), (x+.5)*cs, gy(y+.85) - cs*.5, cs*1.15, h*.05)) { c.font = `${cs*.8}px serif`; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText('🌲', (x+.5)*cs, gy(y+.85)); } } });
-      if (t === 2) objs.push({ y:y + .8, f:() => { c.fillStyle = '#0004'; c.beginPath(); c.ellipse((x+.5)*cs, gy(y+.8), cs*.3, cs*.1, 0, 0, Math.PI*2); c.fill(); spr(c, tinted('tree', '#4a6b60'), (x+.5)*cs, gy(y+.8) - cs*.42, cs*1.0, h*.05); } });
+      if (t === 1) objs.push({ y:y + .9, f:() => drawTree(c, (x+.5)*cs, gy(y+.9), cs, h, false) });
+      if (t === 2) objs.push({ y:y + .8, f:() => drawTree(c, (x+.5)*cs, gy(y+.9), cs, h, true) });
       if (t === 3) objs.push({ y:y + .88, f:() => { c.save(); c.translate(0, gy(y+1) - (y+1)*cs); drawMountain(c, x, y, cs); c.restore(); } }); }
     if (s) for (const m of s.monsters) objs.push({ y:m.y + (flying(m) ? 1.5 : .05), f:() => drawMon(m) });
     objs.sort((a, b) => a.y - b.y); for (const o of objs) o.f();

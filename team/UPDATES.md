@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 12:30 · F · 2026-10-26g – Richtige Bäume, Bauleiste für alle Elemente
+Wald: Tannen mit Stamm, Sumpf: Trauerweiden (`drawTree`, beide Ansichten) statt runder Kronen, die wie Büsche aussahen. Turm-Bilder werden beim Start vorgeladen, damit die Bauleiste bei jedem Element (nicht nur Feuer) die neuen Symbole zeigt.
+
 ### 26.10. 12:00 · F · 2026-10-26f – Bauleiste mit den neuen Turm-Bildern
 In der Schräg-Ansicht zeigen Bauleiste und Dialoge (`towerIcon`) das zugeschnittene Turm-Bild statt des alten Kenney-Symbols (Symbolgröße 30 px). Das Felsen-Zeichen auf Türmen ist jetzt ein Felsbrocken statt eines Bergs. Draufsicht behält die alten Symbole.
 
@@ -62,9 +65,4 @@ Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (R
 ### 23.10. 10:50 · F · 2026-10-23a – Monster gehen im Schritt (nur Anzeige)
 - Das Wippen hängt jetzt an der zurückgelegten Strecke statt an der Uhr: Schnecken trippeln langsam, Hunde schnell, ein stehendes Monster steht still. Dazu Aufsetzen (kleiner Hüpfer) und leichtes Kippen. Keine Regel- und keine Balance-Änderung.
 - Echte Beinbewegung bräuchte Laufbilder wie bei Betty (`MONSTER_ANIM`). Mit L abgestimmt: erst mit wenigen Monstern mit sichtbaren Beinen (Hunde, Ratten, Katzen, Füchse) testen, 4 Bilder, nur Seitenansicht. Neu laden reicht.
-
-### 22.10. 23:50 · F · 2026-10-22b – Schatten Tag 3 und 5 an echtes Spiel angepasst
-- Auswertung Testspiel 22a (Schatten + Eis): Die Simulation bildet das Spiel mit den echten Türmen exakt nach. Schatten machte an Tag 3 (neutral) 20 statt 5–8 und an Tag 5 (Malus) 8 statt 1–3; der Bot unterschätzt hier die Platzierung der Spieler.
-- Nacktschnecken Schatten-Faktor 1,2 → 0,9, Mäuse Schatten 0,7 → 0,55 (Nachbau: Tag 3 etwa 10/7/8, Tag 5 etwa 3 Kills über Wetter 0/1/2). Tag 4 unverändert (20/20 ist die Obergrenze).
-- Schatten-Spieler hatte Irrlicht und Nachtaktivität vergessen: Tag 5/6 um 19 Uhr 15 Durchbrüche, nicht zu werten. Auch ohne das wäre das Spiel in Block 2 verloren (Tag 7: 1–2 Kills) – mit L besprechen. Neues Spiel + neu laden.
 
