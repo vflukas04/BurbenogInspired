@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 26.10. 14:30 · F · 2026-10-26k – Kreativ-Modus, Fix der Turm-Symbole
+Neues Spiel → Spielart „Kreativ“ öffnet `?kreativ=1`: nur dieses Gerät, kein Firebase, eigene Speicher-Schlüssel (`ww2k-…`), echtes Spiel bleibt unberührt. Alle Türme und Stufen gratis (`KREATIV` in `buildCost`/`upgradeCost`/`goldOf`), vier Felder (Feuer, Eis, Schatten, Stein), Welle über Auswahl Tag 1–24 (`KREATIV_MAXTAG`, Tag 25+ bleibt Überraschung), Auslösen wiederholt dieselbe Welle, kein Gold. Fix: 26j hatte durch einen Kommentar mitten in `loadImg` alle Turm-Bilder abgeschaltet; Symbole in der Leiste zeigten nur das Grundbild ohne Teile.
+
 ### 26.10. 13:55 · F · 2026-10-26j – Turm-Bilder laden robuster (iPhone)
 Fehlende Symbole auf dem iPhone gemeldet. Bilder, die nicht laden, werden bis zu 3-mal neu versucht; ein endgültig fehlendes Teilbild blockiert den Turm nicht mehr. Ursache am Handy noch nicht bestätigt (am Laptop nicht nachstellbar).
 
