@@ -223,5 +223,16 @@ function welt(k,si){
 }
 h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder, Dorf in der Ecke unten rechts (Wege biegen um Wald, Felsen und See und kreuzen den Monsterweg nur, wo es sein muss). Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfade zu 4 Türmen, Tag 22 zu 5, Tag 36 gepflasterte Straße zu allen 6, Tag 42 Straße mit Rand zu allen.</p>`;
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<5;i++)h+=cell(`welt-${k}-${i}`,STG[i].t,welt(k,i));h+='</div>';}
+
+// ---------- Eisburg: Kontrast zum Schnee ----------
+{
+ const orig={...P.e}, VAR=[['A · jetzt',{},false],['B · mit Sockel (Eisscholle)',{},true],['C · Sockel + sattere Wände',{stone:'#6aa6cc',stoneD:'#3a6f96',wall:'#5f9cc4',wallD:'#386f97',roofL:'#f2fbff',roof:'#cfe9f6',acc:'#2f6389'},true]];
+ const socle=`<ellipse cx="0" cy="5" rx="38" ry="11.5" fill="#173a57"/><ellipse cx="0" cy="3.2" rx="37" ry="10" fill="#2f6389"/><ellipse cx="-2" cy="1.6" rx="31" ry="7" fill="#4d8cb5"/><path d="M-30 5l6 -2M20 7l9 -3M-8 9l5 -1M26 2l5 1" stroke="#bfe3f3" stroke-width=".9" fill="none"/>`;
+ let h2=`<h2>5 · Eisburg stärker vom Schnee abheben (Vorschlag)</h2><p class="n">Oben groß (Stufe 4, 5, 6), unten im Spiel-Maßstab (1 Feld) auf Schnee. A = jetzt, B = dunkle Eisscholle als Sockel, C = Sockel und sattere Wände.</p><div id="kontrast" style="display:inline-block">`;
+ for(let big=1;big>=0;big--){ for(const [t,pal,sk] of VAR){ Object.assign(P.e,orig,pal); h2+=`<div class="row" style="background:#dcebf4;border-radius:8px;padding:6px;margin-bottom:6px;align-items:flex-end"><div class="lab" style="color:#2f5a78;width:150px">${t}</div>`;
+   for(const st of [4,5,6]){ let v=village('e',st).replace('viewBox="-36 -66 72 76"','viewBox="-44 -66 88 80"'); if(sk) v=v.replace(/(<svg[^>]*>)/,'$1'+socle); if(!big) v=v.replace(/width="216" height="228"/,'width="52" height="55"'); h2+=`<div style="padding:0 18px">${v}</div>`; }
+   h2+='</div>'; } Object.assign(P.e,orig); }
+ h2+='</div>'; h+=h2;
+}
 out.innerHTML=h;
 </script>
