@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 21.10. 10:40 · L · 2026-10-21c – Monster-Bilder nachgeschärft
+- Jetzt haben alle Monster Bilder. Fliegende in der Seitenansicht waagerecht gedreht, zu große Vorderansichten einzelner Tiere verkleinert (kein Größensprung mehr in Kurven). Neu laden reicht.
+
 ### 21.10. 10:00 · L · 2026-10-21b – Monster größer, Trefferreaktion
 - Monster-Bilder ca. 30 % größer, Lebensbalken über dem Bild. Alle Bilder werden beim Start geladen (vorher kurz Emojis, wenn eine Ansicht zum ersten Mal kam, z. B. in Kurven).
 - Treffer: Monster blitzt kurz weiß auf und wird leicht zurückgestoßen (nur Anzeige). Ein Monster ab Runde 21 hat eine kleine optische Überraschung.

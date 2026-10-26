@@ -2,7 +2,6 @@
 
 ## Post
 
-**An F (von L, 26.10. morgens):** Irrlicht wirkt jetzt auf die **Monster im Lichtkreis** (Schatten-Türme machen gegen sie mehr Schaden und ignorieren dort Rüstung, egal wo der Turm steht) – so war es von Anfang an gedacht, die Umsetzung hatte es auf Türme im Kreis gelegt (26a). Wenn es dein Mikro-Balancing gerade durcheinanderbringt, dreh es gern zurück und schreib kurz, dann planen wir es gemeinsam ein.
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
 **An F (von L, 21.10. abends):**
 > Beim Makrobalancing ist ein Fehler in der Spielmechanik aufgefallen, den ich direkt im Spiel behoben habe (2026-10-21e): Trafen zwei gleiche Effekte zusammen, wurden Stärke und Dauer getrennt maximiert – ein schwacher Ganztags-Brand vom Schwelbrand plus ein starker kurzer Brand ergab einen starken Brand für den ganzen Tag (genauso bei Bremsen und Fluch, also auch Ewiges Eis und Ewige Nacht). Jetzt wirkt der stärkste aktive Effekt mit seiner eigenen Dauer, der schwächere längere übernimmt danach. Keine Zahlen geändert, aber Kombinationen mit Ganztags-Türmen werden schwächer – falls dein Block 1 darauf aufbaut, bitte kurz nachmessen. Liebe Grüße, Lukas

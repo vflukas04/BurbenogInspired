@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1459,13 +1459,19 @@ function giftDialog(){
 }
 // Menü ⋯: seltene Knöpfe (Neues Spiel mit Rückfrage, Wetter-Animation)
 let wxAnim = lsGet('ww2-wxanim') !== false;
+// 2,5D-Ansicht (26.10., F): Boden um VK gestaucht, Türme/Monster/Bäume stehen aufrecht und werden nach Tiefe sortiert. Nur Anzeige.
+let view25 = lsGet('ww2-view25') === true;
+const VK = 0.68, CUR = { k:1, top:0 };
+const gyOf = (y, cs) => CUR.top + y * cs * CUR.k;
 function menuDialog(){
   openDlg(`<h2>Menü</h2>
+    <button class="btn" id="mView">Ansicht: ${view25 ? 'Schräg (2,5D)' : 'Draufsicht'}</button>
     <button class="btn" id="mWx">Wetter-Animation: ${wxAnim ? 'an' : 'aus'}</button>
     <button class="btn" id="mNew">Neues Spiel …</button>
     ${G && !G.over ? (G.paused ? '<button class="btn" id="mPause">Weiter spielen</button>' : '<button class="btn" id="mPause">Spiel pausieren …</button>') : ''}
     ${G && !G.over ? '<button class="btn" id="mGive">Spiel aufgeben …</button>' : ''}
     <div class="acts"><button class="btn primary" id="mClose">Schließen</button></div>`);
+  $('mView').onclick = () => { view25 = !view25; lsSet('ww2-view25', view25); for (let q = 0; q < 4; q++) { const cv = $('cv'+q); if (cv) cv.width = 0; } menuDialog(); drawAll(); };
   $('mWx').onclick = () => { wxAnim = !wxAnim; lsSet('ww2-wxanim', wxAnim); menuDialog(); drawAll(); };
   $('mNew').onclick = () => { openDlg(`<h2>Neues Spiel?</h2><p style="margin:0">Das laufende Spiel wird für alle beendet.</p>
     <div class="acts"><button class="btn" id="nNo">Abbrechen</button><button class="btn primary" id="nYes">Neues Spiel</button></div>`);
@@ -1624,8 +1630,10 @@ function buildLanes(){
     </section>`).join('');
   for (let i = 0; i < n; i++) {
     const cv = $('cv'+i);
-    cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), cs = r.width / COLS;
-      clickCell(i, Math.floor((e.clientX - r.left) / cs), Math.floor((e.clientY - r.top) / cs)); });
+    cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), cs = r.width / COLS, ly = e.clientY - r.top;
+      const cx = Math.floor((e.clientX - r.left) / cs); let cy = Math.floor((ly - CUR.top) / (cs * CUR.k));
+      if (CUR.k < 1 && laneOf(i).towers.some(t => t.x === cx && t.y === cy + 1) && ly >= gyOf(cy + 1, cs) - cs * .26) cy++;   // 2,5D: der aufragende Turm gehört zum Feld davor
+      clickCell(i, cx, cy); });
     $('el'+i).addEventListener('click', () => { if (!canSwitchEl(i)) return; const l = laneOf(i);
       L[i] = { ...l, el:(l.el + 1) % ELEMENTS.length }; selTower = null; saveLane(i); render(); });
   }
@@ -1869,17 +1877,36 @@ function drawTower(c, tw, px, py, cs, aim, glow){
   for (let k = 1; k < (tw.lvl || 1); k++) { c.fillStyle = '#000a'; c.fillRect(px + cs - 4 - k*cs*.1, py + cs - cs*.12, cs*.08, cs*.08);
     c.fillStyle = cssVar('--accent'); c.fillRect(px + cs - 3.5 - k*cs*.1, py + cs - cs*.12 + .5, cs*.08 - 1, cs*.08 - 1); }
 }
+function drawTower25(c, tw, x, y, cs, aim, glow){   // Turm als Block: Schatten, Seitenwand, Oberseite (die flache Turm-Zeichnung, gestaucht)
+  const k = CUR.k, hg = cs*.26, gx = x*cs, gyy = gyOf(y, cs), E = ELEMENTS[tw.el], fh = cs*k;
+  c.fillStyle = '#0005'; c.beginPath(); c.ellipse(gx + cs*.56, gyy + fh*.9, cs*.5, fh*.24, 0, 0, Math.PI*2); c.fill();
+  const sx = gx + cs*.06, sw = cs*.88, sy = gyy - hg + fh*.82;
+  c.fillStyle = E.color; c.fillRect(sx, sy, sw, hg + fh*.18 - fh*.0);
+  const gr = c.createLinearGradient(0, sy, 0, sy + hg + fh*.18); gr.addColorStop(0, '#00000033'); gr.addColorStop(1, '#000000aa');
+  c.fillStyle = gr; c.fillRect(sx, sy, sw, hg + fh*.18);
+  c.fillStyle = '#ffffff22'; c.fillRect(sx, sy, cs*.05, hg + fh*.18);
+  c.save(); c.translate(gx, gyy - hg); c.scale(1, k); drawTower(c, tw, 0, 0, cs, aim, glow); c.restore();
+}
+function drawMountain(g, x, y, cs){
+  const bx = (x+.5)*cs, by = (y+.88)*cs, w = cs*.46, ht = cs*.78;   // kleiner Berg: Schatten, helle und dunkle Flanke, Schneekappe
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(bx, by, w*1.05, cs*.1, 0, 0, Math.PI*2); g.fill();
+  const px = bx - w*.08, py = by - ht;
+  g.fillStyle = '#6d6a66'; g.beginPath(); g.moveTo(bx - w, by); g.lineTo(px, py); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
+  g.fillStyle = '#4a4845'; g.beginPath(); g.moveTo(px, py); g.lineTo(bx + w, by); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
+  g.fillStyle = '#4f4d49'; g.beginPath(); g.moveTo(bx - w*.1, by); g.lineTo(bx - w*.55, by - ht*.38); g.lineTo(bx - w*.2, by - ht*.5); g.closePath(); g.fill();
+  g.fillStyle = '#f1f3f5'; g.beginPath(); g.moveTo(px, py); g.lineTo(px - w*.3, py + ht*.28); g.lineTo(px - w*.08, py + ht*.2); g.lineTo(px + w*.1, py + ht*.3); g.lineTo(px + w*.34, py + ht*.27); g.closePath(); g.fill();
+}
 function drawShot(c, p, cs, time){
   const dx = p.tx - p.x, dy = p.ty - p.y, dir = Math.atan2(dy, dx);
   const tot = Math.hypot(p.tx - p.x0, p.ty - p.y0) || 1, left = Math.hypot(dx, dy);
   const k = cs * GRID * .7;                 // Geschosse in alter Feldgröße
-  let x = p.x*cs, y = p.y*cs, h = 0;
+  let x = p.x*cs, y = gyOf(p.y, cs), h = 0;
   if (p.lob) {                              // Wurf: Bogen nach oben, Schatten am Boden
     const tAll = Math.hypot(p.x - p.x0, p.y - p.y0) + left, prog = tAll ? 1 - left / tAll : 1;
     h = Math.sin(Math.PI * prog) * Math.min(1.2 * GRID, tAll * .35) * cs;
     c.fillStyle = '#0006'; c.beginPath(); c.ellipse(x, y, k*.12, k*.06, 0, 0, Math.PI*2); c.fill();
   }
-  y -= h;
+  y -= h + (CUR.k < 1 && !p.lob ? cs*.25 : 0);
   const def = p.def, sz = k * (p.lob ? .42 : .3);
   if (p.el === 0 && def.air) {               // Brandpfeil: Pfeil mit Glut
     c.save(); c.translate(x, y); c.rotate(dir); c.strokeStyle = '#f3d9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(-k*.22, 0); c.lineTo(k*.12, 0); c.stroke();
@@ -1894,7 +1921,7 @@ function drawShot(c, p, cs, time){
 }
 const dot = (c, x, y, r, col) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, Math.PI*2); c.fill(); };
 function drawFx(c, f, cs, time){
-  const k = 1 - f.t / f.t0, x = f.x*cs, y = f.y*cs, col = ELEMENTS[f.el].color;
+  const k = 1 - f.t / f.t0, x = f.x*cs, y = f.kind === 'spark' ? gyOf(f.y, cs) - (CUR.k < 1 ? cs*.25 : 0) : f.y*cs, col = ELEMENTS[f.el].color;
   if (f.kind === 'boom') {                  // Flächentreffer: Mitte hell, nach außen schwächer (wie der Schaden)
     const R = f.r * cs, g = c.createRadialGradient(x, y, 0, x, y, R);
     g.addColorStop(0, col + 'aa'); g.addColorStop(.6, col + '44'); g.addColorStop(1, col + '00');
@@ -1923,17 +1950,18 @@ function drawAll(){ if (G) for (let i = 0; i < NP(); i++) draw(i, $('cv'+i)); }
 function draw(i, cv){
   if (!cv) return;
   const dpr = window.devicePixelRatio || 1, W = cv.clientWidth; if (!W) return;
-  const cs = W / COLS, H = cs * ROWS;
-  if (cv.width !== Math.round(W*dpr)) { cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); cv.style.height = H + 'px'; }
+  const cs = W / COLS, k = view25 ? VK : 1, top = view25 ? cs*.45 : 0, H = top + cs * ROWS * k + (view25 ? cs*.3 : 0), hg = view25 ? cs*.26 : 0;
+  CUR.k = k; CUR.top = top; const gy = y => gyOf(y, cs);
+  if (cv.width !== Math.round(W*dpr) || cv.height !== Math.round(H*dpr)) { cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); cv.style.height = H + 'px'; }
   const c = cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); const map = MAPS[i], v = cssVar;
   const s = replay && replay.sims[i], time = s ? s.t : 0;
   c.fillStyle = v('--bg'); c.fillRect(0, 0, W, H);
   const quake = s && s.fx.find(f => f.kind === 'quake');   // Erdbeben: das ganze Feld wackelt
   if (quake) { const a = (quake.t / quake.t0) * cs * .06; c.translate(Math.sin(time * 90) * a, Math.cos(time * 77) * a); }
   // Hintergrund (Boden, Weg, Gelände) nur einmal zeichnen und zwischenspeichern – spart auf dem Handy viel Zeit
-  const bgKey = [W, dpr, Object.keys(SPR).length].join('-');
+  const bgKey = [W, dpr, Object.keys(SPR).length, view25].join('-');
   if (!BG[i] || BG[i].key !== bgKey) {
-    const bc = document.createElement('canvas'); bc.width = cv.width; bc.height = cv.height; const g = bc.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
+    const bc = document.createElement('canvas'); bc.width = Math.round(W*dpr); bc.height = Math.round(cs*ROWS*dpr); const g = bc.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     const road = map.cells.has(x+','+y), T = TERRAIN[map.terrain[y][x]];
     g.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : T.col[(x+y)%2];
@@ -1941,16 +1969,10 @@ function draw(i, cv){
   }
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
-    if (t === 1) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
+    if (t === 1 && !view25) { if (!spr(g, tinted('tree', '#5d7a52'), (x+.5)*cs, (y+.5)*cs, cs*.95, h*.4, .9)) { g.font = `${cs*.55}px serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.globalAlpha = .55; g.fillText('🌲', (x+.5)*cs, (y+.5)*cs); g.globalAlpha = 1; } }
     if (t === 2) { g.fillStyle = '#31504c'; g.beginPath(); g.ellipse((x+.45)*cs, (y+.55)*cs, cs*.32, cs*.18, h*.3, 0, Math.PI*2); g.fill();
       if (!spr(g, tinted('bush', '#6f8a66'), (x+.72)*cs, (y+.3)*cs, cs*.38, h, .7)) { g.strokeStyle = '#4a6260'; g.lineWidth = 1; for (const dy of [.35,.65]) { g.beginPath(); g.moveTo((x+.2)*cs, (y+dy)*cs); g.lineTo((x+.8)*cs, (y+dy)*cs); g.stroke(); } } }
-    if (t === 3) { const bx = (x+.5)*cs, by = (y+.88)*cs, w = cs*.46, ht = cs*.78;   // kleiner Berg: Schatten, helle und dunkle Flanke, Schneekappe
-      g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(bx, by, w*1.05, cs*.1, 0, 0, Math.PI*2); g.fill();
-      const px = bx - w*.08, py = by - ht;
-      g.fillStyle = '#6d6a66'; g.beginPath(); g.moveTo(bx - w, by); g.lineTo(px, py); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
-      g.fillStyle = '#4a4845'; g.beginPath(); g.moveTo(px, py); g.lineTo(bx + w, by); g.lineTo(bx + w*.15, by); g.closePath(); g.fill();
-      g.fillStyle = '#4f4d49'; g.beginPath(); g.moveTo(bx - w*.1, by); g.lineTo(bx - w*.55, by - ht*.38); g.lineTo(bx - w*.2, by - ht*.5); g.closePath(); g.fill();
-      g.fillStyle = '#f1f3f5'; g.beginPath(); g.moveTo(px, py); g.lineTo(px - w*.3, py + ht*.28); g.lineTo(px - w*.08, py + ht*.2); g.lineTo(px + w*.1, py + ht*.3); g.lineTo(px + w*.34, py + ht*.27); g.closePath(); g.fill(); }
+    if (t === 3 && !view25) drawMountain(g, x, y, cs);
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
   const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
@@ -1959,8 +1981,10 @@ function draw(i, cv){
   g.beginPath(); g.arc(ox*cs, oy*cs, cs*.55, 0, Math.PI*2); g.fill(); g.stroke();
     BG[i] = { key:bgKey, cv:bc };
   }
-  c.drawImage(BG[i].cv, 0, 0, W, H);
+  if (view25) { c.fillStyle = '#2e251d'; c.fillRect(0, top + cs*ROWS*k, W, cs*.3); c.fillStyle = '#4b3b2d'; c.fillRect(0, top + cs*ROWS*k, W, cs*.07); }   // Kante der Platte
+  c.drawImage(BG[i].cv, 0, top, W, cs * ROWS * k);
   const towers = laneOf(i).towers;
+  c.save(); c.translate(0, top); c.scale(1, k);   // ab hier Bodenebene (bei 2,5D gestaucht: Kreise werden Ellipsen)
   if (selCell && selCell.i === i) {
     const tw = towers.find(t => t.x === selCell.x && t.y === selCell.y);
     c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.strokeRect(selCell.x*cs+1, selCell.y*cs+1, cs-2, cs-2);
@@ -1968,7 +1992,7 @@ function draw(i, cv){
       c.beginPath(); c.arc((tw.x+.5)*cs, (tw.y+.5)*cs, r*cs, 0, Math.PI*2); c.setLineDash([4,4]); c.stroke(); c.setLineDash([]); }
   }
   if (pending && pending.i === i) { const d = tdef({ el:laneOf(i).el, idx:pending.k, lvl:1, x:pending.x, y:pending.y }, i);
-    c.globalAlpha = .55; drawTower(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x*cs, pending.y*cs, cs, -Math.PI/2, 0); c.globalAlpha = 1;
+    if (!view25) { c.globalAlpha = .55; drawTower(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x*cs, pending.y*cs, cs, -Math.PI/2, 0); c.globalAlpha = 1; }
     c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.setLineDash([4,4]); c.beginPath(); c.arc((pending.x+.5)*cs, (pending.y+.5)*cs, (d.buff ? d.light : d.range)*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
     c.fillStyle = v('--accent') + '18'; c.fill(); }
   if (s) for (const P of s.pools) {          // Lavapfütze (rot glühend) / Geröll (graue Steine)
@@ -1977,26 +2001,28 @@ function draw(i, cv){
     else { g.addColorStop(0, `rgba(200,190,160,${.45*a})`); g.addColorStop(1, 'rgba(120,110,90,0)'); }
     c.fillStyle = g; c.beginPath(); c.arc(P.x*cs, P.y*cs, P.r*cs, 0, Math.PI*2); c.fill(); }
   if (s) for (const f of s.fx) if (f.kind === 'boom' || f.kind === 'quake' || f.kind === 'nova' || f.kind === 'lance') drawFx(c, f, cs, time);
-  for (const tw of towers) {
+  c.restore();
+  if (view25 && pending && pending.i === i) { c.globalAlpha = .6; drawTower25(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x, pending.y, cs, -Math.PI/2, 0); c.globalAlpha = 1; }
+  const drawTw = tw => {
     const st = s && s.towers.find(o => o.x === tw.x && o.y === tw.y), fl = s && s.fx.find(f => f.kind === 'flash' && f.tw === st);
     const dark = s && s.dark && st && st.def.dayOnly && !s.lights.length && s.monsters.some(m => m.def.night);
     if (dark) c.globalAlpha = .45;
-    drawTower(c, tw, tw.x*cs, tw.y*cs, cs, st ? st.aim : (tw.x + tw.y) * .7, fl ? fl.t / fl.t0 : 0);
+    const aim = st ? st.aim : (tw.x + tw.y) * .7, gl = fl ? fl.t / fl.t0 : 0;
+    if (view25) drawTower25(c, tw, tw.x, tw.y, cs, aim, gl); else drawTower(c, tw, tw.x*cs, tw.y*cs, cs, aim, gl);
     c.globalAlpha = 1;
-    if (st && st.love > 0) { c.font = `${cs*.45}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('💕', (tw.x+.5)*cs, (tw.y+.15)*cs + Math.sin(time*6)*cs*.05); }
+    if (st && st.love > 0) { c.font = `${cs*.45}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('💕', (tw.x+.5)*cs, gy(tw.y+.15) - hg + Math.sin(time*6)*cs*.05); }
     if (map.terrain[tw.y][tw.x] === 3) {   // Turm steht auf Felsen: kleines Berg-Symbol oben rechts
-      const ox = (tw.x+.8)*cs, oy = (tw.y+.2)*cs, r = cs*.17;
+      const ox = (tw.x+.8)*cs, oy = gy(tw.y+.2) - hg, r = cs*.17;
       c.fillStyle = 'rgba(20,20,24,.85)'; c.beginPath(); c.arc(ox, oy, r, 0, Math.PI*2); c.fill();
       c.strokeStyle = '#ffd35a'; c.lineWidth = Math.max(1, cs*.03); c.stroke();
       c.fillStyle = '#d8dce0'; c.beginPath(); c.moveTo(ox - r*.7, oy + r*.5); c.lineTo(ox - r*.1, oy - r*.6); c.lineTo(ox + r*.25, oy); c.lineTo(ox + r*.45, oy - r*.25); c.lineTo(ox + r*.8, oy + r*.5); c.closePath(); c.fill();
     }
-  }
-  if (!s) return;
-  for (const m of s.monsters) {
+  };
+  const drawMon = m => {
     const x = m.x, y = m.y, r = m.def.size*cs*GRID*.8, on = k => m.fx[k] && m.fx[k].t > 0;
     const bob = flying(m) ? Math.sin(time*8 + m.id) * cs*.04 - cs*.12 : 0;
-    c.fillStyle = '#0005'; c.beginPath(); c.ellipse(x*cs, y*cs + r*.7, r*.8, r*.3, 0, 0, Math.PI*2); c.fill();
-    const X = x*cs, Y = y*cs + bob, ghost = m.inv ? .18 + .1 * Math.sin(time*25 + m.id) : m.inForest ? .35 : 1;   // unsichtbar flimmert, Ork im Wald halb
+    c.fillStyle = '#0005'; c.beginPath(); c.ellipse(x*cs, gy(y) + r*.7, r*.8, r*.3, 0, 0, Math.PI*2); c.fill();
+    const X = x*cs, Y = gy(y) + bob, ghost = m.inv ? .18 + .1 * Math.sin(time*25 + m.id) : m.inForest ? .35 : 1;   // unsichtbar flimmert, Ork im Wald halb
     c.globalAlpha = ghost;
     c.fillStyle = m.def.color; c.globalAlpha = .35 * ghost; c.beginPath(); c.arc(X, Y, r, 0, Math.PI*2); c.fill(); c.globalAlpha = ghost;
     if (on('slow')) { c.fillStyle = '#9fdcf540'; c.beginPath(); c.arc(X, Y, r*1.15, 0, Math.PI*2); c.fill(); }
@@ -2049,12 +2075,26 @@ function draw(i, cv){
     c.fillStyle = '#00000088'; c.fillRect(X-r, by, 2*r, 3);
     c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(X-r, by, 2*r*f, 3);
     if (m.def.armorPts && m.ap > 0) { c.fillStyle = '#c8ccd0'; c.fillRect(X-r, by + 3, 2*r*Math.min(1, m.ap / m.def.armorPts), 2); }   // Rüstung: grauer Balken
+  };
+  if (!view25) { for (const tw of towers) drawTw(tw); if (!s) return; for (const m of s.monsters) drawMon(m); }
+  else {   // 2,5D: Türme, Bäume, Berge und Monster nach Tiefe (Fußpunkt) sortiert
+    const objs = [];
+    for (const tw of towers) objs.push({ y:tw.y + 1, f:() => drawTw(tw) });
+    for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
+      if (t === 1) objs.push({ y:y + .9, f:() => { c.fillStyle = '#0004'; c.beginPath(); c.ellipse((x+.5)*cs, gy(y+.85), cs*.36, cs*.12, 0, 0, Math.PI*2); c.fill();
+        if (!spr(c, tinted('tree', '#5d7a52'), (x+.5)*cs, gy(y+.85) - cs*.5, cs*1.15, h*.05)) { c.font = `${cs*.8}px serif`; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText('🌲', (x+.5)*cs, gy(y+.85)); } } });
+      if (t === 3) objs.push({ y:y + .88, f:() => { c.save(); c.translate(0, gy(y+.88) - (y+.88)*cs); drawMountain(c, x, y, cs); c.restore(); } }); }
+    if (s) for (const m of s.monsters) objs.push({ y:m.y + (flying(m) ? 1.5 : .05), f:() => drawMon(m) });
+    objs.sort((a, b) => a.y - b.y); for (const o of objs) o.f();
+    if (!s) return;
   }
   for (const p of s.shots) drawShot(c, p, cs, time);
   for (const f of s.fx) if (f.kind === 'spark') drawFx(c, f, cs, time);
   if (s.dark) { c.fillStyle = '#05081a55'; c.fillRect(0, 0, W, H);   // Nacht: dunkler, Irrlichter leuchten durch
+    c.save(); c.translate(0, top); c.scale(1, k);
     for (const tw of s.towers) if (tw.def.light) { const g = c.createRadialGradient((tw.x+.5)*cs, (tw.y+.5)*cs, 0, (tw.x+.5)*cs, (tw.y+.5)*cs, tw.def.light*cs);
-      g.addColorStop(0, '#fff4c033'); g.addColorStop(1, '#fff4c000'); c.fillStyle = g; c.fillRect(0, 0, W, H); } }
+      g.addColorStop(0, '#fff4c033'); g.addColorStop(1, '#fff4c000'); c.fillStyle = g; c.fillRect(0, 0, W, cs*ROWS); }
+    c.restore(); }
   drawWeather(c, i, s, W, H, cs, time);
 }
 // Wetter auf der Karte: Symbol oben rechts; während der Wiedergabe leichter Regen bzw. Gewitterblitze (im Menü abschaltbar)
