@@ -281,6 +281,19 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 
 - Damit Stein über alle Tage bei 1 landet, müsste es bei Fliegertagen 0,33 an Bodentagen ≈ 1,26 haben (8 von 46 Fliegertagen, geometrisches Mittel).
 
+## D2e Stein: Turm 4 ohne Luftangriff, Schleuder schwach gegen Fliegende (L 26.10. abends)
+- Neue Turmoption `groundMul` (Boden × Wert) – die Luftspezialisten machten vorher am Boden 50 % statt 60 % (nur „halber Schaden“ möglich).
+- Schleuder: Boden 100 %, Fliegende 50 % („schwach gegen Fliegende“).
+
+| ohne Wetter | Feuer | Eis | Schatten | Stein (2 schwach/3/6/8) | Stein Variante 2/4/6/8 |
+|---|---|---|---|---|---|
+| Bodentage | 1,06 | 1,08 | 1,10 | 1,05 | 1,01 |
+| Fliegertage, Plan 1:1 | 0,65 | 0,73 | 0,59 | 0,09 | 0,39 |
+| Fliegertage, vorbereitet | 0,81 | 0,87 | 1,45 | 0,50 | – |
+
+- „Plan 1:1“ hängt stark davon ab, welche Turmnummer der Bot im Standard-Plan oft gebaut hat (Turm 4) – für Fliegertage wenig aussagekräftig. **„Vorbereitet“** (`FLIEG_VORBEREITET=1`): an Fliegertagen sind Türme ohne Luftangriff durch fliegertaugliche gleichen Golds ersetzt – entspricht dem „Rennen zu den Fliegend-Türmen“ (L). Dieses Maß für Fliegertage verwenden.
+- Vorbereitet: Schatten zu stark (Nachtauge 180 % in Masse), Stein zu schwach (Schleuder schwach, Katapult/Granitwächter/Bergkönig nur normal).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

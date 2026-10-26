@@ -12,9 +12,13 @@ const el = +(process.argv[2] || 0), [t0, t1] = (process.argv[3] || '1-48').split
 // wird er durchgehend (alle Tage – Türme werden nicht abgerissen, L 25.10.) durch den nächsten Nicht-Luftturm mit möglichst gleichem Gold ersetzt.
 // Der Wert reiner Luftabwehr wird getrennt bewertet (Fliegertage, Design-Zuschlag ×1,5).
 const goldVon = (e, k, l) => { let g = G.towerBase(e, k).cost; for (let i = 1; i < l; i++) g += Math.round(G.towerBase(e, k).cost * Math.pow(G.CONFIG.upgradeCost, i)); return g; };
-function ersatz(t, d){ if (!G.towerBase(el, t.idx).air) return t;
-  const g = goldVon(el, t.idx, t.lvl); let best = null;
-  for (let k = 0; k < 8; k++) { const b = G.towerBase(el, k); if (b.air || !b.hitsFly) continue; /* Ersatz: Allzweckturm (trifft Boden und Luft) */ for (let l = 1; l <= 6; l++) { const q = Math.abs(Math.log(goldVon(el, k, l) / g)); if (!best || q < best.q) best = { q, idx:k, lvl:l }; } }
+// FLIEG_VORBEREITET=1 (26.10.): an Fliegertagen hat der Spieler vorgesorgt – Türme ohne Luftangriff sind durch fliegertaugliche gleichen Golds ersetzt
+function ersatz(t, d){ const b0 = G.towerBase(el, t.idx);
+  if (process.env.FLIEG_VORBEREITET && G.MONSTERS[d].fly && !b0.hitsFly) return ersatzNach(t, k => G.towerBase(el, k).hitsFly);
+  if (!b0.air) return t;
+  return ersatzNach(t, k => { const b = G.towerBase(el, k); return !b.air && b.hitsFly; }); }   // Ersatz: Allzweckturm (trifft Boden und Luft)
+function ersatzNach(t, passt){ const g = goldVon(el, t.idx, t.lvl); let best = null;
+  for (let k = 0; k < 8; k++) { if (!passt(k)) continue; for (let l = 1; l <= 6; l++) { const q = Math.abs(Math.log(goldVon(el, k, l) / g)); if (!best || q < best.q) best = { q, idx:k, lvl:l }; } }
   return { ...t, idx:best.idx, lvl:best.lvl, _ersatz:true }; }
 function umsetzen(towers, d){ towers = towers.map(t => ersatz(t, d));
   const VAR2 = [...new Set([...VAR, ...towers.filter(t => t._ersatz).map(t => t.idx)])];

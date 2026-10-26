@@ -771,10 +771,10 @@
     0.75,
     {
       "effect": "none",
-      "fly": true
+      "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.3": 0.78223,
+  "ELEMENTS.3.kraftT.3": 0.86045,
   "ELEMENTS.3.towers.4": [
     "Erdbeben",
     "Schaden",
