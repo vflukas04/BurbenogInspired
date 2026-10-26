@@ -269,6 +269,18 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 
 - Bodentage ±5 %. Fliegertage bleiben Element-Eigenschaft: Stein (nur 4 von 8 Türmen) und Eis (kein Bremsen auf Fliegende) schwach, dort muss der Partner tragen.
 
+## D2d Fluchstein zurück, Luftspezialist bei Schatten (L 26.10. 17 Uhr)
+- Fluchstein wieder ohne Luftangriff; Brandpfeil wird normaler Fernkampf-Brandturm, der Luftspezialist (60/180) wandert zu Schatten (Nachtauge).
+- Stein-Variante Schleuder (2/3/6/8) statt Felsbrocken getestet: Fliegertage 0,12 (Turm 2 wird im Plan seltener gebaut als Turm 4) → Felsbrocken bleibt; ggf. nur Name/Bild anpassen.
+
+| ohne Wetter | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| Bodentage | 1,06 | 1,06 | 1,07 | 1,00 |
+| Fliegertage | 0,65 | 0,73 | 0,59 | 0,33 |
+| alle Tage | 0,98 | 1,00 | 0,97 | 0,84 |
+
+- Damit Stein über alle Tage bei 1 landet, müsste es bei Fliegertagen 0,33 an Bodentagen ≈ 1,26 haben (8 von 46 Fliegertagen, geometrisches Mittel).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

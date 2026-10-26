@@ -18,19 +18,20 @@ const V = {
   nova: 0.56, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
 };
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
+const FELS = process.env.STEIN_LUFT === '2' ? 1 : 0, SCHL = process.env.STEIN_LUFT === '2' ? 0 : 1;   // STEIN_LUFT=2: Schleuder statt Felsbrocken trifft Fliegende
 // ---- Türme: r Reichweite, q Rate, n Geschosse, f Fläche, eff/dur Effekt, nova, noFly, air ----
 const T = {
   0: [ ['Funke', { r:3, eff:0.08, dur:3 }], ['Glutbecken', { r:2, q:0.8, n:2, eff:0.1, dur:4, noFly:1 }], ['Flammenwerfer', { r:1.5, q:3, eff:0.06, dur:2 }],
-       ['Brandpfeil', { r:6, eff:0.08, dur:3, luft:LUFT }], ['Schwelbrand', { r:4, q:0.5, eff:0.15, dur:'Tag' }], ['Lavaturm', { r:3.5, q:0.35, f:1.5, eff:0.08, dur:3, noFly:1 }],
+       ['Brandpfeil', { r:6, eff:0.08, dur:3 }]   /* L 26.10.: Luftspezialist wandert zu Schatten (Nachtauge) */, ['Schwelbrand', { r:4, q:0.5, eff:0.15, dur:'Tag' }], ['Lavaturm', { r:3.5, q:0.35, f:1.5, eff:0.08, dur:3, noFly:1 }],
        ['Sonnenturm', { r:5, q:0.6, n:2, eff:0.08, dur:4 }], ['Höllenfeuer', { r:4, q:0.5, f:2, eff:0.1, dur:'Tag' }] ],
   1: [ ['Frostsplitter', { r:3, eff:0.1, dur:2 }], ['Schneeball', { r:3, f:1, eff:0.05, dur:2 }], ['Eiszapfen', { r:5, eff:0.1, dur:2, luft:LUFT, slowFly:1 }],
        ['Frosthauch', { r:2.5, q:2, eff:0.3, dur:3 }], ['Frostnova', { r:2.5, q:1 / 6, nova:1, stun:[0.45, 2], noFly:1 }], ['Eisspeer', { r:6, q:0.5, eff:0.1, dur:2 }],
        ['Blizzard', { r:4, n:5, eff:0.05, dur:2 }], ['Ewiges Eis', { r:4, f:2, eff:0.1, dur:4, noFly:1 }] ],
-  2: [ ['Schemen', { r:3, eff:0.05, dur:4 }], ['Irrlicht', { r:3, eff:0.05, dur:4 }], ['Nachtauge', { r:5, eff:0.05, dur:5 }],
-       ['Fluchstein', { r:3, q:0.5, n:3, eff:0.08, dur:8 }]   /* Vorschlag 26.10.: trifft Fliegende */, ['Seelenfresser', { r:3, q:1.5, eff:0.04, dur:4 }], ['Phantom', { r:4, n:4, eff:0.05, dur:6 }],
+  2: [ ['Schemen', { r:3, eff:0.05, dur:4 }], ['Irrlicht', { r:3, eff:0.05, dur:4 }], ['Nachtauge', { r:5, eff:0.05, dur:5, luft:LUFT }],
+       ['Fluchstein', { r:3, q:0.5, n:3, eff:0.08, dur:8, noFly:1 }], ['Seelenfresser', { r:3, q:1.5, eff:0.04, dur:4 }], ['Phantom', { r:4, n:4, eff:0.05, dur:6 }],
        ['Leerenturm', { r:4, f:1.5, eff:0.06, dur:6 }], ['Ewige Nacht', { r:5, q:0.5, eff:0.1, dur:'Tag' }] ],
-  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', { r:3.5, n:2, f:0.5, noFly:1 }], ['Katapult', { r:5, f:1 }],
-       ['Felsbrocken', { r:3, q:0.5, f:1.5 }]   /* L 26.10.: Stein trifft Fliegende mit Turm 3/4/6/8 */, ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
+  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', { r:3.5, n:2, f:0.5, noFly:SCHL }], ['Katapult', { r:5, f:1 }],
+       ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:FELS }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
 const STEIN_K = +process.env.STEIN_K || 0.8;   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
