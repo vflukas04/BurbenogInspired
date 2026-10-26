@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26k";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26l";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1167,7 +1167,7 @@ function dueTime(g){
 
 /* ---------- Speichern: online (geteilte Datenbank) oder lokal (dieses Gerät) ---------- */
 // Kreativ-Modus (26.10., F): Seite mit ?kreativ – nur dieses Gerät, kein Firebase, eigene Speicher-Schlüssel (ww2k-…), nie das echte Spiel
-const KREATIV = /[?&]kreativ/.test(location.search), KREATIV_MAXTAG = 24;
+const KREATIV = /[?&]kreativ/.test(location.search), KREATIV_MAXTAG = 48;
 const lsKey = k => KREATIV && k !== 'ww2-view25' && k !== 'ww2-wxanim' ? 'ww2k-' + k.slice(4) : k;
 function lsGet(k){ try { return JSON.parse(localStorage.getItem(lsKey(k))); } catch(e){ return null; } }
 function lsSet(k, v){ try { localStorage.setItem(lsKey(k), JSON.stringify(v)); } catch(e){} }
