@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1178,7 +1178,7 @@ const withTimeout = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeou
 // Speicher-Anzeige oben (12.10. 14:39, Fehlersuche Fairphone): speichert … / ✓ gespeichert / ⚠ Fehler mit Meldung
 let writesOpen = 0, writeErr = null, writeOkAt = 0;
 function saveStatus(){ const t = $('modeTag'); if (!t || MODE !== 'online') return;
-  t.textContent = 'Prototyp 3 · online · ' + (writeErr ? '⚠ ' + writeErr : writesOpen ? 'speichert …' : writeOkAt ? '✓ gespeichert' : 'bereit'); }
+  t.textContent = 'Prototyp 3 · online · ' + (writeErr ? '⚠ ' + writeErr : writesOpen ? 'speichert …' : writeOkAt ? '✓ gespeichert' : 'bereit') + (G && syncAt ? ` · Tag ${G.day}.${G.slot + 1} · Stand vor ${Math.round((Date.now() - syncAt) / 1000)} s` + (replay ? ' · Wiedergabe' : '') : ''); }   // Diagnose: Stand vom Server, Wiedergabe aktiv?
 function queueWrite(fn){ const once = () => withTimeout(Promise.resolve().then(fn), 10000);
   writesOpen++; saveStatus();
   writeChain = writeChain.then(() => once().catch(e => { console.warn(e); writeErr = 'nochmal: ' + (e && e.message || e); saveStatus(); return once(); }))
@@ -1199,7 +1199,7 @@ async function saveGame(){
   if (MODE === 'local') return lsSet('ww2-local', { G, L });
   const body = JSON.parse(JSON.stringify(G)); await queueWrite(() => DB.doc(P_STATE).set(body));
 }
-let resolving = false, resolvingAt = 0;
+let resolving = false, resolvingAt = 0, syncAt = 0, hiddenAt = 0;
 // Gibt true zurück, wenn ausgewertet werden konnte (für den Bereit-Knopf: sonst später nochmal versuchen)
 /* Archiv (15.10., L): Jedes online gespielte Spiel wird mitgeschrieben, für die Eichung des Balancing-Skripts.
    games/<GAME_ID>/archiv/<startAt>: je Welle Kills, Gold, Durchbrüche (slots), je Tagesende alle Türme (days).
@@ -2488,6 +2488,8 @@ function onGame(g){
   if (!G) { lanesBuilt = 0; render(); return; }
   if (seat >= NP()) seat = 0;
   if (prevPlayers !== G.cfg.players) lanesBuilt = 0;
+  if (G.lastRun && G.lastRun.id !== seenRun && replay && (document.hidden || performance.now() - replay.last > 3000)) endReplay();   // 27.10. (F): Alte Wiedergabe stand still (Tab im Hintergrund, Laptop im Ruhezustand) – sie blockierte die neue Welle und das Auslösen
+  syncAt = Date.now();
   if (G.lastRun && G.lastRun.id !== seenRun && !replay) { if (seenRun) startReplay(G.lastRun); else { seenRun = G.lastRun.id; lsSet('ww2-seen', seenRun); } }
   render();
 }
@@ -2506,7 +2508,7 @@ window.addEventListener('resize', () => { for (let i = 0; i < 4; i++) { const cv
 setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   // Sicherheitsnetz: keine Welle verpassen
    // Wächter: Steht die Wiedergabe seit 3 s still, obwohl die Seite sichtbar ist, neu anstoßen
    if (replay && !document.hidden && performance.now() - replay.last > 3000) kickLoop();
-   checkReady();
+   checkReady(); saveStatus();
    if (MODE === 'online' && G && !G.over && !G.paused) { const due = dueTime(G); if (due && Date.now() >= due) tryResolve(false); } }, 5000);
 
 function startLocal(){
@@ -2530,7 +2532,8 @@ async function startOnline(db){
   let pollTick = 0;
   setInterval(() => { pollTick++; const waiting = G && !G.over && !replay && isReady(seat);
     if (waiting || pollTick % 5 === 0) refreshFromServer(); }, 2000);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshFromServer(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) hiddenAt = Date.now(); else { if (replay && hiddenAt && Date.now() - hiddenAt > 20000) endReplay();   // war länger weg: nicht ewig in Zeitlupe nachspielen
+    refreshFromServer(); } });
   window.addEventListener('focus', refreshFromServer); window.addEventListener('online', refreshFromServer);
   render();
 }
@@ -2543,7 +2546,7 @@ async function refreshFromServer(){
     const limit = new Promise((_, no) => setTimeout(() => no(new Error('Zeitlimit Server-Abfrage')), 8000));
     const [st, ls] = await Promise.race([Promise.all([DB.doc(P_STATE).get({ source:'server' }), DB.collection(P_LANES).get({ source:'server' })]), limit]);
     ls.docs.forEach(d => { const k = +d.id.slice(1); takeLane(k, d.data()); });
-    const g = st.exists ? st.data() : null;
+    const g = st.exists ? st.data() : null; syncAt = Date.now();
     const stamp = x => x ? `${x.cfg && x.cfg.startAt}-${x.day}-${x.slot}-${x.lastRun ? x.lastRun.id : ''}-${x.over}` : 'leer';
     if (stamp(g) !== stamp(G)) onGame(g); else if (G) render();
   } catch(e) { console.warn(e); }
