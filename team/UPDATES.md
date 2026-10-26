@@ -43,6 +43,11 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 22:30 · F · 2026-10-27k – Dorf, Weltwandel, Wege, Nachtlicht
+- Nur Anzeige, nichts im Spiel ändert sich. Dorf in der Ecke unten rechts (ein Feld, wächst in 7 Stufen von Tag 1 bis 42; Bilder `assets/dorf/`). Der Boden darum wandelt sich nach Element (Feuer Asche/Lava, Eis Schnee, Schatten Violett, Stein Geröll), Radius wächst bis Tag 42 auf fast die ganze Map. Vom Dorf wachsen geschwungene Wege zu den Türmen (um Wald, Felsen, See herum, Monsterweg wird nur gekreuzt, wenn nötig): ab Tag 4, später breiter, ab Tag 36 gepflastert, ab Tag 42 mit Rand. Alles aus Tag und Türmen berechnet (nichts gespeichert, kein Zufall).
+- Nachts (Wiedergabe der 19-Uhr-Welle): Feuer-Türme geben Feuerschein, Eis- und Stein-Türme tragen eine kleine Fackel mit schwachem Licht, Schatten unverändert.
+- Steht ein Turm auf dem Dorffeld, liegt er vor dem Dorf. Neu laden genügt.
+
 ### 27.10. 21:30 · F · 2026-10-27j – See statt Sumpf
 - Sumpf-Felder sind jetzt kleine Seen (Wasser, Glanz, Wellen, ab und zu Seerosenblatt), ohne Strand und ohne Trauerweide; benachbarte Seefelder fließen zu Teichen/Flüssen zusammen. Name in der Anzeige „See“, Bonus (+20 Gold) und Karten unverändert. spiegel.html behält „Sumpf“. Neu laden genügt.
 ### 26.10. 18:45 · F · 2026-10-26v – Eisdrache gefährlicher
@@ -53,6 +58,3 @@ Schneekönig wirft seinen Eisspeer (dreht sich zum Ziel, Speer-Teilbild neu, Ges
 
 ### 26.10. 18:10 · F · 2026-10-26t – Höllenfeuer schießt brennende Kometen
 Geschoss (`shot25`, Feuer Nr. 8): Komet mit glühendem Kern und langem, welligem Flammenschweif, der der Flugbahn (Bogen) folgt; startet an der Turmspitze (`drawShot`, `ang25`). Beim Schuss steigen Glut und Funken vom Turm auf. Nur Anzeige.
-
-### 26.10. 17:55 · F · 2026-10-26s – Lavaturm: Turm im Lavasee mit Lava-Zinnen
-Lavaturm neu gezeichnet: dunkler Steinturm mitten in einem Lavasee, oben Zinnen aus glühender Lava, nur zwei kurze Rinnsale. Teilbilder: Zinnen (pulsieren), Funken (steigen beim Schuss). `TOWER_H` feuer[5] = 69,5. Nur Anzeige.
