@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27n";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27o";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2083,11 +2083,17 @@ function drawForest(g, cx, fy, cs, h){
       g.fillStyle = col; g.beginPath(); g.moveTo(x + x1*k, y + y1*k); g.lineTo(x, y + ty2*k); g.lineTo(x + x2*k, y + y1*k); g.closePath(); g.fill();
       g.fillStyle = '#00000026'; g.beginPath(); g.moveTo(x, y + ty2*k); g.lineTo(x + x2*k, y + y1*k); g.lineTo(x, y + y1*k); g.closePath(); g.fill(); }); });
 }
-function drawLake(g, map, x, y, cs, h){   // Wasserfläche im Boden (gilt für flach und schräg), ohne Strand
+function drawLake(g, map, x, y, cs, h, ice){   // Wasserfläche im Boden (gilt für flach und schräg), ohne Strand
   const isL = (a, b) => a >= 0 && b >= 0 && a < COLS && b < ROWS && !map.cells.has(a + ',' + b) && map.terrain[b][a] === 2, cx = (x + .5)*cs, cy = (y + .5)*cs;
   const water = (col, rx, ry, dx = 0, dy = 0) => { g.fillStyle = col; g.beginPath(); g.ellipse(cx + dx*cs, cy + dy*cs, rx*cs, ry*cs, 0, 0, Math.PI*2); g.fill();
     for (const [nx, ny] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (isL(x + nx, y + ny)) g.fillRect(cx + (nx ? (nx > 0 ? 0 : -.5) : -rx)*cs + dx*cs, cy + (ny ? (ny > 0 ? 0 : -.5) : -ry)*cs + dy*cs, nx ? .5*cs : rx*2*cs, ny ? .5*cs : ry*2*cs); };
-  water('#2a6a96', .47, .43); water('#33809f'.replace('#33809f', '#3484b8'), .4, .35, 0, -.02);
+  if (ice) {   // zugefroren: helle Eisfläche mit Rissen und Glanz (Eis-Dorf hat die Umgebung schon in Schnee verwandelt)
+    water('#8fbfd8', .47, .43); water('#cfeaf5', .41, .36, 0, -.02);
+    g.fillStyle = '#f2fbff'; g.beginPath(); g.ellipse(cx - .1*cs, cy - .12*cs, cs*.2, cs*.08, -.2, 0, Math.PI*2); g.fill();
+    g.strokeStyle = '#7fb0cc'; g.lineWidth = Math.max(1, cs*.025); g.beginPath(); const sx = (h % 2) ? .1 : -.12;
+    g.moveTo(cx + sx*cs, cy - .25*cs); g.lineTo(cx + (sx - .08)*cs, cy - .05*cs); g.lineTo(cx + (sx + .06)*cs, cy + .1*cs); g.lineTo(cx + (sx - .02)*cs, cy + .26*cs);
+    g.moveTo(cx + (sx - .08)*cs, cy - .05*cs); g.lineTo(cx + (sx - .22)*cs, cy - .02*cs); g.stroke(); return; }
+  water('#2a6a96', .47, .43); water('#3484b8', .4, .35, 0, -.02);
   g.fillStyle = '#5fb0dc'; g.beginPath(); g.ellipse(cx - .1*cs, cy - .12*cs, cs*.2, cs*.09, -.2, 0, Math.PI*2); g.fill();
   g.strokeStyle = '#dff6ffaa'; g.lineWidth = Math.max(1, cs*.03); g.beginPath();
   const rx0 = cx + ((h % 2) ? .08 : -.14)*cs, ry0 = cy + (.08 + (h % 3)*.05)*cs; g.moveTo(rx0, ry0); g.quadraticCurveTo(rx0 + cs*.05, ry0 - cs*.05, rx0 + cs*.12, ry0); g.stroke();
@@ -2345,6 +2351,12 @@ function worldPaths(map, vc, used, seed){   // Wege vom Dorf (bzw. dem nächsten
     for (const h of pts) if (!have.includes(h)) have.push(h); segs.push(pts); }
   return segs;
 }
+function worldLv(i, wl, x, y){ if (wl.R <= 0) return 0; const d = Math.hypot(x - wl.vc.x, y - wl.vc.y); return Math.max(0, Math.min(1, (wl.R - d + (wHash(x, y, i) - .5) * 2.4) / 1.5)); }
+function lakeFrozen(map, i, wl, x, y){   // See im Schneegebiet: Feld selbst und alle begehbaren Nachbarfelder (außer Monsterweg) sind schon verwandelt
+  if (worldLv(i, wl, x, y) < .5) return false;
+  for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const a = x + dx, b = y + dy; if (a < 0 || b < 0 || a >= COLS || b >= ROWS || map.cells.has(a + ',' + b)) continue; if (worldLv(i, wl, a, b) < .4) return false; }
+  return true;
+}
 function drawWorldGround(g, map, i, cs, wl){   // Bodenwandel + Wege in den Hintergrund (nur Anzeige)
   const Wd = WORLD[wl.el], u = cs / 40;
   if (wl.R > 0) for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
@@ -2407,7 +2419,7 @@ function draw(i, cv){
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
     if (t === 1 && !view25) drawTree(g, (x+.5)*cs, (y+.92)*cs, cs, h, false);
-    if (t === 2) drawLake(g, map, x, y, cs, h);   // 27.10. (F): kleiner See statt Sumpf (ohne Strand), benachbarte Seefelder fließen zusammen
+    if (t === 2) drawLake(g, map, x, y, cs, h, wl.el === 1 && lakeFrozen(map, i, wl, x, y));   // 27.10. (F): kleiner See statt Sumpf (ohne Strand), benachbarte Seefelder fließen zusammen
     if (t === 3 && !view25) drawMountain(g, x, y, cs);
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }

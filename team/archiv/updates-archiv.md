@@ -1,6 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 27.10. 21:30 · F · 2026-10-27j – See statt Sumpf
+- Sumpf-Felder sind jetzt kleine Seen (Wasser, Glanz, Wellen, ab und zu Seerosenblatt), ohne Strand und ohne Trauerweide; benachbarte Seefelder fließen zu Teichen/Flüssen zusammen. Name in der Anzeige „See“, Bonus (+20 Gold) und Karten unverändert. spiegel.html behält „Sumpf“. Neu laden genügt.
+
+
 ### 26.10. 18:45 · F · 2026-10-26v – Eisdrache gefährlicher
 Dunklere Farben, wütender Blick mit leuchtend blauem Auge, Reißzähne, lange Hörner, Krallen, Stacheln, eckige Flügel mit Knochenfingern. Mündungspunkt für den Eisatem angepasst. Nur Anzeige.
 
