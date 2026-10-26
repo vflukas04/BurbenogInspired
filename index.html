@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26p";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26q";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1895,14 +1895,14 @@ function drawTower(c, tw, px, py, cs, aim, glow, noBody){
 }
 const TIMG = {};   // 26.10. (F): freistehende Turm-Bilder der Schräg-Ansicht, assets/turm/<element>-<nr>.png (88×102-Raster, Fußpunkt bei y=92), Entwürfe/Quelle: team/GRAFIK.md
 const TOWER_NAME = ['feuer', 'eis', 'schatten', 'stein'];
-const TOWER_H = { feuer:[22,42,26,49,52,65.8,52,42], eis:[26,34.5,66.4,57,39.9,58.2,48,66], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
+const TOWER_H = { feuer:[22,42,26,34,52,65.8,52,42], eis:[26,34.5,66.4,57,39.9,58.2,48,66], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
 function loadImg(k){   // bei Ladefehler bis zu 3 Wiederholungen (Handy-Netz)
   if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
   const im = new Image(); im.onerror = () => { TIMG[k] = null; loadImg.n[k] = (loadImg.n[k] || 0) + 1; if (loadImg.n[k] < 4) setTimeout(() => { delete TIMG[k]; loadImg(k); }, 1500*loadImg.n[k]); }; im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
 }
 loadImg.n = {};
 // 26i (F): bewegliche Teile. Jeder Turm hat ein Grundbild (assets/turm/<element>-<nr>.png) und PARTN Teilbilder (…-<nr>p<id>.png, gleiches Raster), die einzeln um einen Drehpunkt bewegt werden
-const PARTN = { feuer:[1,1,2,1,2,2,1,1], eis:[1,1,1,1,1,1,1,2], schatten:[1,1,2,1,2,1,3,2], stein:[1,2,1,1,2,2,2,3] };
+const PARTN = { feuer:[1,1,2,2,2,2,1,1], eis:[1,1,1,1,1,1,1,2], schatten:[1,1,2,1,2,1,3,2], stein:[1,2,1,1,2,2,2,3] };
 function towerImg(el, idx){
   const nmE = TOWER_NAME[el], n = nmE + '-' + (idx + 1), b = loadImg(n), cnt = PARTN[nmE][idx], ps = [];
   let wait = false;
@@ -1917,7 +1917,8 @@ const PARTS = (() => {
     feuer0: [[0, -2, (t, g) => ({ sx: 1 + .1*S(t*9), sy: 1 + .18*S(t*11) + .5*g, r: .08*S(t*7) })]],
     feuer1: [[31, -22, (t, g) => ({ r: .15*S(t*8), sy: 1 + .15*S(t*10) + .5*g, sx: 1 + .3*g })]],
     feuer2: [[7, -12, (t, g, w, dx, dy) => ({ x: -dx*2*g, y: -dy*1.5*g })], [17, -12, (t, g) => ({ sx: 1 + .5*g + .06*S(t*14), sy: 1 + .3*g + .08*S(t*12) })]],
-    feuer3: [[0, -4, (t, g, w) => ({ y: -16*w })]],
+    feuer3: [[0, -20, (t, g, w, dx, dy) => ({ r: Math.max(-.9, Math.min(.9, Math.atan2(dy, Math.abs(dx)))) + .03*S(t*3) - .05*w })],      // Bogen richtet sich auf das Ziel
+             [0, -20, (t, g, w, dx, dy) => { const p = 1 - g; return { r: Math.max(-.9, Math.min(.9, Math.atan2(dy, Math.abs(dx)))), x: p < .2 ? 60*(p/.2) : 0, a: p < .2 ? 1 : p < .55 ? 0 : Math.min(1, (p - .55)/.25) }; }]],   // Pfeil fliegt vorn über den Bogen ab, neuer wird aufgelegt
     feuer4: [[-16.6, -6, (t, g, w, dx, dy) => ({ x: dx*8*w, y: dy*6*w, r: .04*S(t*2) })], [0, -34, (t, g) => ({ sy: 1 + .15*S(t*10) + .4*g, r: .1*S(t*8) })]],
     feuer5: [[0, -46, (t, g) => ({ sy: 1 + .07*S(t*6) + .25*g, sx: 1 + .04*S(t*5) })], [0, -60, (t, g, w) => ({ y: -3*S(t*4) - 8*w, ...sc(1 + .2*g) })]],
     feuer6: [[0, -30, (t, g, w) => ({ r: t*.5 + 1.6*w, ...sc(1 + .12*g) })]],
@@ -1984,7 +1985,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
     else if (nm === 'schatten0' || nm === 'schatten5') { sx = sy = 1; ox = oy = 0; }   // Schemen/Phantom: bewegt sich als Teilbild
     else if (nm === 'schatten1') { ox = 0; oy = Math.sin(now*3 + tw.x) * cs*.05 - cs*.05; sx = sy = 1; }   // Irrlicht schwebt
     else if (nm === 'feuer2' || nm === 'feuer3') { ox = -dx*cs*.07*g; }
-    const flip = (nm === 'feuer1' && Math.cos(aim) > 0) || (nm === 'feuer2' && Math.cos(aim) < 0);   // Glumanda blickt nach links, Flammenwerfer-Mündung nach rechts   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
+    const flip = (nm === 'feuer1' && Math.cos(aim) > 0) || (nm === 'feuer2' && Math.cos(aim) < 0) || (nm === 'feuer3' && Math.cos(aim) < 0);   // Glumanda blickt nach links, Flammenwerfer-Mündung nach rechts   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
     c.save(); c.translate(fx + ox, fy + oy); c.rotate(rotA); c.scale(flip ? -sx : sx, sy);
     c.drawImage(sp, -44*u, -92*u, 88*u, 102*u);
     const gp = Math.max(0, 1 - (now - (FIRE_T[key] === undefined ? -9 : FIRE_T[key])) / .5), wp = gp > 0 ? Math.sin(Math.PI * (1 - gp)) : 0, pd = PARTS[nm];   // bewegliche Teile
@@ -2059,7 +2060,14 @@ function shot25(c, p, x, y, a, cs, time){
     if (i === 1) { tail(q*7, '#ff6a1e66', q*3); ball(q*2.6, '#ff6a1e', '#ffe08a', '#ff8a3d'); return true; }
     if (i === 2) { rot(() => { const fl = 1 + .15*Math.sin(w*2); c.fillStyle = '#e0451a'; c.beginPath(); c.moveTo(-q*9, 0); c.quadraticCurveTo(-q*2, -q*4*fl, q*5, 0); c.quadraticCurveTo(-q*2, q*4*fl, -q*9, 0); c.fill();
         c.fillStyle = '#ffb347'; c.beginPath(); c.moveTo(-q*7, 0); c.quadraticCurveTo(-q*2, -q*2.4, q*3, 0); c.quadraticCurveTo(-q*2, q*2.4, -q*7, 0); c.fill(); c.fillStyle = '#ffe08a'; c.beginPath(); c.ellipse(-q*1, 0, q*3, q*1.1, 0, 0, 7); c.fill(); }); return true; }
-    if (i === 3) return false;
+    if (i === 3) { rot(() => { const fl = 1 + .2*Math.sin(w*2.3);   // brennender Pfeil mit Flammenschweif
+        for (let j = 3; j >= 1; j--) { c.fillStyle = j === 1 ? '#ffb347aa' : '#ff8a3d66'; c.beginPath(); c.ellipse(-q*(3 + j*3.4), Math.sin(w + j)*q*.4, q*(3.6 - j*.6)*fl, q*(1.5 - j*.2), 0, 0, 7); c.fill(); }
+        c.fillStyle = '#c9a26a'; c.fillRect(-q*5, -q*.35, q*8, q*.7); c.fillStyle = '#ddd'; c.beginPath(); c.moveTo(-q*5, 0); c.lineTo(-q*6.4, -q*1.2); c.lineTo(-q*5.6, 0); c.lineTo(-q*6.4, q*1.2); c.fill();
+        c.fillStyle = '#c9c9cf'; c.beginPath(); c.moveTo(q*3, -q*1.1); c.lineTo(q*5, 0); c.lineTo(q*3, q*1.1); c.fill();
+        const gr = c.createRadialGradient(q*2.4, 0, 0, q*2.4, 0, q*5); gr.addColorStop(0, '#ffb347aa'); gr.addColorStop(1, '#ff8a3d00'); c.fillStyle = gr; c.beginPath(); c.arc(q*2.4, 0, q*5, 0, 7); c.fill();
+        c.fillStyle = '#ff8a3d'; c.beginPath(); c.ellipse(q*2.2, 0, q*3.2*fl, q*1.8, 0, 0, 7); c.fill(); c.fillStyle = '#ffe08a'; c.beginPath(); c.ellipse(q*2.6, 0, q*1.8, q*1, 0, 0, 7); c.fill();
+        c.fillStyle = '#ffb347'; for (let j = 0; j < 3; j++) { c.beginPath(); c.arc(-q*(2 + j*3.5) + Math.sin(w*3 + j*2)*q, Math.cos(w*2 + j*3)*q*2, q*.45, 0, 7); c.fill(); } });
+      return true; }
     if (i === 4) { tail(q*6, '#c8301a88', q*2); ball(q*2.4, '#c8301a', '#ffb347', '#ff3a1e'); c.fillStyle = '#3d1410'; for (const sg of [-1, 1]) { c.beginPath(); c.moveTo(x + sg*q*1.4, y - q*2); c.lineTo(x + sg*q*2.8, y - q*4.4); c.lineTo(x + sg*q*.4, y - q*2.6); c.fill(); } return true; }
     if (i === 5) { ball(q*3, '#8a2a10', '#ff6a1e', '#ff5a1e'); c.fillStyle = '#ff8a3d'; c.beginPath(); c.arc(x + q*1.2, y + q*2.6 + Math.sin(w)*q*.4, q*.9, 0, 7); c.fill(); return true; }
     if (i === 6) { ball(q*2.8, '#ffe08a', '#ffffff', '#ffd27a'); return true; }
@@ -2107,6 +2115,7 @@ function drawShot(c, p, cs, time){
   }
   y -= h + (CUR.k < 1 && !p.lob ? cs*.25 : 0);
   if (CUR.k < 1 && p.el === 0 && p.idx === 2) JETS[p.x0 + ',' + p.y0] = { tx:p.tx, ty:p.ty, t:time };   // Flammenwerfer: Ziel merken, die Flamme zeichnet der Turm
+  if (CUR.k < 1 && p.el === 0 && p.idx === 3) { const f = Math.max(0, 1 - (1 - left / tot) * 5), H = TOWER_H.feuer[3], uu = cs * Math.min(1.5, Math.max(.5, H * (1 + 3 * .03) / 44)) / H; x += (Math.cos(dir) > 0 ? 1 : -1) * 20 * uu * f; }   // Brandpfeil: startet vorn am Bogen
   if (CUR.k < 1 && p.el === 0 && p.idx === 1) { const f = Math.max(0, 1 - (1 - left / tot) * 5), uu = cs * .609 / 26; x += (Math.cos(dir) > 0 ? 1 : -1) * 27 * uu * f; }   // Glumanda: Geschoss startet im Maul
   const def = p.def, sz = k * (p.lob ? .42 : .3);
   if (CUR.k < 1 && shot25(c, p, x, y, Math.atan2(dy * CUR.k, dx), cs, time)) return;   // 2,5D: Geschoss passt zum Turm-Bild
