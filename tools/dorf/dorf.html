@@ -159,10 +159,10 @@ const TOW=[[4,3],[5,2],[8,4],[7,5],[2,3],[10,3]];             // Türme, nach Ab
 const VIL=[6,3];
 const STG=[
  {t:'Tag 1',v:0,R:0,np:0,pave:0},
- {t:'Tag 10',v:2,R:2.0,np:1,pave:0},
- {t:'Tag 22',v:4,R:3.6,np:3,pave:0},
+ {t:'Tag 10',v:2,R:2.0,np:2,pave:0},
+ {t:'Tag 22',v:4,R:3.6,np:4,pave:0},
  {t:'Tag 36',v:5,R:5.2,np:5,pave:1},
- {t:'Tag 48',v:6,R:7.5,np:6,pave:2}];
+ {t:'Tag 42',v:6,R:7.5,np:6,pave:2}];
 function welt(k,si){
  const W=WORLD[k],S=STG[si],T=40; let b='';
  const onMon=new Set();
@@ -201,7 +201,7 @@ function welt(k,si){
  b+=`<text x="8" y="16" font-size="13" font-weight="700" fill="${k==='e'?'#2f5a78':'#fff'}" stroke="${k==='e'?'#fff':'#000'}" stroke-width=".4">${S.t}</text>`;
  return svg('0 0 480 320',480,320,b);
 }
-h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder. Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfad zu 1 Turm, Tag 22 zu 3, Tag 36 gepflasterte Straße zu 5, Tag 48 Straße mit Rand zu allen.</p>`;
+h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder. Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfade zu 2 Türmen, Tag 22 zu 4, Tag 36 gepflasterte Straße zu 5, Tag 42 Straße mit Rand zu allen.</p>`;
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<5;i++)h+=cell(`welt-${k}-${i}`,STG[i].t,welt(k,i));h+='</div>';}
 out.innerHTML=h;
 </script>
