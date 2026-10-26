@@ -4,6 +4,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 26.10. 14:30 · F · 2026-10-26k – Kreativ-Modus, Fix der Turm-Symbole
+Neues Spiel → Spielart „Kreativ“ öffnet `?kreativ=1`: nur dieses Gerät, kein Firebase, eigene Speicher-Schlüssel (`ww2k-…`), echtes Spiel bleibt unberührt. Alle Türme und Stufen gratis (`KREATIV` in `buildCost`/`upgradeCost`/`goldOf`), vier Felder (Feuer, Eis, Schatten, Stein), Welle über Auswahl Tag 1–24 (`KREATIV_MAXTAG`, Tag 25+ bleibt Überraschung), Auslösen wiederholt dieselbe Welle, kein Gold. Fix: 26j hatte durch einen Kommentar mitten in `loadImg` alle Turm-Bilder abgeschaltet; Symbole in der Leiste zeigten nur das Grundbild ohne Teile.
+
 ### 26.10. 13:55 · F · 2026-10-26j – Turm-Bilder laden robuster (iPhone)
 Fehlende Symbole auf dem iPhone gemeldet. Bilder, die nicht laden, werden bis zu 3-mal neu versucht; ein endgültig fehlendes Teilbild blockiert den Turm nicht mehr. Ursache am Handy noch nicht bestätigt (am Laptop nicht nachstellbar).
 
@@ -56,8 +59,3 @@ Menü ⋯ → „Ansicht“: Draufsicht oder Schräg. Boden um 0,68 gestaucht (R
 - Nachbau mit den echten Feuer-Türmen (5 Spieler, Tag 8): Sonnig/Hitze 13, Regen/Gewitter 4 Kills. Sonnig 1,075/1,075, Hitze 1,15/1,1, Regen und Gewitter Schaden 0,95, Dauer 0,8, Brennen erlischt 1,5 bzw. 1,35. Abstand Tag 8: 9,8 → 7,0; gewichtetes Mittel unverändert (~8,4).
 - Katzen (Tag 9, nachtaktiv): Schatten-Faktor 1,0 → 1,3, weil Schatten nachts nur im Lichtkreis trifft (beide Feuer+Schatten-Läufe kippten dort).
 - Neues Spiel + neu laden.
-
-### 24.10. 11:20 · F · 2026-10-23d – Block 2 (Tag 7–12) nach fünf Testspielen
-- Fünf Testspiele auf 23c (Schatten+Eis, Feuer+Stein, Eis+Feuer ×2, Stein+Schatten). Der Nachbau mit den echten Türmen trifft die echten Kills; danach Werte aus dem Mittel über Wetter und Spiele.
-- `kraftBlock[1]` (Block 2): Feuer 1 → 1,25 (fiel beim Blockwechsel um ein Drittel ab, Tag 8 nur 2 statt 12–18), Eis 1 → 1,2, Schatten 1 → 0,65 (mit Irrlicht 17–18 Kills an neutralen Tagen, Ziel 5–8). Katzen (Tag 9) Eis 1,75 → 1,4; Ratten (Tag 8) Stein 0,75 → 0,55.
-- Flieger-Tag 10 (Spatzen) entschied drei Spiele: Feuer/Eis ohne Luftabwehr (Brandpfeil/Eiszapfen) bekommen bis 35 Durchbrüche an einem Tag. Zahlen nicht angefasst, Vorschlag zur Warnung im TODO. Neues Spiel + neu laden.

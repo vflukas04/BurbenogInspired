@@ -1,6 +1,12 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 24.10. 11:20 · F · 2026-10-23d – Block 2 (Tag 7–12) nach fünf Testspielen
+- Fünf Testspiele auf 23c (Schatten+Eis, Feuer+Stein, Eis+Feuer ×2, Stein+Schatten). Der Nachbau mit den echten Türmen trifft die echten Kills; danach Werte aus dem Mittel über Wetter und Spiele.
+- `kraftBlock[1]` (Block 2): Feuer 1 → 1,25 (fiel beim Blockwechsel um ein Drittel ab, Tag 8 nur 2 statt 12–18), Eis 1 → 1,2, Schatten 1 → 0,65 (mit Irrlicht 17–18 Kills an neutralen Tagen, Ziel 5–8). Katzen (Tag 9) Eis 1,75 → 1,4; Ratten (Tag 8) Stein 0,75 → 0,55.
+- Flieger-Tag 10 (Spatzen) entschied drei Spiele: Feuer/Eis ohne Luftabwehr (Brandpfeil/Eiszapfen) bekommen bis 35 Durchbrüche an einem Tag. Zahlen nicht angefasst, Vorschlag zur Warnung im TODO. Neues Spiel + neu laden.
+
+
 ### 23.10. 12:45 · F · 2026-10-23c – Block 2: Tag 7 leichter, Stein-Faktor Block 2
 - Testspiel 22a: Tag 7 (Kleine Hunde, alle neutral) nur 1 und 2 von 20 Kills. Hunde `hpMul` 1 → 0,85 (Nachbau mit den echten Türmen: Schatten/Eis etwa 5–8 über Wetter 0/1/2). Tag 8–11 im Testspiel im Rahmen, nicht angefasst.
 - Stein `kraftBlock[1]` 1 → 0,6: Der Bot (Kiesel 1,58) machte in Block 2 an jedem Tag 12–15 Kills, auch am Malus-Tag 8. Mit 0,6: Tag 8 etwa 2–4, Tag 11 (Bonus) etwa 10–11, Tag 7 5–11. Tag 9 (Katzen) bleibt für Stein bei 1 (zu schwer, Katzen Tempo 1,6), offen.

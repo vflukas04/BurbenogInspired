@@ -163,7 +163,8 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
         <option value="real">Echt: 10, 13, 16, 19 Uhr</option></select></label>
       <label for="fLive">Spielart<select id="fLive">
         <option value="0">Uhrzeiten: Leaks kommen zur nächsten Welle</option>
-        <option value="1">Live: Leaks laufen sofort beim Nachbarn weiter</option></select></label>
+        <option value="1">Live: Leaks laufen sofort beim Nachbarn weiter</option>
+        <option value="k">Kreativ: Türme gratis testen, Welle frei wählbar (nur dieses Gerät, zählt nicht)</option></select></label>
       <label for="fDiff">Schwierigkeit<select id="fDiff">
         <option value="leicht">Leicht: Monster −25 % Leben</option>
         <option value="normal" selected>Normal</option>
@@ -176,6 +177,7 @@ canvas{display:block;width:100%;border-radius:4px;touch-action:manipulation}
   </section>
 
   <div id="game" hidden>
+    <div id="kBar" class="row" hidden style="align-items:end;gap:10px;margin:0 0 8px"><label for="kWave">Kreativ-Modus: Welle<select id="kWave"></select></label><a class="btn" href="?">Kreativ-Modus beenden</a></div>
     <div class="clock" id="clock"></div>
     <div id="banner" class="banner" hidden></div>
     <div id="vbanner" class="banner bad" hidden></div>
@@ -220,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26j";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26k";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -562,6 +564,7 @@ function posAt(map, d){
 }
 const MAPS = [0,1,2,3].map(buildMap);
 function buildCost(el, idx, lane, x, y){
+  if (KREATIV) return 0;
   const b = towerBase(el, idx), T = TERRAIN[MAPS[lane].terrain[y][x]];
   if (ELEMENTS[el].terrainFree) return b.cost + (T.stoneExtra || 0);
   return b.cost + T.extra;
@@ -682,7 +685,7 @@ function onRock(d){
   const m = ELEMENTS[d.el].terrainFree ? ROCK.stoneDmg : 1;
   return { ...d, range:d.range * ROCK.rangeMul, dpsNow:d.dpsNow * m, dmg:d.dmg * m, onRock:true };
 }
-const upgradeCost = tw => Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (1 - resVal(curRes(), 'cheap')));
+const upgradeCost = tw => KREATIV ? 0 : Math.round(towerBase(tw.el, tw.idx).cost * Math.pow(CONFIG.upgradeCost, tw.lvl || 1) * (1 - resVal(curRes(), 'cheap')));
 const hpBase = r => CONFIG.baseHp * Math.pow(r, CONFIG.hpExp);
 // Schwierigkeit (17.10., L): wird beim Spielstart gewählt (G.cfg.diff) und wirkt nur auf die Leben; alte Spiele = normal
 const DIFFS = { leicht:{ name:'leicht', hp:0.75 }, normal:{ name:'normal', hp:1 }, schwer:{ name:'schwer', hp:1.25 } };
@@ -1094,12 +1097,12 @@ function incomingFor(g, i){ const n = g.cfg.players; return g.slot === 0 ? waveS
 // Gold = Start + Kopfgeld − Ausgaben − verschenkt + erhalten (nach Gebühr). Geschenke stehen im Feld des Schenkenden.
 function giftsIn(i){ let x = 0; L.forEach((_,k) => (laneOf(k).gifts || []).forEach(g => { if (g.to === i) x += Math.floor(g.amt * (1 - CONFIG.giftFee)); })); return x; }
 function giftsOut(i){ return (laneOf(i).gifts || []).reduce((a,g) => a + g.amt, 0); }
-function goldOf(i){ const l = laneOf(i); return (G.cfg.startGold ?? CONFIG.startGold) + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i) - (l.pot||0); }
+function goldOf(i){ if (KREATIV) return 99999; const l = laneOf(i); return (G.cfg.startGold ?? CONFIG.startGold) + (G.earned[i]||0) - (l.spent||0) - giftsOut(i) + giftsIn(i) - (l.pot||0); }
 // Gold wird erst sichtbar, wenn die Monster in der Wiedergabe sterben
 // Gold aus der laufenden Wiedergabe erscheint erst, wenn die Monster sterben – aber nur beim ersten Ansehen der neuesten Welle.
 // (Fehler bis 11.10.: „Letzte Welle ansehen“ zog bereits ausgegebenes Gold nochmal ab → Minus-Gold.)
 const pendingOf = (i, k) => replay && replay.pending ? Math.max(0, (replay.final[k][i] || 0) - (replay.sims[i] ? replay.sims[i][k] : 0)) : 0;
-function goldAvail(i){ return goldOf(i) - pendingOf(i, 'earned'); }
+function goldAvail(i){ return KREATIV ? 99999 : goldOf(i) - pendingOf(i, 'earned'); }
 const killsOf = i => ((G.kills || [])[i] || 0) - pendingOf(i, 'kills');
 function researchSet(lanes){ const r = new Set(); lanes.forEach(l => (l && l.research || []).forEach(id => r.add(id))); return r; }
 const curRes = () => researchSet(L.map((_,k) => laneOf(k)));
@@ -1163,8 +1166,11 @@ function dueTime(g){
 }
 
 /* ---------- Speichern: online (geteilte Datenbank) oder lokal (dieses Gerät) ---------- */
-function lsGet(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
-function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+// Kreativ-Modus (26.10., F): Seite mit ?kreativ – nur dieses Gerät, kein Firebase, eigene Speicher-Schlüssel (ww2k-…), nie das echte Spiel
+const KREATIV = /[?&]kreativ/.test(location.search), KREATIV_MAXTAG = 24;
+const lsKey = k => KREATIV && k !== 'ww2-view25' && k !== 'ww2-wxanim' ? 'ww2k-' + k.slice(4) : k;
+function lsGet(k){ try { return JSON.parse(localStorage.getItem(lsKey(k))); } catch(e){ return null; } }
+function lsSet(k, v){ try { localStorage.setItem(lsKey(k), JSON.stringify(v)); } catch(e){} }
 let writeChain = Promise.resolve();
 // 12.10. 14:36: Hing ein Schreibvorgang (Safari), blieben alle weiteren in der Schlange liegen (Element-Wahl kam nie an).
 // Jetzt: Zeitlimit 10 s je Versuch, ein zweiter Versuch, danach geht die Schlange trotzdem weiter.
@@ -1220,7 +1226,9 @@ const archDoc = (g, arch) => { const a = { ...arch }; ['days', 'slots'].forEach(
 async function tryResolve(force, onlyKey){
   if (resolving && Date.now() - resolvingAt > 20000) resolving = false;   // hängende Verbindung: nicht ewig blockieren
   if (!G || G.over || G.paused || resolving || replay) return false;
-  if (MODE === 'local') { G = resolveSlot(G, L); lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return true; }
+  if (MODE === 'local') { G = resolveSlot(G, L);
+    if (KREATIV) { G.day = G.kDay || 1; G.slot = 0; G.leaked = {}; G.over = null; G.passed = 0; G.earned = G.earned.map(() => 0); }   // Kreativ: dieselbe Welle jederzeit wieder
+    lsSet('ww2-local', { G, L }); render(); startReplay(G.lastRun); return true; }
   resolving = true; resolvingAt = Date.now(); let ok = false;
   try {
     const ls = await DB.collection(P_LANES).get();
@@ -1317,7 +1325,7 @@ function doBuild(i, x, y, k){
   L[i] = { ...l, towers:[...l.towers, { x, y, el:l.el, idx:k, lvl:1, invested:cost }], spent:(l.spent||0) + cost };
   selCell = { i, x, y }; render(); saveLane(i);
 }
-const refundOf = tw => Math.floor((tw.invested || towerBase(tw.el, tw.idx).cost) * CONFIG.sellRefund);
+const refundOf = tw => KREATIV ? 0 : Math.floor((tw.invested || towerBase(tw.el, tw.idx).cost) * CONFIG.sellRefund);
 // Verkaufen und Upgrade: erst nach Bestätigung im Fenster (wie beim Bauen)
 function sellDialog(i, x, y){
   const l = laneOf(i), tw = l.towers.find(t => t.x === x && t.y === y); if (!tw || !mayBuild(i)) return;
@@ -1520,7 +1528,7 @@ function giveUp(){
 }
 function resetGame(){
   replay = null;
-  if (MODE === 'local') { try { localStorage.removeItem('ww2-local'); } catch(e){} onGame(null); }
+  if (MODE === 'local') { try { localStorage.removeItem(lsKey('ww2-local')); } catch(e){} onGame(null); if (KREATIV) createCreative(); }
   else queueWrite(() => DB.doc(P_STATE).delete());
 }
 function deposit(i, amt){
@@ -1655,6 +1663,7 @@ function updateLaneHeads(){
 const lastGold = [];
 function setGold(i){
   const v = goldAvail(i), el = $('g'+i), old = lastGold[i]; lastGold[i] = v;
+  if (KREATIV) { el.textContent = '∞'; return; }
   if (el.textContent !== String(v)) el.textContent = v;
   if (old === undefined || old === v || (v > old && runPending())) return;
   el.classList.remove('up', 'down'); void el.offsetWidth; el.classList.add(v > old ? 'up' : 'down');
@@ -1672,6 +1681,11 @@ function render(){
   $('setup').hidden = has || !MODE; $('game').hidden = !has; $('stats').hidden = !has; $('palette').hidden = !has;
   if (!has) { renderSetup(); return; }
   ensureTerrain(G.cfg.startAt);
+  $('kBar').hidden = !KREATIV; $('giftBtn').hidden = KREATIV;
+  if (KREATIV) { const sel = $('kWave');
+    if (!sel.options.length) { for (let q = 0; q < Math.min(KREATIV_MAXTAG, MONSTERS.length); q++) sel.add(new Option(`Tag ${MONSTERS[q].day || q + 1}: ${MONSTERS[q].name}`, q + 1));
+      sel.onchange = () => { if (replay) endReplay(); G.kDay = +sel.value; G.day = G.kDay; G.slot = 0; G.leaked = {}; G.over = null; G.passed = 0; lsSet('ww2-local', { G, L }); render(); }; }
+    sel.value = String(G.kDay || 1); }
   if (lanesBuilt !== NP()) buildLanes();
   const n = NP();
   $('sDay').textContent = `${Math.min(G.day, CONFIG.days)}/${CONFIG.days}`;
@@ -1705,7 +1719,7 @@ function render(){
     `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;
   $('today').querySelectorAll('[data-mon]').forEach(x => x.onclick = () => showMonster(+x.dataset.mon));
   if (G.over && overSeen !== G.cfg.startAt + G.over && !replay) showGameOver();
-  $('giftBtn').hidden = !mayBuild(seat) || n < 2;
+  $('giftBtn').hidden = !mayBuild(seat) || n < 2 || KREATIV;
   const go = $('go');
   go.textContent = replay ? 'Welle läuft …' : (MODE === 'local' ? `Welle ${hh(SL[G.slot])} starten` : `Welle ${hh(SL[G.slot])} jetzt auslösen`);
   go.disabled = !!replay || !!G.over || !!G.paused;
@@ -1751,10 +1765,10 @@ function render(){
 }
 function renderPalette(){
   const l = laneOf(seat), E = ELEMENTS[l.el], gold = goldAvail(seat), can = mayBuild(seat), RS = curRes();
-  $('ptitle').innerHTML = `Bauen für <b>Spieler ${seat+1}</b> · <span style="color:${E.color}">${E.name}</span> (${E.note}) · <b>${gold}</b> Gold`;
+  $('ptitle').innerHTML = `Bauen für <b>Spieler ${seat+1}</b> · <span style="color:${E.color}">${E.name}</span> (${E.note}) · ${KREATIV ? '<b>alles gratis</b>' : `<b>${gold}</b> Gold`}`;
   $('prow').innerHTML = E.towers.map((_,k) => towerBase(l.el, k)).map((d,k) => { const lock = LOCKS[k] && !RS.has(LOCKS[k]), ic = towerIcon(l.el, k);
     return `<button class="tw ${selTower===k?'sel':''}" data-k="${k}" ${!can||gold<d.cost||lock?'disabled':''}>
-      <span class="n" style="color:${E.color}">${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</span><span class="c">${lock ? '🔒 Bauhütte' : d.cost + ' Gold'}</span>
+      <span class="n" style="color:${E.color}">${ic ? `<img src="${ic}" alt="">` : ''}${k+1}. ${d.name}</span><span class="c">${lock ? '🔒 Bauhütte' : KREATIV ? 'gratis' : d.cost + ' Gold'}</span>
       <span class="d">${d.role}${d.buff ? '' : ` · ${num(d.dps)} Schaden/s · ${num(d.range)} weit`}${fxText(d) ? '<br>' + fxText(d) : ''}</span></button>`; }).join('');
   $('prow').querySelectorAll('.tw').forEach(x => x.onclick = () => { const k = +x.dataset.k; selTower = selTower === k ? null : k; render(); });
 }
@@ -1881,9 +1895,9 @@ function drawTower(c, tw, px, py, cs, aim, glow, noBody){
 const TIMG = {};   // 26.10. (F): freistehende Turm-Bilder der Schräg-Ansicht, assets/turm/<element>-<nr>.png (88×102-Raster, Fußpunkt bei y=92), Entwürfe/Quelle: team/GRAFIK.md
 const TOWER_NAME = ['feuer', 'eis', 'schatten', 'stein'];
 const TOWER_H = { feuer:[22,42,10,49,52,65.8,52,42], eis:[26,34.5,66.4,57,39.9,58.2,48,66], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
-function loadImg(k){
+function loadImg(k){   // bei Ladefehler bis zu 3 Wiederholungen (Handy-Netz)
   if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
-  const im = new Image(); im.onerror = () => { TIMG[k] = null; loadImg.n[k] = (loadImg.n[k] || 0) + 1; if (loadImg.n[k] < 4) setTimeout(() => { delete TIMG[k]; loadImg(k); }, 1500*loadImg.n[k]); };   // Handy-Netz: bis zu 3 Wiederholungen im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
+  const im = new Image(); im.onerror = () => { TIMG[k] = null; loadImg.n[k] = (loadImg.n[k] || 0) + 1; if (loadImg.n[k] < 4) setTimeout(() => { delete TIMG[k]; loadImg(k); }, 1500*loadImg.n[k]); }; im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
 }
 loadImg.n = {};
 // 26i (F): bewegliche Teile. Jeder Turm hat ein Grundbild (assets/turm/<element>-<nr>.png) und PARTN Teilbilder (…-<nr>p<id>.png, gleiches Raster), die einzeln um einen Drehpunkt bewegt werden
@@ -2292,7 +2306,7 @@ function towerIcon(el, k){
       const d = tc.getImageData(0, 0, w, h).data; let x0 = w, x1 = 0, y0 = h, y1 = 0;   // sichtbarer Bereich der Zeichnung
       for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y*w + x)*4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
       const bw = x1 - x0 + 1, bh = y1 - y0 + 1, sc = Math.min(60 / bw, 60 / bh), cv = document.createElement('canvas'); cv.width = cv.height = 64; const c = cv.getContext('2d');
-      c.drawImage(im, x0, y0, bw, bh, 32 - bw*sc/2, 62 - bh*sc, bw*sc, bh*sc); return ICONS[id] = cv.toDataURL(); }
+      c.drawImage(t, x0, y0, bw, bh, 32 - bw*sc/2, 62 - bh*sc, bw*sc, bh*sc); return ICONS[id] = cv.toDataURL(); }
   }
   const id = el + '-' + k; if (ICONS[id]) return ICONS[id];
   if (!SPR.base || typeof document === 'undefined') return null;
@@ -2302,7 +2316,15 @@ function towerIcon(el, k){
 }
 
 /* ---------- Start ---------- */
+function createCreative(){
+  const cfg = { players:4, timing:'manual', interval:3, startAt:Date.now(), live:false, diff:'normal', startGold:0, version:VERSION, slots:[10], kreativ:true };
+  G = newGameState(cfg); G.kDay = 1; G.log = [{ when:'Kreativ', text:'Kreativ-Modus: alle Türme gratis, Welle frei wählbar.' }];
+  L = [0,1,2,3].map(i => ({ el:i, towers:[], spent:0, gifts:[], gid:cfg.startAt, research:['t5:1','t7:1'] }));
+  seat = 0; selTower = null; selCell = null; replay = null; lanesBuilt = 0; lsSet('ww2-local', { G, L }); render();
+}
 async function newGame(){
+  if (KREATIV) return createCreative();
+  if ($('fLive').value === 'k') { location.href = location.pathname + '?kreativ=1'; return; }
   const players = +$('fPlayers').value, timing = MODE === 'online' ? $('fTiming').value : 'manual';
   const cfg = { players, timing, interval: Math.max(1, +$('fInterval').value || 3), startAt: Date.now(), live: $('fLive').value === '1', diff: $('fDiff').value, startGold: CONFIG.startGold, version: VERSION };
   cfg.slots = cfg.live ? [10] : CONFIG.slotPlan[players];   // Live: eine Welle am Tag, alles läuft ineinander
@@ -2344,7 +2366,7 @@ setInterval(() => { renderClock(); if (G && !replay && seenRun) nextReplay();   
 function startLocal(){
   MODE = 'local';
   const s = lsGet('ww2-local');
-  if (s && s.G) { L = s.L || []; seenRun = s.G.lastRun && s.G.lastRun.id; onGame(s.G); } else render();
+  if (s && s.G) { L = s.L || []; seenRun = s.G.lastRun && s.G.lastRun.id; onGame(s.G); } else if (KREATIV) createCreative(); else render();
 }
 async function startOnline(db){
   MODE = 'online'; DB = db;
@@ -2383,6 +2405,7 @@ async function refreshFromServer(){
 }
 (async () => {
   render();
+  if (KREATIV) return startLocal();
   if (FIREBASE_CONFIG.projectId && window.firebase) {
     try { firebase.initializeApp(FIREBASE_CONFIG); const fs = firebase.firestore();
       try { fs.settings({ experimentalForceLongPolling: true, experimentalAutoDetectLongPolling: false, merge: true }); } catch(e) { console.warn(e); }   // Safari: WebChannel-Verbindung hängt oft, Long Polling ist der bekannte Ausweg
