@@ -20,9 +20,9 @@ const V = {
 // ---- Türme: r Reichweite, q Rate, n Geschosse, f Fläche, eff/dur Effekt, nova, noFly, air ----
 const T = {
   0: [ ['Funke', { r:3, eff:0.08, dur:3 }], ['Glutbecken', { r:2, q:0.8, n:2, eff:0.1, dur:4, noFly:1 }], ['Flammenwerfer', { r:1.5, q:3, eff:0.06, dur:2 }],
-       ['Brandpfeil', { r:6, eff:0.08, dur:3, air:1 }], ['Schwelbrand', { r:4, q:0.5, eff:0.15, dur:'Tag' }], ['Lavaturm', { r:3.5, q:0.35, f:1.5, eff:0.08, dur:3, noFly:1 }],
+       ['Brandpfeil', { r:6, eff:0.08, dur:3, luft:[0.5, 2.5] }], ['Schwelbrand', { r:4, q:0.5, eff:0.15, dur:'Tag' }], ['Lavaturm', { r:3.5, q:0.35, f:1.5, eff:0.08, dur:3, noFly:1 }],
        ['Sonnenturm', { r:5, q:0.6, n:2, eff:0.08, dur:4 }], ['Höllenfeuer', { r:4, q:0.5, f:2, eff:0.1, dur:'Tag' }] ],
-  1: [ ['Frostsplitter', { r:3, eff:0.1, dur:2 }], ['Schneeball', { r:3, f:1, eff:0.05, dur:2 }], ['Eiszapfen', { r:5, eff:0.1, dur:2, air:1, slowFly:1 }],
+  1: [ ['Frostsplitter', { r:3, eff:0.1, dur:2 }], ['Schneeball', { r:3, f:1, eff:0.05, dur:2 }], ['Eiszapfen', { r:5, eff:0.1, dur:2, luft:[0.5, 2.5], slowFly:1 }],
        ['Frosthauch', { r:2.5, q:2, eff:0.3, dur:3 }], ['Frostnova', { r:2.5, q:1 / 6, nova:1, stun:[0.45, 2], noFly:1 }], ['Eisspeer', { r:6, q:0.5, eff:0.1, dur:2 }],
        ['Blizzard', { r:4, n:5, eff:0.05, dur:2 }], ['Ewiges Eis', { r:4, f:2, eff:0.1, dur:4, noFly:1 }] ],
   2: [ ['Schemen', { r:3, eff:0.05, dur:4 }], ['Irrlicht', { r:3, eff:0.05, dur:4 }], ['Nachtauge', { r:5, eff:0.05, dur:5 }],
@@ -31,6 +31,7 @@ const T = {
   3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', { r:3.5, n:2, f:0.5, noFly:1 }], ['Katapult', { r:5, f:1 }],
        ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:1 }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
+const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
 const EFF = { 0:'burn', 1:'slow', 2:'curse', 3:'stun' }, RUEST = { 0:0.5, 1:0.6, 2:0, 3:1.5 }, G0 = 2;   // GRID
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
@@ -38,9 +39,11 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   let w = V.reichweite(m.r) * V.geschosse(n) * V.rate(q) * (m.nova ? V.nova * (m.stun ? V.betaeuben(...m.stun, true) : 1) : V.flaeche(f)) * V.ruestung(RUEST[e]) * (e === 2 ? V.nacht : 1);
   if (m.eff) w *= e === 0 ? V.brennen(m.eff, m.dur) : e === 1 ? V.bremsen(m.eff, f) : V.fluch(m.eff);
   if (m.stun && !m.nova) w *= V.betaeuben(...m.stun, false);
+  // Luftspezialist (L 26.10.): Boden × luft[0], Fliegende × luft[1]; Wert = geometrisches Mittel über die Tage (Fliegertage ≈ LUFT_ANTEIL)
+  if (m.luft) w *= Math.exp((1 - LUFT_ANTEIL) * Math.log(m.luft[0]) + LUFT_ANTEIL * Math.log(m.luft[1]));
   const zuschlag = m.air ? 1.5 : m.noFly ? 1.1 : 1;
   const opt = { effect:m.stun ? 'stun' : m.eff ? EFF[e] : 'none', fly:!m.noFly };
-  if (m.air) opt.air = true; if (m.slowFly) opt.slowFly = true; if (m.nova) opt.nova = true; if (m.stun) opt.chance = m.stun[0];
+  if (m.air) opt.air = true; if (m.luft) { opt.groundHalf = true; opt.flyMul = m.luft[1]; } if (m.slowFly) opt.slowFly = true; if (m.nova) opt.nova = true; if (m.stun) opt.chance = m.stun[0];
   const effWert = m.stun ? m.stun[1] : m.eff || 0, dur = m.stun ? 1 : m.dur || 1;
   sp[`ELEMENTS.${e}.towers.${k}`] = [name, 'Schaden', (m.nova ? m.r : m.r) / G0, q, n, 1, effWert, dur, (m.nova ? m.r : f) / G0, opt];
   sp[`ELEMENTS.${e}.kraftT.${k}`] = +(D0[`ELEMENTS.${e}.kraftT.${k}`] * zuschlag / w).toFixed(5);

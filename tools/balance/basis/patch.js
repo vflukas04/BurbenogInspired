@@ -86,5 +86,8 @@ if (process.env.STAPEL_ALLE) ERSETZEN.push(
    `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), Math.min(def.splash || def.nova ? +(process.env.BREMS_MAX_FL || 0.3) : +(process.env.BREMS_MAX || 0.4), def.eff * f), t, false, 0);`],
   [`    else addFx(m, 'curse', def.eff * f, t, def.curseWave);`,
    `    else addStack(m, 'curse', (def._bid || (def._bid = ++BURN_ID)) + ':c' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, def.curseWave, 0);`]);   // Fluch ohne Deckel: Stapelregel begrenzt auf 2 × stärksten
-ERSETZEN.push(...require('./irrlicht'));   // 26.10. (L): Irrlicht wirkt auf die Monster im Lichtkreis (auch im Spiel umgesetzt, 26a)
+ERSETZEN.push(...require('./irrlicht'));
+// Zweig D (L 26.10.): Luftspezialist – Turmoption groundHalf (Bodenmonster 50 %) und flyMul (Fliegende × Wert); vorher nur über Edelsteine
+ERSETZEN.push([`    chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, idx, el };`,
+  `    chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, flyMul:opt.flyMul || 0, groundHalf:!!opt.groundHalf, idx, el };`]);   // 26.10. (L): Irrlicht wirkt auf die Monster im Lichtkreis (auch im Spiel umgesetzt, 26a)
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };

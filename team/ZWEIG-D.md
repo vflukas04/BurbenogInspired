@@ -244,6 +244,18 @@ Fester Leben-Faktor je Tag/Map (1,15 × Reserve des Kontexts ohne Effekt, dort b
 - **Element-Spezifikation (Idee L):** jedes Element bekommt einen eigenen Nachteil/Vorteil als eigenen Parameter, erst nach dem übrigen Balancing: Schatten Nachtrunde; Stein Wetter neutral + Gelände-Vorteil (Baukosten bis dahin normal); Feuer Wetter (tendenziell kürzeres Brennen); Eis keine Effekte auf Fliegende. Wetter darf mehr Geschmack haben (Nebel/Reichweite gut) – L macht einen Vorschlag.
 - **Irrlicht:** im Code (Basis und aktuelles Spiel) wirkt die Verstärkung auf **Schatten-Türme im Lichtkreis**, die Nachtsicht auf **Monster im Lichtkreis**. L erinnert eine Absprache „wirkt auf die Monster“ – klären.
 
+## D2b Luftspezialist (L 26.10.)
+Brandpfeil und Eiszapfen treffen jetzt auch Bodenmonster: Boden 50 %, Fliegende 250 % (`groundHalf`/`flyMul` als Turmoption, `basis/patch.js`); Wechselkurs = geometrisches Mittel über die Tage (8 von 46 Fliegertage). Kein Ersatz mehr im Plan nötig.
+
+Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliegertage 0,90–1,02):
+| | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| alle Tage | 1,08 | 1,02 | 0,97 | 0,93 |
+| nur Fliegertage | 1,56 | 0,80 | 0,48 | **0,08** |
+
+- **Befund:** Die Fliegertage kippen stark zwischen den Elementen. Nicht wegen der Luftspezialisten, sondern wegen der Türme **ohne** Luftangriff: Stein (Kiesel, Schleuder, Felsbrocken, Erdbeben, Lawine) und Schatten (Fluchstein) stehen im Plan auf Plätzen, die an Fliegertagen nichts treffen. Der Zuschlag ×1,1 gleicht das über das Spiel ungefähr aus, an Fliegertagen aber nicht. Feuer ist dort mit 250 % klar zu stark.
+- Entscheidung offen (L): wie viele Türme ohne Luftangriff je Element, Stein-Regel „Fliegende nur Turm 3/6/8“ beibehalten?
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

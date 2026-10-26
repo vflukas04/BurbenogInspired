@@ -277,10 +277,11 @@
     {
       "effect": "burn",
       "fly": true,
-      "air": true
+      "groundHalf": true,
+      "flyMul": 2.5
     }
   ],
-  "ELEMENTS.0.kraftT.3": 1.24978,
+  "ELEMENTS.0.kraftT.3": 1.25954,
   "ELEMENTS.0.towers.4": [
     "Schwelbrand",
     "Schaden",
@@ -424,11 +425,12 @@
     {
       "effect": "slow",
       "fly": true,
-      "air": true,
+      "groundHalf": true,
+      "flyMul": 2.5,
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.36531,
+  "ELEMENTS.1.kraftT.2": 1.37598,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
