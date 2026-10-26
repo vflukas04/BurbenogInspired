@@ -2,6 +2,7 @@
 
 Format: **Idee** – von wem, wann – Stand (offen · dafür · verworfen) – Notiz. Beschlossenes wandert nach `TODO.md`.
 
+- **Dorf + Arbeiter + Biome abbauen** – F, 26.10. – offen (nur Bilder) – Dorf in der Mitte der Map (1 Feld, 7 Stufen, Elementstil), jeden 2. Tag zieht ein Arbeiter zu einem Biom (Holz, Berg, Angeln), nach ca. 8 Tagen ist es abgebaut; Sumpf wird kleiner See. Entwurfsbilder: `assets/dorf-entwurf/` (Übersicht `_uebersicht.png`), Quelle `tools/dorf/dorf.html`, Export `node tools/dorf/export.js`. Offen: nur Optik oder nimmt das abgebaute Gelände den Bonus (Wald +10, See +20, Felsen +30) weg? Wohin mit dem Dorf auf wechselnden Karten?
 - **Monster-Sprites statt Emojis** – L, 11.10. – offen – sieht je Handy anders aus; lohnt, wenn die Monster feststehen.
 - **Chat in der Chronik** – L, 11.10. – offen
 - **Gold sofort beim Tod** statt nach der Wiedergabe – L, 11.10. – offen – klären: auch wenn niemand zuschaut?

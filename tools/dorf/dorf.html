@@ -1,0 +1,122 @@
+<!doctype html><meta charset="utf-8"><title>Dorf, Arbeiter, Biome – Entwurf</title>
+<style>
+body{margin:0;background:#1d2a1c;color:#e8eadf;font:14px system-ui,sans-serif;padding:20px}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:16px;margin:26px 0 6px;border-bottom:1px solid #fff3;padding-bottom:4px}
+p.n{margin:2px 0 10px;color:#b9c4b0;max-width:900px}
+.row{display:flex;flex-wrap:wrap;gap:6px 10px;margin-bottom:8px}
+.sp{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#b9c4b0;background:#2a3b28;border-radius:8px;padding:4px 4px 2px}
+.sp svg{display:block}
+.lab{width:70px;align-self:center;font-weight:600;color:#e8eadf}
+</style>
+<h1>BurbenogInspired – Dorf, Arbeiter, Biome (Entwurf 26.10.)</h1>
+<p class="n">Nur Bilder zum gemeinsamen Überarbeiten, noch nichts im Spiel. Maßstab: ein Dorf = ein Feld, ein Arbeiter ist etwa ein Drittel Feld hoch.</p>
+<div id="out"></div>
+<script>
+const P = {
+ f:{n:'Feuer', wall:'#7a4a2a', wallD:'#5a3118', roof:'#c2410c', roofL:'#e8590c', acc:'#ffb347', ground:'#4a2e1c', groundL:'#6d4529', glow:'#ff8a3d', flag:'#d8321a', dark:'#1f0e06', win:'#ffd27a', tunic:'#c2410c', cap:'#7a2a12', fire:'#ff8a3d', fireC:'#ffe08a'},
+ e:{n:'Eis', wall:'#d5ecf8', wallD:'#8fc3de', roof:'#eaf8ff', roofL:'#ffffff', acc:'#79c6ee', ground:'#b9d6e6', groundL:'#dff0f8', glow:'#7df9ff', flag:'#3f7fa6', dark:'#2f5a78', win:'#9be8ff', tunic:'#3f7fa6', cap:'#eaf8ff', fire:'#7df9ff', fireC:'#ffffff'},
+ s:{n:'Schatten', wall:'#2b2140', wallD:'#150e2b', roof:'#3d2a78', roofL:'#5b3aa8', acc:'#a98bff', ground:'#1a1230', groundL:'#2d2250', glow:'#a98bff', flag:'#7a4be0', dark:'#07040f', win:'#c9b6ff', tunic:'#4d3a8a', cap:'#150e2b', fire:'#a98bff', fireC:'#f0e6ff'},
+ st:{n:'Stein', wall:'#a89c84', wallD:'#7d725e', roof:'#8a6238', roofL:'#b08650', acc:'#d9cba6', ground:'#6f6450', groundL:'#8d8270', glow:'#ffb347', flag:'#8d3b2c', dark:'#2a2218', win:'#ffd27a', tunic:'#8a6238', cap:'#5e5646', fire:'#ff9a3d', fireC:'#ffe08a'}
+};
+const SKIN='#f0c9a0', SKIND='#c99a72';
+const svg=(vb,w,h,inner)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${w}" height="${h}">${inner}</svg>`;
+// ---------- Dorf ----------
+function hut(k,p,x,y,s){
+ let b='';
+ if(k==='f') b=`<path d="M-9 0V-12H9V0Z" fill="${p.wall}"/><path d="M3 0V-12H9V0Z" fill="${p.wallD}"/><path d="M-9 -4H9M-9 -8H9" stroke="${p.wallD}" stroke-width=".7"/><path d="M-13 -11L0 -23L13 -11Z" fill="${p.roof}"/><path d="M0 -23L13 -11H0Z" fill="${p.roofL}"/><rect x="5" y="-26" width="4" height="8" fill="${p.wallD}"/><rect x="4.5" y="-27" width="5" height="1.6" fill="${p.dark}"/><circle cx="7" cy="-28.5" r="1.3" fill="${p.glow}"/><path d="M-3 0V-7Q0 -10 3 -7V0Z" fill="${p.dark}"/><rect x="-7.5" y="-9" width="3" height="3" fill="${p.win}"/>`;
+ if(k==='e') b=`<path d="M-12 0A12 12 0 0 1 12 0Z" fill="${p.wall}"/><path d="M4 -11.3A12 12 0 0 1 12 0H4Z" fill="${p.wallD}" opacity=".55"/><path d="M-11 -4H11M-9 -8H9M-5 -11H5M-4 0V-5M4 0V-5M0 -5V-10M-8 -4V-8M8 -4V-8" stroke="${p.wallD}" stroke-width=".7" fill="none"/><path d="M-4 0V-4Q0 -8 4 -4V0Z" fill="${p.dark}"/><path d="M-8 -9Q-3 -13 3 -12" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M-12 0H12" stroke="${p.acc}" stroke-width="1.2"/><path d="M9 -8L12 -14L14 -8Z" fill="${p.acc}"/>`;
+ if(k==='s') b=`<path d="M-8 0L-7 -14H7L8 0Z" fill="${p.wall}"/><path d="M2 0V-14H7L8 0Z" fill="${p.wallD}"/><path d="M-11 -13L-1 -25Q2 -34 3 -31L11 -13Z" fill="${p.roof}"/><path d="M3 -31L11 -13H0Z" fill="${p.roofL}"/><path d="M-11 -13H11" stroke="${p.acc}" stroke-width="1"/><path d="M-3 0V-6Q0 -10 3 -6V0Z" fill="${p.dark}"/><path d="M-5.5 -9.5V-11.5Q-4 -13 -2.5 -11.5V-9.5Z" fill="${p.win}"/><circle cx="2" cy="-35" r="1.4" fill="${p.acc}" opacity=".8"/><circle cx="-3" cy="-38" r="1" fill="${p.win}" opacity=".6"/>`;
+ if(k==='st') b=`<path d="M-9 0V-12H9V0Z" fill="${p.wall}"/><path d="M3 0V-12H9V0Z" fill="${p.wallD}"/><path d="M-9 -4H9M-9 -8H9M-4 0V-4M2 -4V-8M-3 -8V-12M5 -8V-12" stroke="${p.wallD}" stroke-width=".7"/><path d="M-13 -11L0 -22L13 -11Z" fill="${p.roof}"/><path d="M-9 -13L-7 -11M-4 -17L-2 -11M2 -18L4 -11M7 -15L9 -11" stroke="${p.roofL}" stroke-width="1.3"/><path d="M-3 0V-7Q0 -10 3 -7V0Z" fill="#4a3220"/><rect x="-7.5" y="-9" width="3" height="3" fill="${p.win}"/>`;
+ return `<g transform="translate(${x} ${y}) scale(${s})">${b}</g>`;
+}
+function tent(p,x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-10 0L0 -15L10 0Z" fill="${p.roof}"/><path d="M0 -15L10 0H0Z" fill="${p.roofL}"/><path d="M-3 0L0 -8L3 0Z" fill="${p.dark}"/><path d="M0 -15V-18" stroke="${p.wallD}" stroke-width="1"/></g>`}
+function fire(p,x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="5" ry="1.8" fill="${p.dark}" opacity=".5"/><path d="M-3 -.5L3 -1.5M-3 -1.5L3 -.5" stroke="${p.wallD}" stroke-width="1.6" stroke-linecap="round"/><path d="M-3 -2Q-3.5 -7 0 -10Q1 -6 3 -5Q4 -2 3 -2Z" fill="${p.fire}"/><path d="M-1.4 -2Q-1.6 -5 0 -6.5Q1.2 -4 1.4 -2Z" fill="${p.fireC}"/></g>`}
+function well(p,x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="-3" rx="5" ry="2.4" fill="${p.wallD}"/><path d="M-5 -3V0Q0 3 5 0V-3Z" fill="${p.wall}"/><ellipse cx="0" cy="-3" rx="3.4" ry="1.4" fill="${p.dark}"/><path d="M-4.5 -3V-11M4.5 -3V-11" stroke="${p.wallD}" stroke-width="1.2"/><path d="M-6.5 -10L0 -15L6.5 -10Z" fill="${p.roof}"/></g>`}
+function crates(p,x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="-5" width="6" height="5" fill="${p.wall}" stroke="${p.wallD}" stroke-width=".7"/><rect x="0" y="-4" width="5" height="4" fill="${p.wallD}"/><rect x="-4" y="-9" width="5" height="4" fill="${p.wall}" stroke="${p.wallD}" stroke-width=".7"/><path d="M-6 -5L0 0M0 -5L-6 0" stroke="${p.wallD}" stroke-width=".5"/></g>`}
+function banner(p,x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0V-24" stroke="${p.wallD}" stroke-width="1.4"/><path d="M0 -24H9L6.5 -20L9 -16H0Z" fill="${p.flag}"/><circle cx="0" cy="-24.5" r="1.2" fill="${p.acc}"/></g>`}
+function tower(p,x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-5 0V-22H5V0Z" fill="${p.wall}"/><path d="M1 0V-22H5V0Z" fill="${p.wallD}"/><path d="M-5 -8H5M-5 -15H5" stroke="${p.wallD}" stroke-width=".6"/><path d="M-7 -21L0 -31L7 -21Z" fill="${p.roof}"/><path d="M0 -31L7 -21H0Z" fill="${p.roofL}"/><rect x="-1.4" y="-19" width="2.8" height="4" fill="${p.win}"/></g>`}
+function fence(p,x1,x2,y){let o='';for(let x=x1;x<=x2;x+=5)o+=`<path d="M${x} ${y}V${y-6}" stroke="${p.wallD}" stroke-width="1.3"/>`;return o+`<path d="M${x1} ${y-4}H${x2}M${x1} ${y-1.5}H${x2}" stroke="${p.wall}" stroke-width=".9"/>`}
+function smoke(p,x,y){return `<g opacity=".55" fill="${p.k==='s'?'#7a4be0':'#cfd6d8'}"><circle cx="${x}" cy="${y}" r="2"/><circle cx="${x+2}" cy="${y-4}" r="2.6"/><circle cx="${x+1}" cy="${y-9}" r="3.2"/></g>`}
+function ground(p,w){return `<ellipse cx="0" cy="1" rx="${w}" ry="${w*.24}" fill="${p.ground}"/><ellipse cx="-4" cy="0" rx="${w*.7}" ry="${w*.15}" fill="${p.groundL}" opacity=".7"/>`}
+function village(k,stage){
+ const p={...P[k],k}; let b=ground(p,stage<2?16:stage<4?22:29);
+ if(stage===1) b+=tent(p,-5,0,1)+fire(p,9,3,1);
+ if(stage===2) b+=hut(k,p,-3,0,1)+fire(p,13,3,1);
+ if(stage===3) b+=hut(k,p,-9,0,1)+tent(p,12,2,.8)+fire(p,2,5,.8);
+ if(stage===4) b+=hut(k,p,-12,-1,1)+hut(k,p,11,0,.9)+well(p,0,5,.9)+crates(p,19,6,.8);
+ if(stage===5) b+=hut(k,p,0,-5,.85)+hut(k,p,-15,0,1)+hut(k,p,15,1,1)+well(p,0,6,.9)+banner(p,25,5,.9);
+ if(stage===6) b+=tower(p,-21,-3,.9)+hut(k,p,-4,-6,.85)+hut(k,p,14,-1,1)+hut(k,p,-12,3,.9)+well(p,3,6,.8)+banner(p,26,5,.9)+fence(p,-24,-6,8)+smoke(p,18,-24);
+ if(stage===0) b=`<ellipse cx="0" cy="1" rx="9" ry="2.4" fill="${p.ground}" opacity=".8"/><path d="M-3 0L0 -3L3 0Z" fill="${p.groundL}"/>`;
+ return svg('-34 -50 68 58',204,174,b);
+}
+// ---------- Arbeiter ----------
+function worker(k,job,fr){
+ const p=P[k]; let b=`<ellipse cx="0" cy="1" rx="6" ry="1.6" fill="#0005"/>`;
+ b+=`<rect x="-3.2" y="-8" width="2.8" height="8" fill="${p.dark}"/><rect x=".4" y="-8" width="2.8" height="8" fill="${p.dark}"/>`;
+ b+=`<path d="M-4.6 -8L-3.8 -18H3.8L4.6 -8Z" fill="${p.tunic}"/><path d="M-4.6 -9.5H4.6" stroke="${p.dark}" stroke-width=".9"/>`;
+ b+=`<path d="M-4 -17L-6.5 -11" stroke="${SKIN}" stroke-width="2.2" stroke-linecap="round"/>`;
+ b+=`<circle cx="0" cy="-21.5" r="4" fill="${SKIN}"/><circle cx="1.5" cy="-21.6" r=".6" fill="#2a1a10"/><circle cx="-1.6" cy="-21.6" r=".6" fill="#2a1a10"/>`;
+ const ang=job==='fisch'?(fr?14:-8):(fr?38:-62);
+ let tool='';
+ if(job==='holz') tool=`<path d="M0 3L0 -15" stroke="#6b4a2c" stroke-width="1.6" stroke-linecap="round"/><path d="M-.6 -15L-7 -17L-7.5 -11L-.6 -11Z" fill="#c9c9cf"/><path d="M-7 -17L-7.5 -11" stroke="#fff" stroke-width=".7"/>`;
+ if(job==='berg') tool=`<path d="M0 3L0 -15" stroke="#6b4a2c" stroke-width="1.6" stroke-linecap="round"/><path d="M-7 -14Q0 -19 7 -14L5.5 -13Q0 -16.5 -5.5 -13Z" fill="#9aa0a8"/><path d="M-7 -14L-6 -13M7 -14L6 -13" stroke="#cfd6dc" stroke-width=".8"/>`;
+ if(job==='fisch') tool=`<path d="M0 4L0 -22" stroke="#7a5a30" stroke-width="1.2" stroke-linecap="round"/><path d="M0 -22Q-3 -26 -14 -22" stroke="#7a5a30" stroke-width=".8" fill="none"/><path d="M-14 -22V${fr?-8:-4}" stroke="#fff" stroke-width=".5" opacity=".8"/><circle cx="-14" cy="${fr?-6:-2}" r="1.1" fill="${p.flag}"/>`;
+ const sx=job==='fisch'?7.5:6.2, sy=job==='fisch'?-12:-13.5;
+ b+=`<g transform="translate(${sx} ${sy}) rotate(${ang})"><g transform="translate(0 -1)">${tool}</g></g>`;
+ b+=`<path d="M4 -16.5L${sx} ${sy}" stroke="${SKIN}" stroke-width="2.2" stroke-linecap="round"/>`;
+ // Kopfbedeckung
+ if(job==='holz') b+=`<path d="M-4.4 -23.5Q0 -29 4.4 -23.5Z" fill="${p.cap}"/><rect x="-4.6" y="-24" width="9.2" height="1.4" fill="${p.acc}"/>`;
+ if(job==='berg') b+=`<path d="M-4.6 -23Q0 -29.5 4.6 -23Z" fill="#d9b030"/><rect x="-5" y="-23.6" width="10" height="1.3" fill="#a88a20"/><circle cx="2.4" cy="-26" r="1.2" fill="${p.glow}"/>`;
+ if(job==='fisch') b+=`<ellipse cx="0" cy="-24.2" rx="7" ry="1.6" fill="#d9b45a"/><path d="M-3.6 -24.4Q0 -29.5 3.6 -24.4Z" fill="#e6c570"/><rect x="-3.7" y="-25.2" width="7.4" height="1" fill="${p.flag}"/>`;
+ return svg('-16 -34 32 40',128,160,b);
+}
+// ---------- Biome ----------
+function pine(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-1.4" y="-5" width="2.8" height="5" fill="#5a3a20"/><path d="M-8 -4L0 -16L8 -4Z" fill="#2c6a35"/><path d="M-6.5 -10L0 -22L6.5 -10Z" fill="#35793f"/><path d="M-5 -16L0 -28L5 -16Z" fill="#3f8d4a"/><path d="M0 -28L5 -16H0Z" fill="#2c6a35" opacity=".5"/></g>`}
+function stump(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-3.6 0V-4H3.6V0Q0 2 -3.6 0Z" fill="#6b4a2c"/><ellipse cx="0" cy="-4" rx="3.6" ry="1.5" fill="#c9a06a"/><ellipse cx="0" cy="-4" rx="2" ry=".8" fill="none" stroke="#8a6238" stroke-width=".5"/></g>`}
+function logs(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-7" y="-3" width="12" height="3" rx="1.4" fill="#8a6238"/><rect x="-5" y="-6" width="12" height="3" rx="1.4" fill="#a37444"/><circle cx="6.8" cy="-4.5" r="1.4" fill="#d9b27c"/><circle cx="4.8" cy="-1.5" r="1.4" fill="#c9a06a"/></g>`}
+function wald(st){
+ const T=[[-18,-3,1],[-6,-7,1.1],[8,-4,1],[19,-8,.9],[2,2,.9]];
+ const S=[[-18,-3],[-6,-7],[8,-4],[19,-8],[2,2]];
+ const dirt=st>=3; let b=`<ellipse cx="0" cy="0" rx="29" ry="9" fill="${dirt?'#5d4a30':'#2f5a2a'}"/><ellipse cx="-3" cy="-1" rx="21" ry="5" fill="${dirt?'#76603f':'#3b7035'}" opacity=".8"/>`;
+ const trees=[5,4,3,1,0][st]; const order=[3,0,2,4,1];
+ const keep=order.slice(5-trees).sort((a,c)=>T[a][1]-T[c][1]);
+ // Stümpfe
+ for(let i=0;i<5;i++) if(!keep.includes(i)) b+=stump(S[i][0],S[i][1]+3,1);
+ for(const i of keep) b+=pine(T[i][0],T[i][1]+3,T[i][2]);
+ if(st>=2) b+=logs(-22,6,.7); if(st>=3) b+=logs(14,6,.8);
+ return svg('-32 -40 64 54',192,162,b);
+}
+function rock(x,y,s,c1,c2,c3){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-12 0L-14 -9L-6 -17L5 -18L13 -10L14 0Z" fill="${c1}"/><path d="M5 -18L13 -10L14 0L3 0L2 -9Z" fill="${c2}"/><path d="M-6 -17L5 -18L2 -11L-8 -9Z" fill="${c3}"/></g>`}
+function fels(st){
+ let b=`<ellipse cx="0" cy="0" rx="29" ry="9" fill="#6d6a5a"/><ellipse cx="-3" cy="-1" rx="21" ry="5" fill="#85806d" opacity=".8"/>`;
+ const c=['#8f8a84','#66615b','#b8b2aa'];
+ if(st===0) b+=rock(-14,2,.8,...c)+rock(14,3,.7,...c)+rock(0,0,1.5,...c);
+ if(st===1) b+=rock(-14,2,.8,...c)+rock(14,3,.6,...c)+rock(0,0,1.2,...c)+`<path d="M-3 -14L1 -8L-2 -4" stroke="#3b3835" stroke-width="1" fill="none"/>`;
+ if(st===2) b+=rock(-14,3,.6,...c)+rock(2,1,.95,...c)+rock(16,5,.4,...c);
+ if(st===3) b+=rock(-4,2,.55,...c)+rock(12,5,.35,...c)+rock(-16,6,.3,...c);
+ if(st===4) b+=`<ellipse cx="-8" cy="3" rx="3.2" ry="1.6" fill="#8f8a84"/><ellipse cx="6" cy="5" rx="2.4" ry="1.2" fill="#66615b"/><ellipse cx="14" cy="2" rx="2" ry="1" fill="#b8b2aa"/><ellipse cx="-16" cy="5" rx="1.8" ry=".9" fill="#8f8a84"/>`;
+ if(st>=1&&st<4) b+=`<circle cx="${-18+st*3}" cy="7" r="1.2" fill="#c9c4bd"/><circle cx="${20-st*2}" cy="8" r="1" fill="#a8a29a"/>`;
+ return svg('-32 -40 64 54',192,162,b);
+}
+function see(st){
+ const rx=[24,20,16,11,6][st], ry=rx*.34;
+ let b=`<ellipse cx="0" cy="1" rx="30" ry="10" fill="#6d5f3a"/><ellipse cx="0" cy="0" rx="${rx+4}" ry="${ry+2}" fill="#c9b27a"/>`;
+ if(st<4) b+=`<ellipse cx="0" cy="0" rx="${rx}" ry="${ry}" fill="#2f7fb3"/><ellipse cx="-2" cy="-1" rx="${rx*.7}" ry="${ry*.6}" fill="#4aa3d6"/><path d="M${-rx*.5} -1Q${-rx*.3} -3 ${-rx*.1} -1M${rx*.2} 1Q${rx*.4} -1 ${rx*.55} 1" stroke="#dff6ff" stroke-width=".8" fill="none"/>`;
+ if(st===0) b+=`<ellipse cx="9" cy="1" rx="3" ry="1.2" fill="#3f9a4a"/><path d="M-6 -2Q-4 -6 -2 -2" fill="#e8b04a"/>`;
+ if(st>=4) b+=`<ellipse cx="0" cy="0" rx="7" ry="2.4" fill="#5a4a2a"/><path d="M-5 -1L-1 1L2 -1L5 1M0 -2V2" stroke="#3a2e18" stroke-width=".7" fill="none"/>`;
+ if(st>=3) b+=`<path d="M-9 1L-4 -1L2 1L8 0" stroke="#3a2e18" stroke-width=".6" fill="none" opacity=".7"/>`;
+ for(const [x,h] of [[-26,12],[-23,16],[24,13],[27,17],[19,-6+10]]){ if(Math.abs(x)<rx+14||st>2) b+=`<path d="M${x} 3V${-h}" stroke="#4a7a3a" stroke-width="1.2"/><ellipse cx="${x}" cy="${-h}" rx="1.3" ry="3" fill="#6b4a2c"/>`; }
+ return svg('-32 -30 64 44',192,132,b);
+}
+// ---------- Sheet ----------
+const out=document.getElementById('out'); let h='';
+const cell=(name,label,s)=>`<div class="sp" data-name="${name}">${s}<span>${label}</span></div>`;
+const KS=['f','e','s','st'], SN={f:'Feuer',e:'Eis',s:'Schatten',st:'Stein'};
+h+=`<h2>1 · Dorf: wächst von Tag zu Tag (7 Stufen, 1 Feld)</h2><p class="n">Stufe 0 = Bauplatz (Tag 1), dann Zelt + Feuer, Hütte, mehr Hütten, Brunnen, Banner, am Ende Wachturm und Zaun (Tag ~40). Der Stil folgt dem Element: Holzhütten, Iglus, schiefe Schattenhäuser, Steinhäuser.</p>`;
+for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<7;i++)h+=cell(`dorf-${k}-${i}`,`Stufe ${i}`,village(k,i));h+='</div>';}
+h+=`<h2>2 · Arbeiter (Holzfäller, Bergarbeiter, Angler), je 2 Bilder pro Tätigkeit</h2><p class="n">Kleidung nimmt die Elementfarbe auf. Bild 1 = Ausholen, Bild 2 = Schlag/Wurf.</p>`;
+for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(const j of [['holz','Holz'],['berg','Berg'],['fisch','Angeln']])for(let f=0;f<2;f++)h+=cell(`arbeiter-${k}-${j[0]}-${f}`,`${j[1]} ${f+1}`,worker(k,j[0],f));h+='</div>';}
+h+=`<h2>3 · Biome in fünf Stufen (voll → abgebaut)</h2><p class="n">Wald (Bäume werden gefällt, Stümpfe und Holzstapel bleiben), Felsen (werden kleiner, am Ende Geröll), See (ersetzt den Sumpf, schrumpft und trocknet aus).</p>`;
+for(const [n,f,t] of [['wald',wald,'Wald'],['fels',fels,'Felsen'],['see',see,'See']]){h+=`<div class="row"><div class="lab">${t}</div>`;for(let i=0;i<5;i++)h+=cell(`biom-${n}-${i}`,`${i*25}% abgebaut`,f(i));h+='</div>';}
+out.innerHTML=h;
+</script>
