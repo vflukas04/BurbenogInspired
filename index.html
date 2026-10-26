@@ -220,7 +220,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26i";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26j";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1883,14 +1883,16 @@ const TOWER_NAME = ['feuer', 'eis', 'schatten', 'stein'];
 const TOWER_H = { feuer:[22,42,10,49,52,65.8,52,42], eis:[26,34.5,66.4,57,39.9,58.2,48,66], schatten:[26,44,39,44,26.6,49,48,60], stein:[48,30,58,62,22,70,33,88] };   // Höhe der Zeichnung über dem Fuß (Raster-Einheiten)
 function loadImg(k){
   if (k in TIMG) return TIMG[k] && TIMG[k].complete && TIMG[k].naturalWidth ? TIMG[k] : null;
-  const im = new Image(); im.onerror = () => { TIMG[k] = null; }; im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
+  const im = new Image(); im.onerror = () => { TIMG[k] = null; loadImg.n[k] = (loadImg.n[k] || 0) + 1; if (loadImg.n[k] < 4) setTimeout(() => { delete TIMG[k]; loadImg(k); }, 1500*loadImg.n[k]); };   // Handy-Netz: bis zu 3 Wiederholungen im.onload = () => { if (!view25 || typeof drawAll !== 'function') return; drawAll(); clearTimeout(towerImg.t); towerImg.t = setTimeout(() => { if (G && typeof render === 'function') render(); }, 80); }; im.src = 'assets/turm/' + k + '.png'; TIMG[k] = im; return null;
 }
+loadImg.n = {};
 // 26i (F): bewegliche Teile. Jeder Turm hat ein Grundbild (assets/turm/<element>-<nr>.png) und PARTN Teilbilder (…-<nr>p<id>.png, gleiches Raster), die einzeln um einen Drehpunkt bewegt werden
 const PARTN = { feuer:[1,1,2,1,2,2,1,1], eis:[1,1,1,1,1,1,1,2], schatten:[1,1,2,1,2,1,3,2], stein:[1,2,1,1,2,2,2,3] };
 function towerImg(el, idx){
   const nmE = TOWER_NAME[el], n = nmE + '-' + (idx + 1), b = loadImg(n), cnt = PARTN[nmE][idx], ps = [];
-  for (let i = 0; i < cnt; i++) { const q = loadImg(n + 'p' + i); if (q) ps.push(q); }
-  if (!b || ps.length < cnt) return null;
+  let wait = false;
+  for (let i = 0; i < cnt; i++) { const q = loadImg(n + 'p' + i); if (q) ps.push(q); else if (n + 'p' + i in TIMG && TIMG[n + 'p' + i] === null && loadImg.n[n + 'p' + i] >= 4) continue; else wait = true; }   // endgültig fehlendes Teil: ohne es zeichnen
+  if (!b || wait) return null;
   b.parts = ps; return b;
 }
 // Bewegung je Teil: [Drehpunkt x, y (Raster, Fuß = 0), Funktion(t Zeit, g 1→0 nach dem Schuss, w Ausschlag 0→1→0, dx, dy Zielrichtung) → {r Drehung, x, y Verschiebung, sx, sy, a}]
