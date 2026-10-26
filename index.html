@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-26m";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-26n";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1968,7 +1968,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
     else if (nm === 'schatten0' || nm === 'schatten5') { sx = sy = 1; ox = oy = 0; }   // Schemen/Phantom: bewegt sich als Teilbild
     else if (nm === 'schatten1') { ox = 0; oy = Math.sin(now*3 + tw.x) * cs*.05 - cs*.05; sx = sy = 1; }   // Irrlicht schwebt
     else if (nm === 'feuer2' || nm === 'feuer3') { ox = -dx*cs*.07*g; }
-    const flip = nm === 'feuer1' && Math.cos(aim) > 0;   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
+    const flip = (nm === 'feuer1' && Math.cos(aim) > 0) || (nm === 'feuer2' && Math.cos(aim) < 0);   // Glumanda blickt nach links, Flammenwerfer-Mündung nach rechts   // Glumanda blickt nach links und dreht sich zum Ziel: Schuss kommt aus dem Maul
     c.save(); c.translate(fx + ox, fy + oy); c.rotate(rotA); c.scale(flip ? -sx : sx, sy);
     c.drawImage(sp, -44*u, -92*u, 88*u, 102*u);
     const gp = Math.max(0, 1 - (now - (FIRE_T[key] === undefined ? -9 : FIRE_T[key])) / .5), wp = gp > 0 ? Math.sin(Math.PI * (1 - gp)) : 0, pd = PARTS[nm];   // bewegliche Teile
@@ -1983,7 +1983,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
     if (g > 0 && glow !== undefined) {                                              // Mündungseffekt in Elementfarbe (am Turm, in Zielrichtung)
       const mx = fx + dx*cs*.32, my = fy - hh*.55 + dy*cs*.2, col = ELEMENTS[tw.el].color;
       const fl = (r, cc) => { const gr = c.createRadialGradient(mx, my, 0, mx, my, r); gr.addColorStop(0, cc + 'dd'); gr.addColorStop(1, cc + '00'); c.fillStyle = gr; c.beginPath(); c.arc(mx, my, r, 0, 7); c.fill(); };
-      if (nm === 'feuer2') { c.save(); c.translate(fx + dx*cs*.28, fy - hh*.45 + dy*cs*.1); c.rotate(Math.atan2(dy, dx)); c.fillStyle = '#ff8a3dcc'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(cs*.3*g, -cs*.12*g, cs*.6*g, 0); c.quadraticCurveTo(cs*.3*g, cs*.12*g, 0, 0); c.fill(); c.fillStyle = '#ffe08acc'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(cs*.2*g, -cs*.05*g, cs*.38*g, 0); c.quadraticCurveTo(cs*.2*g, cs*.05*g, 0, 0); c.fill(); c.restore(); }
+      if (nm === 'feuer2') { c.save(); c.translate(fx + (Math.cos(aim) > 0 ? 1 : -1)*22*u, fy - 4.5*u); c.rotate(Math.atan2(dy, dx)); c.fillStyle = '#ff8a3dcc'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(cs*.3*g, -cs*.12*g, cs*.6*g, 0); c.quadraticCurveTo(cs*.3*g, cs*.12*g, 0, 0); c.fill(); c.fillStyle = '#ffe08acc'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(cs*.2*g, -cs*.05*g, cs*.38*g, 0); c.quadraticCurveTo(cs*.2*g, cs*.05*g, 0, 0); c.fill(); c.restore(); }
       else if (nm === 'eis2') { const ux = fx, uy = fy - hh*.95; const gr = c.createRadialGradient(ux, uy, 0, ux, uy, cs*.35); gr.addColorStop(0, '#eaf8ffcc'); gr.addColorStop(1, '#eaf8ff00'); c.fillStyle = gr; c.beginPath(); c.arc(ux, uy, cs*.35*g, 0, 7); c.fill(); }
       else if (nm === 'stein2' || nm === 'stein7') { c.fillStyle = '#d9cba6'; c.globalAlpha = .6*g; for (let j = -2; j <= 2; j++) { c.beginPath(); c.ellipse(fx + j*cs*.16*(1.6 - g*.6), fy + cs*.04, cs*.07, cs*.04, 0, 0, 7); c.fill(); } c.globalAlpha = 1; if (nm === 'stein7') { c.strokeStyle = '#d9cba6'; c.globalAlpha = .7*g; c.lineWidth = 2; c.beginPath(); c.ellipse(fx, fy, cs*(.3 + .6*(1 - g)), cs*(.3 + .6*(1 - g))*k*.6, 0, 0, 7); c.stroke(); c.globalAlpha = 1; } }
       else if (nm === 'feuer5') { c.fillStyle = '#ff8a3d'; for (let j = 0; j < 5; j++) { c.globalAlpha = g; c.beginPath(); c.arc(fx + (j - 2)*cs*.07, fy - hh - (1 - g)*cs*(.1 + j%3*.1), cs*.03, 0, 7); c.fill(); } c.globalAlpha = 1; }
@@ -2088,6 +2088,14 @@ function drawShot(c, p, cs, time){
     c.fillStyle = '#0006'; c.beginPath(); c.ellipse(x, y, k*.12, k*.06, 0, 0, Math.PI*2); c.fill();
   }
   y -= h + (CUR.k < 1 && !p.lob ? cs*.25 : 0);
+  if (CUR.k < 1 && p.el === 0 && p.idx === 2) {   // Flammenwerfer: Feuerstrahl von der Mündung bis zum Ziel (Spitze = Geschoss)
+    const H = TOWER_H.feuer[2], u = cs * Math.min(1.5, Math.max(.5, H * (1 + 2 * .03) / 44)) / H, sg = (p.tx - p.x0) > 0 ? 1 : -1,
+      mx = p.x0*cs + sg*22*u, my = gyOf(p.y0, cs) + CUR.k*cs*.32 - 4.5*u, ang = Math.atan2(y - my, x - mx), len = Math.hypot(x - mx, y - my), fl = Math.sin(time*40);
+    if (len > 2) { c.save(); c.translate(mx, my); c.rotate(ang);
+      [['#e0451acc', .2], ['#ff8a3de0', .13], ['#ffe08af0', .06]].forEach(([col, w], j) => { const w1 = cs*w*(1 + .12*Math.sin(time*40 + j*2)), w0 = w1*.3;
+        c.fillStyle = col; c.beginPath(); c.moveTo(0, -w0); c.quadraticCurveTo(len*.5, -w1*(.8 + .1*fl), len, -w1*.7); c.lineTo(len, w1*.7); c.quadraticCurveTo(len*.5, w1*(.8 - .1*fl), 0, w0); c.closePath(); c.fill(); });
+      c.restore(); }
+  }
   if (CUR.k < 1 && p.el === 0 && p.idx === 1) { const f = Math.max(0, 1 - (1 - left / tot) * 5), uu = cs * .609 / 26; x += (Math.cos(dir) > 0 ? 1 : -1) * 27 * uu * f; }   // Glumanda: Geschoss startet im Maul
   const def = p.def, sz = k * (p.lob ? .42 : .3);
   if (CUR.k < 1 && shot25(c, p, x, y, Math.atan2(dy * CUR.k, dx), cs, time)) return;   // 2,5D: Geschoss passt zum Turm-Bild

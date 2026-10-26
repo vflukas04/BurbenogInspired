@@ -1,6 +1,13 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 24.10. 19:35 · F · 2026-10-24c – Feuer-Rollen schärfer, Stein-Malus tiefer (Nachbau aller Paare)
+- Nachbau mit dem Bauverhalten aus dem Eis-Stein-Spiel (6 Paare, beide Rollen, 12 Wetterfolgen, Tag 1–12, mit Edelsteinen): Feuer neutral 11 / ineffektiv 10 Kills (Ziel 5–8 / 1–3), Stein ineffektiv 6,5.
+- Feuer `kraftBlock` 1,466/1,25 → 1,30/1,15. `weak` Feuer: Kellerasseln 0,7 → 0,55, Katzen 0,75 → 0,55, Mäuse 1,2 → 1,65, Ratten 1,5 → 1,75. Stein: Nacktschnecken 0,6 → 0,45, Ratten 0,55 → 0,4.
+- Erwartet: Feuer eff ~10 / neutral ~7,6 / ineffektiv ~3; Stein ineffektiv ~3,6. Eis und Schatten unverändert.
+- Neues Spiel + neu laden. Block 1 betroffen, Absprache mit L läuft privat.
+
+
 ### 24.10. 18:10 · F · 2026-10-24b – Katzen: Anzeige wieder „Schatten neutral“
 - Mit Schatten 1,3 (24a) hätte die Anzeige am Tag 9 zwei effektive Elemente gezeigt (Eis und Schatten). `eff:[-1, 1, 0, 0]` legt die Rollen fest, an den Werten ändert sich nichts.
 
