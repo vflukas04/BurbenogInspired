@@ -1,5 +1,8 @@
 # Archiv: ältere Updates (neueste oben)
 
+### 22.10. 00:15 · L · 2026-10-22a – Eigene Bilder für zwei Varianten
+- Zwei Monster-Varianten haben eigene Bilder statt eines gemeinsamen (eine Rückansicht fehlt noch, dort Seitenansicht). Neu laden reicht.
+
 ### 21.10. 23:50 · L · 2026-10-21e – Fuchs und Dachs von hinten
 - Letzte fehlende Ansichten ergänzt (Fuchs und Dachs laufen jetzt auch nach oben mit Rückansicht). Neu laden reicht.
 
