@@ -278,10 +278,10 @@
       "effect": "burn",
       "fly": true,
       "groundHalf": true,
-      "flyMul": 2.5
+      "flyMul": 1.8
     }
   ],
-  "ELEMENTS.0.kraftT.3": 1.25954,
+  "ELEMENTS.0.kraftT.3": 1.14713,
   "ELEMENTS.0.towers.4": [
     "Schwelbrand",
     "Schaden",
@@ -426,11 +426,11 @@
       "effect": "slow",
       "fly": true,
       "groundHalf": true,
-      "flyMul": 2.5,
+      "flyMul": 1.8,
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.37598,
+  "ELEMENTS.1.kraftT.2": 1.25318,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
@@ -607,10 +607,10 @@
     0,
     {
       "effect": "curse",
-      "fly": false
+      "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.3": 1.53466,
+  "ELEMENTS.2.kraftT.3": 1.39514,
   "ELEMENTS.2.towers.4": [
     "Seelenfresser",
     "Schaden",
@@ -724,7 +724,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.0": 1.35351,
+  "ELEMENTS.3.kraftT.0": 1.08281,
   "ELEMENTS.3.towers.1": [
     "Schleuder",
     "Schaden",
@@ -740,7 +740,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.1": 1.5338,
+  "ELEMENTS.3.kraftT.1": 1.22704,
   "ELEMENTS.3.towers.2": [
     "Katapult",
     "Schaden",
@@ -756,7 +756,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.2": 1.13929,
+  "ELEMENTS.3.kraftT.2": 0.91143,
   "ELEMENTS.3.towers.3": [
     "Felsbrocken",
     "Schaden",
@@ -769,10 +769,10 @@
     0.75,
     {
       "effect": "none",
-      "fly": false
+      "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.3": 1.07556,
+  "ELEMENTS.3.kraftT.3": 0.78223,
   "ELEMENTS.3.towers.4": [
     "Erdbeben",
     "Schaden",
@@ -790,7 +790,7 @@
       "chance": 0.2
     }
   ],
-  "ELEMENTS.3.kraftT.4": 1.75982,
+  "ELEMENTS.3.kraftT.4": 1.40785,
   "ELEMENTS.3.towers.5": [
     "Granitwächter",
     "Schaden",
@@ -806,7 +806,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.5": 1.50546,
+  "ELEMENTS.3.kraftT.5": 1.20437,
   "ELEMENTS.3.towers.6": [
     "Lawine",
     "Schaden",
@@ -822,7 +822,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.6": 0.935,
+  "ELEMENTS.3.kraftT.6": 0.748,
   "ELEMENTS.3.towers.7": [
     "Bergkönig",
     "Schaden",
@@ -839,7 +839,7 @@
       "chance": 0.1
     }
   ],
-  "ELEMENTS.3.kraftT.7": 1.09571,
+  "ELEMENTS.3.kraftT.7": 0.87657,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,
@@ -879,5 +879,7 @@
   "MONSTERS.Magier-Novizen.blink.dur": 2.5,
   "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
   "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
-  "_stand": "Zweig D2 (L, 25.10.): Komplettversuch – 32 Türme aus Grundturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js), Weg 2 als Regel; Monster wie D0"
+  "_stand": "Zweig D2 (L, 25.10.): Komplettversuch – 32 Türme aus Grundturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js), Weg 2 als Regel; Monster wie D0",
+  "ELEMENTS.3.splashCenter": 1,
+  "ELEMENTS.3.splashEdge": 0.7
 }

@@ -256,6 +256,19 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - **Befund:** Die Fliegertage kippen stark zwischen den Elementen. Nicht wegen der Luftspezialisten, sondern wegen der Türme **ohne** Luftangriff: Stein (Kiesel, Schleuder, Felsbrocken, Erdbeben, Lawine) und Schatten (Fluchstein) stehen im Plan auf Plätzen, die an Fliegertagen nichts treffen. Der Zuschlag ×1,1 gleicht das über das Spiel ungefähr aus, an Fliegertagen aber nicht. Feuer ist dort mit 250 % klar zu stark.
 - Entscheidung offen (L): wie viele Türme ohne Luftangriff je Element, Stein-Regel „Fliegende nur Turm 3/6/8“ beibehalten?
 
+## D2c Stein 3/4/6/8, Luftspezialist 60/180, Fluchstein (26.10. nachmittags)
+- L: Stein trifft Fliegende mit Turm 3/4/6/8 (Felsbrocken neu); Luftspezialist Boden 60 % / Fliegende 180 %.
+- **Warum Schatten an Fliegertagen so schwach war:** nicht der Fluch, sondern der Fluchstein (Turm 4, kein Luftangriff) – Turm 4 ist im Plan der meistgebaute Turm (Map 0). Test: Fluchstein trifft Fliegende → Schatten-Fliegertage 0,48 → 1,05. Gleiches galt für Stein-Felsbrocken. Als Vorschlag im Stand (L entscheidet).
+- **Stein war an Bodentagen viel zu stark (≈ 1,5)**, verdeckt durch den Einbruch an Fliegertagen: Ursachen Stein-Flächenabfall 120/80 % (≈ +17 %), Rüstungsschaden, Betäuben und Zuschlag ohne Luftangriff je ≈ +4 %. In D: Stein-Abfall wie alle (100/70 %), Korrektur `STEIN_K` = 0,8.
+- Ergebnis ohne Wetter:
+
+| | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| Bodentage | 0,97 | 1,06 | 1,08 | 1,00 |
+| Fliegertage | 1,15 | 0,73 | 1,05 | 0,33 |
+
+- Bodentage ±5 %. Fliegertage bleiben Element-Eigenschaft: Stein (nur 4 von 8 Türmen) und Eis (kein Bremsen auf Fliegende) schwach, dort muss der Partner tragen.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
