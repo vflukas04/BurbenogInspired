@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27t";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27u";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2371,7 +2371,7 @@ function worldInfo(i, map){
   const chan = wk.chan.map(c => ({ ...c, p:dep[c.a[0] + ',' + c.a[1]] || 0 })).filter(c => c.p > 0);
   return { day, el, vc, R, v:wStage(day), np, prog, pave, wide, used, dep, act, chan, key:[el, Math.round(R*3), pave, wide?1:0, vc.x, vc.y, used.map(t => t.x + '_' + t.y).join('.'), prog.map(q => Math.round(q*6)).join(''), Math.min(day, 80)].join(':') };
 }
-function worldPaths(map, vc, used, seed){   // Wege vom Dorf (bzw. dem nächsten Wegstück) zu den Türmen, um Biome herum, als Astwerk
+function worldPaths(map, vc, used, seed, strict){   // strict: Biomfelder gar nicht betreten (Arbeiter), sonst nur sehr teuer (Dorfwege)   // Wege vom Dorf (bzw. dem nächsten Wegstück) zu den Türmen, um Biome herum, als Astwerk
   const key = k => k.x + ',' + k.y, towSet = new Set(used.map(key)), have = [vc.x + ',' + vc.y], segs = [];
   for (const tw of used) { const tgt = key(tw), dist = {}, prev = {}, q = [];
     for (const h of have) { dist[h] = 0; q.push(h); }
@@ -2379,7 +2379,7 @@ function worldPaths(map, vc, used, seed){   // Wege vom Dorf (bzw. dem nächsten
       for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) { if (!dx && !dy) continue; const nx = cx + dx, ny = cy + dy, nk = nx + ',' + ny;
         if (nx < 0 || ny < 0 || nx >= COLS || ny >= ROWS) continue;
         const blk = (a, b) => !map.cells.has(a + ',' + b) && map.terrain[b][a] > 0 && !(a === vc.x && b === vc.y);
-        if (towSet.has(nk) && nk !== tgt) continue; if (dx && dy && (blk(cx + dx, cy) || blk(cx, cy + dy))) continue;
+        if (towSet.has(nk) && nk !== tgt) continue; if (strict && nk !== tgt && blk(nx, ny)) continue; if (dx && dy && (blk(cx + dx, cy) || blk(cx, cy + dy))) continue;
         const w = (dx && dy ? 1.45 : 1) * (map.cells.has(nk) ? 4 : blk(nx, ny) ? 30 : 1) + wHash(nx, ny, 5 + seed) * .5, nd = dist[c] + w;   // Biome nur im Notfall durchqueren
         if (dist[nk] === undefined || nd < dist[nk] - 1e-9) { dist[nk] = nd; prev[nk] = c; if (!q.includes(nk)) q.push(nk); } } }
     if (dist[tgt] === undefined) { segs.push(null); continue; }
@@ -2441,8 +2441,8 @@ function drawWorker(c, cs, wl, w, gyf){   // Arbeiter (etwa ¼ Feld hoch) steht 
 }
 // ---- Arbeiter-Animation (27.10., F): eigene Ebene über dem Spielfeld, läuft dauerhaft (auch in Bau-Pausen), nur Anzeige ----
 function workerPoint(w, vc, T){   // Position (Feldeinheiten, Fußpunkt), Blickrichtung, Tätigkeit
-  if (!w.pts) { let P = []; try { const sg = worldPaths(MAPS_BY_WORKER.map, vc, [{ x:w.x, y:w.y }], w.n)[0]; if (sg) P = sg.slice(0, -1).map(k => { const [x, y] = k.split(',').map(Number); return [x + .5 + (wHash(x, y, 31 + w.n) - .5)*.35, y + .78 + (wHash(x, y, 32 + w.n) - .5)*.25]; }); } catch (e) {}
-    w.pts = [[vc.x + .5, vc.y + .9], ...P.slice(1), [w.x + .78, w.y + .92]]; w.len = 0; w.seg = []; for (let j = 1; j < w.pts.length; j++) { const d = Math.hypot(w.pts[j][0] - w.pts[j-1][0], w.pts[j][1] - w.pts[j-1][1]); w.seg.push(d); w.len += d; } }
+  if (!w.pts) { let P = []; try { const sg = worldPaths(MAPS_BY_WORKER.map, vc, [{ x:w.x, y:w.y }], w.n, true)[0]; if (sg) P = sg.slice(0, -1).map(k => { const [x, y] = k.split(',').map(Number); return [x + .5 + (wHash(x, y, 31 + w.n) - .5)*.2, y + .78 + (wHash(x, y, 32 + w.n) - .5)*.16]; }); else P = null; } catch (e) { P = null; }   // ohne begehbaren Weg (ringsum Gelände): nur am Platz arbeiten, nicht über Biome laufen
+    w.pts = P ? [[vc.x + .5, vc.y + .9], ...P.slice(1), [w.x + .78, w.y + .92]] : [[w.x + .78, w.y + .92]]; w.len = 0; w.seg = []; for (let j = 1; j < w.pts.length; j++) { const d = Math.hypot(w.pts[j][0] - w.pts[j-1][0], w.pts[j][1] - w.pts[j-1][1]); w.seg.push(d); w.len += d; } }
   const sp = .9, tw = w.len / sp, workT = 7 + w.n % 3, idle = 1.3, cyc = workT + 2*tw + idle, ph = (T + w.n * 2.3) % cyc;
   const at = d => { let q = Math.max(0, Math.min(w.len, d)); for (let j = 0; j < w.seg.length; j++) { if (q <= w.seg[j] || j === w.seg.length - 1) { const f = w.seg[j] ? q / w.seg[j] : 0, a = w.pts[j], b = w.pts[j+1]; return [a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f, b[0] - a[0]]; } q -= w.seg[j]; } return [w.pts[0][0], w.pts[0][1], 1]; };
   if (ph < workT || w.len <= 0) { const a = w.pts[w.pts.length - 1]; return { x:a[0], y:a[1], flip:false, work:true }; }

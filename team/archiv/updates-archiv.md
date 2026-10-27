@@ -1,6 +1,11 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 27.10. 00:10 · F · 2026-10-27p – Dörfer: Sockel, Eisburg blau, Spieler 2–4 oben links
+- Alle Dörfer stehen auf einem dunklen Sockel (Feuer Basalt, Eis Eisscholle, Schatten Platte, Stein Steinplatte), die Eisburg hat sattere blaue Wände und hebt sich vom Schnee ab. Neue Bilder in `assets/dorf/` (Quelle `tools/dorf/dorf.html`).
+- Spieler 1 hat das Dorf unten rechts, Spieler 2–4 oben links (zweite Reihe, damit die Burg ins Bild passt). Boden, Wege und zugefrorene Seen richten sich nach der jeweiligen Ecke. Nur Anzeige. Neu laden genügt.
+
+
 ### 27.10. 23:50 · F · 2026-10-27o – Seen frieren im Eis-Gebiet zu
 - Auf einer Eis-Map frieren Seen zu (hellblaue Eisfläche mit Rissen), sobald sie im umgewandelten Schnee-Gebiet um das Dorf liegen. Nur Anzeige, der Geländebonus bleibt. Neu laden genügt.
 
