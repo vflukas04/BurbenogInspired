@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 27.10. 18:00 · L · Zweig D6 – Standardtürme ohne Reichweiten-Zuwachs, Treppe ×1,08, Leben kalibriert (nur Balancing-Werkzeuge)
+- Standardtürme: Reichweite 3,5 auf allen Stufen, Upgrades ändern nur Schaden je Gold (Kurve 1/0,95/1,01/1,08/1,16/1,25). Bezugs-Bot spart bis 3 Tage. Mensch-Bots 92–98 % des Bezugs, Upgrade-Anteil ≈ 50 %, T7/T8 werden gebaut. Spielcode unverändert.
+
 ### 27.10. 13:00 · L · Zweig D4 – Leben auf Bezugs-Bot kalibriert (nur Balancing-Werkzeuge)
 - Treppe ×1,12 je Turmtyp, Upgrade-Kurve 1/0,92/1/1,08/1,16/1,25, Bezugs-Bot mit Vorausschau (≤ 4 × T1, sonst ≤ 3 je Turmtyp). Mensch-Bots 0,91–0,96 des Ziels. Neue Begriffe: **Turmtyp** (T1–T8), **Stufe** (S1–S6). Spielcode unverändert.
 

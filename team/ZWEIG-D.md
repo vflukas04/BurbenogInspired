@@ -389,6 +389,11 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - **D6** (`spiegel-D6.json`: Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Leben noch von D5): Bezug 0,93 (Upgrade-Anteil **48 %**, vorher 32 %), ohne Grenze 0,93 (51 %), wenige ganz hoch 0,94, **Mensch A/B/C 0,90/0,87/0,85 = 97/94/91 % des Bezugs**. T7/T8 bleiben (Bezug Map 0: 3 × T7, 1 × T8, T4/T5 auf S3–S5).
 - **Hinweis:** Im Spiel kann man für 50 % verkaufen (`sellRefund`), die Bots verkaufen nie. Gerade beim Endaufbau (kleiner Turm räumt das beste Feld für T8) könnte Verkaufen einen Teil der 20–25 % holen.
 
+## D6 kalibriert (L 27.10. abends, `spiegel-D6.json`)
+- **Beschlüsse L:** Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 Felder auf allen Stufen. Bezugs-Bot `bezug3` (spart bis 3 Tage, T1 ≤ 4, sonst ≤ 3 je Turmtyp). Upgrade-Anteil um 50 % ist gut, L vermutet **2/3 als Optimum**. Verkaufen soll der Bot nicht (erlaubt ja, sollte aber schlechter sein).
+- **Leben auf D6 kalibriert** (2 Runden): Ziel 1,53 × Tag^−0,098. Kontrolle: Bezug **1,01** (Blöcke 1,04/1,01/1,00/0,99), wenige Türme ganz hoch 1,03, **Mensch A/B/C 0,98/0,95/0,92**. Upgrade-Anteil Bezug 52 %. Endaufbau Bezug Map 0: 4 × T1 (S4–S6), 3 × T2, 3 × T3, 3 × T4, 2 × T5, 3 × T6, 2 × T7, 1 × T8.
+- **Ersetzen erlaubt** (`bezug3V`: verkaufen 50 % + größerer Turmtyp auf dem Feld): 1,02, also kaum besser (+1 %). Der Endaufbau verschiebt sich stark zu großen Türmen (Map 0: je 3 × T4–T8, kaum T1–T3). Verkaufen bleibt deshalb aus dem Bezug heraus.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

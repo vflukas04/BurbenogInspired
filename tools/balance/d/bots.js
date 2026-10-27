@@ -132,15 +132,26 @@ const BOTS = {
   // Bezugs-Bot mit längerem Sparen (L): bis 3 Tageseinkommen
   bezug3: { txt:'wie Bezug, spart bis 3 Tage', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:3, cap:[4, 3, 3, 3, 3, 3, 3, 3] },
   bezug3Frei: { txt:'wie Bezug, spart bis 3 Tage, ohne Obergrenze', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:3 },
+  // wie bezug3, darf aber Türme durch größere Turmtypen ersetzen (Verkauf 50 %) – L 27.10.: erlaubt, sollte aber eigentlich schlechter sein
+  bezug3V: { txt:'wie Bezug (3 Tage sparen), darf ersetzen (verkaufen 50 % + größerer Turmtyp auf dem Feld)', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:3, cap:[4, 3, 3, 3, 3, 3, 3, 3], verkauf:true },
   simVoraus: { txt:'gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1 },
 };
 // Gieriger Aufbau wie build.js (greedy), aber neue Türme nur, solange vom Turmtyp weniger als cap stehen
 const resvW = (s, w) => w.tag ? C.reserveDay(s, w) : C.reserveHp(s, w);
 const runW = (s, w, f) => w.tag ? C.runDay(s, w, f) : C.runWave(s, w, f);
 const quickW = (s, waves, fRef) => { let v = 0, n = 0; waves.forEach((w, i) => { v += (w.wt || 1) * runW(s, w, fRef[i]).hpShare; n += w.wt || 1; }); return v / n; };
-function greedyCap(gold, waves, start, cap, spar){ let setup = start, left = gold - B.spent(setup);
+/* Ersetzen (L 27.10. abends, nur erlaubt, nicht Standard): Turm verkaufen (50 % des investierten Golds zurück, wie im Spiel sellRefund)
+   und auf seinem Feld einen größeren Turmtyp bauen. Kosten = Baupreis − Erlös; der Verlust bleibt als investiertes Gold am neuen Turm. */
+function ersetzen(setup, gold, cap){ const out = [];
+  setup.towers.forEach((t, i) => { const erl = Math.floor((t.inv || 0) * (G.CONFIG.sellRefund ?? 0.5));
+    for (let k = t.idx + 1; k < 8; k++) { if (setup.towers.filter(u => u.idx === k).length >= capVon(cap, k)) continue;
+      const bau = G.buildCost(EL, k, C.LANE, t.x, t.y), cost = bau - erl; if (cost > gold || cost <= 0) continue;
+      out.push({ kind:'up', ersetzt:true, cost, txt:`T${t.idx + 1} S${t.lvl} → T${k + 1}`, apply:s => ({ ...s, towers:s.towers.map((u, j) => j === i ? { x:u.x, y:u.y, el:EL, idx:k, lvl:1, inv:(u.inv || 0) + cost } : u) }) }); } });
+  return out; }
+function greedyCap(gold, waves, start, cap, spar, verkauf){ let setup = start, left = gold - B.spent(setup);
   for (let guard = 0; guard < 300; guard++) {
     const acts = B.actions(setup, left, { cells:3, keep:0.8, spar }).filter(a => { if (a.kind !== 'bau') return true; const k = a.apply(setup).towers.at(-1).idx; return setup.towers.filter(t => t.idx === k).length < capVon(cap, k); });
+    if (verkauf) acts.push(...ersetzen(setup, left + spar, cap));
     if (!acts.length) break;
     const R = waves.map(w => resvW(setup, w)), fRef = R.map(r => Math.max(r * 1.25, 0.05)), base = quickW(setup, waves, fRef);
     let cand = acts.map(a => { const s = a.apply(setup), v = quickW(s, waves, fRef); return { a, s, v, gain:(v - base) / a.cost }; });
@@ -242,7 +253,7 @@ function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage =
   for (let d = 0; d < N; d++) {
     if (RP) rueckVorwaerts(st, d, RP[d]); else
     if (bot.sim) { const start = { el:EL, towers:st.towers.map(t => ({ ...t })), res:[] };
-      const g = bot.cap ? greedyCap(budget(d), bot.sim(d), start, bot.cap, bot.spar * einkommen(d)) : B.greedy(EL, budget(d), bot.sim(d), { cells:3, keep:0.8, spar:bot.spar * einkommen(d) }, start);
+      const g = bot.cap || bot.verkauf ? greedyCap(budget(d), bot.sim(d), start, bot.cap, bot.spar * einkommen(d), bot.verkauf) : B.greedy(EL, budget(d), bot.sim(d), { cells:3, keep:0.8, spar:bot.spar * einkommen(d) }, start);
       st.towers = g.setup.towers.map(t => ({ ...t })); st.spent = B.spent(g.setup);
       // 27.10.: Findet die Schnellbewertung keinen Zuwachs mehr (sättigt), bliebe Gold liegen → Rest nach Wirkung je Gold ausgeben (nicht bei Sparen)
       //         (bei sparenden Bots nur, was über die erlaubte Sparsumme von spar × Tageseinkommen hinausgeht)
