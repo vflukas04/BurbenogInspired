@@ -465,6 +465,26 @@ Fester Aufbau des Bezugs-Bots (D6, beide Maps, alle 48 Tage), alle Türme mit de
 - **Drift** jetzt bei allen Effekt-Elementen ähnlich: Anfang ≈ 0,85, Ende ≈ 1,1–1,17. Schatten am Anfang durch die neuen Nächte 0,87 statt 0,77.
 - **Empfindlichkeit** (L): jeder Kurs ±10 % (auf Wert − 1), alle 4 Elemente auf dem festen Bezugs-Aufbau über 48 Tage (`d/sens.js`, ca. 4–5 min je Variante).
 
+## Empfindlichkeit der Kurse (27.10. nachts, `d/sens.js`)
+Jeder Kurs einzeln ±10 % (auf Wert − 1), Türme neu zusammengesetzt, alle 4 Elemente auf dem festen Bezugs-Aufbau (Bodentage). Ausgang: Feuer 0,927 · Eis 1,002 · Schatten 1,034 · Stein 0,999.
+
+| Kurs | ×0,9 | ×1,1 | betroffen |
+|---|---|---|---|
+| Reichweite | Feuer 0,924 · Eis 0,983 · Stein 0,986 | Eis 1,007 · Stein 0,997 | alle schwach |
+| Geschosse | Schatten 1,025 | Schatten 1,043 · Eis 1,008 | Schatten, Eis |
+| Rate | – | – | kaum |
+| Fläche | Stein 0,985 | Stein 1,002 | Stein |
+| **Brennen** | Feuer 0,942 | **Feuer 0,884** | nur Feuer |
+| **Fluch** | Schatten 1,055 | Schatten 1,025 | nur Schatten |
+| **Bremsen** | Eis 1,009 | Eis 0,972 | nur Eis |
+| **Rüstungsschaden** | Feuer 0,935 · Eis 1,013 · Stein 1,018 | Feuer 0,893 · Eis 0,972 · Stein 0,967 | Feuer, Eis, Stein |
+| Nova / Nova-Betäuben | Eis/Stein ±1 % | | Eis, Stein |
+| Betäuben | – | – | keine Wirkung (keine Einzelziel-Betäuber mehr) |
+| Nachtregel | Schatten 1,023 | Schatten 1,056 | nur Schatten |
+
+- **±10 % auf einen Kurs verschieben ein Element um höchstens etwa 4 %, die Drift-Form (Anfang ≈ 0,85, Ende ≈ 1,1) ändert sich praktisch nicht.** Mit den Kursen lassen sich die Mittelwerte einstellen, die Drift nicht.
+- Saubere Hebel je Element: Feuer → Brennen, Schatten → Fluch, Eis → Bremsen, Stein → Fläche / Rüstungsschaden.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
