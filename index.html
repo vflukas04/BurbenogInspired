@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27w";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27x";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2443,7 +2443,8 @@ function drawWorker(c, cs, wl, w, gyf){   // Arbeiter (etwa ¼ Feld hoch) steht 
 function workerPoint(w, vc, T){   // Position (Feldeinheiten, Fußpunkt), Blickrichtung, Tätigkeit
   if (!w.pts) { let P = []; try { const sg = worldPaths(MAPS_BY_WORKER.map, vc, [{ x:w.x, y:w.y }], w.n, true)[0]; if (sg) P = sg.slice(0, -1).map(k => { const [x, y] = k.split(',').map(Number); return [x + .5 + (wHash(x, y, 31 + w.n) - .5)*.2, y + .78 + (wHash(x, y, 32 + w.n) - .5)*.16]; }); else P = null; } catch (e) { P = null; }   // ohne begehbaren Weg (ringsum Gelände): nur am Platz arbeiten, nicht über Biome laufen
     w.pts = P ? [[vc.x + .5, vc.y + .9], ...P.slice(1), [w.x + .78, w.y + .92]] : [[w.x + .78, w.y + .92]]; w.len = 0; w.seg = []; for (let j = 1; j < w.pts.length; j++) { const d = Math.hypot(w.pts[j][0] - w.pts[j-1][0], w.pts[j][1] - w.pts[j-1][1]); w.seg.push(d); w.len += d; } }
-  const sp = .9, tw = w.len / sp, workT = 7 + w.n % 3, idle = 1.3, cyc = workT + 2*tw + idle, ph = (T + w.n * 2.3) % cyc;
+  const sp = .9, tw = w.len / sp, workT = 30 + w.n % 7 * 3, idle = .8,   // lange Arbeitsphasen, nur selten ein Gang zum Dorf (27x)
+    cyc = workT + 2*tw + idle, ph = (T + w.n * 2.3) % cyc;
   const at = d => { let q = Math.max(0, Math.min(w.len, d)); for (let j = 0; j < w.seg.length; j++) { if (q <= w.seg[j] || j === w.seg.length - 1) { const f = w.seg[j] ? q / w.seg[j] : 0, a = w.pts[j], b = w.pts[j+1]; return [a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f, b[0] - a[0]]; } q -= w.seg[j]; } return [w.pts[0][0], w.pts[0][1], 1]; };
   if (ph < workT || w.len <= 0) { const a = w.pts[w.pts.length - 1]; return { x:a[0], y:a[1], flip:false, work:true }; }
   if (ph < workT + tw) { const r = at(w.len - (ph - workT) * sp); return { x:r[0], y:r[1], flip:r[2] > 0, work:false }; }   // heim zum Dorf

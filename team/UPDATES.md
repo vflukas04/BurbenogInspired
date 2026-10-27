@@ -43,6 +43,9 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 23:05 · F · 2026-10-27x – Arbeiter arbeiten fast durchgehend
+Holzhacken, Steinbau, Angeln dauern jetzt 30–50 s am Stück, nur noch selten ein kurzer Gang zum Dorf (vorher 7–9 s Arbeit, dann Rückweg). Nur Anzeige, neu laden.
+
 ### 27.10. 22:55 · F · 2026-10-27w – Gesandte auch ohne Turm, Schatten-Arbeiter heller
 Gesandte brauchten einen Turm auf beiden Maps (im Kreativ-Modus oft keiner) – ohne Turm übergeben sie jetzt am nächsten Feld am Monsterweg. Arbeiter und Gesandte im Schatten-Biom bekommen einen hellen Schimmer. Nur Anzeige, neu laden.
 
