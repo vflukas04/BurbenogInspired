@@ -438,6 +438,18 @@ Fester Aufbau des Bezugs-Bots (D6, beide Maps, alle 48 Tage), alle Türme mit de
 - **Diagnose je Turm im gemischten Aufbau** (`d/turm6.js`, nur ein Turmtyp ersetzt, Rest Standardtürme): fast alle 0,96–1,05. Ausreißer: **Erdbeben 1,68, Frostnova 1,23** (beide Nova mit Betäuben → Nova-Kurs im gemischten Aufbau zu streng), Schatten-Türme 1,02–1,18 (Fluch hilft auch den anderen Türmen).
 - **Deutung [Vermutung]:** Eis und Stein sind einzeln richtig bepreist, aber **zusammen** stärker: Bremsen hilft allen eigenen Türmen (gemessen: Fläche + Bremsen 1,07 statt Produkt 0,94), Rüstungsschaden ebenso. Diese Zusammenarbeit wächst mit der Zahl der Türme → Drift.
 
+## Drift-Prüfung (L 27.10. 22 Uhr; alte Korrekturen SLOW_K/STEIN_K aus)
+- **Kurse je Spielabschnitt** (alle Türme mit dem Merkmal, Bodentage Tag 1–12/13–24/25–36/37–48): flach sind Fläche 1/2, Bremsen, Brennen, Reichweite 5. Mit Drift: **Nova 0,42/0,67/0,68/0,71**, **Rate ×0,25 0,37/1,05/1,03/1,04**, Rüstungsschaden 1,5 1,08/1,29/1,23/1,22, Fluch 10 % 1,15/1,35/1,32/1,29, Fläche 1,5 1,19/1,21/1,36/1,28, Reichweite 2 0,70 → 0,56, 3 Geschosse 0,80 → 0,66. Abschnitt 1 (wenige Türme, wenig Leben) weicht oft ab.
+- **Element-rein mit abgeschaltetem Merkmal** (Schaden bleibt, Bodentage gesamt und Tag 1–12 → 37–48):
+
+| Element | alles | ohne Bremsen / Fluch | ohne Fläche | ohne Nova | ohne Rüstungsschaden | ohne Nachtregel |
+|---|---|---|---|---|---|---|
+| Eis | 1,34 (1,00 → 1,57) | 1,15 (0,96 → 1,29) | 1,26 (1,00 → 1,38) | 1,18 (1,00 → 1,33) | – | – |
+| Stein (STEIN_K 1) | 1,66 (1,03 → 2,08) | – | 1,71 (1,23 → 1,92) | 1,31 (1,03 → 1,50) | 1,37 (0,94 → 1,59) | – |
+| Schatten | 1,05 (0,77 → 1,21) | 0,88 (0,71 → 0,96) | – | – | – | 1,24 (1,09 → 1,30) |
+
+- **Deutung:** (1) **Nova** (Frostnova, Erdbeben) ist zu billig bepreist: Der Kurs wurde mit „alle Türme Nova“ gemessen (0,60); als einzelner Turmtyp ist sie viel mehr wert (Diagnose 1,23/1,68). Größter Einzelposten bei Stein, deutlicher bei Eis. (2) **Unterstützungs-Effekte** (Bremsen, Rüstungsschaden, Fluch) helfen allen eigenen Türmen und wachsen mit ihrer Zahl: je etwa +20–25 % am Ende, wenig am Anfang. (3) **Nachtregel** trifft Schatten vor allem am Anfang (Tag 1–12: 0,77 statt 1,09), weil in Block 1–2 viele nachtaktive Monster laufen. (4) Ein Rest bleibt auch ohne die Merkmale.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

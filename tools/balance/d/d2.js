@@ -54,7 +54,7 @@ const T = {
   3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', SCHL_DEF], ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:1 }],
        ['Katapult', { r:5, f:1 }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
-const STEIN_K = +process.env.STEIN_K || 0.8;   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
+const STEIN_K = +process.env.STEIN_K || 1;   // 27.10. abends (L): alte Korrektur aus (vorher 0,8)   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
 const EFF = { 0:'burn', 1:'slow', 2:'curse', 3:'stun' }, RUEST = { 0:0.5, 1:0.6, 2:0, 3:1.5 }, G0 = 2;   // GRID
 const zeilen = [];

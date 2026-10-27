@@ -724,7 +724,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.0": 1.10322,
+  "ELEMENTS.3.kraftT.0": 1.37903,
   "ELEMENTS.3.towers.1": [
     "Schleuder",
     "Schaden",
@@ -742,7 +742,7 @@
       "flyMul": 0.5
     }
   ],
-  "ELEMENTS.3.kraftT.1": 1.28414,
+  "ELEMENTS.3.kraftT.1": 1.60517,
   "ELEMENTS.3.towers.2": [
     "Felsbrocken",
     "Schaden",
@@ -758,7 +758,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.2": 0.77609,
+  "ELEMENTS.3.kraftT.2": 0.97012,
   "ELEMENTS.3.towers.3": [
     "Katapult",
     "Schaden",
@@ -774,7 +774,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.3": 0.86104,
+  "ELEMENTS.3.kraftT.3": 1.0763,
   "ELEMENTS.3.towers.4": [
     "Erdbeben",
     "Schaden",
@@ -792,7 +792,7 @@
       "chance": 0.2
     }
   ],
-  "ELEMENTS.3.kraftT.4": 1.98382,
+  "ELEMENTS.3.kraftT.4": 2.47977,
   "ELEMENTS.3.towers.5": [
     "Granitwächter",
     "Schaden",
@@ -808,7 +808,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.5": 1.02738,
+  "ELEMENTS.3.kraftT.5": 1.28423,
   "ELEMENTS.3.towers.6": [
     "Lawine",
     "Schaden",
@@ -824,7 +824,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.6": 0.63101,
+  "ELEMENTS.3.kraftT.6": 0.78876,
   "ELEMENTS.3.towers.7": [
     "Bergkönig",
     "Schaden",
@@ -841,7 +841,7 @@
       "chance": 0.1
     }
   ],
-  "ELEMENTS.3.kraftT.7": 0.97082,
+  "ELEMENTS.3.kraftT.7": 1.21352,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,

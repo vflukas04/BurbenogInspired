@@ -26,7 +26,8 @@ function reserven(m){ setze(m); const out = [];
 const R0 = reserven({});
 function wert(name, m){ const R = reserven(m), q = R.map((x, i) => x.R / R0[i].R);
   const b = q.filter((_, i) => !flieg(R[i].d)), f = q.filter((_, i) => flieg(R[i].d));
-  console.log(`${name.padEnd(40)} ${gm(q).toFixed(3)} | Boden ${gm(b).toFixed(3)} | Flieger ${gm(f).toFixed(3)}`); }
+  const blk = [0, 1, 2, 3].map(j => gm(q.filter((_, i) => !flieg(R[i].d) && Math.floor(R[i].d / 12) === j)).toFixed(2)).join('/');   // Bodentage je 12er-Abschnitt (Drift)
+  console.log(`${name.padEnd(40)} ${gm(q).toFixed(3)} | Boden ${gm(b).toFixed(3)} (${blk}) | Flieger ${gm(f).toFixed(3)}`); }
 const GRUPPEN = {
   reichweite: [['Reichweite 1,5 Felder', { r:1.5 }], ['Reichweite 2', { r:2 }], ['Reichweite 2,5', { r:2.5 }], ['Reichweite 3', { r:3 }], ['Reichweite 4', { r:4 }], ['Reichweite 5', { r:5 }], ['Reichweite 6', { r:6 }],
     ['Reichweite +0,4 Felder je Stufe (alt)', { upR:0.2 }], ['Reichweite +0,2 Felder je Stufe', { upR:0.1 }]],
@@ -37,6 +38,9 @@ const GRUPPEN = {
     ['Fluch 5 % 4 s', { effect:'curse', eff:0.05, dur:4 }], ['Fluch 10 % 4 s', { effect:'curse', eff:0.1, dur:4 }], ['Fluch 20 % 4 s', { effect:'curse', eff:0.2, dur:4 }],
     ['Brennen 8 % 3 s', { effect:'burn', eff:0.08, dur:3 }], ['Brennen 15 % 3 s', { effect:'burn', eff:0.15, dur:3 }], ['Brennen 30 % 6 s', { effect:'burn', eff:0.3, dur:6 }], ['Brennen 5 % ganzer Tag', { effect:'burn', eff:0.05, dur:'Tag' }],
     ['Betäuben 15 % 1 s', { stun:[0.15, 1] }], ['Betäuben 5 % 0,5 s', { stun:[0.05, 0.5] }]],
+  drift: [['Fläche 1', { f:1 }], ['Fläche 1,5', { f:1.5 }], ['Fläche 2', { f:2 }], ['Bremsen 20 % 2 s', { effect:'slow', eff:0.2, dur:2 }], ['Bremsen 40 % 4 s', { effect:'slow', eff:0.4, dur:4 }],
+    ['Fläche 1 + Bremsen 10 % 2 s', { f:1, effect:'slow', eff:0.1, dur:2 }], ['Fluch 10 % 4 s', { effect:'curse', eff:0.1, dur:4 }], ['Brennen 15 % 3 s', { effect:'burn', eff:0.15, dur:3 }],
+    ['Rüstungsschaden 1,5', { el:{ armorDmg:1.5 } }], ['Nova 2 Felder, Rate ×0,25', { nova:2, q:0.25 }], ['3 Geschosse', { n:3 }], ['Reichweite 2', { r:2 }], ['Reichweite 5', { r:5 }], ['Rate ×0,25', { q:0.25 }]],
   pruef: [['Betäuben 100 % 1 s', { stun:[1, 1] }], ['Betäuben 30 % 2 s', { stun:[0.3, 2] }]],
   sonst: [['Nova 2 Felder, Rate ×0,25', { nova:2, q:0.25 }], ['Rüstungsschaden 0,5', { el:{ armorDmg:0.5 } }], ['Rüstungsschaden 1,5', { el:{ armorDmg:1.5 } }], ['Nachtregel (nur Licht)', { el:{ dayOnly:true } }],
     ['keine Fliegenden', { noFly:true }], ['Luftspezialist 60 % / 180 %', { luft:[0.6, 1.8] }], ['schwach gegen Fliegende (100 / 50 %)', { luft:[1, 0.5] }]] };
