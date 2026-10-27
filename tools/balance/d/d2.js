@@ -10,7 +10,8 @@ const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BAS
 const tab = P => x => { if (x <= P[0][0]) return P[0][1]; for (let i = 1; i < P.length; i++) if (x <= P[i][0]) { const [a, va] = P[i - 1], [b, vb] = P[i]; return va + (vb - va) * (x - a) / (b - a); }
   const [a, va] = P[P.length - 2], [b, vb] = P[P.length - 1]; return vb + (vb - va) / (b - a) * (x - b); };
 const V_D6 = {
-  reichweite: tab([[1.5, 0.49], [2, 0.64], [2.5, 0.90], [3, 0.96], [3.5, 1], [4, 1.03], [5, 1.08], [6, 1.11]]),
+  // Reichweite mit Platzwahl (28.10. nachts, UMPLATZ=1: jeder Turm auf den besten Feldern seiner eigenen Reichweite); ohne Platzwahl war 1,5 → 0,49, 2 → 0,64, 6 → 1,11
+  reichweite: tab([[1.5, 0.67], [2, 0.77], [2.5, 0.91], [3, 0.96], [3.5, 1], [4, 1.03], [5, 1.14], [6, 1.21]]),
   geschosse: tab([[1, 1], [2, 0.87], [3, 0.76], [5, 0.53]]),
   rate: q => tab([[-2, 0.80], [-1, 1.03], [0, 1], [1, 0.96], [Math.log2(3), 0.93]])(Math.log2(q)),   // über log2(Rate)
   flaeche: tab([[0, 1], [0.5, 0.82], [1, 0.93], [1.5, 1.20], [2, 1.55]]),
@@ -22,8 +23,9 @@ const V_D6 = {
   betaeuben: (c, t) => 1 + Math.max(0, c * t - 0.1),                            // 15 % 1 s 1,05 · 5 % 0,5 s 1,00
   // Nova (27.10. 22 Uhr): Wert hängt stark am Radius – alle Türme Nova, Rate ×0,25: Radius 2 0,60 · 2,5 1,13 · 3 1,49 · 3,5 1,87;
   // Rate: ×1/6 → ×0,78, ×0,5 → ×1,245 (gegenüber ×0,25). Betäuben in der Nova: Frostnova (45 % 2 s) ×1,47, Erdbeben (20 % 1 s) ×1,22 → 1 + 0,5 × √(Chance × Dauer)
-  novaWert: (r, q) => tab([[2, 0.60], [2.5, 1.13], [3, 1.49], [3.5, 1.87]])(r) * tab([[Math.log2(1 / 6), 0.78], [-2, 1], [-1, 1.245]])(Math.log2(q)),
-  novaStun: (c, t) => 1 + 0.5 * Math.sqrt(c * t),
+  // mit Platzwahl (28.10.): Radius 2 0,79 · 2,5 1,16 · 3 1,53 · 3,5 1,93; Rate ×1/6 → ×0,71, ×0,5 → ×1,26; Betäuben Frostnova ×1,51, Erdbeben ×1,26
+  novaWert: (r, q) => tab([[2, 0.79], [2.5, 1.16], [3, 1.53], [3.5, 1.93]])(r) * tab([[Math.log2(1 / 6), 0.71], [-2, 1], [-1, 1.26]])(Math.log2(q)),
+  novaStun: (c, t) => 1 + 0.53 * Math.sqrt(c * t),
   nova: 0.60, ruestung: a => 1 + (+process.env.RUEST_K || 2.64) * 0.12 * a, nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
 };
 const V_D1 = {
