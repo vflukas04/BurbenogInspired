@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27v";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27w";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2454,7 +2454,9 @@ let MAPS_BY_WORKER = { map:null };
 // ---- Gesandte (27.10., F): ab Tag 12 zu Fuß, ab Tag 28 mit Pferdegespann; nur Anzeige (das Gold ist nur ein Bild, es ändert keinen Spielstand) ----
 const ENVR = {};
 function envoyRoute(i, wl){   // Dorf → nächster Turm über denselben Weg, der auch gezeichnet wird
-  const t = wl.used[0]; if (!t || !(wl.prog[0] >= 1)) return null; const key = [TSEED, i, wl.vc.x, wl.vc.y, t.x, t.y].join('.'); if (ENVR[key] !== undefined) return ENVR[key];
+  let t = wl.used[0]; if (t ? !(wl.prog[0] >= 1) : wl.day < 4) return null;
+  if (!t) { let bd = 1e9; for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (MAPS[i].cells.has(x+','+y) || MAPS[i].terrain[y][x] !== 0 || (x === wl.vc.x && y === wl.vc.y)) continue; if (![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b]) => MAPS[i].cells.has((x+a)+','+(y+b)))) continue; const d = Math.hypot(x-wl.vc.x, y-wl.vc.y); if (d >= 3 && d < bd) { bd = d; t = { x, y }; } } if (!t) return null; }   // ohne Turm: Übergabe am nächsten Feld am Monsterweg
+  const key = [TSEED, i, wl.vc.x, wl.vc.y, t.x, t.y].join('.'); if (ENVR[key] !== undefined) return ENVR[key];
   let R = null; try { const sg = worldPaths(MAPS[i], wl.vc, [t], i)[0]; if (sg && sg.length > 1) { const P = sg.map((k, j) => { const [x, y] = k.split(',').map(Number); return j === 0 || j === sg.length - 1 ? [x + .5, y + .72] : [x + .5 + (wHash(x, y, 7) - .5)*.3, y + .72 + (wHash(x, y, 8) - .5)*.3]; });
     const seg = []; let len = 0; for (let j = 1; j < P.length; j++) { const d = Math.hypot(P[j][0]-P[j-1][0], P[j][1]-P[j-1][1]); seg.push(d); len += d; } R = { pts:P, seg, len }; } } catch (e) {}
   return ENVR[key] = R;
@@ -2477,7 +2479,7 @@ function drawEnvoys(c, i, cs, k, top, T, wls){
       if (q.hide) { if (q.pop >= 0 && q.pop < .6) { c.font = `700 ${cs*.17}px sans-serif`; c.textAlign = 'center'; c.fillStyle = `rgba(255,214,90,${1 - q.pop/.6})`; c.strokeStyle = `rgba(60,40,0,${1 - q.pop/.6})`; c.lineWidth = 2; const ty = fy - cs*.25 - q.pop*cs*.4; c.strokeText('+1', fx, ty); c.fillText('+1', fx, ty); } continue; }
       const el = wls[q.lane].el, fr = Math.floor(T * (q.car ? 7 : 4) + e) % 2, im = dorfImg((q.car ? 'gespann-' : 'gesandter-') + VIL_KEY[el] + '-' + fr); if (!im) continue;
       const sc = q.car ? cs * .5 / 304 : cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc, foot = q.car ? 120 : 152, bob = q.trade ? 0 : Math.abs(Math.sin(T * (q.car ? 14 : 9) + e)) * cs * (q.car ? .006 : .015);
-      c.save(); c.translate(fx, fy - bob); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -foot*sc, ww, hh); c.restore();
+      c.save(); if (el === 2) { c.shadowColor = 'rgba(240,232,255,.95)'; c.shadowBlur = cs*.05; } c.translate(fx, fy - bob); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -foot*sc, ww, hh); c.restore();
       if (q.coin || q.trade) { const cy = fy - (q.car ? cs*.3 : cs*.33) - bob; c.fillStyle = '#ffd35a'; c.strokeStyle = '#8a6a10'; c.lineWidth = Math.max(1, cs*.012); c.beginPath(); c.arc(fx, cy - (q.trade ? Math.sin(q.k*6.28)*cs*.02 : 0), cs*.04, 0, Math.PI*2); c.fill(); c.stroke(); c.fillStyle = '#8a6a10'; c.font = `700 ${cs*.06}px sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('1', fx, cy + 1); c.textBaseline = 'alphabetic'; } } }
 }
 function workerTick(){
@@ -2493,7 +2495,7 @@ function workerTick(){
     drawEnvoys(c, i, cs, k, top, T, wls);
     for (const w of wl.act.slice().sort((a, b) => a.y - b.y)) { const q = workerPoint(w, wl.vc, T); const im = workerImg(wl.el, w.job, q.work ? Math.floor(T*2.5 + w.n) % 2 : Math.floor(T*5 + w.n) % 2); if (!im) continue;
       const sc = cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc, bob = q.work || q.rest ? 0 : Math.abs(Math.sin(T*9 + w.n)) * cs*.015, fx = q.x*cs, fy = top + q.y*cs*k - bob;
-      c.save(); c.translate(fx, fy); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -152*sc, ww, hh); c.restore(); } }
+      c.save(); if (wl.el === 2) { c.shadowColor = 'rgba(240,232,255,.95)'; c.shadowBlur = cs*.05; } c.translate(fx, fy); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -152*sc, ww, hh); c.restore(); } }
 }
 setInterval(workerTick, 100);
 function drawVillage(c, i, cs, wl, gyf){   // Dorf als Bild, steht auf einem Feld in der Ecke

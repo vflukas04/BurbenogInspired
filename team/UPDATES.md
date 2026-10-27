@@ -43,6 +43,9 @@
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
 
+### 27.10. 22:55 · F · 2026-10-27w – Gesandte auch ohne Turm, Schatten-Arbeiter heller
+Gesandte brauchten einen Turm auf beiden Maps (im Kreativ-Modus oft keiner) – ohne Turm übergeben sie jetzt am nächsten Feld am Monsterweg. Arbeiter und Gesandte im Schatten-Biom bekommen einen hellen Schimmer. Nur Anzeige, neu laden.
+
 ### 27.10. 02:10 · F · 2026-10-27v – Gesandte zwischen den Dörfern
 Ab Tag 12 laufen kleine Gesandte auf den Wegen zum ersten Turm, von dort zur Burg des nächsten Spielers, handeln und kehren mit einer Münze („+1“) zurück; ab Tag 24 zwei, ab Tag 28 mit Pferdegespann. Nur Anzeige, kein echtes Gold. Neu laden genügt.
 
