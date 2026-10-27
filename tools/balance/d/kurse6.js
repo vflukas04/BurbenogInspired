@@ -22,8 +22,15 @@ const gm = a => Math.exp(a.reduce((s, x) => s + Math.log(x), 0) / a.length);
 const flieg = d => !!G.MONSTERS[d].fly;
 // Mit nur: nur Tage, an denen ein Turm dieser Typen im Plan steht (sonst wäre der Wert dort 1 und verwässert)
 const NUR = process.env.NUR ? process.env.NUR.split(',').map(Number) : null;
+// UMPLATZ=1 (27.10. nachts): Türme jeden Tag auf die besten Felder ihrer EIGENEN Reichweite setzen (große Turmtypen zuerst), wie ein Spieler,
+// der kurze Türme an die Kreuzung stellt. Ohne UMPLATZ stehen alle auf den Plätzen des Standard-Plans (für 3,5 Felder gewählt).
+const UMPLATZ = !!process.env.UMPLATZ;
+function umplatz(tw){ const used = new Set(), out = [];
+  for (const t of [...tw].sort((a, b) => b.idx - a.idx || b.lvl - a.lvl)) { const c = C.mask(0, t.idx, t.lvl, 0).cells.find(c => !used.has(c.x + ',' + c.y));
+    used.add(c.x + ',' + c.y); out.push({ ...t, x:c.x, y:c.y }); }
+  return out; }
 function reserven(m){ setze(m); const out = [];
-  for (const mp of PLAN.maps) { C.useMap(mp.lane, mp.seed); mp.tage.forEach((t, d) => { if (NUR && !t.towers.some(x => NUR.includes(x.idx))) return; out.push({ d, R:C.reserveDay({ el:0, towers:t.towers, res:[] }, { type:d, players:2 }) }); }); }
+  for (const mp of PLAN.maps) { C.useMap(mp.lane, mp.seed); mp.tage.forEach((t, d) => { if (NUR && !t.towers.some(x => NUR.includes(x.idx))) return; out.push({ d, R:C.reserveDay({ el:0, towers:UMPLATZ ? umplatz(t.towers) : t.towers, res:[] }, { type:d, players:2 }) }); }); }
   setze({}); return out; }
 const R0 = reserven({});
 function wert(name, m){ const R = reserven(m), q = R.map((x, i) => x.R / R0[i].R);
@@ -52,6 +59,10 @@ GRUPPEN.nova = [['Nova 2 Felder, Rate ×0,25', { nova:2, q:0.25 }], ['Nova 2,5, 
   ['Fläche 1,5', { f:1.5 }], ['Fläche 2', { f:2 }], ['Bremsen 20 % 2 s', { effect:'slow', eff:0.2, dur:2 }], ['Fläche 1 + Bremsen 10 % 2 s', { f:1, effect:'slow', eff:0.1, dur:2 }],
   ['Fluch 10 % 4 s', { effect:'curse', eff:0.1, dur:4 }], ['Brennen 15 % 3 s', { effect:'burn', eff:0.15, dur:3 }], ['Rate ×0,25', { q:0.25 }], ['3 Geschosse', { n:3 }], ['Reichweite 2', { r:2 }]];
 GRUPPEN.novaR = [['Nova 2,5, Rate ×0,25', { nova:2.5, q:0.25 }], ['Nova 3,5, Rate ×0,25', { nova:3.5, q:0.25 }], ['Nova 2,5, Rate ×1/6', { nova:2.5, q:1 / 6 }], ['Nova 3, Rate ×0,5', { nova:3, q:0.5 }], ['Nova 2, Rate ×0,5', { nova:2, q:0.5 }]];
+// Kombinationen der Feuer-Türme (27.10. nachts): Flammenwerfer (r 1,5, Rate ×3, Brennen 6 % 2 s), Brandpfeil (r 6, Brennen 8 % 3 s)
+GRUPPEN.kombi = [['Rate ×3', { q:3 }], ['Brennen 6 % 2 s', { effect:'burn', eff:0.06, dur:2 }], ['Rate ×3 + Brennen 6 % 2 s', { q:3, effect:'burn', eff:0.06, dur:2 }],
+  ['Reichweite 1,5 + Rate ×3', { r:1.5, q:3 }], ['Reichweite 1,5 + Rate ×3 + Brennen 6 % 2 s (Flammenwerfer)', { r:1.5, q:3, effect:'burn', eff:0.06, dur:2 }],
+  ['Brennen 8 % 3 s', { effect:'burn', eff:0.08, dur:3 }], ['Reichweite 6 + Brennen 8 % 3 s (Brandpfeil)', { r:6, effect:'burn', eff:0.08, dur:3 }], ['Rate ×0,5 + Brennen 15 % ganzer Tag (Schwelbrand)', { q:0.5, effect:'burn', eff:0.15, dur:'Tag' }]];
 if (NUR) for (const g in GRUPPEN) GRUPPEN[g] = GRUPPEN[g].map(([n, m]) => [n + ` (nur T${NUR.map(k => k + 1).join('/')})`, { ...m, nur:NUR }]);
 const w = process.argv[2] || 'alle', t0 = Date.now();
 console.log(`Basis D6, Plan ${PLAN.bot}, ${R0.length} Tage×Maps, Reserve ohne Merkmal ${gm(R0.map(x => x.R)).toFixed(3)}`);

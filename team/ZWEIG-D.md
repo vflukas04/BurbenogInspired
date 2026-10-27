@@ -485,6 +485,23 @@ Jeder Kurs einzeln ±10 % (auf Wert − 1), Türme neu zusammengesetzt, alle 4 E
 - **±10 % auf einen Kurs verschieben ein Element um höchstens etwa 4 %, die Drift-Form (Anfang ≈ 0,85, Ende ≈ 1,1) ändert sich praktisch nicht.** Mit den Kursen lassen sich die Mittelwerte einstellen, die Drift nicht.
 - Saubere Hebel je Element: Feuer → Brennen, Schatten → Fluch, Eis → Bremsen, Stein → Fläche / Rüstungsschaden.
 
+## Nacht 27./28.10.: freier Bau, Maps 1/3, Platzwahl, Irrlicht
+- **Kurse eingestellt:** Brennen ×0,65 und Fluch ×1,27 (auf Wert − 1, `d/fit1.js`), dazu Rüstungsschaden ×2,64, Bremsen ×4,74 (Verbund). Fester Bezugs-Aufbau (Bodentage): **Feuer 1,01 · Eis 1,00 · Schatten 1,01 · Stein 1,00**; Drift Tag 1–12 / 37–48: Feuer 1,00/1,03 · Eis 0,87/1,10 · Schatten 0,87/1,09 · Stein 0,84/1,07.
+- **Freier Bau je Element** (alle 48 Tage inkl. Fliegertage, 1,00 = Ziel; Standardtürme: Bezug 1,00, Mensch A/B/C 0,98/0,95/0,92):
+
+| Element | Bezugs-Bot | Mensch A | Mensch B | Mensch C |
+|---|---|---|---|---|
+| Feuer | **1,26** | 0,98 | 0,92 | 0,95 |
+| Eis | 1,12 | 0,96 | 0,99 | 0,88 |
+| Schatten | 1,10 | 0,98 | 0,97 | 0,94 |
+| Stein | 0,87 | 0,73 | 0,76 | 0,72 (Fliegertage!) |
+
+- **Feuer frei:** getragen von **Flammenwerfer** (im freien Aufbau durch Standard ersetzt: 0,78) und **Brandpfeil** (0,83); übrige Feuer-Türme 0,96–1,00. Schatten frei: kein einzelner Turm, Verbund insgesamt.
+- **Kombinationen** (alle Türme): Flammenwerfer-Merkmale zusammen 0,57 statt Produkt der Einzelkurse ≈ 0,48 (zu billig bepreist, ×1,18); Brandpfeil 1,26 statt ≈ 1,22.
+- **Platzwahl (`UMPLATZ=1`, Türme auf die besten Felder ihrer eigenen Reichweite):** Reichweite 1,5 / 2 / 2,5 / 3 / 4 / 5 / 6 = **0,67 / 0,77 / 0,91 / 0,96 / 1,03 / 1,14 / 1,21** (ohne Platzwahl 0,49 / 0,64 / 0,90 / 0,96 / 1,03 / 1,08 / 1,11). Kurze und lange Reichweite sind mehr wert, wenn der Turm passend steht – erklärt den Flammenwerfer im freien Bau. Für die Übersetzung sind die Kurse mit Platzwahl die richtigen (Spieler und Bot stellen Türme passend).
+- **Maps 1 und 3** (Bezugs-Bot, Standardtürme, D6): Map 0 0,93 · Map 1 1,02 · Map 2 1,09 · Map 3 1,09. Map 0 ist der Ausreißer; im Mittel aller vier Maps liegt das Spiel etwa 3 % leichter als kalibriert (auf Map 0 + 2).
+- **Irrlicht als Sonderturm** (Schatten element-rein, T2 = echtes Irrlicht wie im Spiel: Licht 4,4 Felder, ×1,3…1,8, Rüstung 30…100 %): Schatten **1,41** statt 1,01 (Tag 1–12 1,03 → 37–48 1,73). Werte fest auf Stufe 1: 1,31; Verstärkung halb: 1,27; doppelt: 1,68; Licht 3 Felder: 1,32. **Das Irrlicht ist im heutigen Spiel-Entwurf deutlich zu stark** (für 45 Gold).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
