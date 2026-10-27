@@ -231,7 +231,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.0": 0.79032,
+  "ELEMENTS.0.kraftT.0": 0.99063,
   "ELEMENTS.0.towers.1": [
     "Glutbecken",
     "Schaden",
@@ -247,7 +247,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.1": 1.34731,
+  "ELEMENTS.0.kraftT.1": 1.78307,
   "ELEMENTS.0.towers.2": [
     "Flammenwerfer",
     "Schaden",
@@ -263,7 +263,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.2": 2.00074,
+  "ELEMENTS.0.kraftT.2": 2.35341,
   "ELEMENTS.0.towers.3": [
     "Brandpfeil",
     "Schaden",
@@ -279,7 +279,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.3": 0.74873,
+  "ELEMENTS.0.kraftT.3": 0.9385,
   "ELEMENTS.0.towers.4": [
     "Schwelbrand",
     "Schaden",
@@ -295,7 +295,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.4": 0.42822,
+  "ELEMENTS.0.kraftT.4": 0.54132,
   "ELEMENTS.0.towers.5": [
     "Lavaturm",
     "Schaden",
@@ -311,7 +311,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.5": 0.88632,
+  "ELEMENTS.0.kraftT.5": 1.11096,
   "ELEMENTS.0.towers.6": [
     "Sonnenturm",
     "Schaden",
@@ -327,7 +327,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.6": 0.83849,
+  "ELEMENTS.0.kraftT.6": 1.06417,
   "ELEMENTS.0.towers.7": [
     "Höllenfeuer",
     "Schaden",
@@ -343,7 +343,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.7": 0.3263,
+  "ELEMENTS.0.kraftT.7": 0.39661,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
     "0": 10,
@@ -393,7 +393,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.0": 1.08805,
+  "ELEMENTS.1.kraftT.0": 1.12706,
   "ELEMENTS.1.towers.1": [
     "Schneeball",
     "Schaden",
@@ -409,7 +409,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.1": 0.84562,
+  "ELEMENTS.1.kraftT.1": 1.16528,
   "ELEMENTS.1.towers.2": [
     "Eiszapfen",
     "Schaden",
@@ -428,7 +428,7 @@
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.41196,
+  "ELEMENTS.1.kraftT.2": 1.46259,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
@@ -444,7 +444,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.3": 0.92433,
+  "ELEMENTS.1.kraftT.3": 1.24188,
   "ELEMENTS.1.towers.4": [
     "Frostnova",
     "Schaden",
@@ -462,7 +462,7 @@
       "chance": 0.45
     }
   ],
-  "ELEMENTS.1.kraftT.4": 1.45579,
+  "ELEMENTS.1.kraftT.4": 1.77929,
   "ELEMENTS.1.towers.5": [
     "Eisspeer",
     "Schaden",
@@ -478,7 +478,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 1.06143,
+  "ELEMENTS.1.kraftT.5": 1.09949,
   "ELEMENTS.1.towers.6": [
     "Blizzard",
     "Schaden",
@@ -494,7 +494,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 2.16338,
+  "ELEMENTS.1.kraftT.6": 2.20224,
   "ELEMENTS.1.towers.7": [
     "Ewiges Eis",
     "Schaden",
@@ -510,7 +510,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.41032,
+  "ELEMENTS.1.kraftT.7": 0.70055,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -560,7 +560,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.0": 1.12638,
+  "ELEMENTS.2.kraftT.0": 1.24245,
   "ELEMENTS.2.towers.1": [
     "Irrlicht",
     "Schaden",
@@ -576,7 +576,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.1": 1.15857,
+  "ELEMENTS.2.kraftT.1": 1.27796,
   "ELEMENTS.2.towers.2": [
     "Nachtauge",
     "Schaden",
@@ -594,7 +594,7 @@
       "flyMul": 1.8
     }
   ],
-  "ELEMENTS.2.kraftT.2": 1.46171,
+  "ELEMENTS.2.kraftT.2": 1.61233,
   "ELEMENTS.2.towers.3": [
     "Fluchstein",
     "Schaden",
@@ -610,7 +610,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.2.kraftT.3": 1.57223,
+  "ELEMENTS.2.kraftT.3": 1.79121,
   "ELEMENTS.2.towers.4": [
     "Seelenfresser",
     "Schaden",
@@ -626,7 +626,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.4": 1.3868,
+  "ELEMENTS.2.kraftT.4": 1.50802,
   "ELEMENTS.2.towers.5": [
     "Phantom",
     "Schaden",
@@ -642,7 +642,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.5": 1.891,
+  "ELEMENTS.2.kraftT.5": 2.08586,
   "ELEMENTS.2.towers.6": [
     "Leerenturm",
     "Schaden",
@@ -658,7 +658,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.6": 0.93679,
+  "ELEMENTS.2.kraftT.6": 1.04618,
   "ELEMENTS.2.towers.7": [
     "Ewige Nacht",
     "Schaden",
@@ -674,7 +674,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.7": 0.89647,
+  "ELEMENTS.2.kraftT.7": 1.03668,
   "ELEMENTS.2.kraft": 1,
   "ELEMENTS.2.costOverride": {
     "0": 10,
@@ -792,7 +792,7 @@
       "chance": 0.2
     }
   ],
-  "ELEMENTS.3.kraftT.4": 1.89756,
+  "ELEMENTS.3.kraftT.4": 1.98382,
   "ELEMENTS.3.towers.5": [
     "Granitwächter",
     "Schaden",
@@ -889,6 +889,8 @@
     "ziel48": 1.05
   },
   "CONFIG.upgrade.range": 0,
+  "CONFIG.upgrade.eff": 1,
+  "CONFIG.upgrade.dur": 1,
   "ELEMENTS.3.splashCenter": 1,
   "ELEMENTS.3.splashEdge": 0.7
 }

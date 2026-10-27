@@ -431,6 +431,13 @@ Fester Aufbau des Bezugs-Bots (D6, beide Maps, alle 48 Tage), alle Türme mit de
 - **Grund für Feuer frei 1,52 [Vermutung, sehr wahrscheinlich]:** versteckter Upgrade-Bonus wie beim Reichweiten-Zuwachs: Effekt ×1,15 und Dauer ×1,3 je Stufe (`CONFIG.upgrade.eff/dur`) – auf S6 Effekt ×2,0, Dauer ×3,7. Brennen 8 % 3 s wird auf S6 zu 16 % 11 s (Wert nach Kurs 2,66 statt 1,45). Der freie Bot rüstet deshalb Effekttürme besonders hoch.
 - Stapelregel Fluch/Bremsen gilt (stärkster voll, weitere je 20 %, höchstens 6) – erklärt einen Teil der Drift (mit vielen Türmen bis ×2 des stärksten).
 
+## D6T ohne Effekt-Wachstum (27.10. 21–22 Uhr)
+- **Fehler korrigiert (Claude):** Neben der Reichweite wuchsen beim Aufrüsten auch Effektstärke (×1,15) und Effektdauer (×1,3) je Stufe (allgemeine Regel `CONFIG.upgrade.eff/dur`). Bei Standardtürmen wirkungslos, bei echten Türmen ein versteckter Upgrade-Bonus. In `spiegel-D6.json` jetzt beide = 1 (Leben und Standardtürme unverändert). Weitere Stufen-Regeln (Schussrate, Betäubungschance, Irrlicht-Werte) kommen in den zusammengesetzten Türmen nicht vor.
+- **Effekt-Kurse ohne Wachstum** (alle Türme, gleicher Schaden/s): Bremsen 10 % 2 s 1,00 · 20 % 2 s 1,02 · 40 % 4 s 1,20 · Fläche 1 + Bremsen 10 % 1,07 · Fluch 5/10/20 % 1,14/1,27/1,49 · Brennen 8 % 3 s 1,16 · 15 % 3 s 1,29 · 30 % 6 s 1,97 · 5 % ganzer Tag 1,41 · Betäuben 15 % 1 s 1,05. Übrige Kurse unverändert. In `d2.js` eingesetzt (SLOW_K jetzt 1).
+- **Element-rein (Bezugs-Aufbau, alle Türme des Elements), Bodentage:** **Feuer 0,99** (flach: 1,01/0,98/0,99/1,00) · Eis 1,34 (1,00 → 1,57) · Schatten 1,05 (0,77 → 1,21) · Stein 1,35 (0,84 → 1,68).
+- **Diagnose je Turm im gemischten Aufbau** (`d/turm6.js`, nur ein Turmtyp ersetzt, Rest Standardtürme): fast alle 0,96–1,05. Ausreißer: **Erdbeben 1,68, Frostnova 1,23** (beide Nova mit Betäuben → Nova-Kurs im gemischten Aufbau zu streng), Schatten-Türme 1,02–1,18 (Fluch hilft auch den anderen Türmen).
+- **Deutung [Vermutung]:** Eis und Stein sind einzeln richtig bepreist, aber **zusammen** stärker: Bremsen hilft allen eigenen Türmen (gemessen: Fläche + Bremsen 1,07 statt Produkt 0,94), Rüstungsschaden ebenso. Diese Zusammenarbeit wächst mit der Zahl der Türme → Drift.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

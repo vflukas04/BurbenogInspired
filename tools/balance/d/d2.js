@@ -14,11 +14,12 @@ const V_D6 = {
   geschosse: tab([[1, 1], [2, 0.87], [3, 0.76], [5, 0.53]]),
   rate: q => tab([[-2, 0.80], [-1, 1.03], [0, 1], [1, 0.96], [Math.log2(3), 0.93]])(Math.log2(q)),   // über log2(Rate)
   flaeche: tab([[0, 1], [0.5, 0.82], [1, 0.93], [1.5, 1.20], [2, 1.55]]),
-  brennen: (e, d) => 1 + e * (d === 'Tag' ? 12 : 5.6 * Math.pow(d / 3, 0.47)),   // 8 % 3 s 1,45 · 15 % 3 s 1,84 · 30 % 6 s 3,33 · 5 % Tag 1,60
-  fluch: e => 1 + 5.6 * e / (1 + 2.2 * e),                                       // 5 % 1,25 · 10 % 1,46 · 20 % 1,78
-  // Bremsen: Einzelziel gemessen 10 % 2 s 1,02 · 20 % 2 s 1,17 · 40 % 4 s 1,32; mit Fläche 1: 10 % ×1,48 auf die Fläche. SLOW_K wie D2 (gemischte Aufbauten)
-  bremsen: (s, fl) => { const k = +process.env.SLOW_K || 2, ein = tab([[0, 0], [0.1, 0.02], [0.2, 0.17], [0.4, 0.32]])(s); return 1 + k * (fl > 0 ? 4.8 * s : ein); },
-  betaeuben: (c, t) => 1 + 1.5 * Math.max(0, c * t - 0.1),                     // 15 % 1 s 1,07 · 30 % 2 s 1,75 (gemessen 1,77)
+  // Effekte OHNE Wachstum je Stufe (27.10. 21 Uhr, CONFIG.upgrade.eff/dur = 1): Brennen 8 % 3 s 1,16 · 15 % 3 s 1,29 · 30 % 6 s 1,97 · 5 % Tag 1,41
+  brennen: (e, d) => 1 + e * (d === 'Tag' ? 8.1 : 1.94 * Math.pow(d / 3, 0.74)),
+  fluch: e => 1 + 2.8 * e / (1 + 0.7 * e),                                       // 5 % 1,135 · 10 % 1,265 · 20 % 1,494
+  // Bremsen: Einzelziel 10 % 2 s 1,004 · 20 % 2 s 1,02 · 40 % 4 s 1,20; mit Fläche 1: 10 % ×1,15 auf die Fläche. SLOW_K (Standard 1 = wie gemessen)
+  bremsen: (s, fl) => { const k = +process.env.SLOW_K || 1, ein = tab([[0, 0], [0.1, 0.004], [0.2, 0.02], [0.4, 0.198]])(s); return 1 + k * (fl > 0 ? 1.48 * s : ein); },
+  betaeuben: (c, t) => 1 + Math.max(0, c * t - 0.1),                            // 15 % 1 s 1,05 · 5 % 0,5 s 1,00
   nova: 0.60, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
 };
 const V_D1 = {
