@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27u";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27v";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2451,16 +2451,46 @@ function workerPoint(w, vc, T){   // Position (Feldeinheiten, Fußpunkt), Blickr
   const r = at((ph - workT - tw - idle) * sp); return { x:r[0], y:r[1], flip:r[2] < 0, work:false };   // wieder hinaus
 }
 let MAPS_BY_WORKER = { map:null };
+// ---- Gesandte (27.10., F): ab Tag 12 zu Fuß, ab Tag 28 mit Pferdegespann; nur Anzeige (das Gold ist nur ein Bild, es ändert keinen Spielstand) ----
+const ENVR = {};
+function envoyRoute(i, wl){   // Dorf → nächster Turm über denselben Weg, der auch gezeichnet wird
+  const t = wl.used[0]; if (!t || !(wl.prog[0] >= 1)) return null; const key = [TSEED, i, wl.vc.x, wl.vc.y, t.x, t.y].join('.'); if (ENVR[key] !== undefined) return ENVR[key];
+  let R = null; try { const sg = worldPaths(MAPS[i], wl.vc, [t], i)[0]; if (sg && sg.length > 1) { const P = sg.map((k, j) => { const [x, y] = k.split(',').map(Number); return j === 0 || j === sg.length - 1 ? [x + .5, y + .72] : [x + .5 + (wHash(x, y, 7) - .5)*.3, y + .72 + (wHash(x, y, 8) - .5)*.3]; });
+    const seg = []; let len = 0; for (let j = 1; j < P.length; j++) { const d = Math.hypot(P[j][0]-P[j-1][0], P[j][1]-P[j-1][1]); seg.push(d); len += d; } R = { pts:P, seg, len }; } } catch (e) {}
+  return ENVR[key] = R;
+}
+function routeAt(R, d){ let q = Math.max(0, Math.min(R.len, d)); for (let j = 0; j < R.seg.length; j++) { if (q <= R.seg[j] || j === R.seg.length - 1) { const f = R.seg[j] ? q / R.seg[j] : 0, a = R.pts[j], b = R.pts[j+1]; return [a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f, b[0] - a[0]]; } q -= R.seg[j]; } return [R.pts[0][0], R.pts[0][1], 1]; }
+function envoyState(o, n, T, day, A, B, p){   // Gesandter von Map o zur Map p und zurück; liefert Map, Position, Blickrichtung, Zustand
+  const car = day >= 28, sp = car ? 2.3 : .9, tA = A.len / sp, tB = B.len / sp, trade = 2.6, gap = 2.5, cyc = tA + 2*tB + trade + tA + gap, ph = (T + n * cyc / 2 + o * 3.7) % cyc;
+  if (ph < tA) { const r = routeAt(A, ph*sp); return { lane:o, x:r[0], y:r[1], flip:r[2] < 0, car }; }
+  if (ph < tA + tB) { const r = routeAt(B, B.len - (ph - tA)*sp); return { lane:p, x:r[0], y:r[1], flip:r[2] > 0, car }; }   // auf der Partner-Map vom Turm zur Burg
+  if (ph < tA + tB + trade) return { lane:p, x:B.pts[0][0], y:B.pts[0][1], flip:false, car, trade:true, k:(ph - tA - tB) / trade };
+  if (ph < tA + 2*tB + trade) { const r = routeAt(B, (ph - tA - tB - trade)*sp); return { lane:p, x:r[0], y:r[1], flip:r[2] < 0, car, coin:true }; }
+  if (ph < 2*tA + 2*tB + trade) { const r = routeAt(A, A.len - (ph - tA - 2*tB - trade)*sp); return { lane:o, x:r[0], y:r[1], flip:r[2] > 0, car, coin:true }; }
+  return { lane:o, x:A.pts[0][0], y:A.pts[0][1], flip:false, car, pop:(ph - 2*tA - 2*tB - trade) / gap, hide:true };
+}
+function drawEnvoys(c, i, cs, k, top, T, wls){
+  const n = NP(), day = wls[i].day; if (n < 2 || day < 12) return;
+  for (let o = 0; o < n; o++) { const p = (o + 1) % n, wo = wls[o], wp = wls[p]; const A = envoyRoute(o, wo), B = envoyRoute(p, wp); if (!A || !B) continue;
+    for (let e = 0; e < (day >= 24 ? 2 : 1); e++) { const q = envoyState(o, e, T, day, A, B, p); if (q.lane !== i) continue;
+      const fx = q.x*cs, fy = top + q.y*cs*k;
+      if (q.hide) { if (q.pop >= 0 && q.pop < .6) { c.font = `700 ${cs*.17}px sans-serif`; c.textAlign = 'center'; c.fillStyle = `rgba(255,214,90,${1 - q.pop/.6})`; c.strokeStyle = `rgba(60,40,0,${1 - q.pop/.6})`; c.lineWidth = 2; const ty = fy - cs*.25 - q.pop*cs*.4; c.strokeText('+1', fx, ty); c.fillText('+1', fx, ty); } continue; }
+      const el = wls[q.lane].el, fr = Math.floor(T * (q.car ? 7 : 4) + e) % 2, im = dorfImg((q.car ? 'gespann-' : 'gesandter-') + VIL_KEY[el] + '-' + fr); if (!im) continue;
+      const sc = q.car ? cs * .5 / 304 : cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc, foot = q.car ? 120 : 152, bob = q.trade ? 0 : Math.abs(Math.sin(T * (q.car ? 14 : 9) + e)) * cs * (q.car ? .006 : .015);
+      c.save(); c.translate(fx, fy - bob); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -foot*sc, ww, hh); c.restore();
+      if (q.coin || q.trade) { const cy = fy - (q.car ? cs*.3 : cs*.33) - bob; c.fillStyle = '#ffd35a'; c.strokeStyle = '#8a6a10'; c.lineWidth = Math.max(1, cs*.012); c.beginPath(); c.arc(fx, cy - (q.trade ? Math.sin(q.k*6.28)*cs*.02 : 0), cs*.04, 0, Math.PI*2); c.fill(); c.stroke(); c.fillStyle = '#8a6a10'; c.font = `700 ${cs*.06}px sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('1', fx, cy + 1); c.textBaseline = 'alphabetic'; } } }
+}
 function workerTick(){
   if (!G || (typeof document !== 'undefined' && document.hidden)) return;
-  const T = performance.now() / 1000, dpr = window.devicePixelRatio || 1;
+  const T = performance.now() / 1000, dpr = window.devicePixelRatio || 1, wls = []; for (let i = 0; i < NP(); i++) wls[i] = worldInfo(i, MAPS[i]);
   for (let i = 0; i < NP(); i++) { const cv = $('cv'+i); if (!cv || !cv.clientWidth) continue;
     let ov = $('ov'+i); if (ov && ov.parentNode !== cv.parentNode) { ov.remove(); ov = null; }
     if (!ov) { ov = document.createElement('canvas'); ov.id = 'ov' + i; ov.style.cssText = 'position:absolute;left:0;top:0;pointer-events:none'; cv.parentNode.insertBefore(ov, cv.nextSibling); }
     const W = cv.clientWidth, H = cv.clientHeight; if (ov.width !== Math.round(W*dpr) || ov.height !== Math.round(H*dpr)) { ov.width = Math.round(W*dpr); ov.height = Math.round(H*dpr); ov.style.width = W + 'px'; ov.style.height = H + 'px'; }
     const c = ov.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
-    const map = MAPS[i], wl = worldInfo(i, map); if (!wl.act.length) continue; MAPS_BY_WORKER.map = map;
+    const map = MAPS[i], wl = wls[i]; MAPS_BY_WORKER.map = map;
     const cs = W / COLS, k = view25 ? VK : 1, top = view25 ? cs*.45 : 0;
+    drawEnvoys(c, i, cs, k, top, T, wls);
     for (const w of wl.act.slice().sort((a, b) => a.y - b.y)) { const q = workerPoint(w, wl.vc, T); const im = workerImg(wl.el, w.job, q.work ? Math.floor(T*2.5 + w.n) % 2 : Math.floor(T*5 + w.n) % 2); if (!im) continue;
       const sc = cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc, bob = q.work || q.rest ? 0 : Math.abs(Math.sin(T*9 + w.n)) * cs*.015, fx = q.x*cs, fy = top + q.y*cs*k - bob;
       c.save(); c.translate(fx, fy); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -152*sc, ww, hh); c.restore(); } }

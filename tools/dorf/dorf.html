@@ -229,5 +229,34 @@ function welt(k,si){
 h+=`<h2>4 · Welt um das Dorf: Boden wandelt sich, Wege wachsen (Vorschlag 27.10.)</h2><p class="n">Ausschnitt 12 × 8 Felder, Dorf in der Ecke unten rechts (Wege biegen um Wald, Felsen und See und kreuzen den Monsterweg nur, wo es sein muss). Braun = Monsterweg (bleibt unverändert, immer gut erkennbar). Vom Dorf aus wächst der Boden in Ringen zum Element um (Asche, Schnee, Violett, Geröll), unregelmäßig, nicht kreisrund. Wege: Tag 10 Trampelpfade zu 4 Türmen, Tag 22 zu 5, Tag 36 gepflasterte Straße zu allen 6, Tag 42 Straße mit Rand zu allen.</p>`;
 for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let i=0;i<5;i++)h+=cell(`welt-${k}-${i}`,STG[i].t,welt(k,i));h+='</div>';}
 
+
+// ---------- Gesandte und Pferdegespann ----------
+function gesandter(k,fr){
+ const p=P[k]; let b=`<ellipse cx="0" cy="1" rx="6" ry="1.6" fill="#0005"/>`;
+ const a=fr?1.4:-1.4;
+ b+=`<rect x="${-3.3+a}" y="-8" width="2.8" height="8" fill="${p.dark}"/><rect x="${.5-a}" y="-8" width="2.8" height="8" fill="${p.dark}"/>`;
+ b+=`<rect x="-9" y="-18" width="4.6" height="8.5" rx="1" fill="#7a5030"/><rect x="-9" y="-18" width="4.6" height="2" fill="#5a3a1c"/>`;   // Rucksack
+ b+=`<path d="M-5.2 -8L-4 -18.4H4L5.2 -8Z" fill="${p.tunic}"/><path d="M1 -8L1.4 -18.4H4L5.2 -8Z" fill="${p.dark}" opacity=".3"/><path d="M-5 -9.6H5" stroke="${p.acc}" stroke-width="1"/>`;
+ b+=`<path d="M3.4 -16.6Q7 -14 8.6 -13.2" stroke="${SKIN}" stroke-width="2.2" fill="none" stroke-linecap="round"/><rect x="7.6" y="-17.2" width="5" height="6.4" rx=".8" fill="#f2e6c0" stroke="#b89a5a" stroke-width=".5" transform="rotate(${fr?8:-6} 10 -14)"/><path d="M8.8 -15.4H11.6M8.8 -13.6H11.6" stroke="#b89a5a" stroke-width=".5"/>`;   // Schriftrolle
+ b+=`<circle cx="0" cy="-21.5" r="4" fill="${SKIN}"/><circle cx="1.5" cy="-21.6" r=".6" fill="#2a1a10"/><circle cx="-1.6" cy="-21.6" r=".6" fill="#2a1a10"/><path d="M-1 -19.6Q0 -18.8 1.2 -19.6" stroke="${SKIND}" stroke-width=".5" fill="none"/>`;
+ b+=`<path d="M-8 -23.4Q0 -26 8 -23.4L5 -22.4Q0 -23.8 -5 -22.4Z" fill="${p.cap}"/><path d="M-4.4 -23.4Q-1 -31 4.4 -23.4Z" fill="${p.cap}"/><rect x="-4.6" y="-24.2" width="9.2" height="1.4" fill="${p.acc}"/><path d="M3 -28Q9 -32 10 -27" stroke="${p.flag}" stroke-width="1.2" fill="none" stroke-linecap="round"/>`;   // Reisehut mit Feder
+ return svg('-20 -38 40 44',160,176,b);
+}
+function gespann(k,fr){
+ const p=P[k]; let b=`<ellipse cx="-4" cy="1" rx="34" ry="2.4" fill="#0005"/>`;
+ const a=fr?2.2:-2.2, w=fr?25:-25;
+ for(const wx of [-27,-11]) b+=`<circle cx="${wx}" cy="-4.6" r="4.6" fill="#4a3320"/><circle cx="${wx}" cy="-4.6" r="3.4" fill="#8a5a30"/><path d="M${wx-3.4} -4.6H${wx+3.4}M${wx} -8V-1.2" stroke="#4a3320" stroke-width=".8" transform="rotate(${w} ${wx} -4.6)"/><circle cx="${wx}" cy="-4.6" r=".9" fill="#4a3320"/>`;
+ b+=`<rect x="-33" y="-14" width="27" height="8" rx="1" fill="${p.wall}"/><rect x="-33" y="-14" width="27" height="2" fill="${p.wallD}"/><path d="M-30 -14V-22M-9 -14V-22" stroke="${p.wallD}" stroke-width="1.2"/><path d="M-34 -22Q-19.5 -30 -4.5 -22Z" fill="${p.roof}"/><path d="M-19.5 -26.2Q-4.5 -24 -4.5 -22H-19.5Z" fill="${p.roofL}" opacity=".6"/><path d="M-34 -22H-4.5" stroke="${p.acc}" stroke-width="1"/>`;   // Wagen mit Plane
+ b+=`<path d="M-6 -9H8" stroke="#4a3320" stroke-width="1.4"/>`;   // Deichsel
+ b+=`<path d="M-18 -9Q-14 -9 -12 -14" stroke="${p.tunic}" stroke-width="3" fill="none"/><circle cx="-12.4" cy="-15.6" r="2.4" fill="${SKIN}"/><path d="M-15 -17L-12 -21L-9.4 -17Z" fill="${p.cap}"/>`;   // Kutscher
+ const leg=(x,d)=>`<path d="M${x} -10L${x+d} -1.4" stroke="#6a4222" stroke-width="2.6" stroke-linecap="round"/><rect x="${x+d-1.3}" y="-2.2" width="2.8" height="2.2" rx=".6" fill="#2a1a10"/>`;
+ b+=leg(8,-a)+leg(12,a)+`<path d="M8 -9Q-2 -6 -3 -4" stroke="#4a2a14" stroke-width="2" fill="none"/>`;   // Schweif folgt unten
+ b+=`<path d="M8.4 -12Q4 -17 7 -22" stroke="#4a2a14" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+ b+=`<ellipse cx="17" cy="-12.4" rx="10" ry="5.6" fill="#8a5a30"/><ellipse cx="17" cy="-10.4" rx="9" ry="3" fill="#a8743c" opacity=".6"/>`+leg(23,a)+leg(27,-a);
+ b+=`<path d="M25 -15L28.4 -23L33 -22.6L36.6 -18L35.6 -15.6L31.4 -17L28.6 -13Z" fill="#8a5a30"/><path d="M28.4 -23L26.6 -26L29.6 -24.4Z" fill="#6a4222"/><path d="M26 -16L27.6 -24" stroke="#4a2a14" stroke-width="2" stroke-linecap="round"/><circle cx="33.4" cy="-20.2" r=".7" fill="#1a0f08"/><path d="M12 -15Q24 -18 27 -14" stroke="${p.flag}" stroke-width="1.6" fill="none"/><path d="M26 -14Q30 -10 34 -11" stroke="#4a3320" stroke-width=".8" fill="none"/>`;
+ return svg('-44 -30 88 34',352,136,b);
+}
+h+=`<h2>6 · Gesandte (ab Tag 12 zu Fuß) und Pferdegespann (später)</h2><p class="n">Gesandte laufen vom Dorf über die Wege zum Turm, dann zur Burg des Partners, handeln und bringen 1 Gold. Später fährt ein Pferdegespann.</p>`;
+for(const k of KS){h+=`<div class="row"><div class="lab">${SN[k]}</div>`;for(let f=0;f<2;f++)h+=cell(`gesandter-${k}-${f}`,`Gesandter ${f+1}`,gesandter(k,f));for(let f=0;f<2;f++)h+=cell(`gespann-${k}-${f}`,`Gespann ${f+1}`,gespann(k,f));h+='</div>';}
 out.innerHTML=h;
 </script>
