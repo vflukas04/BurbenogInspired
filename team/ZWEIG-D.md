@@ -450,6 +450,13 @@ Fester Aufbau des Bezugs-Bots (D6, beide Maps, alle 48 Tage), alle Türme mit de
 
 - **Deutung:** (1) **Nova** (Frostnova, Erdbeben) ist zu billig bepreist: Der Kurs wurde mit „alle Türme Nova“ gemessen (0,60); als einzelner Turmtyp ist sie viel mehr wert (Diagnose 1,23/1,68). Größter Einzelposten bei Stein, deutlicher bei Eis. (2) **Unterstützungs-Effekte** (Bremsen, Rüstungsschaden, Fluch) helfen allen eigenen Türmen und wachsen mit ihrer Zahl: je etwa +20–25 % am Ende, wenig am Anfang. (3) **Nachtregel** trifft Schatten vor allem am Anfang (Tag 1–12: 0,77 statt 1,09), weil in Block 1–2 viele nachtaktive Monster laufen. (4) Ein Rest bleibt auch ohne die Merkmale.
 
+## Nova-Kurs nach Radius (L 27.10. 22:30)
+- **Fehler gefunden (Claude):** In `d2.js` galt für jede Nova der feste Kurs 0,60, gemessen mit Radius 2. Der Wert hängt aber stark am Radius (alle Türme Nova, Rate ×0,25): **Radius 2 0,60 · 2,5 1,13 · 3 1,49 · 3,5 1,87**. Rate: ×1/6 → ×0,78, ×0,5 → ×1,245. Betäuben in der Nova: Frostnova (45 % 2 s) ×1,47, Erdbeben (20 % 1 s) ×1,22 (→ 1 + 0,5 × √(Chance × Dauer)). Erdbeben (Radius 3) war damit um etwa das 2,5-Fache zu billig bepreist.
+- Jetzt `V.novaWert(r, q)` und `V.novaStun` in `d2.js` (ohne zusätzlichen Reichweiten- und Ratenkurs): Erdbeben Schaden ×0,51 (vorher ×1,84), Frostnova ×0,79 (vorher ×1,32).
+- **Element-rein danach** (Bodentage, Tag 1–12 → 37–48): Feuer 0,99 (flach) · Eis **1,20** (1,00 → 1,35; vorher 1,34) · Schatten 1,05 (0,77 → 1,21) · Stein **1,23** (1,03 → 1,34; vorher 1,66).
+- **„Nur ein Turmtyp“ gemessen** (nur Turm 5 mit dem Merkmal): alle Werte kleiner, weil nur ein Teil der Türme das Merkmal hat (Fläche 2: 1,16 statt 1,55). Kein Hinweis, dass einzelne Kurse im gemischten Aufbau grundsätzlich anders sind – der Nova-Fehler war der Radius.
+- **Nachtaktive Monster (L: gleichmäßiger verteilen):** heute Tag 5, 6, 9, 11, 12, 16, 19, 33, 40, 44 – sieben in den ersten 19 Tagen, drei in den letzten 29.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

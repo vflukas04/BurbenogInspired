@@ -9,7 +9,7 @@ const PLAN = JSON.parse(fs.readFileSync(path.resolve(process.env.PLAN || path.jo
 const E = G.ELEMENTS[0], ROWS = E.towers.map(r => JSON.parse(JSON.stringify(r))), GR = G.GRID, UPR = G.CONFIG.upgrade.range;
 const ELK = ['armorDmg', 'dayOnly'], EL0 = Object.fromEntries(ELK.map(k => [k, E[k]]));
 // Merkmal: r Reichweite (Felder), q Rate-Faktor, n Geschosse, f Fläche (Felder), effect/eff/dur, stun [Chance, Dauer], nova, noFly, luft [Boden, Flieger], el {…}, upR (Reichweite je Stufe, alte Felder)
-function setze(m){ E.towers.forEach((row, k) => { const r = JSON.parse(JSON.stringify(ROWS[k])), o = r[9];
+function setze(m){ E.towers.forEach((row, k) => { const r = JSON.parse(JSON.stringify(ROWS[k])), o = r[9]; if (m.nur && !m.nur.includes(k)) { E.towers[k] = r; return; }   // nur: Merkmal nur für diese Turmtypen (Index 0–7)
     if (m.r) r[2] = m.r / GR; if (m.q) r[3] = m.q; if (m.n) r[4] = m.n; if (m.f) r[8] = m.f / GR;
     if (m.effect) { o.effect = m.effect; r[6] = m.eff; r[7] = m.dur; }
     if (m.stun) { o.effect = 'stun'; o.chance = m.stun[0]; r[6] = m.stun[1]; r[7] = 1; }
@@ -20,8 +20,10 @@ function setze(m){ E.towers.forEach((row, k) => { const r = JSON.parse(JSON.stri
   G.CONFIG.upgrade.range = m.upR ?? UPR; }
 const gm = a => Math.exp(a.reduce((s, x) => s + Math.log(x), 0) / a.length);
 const flieg = d => !!G.MONSTERS[d].fly;
+// Mit nur: nur Tage, an denen ein Turm dieser Typen im Plan steht (sonst wäre der Wert dort 1 und verwässert)
+const NUR = process.env.NUR ? process.env.NUR.split(',').map(Number) : null;
 function reserven(m){ setze(m); const out = [];
-  for (const mp of PLAN.maps) { C.useMap(mp.lane, mp.seed); mp.tage.forEach((t, d) => out.push({ d, R:C.reserveDay({ el:0, towers:t.towers, res:[] }, { type:d, players:2 }) })); }
+  for (const mp of PLAN.maps) { C.useMap(mp.lane, mp.seed); mp.tage.forEach((t, d) => { if (NUR && !t.towers.some(x => NUR.includes(x.idx))) return; out.push({ d, R:C.reserveDay({ el:0, towers:t.towers, res:[] }, { type:d, players:2 }) }); }); }
   setze({}); return out; }
 const R0 = reserven({});
 function wert(name, m){ const R = reserven(m), q = R.map((x, i) => x.R / R0[i].R);
@@ -44,6 +46,13 @@ const GRUPPEN = {
   pruef: [['Betäuben 100 % 1 s', { stun:[1, 1] }], ['Betäuben 30 % 2 s', { stun:[0.3, 2] }]],
   sonst: [['Nova 2 Felder, Rate ×0,25', { nova:2, q:0.25 }], ['Rüstungsschaden 0,5', { el:{ armorDmg:0.5 } }], ['Rüstungsschaden 1,5', { el:{ armorDmg:1.5 } }], ['Nachtregel (nur Licht)', { el:{ dayOnly:true } }],
     ['keine Fliegenden', { noFly:true }], ['Luftspezialist 60 % / 180 %', { luft:[0.6, 1.8] }], ['schwach gegen Fliegende (100 / 50 %)', { luft:[1, 0.5] }]] };
+// Gruppe nova (L 27.10.): Nova und Vergleichsmerkmale nur an einem Turmtyp (NUR=4 → Turm 5), übrige Türme Standard
+GRUPPEN.nova = [['Nova 2 Felder, Rate ×0,25', { nova:2, q:0.25 }], ['Nova 2,5, Rate ×1/6, Betäuben 45 % 2 s (Frostnova)', { nova:2.5, q:1 / 6, stun:[0.45, 2] }],
+  ['Nova 3, Rate ×0,25, Betäuben 20 % 1 s (Erdbeben)', { nova:3, q:0.25, stun:[0.2, 1] }], ['Nova 3, Rate ×0,25', { nova:3, q:0.25 }],
+  ['Fläche 1,5', { f:1.5 }], ['Fläche 2', { f:2 }], ['Bremsen 20 % 2 s', { effect:'slow', eff:0.2, dur:2 }], ['Fläche 1 + Bremsen 10 % 2 s', { f:1, effect:'slow', eff:0.1, dur:2 }],
+  ['Fluch 10 % 4 s', { effect:'curse', eff:0.1, dur:4 }], ['Brennen 15 % 3 s', { effect:'burn', eff:0.15, dur:3 }], ['Rate ×0,25', { q:0.25 }], ['3 Geschosse', { n:3 }], ['Reichweite 2', { r:2 }]];
+GRUPPEN.novaR = [['Nova 2,5, Rate ×0,25', { nova:2.5, q:0.25 }], ['Nova 3,5, Rate ×0,25', { nova:3.5, q:0.25 }], ['Nova 2,5, Rate ×1/6', { nova:2.5, q:1 / 6 }], ['Nova 3, Rate ×0,5', { nova:3, q:0.5 }], ['Nova 2, Rate ×0,5', { nova:2, q:0.5 }]];
+if (NUR) for (const g in GRUPPEN) GRUPPEN[g] = GRUPPEN[g].map(([n, m]) => [n + ` (nur T${NUR.map(k => k + 1).join('/')})`, { ...m, nur:NUR }]);
 const w = process.argv[2] || 'alle', t0 = Date.now();
 console.log(`Basis D6, Plan ${PLAN.bot}, ${R0.length} Tage×Maps, Reserve ohne Merkmal ${gm(R0.map(x => x.R)).toFixed(3)}`);
 for (const g of w === 'alle' ? Object.keys(GRUPPEN) : w.split(',')) for (const [n, m] of GRUPPEN[g]) wert(n, m);

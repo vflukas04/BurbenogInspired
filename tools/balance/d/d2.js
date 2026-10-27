@@ -20,6 +20,10 @@ const V_D6 = {
   // Bremsen: Einzelziel 10 % 2 s 1,004 · 20 % 2 s 1,02 · 40 % 4 s 1,20; mit Fläche 1: 10 % ×1,15 auf die Fläche. SLOW_K (Standard 1 = wie gemessen)
   bremsen: (s, fl) => { const k = +process.env.SLOW_K || 1, ein = tab([[0, 0], [0.1, 0.004], [0.2, 0.02], [0.4, 0.198]])(s); return 1 + k * (fl > 0 ? 1.48 * s : ein); },
   betaeuben: (c, t) => 1 + Math.max(0, c * t - 0.1),                            // 15 % 1 s 1,05 · 5 % 0,5 s 1,00
+  // Nova (27.10. 22 Uhr): Wert hängt stark am Radius – alle Türme Nova, Rate ×0,25: Radius 2 0,60 · 2,5 1,13 · 3 1,49 · 3,5 1,87;
+  // Rate: ×1/6 → ×0,78, ×0,5 → ×1,245 (gegenüber ×0,25). Betäuben in der Nova: Frostnova (45 % 2 s) ×1,47, Erdbeben (20 % 1 s) ×1,22 → 1 + 0,5 × √(Chance × Dauer)
+  novaWert: (r, q) => tab([[2, 0.60], [2.5, 1.13], [3, 1.49], [3.5, 1.87]])(r) * tab([[Math.log2(1 / 6), 0.78], [-2, 1], [-1, 1.245]])(Math.log2(q)),
+  novaStun: (c, t) => 1 + 0.5 * Math.sqrt(c * t),
   nova: 0.60, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
 };
 const V_D1 = {
@@ -60,7 +64,7 @@ const EFF = { 0:'burn', 1:'slow', 2:'curse', 3:'stun' }, RUEST = { 0:0.5, 1:0.6,
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   const q = m.q || 1, n = m.n || 1, f = m.f || 0;
-  let w = V.reichweite(m.r) * V.geschosse(n) * V.rate(q) * (m.nova ? V.nova * (m.stun ? V.betaeuben(...m.stun, true) : 1) : V.flaeche(f)) * V.ruestung(RUEST[e]) * (e === 2 ? V.nacht : 1);
+  let w = (m.nova && V.novaWert ? V.novaWert(m.r, q) * (m.stun ? V.novaStun(...m.stun) : 1) : V.reichweite(m.r) * V.geschosse(n) * V.rate(q) * (m.nova ? V.nova * (m.stun ? V.betaeuben(...m.stun, true) : 1) : V.flaeche(f))) * V.ruestung(RUEST[e]) * (e === 2 ? V.nacht : 1);   // Nova D6: eigener Kurs nach Radius und Rate (ohne Reichweiten-/Ratenkurs)
   if (m.eff) w *= e === 0 ? V.brennen(m.eff, m.dur) : e === 1 ? V.bremsen(m.eff, f) : V.fluch(m.eff);
   if (m.stun && !m.nova) w *= V.betaeuben(...m.stun, false);
   // Luftspezialist (L 26.10.): Boden × luft[0], Fliegende × luft[1]; Wert = geometrisches Mittel über die Tage (Fliegertage ≈ LUFT_ANTEIL)
