@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-27s";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-27t";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2439,6 +2439,33 @@ function drawWorker(c, cs, wl, w, gyf){   // Arbeiter (etwa ¼ Feld hoch) steht 
   const im = workerImg(wl.el, w.job, (wl.day + w.n) % 2); if (!im) return; const sc = cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc;
   c.drawImage(im, (w.x + .78)*cs - ww/2, gyf(w.y + .92) - 152*sc, ww, hh);   // Fußpunkt bei 152 px
 }
+// ---- Arbeiter-Animation (27.10., F): eigene Ebene über dem Spielfeld, läuft dauerhaft (auch in Bau-Pausen), nur Anzeige ----
+function workerPoint(w, vc, T){   // Position (Feldeinheiten, Fußpunkt), Blickrichtung, Tätigkeit
+  if (!w.pts) { let P = []; try { const sg = worldPaths(MAPS_BY_WORKER.map, vc, [{ x:w.x, y:w.y }], w.n)[0]; if (sg) P = sg.slice(0, -1).map(k => { const [x, y] = k.split(',').map(Number); return [x + .5 + (wHash(x, y, 31 + w.n) - .5)*.35, y + .78 + (wHash(x, y, 32 + w.n) - .5)*.25]; }); } catch (e) {}
+    w.pts = [[vc.x + .5, vc.y + .9], ...P.slice(1), [w.x + .78, w.y + .92]]; w.len = 0; w.seg = []; for (let j = 1; j < w.pts.length; j++) { const d = Math.hypot(w.pts[j][0] - w.pts[j-1][0], w.pts[j][1] - w.pts[j-1][1]); w.seg.push(d); w.len += d; } }
+  const sp = .9, tw = w.len / sp, workT = 7 + w.n % 3, idle = 1.3, cyc = workT + 2*tw + idle, ph = (T + w.n * 2.3) % cyc;
+  const at = d => { let q = Math.max(0, Math.min(w.len, d)); for (let j = 0; j < w.seg.length; j++) { if (q <= w.seg[j] || j === w.seg.length - 1) { const f = w.seg[j] ? q / w.seg[j] : 0, a = w.pts[j], b = w.pts[j+1]; return [a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f, b[0] - a[0]]; } q -= w.seg[j]; } return [w.pts[0][0], w.pts[0][1], 1]; };
+  if (ph < workT || w.len <= 0) { const a = w.pts[w.pts.length - 1]; return { x:a[0], y:a[1], flip:false, work:true }; }
+  if (ph < workT + tw) { const r = at(w.len - (ph - workT) * sp); return { x:r[0], y:r[1], flip:r[2] > 0, work:false }; }   // heim zum Dorf
+  if (ph < workT + tw + idle) return { x:w.pts[0][0], y:w.pts[0][1], flip:false, work:false, rest:true };
+  const r = at((ph - workT - tw - idle) * sp); return { x:r[0], y:r[1], flip:r[2] < 0, work:false };   // wieder hinaus
+}
+let MAPS_BY_WORKER = { map:null };
+function workerTick(){
+  if (!G || (typeof document !== 'undefined' && document.hidden)) return;
+  const T = performance.now() / 1000, dpr = window.devicePixelRatio || 1;
+  for (let i = 0; i < NP(); i++) { const cv = $('cv'+i); if (!cv || !cv.clientWidth) continue;
+    let ov = $('ov'+i); if (ov && ov.parentNode !== cv.parentNode) { ov.remove(); ov = null; }
+    if (!ov) { ov = document.createElement('canvas'); ov.id = 'ov' + i; ov.style.cssText = 'position:absolute;left:0;top:0;pointer-events:none'; cv.parentNode.insertBefore(ov, cv.nextSibling); }
+    const W = cv.clientWidth, H = cv.clientHeight; if (ov.width !== Math.round(W*dpr) || ov.height !== Math.round(H*dpr)) { ov.width = Math.round(W*dpr); ov.height = Math.round(H*dpr); ov.style.width = W + 'px'; ov.style.height = H + 'px'; }
+    const c = ov.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+    const map = MAPS[i], wl = worldInfo(i, map); if (!wl.act.length) continue; MAPS_BY_WORKER.map = map;
+    const cs = W / COLS, k = view25 ? VK : 1, top = view25 ? cs*.45 : 0;
+    for (const w of wl.act.slice().sort((a, b) => a.y - b.y)) { const q = workerPoint(w, wl.vc, T); const im = workerImg(wl.el, w.job, q.work ? Math.floor(T*2.5 + w.n) % 2 : Math.floor(T*5 + w.n) % 2); if (!im) continue;
+      const sc = cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc, bob = q.work || q.rest ? 0 : Math.abs(Math.sin(T*9 + w.n)) * cs*.015, fx = q.x*cs, fy = top + q.y*cs*k - bob;
+      c.save(); c.translate(fx, fy); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -152*sc, ww, hh); c.restore(); } }
+}
+setInterval(workerTick, 100);
 function drawVillage(c, i, cs, wl, gyf){   // Dorf als Bild, steht auf einem Feld in der Ecke
   const im = villageImg(wl.el, wl.v); if (!im) return;
   const sc = cs * 1.3 / 216, w = im.naturalWidth * sc, h = im.naturalHeight * sc, bx = Math.max(w/2, Math.min(COLS*cs - w/2, (wl.vc.x + .5)*cs)), by = gyf(wl.vc.y + .86);
@@ -2580,9 +2607,9 @@ function draw(i, cv){
     c.fillStyle = f > .5 ? v('--ok') : v('--danger'); c.fillRect(X-r, by, 2*r*f, 3);
     if (m.def.armorPts && m.ap > 0) { c.fillStyle = '#c8ccd0'; c.fillRect(X-r, by + 3, 2*r*Math.min(1, m.ap / m.def.armorPts), 2); }   // Rüstung: grauer Balken
   };
-  if (!view25) { drawVillage(c, i, cs, wl, y => y*cs); for (const w of wl.act) drawWorker(c, cs, wl, w, y => y*cs); for (const tw of towers) drawTw(tw); if (!s) return; for (const m of s.monsters) drawMon(m); }
+  if (!view25) { drawVillage(c, i, cs, wl, y => y*cs); for (const tw of towers) drawTw(tw); if (!s) return; for (const m of s.monsters) drawMon(m); }
   else {   // 2,5D: Türme, Bäume, Berge und Monster nach Tiefe (Fußpunkt) sortiert
-    const objs = [{ y:wl.vc.y + .86, f:() => drawVillage(c, i, cs, wl, gy) }, ...wl.act.map(w => ({ y:w.y + .93, f:() => drawWorker(c, cs, wl, w, gy) }))];
+    const objs = [{ y:wl.vc.y + .86, f:() => drawVillage(c, i, cs, wl, gy) }];
     for (const tw of towers) objs.push({ y:tw.y + 1, f:() => drawTw(tw) });
     for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
       if (t === 1) objs.push({ y:y + .9, f:() => drawTree(c, (x+.5)*cs, gy(y+.9), cs, h, false, treeKind(i, wl, x, y), wl.dep[x+','+y]) });

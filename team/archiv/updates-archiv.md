@@ -1,6 +1,10 @@
 # Archiv: ältere Updates (neueste oben)
 
 
+### 27.10. 23:50 · F · 2026-10-27o – Seen frieren im Eis-Gebiet zu
+- Auf einer Eis-Map frieren Seen zu (hellblaue Eisfläche mit Rissen), sobald sie im umgewandelten Schnee-Gebiet um das Dorf liegen. Nur Anzeige, der Geländebonus bleibt. Neu laden genügt.
+
+
 ### 27.10. 23:30 · F · 2026-10-27n – Dorfwege nochmal halb so breit
 - Dorfwege nochmal halbiert (Trampelpfad ca. 2 px bei 40 px Feld). Nur Anzeige. Neu laden genügt.
 

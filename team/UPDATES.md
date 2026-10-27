@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+
+### 28.10. 22:30 · F · 2026-10-27t – Arbeiter laufen und arbeiten dauerhaft
+- Die Arbeiter sind jetzt animiert und laufen ständig, auch in Bau-Pausen und während der Wiedergabe: Sie arbeiten ein paar Sekunden am Gelände (Hacken/Hauen/Angeln, 2 Bilder im Wechsel), laufen auf einem Weg um die Biome zum Dorf, rasten kurz und gehen wieder hinaus. Eigene Ebene über dem Feld (10 Bilder/s, nur sichtbar und aktiv bei geöffneter Seite), nur Anzeige. Neu laden genügt.
 ### 27.10. 18:00 · L · Zweig D6 – Standardtürme ohne Reichweiten-Zuwachs, Treppe ×1,08, Leben kalibriert (nur Balancing-Werkzeuge)
 - Standardtürme: Reichweite 3,5 auf allen Stufen, Upgrades ändern nur Schaden je Gold (Kurve 1/0,95/1,01/1,08/1,16/1,25). Bezugs-Bot spart bis 3 Tage. Mensch-Bots 92–98 % des Bezugs, Upgrade-Anteil ≈ 50 %, T7/T8 werden gebaut. Spielcode unverändert.
 
@@ -67,6 +70,3 @@ Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md ei
 ### 27.10. 00:10 · F · 2026-10-27p – Dörfer: Sockel, Eisburg blau, Spieler 2–4 oben links
 - Alle Dörfer stehen auf einem dunklen Sockel (Feuer Basalt, Eis Eisscholle, Schatten Platte, Stein Steinplatte), die Eisburg hat sattere blaue Wände und hebt sich vom Schnee ab. Neue Bilder in `assets/dorf/` (Quelle `tools/dorf/dorf.html`).
 - Spieler 1 hat das Dorf unten rechts, Spieler 2–4 oben links (zweite Reihe, damit die Burg ins Bild passt). Boden, Wege und zugefrorene Seen richten sich nach der jeweiligen Ecke. Nur Anzeige. Neu laden genügt.
-
-### 27.10. 23:50 · F · 2026-10-27o – Seen frieren im Eis-Gebiet zu
-- Auf einer Eis-Map frieren Seen zu (hellblaue Eisfläche mit Rissen), sobald sie im umgewandelten Schnee-Gebiet um das Dorf liegen. Nur Anzeige, der Geländebonus bleibt. Neu laden genügt.
