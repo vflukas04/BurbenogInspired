@@ -1,0 +1,880 @@
+{
+  "_basis": "044d8c0",
+  "MONSTERS.Betty (Boss).hpMul": 1.1374,
+  "MONSTERS.Nazgul.hpMul": 0.1694,
+  "MONSTERS.Fledermäuse.hpMul": 0.3587,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.358,
+  "MONSTERS.Silberfische.hpMul": 1.0286,
+  "MONSTERS.Kellerasseln.hpMul": 0.5746,
+  "MONSTERS.Nacktschnecken.hpMul": 1.1657,
+  "MONSTERS.Ohrenkneifer.hpMul": 0.7766,
+  "MONSTERS.Mäuse.hpMul": 0.8387,
+  "MONSTERS.Maus-Boss.hpMul": 6.5001,
+  "MONSTERS.Kleine Hunde.hpMul": 0.6759,
+  "MONSTERS.Ratten.hpMul": 0.7222,
+  "MONSTERS.Katzen.hpMul": 0.7016,
+  "MONSTERS.Spatzen.hpMul": 0.7476,
+  "MONSTERS.Füchse.hpMul": 0.5976,
+  "MONSTERS.Fuchs-Boss.hpMul": 4.3302,
+  "MONSTERS.Habichte.hpMul": 0.6747,
+  "MONSTERS.Dachse.hpMul": 0.6741,
+  "MONSTERS.Oktopusse.hpMul": 1.1068,
+  "MONSTERS.Wildschweine.hpMul": 0.5985,
+  "MONSTERS.Schäferhunde.hpMul": 0.6861,
+  "MONSTERS.Schäferhund-Boss.hpMul": 4.2789,
+  "MONSTERS.Besoffene Penner.hpMul": 0.7206,
+  "MONSTERS.Wütende Partnerin.hpMul": 0.4378,
+  "MONSTERS.Wütende Nachbarn.hpMul": 0.3914,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.5248,
+  "MONSTERS.Uffug-Vorhaut.hpMul": 0.6372,
+  "MONSTERS.Uffug (Boss).hpMul": 4.2142,
+  "MONSTERS.Roboter.hpMul": 0.369,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.2823,
+  "MONSTERS.Würfel.hpMul": 0.4427,
+  "MONSTERS.Phönixe.hpMul": 0.4612,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5986,
+  "MONSTERS.El Schlucko.hpMul": 3.796,
+  "MONSTERS.Krieger.hpMul": 0.2151,
+  "MONSTERS.Golems.hpMul": 0.2928,
+  "MONSTERS.Albträume.hpMul": 0.3985,
+  "MONSTERS.Magier-Novizen.hpMul": 0.4077,
+  "MONSTERS.Magiermeister.hpMul": 1.8961,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.2942,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.2025,
+  "MONSTERS.Wargreiter.hpMul": 0.2731,
+  "MONSTERS.Lehrer.hpMul": 0.2323,
+  "MONSTERS.Schulleiter.hpMul": 1.927,
+  "MONSTERS.Streichquartett.hpMul": 0.2331,
+  "MONSTERS.Heisenbergs.hpMul": 0.1809,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.1543,
+  "MONSTERS.GNTModels.hpMul": 0.2963,
+  "MONSTERS.Kellerasseln.weak": [
+    0.9,
+    1,
+    1,
+    1.1
+  ],
+  "MONSTERS.Nacktschnecken.weak": [
+    1,
+    1.1,
+    1,
+    0.9
+  ],
+  "MONSTERS.Ohrenkneifer.weak": [
+    1,
+    0.9,
+    1.1,
+    1
+  ],
+  "MONSTERS.Mäuse.weak": [
+    1.1,
+    1,
+    0.9,
+    1
+  ],
+  "MONSTERS.Ratten.weak": [
+    1.15,
+    1,
+    1,
+    0.85
+  ],
+  "MONSTERS.Katzen.weak": [
+    0.85,
+    1.15,
+    1,
+    1
+  ],
+  "MONSTERS.Spatzen.weak": [
+    1,
+    0.85,
+    1.15,
+    1
+  ],
+  "MONSTERS.Füchse.weak": [
+    1,
+    1,
+    0.85,
+    1.15
+  ],
+  "MONSTERS.Dachse.weak": [
+    1,
+    1,
+    0.8,
+    1.2
+  ],
+  "MONSTERS.Oktopusse.weak": [
+    0.8,
+    1.2,
+    1,
+    1
+  ],
+  "MONSTERS.Wildschweine.weak": [
+    1,
+    0.8,
+    1.2,
+    1
+  ],
+  "MONSTERS.Schäferhunde.weak": [
+    1.2,
+    1,
+    1,
+    0.8
+  ],
+  "MONSTERS.Wütende Partnerin.weak": [
+    0.75,
+    1.25,
+    1,
+    1
+  ],
+  "MONSTERS.Eifersüchtige Geliebte.weak": [
+    1,
+    1,
+    0.75,
+    1.25
+  ],
+  "MONSTERS.Würfel.weak": [
+    1,
+    1,
+    1.25,
+    0.75
+  ],
+  "MONSTERS.Fairtrade-Bananen.weak": [
+    1,
+    1,
+    0.75,
+    1.25
+  ],
+  "MONSTERS.Looping-Louie-Flugzeuge.weak": [
+    0.75,
+    1,
+    1.25,
+    1
+  ],
+  "MONSTERS.Magier-Novizen.weak": [
+    1,
+    0.75,
+    1,
+    1.25
+  ],
+  "MONSTERS.Lindner-Spezialisten.weak": [
+    1.3,
+    0.7,
+    1,
+    1
+  ],
+  "MONSTERS.Wargreiter.weak": [
+    1,
+    1,
+    1.3,
+    0.7
+  ],
+  "MONSTERS.Fledermäuse.weak": [
+    0.7,
+    1.3,
+    1,
+    1
+  ],
+  "MONSTERS.Lehrer.weak": [
+    1,
+    1,
+    0.7,
+    1.3
+  ],
+  "MONSTERS.Heisenbergs.weak": [
+    0.65,
+    1,
+    1.35,
+    1
+  ],
+  "MONSTERS.Mehlmottenraupen.weak": [
+    1,
+    0.65,
+    1,
+    1.35
+  ],
+  "MONSTERS.Nazgul.weak": [
+    1.35,
+    1,
+    0.65,
+    1
+  ],
+  "MONSTERS.GNTModels.weak": [
+    1,
+    1.35,
+    1,
+    0.65
+  ],
+  "MONSTERS.Wütende Nachbarn.weak": [
+    1,
+    1,
+    1.25,
+    0.75
+  ],
+  "MONSTERS.Uffug-Vorhaut.weak": [
+    1.25,
+    0.75,
+    1,
+    1
+  ],
+  "ELEMENTS.0.towers.0": [
+    "Turm 1",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.0": 1.16452,
+  "ELEMENTS.0.towers.1": [
+    "Turm 2",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.1": 1.24216,
+  "ELEMENTS.0.towers.2": [
+    "Turm 3",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.2": 1.32798,
+  "ELEMENTS.0.towers.3": [
+    "Turm 4",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.3": 1.42267,
+  "ELEMENTS.0.towers.4": [
+    "Turm 5",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.4": 1.55949,
+  "ELEMENTS.0.towers.5": [
+    "Turm 6",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.5": 1.62274,
+  "ELEMENTS.0.towers.6": [
+    "Turm 7",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.6": 1.60622,
+  "ELEMENTS.0.towers.7": [
+    "Turm 8",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.0.kraftT.7": 1.61404,
+  "ELEMENTS.0.kraft": 1,
+  "ELEMENTS.0.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 70,
+    "3": 120,
+    "4": 200,
+    "5": 340,
+    "6": 580,
+    "7": 1000
+  },
+  "ELEMENTS.0.upDmg": [
+    2.3,
+    2.0652,
+    1.8474,
+    1.7433,
+    1.6981
+  ],
+  "ELEMENTS.0.upT": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "ELEMENTS.0.armorDmg": 0,
+  "ELEMENTS.0.dayOnly": false,
+  "ELEMENTS.0.noFly": false,
+  "ELEMENTS.0.weatherproof": false,
+  "ELEMENTS.0.terrainFree": false,
+  "ELEMENTS.0.kraftBlock": null,
+  "ELEMENTS.1.towers.0": [
+    "Turm 1",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.0": 1.16452,
+  "ELEMENTS.1.towers.1": [
+    "Turm 2",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.1": 1.24216,
+  "ELEMENTS.1.towers.2": [
+    "Turm 3",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.2": 1.32798,
+  "ELEMENTS.1.towers.3": [
+    "Turm 4",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.3": 1.42267,
+  "ELEMENTS.1.towers.4": [
+    "Turm 5",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.4": 1.55949,
+  "ELEMENTS.1.towers.5": [
+    "Turm 6",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.5": 1.62274,
+  "ELEMENTS.1.towers.6": [
+    "Turm 7",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.6": 1.60622,
+  "ELEMENTS.1.towers.7": [
+    "Turm 8",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.7": 1.61404,
+  "ELEMENTS.1.kraft": 1,
+  "ELEMENTS.1.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 70,
+    "3": 120,
+    "4": 200,
+    "5": 340,
+    "6": 580,
+    "7": 1000
+  },
+  "ELEMENTS.1.upDmg": [
+    2.3,
+    2.0652,
+    1.8474,
+    1.7433,
+    1.6981
+  ],
+  "ELEMENTS.1.upT": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "ELEMENTS.1.armorDmg": 0,
+  "ELEMENTS.1.dayOnly": false,
+  "ELEMENTS.1.noFly": false,
+  "ELEMENTS.1.weatherproof": false,
+  "ELEMENTS.1.terrainFree": false,
+  "ELEMENTS.1.kraftBlock": null,
+  "ELEMENTS.2.towers.0": [
+    "Turm 1",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.0": 1.16452,
+  "ELEMENTS.2.towers.1": [
+    "Turm 2",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.1": 1.24216,
+  "ELEMENTS.2.towers.2": [
+    "Turm 3",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.2": 1.32798,
+  "ELEMENTS.2.towers.3": [
+    "Turm 4",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.3": 1.42267,
+  "ELEMENTS.2.towers.4": [
+    "Turm 5",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.4": 1.55949,
+  "ELEMENTS.2.towers.5": [
+    "Turm 6",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.5": 1.62274,
+  "ELEMENTS.2.towers.6": [
+    "Turm 7",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.6": 1.60622,
+  "ELEMENTS.2.towers.7": [
+    "Turm 8",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.2.kraftT.7": 1.61404,
+  "ELEMENTS.2.kraft": 1,
+  "ELEMENTS.2.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 70,
+    "3": 120,
+    "4": 200,
+    "5": 340,
+    "6": 580,
+    "7": 1000
+  },
+  "ELEMENTS.2.upDmg": [
+    2.3,
+    2.0652,
+    1.8474,
+    1.7433,
+    1.6981
+  ],
+  "ELEMENTS.2.upT": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "ELEMENTS.2.armorDmg": 0,
+  "ELEMENTS.2.dayOnly": false,
+  "ELEMENTS.2.noFly": false,
+  "ELEMENTS.2.weatherproof": false,
+  "ELEMENTS.2.terrainFree": false,
+  "ELEMENTS.2.kraftBlock": null,
+  "ELEMENTS.3.towers.0": [
+    "Turm 1",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.0": 1.16452,
+  "ELEMENTS.3.towers.1": [
+    "Turm 2",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.1": 1.24216,
+  "ELEMENTS.3.towers.2": [
+    "Turm 3",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.2": 1.32798,
+  "ELEMENTS.3.towers.3": [
+    "Turm 4",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.3": 1.42267,
+  "ELEMENTS.3.towers.4": [
+    "Turm 5",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.4": 1.55949,
+  "ELEMENTS.3.towers.5": [
+    "Turm 6",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.5": 1.62274,
+  "ELEMENTS.3.towers.6": [
+    "Turm 7",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.6": 1.60622,
+  "ELEMENTS.3.towers.7": [
+    "Turm 8",
+    "Schaden",
+    1.75,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.7": 1.61404,
+  "ELEMENTS.3.kraft": 1,
+  "ELEMENTS.3.costOverride": {
+    "0": 10,
+    "1": 45,
+    "2": 70,
+    "3": 120,
+    "4": 200,
+    "5": 340,
+    "6": 580,
+    "7": 1000
+  },
+  "ELEMENTS.3.upDmg": [
+    2.3,
+    2.0652,
+    1.8474,
+    1.7433,
+    1.6981
+  ],
+  "ELEMENTS.3.upT": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "ELEMENTS.3.armorDmg": 0,
+  "ELEMENTS.3.dayOnly": false,
+  "ELEMENTS.3.noFly": false,
+  "ELEMENTS.3.weatherproof": false,
+  "ELEMENTS.3.terrainFree": false,
+  "ELEMENTS.3.kraftBlock": null,
+  "MONSTERS.Betty (Boss).charm.stop": 4.5,
+  "MONSTERS.Magier-Novizen.blink.every": 6,
+  "MONSTERS.Magier-Novizen.blink.dur": 2.5,
+  "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
+  "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
+  "_stand": "Zweig D3 (L, 27.10.): wie D0, Preise 10/45/70/120/200/340/580/1000, Upgrade-Kurve 1/0.92/1/1.08/1.16/1.25, Treppe ×1.12 je Turmtyp; Monster wie D0 · Leben D4: Bezugs-Bot (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve 1.55 × Tag^−0.101 (Tag 1: 12 Kills Menschen-Start, Betty 1.05) · Test: Upgrades ohne Reichweiten-Zuwachs",
+  "_ziel": {
+    "R1": 1.5514,
+    "a": 0.1008,
+    "bot": "bezug",
+    "ziel48": 1.05
+  },
+  "CONFIG.upgrade.range": 0
+}

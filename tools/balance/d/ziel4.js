@@ -16,8 +16,8 @@ const f1 = Math.sqrt(lo * hi), R1 = R[0] / f1, a = Math.log(R1 / ZIEL48) / Math.
 const sp = { ...C.SPIEGEL }, aend = [];
 G.MONSTERS.forEach((m, d) => { const z = R1 * Math.pow(d + 1, -a), p = `MONSTERS.${m.name}.hpMul`, h = sp[p] ?? m.hpMul ?? 1;
   sp[p] = +(h * R[d] / z).toFixed(4); aend.push(R[d] / z); });
-sp._ziel = { R1:+R1.toFixed(4), a:+a.toFixed(4), bot:'bezug', ziel48:ZIEL48 };
-sp._stand = (sp._stand || '').replace(/ · Leben D4:.*$/, '') + ` · Leben D4: Bezugs-Bot (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve ${R1.toFixed(2)} × Tag^−${a.toFixed(3)} (Tag 1: 12 Kills Menschen-Start, Betty ${ZIEL48})`;
+sp._ziel = { R1:+R1.toFixed(4), a:+a.toFixed(4), bot:PLAN.bot, ziel48:ZIEL48 };
+sp._stand = (sp._stand || '').replace(/ · Leben D4:.*$/, '') + ` · Leben D4: Bezugs-Bot ${PLAN.bot} (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve ${R1.toFixed(2)} × Tag^−${a.toFixed(3)} (Tag 1: 12 Kills Menschen-Start, Betty ${ZIEL48})`;
 S.speichern(sp, path.resolve(__dirname, '..', process.env.AUS || 'spiegel-D4.json'));
 const gm = x => Math.exp(x.reduce((s, v) => s + Math.log(v), 0) / x.length);
 console.log(`Tag 1: Leben ×${f1.toFixed(2)} für 12 Kills → R1 ${R1.toFixed(3)}, a ${a.toFixed(3)} · Leben-Änderung je Tag: Mittel ×${gm(aend).toFixed(3)}, min ×${Math.min(...aend).toFixed(2)}, max ×${Math.max(...aend).toFixed(2)}`);

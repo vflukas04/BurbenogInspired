@@ -18,8 +18,12 @@ const budget = d => { let g = G.CONFIG.startGold; for (let i = 0; i < d; i++) g 
 // ---------- Bausteine ----------
 const used = st => new Set(st.towers.map(t => t.x + ',' + t.y));
 const upCost = t => B.upCost(t, []);
-function zelle(st, k, minAnteil = 0){ const m = C.mask(EL, k, 1, 0), u = used(st);
-  const c = m.cells.find(c => !u.has(c.x + ',' + c.y) && c.c >= minAnteil * m.best); return c ? { x:c.x, y:c.y, cost:G.buildCost(EL, k, C.LANE, c.x, c.y) } : null; }
+// Platzwahl (27.10. nachm.): bestes freies Feld; ist es mit dem freien Gold (FREI) wegen Geländeaufschlag nicht bezahlbar,
+// nimmt der Bot das beste bezahlbare Feld mit mindestens 80 % der Abdeckung (vorher wartete er dann – Mensch-Bots an Tag 1 nur 1 Turm)
+let FREI = Infinity;
+function zelle(st, k, minAnteil = 0){ const m = C.mask(EL, k, 1, 0), u = used(st), kost = c => G.buildCost(EL, k, C.LANE, c.x, c.y);
+  const frei = m.cells.filter(c => !u.has(c.x + ',' + c.y) && c.c >= minAnteil * m.best); if (!frei.length) return null;
+  const c = frei.find(c => c.c >= 0.8 * frei[0].c && kost(c) <= FREI) || frei[0]; return { x:c.x, y:c.y, cost:kost(c) }; }
 const bau = (st, k, min) => { const c = zelle(st, k, min); return c ? { kind:'bau', k, c, cost:c.cost } : null; };
 const up = t => t && (t.lvl || 1) < 6 ? { kind:'up', t, cost:upCost(t) } : null;
 const vom = (st, k) => st.towers.filter(t => t.idx === k);
@@ -109,6 +113,14 @@ const BOTS = {
   simVoraus3: { txt:'gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag, höchstens 3 je Turmtyp', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1, cap:3 },
   // Bezugs-Bot (L 27.10.): wie simVoraus3, aber Turm 1 bis zu 4-mal
   bezug: { txt:'Bezug: gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag, T1 höchstens 4, sonst 3 je Turmtyp', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1, cap:[4, 3, 3, 3, 3, 3, 3, 3] },
+  // Sparsame Bots (L 27.10. nachm.): nur so viel bauen wie heute nötig, Rest auf die effizientesten Käufe sparen (bis 5 Tage)
+  sparsam: { txt:'sparsam: heute nur das Nötige (Reserve ≥ Ziel), sonst sparen auf den besten Kauf je Gold (Tag +3/+6), T1 ≤ 4, sonst ≤ 3', sparsam:true, cap:[4, 3, 3, 3, 3, 3, 3, 3], horizont:5 },
+  sparsamX: { txt:'sparsam, Bewertung exakt (Reserve-Zuwachs je Gold), T1 ≤ 4, sonst ≤ 3', sparsam:true, exakt:true, cap:[4, 3, 3, 3, 3, 3, 3, 3], horizont:5 },
+  sparsamFreiX: { txt:'sparsam, Bewertung exakt, ohne Obergrenze', sparsam:true, exakt:true, horizont:5 },
+  sparsamFrei: { txt:'sparsam wie oben, ohne Obergrenze je Turmtyp', sparsam:true, horizont:5 },
+  // Bezugs-Bot mit längerem Sparen (L): bis 3 Tageseinkommen
+  bezug3: { txt:'wie Bezug, spart bis 3 Tage', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:3, cap:[4, 3, 3, 3, 3, 3, 3, 3] },
+  bezug3Frei: { txt:'wie Bezug, spart bis 3 Tage, ohne Obergrenze', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:3 },
   simVoraus: { txt:'gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1 },
 };
 // Gieriger Aufbau wie build.js (greedy), aber neue Türme nur, solange vom Turmtyp weniger als cap stehen
@@ -128,6 +140,28 @@ function greedyCap(gold, waves, start, cap, spar){ let setup = start, left = gol
     if (best.a.cost > left) break;   // sparen
     setup = best.s; left -= best.a.cost; }
   return { setup }; }
+/* Sparsamer Bot (L 27.10. nachm.): gibt nur aus, was er braucht, um die heutige Welle zu schaffen (Reserve ≥ Ziel × marge),
+   und spart den Rest für die Käufe mit dem größten Zuwachs je Gold auf künftigen Wellen (Tag +3 und +6) – das dürfen auch große
+   Türme sein, die erst in einigen Tagen bezahlbar sind (Sparziel bis HORIZONT Tageseinkommen). Ist das Sparziel bezahlbar, kauft er es.
+   Muss er heute nachkaufen, nimmt er unter dem Bezahlbaren das Beste für die Zukunft. Obergrenze je Turmtyp optional (cap). */
+function sparsam(bot, st, d){ const heute = { type:d, players:SPIELER, tag:true }, Z = ZIEL(d) * (bot.marge || 1);
+  const zuk = [3, 6].map(h => ({ type:Math.min(N - 1, d + h), players:SPIELER, tag:true }));
+  for (let guard = 0; guard < 60; guard++) {
+    const setup = { el:EL, towers:st.towers, res:[] }, frei = budget(d) - st.spent, noetig = C.reserveDay(setup, heute) < Z;
+    const acts = B.actions(setup, frei + (bot.horizont || 5) * einkommen(d), { cells:3, keep:0.8 })
+      .filter(a => a.kind !== 'bau' || st.towers.filter(t => t.idx === a.apply(setup).towers.at(-1).idx).length < capVon(bot.cap, a.apply(setup).towers.at(-1).idx));
+    if (!acts.length) break;
+    const R0 = zuk.map(w => C.reserveDay(setup, w)), fRef = R0.map(r => Math.max(r * 1.25, 0.05)), base = quickW(setup, zuk, fRef);
+    // exakt (27.10. nachm.): Zuwachs der Reserve (log) je Gold statt Schnellbewertung – die Schnellbewertung (Anteil Leben bei festem
+    // Faktor, höchstens 100 %) unterschätzt große Käufe; gemessen Tag 33: T8 schnell 0,22 ≈ T5-Upgrade 0,22, Reserve 0,30 gegen 0,26
+    const wert = a => { const s = a.apply(setup); if (!bot.exakt) return (quickW(s, zuk, fRef) - base) / a.cost;
+      return zuk.reduce((v, w, i) => v + Math.log(C.reserveDay(s, w, 0.97, R0[i] * 0.95, R0[i] * 4) / R0[i]), 0) / zuk.length / a.cost; };
+    const cand = acts.map(a => ({ a, g:wert(a) })).sort((x, y) => y.g - x.g);
+    const ziel = cand[0], bezahlbar = cand.filter(c => c.a.cost <= frei);
+    const wahl = ziel.a.cost <= frei ? ziel : noetig ? bezahlbar[0] : null;
+    if (!wahl || wahl.g <= 0 && st.towers.length) break;
+    const s2 = wahl.a.apply(setup); st.towers = s2.towers.map(t => ({ ...t })); st.spent = B.spent(s2);
+  } }
 // ---------- Plan erzeugen ----------
 function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage = [];
   if (bot.fest) { const P = require(path.join(__dirname, 'plaene', `standard-map${C.LANE}.json`)).erg.Feuer[0];
@@ -139,7 +173,8 @@ function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage =
       // 27.10.: Findet die Schnellbewertung keinen Zuwachs mehr (sättigt), bliebe Gold liegen → Rest nach Wirkung je Gold ausgeben (nicht bei Sparen)
       //         (bei sparenden Bots nur, was über die erlaubte Sparsumme von spar × Tageseinkommen hinausgeht)
       for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent - bot.spar * einkommen(d), a = rest(st, frei, bot.cap); if (!a) break; ausfuehren(st, a); } }
-    else for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent, a = bot.next(st, d, frei); if (!a || a.cost > frei) break; ausfuehren(st, a); }
+    else if (bot.sparsam) sparsam(bot, st, d);
+    else for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent; FREI = frei; const a = bot.next(st, d, frei); FREI = Infinity; if (!a || a.cost > frei) break; ausfuehren(st, a); }
     tage.push({ gold:budget(d), spent:st.spent, towers:st.towers.map(t => ({ x:t.x, y:t.y, el:EL, idx:t.idx, lvl:t.lvl, inv:t.inv })) });
   }
   return tage; }
