@@ -33,6 +33,9 @@ function ausfuehren(st, a){
 const wirk = t => { const d = G.tdef(t, C.LANE); return d.dps * C.coverage(t.x, t.y, d.range); };
 function proxyWert(st, a){ if (a.kind === 'bau') return wirk({ x:a.c.x, y:a.c.y, el:EL, idx:a.k, lvl:1 }) / a.cost;
   return (wirk({ ...a.t, lvl:a.t.lvl + 1 }) - wirk(a.t)) / a.cost; }
+// Rest-Ausgabe der Sim-Bots: beste Wirkung je Gold, mit Obergrenze je Turmtyp
+const rest = (st, frei, cap = 1e9) => { const a = alleAktionen(st).filter(a => a.cost <= frei && (a.kind !== 'bau' || vom(st, a.k).length < cap)); if (!a.length) return null;
+  return a.map(x => ({ x, v:proxyWert(st, x) })).sort((p, q) => q.v - p.v)[0].x; };
 const alleAktionen = st => [...[...Array(8).keys()].map(k => bau(st, k)), ...st.towers.map(up)].filter(Boolean);
 // ---------- Bots: next(st, d, frei) → gewünschte Aktion (zu teuer = heute sparen) oder null ----------
 const BOTS = {
@@ -99,18 +102,39 @@ const BOTS = {
   // Sim mit Vorausschau: heute ×1, morgen ×0,5, übermorgen ×0,25; darf ein Tageseinkommen lang sparen
   // Bezug: alter P2-Plan (25.10., D0-Preise): mit Forschung, Edelsteinen, Umbau erlaubt und vollem Kopfgeld – nur zum Vergleich
   p2alt: { txt:'Bezug: alter P2-Plan (Forschung, Edelsteine, Umbau, volles Kopfgeld)', fest:true },
+  // Mit Obergrenze (L 27.10.): wie sim/simVoraus, aber höchstens 3 Türme je Turmtyp (T1 … T8)
+  sim3: { txt:'gierig mit Simulation (heute), höchstens 3 Türme je Turmtyp', sim:d => [{ type:d, players:SPIELER, tag:true }], spar:0, cap:3 },
+  simVoraus3: { txt:'gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag, höchstens 3 je Turmtyp', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1, cap:3 },
   simVoraus: { txt:'gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1 },
 };
+// Gieriger Aufbau wie build.js (greedy), aber neue Türme nur, solange vom Turmtyp weniger als cap stehen
+const resvW = (s, w) => w.tag ? C.reserveDay(s, w) : C.reserveHp(s, w);
+const runW = (s, w, f) => w.tag ? C.runDay(s, w, f) : C.runWave(s, w, f);
+const quickW = (s, waves, fRef) => { let v = 0, n = 0; waves.forEach((w, i) => { v += (w.wt || 1) * runW(s, w, fRef[i]).hpShare; n += w.wt || 1; }); return v / n; };
+function greedyCap(gold, waves, start, cap, spar){ let setup = start, left = gold - B.spent(setup);
+  for (let guard = 0; guard < 300; guard++) {
+    const acts = B.actions(setup, left, { cells:3, keep:0.8, spar }).filter(a => { if (a.kind !== 'bau') return true; const k = a.apply(setup).towers.at(-1).idx; return setup.towers.filter(t => t.idx === k).length < cap; });
+    if (!acts.length) break;
+    const R = waves.map(w => resvW(setup, w)), fRef = R.map(r => Math.max(r * 1.25, 0.05)), base = quickW(setup, waves, fRef);
+    let cand = acts.map(a => { const s = a.apply(setup), v = quickW(s, waves, fRef); return { a, s, v, gain:(v - base) / a.cost }; });
+    const sat = cand.filter(c => c.v >= 0.999);
+    if (sat.length > 1) { const s0 = B.score(setup, waves); cand = sat.map(c => ({ ...c, gain:Math.log(B.score(c.s, waves) / s0) / c.a.cost })); }
+    cand.sort((x, y) => y.gain - x.gain); const best = cand[0];
+    if (!best || best.gain <= 0 && setup.towers.length) break;
+    if (best.a.cost > left) break;   // sparen
+    setup = best.s; left -= best.a.cost; }
+  return { setup }; }
 // ---------- Plan erzeugen ----------
 function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage = [];
   if (bot.fest) { const P = require(path.join(__dirname, 'plaene', `standard-map${C.LANE}.json`)).erg.Feuer[0];
     return P.tage.map((t, d) => ({ gold:t.gold, spent:B.spent(t.setup), res:t.setup.res || [], towers:t.setup.towers })); }
   for (let d = 0; d < N; d++) {
-    if (bot.sim) { const g = B.greedy(EL, budget(d), bot.sim(d), { cells:3, keep:0.8, spar:bot.spar * einkommen(d) }, { el:EL, towers:st.towers.map(t => ({ ...t })), res:[] });
+    if (bot.sim) { const start = { el:EL, towers:st.towers.map(t => ({ ...t })), res:[] };
+      const g = bot.cap ? greedyCap(budget(d), bot.sim(d), start, bot.cap, bot.spar * einkommen(d)) : B.greedy(EL, budget(d), bot.sim(d), { cells:3, keep:0.8, spar:bot.spar * einkommen(d) }, start);
       st.towers = g.setup.towers.map(t => ({ ...t })); st.spent = B.spent(g.setup);
       // 27.10.: Findet die Schnellbewertung keinen Zuwachs mehr (sättigt), bliebe Gold liegen → Rest nach Wirkung je Gold ausgeben (nicht bei Sparen)
       //         (bei sparenden Bots nur, was über die erlaubte Sparsumme von spar × Tageseinkommen hinausgeht)
-      for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent - bot.spar * einkommen(d), a = BOTS.proxy.next(st, d, frei); if (!a) break; ausfuehren(st, a); } }
+      for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent - bot.spar * einkommen(d), a = rest(st, frei, bot.cap); if (!a) break; ausfuehren(st, a); } }
     else for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent, a = bot.next(st, d, frei); if (!a || a.cost > frei) break; ausfuehren(st, a); }
     tage.push({ gold:budget(d), spent:st.spent, towers:st.towers.map(t => ({ x:t.x, y:t.y, el:EL, idx:t.idx, lvl:t.lvl, inv:t.inv })) });
   }

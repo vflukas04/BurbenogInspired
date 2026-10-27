@@ -344,6 +344,16 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 | 1/0,95/1/1,075/1,15/1,2 (`spiegel-D3-flach.json`) | 0,92/1,06/1,18/1,27/1,29 | 0,59 (hoch) | 0,58 | 0,55 / 0,53 / 0,52 | 93 % |
 
   Bei allen drei Kurven bauen die Sim-Bots 15–26 × Turm 1 auf S6, dazu einzelne T2–T6. Grund ist die Platzknappheit: Turm 1 steht früh auf den besten Feldern, Abriss gibt es nicht, deshalb schlägt das Aufrüsten dort einen neuen großen Turm auf schlechterem Feld. **Ohne Reichweiten-Zuwachs bei Upgrades** (Test `spiegel-D3-k2r0.json`) ist es genauso (sim weiter 17–18 × T1 S6), alle Bots verlieren 10–18 %. Die Kurve ist also nicht der Hebel für vielfältigere Aufbauten. Möglich wären die Turm-Treppe (1,10 je Stufe, z. B. 1,15) oder weniger gute Plätze.
+- **Turm-Treppe und Obergrenze (L 27.10. mittags, Kurve 1/0,92/1/1,08/1,16/1,25):** Schaden je Gold steigt je Turmtyp um ×1,10 / ×1,12 / ×1,15 (`spiegel-D3-k2.json`, `-k2t112`, `-k2t115`; Leben nicht nachkalibriert, deshalb steigen die Werte). Neu: **sim3 / simVoraus3** = gierig mit Simulation, aber höchstens 3 Türme je Turmtyp.
+
+| Treppe | bester (hoch) | sim3 / simVoraus3 | sim (ohne Grenze) | Mensch A / B / C | Mensch A ÷ bester |
+|---|---|---|---|---|---|
+| ×1,10 | 0,61 | 0,60 / 0,59 | 0,60 (31 Türme, 22–26 × T1) | 0,56 / 0,53 / 0,52 | 92 % |
+| ×1,12 | 0,63 | 0,61 / 0,62 | 0,60 (27, 17 × T1) | 0,57 / 0,55 / 0,54 | 90 % |
+| ×1,15 | 0,66 | 0,63 / 0,63 | 0,61 (28, 20 × T1) | 0,60 / 0,59 / 0,58 | 91 % |
+
+  - **Die Obergrenze kostet nichts**, ab ×1,12 ist sie sogar besser als ohne. Die Masse an Turm 1 ist also nicht optimal, sondern Kurzsichtigkeit des gierigen Bots (jeden Tag ist das nächste T1-Upgrade knapp am besten). Mit Grenze baut der Bot von T1–T5 je 3, dazu 1–2 × T6; Upgrades vor allem auf T1–T4. T7/T8: bei ×1,10 nie, bei ×1,12 einmal T8, bei ×1,15 2 × T7 und 1 × T8 (simVoraus3).
+  - Die Treppe ändert die Turm-Masse ohne Grenze nicht. Sie entscheidet vor allem, ob große Türme spät lohnen: Bei ×1,15 liegen die Großturm-Bots (hoch, hoch5, leiter3) vorne, und die Mensch-Bots holen im letzten Block auf.
 - **Später (Forschung):** Wert je Freischaltung = Gold-Äquivalent (Budget-Aufschlag, der dieselbe Reserve bringt; mit festem Budget direkt messbar), Preis = Anteil davon, gemeinsame Forschung × Spielerzahl/2, Summe gegen das 10-%-Ziel prüfen, dann Leben nachziehen.
 
 ## Nächste Schritte

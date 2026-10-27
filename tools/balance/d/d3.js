@@ -12,12 +12,14 @@ function upDmg(kurve){ const out = []; let gold = 1, prev = 1;
   for (let s = 2; s <= 6; s++) { gold += Math.pow(1.5, s - 1); const dps = gold * kurve[s - 1]; out.push(+(dps / prev).toFixed(4)); prev = dps; }
   return out; }
 const grenz = u => { let gold = 1, dps = 1; return u.map((f, i) => { const g = Math.pow(1.5, i + 1), n = dps * f, m = (n - dps) / g; gold += g; dps = n; return +m.toFixed(2); }); };   // Kraft je Gold des einzelnen Upgrades
+// TREPPE=1.15 (L 27.10.): Schaden je Gold steigt je Turmtyp um diesen Faktor (D0: 1,10)
+const TREPPE = +(process.env.TREPPE || 1.10);
 const KURVE = process.env.UPKURVE ? [1, ...process.env.UPKURVE.split(',').map(Number).slice(1)] : null;
 for (let e = 0; e < 4; e++) {
   sp[`ELEMENTS.${e}.costOverride`] = Object.fromEntries(PREIS.map((p, k) => [k, p]));
-  for (let k = 0; k < 8; k++) sp[`ELEMENTS.${e}.kraftT.${k}`] = +(D0[`ELEMENTS.${e}.kraftT.${k}`] * PREIS[k] / ALT[k]).toFixed(5);
+  for (let k = 0; k < 8; k++) sp[`ELEMENTS.${e}.kraftT.${k}`] = +(D0[`ELEMENTS.${e}.kraftT.${k}`] * PREIS[k] / ALT[k] * Math.pow(TREPPE / 1.10, k)).toFixed(5);
   if (KURVE) sp[`ELEMENTS.${e}.upDmg`] = upDmg(KURVE);
 }
-sp._stand = `Zweig D3 (L, 27.10.): wie D0, Preise ${PREIS.join('/')}` + (KURVE ? `, Upgrade-Kurve ${KURVE.join('/')}` : '') + '; Monster wie D0';
+sp._stand = `Zweig D3 (L, 27.10.): wie D0, Preise ${PREIS.join('/')}` + (KURVE ? `, Upgrade-Kurve ${KURVE.join('/')}` : '') + (TREPPE !== 1.10 ? `, Treppe ×${TREPPE} je Turmtyp` : '') + '; Monster wie D0';
 S.speichern(sp, path.resolve(__dirname, '..', process.env.AUS || 'spiegel-D3.json'));
 const u = sp['ELEMENTS.0.upDmg']; console.log(sp._stand, u, 'je Upgrade (Kraft je Gold):', grenz(u).join('/'));
