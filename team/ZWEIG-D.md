@@ -363,6 +363,24 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - Bezugs-Bot Tag 48: 4 × T1 S6, 3 × T2 (S2–S3), 3 × T3 (S2–S6), 3 × T4, 3 × T5, 2 × T6 (Map 0).
 - **Offen:** Map 0 ist etwa 20 % schwerer als Map 2 (Bezugs-Bot 0,92 / 1,13). Das ist Kartenvarianz (Wegführung/Gelände), Prüfpunkt für später. Der Regel-Bot „hoch“ (wenige Türme ganz hoch) ist etwas stärker als der gierige Bezugs-Bot. Der Bezug ist also stark, aber nicht optimal.
 
+## D5 Standardtürme ohne Reichweiten-Zuwachs (L 27.10. nachmittags, `spiegel-D5.json`)
+- **Beschluss L:** Standardtürme (auch ihre Upgrades) haben auf allen Stufen dieselben Standardwerte (Reichweite 3,5 Felder, 1 Schuss/s, 1 Geschoss, kein Effekt). Nur der Schaden je Gold steigt mit Turmtyp (Treppe) und Stufe (Upgrade-Kurve). Bisher galt die allgemeine Spielregel „Reichweite +0,2 (alte Felder) je Stufe“ auch für sie: S6 = 5,5 statt 3,5 Felder. Merkmale wie Reichweiten-Zuwachs kommen erst bei den echten Türmen über die Umrechnungsfaktoren dazu.
+- **Warum das wichtig war:** Mit Zuwachs ist das billige T1-Upgrade je Gold das Beste (Tag 21, exakt: T1 → S5 1,20, neuer T6/T7/T8 0,73–0,76 je 1000 Gold); ohne Zuwachs drehen sich die Werte um (T6/T7 1,02, T8 0,94, T1-Upgrade 0,90; Tag 33: T8 0,50 gegen 0,15). Die Abdeckung der besten Felder ist fast gleich (25 beste: 15,4 bis 13,0), Platzknappheit ist also **nicht** der Grund (frühere Aussage korrigiert). Zusätzlich unterschätzt die Schnellbewertung der gierigen Bots große Käufe (Tag 33, T8: 0,21 statt 0,50) → sparsame Bots bewerten exakt (Reserve-Zuwachs je Gold).
+- **Bezug neu:** `bezug3` (wie bezug, spart bis 3 Tage; war mit 1,05 am stärksten). Leben auf D5 kalibriert (2 Runden, `d/ziel4.js`): Reserve 1,52 × Tag^−0,096, Bezug danach 1,00 in allen Blöcken (schwächster Tag 0,92).
+- **Ergebnis D5 (Treppe ×1,12):** Bezug 1,00 · ohne Obergrenze (`bezug3Frei`) 1,00 · wenige Türme ganz hoch 0,99 · Mensch A/B/C 0,95/0,94/0,91. **Ohne Obergrenze entsteht jetzt von selbst eine Mischung:** Tag 48 Map 0: 10 × T1 (2 × S6), 2 × T2, 2 × T4, 4 × T5, 3 × T6, 3 × T7, 1 × T8. Bezug mit Grenze: 4 × T1 (S5–S6), je 3 × T2–T7, 2 × T8. T7/T8 kommen jetzt bei allen Treppen.
+- **Neue Auffälligkeit:** Die Bots rüsten kaum noch auf (Upgrade-Anteil 30–45 % statt 80–90 %), die meisten Türme bleiben auf S1. Grund: Das erste Upgrade bringt je Gold 0,87, ein neuer Turm des nächsten Typs ×1,12 mehr als der eigene. → Upgrade-Kurve am Anfang prüfen.
+- **Treppe neu geprüft (Leben wie D5, nicht je Treppe kalibriert):**
+
+| Treppe | Bezug | ohne Grenze | wenige ganz hoch | Mensch A / B / C | Mensch A ÷ Bezug |
+|---|---|---|---|---|---|
+| ×1,10 | 0,96 | 0,96 | 0,97 | 0,92 / 0,90 / 0,87 | 96 % |
+| **×1,12** | 1,00 | 1,00 | 0,99 | 0,95 / 0,94 / 0,91 | 95 % |
+| ×1,15 | 1,07 | 1,06 | 1,02 | 1,00 / 1,00 / 0,97 | 93 % |
+
+  Die Zusammensetzung ändert sich wenig. T7/T8 kommen bei allen drei Treppen (×1,10: 3 × T7 / 2 × T8 ohne Grenze; ×1,15: 3 × T7, 1 × T8).
+- **Sparer mit Schwelle 1,05 (L, `spar105`):** Er kauft heute nur, bis die Reserve 1,05 erreicht ist, und spart sonst auf den besten Kauf je Gold (exakt, bis 5 Tage). Ergebnis 1,02 (Tag 1–12 1,08, 37–48 0,96). Er spart kaum, weil der beste Kauf je Gold meist schon bezahlbar ist (kleine Käufe sind je Gold ähnlich gut wie große). Tag 48 Map 0: 4 × T1 S6, je 3 × T2–T6 (S1–S5), 2 × T7.
+- **Platz-Fix der Regel-Bots:** Ist das beste Feld wegen Wald/Sumpf nicht bezahlbar, nehmen sie das beste bezahlbare mit ≥ 80 % Abdeckung. Vorher bauten die Mensch-Bots an Tag 1 nur einen Turm.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

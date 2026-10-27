@@ -117,6 +117,9 @@ const BOTS = {
   sparsam: { txt:'sparsam: heute nur das Nötige (Reserve ≥ Ziel), sonst sparen auf den besten Kauf je Gold (Tag +3/+6), T1 ≤ 4, sonst ≤ 3', sparsam:true, cap:[4, 3, 3, 3, 3, 3, 3, 3], horizont:5 },
   sparsamX: { txt:'sparsam, Bewertung exakt (Reserve-Zuwachs je Gold), T1 ≤ 4, sonst ≤ 3', sparsam:true, exakt:true, cap:[4, 3, 3, 3, 3, 3, 3, 3], horizont:5 },
   sparsamFreiX: { txt:'sparsam, Bewertung exakt, ohne Obergrenze', sparsam:true, exakt:true, horizont:5 },
+  // L 27.10. 14 Uhr: spart so viel wie möglich, ohne die Reserve 1,05 an der heutigen Welle zu unterschreiten
+  spar105: { txt:'spart so viel wie möglich, heute nur bis Reserve 1,05; Rest auf den besten Kauf je Gold (exakt, bis 5 Tage), T1 ≤ 4, sonst ≤ 3', sparsam:true, exakt:true, schwelle:1.05, cap:[4, 3, 3, 3, 3, 3, 3, 3], horizont:5 },
+  spar105Frei: { txt:'wie spar105, ohne Obergrenze', sparsam:true, exakt:true, schwelle:1.05, horizont:5 },
   sparsamFrei: { txt:'sparsam wie oben, ohne Obergrenze je Turmtyp', sparsam:true, horizont:5 },
   // Bezugs-Bot mit längerem Sparen (L): bis 3 Tageseinkommen
   bezug3: { txt:'wie Bezug, spart bis 3 Tage', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:3, cap:[4, 3, 3, 3, 3, 3, 3, 3] },
@@ -144,7 +147,7 @@ function greedyCap(gold, waves, start, cap, spar){ let setup = start, left = gol
    und spart den Rest für die Käufe mit dem größten Zuwachs je Gold auf künftigen Wellen (Tag +3 und +6) – das dürfen auch große
    Türme sein, die erst in einigen Tagen bezahlbar sind (Sparziel bis HORIZONT Tageseinkommen). Ist das Sparziel bezahlbar, kauft er es.
    Muss er heute nachkaufen, nimmt er unter dem Bezahlbaren das Beste für die Zukunft. Obergrenze je Turmtyp optional (cap). */
-function sparsam(bot, st, d){ const heute = { type:d, players:SPIELER, tag:true }, Z = ZIEL(d) * (bot.marge || 1);
+function sparsam(bot, st, d){ const heute = { type:d, players:SPIELER, tag:true }, Z = bot.schwelle || ZIEL(d) * (bot.marge || 1);   // schwelle (L 27.10.): feste Reserve, z. B. 1,05
   const zuk = [3, 6].map(h => ({ type:Math.min(N - 1, d + h), players:SPIELER, tag:true }));
   for (let guard = 0; guard < 60; guard++) {
     const setup = { el:EL, towers:st.towers, res:[] }, frei = budget(d) - st.spent, noetig = C.reserveDay(setup, heute) < Z;
