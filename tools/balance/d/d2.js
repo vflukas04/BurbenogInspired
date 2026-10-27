@@ -19,14 +19,14 @@ const V_D6 = {
   brennen: (e, d) => 1 + e * (d === 'Tag' ? 8.1 : 1.94 * Math.pow(d / 3, 0.74)),
   fluch: e => 1 + 2.8 * e / (1 + 0.7 * e),                                       // 5 % 1,135 · 10 % 1,265 · 20 % 1,494
   // Bremsen: Einzelziel 10 % 2 s 1,004 · 20 % 2 s 1,02 · 40 % 4 s 1,20; mit Fläche 1: 10 % ×1,15 auf die Fläche. SLOW_K (Standard 1 = wie gemessen)
-  bremsen: (s, fl) => { const k = +process.env.SLOW_K || 4.741, ein = tab([[0, 0], [0.1, 0.004], [0.2, 0.02], [0.4, 0.198]])(s); return 1 + k * (fl > 0 ? 1.48 * s : ein); },
+  bremsen: (s, fl) => { const k = +process.env.SLOW_K || 9.47, ein = tab([[0, 0], [0.1, 0.004], [0.2, 0.02], [0.4, 0.198]])(s); return 1 + k * (fl > 0 ? 1.48 * s : ein); },
   betaeuben: (c, t) => 1 + Math.max(0, c * t - 0.1),                            // 15 % 1 s 1,05 · 5 % 0,5 s 1,00
   // Nova (27.10. 22 Uhr): Wert hängt stark am Radius – alle Türme Nova, Rate ×0,25: Radius 2 0,60 · 2,5 1,13 · 3 1,49 · 3,5 1,87;
   // Rate: ×1/6 → ×0,78, ×0,5 → ×1,245 (gegenüber ×0,25). Betäuben in der Nova: Frostnova (45 % 2 s) ×1,47, Erdbeben (20 % 1 s) ×1,22 → 1 + 0,5 × √(Chance × Dauer)
   // mit Platzwahl (28.10.): Radius 2 0,79 · 2,5 1,16 · 3 1,53 · 3,5 1,93; Rate ×1/6 → ×0,71, ×0,5 → ×1,26; Betäuben Frostnova ×1,51, Erdbeben ×1,26
   novaWert: (r, q) => tab([[2, 0.79], [2.5, 1.16], [3, 1.53], [3.5, 1.93]])(r) * tab([[Math.log2(1 / 6), 0.71], [-2, 1], [-1, 1.26]])(Math.log2(q)),
   novaStun: (c, t) => 1 + 0.53 * Math.sqrt(c * t),
-  nova: 0.60, ruestung: a => 1 + (+process.env.RUEST_K || 2.64) * 0.12 * a, nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
+  nova: 0.60, ruestung: a => 1 + (+process.env.RUEST_K || 2.97) * 0.12 * a, nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
 };
 const V_D1 = {
   reichweite: r => r < 3.5 ? Math.pow(r / 3.5, 0.3) : Math.pow(r / 3.5, 0.16),
@@ -41,8 +41,8 @@ const V_D1 = {
 };
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 // SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
-// Verbund-/Element-Kurse (27.10. nachts, d/verbund.js und d/fit1.js): Brennen ×0,65, Fluch ×1,27 auf (Wert − 1); RUEST_K 2,64, SLOW_K 4,74 (Standard unten)
-const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : 'brennen:0.65,fluch:1.27');
+// Verbund-/Element-Kurse (28.10. nachts, mit Platzwahl, d/verbund.js und d/fit1.js): Brennen ×0,59, Fluch ×1,29 auf (Wert − 1); RUEST_K 2,97, SLOW_K 9,47 (Standard unten)
+const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
