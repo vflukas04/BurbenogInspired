@@ -3,21 +3,36 @@
 // Weg 2 (schwache Effekte, Wert ≈ 1,2–1,5) als Regel, Weg 1 (starker Effekt, wenig Schaden) als Ausnahme: Schwelbrand, Frosthauch, Erdbeben.
 // Irrlicht bleibt vorerst ein normaler Fluch-Turm (Sonderturm folgt am Ende). Reichweite/Fläche in Feldern (neues Raster).
 const fs = require('fs'), path = require('path'), S = require('../spiegel');
-// Basis (27.10.): Standardtürme D4 (Preise bis 1000, Treppe ×1,12, Upgrade-Kurve L, Leben auf den Bezugs-Bot kalibriert); BASIS=spiegel-D0.json = alte Preise
-const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || 'spiegel-D4.json'))), sp = { ...D0 };
-// ---- Wechselkurse (Messungen D1b/D1c, alle Türme der Map mit dem Merkmal, Stapelregel) ----
-const V = {
+// Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
+const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || 'spiegel-D6.json'))), sp = { ...D0 };
+// ---- Wechselkurse ----
+// D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
+const tab = P => x => { if (x <= P[0][0]) return P[0][1]; for (let i = 1; i < P.length; i++) if (x <= P[i][0]) { const [a, va] = P[i - 1], [b, vb] = P[i]; return va + (vb - va) * (x - a) / (b - a); }
+  const [a, va] = P[P.length - 2], [b, vb] = P[P.length - 1]; return vb + (vb - va) / (b - a) * (x - b); };
+const V_D6 = {
+  reichweite: tab([[1.5, 0.49], [2, 0.64], [2.5, 0.90], [3, 0.96], [3.5, 1], [4, 1.03], [5, 1.08], [6, 1.11]]),
+  geschosse: tab([[1, 1], [2, 0.87], [3, 0.76], [5, 0.53]]),
+  rate: q => tab([[-2, 0.80], [-1, 1.03], [0, 1], [1, 0.96], [Math.log2(3), 0.93]])(Math.log2(q)),   // über log2(Rate)
+  flaeche: tab([[0, 1], [0.5, 0.82], [1, 0.93], [1.5, 1.20], [2, 1.55]]),
+  brennen: (e, d) => 1 + e * (d === 'Tag' ? 12 : 5.6 * Math.pow(d / 3, 0.47)),   // 8 % 3 s 1,45 · 15 % 3 s 1,84 · 30 % 6 s 3,33 · 5 % Tag 1,60
+  fluch: e => 1 + 5.6 * e / (1 + 2.2 * e),                                       // 5 % 1,25 · 10 % 1,46 · 20 % 1,78
+  // Bremsen: Einzelziel gemessen 10 % 2 s 1,02 · 20 % 2 s 1,17 · 40 % 4 s 1,32; mit Fläche 1: 10 % ×1,48 auf die Fläche. SLOW_K wie D2 (gemischte Aufbauten)
+  bremsen: (s, fl) => { const k = +process.env.SLOW_K || 2, ein = tab([[0, 0], [0.1, 0.02], [0.2, 0.17], [0.4, 0.32]])(s); return 1 + k * (fl > 0 ? 4.8 * s : ein); },
+  betaeuben: (c, t) => 1 + 1.5 * Math.max(0, c * t - 0.1),                     // 15 % 1 s 1,07 · 30 % 2 s 1,75 (gemessen 1,77)
+  nova: 0.60, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
+};
+const V_D1 = {
   reichweite: r => r < 3.5 ? Math.pow(r / 3.5, 0.3) : Math.pow(r / 3.5, 0.16),
   geschosse: n => Math.pow(n, -0.18),
   rate: q => Math.pow(q, -0.04),
-  flaeche: r => { const P = [[0, 1], [0.5, 0.84], [1, 0.9], [1.5, 1.19], [2, 1.52]]; if (r >= 2) return 1.52 + 0.66 * (r - 2);
-    for (let i = 1; i < P.length; i++) if (r <= P[i][0]) { const [a, va] = P[i - 1], [b, vb] = P[i]; return va + (vb - va) * (r - a) / (b - a); } },
+  flaeche: tab([[0, 1], [0.5, 0.84], [1, 0.9], [1.5, 1.19], [2, 1.52]]),
   brennen: (e, d) => 1 + e * (d === 'Tag' ? 10.4 : 5 * Math.pow(d / 3, 0.42)),
   fluch: e => 1 + 5.8 * e / (1 + 2.2 * e),
-  bremsen: (s, fl) => 1 + (+process.env.SLOW_K || 2) * (fl > 0 ? 9 * s / (1 + 2 * s) : 1.2 * s),   // SLOW_K: Korrektur aus dem Komplettversuch
+  bremsen: (s, fl) => 1 + (+process.env.SLOW_K || 2) * (fl > 0 ? 9 * s / (1 + 2 * s) : 1.2 * s),
   betaeuben: (c, t, nova) => 1 + (nova ? 1.8 : 5.7) * c * Math.pow(t, 0.2),
   nova: 0.56, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
 };
+const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
 // Stein und Fliegende (L 27.10.): 2 (schwach)/4/6/8 – Schleuder (T2) schwach gegen Fliegende (Boden 100 %, Fliegende SCHWACH),
 // Katapult (T4, Namen wie vor dem 17.10.) und T6/T8 treffen Fliegende normal, T1/T3/T5/T7 gar nicht. Kein starker Fliegerturm bei Stein.
@@ -60,6 +75,6 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
 });
 for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.armorDmg`] = RUEST[e]; sp[`ELEMENTS.${e}.dayOnly`] = e === 2; }
 sp['ELEMENTS.3.splashCenter'] = 1; sp['ELEMENTS.3.splashEdge'] = 0.7;   // Stein-Flächenabfall wie alle (Mitte 100 %, Rand 70 %); eigene Stein-Fläche ggf. später als Element-Spezifikation
-sp._stand = 'Zweig D2 (L, 25.10.; 27.10. Preise D3, Stein 2s/4/6/8): Komplettversuch – 32 Türme aus Grundturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js), Weg 2 als Regel; Monster wie D0';
-S.speichern(sp, path.join(__dirname, '..', 'spiegel-D2.json'));
+sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
+S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));

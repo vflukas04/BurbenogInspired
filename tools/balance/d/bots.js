@@ -10,7 +10,7 @@ const fs = require('fs'), path = require('path'), C = require('../core'), B = re
 for (const k in G.LOCKS) delete G.LOCKS[k];                       // alles freigeschaltet
 G.WEATHER.forEach(w => { w.el = {}; delete w.burnDecay; });        // ohne Wetter-Wirkung
 G.MONSTERS.forEach(m => { m.weak = [1, 1, 1, 1]; });               // neutrale Faktoren
-const EL = 0, SPIELER = 2, ANTEIL = +(process.env.ANTEIL || 0.9), MAPS = [[0, 11], [2, 23]], N = G.MONSTERS.length;
+const EL = +(process.env.EL || 0), SPIELER = 2, ANTEIL = +(process.env.ANTEIL || 0.9), MAPS = [[0, 11], [2, 23]], N = G.MONSTERS.length;
 // Ziel-Kurve: aus dem Spiegel (_ziel, gesetzt von d/ziel4.js), sonst die D0-Kurve 1,52 × Tag^−0,096
 const ZK = C.SPIEGEL._ziel || { R1:1.52, a:0.096 }, ZIEL = d => ZK.R1 * Math.pow(d + 1, -ZK.a);
 const einkommen = d => d < N ? ANTEIL * G.monsterDef(d, SPIELER).bounty * (G.MONSTERS[d].count || G.CONFIG.perWave) : 0;

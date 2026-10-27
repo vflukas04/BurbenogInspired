@@ -424,6 +424,13 @@ Fester Aufbau des Bezugs-Bots (D6, beide Maps, alle 48 Tage), alle Türme mit de
 - **Betäuben viel schwächer als in D1c** (15 % 1 s: 1,07 statt 1,86). [Vermutung] Die alte Messung hatte einen Fehler bei der Betäubungschance; 100 % 1 s (1,51) < 30 % 2 s (1,77) zeigt, dass die Dauer zählt, nicht die Häufigkeit. Vor der Übersetzung der Stein-Türme gegenprüfen.
 - **Bremsen** wirkt nur am Boden; an Fliegertagen ×1,00 (Eis bremst keine Fliegenden). Bremsen mit Fläche wirkt an Fliegertagen wie reine Fläche.
 
+## D6T Türme aus den D6-Kursen (27.10. abends, `d/d2.js` → `spiegel-D6T.json`, `d/elemente6.js`)
+- Kurse in `d2.js` auf D6 umgestellt (`V_D6`; `KURSE=D1` = alt). Korrekturen wie D2 (SLOW_K 2, STEIN_K 0,8, keine Fliegenden ×1,1). Stein 2s/4/6/8.
+- **Bezugs-Aufbau, Turm für Turm durch das Element ersetzt** (1,00 = Standardturm), Bodentage: Feuer 0,96 · Eis 1,25 · Schatten 1,01 · Stein 1,34. Starke Drift über das Spiel: Tag 1–12 / 37–48 Feuer 1,06/0,94, Eis 0,93/1,63, Schatten 0,72/1,20, Stein 0,84/1,71. Fliegertage 0,71 / 0,66 / 0,79 / 0,21.
+- **Bezugs-Bot frei je Element** (1,00 = Ziel): **Feuer 1,52** · Eis 1,31 · Schatten 1,10 · Stein 1,07 (Tag 1–12: 1,27 / 1,00 / 0,84 / 0,77).
+- **Grund für Feuer frei 1,52 [Vermutung, sehr wahrscheinlich]:** versteckter Upgrade-Bonus wie beim Reichweiten-Zuwachs: Effekt ×1,15 und Dauer ×1,3 je Stufe (`CONFIG.upgrade.eff/dur`) – auf S6 Effekt ×2,0, Dauer ×3,7. Brennen 8 % 3 s wird auf S6 zu 16 % 11 s (Wert nach Kurs 2,66 statt 1,45). Der freie Bot rüstet deshalb Effekttürme besonders hoch.
+- Stapelregel Fluch/Bremsen gilt (stärkster voll, weitere je 20 %, höchstens 6) – erklärt einen Teil der Drift (mit vielen Türmen bis ×2 des stärksten).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
