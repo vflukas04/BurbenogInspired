@@ -502,6 +502,21 @@ Jeder Kurs einzeln ±10 % (auf Wert − 1), Türme neu zusammengesetzt, alle 4 E
 - **Maps 1 und 3** (Bezugs-Bot, Standardtürme, D6): Map 0 0,93 · Map 1 1,02 · Map 2 1,09 · Map 3 1,09. Map 0 ist der Ausreißer; im Mittel aller vier Maps liegt das Spiel etwa 3 % leichter als kalibriert (auf Map 0 + 2).
 - **Irrlicht als Sonderturm** (Schatten element-rein, T2 = echtes Irrlicht wie im Spiel: Licht 4,4 Felder, ×1,3…1,8, Rüstung 30…100 %): Schatten **1,41** statt 1,01 (Tag 1–12 1,03 → 37–48 1,73). Werte fest auf Stufe 1: 1,31; Verstärkung halb: 1,27; doppelt: 1,68; Licht 3 Felder: 1,32. **Das Irrlicht ist im heutigen Spiel-Entwurf deutlich zu stark** (für 45 Gold).
 
+## Stand 28.10. früh: Kurse mit Platzwahl, freier Bau ausgeglichen
+- **Kurse mit Platzwahl** (Reichweite 1,5 → 0,67, 2 → 0,77, 5 → 1,14, 6 → 1,21; Nova Radius 2/2,5/3/3,5 → 0,79/1,16/1,53/1,93) in `d2.js`. Element-Test jetzt auch mit Platzwahl (`elemente6.js UMPLATZ=1`, Standard und Element werden auf die besten Felder ihrer eigenen Reichweite gesetzt).
+- **Neu eingestellt** (`d/verbund.js`, `d/fit1.js`): Rüstungsschaden ×2,97, Bremsen ×9,47, Brennen ×0,59, Fluch ×1,29 (jeweils auf Wert − 1; jetzt Standard in `d2.js`). Fester Aufbau: Feuer 1,00 · Eis 1,00 · Schatten 1,01 · Stein 1,00 (Bodentage). Drift Tag 1–12 / 37–48: Feuer 0,98/1,02 · Eis 0,84/1,07 · Schatten 0,88/1,05 · Stein 0,82/1,03.
+- **Freier Bau** (Bezugs-Bot frei je Element; Mensch-Bots A/B/C; Ziel = 1,00; Standardtürme: Bezug 1,01 Boden / 0,99 Flieger, Mensch 0,98/0,95/0,92):
+
+| Element | Bezug Boden | Bezug Flieger | Mensch A/B/C Boden | Mensch A/B/C Flieger |
+|---|---|---|---|---|
+| Feuer | **1,04** (vorher 1,26) | 0,86 | 0,97 / 0,93 / 0,93 | 0,70 / 0,50 / 0,64 |
+| Eis | 1,08 | 1,18 | 0,92 / 0,93 / 0,84 | 0,74 / 0,71 / 0,65 |
+| Schatten | 1,02 | **1,48** | 0,96 / 0,95 / 0,93 | 0,99 / 1,06 / 0,93 |
+| Stein | 1,00 | **0,28** | 0,94 / 0,93 / 0,88 | 0,15 / 0,21 / 0,19 |
+
+- **An Bodentagen sind die Elemente beim freien Bau jetzt innerhalb von +8 %** (Eis am stärksten). Die Mensch-Bots liegen bei Eis etwas tiefer als bei den anderen.
+- **Fliegertage sind die größte Baustelle:** Schatten zu stark (Nachtauge als Luftspezialist), Stein sehr schwach (2s/4/6/8, von L in Kauf genommen), Mensch-Bots bei Feuer/Eis schwach (sie bauen viele Türme ohne Luftangriff).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
