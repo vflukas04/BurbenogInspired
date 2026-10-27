@@ -24,7 +24,7 @@ const V_D6 = {
   // Rate: ×1/6 → ×0,78, ×0,5 → ×1,245 (gegenüber ×0,25). Betäuben in der Nova: Frostnova (45 % 2 s) ×1,47, Erdbeben (20 % 1 s) ×1,22 → 1 + 0,5 × √(Chance × Dauer)
   novaWert: (r, q) => tab([[2, 0.60], [2.5, 1.13], [3, 1.49], [3.5, 1.87]])(r) * tab([[Math.log2(1 / 6), 0.78], [-2, 1], [-1, 1.245]])(Math.log2(q)),
   novaStun: (c, t) => 1 + 0.5 * Math.sqrt(c * t),
-  nova: 0.60, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
+  nova: 0.60, ruestung: a => 1 + (+process.env.RUEST_K || 1) * 0.12 * a, nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
 };
 const V_D1 = {
   reichweite: r => r < 3.5 ? Math.pow(r / 3.5, 0.3) : Math.pow(r / 3.5, 0.16),
@@ -38,6 +38,9 @@ const V_D1 = {
   nova: 0.56, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
 };
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
+// SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
+if (process.env.SENS) for (const t of process.env.SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
+  V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
 // Stein und Fliegende (L 27.10.): 2 (schwach)/4/6/8 – Schleuder (T2) schwach gegen Fliegende (Boden 100 %, Fliegende SCHWACH),
 // Katapult (T4, Namen wie vor dem 17.10.) und T6/T8 treffen Fliegende normal, T1/T3/T5/T7 gar nicht. Kein starker Fliegerturm bei Stein.

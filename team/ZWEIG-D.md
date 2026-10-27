@@ -457,6 +457,14 @@ Fester Aufbau des Bezugs-Bots (D6, beide Maps, alle 48 Tage), alle Türme mit de
 - **„Nur ein Turmtyp“ gemessen** (nur Turm 5 mit dem Merkmal): alle Werte kleiner, weil nur ein Teil der Türme das Merkmal hat (Fläche 2: 1,16 statt 1,55). Kein Hinweis, dass einzelne Kurse im gemischten Aufbau grundsätzlich anders sind – der Nova-Fehler war der Radius.
 - **Nachtaktive Monster (L: gleichmäßiger verteilen):** heute Tag 5, 6, 9, 11, 12, 16, 19, 33, 40, 44 – sieben in den ersten 19 Tagen, drei in den letzten 29.
 
+## Verbund-Kurse und Nachtaktive neu (L 27.10. 22:20)
+- **Nachtaktive (im Test, `spiegel-D6.json`):** Tag 5 Mäuse, 9 Katzen, 11 Füchse, 16 Wildschweine, 19 Besoffene Penner, 22 Eifersüchtige Geliebte, 27 Würfel, 33 Albträume, 37 E-Scooter-Fahrer, 40 Fledermäuse, 44 Heisenbergs. Zwischenbosse tagsüber (Boss-Tage laufen im Spiel wie Live, ohne Nacht).
+- **Verbund-Kurse (`d/verbund.js`):** Faktor auf (Wert − 1), sodass das Element im eigenen Verbund (Bezugs-Aufbau) bei 1,00 liegt. Früher dasselbe Prinzip als SLOW_K = 2 (25.10.) und STEIN_K = 0,8. Neu: **Rüstungsschaden ×2,64** (an Stein gesucht, gilt für alle Elemente mit Rüstungsschaden), **Bremsen ×4,74** (an Eis).
+- **Ergebnis** (Bodentage, Tag 1–12/13–24/25–36/37–48): Feuer **0,93** (0,96/0,91/0,92/0,92) · Eis **1,00** (0,87/1,04/1,03/1,10) · Schatten **1,03** (0,87/1,03/1,16/1,13) · Stein **1,00** (0,84/0,98/1,17/1,07). Fliegertage 0,69 / 0,61 / 0,80 / 0,21.
+- **Neuer Haken:** Feuer fällt von 0,99 auf 0,93, weil der Rüstungs-Kurs für alle gilt (Feuer hat Rüstungsschaden 0,5). [Vermutung] Bei Stein wirkt der Rüstungsschaden zusammen mit der Fläche (ein Wurf senkt die Rüstung vieler Monster), bei Feuer kaum.
+- **Drift** jetzt bei allen Effekt-Elementen ähnlich: Anfang ≈ 0,85, Ende ≈ 1,1–1,17. Schatten am Anfang durch die neuen Nächte 0,87 statt 0,77.
+- **Empfindlichkeit** (L): jeder Kurs ±10 % (auf Wert − 1), alle 4 Elemente auf dem festen Bezugs-Aufbau über 48 Tage (`d/sens.js`, ca. 4–5 min je Variante).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

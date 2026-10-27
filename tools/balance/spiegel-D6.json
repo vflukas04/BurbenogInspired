@@ -869,7 +869,7 @@
   "MONSTERS.Magier-Novizen.blink.dur": 2.5,
   "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
   "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
-  "_stand": "Zweig D6 (L, 27.10.): Standardtürme wie D0 (Reichweite, Effektstärke und Effektdauer auf allen Stufen gleich, Upgrades ändern nur den Schaden je Gold), Preise 10/45/70/120/200/340/580/1000, Upgrade-Kurve 1/0.95/1.01/1.08/1.16/1.25, Treppe ×1.08 je Turmtyp; Monster wie D0 · Leben D4: Bezugs-Bot bezug3 (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve 1.53 × Tag^−0.098 (Tag 1: 12 Kills Menschen-Start, Betty 1.05)",
+  "_stand": "Zweig D6 (L, 27.10.): Standardtürme wie D0 (Reichweite, Effektstärke und Effektdauer auf allen Stufen gleich, Upgrades ändern nur den Schaden je Gold), Preise 10/45/70/120/200/340/580/1000, Upgrade-Kurve 1/0.95/1.01/1.08/1.16/1.25, Treppe ×1.08 je Turmtyp; Monster wie D0 · Leben D4: Bezugs-Bot bezug3 (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve 1.53 × Tag^−0.098 (Tag 1: 12 Kills Menschen-Start, Betty 1.05) · Nachtaktive neu (L 27.10.): Tag 5, 9, 11, 16, 19, 22, 27, 33, 37, 40, 44; Zwischenbosse tagsüber",
   "_ziel": {
     "R1": 1.534,
     "a": 0.0979,
@@ -878,5 +878,18 @@
   },
   "CONFIG.upgrade.range": 0,
   "CONFIG.upgrade.eff": 1,
-  "CONFIG.upgrade.dur": 1
+  "CONFIG.upgrade.dur": 1,
+  "MONSTERS.Mäuse.night": true,
+  "MONSTERS.Maus-Boss.night": false,
+  "MONSTERS.Katzen.night": true,
+  "MONSTERS.Füchse.night": true,
+  "MONSTERS.Fuchs-Boss.night": false,
+  "MONSTERS.Wildschweine.night": true,
+  "MONSTERS.Besoffene Penner.night": true,
+  "MONSTERS.Albträume.night": true,
+  "MONSTERS.Fledermäuse.night": true,
+  "MONSTERS.Heisenbergs.night": true,
+  "MONSTERS.Eifersüchtige Geliebte.night": true,
+  "MONSTERS.Würfel.night": true,
+  "MONSTERS.E-Scooter-Fahrer.night": true
 }
