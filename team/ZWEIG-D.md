@@ -335,6 +335,15 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - T7/T8 bauen nur die Mensch-, Leiter- und Querschnitt-Bots (S1–S3), die Sim-Bots nie.
 - Alle liegen bei etwa 0,6 des alten Plans. Erwartet: Der alte Plan hatte +32 % Gold (volles Kopfgeld + Kopfgeld-Forschung), +25 % Element-Schaden, Steine und freien Umbau. **Die Leben müssen auf den neuen Bezug nachkalibriert werden**, sobald der Bezugs-Bot feststeht.
 - **Flachere Upgrade-Kurve 1/0,95/1/1,075/1,15/1,2** (`spiegel-D3-flach.json`, je Upgrade 0,92/1,06/1,18/1,27/1,29): hoch 0,62 → 0,59, hoch5 0,59 → 0,58, kern 0,56 → 0,55, breit und leiter3 gleich. Die Reihenfolge bleibt, der Abstand Bester ÷ Mensch A sinkt von 1,11 auf 1,07.
+- **Upgrade-Kurven im Vergleich (27.10. mittags, alle 15 Bots bzw. Sim-Bots neu simuliert):**
+
+| Kurve (ganzer Turm) | je Upgrade S2–S6 | bester Bot | sim | Mensch A / B / C | Mensch A ÷ bester |
+|---|---|---|---|---|---|
+| 1/0,9/1/1,1/1,2/1,3 (D3) | 0,83/1,11/1,24/1,36/1,47 | 0,62 (hoch) | 0,60 | 0,56 / 0,53 / 0,51 | 90 % |
+| **1/0,92/1/1,08/1,16/1,25 (L, `spiegel-D3-k2.json`)** | 0,87/1,09/1,19/1,29/1,41 | 0,61 (hoch) | 0,60 | 0,56 / 0,53 / 0,52 | 92 % |
+| 1/0,95/1/1,075/1,15/1,2 (`spiegel-D3-flach.json`) | 0,92/1,06/1,18/1,27/1,29 | 0,59 (hoch) | 0,58 | 0,55 / 0,53 / 0,52 | 93 % |
+
+  Bei allen drei Kurven bauen die Sim-Bots 15–26 × Turm 1 auf S6, dazu einzelne T2–T6. Grund ist die Platzknappheit: Turm 1 steht früh auf den besten Feldern, Abriss gibt es nicht, deshalb schlägt das Aufrüsten dort einen neuen großen Turm auf schlechterem Feld. **Ohne Reichweiten-Zuwachs bei Upgrades** (Test `spiegel-D3-k2r0.json`) ist es genauso (sim weiter 17–18 × T1 S6), alle Bots verlieren 10–18 %. Die Kurve ist also nicht der Hebel für vielfältigere Aufbauten. Möglich wären die Turm-Treppe (1,10 je Stufe, z. B. 1,15) oder weniger gute Plätze.
 - **Später (Forschung):** Wert je Freischaltung = Gold-Äquivalent (Budget-Aufschlag, der dieselbe Reserve bringt; mit festem Budget direkt messbar), Preis = Anteil davon, gemeinsame Forschung × Spielerzahl/2, Summe gegen das 10-%-Ziel prüfen, dann Leben nachziehen.
 
 ## Nächste Schritte
