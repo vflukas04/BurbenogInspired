@@ -120,6 +120,14 @@ const BOTS = {
   // L 27.10. 14 Uhr: spart so viel wie möglich, ohne die Reserve 1,05 an der heutigen Welle zu unterschreiten
   spar105: { txt:'spart so viel wie möglich, heute nur bis Reserve 1,05; Rest auf den besten Kauf je Gold (exakt, bis 5 Tage), T1 ≤ 4, sonst ≤ 3', sparsam:true, exakt:true, schwelle:1.05, cap:[4, 3, 3, 3, 3, 3, 3, 3], horizont:5 },
   spar105Frei: { txt:'wie spar105, ohne Obergrenze', sparsam:true, exakt:true, schwelle:1.05, horizont:5 },
+  // Planer (L 27.10. 15 Uhr): wie spar105 ohne Obergrenze, zusätzlich Bündel (mehrere Stufen auf einmal), Vorauswahl 4 je Art, exakt bewertet
+  planer: { txt:'Planer: spart bis 5 Tage, heute nur bis Reserve 1,05, bewertet auch mehrstufige Käufe (Bündel) exakt; ohne Obergrenze', sparsam:true, exakt:true, schwelle:1.05, horizont:5, buendel:true, vorwahl:4 },
+  // Claude-Plan (27.10.): Regeln aus den Messungen – je Gold sind größere Turmtypen besser als Upgrades → immer auf den nächstgrößeren
+  // Turmtyp sparen (bis 3 Tage), heute nur nachkaufen, wenn die Reserve unter 1,05 fällt (dann das Bezahlbare mit der größten Wirkung je Gold);
+  // ab T8: neuer T8 oder T8-Upgrade, je nach Wirkung je Gold
+  claude: { txt:'Claude-Plan: spart auf den nächstgrößeren Turmtyp (bis 3 Tage), Nachkauf nur unter Reserve 1,05; ab T8 neue T8 / Upgrades', claude:true },
+  // Rückwärts-Bot (L 27.10. 15 Uhr): Ziel = optimaler Endaufbau (OPTIMUM=…), rückwärts auf jeden Tag heruntergerechnet, vorwärts nachgebaut
+  rueck: { txt:'Rückwärts: Tagesziele aus dem optimalen Endaufbau, Nachkauf nur unter Reserve 1,05', rueck:true },
   sparsamFrei: { txt:'sparsam wie oben, ohne Obergrenze je Turmtyp', sparsam:true, horizont:5 },
   // Bezugs-Bot mit längerem Sparen (L): bis 3 Tageseinkommen
   bezug3: { txt:'wie Bezug, spart bis 3 Tage', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:3, cap:[4, 3, 3, 3, 3, 3, 3, 3] },
@@ -147,14 +155,31 @@ function greedyCap(gold, waves, start, cap, spar){ let setup = start, left = gol
    und spart den Rest für die Käufe mit dem größten Zuwachs je Gold auf künftigen Wellen (Tag +3 und +6) – das dürfen auch große
    Türme sein, die erst in einigen Tagen bezahlbar sind (Sparziel bis HORIZONT Tageseinkommen). Ist das Sparziel bezahlbar, kauft er es.
    Muss er heute nachkaufen, nimmt er unter dem Bezahlbaren das Beste für die Zukunft. Obergrenze je Turmtyp optional (cap). */
+/* Bündel (Planer, L 27.10.): mehrstufige Käufe als EINE Aktion, damit sich Vorleistung zeigt – Turm um 2…5 Stufen auf einmal,
+   neuer Turm gleich auf S2/S3. Kosten = Summe der Einzelschritte. */
+function buendel(setup, gold, cap){ const out = [], used = new Set(setup.towers.map(t => t.x + ',' + t.y));
+  setup.towers.forEach((t, i) => { let cost = 0, lvl = t.lvl || 1;
+    for (let j = lvl + 1; j <= 6; j++) { cost += B.upCost({ ...t, lvl:j - 1 }, []); if (j < lvl + 2) continue; if (cost > gold) break;
+      const c = cost, ziel = j; out.push({ kind:'up', buendel:true, cost:c, txt:`T${t.idx + 1} → S${ziel}`, apply:s => ({ ...s, towers:s.towers.map((u, k) => k === i ? { ...u, lvl:ziel, inv:(u.inv || 0) + c } : u) }) }); } });
+  for (let k = 0; k < 8; k++) { if (setup.towers.filter(t => t.idx === k).length >= capVon(cap, k)) continue;
+    const z = C.mask(EL, k, 1, 0.8).cells.find(c => !used.has(c.x + ',' + c.y)); if (!z) continue;
+    let cost = G.buildCost(EL, k, C.LANE, z.x, z.y);
+    for (let j = 2; j <= 3; j++) { cost += B.upCost({ el:EL, idx:k, lvl:j - 1 }, []); if (cost > gold) break;
+      const c = cost, ziel = j; out.push({ kind:'bau', buendel:true, cost:c, txt:`T${k + 1} neu auf S${ziel}`, apply:s => ({ ...s, towers:[...s.towers, { x:z.x, y:z.y, el:EL, idx:k, lvl:ziel, inv:c }] }) }); } }
+  return out; }
 function sparsam(bot, st, d){ const heute = { type:d, players:SPIELER, tag:true }, Z = bot.schwelle || ZIEL(d) * (bot.marge || 1);   // schwelle (L 27.10.): feste Reserve, z. B. 1,05
   const zuk = [3, 6].map(h => ({ type:Math.min(N - 1, d + h), players:SPIELER, tag:true }));
   for (let guard = 0; guard < 60; guard++) {
     const setup = { el:EL, towers:st.towers, res:[] }, frei = budget(d) - st.spent, noetig = C.reserveDay(setup, heute) < Z;
     const acts = B.actions(setup, frei + (bot.horizont || 5) * einkommen(d), { cells:3, keep:0.8 })
       .filter(a => a.kind !== 'bau' || st.towers.filter(t => t.idx === a.apply(setup).towers.at(-1).idx).length < capVon(bot.cap, a.apply(setup).towers.at(-1).idx));
+    if (bot.buendel) acts.push(...buendel(setup, frei + (bot.horizont || 5) * einkommen(d), bot.cap));
     if (!acts.length) break;
     const R0 = zuk.map(w => C.reserveDay(setup, w)), fRef = R0.map(r => Math.max(r * 1.25, 0.05)), base = quickW(setup, zuk, fRef);
+    // Vorauswahl (Planer): Schnellbewertung je Art (bauen / einzelnes Upgrade / Bündel), je die besten 4 werden exakt bewertet
+    if (bot.vorwahl) { const q = acts.map(a => ({ a, v:(quickW(a.apply(setup), zuk, fRef) - base) / a.cost }));
+      const art = a => a.buendel ? 'b' : a.kind; acts.length = 0;
+      for (const k of ['bau', 'up', 'b']) acts.push(...q.filter(x => art(x.a) === k).sort((x, y) => y.v - x.v).slice(0, bot.vorwahl).map(x => x.a)); }
     // exakt (27.10. nachm.): Zuwachs der Reserve (log) je Gold statt Schnellbewertung – die Schnellbewertung (Anteil Leben bei festem
     // Faktor, höchstens 100 %) unterschätzt große Käufe; gemessen Tag 33: T8 schnell 0,22 ≈ T5-Upgrade 0,22, Reserve 0,30 gegen 0,26
     const wert = a => { const s = a.apply(setup); if (!bot.exakt) return (quickW(s, zuk, fRef) - base) / a.cost;
@@ -165,11 +190,57 @@ function sparsam(bot, st, d){ const heute = { type:d, players:SPIELER, tag:true 
     if (!wahl || wahl.g <= 0 && st.towers.length) break;
     const s2 = wahl.a.apply(setup); st.towers = s2.towers.map(t => ({ ...t })); st.spent = B.spent(s2);
   } }
+function claudePlan(st, d){ const heute = { type:d, players:SPIELER, tag:true };
+  const zielKauf = frei => { const maxK = Math.max(-1, ...st.towers.map(t => t.idx));
+    if (maxK < 7) { const k = [7, 6, 5, 4, 3, 2, 1, 0].find(k => k > maxK && preis(k) <= frei + (st.towers.length ? 3 * einkommen(d) : 0)); return k === undefined ? null : bau(st, k); }
+    const c = [bau(st, 7), ...vom(st, 7).map(up)].filter(Boolean); return c.length ? c.map(x => ({ x, v:proxyWert(st, x) })).sort((p, q) => q.v - p.v)[0].x : null; };
+  for (let guard = 0; guard < 80; guard++) { const frei = budget(d) - st.spent; FREI = frei;
+    const z = zielKauf(frei); if (z && z.cost <= frei) { ausfuehren(st, z); FREI = Infinity; continue; }
+    if (C.reserveDay({ el:EL, towers:st.towers, res:[] }, heute) >= 1.05) { FREI = Infinity; break; }   // sparen
+    const a = rest(st, frei); FREI = Infinity; if (!a) break; ausfuehren(st, a); } }
+/* Rückwärts-Bot (L 27.10. 15 Uhr): 1) optimaler Endaufbau ohne Pfad (d/optimum.js, Datei OPTIMUM). 2) Rückwärts: Aufbau für Tag d =
+   Teilmenge des Aufbaus von Tag d+1 (Türme weglassen oder Stufen zurücknehmen), bis er ins Gold von Tag d passt – jeweils das, was an
+   der Welle von Tag d am wenigsten Reserve je Gold kostet. 3) Vorwärts (der eigentliche Bot): jeden Tag die Schritte zum Ziel des Tages
+   kaufen (billigste zuerst); fällt die Reserve unter SCHWELLE (1,05), Nachkauf außerhalb des Plans (bester Zuwachs je Gold, exakt). */
+let RESERVIERT = new Set(), VERLEGT = new Map();   // Felder des Endziels: Nachkäufe außerhalb des Plans bauen dort nicht
+const tkey = t => t.x + ',' + t.y + ',' + t.idx, kostenBis = (t, lvl) => { let c = G.buildCost(EL, t.idx, C.LANE, t.x, t.y); for (let l = 1; l < lvl; l++) c += B.upCost({ ...t, lvl:l }, []); return c; };
+function rueckPlan(){ const O = JSON.parse(fs.readFileSync(path.resolve(process.env.OPTIMUM))), m = O.maps.find(x => x.lane === C.LANE);
+  const plan = []; plan[N - 1] = m.towers.map(t => ({ x:t.x, y:t.y, el:EL, idx:t.idx, lvl:t.lvl }));
+  for (let d = N - 2; d >= 0; d--) { let S = plan[d + 1].map(t => ({ ...t })); const w = { type:d, players:SPIELER, tag:true };
+    const kost = S2 => S2.reduce((a, t) => a + kostenBis(t, t.lvl), 0);
+    while (kost(S) > budget(d) && S.length) { const R0 = C.reserveDay({ el:EL, towers:S, res:[] }, w); let best = null;
+      S.forEach((t, i) => { const S2 = t.lvl > 1 ? S.map((u, j) => j === i ? { ...u, lvl:u.lvl - 1 } : u) : S.filter((_, j) => j !== i);
+        const zur = kost(S) - kost(S2), R = C.reserveDay({ el:EL, towers:S2, res:[] }, w, 0.97, 0.02, R0 * 1.01), v = (Math.log(R0) - Math.log(R)) / zur;
+        if (!best || v < best.v) best = { v, S2 }; });
+      S = best.S2; }
+    plan[d] = S; }
+  return plan; }
+function rueckVorwaerts(st, d, ziel){ const heute = { type:d, players:SPIELER, tag:true }, schwelle = +(process.env.SCHWELLE || 1.05);
+  for (let guard = 0; guard < 80; guard++) { const frei = budget(d) - st.spent, hier = new Map(st.towers.map(t => [tkey(t), t]));
+    // Zielplätze: ist das Feld eines Zielturms schon von einem anderen Turm belegt, wandert das Ziel auf das beste freie, nicht reservierte Feld
+    const belegt = new Set(st.towers.map(t => t.x + ',' + t.y)), reserviert = new Set(ziel.map(z => z.x + ',' + z.y));
+    const schritte = []; for (const z0 of ziel) { const z = VERLEGT.get(tkey(z0)) || z0, t = hier.get(tkey(z));
+      if (!t) { let c = { x:z.x, y:z.y };
+        if (belegt.has(c.x + ',' + c.y)) { c = C.mask(EL, z.idx, 1, 0).cells.find(q => !belegt.has(q.x + ',' + q.y) && !reserviert.has(q.x + ',' + q.y)); if (!c) continue;
+          VERLEGT.set(tkey(z0), { ...z0, x:c.x, y:c.y }); }
+        const cost = G.buildCost(EL, z.idx, C.LANE, c.x, c.y); schritte.push({ kind:'bau', k:z.idx, c:{ x:c.x, y:c.y, cost }, cost }); }
+      else if (t.lvl < z0.lvl) schritte.push(up(t)); }
+    const s = schritte.filter(a => a && a.cost <= frei).sort((a, b) => a.cost - b.cost)[0];
+    if (s) { ausfuehren(st, s); continue; }
+    const setup = { el:EL, towers:st.towers, res:[] }, R0 = C.reserveDay(setup, heute); if (R0 >= schwelle) break;
+    const acts = B.actions(setup, frei, { cells:6, keep:0.6 }).filter(a => a.kind !== 'bau' || !RESERVIERT.has((t => t.x + ',' + t.y)(a.apply(setup).towers.at(-1)))); if (!acts.length) break;
+    const fRef = Math.max(R0 * 1.25, 0.05), base = C.runDay(setup, heute, fRef).hpShare;
+    const vor = acts.map(a => ({ a, v:(C.runDay(a.apply(setup), heute, fRef).hpShare - base) / a.cost })).sort((x, y) => y.v - x.v).slice(0, 8);
+    const best = vor.map(x => ({ a:x.a, g:Math.log(C.reserveDay(x.a.apply(setup), heute, 0.97, R0 * 0.95, R0 * 4) / R0) / x.a.cost })).sort((x, y) => y.g - x.g)[0];
+    if (!best || best.g <= 0) break; const s2 = best.a.apply(setup); st.towers = s2.towers.map(t => ({ ...t })); st.spent = B.spent(s2); } }
 // ---------- Plan erzeugen ----------
 function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage = [];
   if (bot.fest) { const P = require(path.join(__dirname, 'plaene', `standard-map${C.LANE}.json`)).erg.Feuer[0];
     return P.tage.map((t, d) => ({ gold:t.gold, spent:B.spent(t.setup), res:t.setup.res || [], towers:t.setup.towers })); }
+  const RP = bot.rueck ? rueckPlan() : null; RESERVIERT = new Set(RP && process.env.RESERV ? RP[N - 1].map(z => z.x + ',' + z.y) : []);   // RESERV=1: Zielfelder für Notkäufe sperren (27.10.: führt zu Einbruch am Anfang, Standard aus) VERLEGT = new Map();
+  if (RP && process.env.NUR_RUECK) return RP.map((S, d) => ({ gold:budget(d), spent:S.reduce((a, t) => a + kostenBis(t, t.lvl), 0), towers:S.map(t => ({ ...t, inv:kostenBis(t, t.lvl) })) }));
   for (let d = 0; d < N; d++) {
+    if (RP) rueckVorwaerts(st, d, RP[d]); else
     if (bot.sim) { const start = { el:EL, towers:st.towers.map(t => ({ ...t })), res:[] };
       const g = bot.cap ? greedyCap(budget(d), bot.sim(d), start, bot.cap, bot.spar * einkommen(d)) : B.greedy(EL, budget(d), bot.sim(d), { cells:3, keep:0.8, spar:bot.spar * einkommen(d) }, start);
       st.towers = g.setup.towers.map(t => ({ ...t })); st.spent = B.spent(g.setup);
@@ -177,6 +248,7 @@ function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage =
       //         (bei sparenden Bots nur, was über die erlaubte Sparsumme von spar × Tageseinkommen hinausgeht)
       for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent - bot.spar * einkommen(d), a = rest(st, frei, bot.cap); if (!a) break; ausfuehren(st, a); } }
     else if (bot.sparsam) sparsam(bot, st, d);
+    else if (bot.claude) claudePlan(st, d);
     else for (let guard = 0; guard < 300; guard++) { const frei = budget(d) - st.spent; FREI = frei; const a = bot.next(st, d, frei); FREI = Infinity; if (!a || a.cost > frei) break; ausfuehren(st, a); }
     tage.push({ gold:budget(d), spent:st.spent, towers:st.towers.map(t => ({ x:t.x, y:t.y, el:EL, idx:t.idx, lvl:t.lvl, inv:t.inv })) });
   }

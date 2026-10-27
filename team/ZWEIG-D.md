@@ -381,6 +381,14 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - **Sparer mit Schwelle 1,05 (L, `spar105`):** Er kauft heute nur, bis die Reserve 1,05 erreicht ist, und spart sonst auf den besten Kauf je Gold (exakt, bis 5 Tage). Ergebnis 1,02 (Tag 1–12 1,08, 37–48 0,96). Er spart kaum, weil der beste Kauf je Gold meist schon bezahlbar ist (kleine Käufe sind je Gold ähnlich gut wie große). Tag 48 Map 0: 4 × T1 S6, je 3 × T2–T6 (S1–S5), 2 × T7.
 - **Platz-Fix der Regel-Bots:** Ist das beste Feld wegen Wald/Sumpf nicht bezahlbar, nehmen sie das beste bezahlbare mit ≥ 80 % Abdeckung. Vorher bauten die Mensch-Bots an Tag 1 nur einen Turm.
 
+## D5b Weitsichtige Bots, optimaler Endaufbau, Rückwärts-Bot, D6 (L 27.10. nachmittags)
+- **Optimaler Endaufbau ohne Pfad** (`d/optimum.js`, Gold von Tag 48, bewertet an Tag 44–48, Suche von mehreren Startpunkten mit vorab gesetzten T8/T7): Map 0 Reserve **1,53** (T8 × 5, T7 × 3, dazu kleine Lückenfüller auf schlechteren Feldern), Map 2 **1,78** (T8 × 6, T7, T1). Fast alles auf S1. Zum Vergleich der Endaufbau des Bezugs-Bots an denselben Tagen: 1,21 / 1,34. **Der Pfad kostet also etwa 20–25 %:** frühe kleine Türme besetzen die besten Felder, Abriss gibt es im Bot nicht.
+- **Planer** (`planer`: spart bis 5 Tage, heute nur bis Reserve 1,05, bewertet auch mehrstufige Käufe exakt): 1,01, also nicht besser als der Bezug (1,00). Am Ende schwach (0,95).
+- **Claude-Plan** (Regel-Bot: immer auf den nächstgrößeren Turmtyp sparen, Nachkauf nach Papierwert): **0,84**, verloren. Die Nachkäufe ohne Simulation erzeugen Massen an Stufe-1-Türmen.
+- **Rückwärts-Bot** (`rueck`, L): Tagesziele = Teilmengen des optimalen Endaufbaus (rückwärts heruntergerechnet), vorwärts nachgebaut, Nachkauf nur unter Reserve 1,05. Reiner Rückwärtsplan: Tag 1–12 bei 0,02 – die kleinen Türme des Endaufbaus sind Lückenfüller auf schlechten Feldern und tragen den Anfang nicht. Mit Nachkäufen (Zielturm wandert auf das beste freie Feld, wenn sein Feld belegt ist): **0,94** (Map 0 am Ende 29 × T1). Die einfache Version bringt also nichts. L's Erweiterung (Tagesziel darf vom Folgetag abweichen, Folgetage passen sich an) wäre nötig.
+- **D6** (`spiegel-D6.json`: Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Leben noch von D5): Bezug 0,93 (Upgrade-Anteil **48 %**, vorher 32 %), ohne Grenze 0,93 (51 %), wenige ganz hoch 0,94, **Mensch A/B/C 0,90/0,87/0,85 = 97/94/91 % des Bezugs**. T7/T8 bleiben (Bezug Map 0: 3 × T7, 1 × T8, T4/T5 auf S3–S5).
+- **Hinweis:** Im Spiel kann man für 50 % verkaufen (`sellRefund`), die Bots verkaufen nie. Gerade beim Endaufbau (kleiner Turm räumt das beste Feld für T8) könnte Verkaufen einen Teil der 20–25 % holen.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
