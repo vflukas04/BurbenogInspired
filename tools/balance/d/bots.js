@@ -11,7 +11,8 @@ for (const k in G.LOCKS) delete G.LOCKS[k];                       // alles freig
 G.WEATHER.forEach(w => { w.el = {}; delete w.burnDecay; });        // ohne Wetter-Wirkung
 G.MONSTERS.forEach(m => { m.weak = [1, 1, 1, 1]; });               // neutrale Faktoren
 const EL = 0, SPIELER = 2, ANTEIL = +(process.env.ANTEIL || 0.9), MAPS = [[0, 11], [2, 23]], N = G.MONSTERS.length;
-const ZIEL = d => 1.52 * Math.pow(d + 1, -0.096);
+// Ziel-Kurve: aus dem Spiegel (_ziel, gesetzt von d/ziel4.js), sonst die D0-Kurve 1,52 × Tag^−0,096
+const ZK = C.SPIEGEL._ziel || { R1:1.52, a:0.096 }, ZIEL = d => ZK.R1 * Math.pow(d + 1, -ZK.a);
 const einkommen = d => d < N ? ANTEIL * G.monsterDef(d, SPIELER).bounty * (G.MONSTERS[d].count || G.CONFIG.perWave) : 0;
 const budget = d => { let g = G.CONFIG.startGold; for (let i = 0; i < d; i++) g += einkommen(i); return Math.floor(g); };
 // ---------- Bausteine ----------
@@ -34,7 +35,8 @@ const wirk = t => { const d = G.tdef(t, C.LANE); return d.dps * C.coverage(t.x, 
 function proxyWert(st, a){ if (a.kind === 'bau') return wirk({ x:a.c.x, y:a.c.y, el:EL, idx:a.k, lvl:1 }) / a.cost;
   return (wirk({ ...a.t, lvl:a.t.lvl + 1 }) - wirk(a.t)) / a.cost; }
 // Rest-Ausgabe der Sim-Bots: beste Wirkung je Gold, mit Obergrenze je Turmtyp
-const rest = (st, frei, cap = 1e9) => { const a = alleAktionen(st).filter(a => a.cost <= frei && (a.kind !== 'bau' || vom(st, a.k).length < cap)); if (!a.length) return null;
+const capVon = (cap, k) => cap === undefined ? 1e9 : Array.isArray(cap) ? cap[k] : cap;   // Obergrenze je Turmtyp: Zahl oder Liste [T1 … T8]
+const rest = (st, frei, cap) => { const a = alleAktionen(st).filter(a => a.cost <= frei && (a.kind !== 'bau' || vom(st, a.k).length < capVon(cap, a.k))); if (!a.length) return null;
   return a.map(x => ({ x, v:proxyWert(st, x) })).sort((p, q) => q.v - p.v)[0].x; };
 const alleAktionen = st => [...[...Array(8).keys()].map(k => bau(st, k)), ...st.towers.map(up)].filter(Boolean);
 // ---------- Bots: next(st, d, frei) → gewünschte Aktion (zu teuer = heute sparen) oder null ----------
@@ -105,6 +107,8 @@ const BOTS = {
   // Mit Obergrenze (L 27.10.): wie sim/simVoraus, aber höchstens 3 Türme je Turmtyp (T1 … T8)
   sim3: { txt:'gierig mit Simulation (heute), höchstens 3 Türme je Turmtyp', sim:d => [{ type:d, players:SPIELER, tag:true }], spar:0, cap:3 },
   simVoraus3: { txt:'gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag, höchstens 3 je Turmtyp', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1, cap:3 },
+  // Bezugs-Bot (L 27.10.): wie simVoraus3, aber Turm 1 bis zu 4-mal
+  bezug: { txt:'Bezug: gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag, T1 höchstens 4, sonst 3 je Turmtyp', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1, cap:[4, 3, 3, 3, 3, 3, 3, 3] },
   simVoraus: { txt:'gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag', sim:d => [0, 1, 2].filter(i => d + i < N).map(i => ({ type:d + i, players:SPIELER, tag:true, wt:[1, 0.5, 0.25][i] })), spar:1 },
 };
 // Gieriger Aufbau wie build.js (greedy), aber neue Türme nur, solange vom Turmtyp weniger als cap stehen
@@ -113,7 +117,7 @@ const runW = (s, w, f) => w.tag ? C.runDay(s, w, f) : C.runWave(s, w, f);
 const quickW = (s, waves, fRef) => { let v = 0, n = 0; waves.forEach((w, i) => { v += (w.wt || 1) * runW(s, w, fRef[i]).hpShare; n += w.wt || 1; }); return v / n; };
 function greedyCap(gold, waves, start, cap, spar){ let setup = start, left = gold - B.spent(setup);
   for (let guard = 0; guard < 300; guard++) {
-    const acts = B.actions(setup, left, { cells:3, keep:0.8, spar }).filter(a => { if (a.kind !== 'bau') return true; const k = a.apply(setup).towers.at(-1).idx; return setup.towers.filter(t => t.idx === k).length < cap; });
+    const acts = B.actions(setup, left, { cells:3, keep:0.8, spar }).filter(a => { if (a.kind !== 'bau') return true; const k = a.apply(setup).towers.at(-1).idx; return setup.towers.filter(t => t.idx === k).length < capVon(cap, k); });
     if (!acts.length) break;
     const R = waves.map(w => resvW(setup, w)), fRef = R.map(r => Math.max(r * 1.25, 0.05)), base = quickW(setup, waves, fRef);
     let cand = acts.map(a => { const s = a.apply(setup), v = quickW(s, waves, fRef); return { a, s, v, gain:(v - base) / a.cost }; });

@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 27.10. 13:00 · L · Zweig D4 – Leben auf Bezugs-Bot kalibriert (nur Balancing-Werkzeuge)
+- Treppe ×1,12 je Turmtyp, Upgrade-Kurve 1/0,92/1/1,08/1,16/1,25, Bezugs-Bot mit Vorausschau (≤ 4 × T1, sonst ≤ 3 je Turmtyp). Mensch-Bots 0,91–0,96 des Ziels. Neue Begriffe: **Turmtyp** (T1–T8), **Stufe** (S1–S6). Spielcode unverändert.
+
 ### 27.10. 12:00 · L · Zweig D3 – Bot-Vergleich Standardtürme (nur Balancing-Werkzeuge)
 - Preise in D gerafft (10/45/70/120/200/340/580/1000), Stein in D 2 (schwach)/4/6/8 mit T3 Felsbrocken, T4 Katapult. Spielcode unverändert.
 - 15 Bots mit festem Gold (90 % des Kopfgelds, alles frei, ohne Forschung): Am stärksten sind Aufbauten mit 80–94 % Upgrades; Mensch-Bots erreichen 82–90 % des besten. Tabelle in `team/ZWEIG-D.md` (D3).

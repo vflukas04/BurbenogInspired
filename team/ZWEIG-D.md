@@ -356,6 +356,13 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
   - Die Treppe ändert die Turm-Masse ohne Grenze nicht. Sie entscheidet vor allem, ob große Türme spät lohnen: Bei ×1,15 liegen die Großturm-Bots (hoch, hoch5, leiter3) vorne, und die Mensch-Bots holen im letzten Block auf.
 - **Später (Forschung):** Wert je Freischaltung = Gold-Äquivalent (Budget-Aufschlag, der dieselbe Reserve bringt; mit festem Budget direkt messbar), Preis = Anteil davon, gemeinsame Forschung × Spielerzahl/2, Summe gegen das 10-%-Ziel prüfen, dann Leben nachziehen.
 
+## D4 Leben auf den Bezugs-Bot kalibriert (L 27.10. mittags, `spiegel-D4.json`)
+- **Beschlüsse L:** Treppe **×1,12** je Turmtyp (×1,13 wäre auch möglich), Upgrade-Kurve **1/0,92/1/1,08/1,16/1,25**, Preise bis 1000. Begriffe: **Turmtyp** (T1–T8), **Stufe** (S1–S6). **Bezugs-Bot** `bezug`: gierig mit Simulation heute/morgen/übermorgen, spart 1 Tag, höchstens **4 × T1, sonst 3 je Turmtyp**.
+- **Kalibrierung (`d/ziel4.js`):** Ziel-Reserve 1,55 × Tag^−0,101. Tag 1: Leben so, dass der Menschen-Start (3 × T1 S1) im ersten Durchlauf 12 von 20 schafft. Betty: 1,05 für den Bezugs-Bot. Festes Gold, ohne Forschung, ohne Wetter, neutrale Faktoren. Zwei Runden: Bot erzeugen, Leben anpassen, Bot neu erzeugen. Danach liegt der Bezugs-Bot bei 1,02 des Ziels (Blöcke 1,02–1,03, schwächster Tag 0,91). Die Leben sinken dadurch im Mittel auf **×0,53** gegenüber D0, weil D0 auf den alten Plan mit Forschung, Steinen, Umbau und mehr Gold kalibriert war. **Mit der Forschung später steigen sie wieder.**
+- **Alle Bots auf D4** (1,00 = Ziel): hoch 1,05 · **bezug 1,02** · hoch5 1,01 · sim 1,00 · **Mensch A 0,96 · Mensch B 0,93 · Mensch C 0,91** · leiter3 0,95 · quer 0,89 · nurT1 0,79. Die Mensch-Bots liegen in Tag 1–12 bei 0,80–0,88 (Start mit 3 × T1 ist Absicht) und holen bis Tag 37–48 auf (0,96–1,03).
+- Bezugs-Bot Tag 48: 4 × T1 S6, 3 × T2 (S2–S3), 3 × T3 (S2–S6), 3 × T4, 3 × T5, 2 × T6 (Map 0).
+- **Offen:** Map 0 ist etwa 20 % schwerer als Map 2 (Bezugs-Bot 0,92 / 1,13). Das ist Kartenvarianz (Wegführung/Gelände), Prüfpunkt für später. Der Regel-Bot „hoch“ (wenige Türme ganz hoch) ist etwas stärker als der gierige Bezugs-Bot. Der Bezug ist also stark, aber nicht optimal.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

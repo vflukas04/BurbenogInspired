@@ -15,7 +15,7 @@ Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md`
 
 ## Das Spiel in 10 Zeilen (Stand 14.10.)
 - Koop-Tower-Defense über mehrere Tage, 2–4 Spieler, jeder hat eine eigene Map (16 × 16 Felder).
-- **Begriffe (seit 16.10.):** **Map** = Karte eines Spielers, **Feld** = ein einzelnes Kästchen darauf. (Im Code heißt die Map `lane`, in älteren Texten oft noch „Feld“.)
+- **Begriffe (seit 16.10.):** **Map** = Karte eines Spielers, **Feld** = ein einzelnes Kästchen darauf, **Turmtyp** = T1–T8 (z. B. Funke), **Stufe** = Upgrade-Stufe S1–S6 (seit 27.10.). (Im Code heißt die Map `lane`, in älteren Texten oft noch „Feld“.)
 - 48 Spieltage: 40 Runden mit je einem Monstertyp (20 Stück) + 6 Zwischenbosse (kein Gold, dafür Edelstein) + 2 Endbosse (Tag 24 Uffug, Tag 48). Ab Runde 21 neue Mechaniken (Überraschung von L für F, siehe Post).
 - Spielart „Uhrzeiten“ (10 Uhr neue Welle, Durchgelassene laufen später beim Nachbarn weiter) oder „Live“ (sofort weiter). Mehr als 30 ganz durchgebrochen = verloren.
 - Elemente: Feuer brennt · Eis bremst · Schatten verflucht (mehr Schaden, weniger Rüstung) + Irrlicht verstärkt · Stein Fläche, zertrümmert Rüstung, wetterfest.

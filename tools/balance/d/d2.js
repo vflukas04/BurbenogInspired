@@ -3,8 +3,8 @@
 // Weg 2 (schwache Effekte, Wert ≈ 1,2–1,5) als Regel, Weg 1 (starker Effekt, wenig Schaden) als Ausnahme: Schwelbrand, Frosthauch, Erdbeben.
 // Irrlicht bleibt vorerst ein normaler Fluch-Turm (Sonderturm folgt am Ende). Reichweite/Fläche in Feldern (neues Raster).
 const fs = require('fs'), path = require('path'), S = require('../spiegel');
-// Basis (27.10.): Standardtürme mit gerafften Preisen (spiegel-D3.json, d/d3.js); BASIS=spiegel-D0.json = alte Preise
-const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || 'spiegel-D3.json'))), sp = { ...D0 };
+// Basis (27.10.): Standardtürme D4 (Preise bis 1000, Treppe ×1,12, Upgrade-Kurve L, Leben auf den Bezugs-Bot kalibriert); BASIS=spiegel-D0.json = alte Preise
+const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || 'spiegel-D4.json'))), sp = { ...D0 };
 // ---- Wechselkurse (Messungen D1b/D1c, alle Türme der Map mit dem Merkmal, Stapelregel) ----
 const V = {
   reichweite: r => r < 3.5 ? Math.pow(r / 3.5, 0.3) : Math.pow(r / 3.5, 0.16),
