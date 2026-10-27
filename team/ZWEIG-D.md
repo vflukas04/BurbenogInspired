@@ -294,6 +294,19 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - „Plan 1:1“ hängt stark davon ab, welche Turmnummer der Bot im Standard-Plan oft gebaut hat (Turm 4) – für Fliegertage wenig aussagekräftig. **„Vorbereitet“** (`FLIEG_VORBEREITET=1`): an Fliegertagen sind Türme ohne Luftangriff durch fliegertaugliche gleichen Golds ersetzt – entspricht dem „Rennen zu den Fliegend-Türmen“ (L). Dieses Maß für Fliegertage verwenden.
 - Vorbereitet: Schatten zu stark (Nachtauge 180 % in Masse), Stein zu schwach (Schleuder schwach, Katapult/Granitwächter/Bergkönig nur normal).
 
+## D2f Querschnitts-Aufbau und Stein-Varianten (27.10. morgens)
+- **Bot-Endaufbau (Standardtürme, Tag 48, 11 934 Gold je Spieler):** Map 0: 11 × Turm 1 S6, 1 × T2 S3, 4 × T3 (S2–S6), 6 × T4 (S2–S5); Forschung 660 Gold (Element-Schaden, Kopfgeld, Reichweite je 3 Stufen, Upgrades billiger 1). Map 2: T2 S6, T3 S2, 2 × T4 (S5/S6), 2 × T5 S4, 2 × T6 S3; Forschung 910 (dazu Türme 5–6). Türme 7–8 nie.
+- **Querschnitt (`QUER=1`):** Gold des Tages gleichmäßig auf alle bezahlbaren Turmtypen (je höchste passende Stufe, bis 4 Kopien). Werte relativ zu D0 (Standardtürme, gleicher Querschnitt):
+
+| | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| Bodentage | 1,08 | 1,09 | 0,98 | 1,05 |
+| Fliegertage | 0,68 | 0,80 | 1,10 | 0,23 |
+| fliegertaugliche Türme | 6 von 8 | 6 (Eiszapfen stark) | 7 (Nachtauge stark) | 3 + Schleuder schwach |
+
+- **Bot-Plan, Stein-Varianten (L):** L-Regel (2 schwach, 3/6/8): Boden 1,05 / Flieger 0,09 · Katapult ohne Luft, Felsbrocken normal: 1,02 / 0,33 · Katapult ohne Luft, **Felsbrocken stark** (60/180): **0,94 / 0,71**.
+- Deutung: Im Querschnitt hängen die Fliegertage fast nur an der **Zahl** fliegertauglicher Türme; im Bot-Plan an Turm 4 (meistgebaut). Felsbrocken stark hilft nur im Bot-Plan. Zuschlag ×1,1 für „keine Fliegenden“ gleicht den Ausfall an Fliegertagen nicht aus (rechnerisch ≈ ×1,2 nötig).
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
