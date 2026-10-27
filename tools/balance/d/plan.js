@@ -28,10 +28,20 @@ function umsetzen(towers, d){ towers = towers.map(t => ersatz(t, d));
   for (const t of neu) { const c = C.mask(el, t.idx, t.lvl, 0).cells.find(c => !used.has(c.x + ',' + c.y)); used.add(c.x + ',' + c.y); bleib.push({ ...t, el, x:c.x, y:c.y }); }
   return bleib;
 }
+// QUER=1 (27.10., L/Claude): Querschnitts-Aufbau statt Bot-Plan – das Gold des Tages (wie im Plan) gleichmäßig auf alle Turmtypen,
+// die man sich leisten kann; je Typ die höchste Stufe, die in den Anteil passt, bis zu 4 Kopien; teure Typen zuerst auf ihre besten Plätze.
+// Kein Bot-Vorzug für einzelne Turmnummern; alle Merkmale (auch „keine Fliegenden“, Luftspezialisten) zählen gleich.
+function quer(gold){ let typen = [...Array(8).keys()];
+  for (let i = 0; i < 8; i++) { const s = gold / typen.length, ok = typen.filter(k => goldVon(el, k, 1) <= s); if (ok.length === typen.length) break; typen = ok.length ? ok : [0]; }
+  const s = gold / typen.length, used = new Set(), tw = [];
+  for (const k of [...typen].sort((a, b) => b - a)) { let l = 1; while (l < 6 && goldVon(el, k, l + 1) <= s) l++;
+    const n = Math.max(1, Math.min(4, Math.floor(s / goldVon(el, k, l))));
+    for (let j = 0; j < n; j++) { const c = C.mask(el, k, l, 0).cells.find(c => !used.has(c.x + ',' + c.y)); if (!c) break; used.add(c.x + ',' + c.y); tw.push({ x:c.x, y:c.y, el, idx:k, lvl:l }); } }
+  return tw; }
 function lauf(){ const out = [];
   for (let d = t0 - 1; d < t1; d++) { if (process.env.TAGART === 'flieg' && !G.MONSTERS[d].fly) continue; if (process.env.TAGART === 'boden' && G.MONSTERS[d].fly) continue;   // TAGART: nur Flieger- bzw. Bodentage
     const r = PLAENE.map(p => { C.useMap(p.lane, p.seed); const s = p.tage[d].setup;
-      return C.reserveDay({ el, towers:umsetzen(s.towers, d), res:(s.res || []).map(r => r.replace(/^el0:/, `el${el}:`)) }, { type:d, players:2 }); });   // Element-Forschung des Plans (Feuer) auf das geprüfte Element umschreiben
+      return C.reserveDay({ el, towers:process.env.QUER ? quer(p.tage[d].gold) : umsetzen(s.towers, d), res:(s.res || []).map(r => r.replace(/^el0:/, `el${el}:`)) }, { type:d, players:2 }); });   // Element-Forschung des Plans (Feuer) auf das geprüfte Element umschreiben
     out.push({ d, r, m:Math.sqrt(r[0] * r[1]) }); }
   return out; }
 module.exports = { lauf };

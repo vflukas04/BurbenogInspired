@@ -20,7 +20,10 @@ const V = {
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
 // Stein und Fliegende (L 26.10. abends): Turm 4 (Felsbrocken) ohne Luftangriff; Turm 2 (Schleuder) „schwach gegen Fliegende“ (Boden 100 %, Fliegende SCHWACH)
 // STEIN_LUFT=2468: Felsbrocken trifft Fliegende zusätzlich (Variante)
-const SCHWACH = +(process.env.SCHWACH || 0.5), FELS = process.env.STEIN_LUFT === '2468' ? 0 : 1;
+const SCHWACH = +(process.env.SCHWACH || 0.5), FELS = process.env.STEIN_LUFT === '2468' || /^T4/.test(process.env.STEIN_LUFT || '') ? 0 : 1;
+// STEIN_LUFT=T4 bzw. T4stark (L 27.10.): Katapult (Turm 3) ohne Luftangriff, Felsbrocken (Turm 4) normal bzw. stark gegen Fliegende
+const KATA_NOFLY = /^T4/.test(process.env.STEIN_LUFT || '') ? 1 : 0, FELS_LUFT = process.env.STEIN_LUFT === 'T4stark' ? LUFT : null;
+const NOFLY_Z = +(process.env.NOFLY_Z || 1.1);
 const SCHL_DEF = { r:3.5, n:2, f:0.5, luft:[1, SCHWACH] };
 // ---- Türme: r Reichweite, q Rate, n Geschosse, f Fläche, eff/dur Effekt, nova, noFly, air ----
 const T = {
@@ -33,8 +36,8 @@ const T = {
   2: [ ['Schemen', { r:3, eff:0.05, dur:4 }], ['Irrlicht', { r:3, eff:0.05, dur:4 }], ['Nachtauge', { r:5, eff:0.05, dur:5, luft:LUFT }],
        ['Fluchstein', { r:3, q:0.5, n:3, eff:0.08, dur:8, noFly:1 }], ['Seelenfresser', { r:3, q:1.5, eff:0.04, dur:4 }], ['Phantom', { r:4, n:4, eff:0.05, dur:6 }],
        ['Leerenturm', { r:4, f:1.5, eff:0.06, dur:6 }], ['Ewige Nacht', { r:5, q:0.5, eff:0.1, dur:'Tag' }] ],
-  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', SCHL_DEF], ['Katapult', { r:5, f:1 }],
-       ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:FELS }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
+  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', SCHL_DEF], ['Katapult', { r:5, f:1, noFly:KATA_NOFLY }],
+       ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:FELS, luft:FELS_LUFT }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
 const STEIN_K = +process.env.STEIN_K || 0.8;   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
@@ -47,7 +50,7 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   if (m.stun && !m.nova) w *= V.betaeuben(...m.stun, false);
   // Luftspezialist (L 26.10.): Boden × luft[0], Fliegende × luft[1]; Wert = geometrisches Mittel über die Tage (Fliegertage ≈ LUFT_ANTEIL)
   if (m.luft) w *= Math.exp((1 - LUFT_ANTEIL) * Math.log(m.luft[0]) + LUFT_ANTEIL * Math.log(m.luft[1]));
-  const zuschlag = m.air ? 1.5 : m.noFly ? 1.1 : 1;
+  const zuschlag = m.air ? 1.5 : m.noFly ? NOFLY_Z : 1;
   const opt = { effect:m.stun ? 'stun' : m.eff ? EFF[e] : 'none', fly:!m.noFly };
   if (m.air) opt.air = true; if (m.luft) { opt.groundMul = m.luft[0]; opt.flyMul = m.luft[1]; } if (m.slowFly) opt.slowFly = true; if (m.nova) opt.nova = true; if (m.stun) opt.chance = m.stun[0];
   const effWert = m.stun ? m.stun[1] : m.eff || 0, dur = m.stun ? 1 : m.dur || 1;
