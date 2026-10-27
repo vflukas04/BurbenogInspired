@@ -394,6 +394,36 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - **Leben auf D6 kalibriert** (2 Runden): Ziel 1,53 × Tag^−0,098. Kontrolle: Bezug **1,01** (Blöcke 1,04/1,01/1,00/0,99), wenige Türme ganz hoch 1,03, **Mensch A/B/C 0,98/0,95/0,92**. Upgrade-Anteil Bezug 52 %. Endaufbau Bezug Map 0: 4 × T1 (S4–S6), 3 × T2, 3 × T3, 3 × T4, 2 × T5, 3 × T6, 2 × T7, 1 × T8.
 - **Ersetzen erlaubt** (`bezug3V`: verkaufen 50 % + größerer Turmtyp auf dem Feld): 1,02, also kaum besser (+1 %). Der Endaufbau verschiebt sich stark zu großen Türmen (Map 0: je 3 × T4–T8, kaum T1–T3). Verkaufen bleibt deshalb aus dem Bezug heraus.
 
+## D6 Wechselkurse neu gemessen (L 27.10. abends, `d/kurse6.js`)
+Fester Aufbau des Bezugs-Bots (D6, beide Maps, alle 48 Tage), alle Türme mit demselben Merkmal bei gleichem Schaden/s, Stapelregel. Wert = Reserve mit ÷ ohne. Alte Werte aus D1b/D1c (Basis D0, damals mit Reichweiten-Zuwachs je Stufe).
+
+| Merkmal | gesamt | Boden | Flieger | alt |
+|---|---|---|---|---|
+| Reichweite 1,5 / 2 / 2,5 / 3 Felder | 0,49 / 0,64 / 0,90 / 0,96 | | | 0,75 / 0,87 / 0,94 / 0,97 |
+| Reichweite 4 / 5 / 6 Felder | 1,03 / 1,08 / 1,11 | | | 1,02 / 1,06 / 1,09 |
+| Reichweite-Zuwachs +0,4 / +0,2 Felder je Stufe | 1,05 / 1,03 | | | – |
+| Rate ×0,25 / ×0,5 / ×2 / ×3 | 0,80 / 1,03 / 0,96 / 0,93 | | | – / 1,03 / 0,97 / – |
+| 2 / 3 / 5 Geschosse | 0,87 / 0,76 / 0,53 | | | 0,89 / 0,80 / – |
+| Fläche 0,5 / 1 / 1,5 / 2 Felder | 0,82 / 0,93 / 1,20 / 1,55 | 0,83 / 0,94 / 1,26 / 1,59 | 0,79 / 0,87 / 0,96 / 1,36 | 0,84 / 0,90 / 1,19 / 1,52 |
+| Bremsen 10 % 2 s / 20 % 2 s / 40 % 4 s | 1,02 / 1,17 / 1,32 | 1,02 / 1,20 / 1,40 | 1,00 (wirkt nicht) | 1,04 / 1,23 / 1,49 |
+| Fläche 1 + Bremsen 10 % 2 s | 1,38 | 1,52 | 0,87 | 1,55 |
+| Fluch 5 / 10 / 20 % (4 s) | 1,24 / 1,45 / 1,78 | | 1,23 / 1,41 / 1,72 | 1,28 / 1,51 / 1,86 |
+| Brennen 8 % 3 s / 15 % 3 s / 30 % 6 s | 1,46 / 1,83 / 3,38 | 1,48 / 1,87 / 3,51 | 1,37 / 1,66 / 2,78 | 1,40 / 1,73 / 3,0 |
+| Brennen 5 % ganzer Tag | 1,60 | 1,65 | 1,38 | 1,53 |
+| Betäuben 5 % 0,5 s / 15 % 1 s / 30 % 2 s / 100 % 1 s | 1,00 / 1,07 / 1,77 / 1,51 | | | – / 1,86 / 2,96 / – |
+| Nova 2 Felder, Rate ×0,25 | 0,60 | | | 0,56 |
+| Rüstungsschaden 0,5 / 1,5 | 1,07 / 1,18 | 1,08 / 1,20 | 1,05 / 1,09 | 1,07 / 1,18 |
+| Nachtregel (nachtaktive nur im Licht) | 0,86 | | | 0,86 |
+| keine Fliegenden | 0,50 | 0,96 | 0,02 | 0,97 / 0,02 |
+| Luftspezialist 60 % / 180 % | 0,73 | 0,61 | 1,80 | – |
+| schwach gegen Fliegende (100 / 50 %) | 0,88 | 0,99 | 0,50 | – |
+
+- **Stabil:** Fläche, Fluch, Brennen, Rüstungsschaden, Nova, Nachtregel, Rate und Geschosse liegen innerhalb weniger Prozent der alten Werte.
+- **Neu deutlich anders:** **kleine Reichweiten sind viel teurer** (2 Felder 0,64 statt 0,87; 1,5 Felder 0,49 statt 0,75). Früher hob der Reichweiten-Zuwachs je Stufe kleine Türme auf S5/S6 über 4 Felder. Für den Flammenwerfer (1,5) und das Glutbecken (2) wird der Ausgleich also deutlich größer.
+- **Reichweiten-Zuwachs je Stufe ist als Merkmal wenig wert** (+0,4 Felder je Stufe: ×1,05). Er hat aber die Wahl zwischen Upgrade und neuem Turm stark verschoben. Wenn er für echte Türme wiederkommt, dann eher klein.
+- **Betäuben viel schwächer als in D1c** (15 % 1 s: 1,07 statt 1,86). [Vermutung] Die alte Messung hatte einen Fehler bei der Betäubungschance; 100 % 1 s (1,51) < 30 % 2 s (1,77) zeigt, dass die Dauer zählt, nicht die Häufigkeit. Vor der Übersetzung der Stein-Türme gegenprüfen.
+- **Bremsen** wirkt nur am Boden; an Fliegertagen ×1,00 (Eis bremst keine Fliegenden). Bremsen mit Fläche wirkt an Fliegertagen wie reine Fläche.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
