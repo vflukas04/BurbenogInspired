@@ -17,6 +17,6 @@ const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number
 for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) { abl(e, process.env.ABL); const b = [], f = [], blk = [[], [], [], []];
   for (const mp of PLAN.maps) { C.useMap(mp.lane, mp.seed);
     mp.tage.forEach((t, d) => { if (d + 1 < tage[0] || d + 1 > tage[1]) return;
-      const R = C.reserveDay({ el:e, towers:t.towers.map(x => ({ ...x, el:e })), res:[] }, { type:d, players:2 }), q = R / t.R;
+      const R = C.reserveDay({ el:e, towers:t.towers.map(x => ({ ...x, el:e })), res:[] }, { type:d, players:2, weather:+(process.env.WETTER || 0) }), q = R / t.R;   // WETTER=Index (mit MIT_WETTER=1)
       (G.MONSTERS[d].fly ? f : b).push(q); if (!G.MONSTERS[d].fly) blk[Math.min(3, Math.floor(d / 12))].push(q); }); }
-  console.log(`${NAME[e].padEnd(9)}${process.env.ABL ? ' ohne ' + process.env.ABL : ''} Boden ${gm(b).toFixed(3)} (Tag 1–12 ${gm(blk[0]).toFixed(2)} · 13–24 ${gm(blk[1]).toFixed(2)} · 25–36 ${gm(blk[2]).toFixed(2)} · 37–48 ${gm(blk[3]).toFixed(2)}) | Flieger ${gm(f).toFixed(3)} | ${Math.round((Date.now() - t0) / 1000)} s`); }
+  console.log(`${NAME[e].padEnd(9)}${process.env.ABL ? ' ohne ' + process.env.ABL : ''}${process.env.MIT_WETTER ? ' Wetter ' + G.WEATHER[+(process.env.WETTER || 0)].name : ''} Boden ${gm(b).toFixed(3)} (Tag 1–12 ${gm(blk[0]).toFixed(2)} · 13–24 ${gm(blk[1]).toFixed(2)} · 25–36 ${gm(blk[2]).toFixed(2)} · 37–48 ${gm(blk[3]).toFixed(2)}) | Flieger ${gm(f).toFixed(3)} | ${Math.round((Date.now() - t0) / 1000)} s`); }

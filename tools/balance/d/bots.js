@@ -8,9 +8,9 @@
 // Aufruf: SPIEGEL=tools/balance/spiegel-D3.json BOT=kern node tools/balance/d/bots.js  (BOT=alle: nacheinander; Liste: BOTS unten)
 const fs = require('fs'), path = require('path'), C = require('../core'), B = require('../build'), { G } = C;
 for (const k in G.LOCKS) delete G.LOCKS[k];                       // alles freigeschaltet
-G.WEATHER.forEach(w => { w.el = {}; delete w.burnDecay; });        // ohne Wetter-Wirkung
+if (!process.env.MIT_WETTER) G.WEATHER.forEach(w => { w.el = {}; delete w.burnDecay; });        // ohne Wetter-Wirkung (MIT_WETTER=1: Wetter wie im Spiel, für Wetter-Messungen)
 G.MONSTERS.forEach(m => { m.weak = [1, 1, 1, 1]; });               // neutrale Faktoren
-const EL = +(process.env.EL || 0), SPIELER = 2, ANTEIL = +(process.env.ANTEIL || 0.9), MAPS = [[0, 11], [2, 23]], N = G.MONSTERS.length;
+const EL = +(process.env.EL || 0), SPIELER = 2, ANTEIL = +(process.env.ANTEIL || 0.9), MAPS = process.env.MAPS ? process.env.MAPS.split(',').map(x => x.split(':').map(Number)) : [[0, 11], [2, 23]]   /* MAPS=1:37,3:53 (Map:Gelände-Seed) */, N = G.MONSTERS.length;
 // Ziel-Kurve: aus dem Spiegel (_ziel, gesetzt von d/ziel4.js), sonst die D0-Kurve 1,52 × Tag^−0,096
 const ZK = C.SPIEGEL._ziel || { R1:1.52, a:0.096 }, ZIEL = d => ZK.R1 * Math.pow(d + 1, -ZK.a);
 const einkommen = d => d < N ? ANTEIL * G.monsterDef(d, SPIELER).bounty * (G.MONSTERS[d].count || G.CONFIG.perWave) : 0;
