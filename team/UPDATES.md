@@ -42,6 +42,10 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 27.10. 12:00 · L · Zweig D3 – Bot-Vergleich Standardtürme (nur Balancing-Werkzeuge)
+- Preise in D gerafft (10/45/70/120/200/340/580/1000), Stein in D 2 (schwach)/4/6/8 mit T3 Felsbrocken, T4 Katapult. Spielcode unverändert.
+- 15 Bots mit festem Gold (90 % des Kopfgelds, alles frei, ohne Forschung): Am stärksten sind Aufbauten mit 80–94 % Upgrades; Mensch-Bots erreichen 82–90 % des besten. Tabelle in `team/ZWEIG-D.md` (D3).
+
 
 ### 27.10. 01:30 · F · 2026-10-27s – Arbeiter, Biom-Abbau, Wege wachsen Stück für Stück
 - Arbeiter sind jetzt im Spiel (nur Anzeige): ab Tag 2 alle 2 Tage ein neuer (Holzfäller am Wald, Bergarbeiter am Felsen, Angler am See), nächstgelegene Felder zuerst, je 8 Tage Arbeit. Wald verliert Bäume (Stümpfe, am Ende Holzstapel), Felsen schrumpfen zu Geröll, Angler graben Kanäle zum nächsten See. Arbeiter ≈ ¼ Feld hoch; Geländebonus bleibt unverändert, auch wenn das Feld abgebaut ist. Bilder `assets/dorf/arbeiter-*`.

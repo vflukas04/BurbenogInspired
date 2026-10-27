@@ -307,6 +307,36 @@ Plan-Reserve ohne Wetter, alle Tage / nur Fliegertage (D0 Standardtürme: Fliege
 - **Bot-Plan, Stein-Varianten (L):** L-Regel (2 schwach, 3/6/8): Boden 1,05 / Flieger 0,09 · Katapult ohne Luft, Felsbrocken normal: 1,02 / 0,33 · Katapult ohne Luft, **Felsbrocken stark** (60/180): **0,94 / 0,71**.
 - Deutung: Im Querschnitt hängen die Fliegertage fast nur an der **Zahl** fliegertauglicher Türme; im Bot-Plan an Turm 4 (meistgebaut). Felsbrocken stark hilft nur im Bot-Plan. Zuschlag ×1,1 für „keine Fliegenden“ gleicht den Ausfall an Fliegertagen nicht aus (rechnerisch ≈ ×1,2 nötig).
 
+## D3 Bot-Vergleich: Standardtürme, festes Gold, alles freigeschaltet (L 27.10. vormittags)
+**Beschlüsse L:** Preise gerafft auf **10/45/70/120/200/340/580/1000** (`d/d3.js` → `spiegel-D3.json`, Schaden weiter 0,233 × Gold × 1,10^Turm). Stein in D: **2 (schwach)/4/6/8**, Namen wie vor dem 17.10.: **T3 Felsbrocken** (keine Fliegenden), **T4 Katapult** (trifft Fliegende) – `d/d2.js` baut jetzt auf D3 auf. Forschung wird ausgeklammert und später nach Mehrwert bepreist, Preise dann je Spielerzahl.
+**Aufbau (`d/bots.js`, Übersicht `d/bots-uebersicht.js`):** Gold vor Tag d = 30 + **90 %** des Kopfgelds aller Tage davor (alle Monster getötet; 10 % = fairer Kassen-Anteil). Gold hängt nicht vom Abschneiden ab. Alle Türme frei, keine Forschung, keine Steine, kein Abriss, ohne Wetter, Faktoren neutral, Map 0 (Seed 11) und Map 2 (Seed 23). Bewertung: Reserve je Tag (ganzer Tag), relativ zum **alten P2-Plan** (Forschung, Steine, Umbau, volles Kopfgeld; liegt in dieser Umgebung bei 0,89 × Ziel-Kurve).
+
+| Bot | Vorgehen | gesamt | T1–12 | 13–24 | 25–36 | 37–48 | Türme Tag 48 | Upgr.-Anteil |
+|---|---|---|---|---|---|---|---|---|
+| hoch | ≤ 6 Türme, jeder bis S6, neu = höchste bezahlbare Stufe | **0,62** | 0,83 | 0,64 | 0,57 | 0,50 | 4 (T1/T3/T4 S6, T6 S5) | 94 % |
+| sim | gierig mit Simulation (heute) | 0,60 | 0,76 | 0,70 | 0,55 | 0,45 | 30 (22 × T1, fast alle S6) | 86 % |
+| simVoraus | gierig, Simulation heute/morgen/übermorgen, spart 1 Tag | 0,60 | 0,79 | 0,65 | 0,54 | 0,47 | 29 (18 × T1) | 79 % |
+| hoch5 | jeder Turm bis S5, dann nächster | 0,59 | 0,78 | 0,60 | 0,53 | 0,50 | 6 | 91 % |
+| hoch4 | jeder Turm bis S4 | 0,56 | 0,68 | 0,58 | 0,53 | 0,49 | 7 | 87 % |
+| **kern** (Mensch A) | 3 × T1 → S6, je Stufe 1 Turm bis S3, Billigstes zuerst | **0,56** | 0,69 | 0,63 | 0,49 | 0,45 | 10 (T1–T8) | 71 % |
+| **breit** (Mensch B) | 2 × T1 → S4, je Stufe 2 Türme bis S3, spart 2 Tage | 0,53 | 0,65 | 0,56 | 0,50 | 0,43 | 12 (T1–T6) | 82 % |
+| hoch3 | jeder Turm bis S3 | 0,53 | 0,64 | 0,56 | 0,48 | 0,44 | 14 | 85 % |
+| leiter3 | größter Turm (≤ 2 Tage sparen), je bis S3 | 0,52 | 0,55 | 0,58 | 0,48 | 0,48 | 5 (2 × T8) | 74 % |
+| **sparer** (Mensch C) | 3 × T1 → S3, spart auf T2…T8 je 1 × | 0,51 | 0,61 | 0,53 | 0,47 | 0,44 | 10 (T1–T8) | 73 % |
+| quer | Gold gleichmäßig auf alle Stufen | 0,50 | 0,54 | 0,56 | 0,48 | 0,44 | 14 (2 100 Gold übrig) | 62 % |
+| nurT1 | nur Turm 1, Billigstes zuerst | 0,47 | 0,66 | 0,53 | 0,40 | 0,35 | 94 × T1 | 90 % |
+| proxySpar | gierig nach Schaden × Abdeckung je Gold, spart 2 Tage | 0,47 | 0,31 | 0,60 | 0,53 | 0,51 | 26, fast alle S1 | 2 % |
+| leiter | immer größter Turm auf S1, Upgrades erst ab 14 Türmen | 0,42 | 0,19 | 0,58 | 0,54 | 0,49 | 14 | 70 % |
+| proxy | wie proxySpar, spart nie | 0,40 | 0,54 | 0,47 | 0,35 | 0,28 | 89, fast alle S1 | 9 % |
+
+- **Typisch für starke Aufbauten:** 80–94 % des Golds in Upgrades, wenige Türme auf den besten Plätzen. Zwei Wege sind gleich gut: wenige Türme ganz hoch (hoch) oder viele Turm-1 auf S6 (sim). Neue Türme auf Stufe 1 und Sparen auf große Türme verlieren (proxy, leiter).
+- **Grund:** Das einzelne Upgrade bringt je Gold S2–S6 0,83/1,11/1,24/1,36/1,47 (Kurve 1/0,9/1/1,1/1,2/1,3 gilt für den ganzen Turm), ein neuer Turm T2–T5 1,10/1,21/1,33/1,46. Dazu sind gute Plätze knapp.
+- **Mensch-Bots** erreichen 0,51–0,56, also **82–90 % des besten Bots**. Die Maps unterscheiden sich kaum (Map 0/2 je ±0,03).
+- T7/T8 bauen nur die Mensch-, Leiter- und Querschnitt-Bots (S1–S3), die Sim-Bots nie.
+- Alle liegen bei etwa 0,6 des alten Plans. Erwartet: Der alte Plan hatte +32 % Gold (volles Kopfgeld + Kopfgeld-Forschung), +25 % Element-Schaden, Steine und freien Umbau. **Die Leben müssen auf den neuen Bezug nachkalibriert werden**, sobald der Bezugs-Bot feststeht.
+- **Flachere Upgrade-Kurve 1/0,95/1/1,075/1,15/1,2** (`spiegel-D3-flach.json`, je Upgrade 0,92/1,06/1,18/1,27/1,29): hoch 0,62 → 0,59, hoch5 0,59 → 0,58, kern 0,56 → 0,55, breit und leiter3 gleich. Die Reihenfolge bleibt, der Abstand Bester ÷ Mensch A sinkt von 1,11 auf 1,07.
+- **Später (Forschung):** Wert je Freischaltung = Gold-Äquivalent (Budget-Aufschlag, der dieselbe Reserve bringt; mit festem Budget direkt messbar), Preis = Anteil davon, gemeinsame Forschung × Spielerzahl/2, Summe gegen das 10-%-Ziel prüfen, dann Leben nachziehen.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

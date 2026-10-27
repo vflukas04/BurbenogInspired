@@ -311,7 +311,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.5": 0.91177,
+  "ELEMENTS.0.kraftT.5": 0.88572,
   "ELEMENTS.0.towers.6": [
     "Sonnenturm",
     "Schaden",
@@ -327,7 +327,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.6": 1.10099,
+  "ELEMENTS.0.kraftT.6": 0.98242,
   "ELEMENTS.0.towers.7": [
     "Höllenfeuer",
     "Schaden",
@@ -343,7 +343,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.7": 0.49456,
+  "ELEMENTS.0.kraftT.7": 0.41213,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
     "0": 10,
@@ -351,9 +351,9 @@
     "2": 70,
     "3": 120,
     "4": 200,
-    "5": 350,
-    "6": 650,
-    "7": 1200
+    "5": 340,
+    "6": 580,
+    "7": 1000
   },
   "ELEMENTS.0.upDmg": [
     2.25,
@@ -478,7 +478,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 1.02471,
+  "ELEMENTS.1.kraftT.5": 0.99543,
   "ELEMENTS.1.towers.6": [
     "Blizzard",
     "Schaden",
@@ -494,7 +494,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 1.7598,
+  "ELEMENTS.1.kraftT.6": 1.57028,
   "ELEMENTS.1.towers.7": [
     "Ewiges Eis",
     "Schaden",
@@ -510,7 +510,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.45129,
+  "ELEMENTS.1.kraftT.7": 0.37607,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -518,9 +518,9 @@
     "2": 70,
     "3": 120,
     "4": 200,
-    "5": 350,
-    "6": 650,
-    "7": 1200
+    "5": 340,
+    "6": 580,
+    "7": 1000
   },
   "ELEMENTS.1.upDmg": [
     2.25,
@@ -642,7 +642,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.5": 1.76807,
+  "ELEMENTS.2.kraftT.5": 1.71755,
   "ELEMENTS.2.towers.6": [
     "Leerenturm",
     "Schaden",
@@ -658,7 +658,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.6": 1.18195,
+  "ELEMENTS.2.kraftT.6": 1.05466,
   "ELEMENTS.2.towers.7": [
     "Ewige Nacht",
     "Schaden",
@@ -674,7 +674,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.7": 1.23618,
+  "ELEMENTS.2.kraftT.7": 1.03014,
   "ELEMENTS.2.kraft": 1,
   "ELEMENTS.2.costOverride": {
     "0": 10,
@@ -682,9 +682,9 @@
     "2": 70,
     "3": 120,
     "4": 200,
-    "5": 350,
-    "6": 650,
-    "7": 1200
+    "5": 340,
+    "6": 580,
+    "7": 1000
   },
   "ELEMENTS.2.upDmg": [
     2.25,
@@ -744,22 +744,6 @@
   ],
   "ELEMENTS.3.kraftT.1": 1.2584,
   "ELEMENTS.3.towers.2": [
-    "Katapult",
-    "Schaden",
-    2.5,
-    1,
-    1,
-    1,
-    0,
-    1,
-    0.5,
-    {
-      "effect": "none",
-      "fly": true
-    }
-  ],
-  "ELEMENTS.3.kraftT.2": 0.91143,
-  "ELEMENTS.3.towers.3": [
     "Felsbrocken",
     "Schaden",
     1.5,
@@ -774,7 +758,23 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.3": 0.86045,
+  "ELEMENTS.3.kraftT.2": 0.81778,
+  "ELEMENTS.3.towers.3": [
+    "Katapult",
+    "Schaden",
+    2.5,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0.5,
+    {
+      "effect": "none",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.3.kraftT.3": 0.95898,
   "ELEMENTS.3.towers.4": [
     "Erdbeben",
     "Schaden",
@@ -808,7 +808,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.5": 1.20437,
+  "ELEMENTS.3.kraftT.5": 1.16996,
   "ELEMENTS.3.towers.6": [
     "Lawine",
     "Schaden",
@@ -824,7 +824,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.6": 0.748,
+  "ELEMENTS.3.kraftT.6": 0.66744,
   "ELEMENTS.3.towers.7": [
     "Bergkönig",
     "Schaden",
@@ -841,7 +841,7 @@
       "chance": 0.1
     }
   ],
-  "ELEMENTS.3.kraftT.7": 0.87657,
+  "ELEMENTS.3.kraftT.7": 0.73047,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,
@@ -849,9 +849,9 @@
     "2": 70,
     "3": 120,
     "4": 200,
-    "5": 350,
-    "6": 650,
-    "7": 1200
+    "5": 340,
+    "6": 580,
+    "7": 1000
   },
   "ELEMENTS.3.upDmg": [
     2.25,
@@ -881,7 +881,7 @@
   "MONSTERS.Magier-Novizen.blink.dur": 2.5,
   "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
   "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
-  "_stand": "Zweig D2 (L, 25.10.): Komplettversuch – 32 Türme aus Grundturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js), Weg 2 als Regel; Monster wie D0",
+  "_stand": "Zweig D2 (L, 25.10.; 27.10. Preise D3, Stein 2s/4/6/8): Komplettversuch – 32 Türme aus Grundturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js), Weg 2 als Regel; Monster wie D0",
   "ELEMENTS.3.splashCenter": 1,
   "ELEMENTS.3.splashEdge": 0.7
 }

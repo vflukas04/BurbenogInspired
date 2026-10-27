@@ -3,7 +3,8 @@
 // Weg 2 (schwache Effekte, Wert ≈ 1,2–1,5) als Regel, Weg 1 (starker Effekt, wenig Schaden) als Ausnahme: Schwelbrand, Frosthauch, Erdbeben.
 // Irrlicht bleibt vorerst ein normaler Fluch-Turm (Sonderturm folgt am Ende). Reichweite/Fläche in Feldern (neues Raster).
 const fs = require('fs'), path = require('path'), S = require('../spiegel');
-const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'spiegel-D0.json'))), sp = { ...D0 };
+// Basis (27.10.): Standardtürme mit gerafften Preisen (spiegel-D3.json, d/d3.js); BASIS=spiegel-D0.json = alte Preise
+const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || 'spiegel-D3.json'))), sp = { ...D0 };
 // ---- Wechselkurse (Messungen D1b/D1c, alle Türme der Map mit dem Merkmal, Stapelregel) ----
 const V = {
   reichweite: r => r < 3.5 ? Math.pow(r / 3.5, 0.3) : Math.pow(r / 3.5, 0.16),
@@ -18,11 +19,9 @@ const V = {
   nova: 0.56, ruestung: a => 1 + 0.12 * a, nacht: 0.86,
 };
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
-// Stein und Fliegende (L 26.10. abends): Turm 4 (Felsbrocken) ohne Luftangriff; Turm 2 (Schleuder) „schwach gegen Fliegende“ (Boden 100 %, Fliegende SCHWACH)
-// STEIN_LUFT=2468: Felsbrocken trifft Fliegende zusätzlich (Variante)
-const SCHWACH = +(process.env.SCHWACH || 0.5), FELS = process.env.STEIN_LUFT === '2468' || /^T4/.test(process.env.STEIN_LUFT || '') ? 0 : 1;
-// STEIN_LUFT=T4 bzw. T4stark (L 27.10.): Katapult (Turm 3) ohne Luftangriff, Felsbrocken (Turm 4) normal bzw. stark gegen Fliegende
-const KATA_NOFLY = /^T4/.test(process.env.STEIN_LUFT || '') ? 1 : 0, FELS_LUFT = process.env.STEIN_LUFT === 'T4stark' ? LUFT : null;
+// Stein und Fliegende (L 27.10.): 2 (schwach)/4/6/8 – Schleuder (T2) schwach gegen Fliegende (Boden 100 %, Fliegende SCHWACH),
+// Katapult (T4, Namen wie vor dem 17.10.) und T6/T8 treffen Fliegende normal, T1/T3/T5/T7 gar nicht. Kein starker Fliegerturm bei Stein.
+const SCHWACH = +(process.env.SCHWACH || 0.5);
 const NOFLY_Z = +(process.env.NOFLY_Z || 1.1);
 const SCHL_DEF = { r:3.5, n:2, f:0.5, luft:[1, SCHWACH] };
 // ---- Türme: r Reichweite, q Rate, n Geschosse, f Fläche, eff/dur Effekt, nova, noFly, air ----
@@ -36,8 +35,8 @@ const T = {
   2: [ ['Schemen', { r:3, eff:0.05, dur:4 }], ['Irrlicht', { r:3, eff:0.05, dur:4 }], ['Nachtauge', { r:5, eff:0.05, dur:5, luft:LUFT }],
        ['Fluchstein', { r:3, q:0.5, n:3, eff:0.08, dur:8, noFly:1 }], ['Seelenfresser', { r:3, q:1.5, eff:0.04, dur:4 }], ['Phantom', { r:4, n:4, eff:0.05, dur:6 }],
        ['Leerenturm', { r:4, f:1.5, eff:0.06, dur:6 }], ['Ewige Nacht', { r:5, q:0.5, eff:0.1, dur:'Tag' }] ],
-  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', SCHL_DEF], ['Katapult', { r:5, f:1, noFly:KATA_NOFLY }],
-       ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:FELS, luft:FELS_LUFT }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
+  3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', SCHL_DEF], ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:1 }],
+       ['Katapult', { r:5, f:1 }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
 const STEIN_K = +process.env.STEIN_K || 0.8;   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
@@ -61,6 +60,6 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
 });
 for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.armorDmg`] = RUEST[e]; sp[`ELEMENTS.${e}.dayOnly`] = e === 2; }
 sp['ELEMENTS.3.splashCenter'] = 1; sp['ELEMENTS.3.splashEdge'] = 0.7;   // Stein-Flächenabfall wie alle (Mitte 100 %, Rand 70 %); eigene Stein-Fläche ggf. später als Element-Spezifikation
-sp._stand = 'Zweig D2 (L, 25.10.): Komplettversuch – 32 Türme aus Grundturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js), Weg 2 als Regel; Monster wie D0';
+sp._stand = 'Zweig D2 (L, 25.10.; 27.10. Preise D3, Stein 2s/4/6/8): Komplettversuch – 32 Türme aus Grundturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js), Weg 2 als Regel; Monster wie D0';
 S.speichern(sp, path.join(__dirname, '..', 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));
