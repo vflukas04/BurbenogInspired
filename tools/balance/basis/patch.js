@@ -110,4 +110,9 @@ ERSETZEN.push([`const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;`, `const ceil1
   [`    if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * dt;`,
    `    if (on('burn')) { const bp = CONFIG.burnArmor && m.ap > 0 ? Math.max(0, Math.min(0.95, armorPctOf(m) + (m.aura || 0)) - (on('curse') ? fx.curse.v : 0)) : 0;
       m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * (1 - (CONFIG.burnArmor || 0) * bp) * dt; }`]);
+// Zweig D (L 28.10.): ELEMENTS[e].kraftBlock[i] = Schaden des Elements in den Runden 5i+1 … 5i+5 (Runde der Welle, z. B. Wetter-Mittel je Abschnitt nachstellen)
+ERSETZEN.push([`  const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw, inp.lane || 0), W, res) }));`,
+  `  const kbR = inp.incoming && inp.incoming[0] && MONSTERS[inp.incoming[0].type] ? MONSTERS[inp.incoming[0].type].round : 0;
+  const kbOf = el => { const a = ELEMENTS[el].kraftBlock; return a && kbR ? (a[Math.min(a.length - 1, Math.floor((kbR - 1) / 5))] || 1) : 1; };
+  const towers = raw.map(tw => { const d = wdef(tdef(tw, inp.lane || 0), W, res), k = kbOf(tw.el); return { ...tw, cd:0, def: k === 1 ? d : { ...d, dpsNow:d.dpsNow * k, dmg:d.dmg * k } }; });`]);
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };

@@ -651,3 +651,9 @@ Alle mit Stapel 0,35/0,15/0,1, Feuer-Wetter 0,94/1/1,06/1, Nacht-Tausch Füchse 
 - Mehr Rüstung hinten (M) hebt **alle** Elemente hinten (gemeinsam 1,02 → 1,06), flacht Eis/Stein nicht ab: Elemente mit Rüstungsschaden gewinnen gegenüber dem Standardturm, je mehr Rüstung.
 - **N** absolut: Feuer 1,05 (1,03/1,04/1,09/1,05) · Eis 1,01 (0,97/1,00/1,07/1,02) · Schatten 0,99 (0,95/0,97/1,02/1,01) · Stein 1,07 (1,05/1,03/1,18/1,04). Die gemeinsame Delle (Block 3 +6 %) tragen die Leben ab.
 - Wetter-Mittel je Block damit: Feuer −6/0/+6/0 %, Eis +4/0/0/−3 % (Winter → Sommer → Herbst).
+
+## D7 (28.10. mittags): Drift-Form und Niveaus fest eingebaut
+- `d/d2.js` erzeugt jetzt standardmäßig D7 (`D7=0` = alter Stand): Rüstung Tag 1–12 +30 %/+0,3 Punkte, Füchse tagaktiv, Krieger nachtaktiv, Stapelanteil Brennen 0,35/Bremsen 0,15/Fluch 0,1, Wetter-Mittel als `kraftBlock` (Feuer 0,94 in Runde 1–10, 1,06 in 21–30; Eis 1,04 in 1–10, 0,97 in 31–40; neu in `basis/patch.js`, je 5 Runden nach der Runde der Welle).
+- Niveaus neu (`d/fit1.js`, mit Platzwahl): **Rüstungsschaden 3,6** (vorher 2,97; wirkt je Element konstant, ändert die Form nicht – damit Stein auf 1,00), **Bremsen 7,45** (vorher 9,47), **Brennen ×0,67** (vorher 0,59), Fluch ×1,29. Fläche taugt nicht als Stein-Hebel: ändert vor allem den Anfang (×0,45 → 0,94/0,96/1,14/1,02).
+- Spiegel: `spiegel-D7T.json` (Elementtürme), `spiegel-D7.json` (Standardtürme mit denselben Monstern, für Bots und Leben).
+- **Fester Aufbau** (Bodentage): Feuer 1,00 (0,99/0,99/1,03/0,99) · Eis 1,00 (0,95/0,98/1,05/1,03) · Schatten 0,99 (0,95/0,97/1,02/1,01) · Stein 1,00 (0,98/0,96/1,10/0,96). Form-Rest 2,2 %, gemeinsam 0,97/0,98/1,05/1,00. Auffällig nur Stein in Tag 25–36 (+5 %).

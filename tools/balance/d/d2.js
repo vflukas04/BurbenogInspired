@@ -5,6 +5,8 @@
 const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
 const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || 'spiegel-D6.json'))), sp = { ...D0 };
+// D7-Niveaus (28.10., d/fit1.js mit Platzwahl): Rüstungsschaden 3,6 (Stein auf 1,00), Bremsen 7,45 (= 9,47 × 0,787), Brennen ×0,67, Fluch ×1,29
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= '7.45'; }
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
 const tab = P => x => { if (x <= P[0][0]) return P[0][1]; for (let i = 1; i < P.length; i++) if (x <= P[i][0]) { const [a, va] = P[i - 1], [b, vb] = P[i]; return va + (vb - va) * (x - a) / (b - a); }
@@ -42,7 +44,7 @@ const V_D1 = {
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 // SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
 // Verbund-/Element-Kurse (28.10. nachts, mit Platzwahl, d/verbund.js und d/fit1.js): Brennen ×0,59, Fluch ×1,29 auf (Wert − 1); RUEST_K 2,97, SLOW_K 9,47 (Standard unten)
-const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : 'brennen:0.59,fluch:1.29');
+const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:0.67,fluch:1.29' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
@@ -69,6 +71,7 @@ const T = {
 if (process.env.AENDERN) for (const a of process.env.AENDERN.split(';').filter(Boolean)) { const [ek, v] = a.split('='), [e, k, f] = ek.split('.'); T[+e][+k][1] = { ...T[+e][+k][1], [f]:isNaN(+v) ? v : +v }; }
 const STEIN_K = +process.env.STEIN_K || 1;   // 27.10. abends (L): alte Korrektur aus (vorher 0,8)   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
+const D7 = process.env.D7 !== '0', D7_RUEST = {"Silberfische":[0.3,0.3],"Kellerasseln":[0.5,0.6],"Nacktschnecken":[0.3,0.3],"Ohrenkneifer":[0.45,0.6],"Mäuse":[0.3,0.3],"Maus-Boss":[0.3,0.3],"Kleine Hunde":[0.4,0.5],"Ratten":[0.45,0.6],"Katzen":[0.4,0.5],"Spatzen":[0.3,0.3],"Füchse":[0.5,0.7],"Fuchs-Boss":[0.5,0.7]};   // Rüstung Tag 1–12 (D6 + 30 % / + 0,3)
 const EFF = { 0:'burn', 1:'slow', 2:'curse', 3:'stun' }, RUEST = Object.assign({}, (process.env.RUEST_EL || '0.5,0.6,0,1.5').split(',').map(Number))   /* RUEST_EL (28.10.): Rüstungsschaden je Element */, G0 = 2;   // GRID
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
@@ -88,7 +91,11 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   zeilen.push(`${name.padEnd(14)} Wert ${w.toFixed(2)} × Zuschlag ${zuschlag} → Schaden ×${(zuschlag / w).toFixed(2)}`);
 });
 for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.armorDmg`] = RUEST[e]; sp[`ELEMENTS.${e}.dayOnly`] = e === 2; }
-sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || '0.2,0.2,0.2').split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
+// D7 (L 28.10., Drift-Form, Variante N in ZWEIG-D.md; D7=0 schaltet ab): Rüstung Tag 1–12 +30 % / +0,3 Punkte, Füchse tagaktiv, Krieger nachtaktiv,
+// Stapelanteil Brennen 0,35 / Bremsen 0,15 / Fluch 0,1, Wetter-Mittel als kraftBlock (je 5 Runden): Feuer −6 % (Runde 1–10), +6 % (21–30); Eis +4 % (1–10), −3 % (31–40)
+if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] = a; }); sp['MONSTERS.Füchse.night'] = false; sp['MONSTERS.Krieger.night'] = true;
+  sp['ELEMENTS.0.kraftBlock'] = [0.94, 0.94, 1, 1, 1.06, 1.06, 1, 1]; sp['ELEMENTS.1.kraftBlock'] = [1.04, 1.04, 1, 1, 1, 1, 0.97, 0.97]; sp['ELEMENTS.2.kraftBlock'] = null; sp['ELEMENTS.3.kraftBlock'] = null; }
+sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.15,0.1' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
 sp['CONFIG.burnArmor'] = +(process.env.BRENN_RUEST ?? 0);   // 28.10.: Option Brennen durch Rüstung mindern – gemessen unnötig (Feuer hängt über den Rüstungsschaden an der Rüstung, nicht über das Brennen)
 sp['ELEMENTS.3.splashCenter'] = 1; sp['ELEMENTS.3.splashEdge'] = 0.7;   // Stein-Flächenabfall wie alle (Mitte 100 %, Rand 70 %); eigene Stein-Fläche ggf. später als Element-Spezifikation
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
