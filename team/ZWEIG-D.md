@@ -550,7 +550,24 @@ Bodentage, Tag 1–12 / 13–24 / 25–36 / 37–48 (Spanne = größter − klei
 | B: T1 und T2 Reichweite 2 | 0,86/0,94/0,99/1,05 (0,19) | 0,91/0,97/1,08/1,00 (0,17) | 0,81/1,02/1,11/0,99 (0,30) |
 | C: T1 Reichweite 1,5 | 0,90/0,95/1,06/1,08 (0,18) | 0,92/1,01/1,14/1,03 (0,22) | 0,89/1,09/1,15/1,02 (0,26) |
 
+| D: T1 2 Geschosse | 0,88/1,05/1,11/1,04 (0,23) | 0,93/1,02/1,16/1,04 (0,23) | 0,88/1,02/1,17/1,03 (0,29) |
+| E: T1 3 Geschosse | 0,89/1,04/1,16/1,05 (0,27) | 0,93/1,01/1,17/1,04 (0,24) | 0,86/1,01/1,18/1,01 (0,32) |
+
+- Mehrere Geschosse heben vor allem den Anfang (bis 0,93), verkleinern die Spanne aber kaum.
 - Kurze Reichweite an den frühen Türmen verringert die Drift um etwa ein Viertel. Tag 1–12 bleibt bei 0,86–0,92: Mit wenigen Türmen wirken Bremsen, Fluch und Rüstungsschaden kaum. Ganz weg bekommt man die Drift mit Turm-Merkmalen allein nicht.
+
+## Irrlicht mit kleinem Lichtkreis (28.10. morgens, L: so klein, dass man am Anfang zwei braucht; mit Platzwahl)
+Schatten element-rein, Bodentage (Tag 1–12/13–24/25–36/37–48):
+
+| Licht | Verstärkung | Rüstung ignorieren | Schatten |
+|---|---|---|---|
+| 2,5 Felder | aus | wie Spiel | 1,13 (0,90/1,20/1,31/1,20) |
+| 2,5 | halb | aus | 1,19 (0,93/1,26/1,40/1,27) |
+| 2,5 | wie Spiel (1,3–1,8) | aus | 1,31 (0,97/1,37/1,55/1,48) |
+| 2 | wie Spiel | aus | 1,10 (0,94/1,18/1,23/1,11) |
+| 2 | aus | aus | **1,02** (0,89/1,08/1,17/1,00) |
+
+- Mit 2 Feldern Licht ist das reine Licht (Nachtsicht) etwa so viel wert wie der Fluch-Turm, den es ersetzt. Jede Verstärkung kommt obendrauf: volle Verstärkung +8 %.
 
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
