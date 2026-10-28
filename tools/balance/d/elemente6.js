@@ -38,6 +38,9 @@ if (process.env.RUEST_MUL) { const k = +process.env.RUEST_MUL; G.MONSTERS.forEac
 const KB = {}; (process.env.KRAFT_BLOCK || '').split(';').filter(Boolean).forEach(x => { const [e, f] = x.split(':'); KB[+e] = f.split(',').map(Number); });
 // NACHT='11:0,31:1' (28.10.): Nachtaktiv je Tag umstellen (Schatten-Drift über die Verteilung der Nächte)
 (process.env.NACHT || '').split(',').filter(Boolean).forEach(x => { const [d, v] = x.split(':').map(Number); G.MONSTERS[d - 1].night = !!v; });
+// MON='Spatzen.speed=1.2;Spatzen.ar=null;Nazgul.ar=[0.4,0.5]' (28.10.): Monster-Werte für die Messung überschreiben (JSON-Werte, null löscht)
+(process.env.MON || '').split(';').filter(Boolean).forEach(x => { const [k, v] = x.split('='), i = k.lastIndexOf('.'), n = k.slice(0, i), f = k.slice(i + 1), m = G.MONSTERS.find(q => q.name === n);
+  if (!m) throw new Error('Monster fehlt: ' + n); const w = JSON.parse(v); if (w === null) delete m[f]; else m[f] = w; });
 const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number);
 // Mit UMPLATZ wird auch der Vergleich (Standardtürme) umgesetzt: Standard-Zeilen aus spiegel-D6.json kurz auf das Element legen
 const D6 = UMPLATZ ? JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'spiegel-D6.json'))) : null;

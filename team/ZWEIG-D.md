@@ -706,3 +706,16 @@ Gewichte je Block (`WEATHER[k].wB`, Anteil der Tage; im Spiel noch einzubauen):
 - Nachtaktiv jetzt: Tag 5, 9, 16, 19, 27, 31, 33, 37, 38, 40, 44 (Block 1: 2, Block 2: 2, Block 3: 3, Block 4: 4 inkl. Fledermäuse).
 - Schatten frei: **1,00** (1,00/**0,93**/1,00/**1,07**), vorher 0,87 und 1,16 in Block 2 und 4. Fliegertage 1,47.
 - Eis: Bremsen 13,53 (fest 0,94: 0,91/0,93/0,98/0,95). Frei aber nur 1,07 → **1,06** (1,03/1,05/1,08/1,07, flacher). Der Bot gleicht die teureren Bremsen über die Kombination aus; der Abstand fest–frei wächst auf 12 %. Weiter senken bringt frei wenig und drückt den festen Aufbau.
+
+## Fliegende: Tempo und Rüstung (28.10. spät, fester Aufbau, Fliegertage, Element ÷ Standard; `elemente6.js MON=…`)
+Heute: Spatzen 1,5 · Habichte 1,8 · Uffug-Vorhaut 1,0 · Phönixe 1,4 · Looping-Louie 1,7 · Fledermäuse 1,6 (nachts) · Nazgul 1,5 (Boden im Mittel 1,12).
+
+| Variante | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| V0 heute (D7, Spatzen mit Zusatzrüstung 30 %/0,3) | 0,71 | 0,51 | 0,77 | 0,180 |
+| V1 Spatzen ohne Rüstung | 0,69 | 0,50 | 0,77 | 0,175 |
+| V2 = V1 + Tempo Spatzen 1,2 · Habichte 1,6 · Uffug-Vorhaut 0,8 · Phönixe 1,1 · Looping-Louie 1,3 · Fledermäuse 1,0 · Nazgul 0,9 | 0,75 | 0,51 | 0,81 | **0,219** |
+| V3 = V2 + Rüstung Uffug-Vorhaut 35 %/0,5 · Looping-Louie 40 %/0,5 · Nazgul 45 %/0,6 | 0,77 | 0,53 | 0,81 | **0,233** |
+
+- Langsamere Fliegende helfen Stein am meisten (+25 %, Würfe treffen), Feuer +8 %, Schatten +5 %, Eis +3 % – jeweils gegenüber dem Standardturm, der ebenfalls profitiert. Die Leben je Tag gleicht die Kalibrierung danach wieder aus.
+- Gepanzerte Fliegende helfen den Elementen mit Rüstungsschaden etwas (Stein +6 %, Feuer/Eis +3 %), Schatten kaum.
