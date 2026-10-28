@@ -688,3 +688,16 @@ Gewichte je Block (`WEATHER[k].wB`, Anteil der Tage; im Spiel noch einzubauen):
 - Niveaus danach (fester Aufbau, Ziel L: Feuer/Eis 0,97 fest, damit frei ≈ 1,03): Brennen ×0,834, Bremsen 10,77, Rüstungsschaden 3,6, Fluch ×1,29.
 - **Leben neu kalibriert** (`d/ziel4.js`, zwei Runden auf `spiegel-D7.json`): Bezugs-Bot mit Standardtürmen 1,00 der Ziel-Kurve in allen Blöcken (schwächster Tag 0,88, Tag 39). Leben im Mittel ×0,89 gegenüber D6, Tag 1 ×0,68 (wegen der neuen Rüstung in Tag 1–12).
 - Stein T3/T7 „schwach gegen Fliegende“ statt „keine Fliegenden“ (L, Idee): fest Boden 0,998 statt 0,995, Flieger 0,20 statt 0,18 → kaum Wirkung, bleibt wie bisher.
+
+## Ergebnis D7 (28.10. abends): fester Aufbau und freier Bau
+| Bodentage (Tag 1–12/13–24/25–36/37–48) | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| fester Aufbau (Ziel L: Feuer/Eis 0,97) | 0,97 (1,01/0,96/0,97/0,96) | 0,97 (0,93/0,96/1,01/0,99) | 1,00 (0,97/0,99/1,02/1,03) | 1,00 (0,99/0,95/1,10/0,97) |
+| freier Bau ÷ Standard-Bot | **1,03** (1,01/1,07/0,97/1,08) | **1,07** (1,03/1,00/1,13/1,13) | **1,00** (1,00/0,87/1,00/1,16) | **1,06** (1,05/1,01/1,12/1,09) |
+| Fliegertage frei | 0,86 | 1,20 | 1,43 | 0,32 |
+
+- Form-Rest fest 2,8 % (gemeinsam 0,99/0,98/1,04/1,00). Feuer am Anfang +5 %, weil das echte Wetter den Feuer-Kontrast nur zu zwei Dritteln schafft.
+- Standard-Bot nach der Lebens-Kalibrierung: 1,00 (1,02/1,00/0,99/0,99), schwächster Tag 0,91.
+- Stein frei mit Baubonus 1,06 (vorher ohne 1,00) – leicht stärker als Ausgleich für die Fliegertage (L).
+- **Auffällig:** Eis frei 1,07 (10 % über fest, hinten 1,13); Schatten frei Tag 13–24 0,87 in zwei Läufen gleich (drei Nächte in Block 2: Wildschweine, Penner, Geliebte), Tag 37–48 1,16. Vorschlag: Eis −3 %, einen Nacht-Tausch Block 2 → Block 4.
+- Laufzeiten (2 Kerne): Element-Bot frei 13–36 min, Standard-Bot 10 min, fester Aufbau 1,5 min je Element.
