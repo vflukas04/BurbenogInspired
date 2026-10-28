@@ -659,3 +659,32 @@ Alle mit Stapel 0,35/0,15/0,1, Feuer-Wetter 0,94/1/1,06/1, Nacht-Tausch Füchse 
 - **Fester Aufbau** (Bodentage): Feuer 1,00 (0,99/0,99/1,03/0,99) · Eis 1,00 (0,95/0,98/1,05/1,03) · Schatten 0,99 (0,95/0,97/1,02/1,01) · Stein 1,00 (0,98/0,96/1,10/0,96). Form-Rest 2,2 %, gemeinsam 0,97/0,98/1,05/1,00. Auffällig nur Stein in Tag 25–36 (+5 %).
 - **Freier Bau** (bezug3 je Element ÷ bezug3 mit Standardtürmen auf `spiegel-D7.json`, `d/frei-vergleich.py`), Bodentage (Tag 1–12/13–24/25–36/37–48): Feuer **1,06** (1,02/1,07/1,10/1,05) · Eis **1,06** (1,05/0,97/1,12/1,11) · Schatten **0,98** (1,01/0,86/0,99/1,06) · Stein **1,00** (1,04/1,03/0,98/0,96). Fliegertage 0,89 / 1,25 / 1,40 / 0,33. Der Anfang ist kein Problem mehr; die Blöcke streuen im freien Bau ±5–10 % (Bot-Pfad). Feuer und Eis sind frei etwa 6 % stärker als fest (Kombination der Türme).
 - Standardtürme auf D7 (mehr Rüstung Tag 1–12): Bezugs-Bot 0,89 der Ziel-Kurve, Tag 1–12 0,65 → **Leben neu kalibrieren** (`d/ziel4.js` auf D7).
+
+## Wetter D7 mit eigenen Noten und Jahreszeiten (28.10. nachmittags)
+Gemessen je Wetter mit `elemente6.js MIT_WETTER=1 WETTER_REL=1` (Bodentage, Wind über 4 Richtungen gemittelt). Stein ist wieder **wetterfest** (nur Wind/Gewitter wirken über das Monster-Tempo) und hat den **Baubonus** (`terrainFree`).
+
+| Wetter | Mechanik | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|---|
+| Sonnig | Feuer Schaden +7,5 %, Effekt +5 %; Schatten −4 % | 1,08 | 1,00 | 0,96 | 1,00 |
+| Bewölkt | Schatten +7 % | 1,00 | 1,00 | 1,07 | 1,00 |
+| Regen | Brennen kürzer (×0,8); Eis Bremsen +15 %, Schaden +4,5 % | 0,98 | 1,06 | 1,00 | 1,00 |
+| Gewitter | Brennen kürzer; Schatten +6 %; Fliegende ×0,96 | 0,98 | 1,00 | 1,06 | 1,00 (Flieger höher) |
+| Nebel | Reichweite ×0,92 (nicht Stein); Schatten +8 % | 0,99 | 0,97 | 1,05 | 1,00 |
+| Frost | Feuer −8 %; Eis Bremsen +15 %, Dauer +20 %, Schaden +5 % | 0,92 | 1,07 | 1,00 | 1,00 |
+| Hitze | Feuer +8 %, Effekt +10 %; Eis Dauer ×0,8, Schaden −2 % | 1,10 | 0,97 | 1,00 | 1,00 |
+| Wind | Richtung je Tag: Boden +5/−7 %, Flug +8/−10 %; Feuer Effekt +10 % | 1,02 (1,02–1,03) | 1,00 (0,97–1,03) | 1,00 | 1,01 (0,98–1,04; Flieger 0,90–1,12) |
+
+Gewichte je Block (`WEATHER[k].wB`, Anteil der Tage; im Spiel noch einzubauen):
+
+| Block | Sonnig | Bewölkt | Regen | Gewitter | Nebel | Frost | Hitze | Wind | Mittel Feuer / Eis / Schatten |
+|---|---|---|---|---|---|---|---|---|---|
+| Tag 1–12 Winter | 4 | 4 | 35 | 10 | 4 | 35 | 4 | 4 | 0,97 / 1,05 / 1,01 |
+| Tag 13–24 Frühling | 4 | 22 | 33 | 4 | 4 | 4 | 25 | 4 | 1,02 / 1,02 / 1,02 |
+| Tag 25–36 Sommer | 29 | 14 | 6 | 4 | 4 | 4 | 35 | 4 | 1,05 / 1,00 / 1,00 |
+| Tag 37–48 Herbst | 11 | 4 | 4 | 7 | 35 | 4 | 17 | 18 | 1,02 / 0,99 / 1,02 |
+
+- Die Mittel stehen in den Tests als `kraftBlock` (Tests laufen ohne Wetter). Im Mittel über das Spiel: Feuer +1,5 %, Eis +1,4 %, Schatten +1,3 %, Stein 0 (Baubonus gleicht aus, frei ≈ +5 %).
+- Feuer-Kontrast Block 3 − Block 1 nur 8 % statt der gewünschten 12 % (mehr ginge nur mit fast nur einem Wetter je Block).
+- Niveaus danach (fester Aufbau, Ziel L: Feuer/Eis 0,97 fest, damit frei ≈ 1,03): Brennen ×0,834, Bremsen 10,77, Rüstungsschaden 3,6, Fluch ×1,29.
+- **Leben neu kalibriert** (`d/ziel4.js`, zwei Runden auf `spiegel-D7.json`): Bezugs-Bot mit Standardtürmen 1,00 der Ziel-Kurve in allen Blöcken (schwächster Tag 0,88, Tag 39). Leben im Mittel ×0,89 gegenüber D6, Tag 1 ×0,68 (wegen der neuen Rüstung in Tag 1–12).
+- Stein T3/T7 „schwach gegen Fliegende“ statt „keine Fliegenden“ (L, Idee): fest Boden 0,998 statt 0,995, Flieger 0,20 statt 0,18 → kaum Wirkung, bleibt wie bisher.
