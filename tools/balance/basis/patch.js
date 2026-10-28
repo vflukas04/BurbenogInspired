@@ -115,4 +115,14 @@ ERSETZEN.push([`  const towers = raw.map(tw => ({ ...tw, cd:0, def: wdef(tdef(tw
   `  const kbR = inp.incoming && inp.incoming[0] && MONSTERS[inp.incoming[0].type] ? MONSTERS[inp.incoming[0].type].round : 0;
   const kbOf = el => { const a = ELEMENTS[el].kraftBlock; return a && kbR ? (a[Math.min(a.length - 1, Math.floor((kbR - 1) / 5))] || 1) : 1; };
   const towers = raw.map(tw => { const d = wdef(tdef(tw, inp.lane || 0), W, res), k = kbOf(tw.el); return { ...tw, cd:0, def: k === 1 ? d : { ...d, dpsNow:d.dpsNow * k, dmg:d.dmg * k } }; });`]);
+// Zweig D (Claude 29.10. nachts): FEHLER behoben – flyMul (Luftspezialist 180 %, Schleuder „schwach gegen Fliegende“ 50 %) wurde in den Turmwerten geführt, aber nie angewandt.
+// Dazu Looping-Louie-Tiefflug (L 28.10.): MONSTERS[…].lowFly = { low:[[a, b], …] (Anteile des Wegs), mid } – im Tiefflug (m.alt 0) Bodenmonster für alle Türme,
+// im Übergang (m.alt 1, Breite mid) fliegend, aber ohne Malus „schwach gegen Fliegende“, sonst Hochflug (normal). Höhe hängt vom Ort ab (alle in einer Reihe gleich).
+ERSETZEN.push([`  if (def.groundMul && !flying(m)) dmg *= def.groundMul;      // Zweig D: Luftspezialist / schwach gegen Fliegende`,
+  `  if (def.groundMul && !flying(m)) dmg *= def.groundMul;      // Zweig D: Luftspezialist / schwach gegen Fliegende
+  if (def.flyMul && flying(m) && !(def.flyMul < 1 && m.alt === 1)) dmg *= def.flyMul;   // 29.10.: flyMul wirkt (im Übergang des Tiefflugs kein Malus)`],
+  [`const flier = m => !!(m.def.fly || (m.coc && m.coc.fly));`,
+   `const flier = m => !!(m.def.fly || (m.coc && m.coc.fly)) && m.alt !== 0;
+function altOf(z, f){ for (const [a, b] of z.low) if (f >= a && f <= b) return 0; for (const [a, b] of z.low) if (f >= a - z.mid && f <= b + z.mid) return 1; return 2; }`],
+  [`    m.age += dt; const D = m.def;`, `    m.age += dt; const D = m.def; if (D.lowFly) m.alt = altOf(D.lowFly, m.d / s.map.len);`]);
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };

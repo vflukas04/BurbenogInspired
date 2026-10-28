@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
 const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || (process.env.D7 !== '0' ? 'spiegel-D7.json' : 'spiegel-D6.json')))), sp = { ...D0 };
 // D7-Niveaus (28.10., d/fit1.js mit Platzwahl, mit Wetter-Mitteln in kraftBlock): Rüstungsschaden 3,6 (Stein 1,00), Bremsen 10,77, Brennen ×0,834 (Feuer/Eis fest 0,97), Fluch ×1,29
-if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= '13.53'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '10.77'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.17'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
 
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
@@ -45,7 +45,7 @@ const V_D1 = {
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 // SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
 // Verbund-/Element-Kurse (28.10. nachts, mit Platzwahl, d/verbund.js und d/fit1.js): Brennen ×0,59, Fluch ×1,29 auf (Wert − 1); RUEST_K 2,97, SLOW_K 9,47 (Standard unten)
-const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:0.834,fluch:1.29' : 'brennen:0.59,fluch:1.29');
+const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:0.932,fluch:1.29,nacht:0.683' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
@@ -72,7 +72,7 @@ const T = {
 if (process.env.AENDERN) for (const a of process.env.AENDERN.split(';').filter(Boolean)) { const [ek, v] = a.split('='), [e, k, f] = ek.split('.'); T[+e][+k][1] = { ...T[+e][+k][1], [f]:(() => { try { return JSON.parse(v); } catch (x) { return v; } })() }; }
 const STEIN_K = +process.env.STEIN_K || 1;   // 27.10. abends (L): alte Korrektur aus (vorher 0,8)   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
-const D7 = process.env.D7 !== '0', D7_RUEST = {"Silberfische":[0.3,0.3],"Kellerasseln":[0.5,0.6],"Nacktschnecken":[0.3,0.3],"Ohrenkneifer":[0.45,0.6],"Mäuse":[0.3,0.3],"Maus-Boss":[0.3,0.3],"Kleine Hunde":[0.4,0.5],"Ratten":[0.45,0.6],"Katzen":[0.4,0.5],"Spatzen":[0.3,0.3],"Füchse":[0.5,0.7],"Fuchs-Boss":[0.5,0.7]};   // Rüstung Tag 1–12 (D6 + 30 % / + 0,3)
+const D7 = process.env.D7 !== '0', D7_RUEST = {"Silberfische":[0.3,0.3],"Kellerasseln":[0.5,0.6],"Nacktschnecken":[0.3,0.3],"Ohrenkneifer":[0.45,0.6],"Mäuse":[0.3,0.3],"Maus-Boss":[0.3,0.3],"Kleine Hunde":[0.4,0.5],"Ratten":[0.45,0.6],"Katzen":[0.4,0.5],"Füchse":[0.5,0.7],"Fuchs-Boss":[0.5,0.7]};   // Rüstung Tag 1–12 (D6 + 30 % / + 0,3)
 const EFF = { 0:'burn', 1:'slow', 2:'curse', 3:'stun' }, RUEST = Object.assign({}, (process.env.RUEST_EL || '0.5,0.6,0,1.5').split(',').map(Number))   /* RUEST_EL (28.10.): Rüstungsschaden je Element */, G0 = 2;   // GRID
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
@@ -94,7 +94,11 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
 for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.armorDmg`] = RUEST[e]; sp[`ELEMENTS.${e}.dayOnly`] = e === 2; }
 // D7 (L 28.10., Drift-Form, Variante N in ZWEIG-D.md; D7=0 schaltet ab): Rüstung Tag 1–12 +30 % / +0,3 Punkte, Füchse tagaktiv, Krieger nachtaktiv,
 // Stapelanteil Brennen 0,35 / Bremsen 0,15 / Fluch 0,1, Wetter-Mittel als kraftBlock (je 5 Runden): Feuer −6 % (Runde 1–10), +6 % (21–30); Eis +4 % (1–10), −3 % (31–40)
-if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] = a; }); sp['MONSTERS.Füchse.night'] = false; sp['MONSTERS.Krieger.night'] = true; sp['MONSTERS.Eifersüchtige Geliebte.night'] = false; sp['MONSTERS.Lindner-Spezialisten.night'] = true;   // 2. Tausch (L 28.10. abends)
+if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] = a; }); sp['MONSTERS.Füchse.night'] = false; sp['MONSTERS.Krieger.night'] = true; // Fliegende (L 28.10. spät): Tempo meist wie am Boden, einzelne sehr schnell/langsam; drei gepanzert; Looping-Louie mit Tiefflug (⅓ des Wegs tief, Übergänge ohne Malus)
+  Object.entries({ 'Spatzen':1.2, 'Habichte':1.6, 'Uffug-Vorhaut':0.8, 'Phönixe':1.1, 'Looping-Louie-Flugzeuge':1.7, 'Fledermäuse':1.0, 'Nazgul':0.9 }).forEach(([n, v]) => { sp[`MONSTERS.${n}.speed`] = v; });
+  sp['MONSTERS.Spatzen.ar'] = null; sp['MONSTERS.Uffug-Vorhaut.ar'] = [0.35, 0.5]; sp['MONSTERS.Looping-Louie-Flugzeuge.ar'] = [0.4, 0.5]; sp['MONSTERS.Nazgul.ar'] = [0.45, 0.6];
+  sp['MONSTERS.Looping-Louie-Flugzeuge.lowFly'] = { low:[[0.18, 0.34], [0.55, 0.72]], mid:0.04 };
+  sp['MONSTERS.Eifersüchtige Geliebte.night'] = false; sp['MONSTERS.Lindner-Spezialisten.night'] = true;   // 2. Tausch (L 28.10. abends)
   sp['ELEMENTS.3.weatherproof'] = true; sp['ELEMENTS.3.terrainFree'] = true;   // Stein wetterfest + Baubonus (L)
   // Wetter D7 (28.10. nachmittags): eigene Noten, je Wetter höchstens ±10 % je Element (gemessen mit WETTER_REL), Gewichte je Block wB (Tag 1–12 Winter, 13–24 Frühling, 25–36 Sommer, 37–48 Herbst).
   // kraftBlock = gewichtetes Mittel des Wetters je Block (Tests laufen ohne Wetter, das Mittel steht dafür in kraftBlock; im Spiel wirkt das echte Wetter)
@@ -110,7 +114,7 @@ if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] 
   WD7.forEach((w, k) => { sp[`WEATHER.${k}`] = w; });
   sp['ELEMENTS.0.kraftBlock'] = [0.971, 0.971, 1.018, 1.018, 1.053, 1.053, 1.02, 1.02]; sp['ELEMENTS.1.kraftBlock'] = [1.049, 1.049, 1.017, 1.017, 0.996, 0.996, 0.989, 0.989];
   sp['ELEMENTS.2.kraftBlock'] = [1.009, 1.009, 1.018, 1.018, 1.003, 1.003, 1.021, 1.021]; sp['ELEMENTS.3.kraftBlock'] = null; }
-sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.15,0.1' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
+sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.05,0.1' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
 sp['CONFIG.burnArmor'] = +(process.env.BRENN_RUEST ?? 0);   // 28.10.: Option Brennen durch Rüstung mindern – gemessen unnötig (Feuer hängt über den Rüstungsschaden an der Rüstung, nicht über das Brennen)
 sp['ELEMENTS.3.splashCenter'] = 1; sp['ELEMENTS.3.splashEdge'] = 0.7;   // Stein-Flächenabfall wie alle (Mitte 100 %, Rand 70 %); eigene Stein-Fläche ggf. später als Element-Spezifikation
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;

@@ -3,8 +3,8 @@
 // Ausgabe: Suchschritte und bester Faktor. Arbeitsdatei spiegel-fit-<pid>.json (wird gelöscht).
 const cp = require('child_process'), path = require('path'), fs = require('fs'), dir = path.join(__dirname, '..', '..', '..');
 const [kurs, el, lo0, hi0] = process.argv.slice(2), datei = `spiegel-fit-${process.pid}.json`, NAME = ['Feuer', 'Eis', 'Schatten', 'Stein'];
-function messe(k){ const sens = [process.env.SENS_FEST, `${kurs}:${k}`].filter(Boolean).join(',');
-  cp.execFileSync(process.execPath, [path.join(__dirname, 'd2.js')], { env:{ ...process.env, SENS:sens, AUS:datei }, cwd:dir });
+function messe(k){ const env = /^[A-Z_]+$/.test(kurs), sens = [process.env.SENS_FEST, env ? '' : `${kurs}:${k}`].filter(Boolean).join(',');   // Großbuchstaben = Umgebungsvariable direkt (z. B. NOFLY_Z)
+  cp.execFileSync(process.execPath, [path.join(__dirname, 'd2.js')], { env:{ ...process.env, ...(sens ? { SENS:sens } : {}), ...(env ? { [kurs]:String(k) } : {}), AUS:datei }, cwd:dir });
   const out = cp.execFileSync(process.execPath, [path.join(__dirname, 'elemente6.js')], { env:{ ...process.env, STAPEL_ALLE:'1', SPIEGEL:'tools/balance/' + datei, EL:el }, cwd:dir, encoding:'utf8' });
   return { g:+out.match(/Boden ([\d.]+)/)[1], z:out.trim() }; }
 let lo = +lo0, hi = +hi0, best = null; const ZIEL = +(process.env.ZIEL || 1);   // ZIEL (28.10.): Zielwert; RICHTUNG=- wenn ein größerer Faktor das Element stärker macht
