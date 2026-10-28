@@ -4,9 +4,10 @@
 // Irrlicht bleibt vorerst ein normaler Fluch-Turm (Sonderturm folgt am Ende). Reichweite/Fläche in Feldern (neues Raster).
 const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
-const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || 'spiegel-D6.json'))), sp = { ...D0 };
-// D7-Niveaus (28.10., d/fit1.js mit Platzwahl): Rüstungsschaden 3,6 (Stein auf 1,00), Bremsen 7,45 (= 9,47 × 0,787), Brennen ×0,67, Fluch ×1,29
-if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= '7.45'; }
+const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || (process.env.D7 !== '0' ? 'spiegel-D7.json' : 'spiegel-D6.json')))), sp = { ...D0 };
+// D7-Niveaus (28.10., d/fit1.js mit Platzwahl, mit Wetter-Mitteln in kraftBlock): Rüstungsschaden 3,6 (Stein 1,00), Bremsen 10,77, Brennen ×0,834 (Feuer/Eis fest 0,97), Fluch ×1,29
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= '10.77'; }   // 28.10. nachmittags mit Wetter-Mitteln: Feuer/Eis auf 0,97 (fest), damit frei ≈ 1,03
+
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
 const tab = P => x => { if (x <= P[0][0]) return P[0][1]; for (let i = 1; i < P.length; i++) if (x <= P[i][0]) { const [a, va] = P[i - 1], [b, vb] = P[i]; return va + (vb - va) * (x - a) / (b - a); }
@@ -44,7 +45,7 @@ const V_D1 = {
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 // SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
 // Verbund-/Element-Kurse (28.10. nachts, mit Platzwahl, d/verbund.js und d/fit1.js): Brennen ×0,59, Fluch ×1,29 auf (Wert − 1); RUEST_K 2,97, SLOW_K 9,47 (Standard unten)
-const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:0.67,fluch:1.29' : 'brennen:0.59,fluch:1.29');
+const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:0.834,fluch:1.29' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
@@ -68,7 +69,7 @@ const T = {
        ['Katapult', { r:5, f:1 }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
 // AENDERN (28.10., Experimente): 'e.k.feld=wert;…' ändert Turm-Merkmale vor dem Zusammensetzen, z. B. '1.0.r=2;2.0.r=2' (Eis- und Schatten-T1 Reichweite 2)
-if (process.env.AENDERN) for (const a of process.env.AENDERN.split(';').filter(Boolean)) { const [ek, v] = a.split('='), [e, k, f] = ek.split('.'); T[+e][+k][1] = { ...T[+e][+k][1], [f]:isNaN(+v) ? v : +v }; }
+if (process.env.AENDERN) for (const a of process.env.AENDERN.split(';').filter(Boolean)) { const [ek, v] = a.split('='), [e, k, f] = ek.split('.'); T[+e][+k][1] = { ...T[+e][+k][1], [f]:(() => { try { return JSON.parse(v); } catch (x) { return v; } })() }; }
 const STEIN_K = +process.env.STEIN_K || 1;   // 27.10. abends (L): alte Korrektur aus (vorher 0,8)   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
 const D7 = process.env.D7 !== '0', D7_RUEST = {"Silberfische":[0.3,0.3],"Kellerasseln":[0.5,0.6],"Nacktschnecken":[0.3,0.3],"Ohrenkneifer":[0.45,0.6],"Mäuse":[0.3,0.3],"Maus-Boss":[0.3,0.3],"Kleine Hunde":[0.4,0.5],"Ratten":[0.45,0.6],"Katzen":[0.4,0.5],"Spatzen":[0.3,0.3],"Füchse":[0.5,0.7],"Fuchs-Boss":[0.5,0.7]};   // Rüstung Tag 1–12 (D6 + 30 % / + 0,3)
@@ -94,7 +95,21 @@ for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.armorDmg`] = RUEST[e]; sp[`ELEME
 // D7 (L 28.10., Drift-Form, Variante N in ZWEIG-D.md; D7=0 schaltet ab): Rüstung Tag 1–12 +30 % / +0,3 Punkte, Füchse tagaktiv, Krieger nachtaktiv,
 // Stapelanteil Brennen 0,35 / Bremsen 0,15 / Fluch 0,1, Wetter-Mittel als kraftBlock (je 5 Runden): Feuer −6 % (Runde 1–10), +6 % (21–30); Eis +4 % (1–10), −3 % (31–40)
 if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] = a; }); sp['MONSTERS.Füchse.night'] = false; sp['MONSTERS.Krieger.night'] = true;
-  sp['ELEMENTS.0.kraftBlock'] = [0.94, 0.94, 1, 1, 1.06, 1.06, 1, 1]; sp['ELEMENTS.1.kraftBlock'] = [1.04, 1.04, 1, 1, 1, 1, 0.97, 0.97]; sp['ELEMENTS.2.kraftBlock'] = null; sp['ELEMENTS.3.kraftBlock'] = null; }
+  sp['ELEMENTS.3.weatherproof'] = true; sp['ELEMENTS.3.terrainFree'] = true;   // Stein wetterfest + Baubonus (L)
+  // Wetter D7 (28.10. nachmittags): eigene Noten, je Wetter höchstens ±10 % je Element (gemessen mit WETTER_REL), Gewichte je Block wB (Tag 1–12 Winter, 13–24 Frühling, 25–36 Sommer, 37–48 Herbst).
+  // kraftBlock = gewichtetes Mittel des Wetters je Block (Tests laufen ohne Wetter, das Mittel steht dafür in kraftBlock; im Spiel wirkt das echte Wetter)
+  const WD7 = [
+    { name:'Sonnig',   sym:'☀', w:3,   wB:[0.04, 0.04, 0.29, 0.11], el:{ 0:{ dmg:1.075, eff:1.05 }, 2:{ dmg:0.96 } } },
+    { name:'Bewölkt',  sym:'☁', w:3,   wB:[0.04, 0.22, 0.14, 0.04], el:{ 2:{ dmg:1.07 } } },
+    { name:'Regen',    sym:'☂', w:2,   wB:[0.35, 0.33, 0.06, 0.04], el:{ 0:{ dur:0.8 }, 1:{ eff:1.15, dmg:1.045 } } },
+    { name:'Gewitter', sym:'ϟ', w:1,   wB:[0.10, 0.04, 0.04, 0.07], el:{ 0:{ dur:0.8 }, 2:{ dmg:1.06 } }, flySpeed:0.96 },
+    { name:'Nebel',    sym:'≡', w:1.5, wB:[0.04, 0.04, 0.04, 0.35], el:{ 2:{ dmg:1.08 } }, range:0.92 },
+    { name:'Frost',    sym:'❄', w:1,   wB:[0.35, 0.04, 0.04, 0.04], el:{ 0:{ dmg:0.92 }, 1:{ eff:1.15, dur:1.2, dmg:1.05 } } },
+    { name:'Hitze',    sym:'♨', w:1,   wB:[0.04, 0.25, 0.35, 0.17], el:{ 0:{ dmg:1.08, eff:1.1 }, 1:{ dur:0.8, dmg:0.98 } } },
+    { name:'Wind',     sym:'≋', w:1.5, wB:[0.04, 0.04, 0.04, 0.18], el:{ 0:{ eff:1.1 } }, wind:{ ground:[0.05, 0.07], fly:[0.08, 0.1] } } ];   // Wind: Richtung je Tag (Spiel), Tempo × (1 + mit·cos) bzw. (1 − gegen·|cos|)
+  WD7.forEach((w, k) => { sp[`WEATHER.${k}`] = w; });
+  sp['ELEMENTS.0.kraftBlock'] = [0.971, 0.971, 1.018, 1.018, 1.053, 1.053, 1.02, 1.02]; sp['ELEMENTS.1.kraftBlock'] = [1.049, 1.049, 1.017, 1.017, 0.996, 0.996, 0.989, 0.989];
+  sp['ELEMENTS.2.kraftBlock'] = [1.009, 1.009, 1.018, 1.018, 1.003, 1.003, 1.021, 1.021]; sp['ELEMENTS.3.kraftBlock'] = null; }
 sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.15,0.1' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
 sp['CONFIG.burnArmor'] = +(process.env.BRENN_RUEST ?? 0);   // 28.10.: Option Brennen durch Rüstung mindern – gemessen unnötig (Feuer hängt über den Rüstungsschaden an der Rüstung, nicht über das Brennen)
 sp['ELEMENTS.3.splashCenter'] = 1; sp['ELEMENTS.3.splashEdge'] = 0.7;   // Stein-Flächenabfall wie alle (Mitte 100 %, Rand 70 %); eigene Stein-Fläche ggf. später als Element-Spezifikation

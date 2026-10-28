@@ -1,53 +1,53 @@
 {
   "_basis": "044d8c0",
-  "MONSTERS.Betty (Boss).hpMul": 0.8608,
-  "MONSTERS.Nazgul.hpMul": 0.1627,
-  "MONSTERS.Fledermäuse.hpMul": 0.3647,
-  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.2749,
-  "MONSTERS.Silberfische.hpMul": 1.0286,
-  "MONSTERS.Kellerasseln.hpMul": 0.5849,
-  "MONSTERS.Nacktschnecken.hpMul": 1.1408,
-  "MONSTERS.Ohrenkneifer.hpMul": 0.7582,
-  "MONSTERS.Mäuse.hpMul": 0.7664,
-  "MONSTERS.Maus-Boss.hpMul": 4.2342,
-  "MONSTERS.Kleine Hunde.hpMul": 0.6591,
-  "MONSTERS.Ratten.hpMul": 0.5635,
-  "MONSTERS.Katzen.hpMul": 0.4537,
-  "MONSTERS.Spatzen.hpMul": 0.7702,
-  "MONSTERS.Füchse.hpMul": 0.5416,
-  "MONSTERS.Fuchs-Boss.hpMul": 3.1901,
-  "MONSTERS.Habichte.hpMul": 0.676,
-  "MONSTERS.Dachse.hpMul": 0.5846,
-  "MONSTERS.Oktopusse.hpMul": 0.8339,
-  "MONSTERS.Wildschweine.hpMul": 0.6299,
-  "MONSTERS.Schäferhunde.hpMul": 0.6619,
-  "MONSTERS.Schäferhund-Boss.hpMul": 3.0835,
-  "MONSTERS.Besoffene Penner.hpMul": 0.69,
-  "MONSTERS.Wütende Partnerin.hpMul": 0.4262,
-  "MONSTERS.Wütende Nachbarn.hpMul": 0.3695,
-  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.5679,
-  "MONSTERS.Uffug-Vorhaut.hpMul": 0.6379,
-  "MONSTERS.Uffug (Boss).hpMul": 3.2693,
-  "MONSTERS.Roboter.hpMul": 0.3713,
-  "MONSTERS.Sommer-Schneebälle.hpMul": 0.2818,
-  "MONSTERS.Würfel.hpMul": 0.3763,
-  "MONSTERS.Phönixe.hpMul": 0.4794,
-  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5603,
-  "MONSTERS.El Schlucko.hpMul": 2.9629,
-  "MONSTERS.Krieger.hpMul": 0.2155,
-  "MONSTERS.Golems.hpMul": 0.2763,
-  "MONSTERS.Albträume.hpMul": 0.3687,
-  "MONSTERS.Magier-Novizen.hpMul": 0.3846,
-  "MONSTERS.Magiermeister.hpMul": 1.3893,
-  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.2753,
-  "MONSTERS.Lindner-Spezialisten.hpMul": 0.1787,
-  "MONSTERS.Wargreiter.hpMul": 0.2546,
-  "MONSTERS.Lehrer.hpMul": 0.2303,
-  "MONSTERS.Schulleiter.hpMul": 1.3992,
-  "MONSTERS.Streichquartett.hpMul": 0.2132,
-  "MONSTERS.Heisenbergs.hpMul": 0.1742,
-  "MONSTERS.Mehlmottenraupen.hpMul": 0.1378,
-  "MONSTERS.GNTModels.hpMul": 0.2651,
+  "MONSTERS.Betty (Boss).hpMul": 0.8722,
+  "MONSTERS.Nazgul.hpMul": 0.1622,
+  "MONSTERS.Fledermäuse.hpMul": 0.3392,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.2767,
+  "MONSTERS.Silberfische.hpMul": 0.6987,
+  "MONSTERS.Kellerasseln.hpMul": 0.3525,
+  "MONSTERS.Nacktschnecken.hpMul": 0.7674,
+  "MONSTERS.Ohrenkneifer.hpMul": 0.4701,
+  "MONSTERS.Mäuse.hpMul": 0.5158,
+  "MONSTERS.Maus-Boss.hpMul": 2.8751,
+  "MONSTERS.Kleine Hunde.hpMul": 0.4257,
+  "MONSTERS.Ratten.hpMul": 0.3569,
+  "MONSTERS.Katzen.hpMul": 0.3415,
+  "MONSTERS.Spatzen.hpMul": 0.4793,
+  "MONSTERS.Füchse.hpMul": 0.3064,
+  "MONSTERS.Fuchs-Boss.hpMul": 1.989,
+  "MONSTERS.Habichte.hpMul": 0.6616,
+  "MONSTERS.Dachse.hpMul": 0.5718,
+  "MONSTERS.Oktopusse.hpMul": 0.8203,
+  "MONSTERS.Wildschweine.hpMul": 0.5928,
+  "MONSTERS.Schäferhunde.hpMul": 0.5927,
+  "MONSTERS.Schäferhund-Boss.hpMul": 3.0494,
+  "MONSTERS.Besoffene Penner.hpMul": 0.6815,
+  "MONSTERS.Wütende Partnerin.hpMul": 0.4159,
+  "MONSTERS.Wütende Nachbarn.hpMul": 0.3371,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.573,
+  "MONSTERS.Uffug-Vorhaut.hpMul": 0.6621,
+  "MONSTERS.Uffug (Boss).hpMul": 3.2302,
+  "MONSTERS.Roboter.hpMul": 0.3629,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.286,
+  "MONSTERS.Würfel.hpMul": 0.3971,
+  "MONSTERS.Phönixe.hpMul": 0.4436,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5681,
+  "MONSTERS.El Schlucko.hpMul": 2.9666,
+  "MONSTERS.Krieger.hpMul": 0.2147,
+  "MONSTERS.Golems.hpMul": 0.2727,
+  "MONSTERS.Albträume.hpMul": 0.3748,
+  "MONSTERS.Magier-Novizen.hpMul": 0.3864,
+  "MONSTERS.Magiermeister.hpMul": 1.3714,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.2785,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.179,
+  "MONSTERS.Wargreiter.hpMul": 0.2534,
+  "MONSTERS.Lehrer.hpMul": 0.2127,
+  "MONSTERS.Schulleiter.hpMul": 1.3656,
+  "MONSTERS.Streichquartett.hpMul": 0.209,
+  "MONSTERS.Heisenbergs.hpMul": 0.1858,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.1332,
+  "MONSTERS.GNTModels.hpMul": 0.2696,
   "MONSTERS.Kellerasseln.weak": [
     0.9,
     1,
@@ -231,7 +231,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.0": 0.90361,
+  "ELEMENTS.0.kraftT.0": 0.88324,
   "ELEMENTS.0.towers.1": [
     "Glutbecken",
     "Schaden",
@@ -247,7 +247,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.1": 1.38005,
+  "ELEMENTS.0.kraftT.1": 1.33479,
   "ELEMENTS.0.towers.2": [
     "Flammenwerfer",
     "Schaden",
@@ -263,7 +263,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.2": 1.54071,
+  "ELEMENTS.0.kraftT.2": 1.52038,
   "ELEMENTS.0.towers.3": [
     "Brandpfeil",
     "Schaden",
@@ -279,7 +279,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.3": 0.78531,
+  "ELEMENTS.0.kraftT.3": 0.76761,
   "ELEMENTS.0.towers.4": [
     "Schwelbrand",
     "Schaden",
@@ -295,7 +295,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.4": 0.57617,
+  "ELEMENTS.0.kraftT.4": 0.51914,
   "ELEMENTS.0.towers.5": [
     "Lavaturm",
     "Schaden",
@@ -311,7 +311,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.5": 1.01337,
+  "ELEMENTS.0.kraftT.5": 0.99053,
   "ELEMENTS.0.towers.6": [
     "Sonnenturm",
     "Schaden",
@@ -327,7 +327,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.6": 0.92816,
+  "ELEMENTS.0.kraftT.6": 0.90297,
   "ELEMENTS.0.towers.7": [
     "Höllenfeuer",
     "Schaden",
@@ -343,7 +343,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.7": 0.40563,
+  "ELEMENTS.0.kraftT.7": 0.37347,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
     "0": 10,
@@ -378,14 +378,14 @@
   "ELEMENTS.0.weatherproof": false,
   "ELEMENTS.0.terrainFree": false,
   "ELEMENTS.0.kraftBlock": [
-    0.94,
-    0.94,
-    1,
-    1,
-    1.06,
-    1.06,
-    1,
-    1
+    0.971,
+    0.971,
+    1.018,
+    1.018,
+    1.053,
+    1.053,
+    1.02,
+    1.02
   ],
   "ELEMENTS.1.towers.0": [
     "Frostsplitter",
@@ -402,7 +402,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.0": 0.93547,
+  "ELEMENTS.1.kraftT.0": 0.92356,
   "ELEMENTS.1.towers.1": [
     "Schneeball",
     "Schaden",
@@ -418,7 +418,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.1": 0.68681,
+  "ELEMENTS.1.kraftT.1": 0.59291,
   "ELEMENTS.1.towers.2": [
     "Eiszapfen",
     "Schaden",
@@ -437,7 +437,7 @@
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.15006,
+  "ELEMENTS.1.kraftT.2": 1.13542,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
@@ -453,7 +453,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.3": 0.63995,
+  "ELEMENTS.1.kraftT.3": 0.53342,
   "ELEMENTS.1.towers.4": [
     "Frostnova",
     "Schaden",
@@ -487,7 +487,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 0.83716,
+  "ELEMENTS.1.kraftT.5": 0.8265,
   "ELEMENTS.1.towers.6": [
     "Blizzard",
     "Schaden",
@@ -503,7 +503,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 1.85101,
+  "ELEMENTS.1.kraftT.6": 1.83898,
   "ELEMENTS.1.towers.7": [
     "Ewiges Eis",
     "Schaden",
@@ -519,7 +519,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.32563,
+  "ELEMENTS.1.kraftT.7": 0.26395,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -554,14 +554,14 @@
   "ELEMENTS.1.weatherproof": false,
   "ELEMENTS.1.terrainFree": false,
   "ELEMENTS.1.kraftBlock": [
-    1.04,
-    1.04,
-    1,
-    1,
-    1,
-    1,
-    0.97,
-    0.97
+    1.049,
+    1.049,
+    1.017,
+    1.017,
+    0.996,
+    0.996,
+    0.989,
+    0.989
   ],
   "ELEMENTS.2.towers.0": [
     "Schemen",
@@ -726,7 +726,16 @@
   "ELEMENTS.2.noFly": false,
   "ELEMENTS.2.weatherproof": false,
   "ELEMENTS.2.terrainFree": false,
-  "ELEMENTS.2.kraftBlock": null,
+  "ELEMENTS.2.kraftBlock": [
+    1.009,
+    1.009,
+    1.018,
+    1.018,
+    1.003,
+    1.003,
+    1.021,
+    1.021
+  ],
   "ELEMENTS.3.towers.0": [
     "Kiesel",
     "Schaden",
@@ -891,8 +900,8 @@
   "ELEMENTS.3.armorDmg": 1.5,
   "ELEMENTS.3.dayOnly": false,
   "ELEMENTS.3.noFly": false,
-  "ELEMENTS.3.weatherproof": false,
-  "ELEMENTS.3.terrainFree": false,
+  "ELEMENTS.3.weatherproof": true,
+  "ELEMENTS.3.terrainFree": true,
   "ELEMENTS.3.kraftBlock": null,
   "MONSTERS.Betty (Boss).charm.stop": 4.5,
   "MONSTERS.Magier-Novizen.blink.every": 6,
@@ -901,7 +910,7 @@
   "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
   "_stand": "Zweig D2-Methode (L, 25.10.; 27.10. abends Basis spiegel-D6.json, Kurse D6, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis",
   "_ziel": {
-    "R1": 1.534,
+    "R1": 1.5339,
     "a": 0.0979,
     "bot": "bezug3",
     "ziel48": 1.05
@@ -971,6 +980,167 @@
     0.7
   ],
   "MONSTERS.Krieger.night": true,
+  "WEATHER.0": {
+    "name": "Sonnig",
+    "sym": "☀",
+    "w": 3,
+    "wB": [
+      0.04,
+      0.04,
+      0.29,
+      0.11
+    ],
+    "el": {
+      "0": {
+        "dmg": 1.075,
+        "eff": 1.05
+      },
+      "2": {
+        "dmg": 0.96
+      }
+    }
+  },
+  "WEATHER.1": {
+    "name": "Bewölkt",
+    "sym": "☁",
+    "w": 3,
+    "wB": [
+      0.04,
+      0.22,
+      0.14,
+      0.04
+    ],
+    "el": {
+      "2": {
+        "dmg": 1.07
+      }
+    }
+  },
+  "WEATHER.2": {
+    "name": "Regen",
+    "sym": "☂",
+    "w": 2,
+    "wB": [
+      0.35,
+      0.33,
+      0.06,
+      0.04
+    ],
+    "el": {
+      "0": {
+        "dur": 0.8
+      },
+      "1": {
+        "eff": 1.15,
+        "dmg": 1.045
+      }
+    }
+  },
+  "WEATHER.3": {
+    "name": "Gewitter",
+    "sym": "ϟ",
+    "w": 1,
+    "wB": [
+      0.1,
+      0.04,
+      0.04,
+      0.07
+    ],
+    "el": {
+      "0": {
+        "dur": 0.8
+      },
+      "2": {
+        "dmg": 1.06
+      }
+    },
+    "flySpeed": 0.96
+  },
+  "WEATHER.4": {
+    "name": "Nebel",
+    "sym": "≡",
+    "w": 1.5,
+    "wB": [
+      0.04,
+      0.04,
+      0.04,
+      0.35
+    ],
+    "el": {
+      "2": {
+        "dmg": 1.08
+      }
+    },
+    "range": 0.92
+  },
+  "WEATHER.5": {
+    "name": "Frost",
+    "sym": "❄",
+    "w": 1,
+    "wB": [
+      0.35,
+      0.04,
+      0.04,
+      0.04
+    ],
+    "el": {
+      "0": {
+        "dmg": 0.92
+      },
+      "1": {
+        "eff": 1.15,
+        "dur": 1.2,
+        "dmg": 1.05
+      }
+    }
+  },
+  "WEATHER.6": {
+    "name": "Hitze",
+    "sym": "♨",
+    "w": 1,
+    "wB": [
+      0.04,
+      0.25,
+      0.35,
+      0.17
+    ],
+    "el": {
+      "0": {
+        "dmg": 1.08,
+        "eff": 1.1
+      },
+      "1": {
+        "dur": 0.8,
+        "dmg": 0.98
+      }
+    }
+  },
+  "WEATHER.7": {
+    "name": "Wind",
+    "sym": "≋",
+    "w": 1.5,
+    "wB": [
+      0.04,
+      0.04,
+      0.04,
+      0.18
+    ],
+    "el": {
+      "0": {
+        "eff": 1.1
+      }
+    },
+    "wind": {
+      "ground": [
+        0.05,
+        0.07
+      ],
+      "fly": [
+        0.08,
+        0.1
+      ]
+    }
+  },
   "CONFIG.stackRest": {
     "burn": 0.35,
     "slow": 0.15,
