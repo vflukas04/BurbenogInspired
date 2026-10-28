@@ -701,3 +701,8 @@ Gewichte je Block (`WEATHER[k].wB`, Anteil der Tage; im Spiel noch einzubauen):
 - Stein frei mit Baubonus 1,06 (vorher ohne 1,00) – leicht stärker als Ausgleich für die Fliegertage (L).
 - **Auffällig:** Eis frei 1,07 (10 % über fest, hinten 1,13); Schatten frei Tag 13–24 0,87 in zwei Läufen gleich (drei Nächte in Block 2: Wildschweine, Penner, Geliebte), Tag 37–48 1,16. Vorschlag: Eis −3 %, einen Nacht-Tausch Block 2 → Block 4.
 - Laufzeiten (2 Kerne): Element-Bot frei 13–36 min, Standard-Bot 10 min, fester Aufbau 1,5 min je Element.
+
+### 2. Nacht-Tausch und Eis −3 % (28.10. abends, L: Geliebte tagsüber, Lindner-Spezialisten nachts)
+- Nachtaktiv jetzt: Tag 5, 9, 16, 19, 27, 31, 33, 37, 38, 40, 44 (Block 1: 2, Block 2: 2, Block 3: 3, Block 4: 4 inkl. Fledermäuse).
+- Schatten frei: **1,00** (1,00/**0,93**/1,00/**1,07**), vorher 0,87 und 1,16 in Block 2 und 4. Fliegertage 1,47.
+- Eis: Bremsen 13,53 (fest 0,94: 0,91/0,93/0,98/0,95). Frei aber nur 1,07 → **1,06** (1,03/1,05/1,08/1,07, flacher). Der Bot gleicht die teureren Bremsen über die Kombination aus; der Abstand fest–frei wächst auf 12 %. Weiter senken bringt frei wenig und drückt den festen Aufbau.
