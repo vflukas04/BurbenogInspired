@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 28.10. 09:20 · F · 2026-10-28a – Gesandte wandern über den Monsterweg zur Nachbar-Burg
+Die Gesandten laufen jetzt wie die Monster: Dorf → Monsterweg → Ausgang rechts → Eingang links der nächsten Map → Burg des Nachbarn, handeln, dann zurück (ab Tag 28 mit Gespann, schneller). Läuft durchgehend, nicht nur zu Wellenzeiten. Nur Anzeige, neu laden.
+
 ### 28.10. 02:00 · L · Zweig D6T – echte Türme aus Wechselkursen, Elemente an Bodentagen ±8 % (nur Balancing-Werkzeuge)
 - Fehler behoben: Effekt und Dauer wuchsen je Stufe mit, Nova-Kurs hing nicht am Radius. Kurse mit Platzwahl, Verbund-Kurse für Bremsen/Rüstungsschaden, Brennen/Fluch nachgezogen. Nachtaktive im Test neu verteilt (L). Spielcode unverändert.
 - Freier Bau an Bodentagen: Feuer 1,04 · Eis 1,08 · Schatten 1,02 · Stein 1,00. Offen: Fliegertage, Drift am Anfang (≈ 0,85), Irrlicht zu stark, Wetter bis ±28 %. Details `team/ZWEIG-D.md`.
