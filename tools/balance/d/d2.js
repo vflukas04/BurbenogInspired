@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
 const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || (process.env.D7 !== '0' ? 'spiegel-D7.json' : 'spiegel-D6.json')))), sp = { ...D0 };
 // D7-Niveaus (28.10., d/fit1.js mit Platzwahl, mit Wetter-Mitteln in kraftBlock): Rüstungsschaden 3,6 (Stein 1,00), Bremsen 10,77, Brennen ×0,834 (Feuer/Eis fest 0,97), Fluch ×1,29
-if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= '10.77'; }   // 28.10. nachmittags mit Wetter-Mitteln: Feuer/Eis auf 0,97 (fest), damit frei ≈ 1,03
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= '13.53'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
 
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
@@ -94,7 +94,7 @@ for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
 for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.armorDmg`] = RUEST[e]; sp[`ELEMENTS.${e}.dayOnly`] = e === 2; }
 // D7 (L 28.10., Drift-Form, Variante N in ZWEIG-D.md; D7=0 schaltet ab): Rüstung Tag 1–12 +30 % / +0,3 Punkte, Füchse tagaktiv, Krieger nachtaktiv,
 // Stapelanteil Brennen 0,35 / Bremsen 0,15 / Fluch 0,1, Wetter-Mittel als kraftBlock (je 5 Runden): Feuer −6 % (Runde 1–10), +6 % (21–30); Eis +4 % (1–10), −3 % (31–40)
-if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] = a; }); sp['MONSTERS.Füchse.night'] = false; sp['MONSTERS.Krieger.night'] = true;
+if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] = a; }); sp['MONSTERS.Füchse.night'] = false; sp['MONSTERS.Krieger.night'] = true; sp['MONSTERS.Eifersüchtige Geliebte.night'] = false; sp['MONSTERS.Lindner-Spezialisten.night'] = true;   // 2. Tausch (L 28.10. abends)
   sp['ELEMENTS.3.weatherproof'] = true; sp['ELEMENTS.3.terrainFree'] = true;   // Stein wetterfest + Baubonus (L)
   // Wetter D7 (28.10. nachmittags): eigene Noten, je Wetter höchstens ±10 % je Element (gemessen mit WETTER_REL), Gewichte je Block wB (Tag 1–12 Winter, 13–24 Frühling, 25–36 Sommer, 37–48 Herbst).
   // kraftBlock = gewichtetes Mittel des Wetters je Block (Tests laufen ohne Wetter, das Mittel steht dafür in kraftBlock; im Spiel wirkt das echte Wetter)

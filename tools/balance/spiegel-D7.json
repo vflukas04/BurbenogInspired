@@ -889,7 +889,7 @@
   "MONSTERS.Albträume.night": true,
   "MONSTERS.Fledermäuse.night": true,
   "MONSTERS.Heisenbergs.night": true,
-  "MONSTERS.Eifersüchtige Geliebte.night": true,
+  "MONSTERS.Eifersüchtige Geliebte.night": false,
   "MONSTERS.Würfel.night": true,
   "MONSTERS.E-Scooter-Fahrer.night": true,
   "MONSTERS.Silberfische.ar": [
@@ -940,5 +940,6 @@
     0.5,
     0.7
   ],
-  "MONSTERS.Krieger.night": true
+  "MONSTERS.Krieger.night": true,
+  "MONSTERS.Lindner-Spezialisten.night": true
 }

@@ -402,7 +402,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.0": 0.92356,
+  "ELEMENTS.1.kraftT.0": 0.91388,
   "ELEMENTS.1.towers.1": [
     "Schneeball",
     "Schaden",
@@ -418,7 +418,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.1": 0.59291,
+  "ELEMENTS.1.kraftT.1": 0.5324,
   "ELEMENTS.1.towers.2": [
     "Eiszapfen",
     "Schaden",
@@ -437,7 +437,7 @@
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.13542,
+  "ELEMENTS.1.kraftT.2": 1.12353,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
@@ -453,7 +453,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.3": 0.53342,
+  "ELEMENTS.1.kraftT.3": 0.46858,
   "ELEMENTS.1.towers.4": [
     "Frostnova",
     "Schaden",
@@ -487,7 +487,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 0.8265,
+  "ELEMENTS.1.kraftT.5": 0.81785,
   "ELEMENTS.1.towers.6": [
     "Blizzard",
     "Schaden",
@@ -503,7 +503,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 1.83898,
+  "ELEMENTS.1.kraftT.6": 1.8291,
   "ELEMENTS.1.towers.7": [
     "Ewiges Eis",
     "Schaden",
@@ -519,7 +519,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.26395,
+  "ELEMENTS.1.kraftT.7": 0.22804,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -928,7 +928,7 @@
   "MONSTERS.Albträume.night": true,
   "MONSTERS.Fledermäuse.night": true,
   "MONSTERS.Heisenbergs.night": true,
-  "MONSTERS.Eifersüchtige Geliebte.night": true,
+  "MONSTERS.Eifersüchtige Geliebte.night": false,
   "MONSTERS.Würfel.night": true,
   "MONSTERS.E-Scooter-Fahrer.night": true,
   "MONSTERS.Silberfische.ar": [
@@ -980,6 +980,7 @@
     0.7
   ],
   "MONSTERS.Krieger.night": true,
+  "MONSTERS.Lindner-Spezialisten.night": true,
   "WEATHER.0": {
     "name": "Sonnig",
     "sym": "☀",
