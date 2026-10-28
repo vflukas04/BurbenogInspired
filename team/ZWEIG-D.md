@@ -574,3 +574,25 @@ Schatten element-rein, Bodentage (Tag 1–12/13–24/25–36/37–48):
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
 3. D3 heutige Türme als Grundturm + Merkmale beschreiben, Schaden/Schuss folgt → `spiegel-D1.json`.
 4. D4 Monster nach Einkommen, D5 Bot-Lauf nur zur Prüfung.
+
+## Wetter-Entwurf, Wind mit Richtung, Baubonus Stein (28.10. vormittags, L: Vorteile überwiegen, Stein wetterfest + Baubonus)
+- **Nur Schaden:** Wetter, das nur den Schaden eines Elements ändert, wirkt exakt (Schaden ×1,08 → Reserve ×1,077). Entwurf daher ohne Reichweite/Dauer/Effekt, keine Messung nötig.
+- **Entwurf** (je Wetter höchstens +8 % / −4 %, Gewichte wie heute): Sonnig Feuer +8 · Bewölkt Schatten +7 · Regen Eis +8, Feuer −3 · Gewitter Schatten +6, Feuer −4 · Nebel Eis +5, Schatten +3 · Frost Eis +8, Feuer −4 · Hitze Feuer +8, Eis −4 · Wind Feuer +7 + Richtung. Gewichtetes Mittel: Feuer +2,0 %, Eis +2,0 %, Schatten +2,3 %, Stein 0 (wetterfest).
+- **Wind mit Richtung** (`basis/patch.js` `windMul`, `elemente6.js WIND=dx,dy,mitBoden,gegenBoden,mitFlug,gegenFlug`): Tempo × (1 + mit·cos) bzw. (1 − gegen·|cos|) je Wegstück. Symmetrisch ±10 %/±20 % ist fast neutral (Feuer 0,985–1,016). Asymmetrisch Boden +10/−20 %, Flug +20/−40 %: Feuer Boden 0,99–1,05 (Mittel 1,016), Flieger 1,02–1,13. Stein reagiert deutlich stärker (Würfe treffen langsame Monster besser): Boden +10/−20, Flug +20/−30: 0,97/1,12/1,03/1,04 (Osten/Westen/Süden/Norden), Flieger 0,80–1,32. → Für die 10-%-Grenze schwächer einstellen (etwa Boden +6/−10 %).
+- **Baubonus Stein** (`terrainFree` in D bisher aus; freier Bau bezug3, Stein, mit ÷ ohne): Tag 1–12 1,00 · 13–24 1,05 · 25–36 1,15 · 37–48 1,03, gesamt **+5 %** (Bot-Streuung ±5 %). Gleicht den Wetter-Vorteil der anderen (+2 %) mehr als aus; hilft am Anfang nicht.
+- **Wetter gegen Drift:** Mit je einem Bonus-Element je Wetter kann ein Element im Mittel höchstens um ≈ 8 %/3 ≈ 2,7 % angehoben werden (Lösung mit Jahreszeiten-Gewichten: Block 1 Eis +2 %, Schatten +3 %). Die Drift ist 15–35 % → Wetter fängt höchstens ein Zehntel auf.
+
+## Rüstung und Drift (28.10. vormittags, L: Relation Rüstung zu Leben, `elemente6.js RUEST=0 / RUEST_ADD=p,q / RUEST_MUL=k / RUEST_TAGE`)
+Mechanik: Standardtürme haben keinen Rüstungsschaden, die Punkte bleiben → für sie wirkt Rüstung dauerhaft als −Prozent. Feuer (Brennen geht durch), Eis/Stein (Punkte abtragen) und Schatten (Fluch senkt Prozent) gewinnen dagegen. Element ÷ Standard hängt nicht von den Leben ab. Bodentage, Tag 1–12 / 13–24 / 25–36 / 37–48:
+
+| Variante | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| heute | 0,98/1,01/0,99/1,02 | 0,84/1,04/1,08/1,07 | 0,88/1,01/1,14/1,05 | 0,82/1,04/1,19/1,03 |
+| keine Rüstung | 0,94/0,90/0,91/0,89 | 0,80/0,91/0,98/0,98 | 0,85/0,89/1,02/0,95 | 0,76/0,81/0,97/0,87 |
+| alle +15 % / +0,3 Punkte | 1,00/1,06/1,05/1,03 | 0,85/1,05/1,10/1,06 | 0,90/1,06/1,21/1,11 | 0,90/1,18/1,36/1,13 |
+| alle ×1,5 | 0,97/1,10/1,06/1,03 | 0,84/1,12/1,13/1,07 | 0,88/1,07/1,20/1,07 | 0,84/1,23/1,38/1,11 |
+| nur Tag 1–12: +30 % / +0,05 Punkte | 1,25 | 1,08 | 0,91 | 1,13 |
+| nur Tag 1–12: +30 % / +0,3 Punkte | 1,09 | 0,96 | 0,91 | 1,07 |
+
+- Rüstung trägt einen großen Teil des Buckels in Tag 13–36 (ohne Rüstung: Schatten 1,02 statt 1,14, Stein 0,97 statt 1,19).
+- **Hohe Prozent mit dünnen Punkten** am Anfang heben Eis und Stein stark (über 1), Feuer aber noch mehr (Brennen geht durch), Schatten kaum (wenige Fluch-Türme). Dicke Punkte dämpfen Eis/Stein, nicht Feuer.

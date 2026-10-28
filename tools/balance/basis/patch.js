@@ -92,4 +92,15 @@ ERSETZEN.push([`    chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMa
   `    chance:opt.chance || 0, chanceUp:opt.chanceUp || 0, chanceMax:opt.chanceMax || 0.4, flyMul:opt.flyMul || 0, groundMul:opt.groundMul || 0, idx, el };`],
   [`  if (def.groundHalf && !flying(m)) dmg *= 0.5;               // Feuerregen: Bodenmonster halb`,
    `  if (def.groundHalf && !flying(m)) dmg *= 0.5;               // Feuerregen: Bodenmonster halb\n  if (def.groundMul && !flying(m)) dmg *= def.groundMul;      // Zweig D: Luftspezialist / schwach gegen Fliegende`]);   // 26.10. (L): Irrlicht wirkt auf die Monster im Lichtkreis (auch im Spiel umgesetzt, 26a)
+// Zweig D (L 28.10.): Wind aus einer Richtung – Monster, die mit dem Wind laufen, werden schneller, gegen den Wind langsamer.
+// WEATHER[k].wind = { dir:[dx, dy] (Richtung, in die der Wind weht), ground:[mit, gegen], fly:[mit, gegen] } (Anteile, mit cos der Laufrichtung gewichtet).
+// Ohne wind wie bisher (flySpeed). Richtung im Spiel später je Tag aus dem Seed; für Messungen fest (elemente6.js WIND=…).
+ERSETZEN.push([`    const v = GRID * spd * (flying(m) && s.W.flySpeed ? s.W.flySpeed : 1) * (1 - slow) * dt;`,
+  `    const v = GRID * spd * windMul(s, m) * (1 - slow) * dt;`],
+  [`const isBossy = m => !!(m.def.mini || m.def.boss);`,
+  `const isBossy = m => !!(m.def.mini || m.def.boss);
+function windMul(s, m){ const W = s.W, f = flying(m), k = f && W.flySpeed ? W.flySpeed : 1, w = W.wind; if (!w) return k;
+  const sg = s.map.seg.find(g => m.d <= g.start + g.len) || s.map.seg[s.map.seg.length - 1], dx = sg.bx - sg.ax, dy = sg.by - sg.ay, L = Math.hypot(dx, dy) || 1;
+  const c = (dx * w.dir[0] + dy * w.dir[1]) / (L * (Math.hypot(w.dir[0], w.dir[1]) || 1)) * (m.back ? -1 : 1), p = f ? w.fly : w.ground;
+  return k * (c >= 0 ? 1 + p[0] * c : 1 + p[1] * c); }`]);
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };
