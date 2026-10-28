@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-28b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-28c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2455,18 +2455,21 @@ let MAPS_BY_WORKER = { map:null };
 // ---- Gesandte (27.10., F): ab Tag 12 zu Fuß, ab Tag 28 mit Pferdegespann; nur Anzeige (das Gold ist nur ein Bild, es ändert keinen Spielstand) ----
 const ENVR = {};
 function envoyMk(P){ const seg = []; let len = 0; for (let j = 1; j < P.length; j++) { const d = Math.hypot(P[j][0]-P[j-1][0], P[j][1]-P[j-1][1]); seg.push(d); len += d; } return { pts:P, seg, len }; }
-function envoyBase(i, wl){   // Dorf → Übergabefeld am Monsterweg (gezeichnete Wegführung) und Straßenpunkt, dann der Monsterweg selbst
+function envoyBase(i, wl){   // kürzester Weg: Dorf → (gezeichnete Wegführung) → Übergabefeld, das Weg + Reststrecke auf dem Monsterweg minimiert; Ausgang und Eingang getrennt gewählt
   const map = MAPS[i], key = [TSEED, i, wl.vc.x, wl.vc.y].join('.'); if (ENVR[key] !== undefined) return ENVR[key];
   let R = null; try {
-    let t = null, bd = 1e9; for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y) || map.terrain[y][x] !== 0 || (x === wl.vc.x && y === wl.vc.y)) continue; if (![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b]) => map.cells.has((x+a)+','+(y+b)))) continue; const d = Math.hypot(x-wl.vc.x, y-wl.vc.y); if (d < bd) { bd = d; t = { x, y }; } }
-    if (t) { const sg = worldPaths(map, wl.vc, [t], i)[0]; const P = sg && sg.length > 1 ? sg.map((k, j) => { const [x, y] = k.split(',').map(Number); return j === 0 ? [x + .5, y + .72] : [x + .5 + (wHash(x, y, 7) - .5)*.3, y + .72 + (wHash(x, y, 8) - .5)*.3]; }) : [[wl.vc.x + .5, wl.vc.y + .72], [t.x + .5, t.y + .72]];
-      const road = []; for (let d = 0; d <= map.len; d += .25) { const [x, y] = posAt(map, d); road.push([x, y + .2]); }
-      let bi = 0, bq = 1e9; road.forEach((r, j) => { const q = Math.hypot(r[0] - (t.x + .5), r[1] - (t.y + .72)); if (q < bq) { bq = q; bi = j; } });
-      R = { P, road, bi }; } } catch (e) {}
+    const road = []; for (let d = 0; d <= map.len; d += .25) { const [x, y] = posAt(map, d); road.push([x, y + .2]); }
+    const cand = []; for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y) || map.terrain[y][x] !== 0 || (x === wl.vc.x && y === wl.vc.y)) continue; if (![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b]) => map.cells.has((x+a)+','+(y+b)))) continue;
+      let bi = 0, bq = 1e9; road.forEach((r, j) => { const q = Math.hypot(r[0] - (x + .5), r[1] - (y + .72)); if (q < bq) { bq = q; bi = j; } }); cand.push({ x, y, bi, e:Math.hypot(x - wl.vc.x, y - wl.vc.y) * 1.25 }); }
+    const pick = f => cand.reduce((m, c) => (!m || f(c) < f(m)) ? c : m, null);
+    const mk = (t, out) => { const sg = worldPaths(map, wl.vc, [{ x:t.x, y:t.y }], i)[0]; const P = sg && sg.length > 1 ? sg.map((k, j) => { const [x, y] = k.split(',').map(Number); return j === 0 ? [x + .5, y + .72] : [x + .5 + (wHash(x, y, 7) - .5)*.3, y + .72 + (wHash(x, y, 8) - .5)*.3]; }) : [[wl.vc.x + .5, wl.vc.y + .72], [t.x + .5, t.y + .72]];
+      return out ? envoyMk([...P, ...road.slice(t.bi)]) : envoyMk([...road.slice(0, t.bi + 1), ...P.slice().reverse()]); };
+    const to = pick(c => c.e + (road.length - c.bi) * .25), ti = pick(c => c.e + c.bi * .25);
+    if (to && ti) R = { out:mk(to, true), inn:mk(ti, false) }; } catch (e) {}
   return ENVR[key] = R;
 }
-function envoyOut(i, wl){ const B = envoyBase(i, wl); if (!B) return null; if (!B.out) B.out = envoyMk([...B.P, ...B.road.slice(B.bi)]); return B.out; }   // Dorf → Ausgang rechts
-function envoyIn(i, wl){ const B = envoyBase(i, wl); if (!B) return null; if (!B.inn) B.inn = envoyMk([...B.road.slice(0, B.bi + 1), ...B.P.slice().reverse()]); return B.inn; }   // Eingang links → Dorf
+function envoyOut(i, wl){ const B = envoyBase(i, wl); return B ? B.out : null; }   // Dorf → Ausgang rechts
+function envoyIn(i, wl){ const B = envoyBase(i, wl); return B ? B.inn : null; }   // Eingang links → Dorf
 function routeAt(R, d){ let q = Math.max(0, Math.min(R.len, d)); for (let j = 0; j < R.seg.length; j++) { if (q <= R.seg[j] || j === R.seg.length - 1) { const f = R.seg[j] ? q / R.seg[j] : 0, a = R.pts[j], b = R.pts[j+1]; return [a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f, b[0] - a[0]]; } q -= R.seg[j]; } return [R.pts[0][0], R.pts[0][1], 1]; }
 function envoyState(o, n, T, day, A, B, p){   // Gesandter: Dorf o → Ausgang → Eingang von Map p → Burg von p, handeln, zurück (wie die Monster, nur in beide Richtungen)
   const car = day >= 28, sp = car ? 3.6 : 1.5, tA = A.len / sp, tB = B.len / sp, trade = 2.6, gap = 2.5, cyc = 2*tA + 2*tB + trade + gap, ph = (T + n * cyc / 2 + o * 37) % cyc;
