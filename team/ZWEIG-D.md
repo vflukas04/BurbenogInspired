@@ -517,6 +517,29 @@ Jeder Kurs einzeln ±10 % (auf Wert − 1), Türme neu zusammengesetzt, alle 4 E
 - **An Bodentagen sind die Elemente beim freien Bau jetzt innerhalb von +8 %** (Eis am stärksten). Die Mensch-Bots liegen bei Eis etwas tiefer als bei den anderen.
 - **Fliegertage sind die größte Baustelle:** Schatten zu stark (Nachtauge als Luftspezialist), Stein sehr schwach (2s/4/6/8, von L in Kauf genommen), Mensch-Bots bei Feuer/Eis schwach (sie bauen viele Türme ohne Luftangriff).
 
+## Wetter je Element (28.10. nachts, `elemente6.js MIT_WETTER=1 WETTER_REL=1`, Bezugs-Aufbau mit Platzwahl, heutige Wetter-Werte)
+Wert = dieselben Element-Türme mit ÷ ohne dieses Wetter (Bodentage; in Klammern Fliegertage, wo abweichend).
+
+| Wetter (Gewicht) | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| Sonnig (3) | **1,15** | 0,98 | 1,07 | 1,00 |
+| Bewölkt (3) | 1,00 | 1,00 | **0,84** | 1,00 |
+| Regen (2) | **0,87** | 1,06 | 0,93 | 1,00 |
+| Gewitter (1) | **0,87** | 1,01 | **0,81** | 1,00 (Flieger 1,28) |
+| Nebel (1,5) | 0,96 | 0,94 | 1,10 | 0,93 |
+| Frost (1) | 0,93 | 1,08 | 1,00 | 1,00 |
+| Hitze (1) | **1,28** | 0,95 | 1,00 | 1,00 |
+| Wind (1,5) | 0,98 (Flieger 0,87) | 0,99 (0,90) | 1,00 (0,91) | 0,99 (**0,62**) |
+| **gewichtetes Mittel** | ×1,005 | ×0,998 | **×0,962** | ×0,992 |
+
+- Im Mittel fast neutral (Schatten −4 %), aber **einzelne Wetter weit über der 10-%-Grenze** (L): Feuer bei Hitze +28 %, Sonnig +15 %, Regen/Gewitter −13 %; Schatten bei Gewitter −19 %, Bewölkt −16 %.
+- Stein ist in D nicht wetterfest (`weatherproof` aus D0 = false): Nebel (Reichweite) trifft ihn mit −7 %. Wind macht Fliegende schneller (Stein an Fliegertagen 0,62), Gewitter langsamer (1,28).
+- Grundlage für L's Wetter-Entwurf (höchstens 10 %, ausgeglichen).
+
+## Irrlicht (28.10. nachts, Fortsetzung)
+- Aufgeteilt (Schatten element-rein, Bodentage): nur Licht (keine Verstärkung, keine Rüstung) **1,06** · + Rüstung ignorieren **1,13** · Verstärkung ×0,5 ohne Rüstung 1,19 · volle Verstärkung ohne Rüstung 1,32 · alles (Spiel) **1,41**. Bezug: Schatten mit normalem Fluch-T2 1,01.
+- Schon das reine Licht (Nachtsicht) ist mehr wert als der Fluch-Turm an seiner Stelle. Die Nachtregel ist im Kurs mit 0,86 bezahlt, mit Irrlicht fällt sie weitgehend weg. **Vorschlag (Entscheidung L):** Nachtregel-Kurs für Schatten mit Irrlicht neu bestimmen und die Verstärkung des Irrlichts so wählen, dass Schatten mit Irrlicht bei 1,00 liegt (Messung: etwa ×0,1–0,2 der heutigen Verstärkung, ohne Rüstungsanteil), oder das Irrlicht teurer machen.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).

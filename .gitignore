@@ -2,3 +2,4 @@ tools/archiv-daten/
 tools/balance/ergebnisse/
 tools/balance/spiegel-sens-*.json
 tools/balance/spiegel-fit-*.json
+tools/balance/spiegel-exp-*.json
