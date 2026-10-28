@@ -540,6 +540,18 @@ Wert = dieselben Element-Türme mit ÷ ohne dieses Wetter (Bodentage; in Klammer
 - Aufgeteilt (Schatten element-rein, Bodentage): nur Licht (keine Verstärkung, keine Rüstung) **1,06** · + Rüstung ignorieren **1,13** · Verstärkung ×0,5 ohne Rüstung 1,19 · volle Verstärkung ohne Rüstung 1,32 · alles (Spiel) **1,41**. Bezug: Schatten mit normalem Fluch-T2 1,01.
 - Schon das reine Licht (Nachtsicht) ist mehr wert als der Fluch-Turm an seiner Stelle. Die Nachtregel ist im Kurs mit 0,86 bezahlt, mit Irrlicht fällt sie weitgehend weg. **Vorschlag (Entscheidung L):** Nachtregel-Kurs für Schatten mit Irrlicht neu bestimmen und die Verstärkung des Irrlichts so wählen, dass Schatten mit Irrlicht bei 1,00 liegt (Messung: etwa ×0,1–0,2 der heutigen Verstärkung, ohne Rüstungsanteil), oder das Irrlicht teurer machen.
 
+## Drift-Experiment: frühe Türme mit kurzer Reichweite (28.10. nachts, `d/exp-drift.sh`, Kurse unverändert, mit Platzwahl)
+Bodentage, Tag 1–12 / 13–24 / 25–36 / 37–48 (Spanne = größter − kleinster Abschnitt):
+
+| Variante | Eis | Schatten | Stein |
+|---|---|---|---|
+| heute (T1 Reichweite 3) | 0,84/1,04/1,08/1,07 (0,24) | 0,88/1,01/1,14/1,05 (0,26) | 0,82/1,04/1,19/1,03 (0,37) |
+| A: T1 Reichweite 2 | 0,87/0,96/1,06/1,02 (0,19) | 0,91/0,99/1,11/1,03 (0,20) | 0,85/1,03/1,14/1,02 (0,29) |
+| B: T1 und T2 Reichweite 2 | 0,86/0,94/0,99/1,05 (0,19) | 0,91/0,97/1,08/1,00 (0,17) | 0,81/1,02/1,11/0,99 (0,30) |
+| C: T1 Reichweite 1,5 | 0,90/0,95/1,06/1,08 (0,18) | 0,92/1,01/1,14/1,03 (0,22) | 0,89/1,09/1,15/1,02 (0,26) |
+
+- Kurze Reichweite an den frühen Türmen verringert die Drift um etwa ein Viertel. Tag 1–12 bleibt bei 0,86–0,92: Mit wenigen Türmen wirken Bremsen, Fluch und Rüstungsschaden kaum. Ganz weg bekommt man die Drift mit Turm-Merkmalen allein nicht.
+
 ## Nächste Schritte
 1. D1 Grundturm im Simulator (Kopie eines Turms ohne Effekt, Rate/Reichweite fest, Schaden ∝ Gold).
 2. D2 Wechselkurse messen: Rate, Reichweite, Fläche, dann Effekte (echte Leben, mehrere Tage, Maps 0–3).
