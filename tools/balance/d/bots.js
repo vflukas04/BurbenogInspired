@@ -6,6 +6,7 @@
 // – Bewertung je Tag: Reserve (ganzer Tag, 10 + 19 Uhr, wie P2) auf Map 0 (Seed 11) und Map 2 (Seed 23), ohne Wetter,
 //   Monster-Faktoren neutral (wie die Kalibrierung ziel.js), verglichen mit der Ziel-Kurve R(d) = 1,52 × d^−0,096.
 // Aufruf: SPIEGEL=tools/balance/spiegel-D3.json BOT=kern node tools/balance/d/bots.js  (BOT=alle: nacheinander; Liste: BOTS unten)
+if (process.env.D_GENAU === undefined) process.env.D_GENAU = '1';   // 28.10.: Schaden/s ohne Aufrunden (basis/patch.js)
 const fs = require('fs'), path = require('path'), C = require('../core'), B = require('../build'), { G } = C;
 for (const k in G.LOCKS) delete G.LOCKS[k];                       // alles freigeschaltet
 if (!process.env.MIT_WETTER) G.WEATHER.forEach(w => { w.el = {}; delete w.burnDecay; });        // ohne Wetter-Wirkung (MIT_WETTER=1: Wetter wie im Spiel, für Wetter-Messungen)

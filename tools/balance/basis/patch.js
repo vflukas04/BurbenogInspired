@@ -103,4 +103,11 @@ function windMul(s, m){ const W = s.W, f = flying(m), k = f && W.flySpeed ? W.fl
   const sg = s.map.seg.find(g => m.d <= g.start + g.len) || s.map.seg[s.map.seg.length - 1], dx = sg.bx - sg.ax, dy = sg.by - sg.ay, L = Math.hypot(dx, dy) || 1;
   const c = (dx * w.dir[0] + dy * w.dir[1]) / (L * (Math.hypot(w.dir[0], w.dir[1]) || 1)) * (m.back ? -1 : 1), p = f ? w.fly : w.ground;
   return k * (c >= 0 ? 1 + p[0] * c : 1 + p[1] * c); }`]);
+// Zweig D (L 28.10.): (1) D_GENAU=1 (Standard in d/bots.js): Schaden/s ohne Aufrunden auf 0,1 – das Aufrunden verschob T1 je Element um 0,7–4 %.
+// (2) CONFIG.burnArmor: Brennen wird durch Rüstung gemindert (× (1 − burnArmor × Prozent), solange Punkte übrig sind; Fluch senkt die Prozent auch hier).
+//     Vorher ging Brennen ganz durch – dadurch hing Feuer stärker an der Rüstung als die anderen Elemente.
+ERSETZEN.push([`const ceil1 = v => Math.ceil(v * 10 - 1e-6) / 10;`, `const ceil1 = v => typeof process === 'object' && process.env && process.env.D_GENAU === '1' ? v : Math.ceil(v * 10 - 1e-6) / 10;`],
+  [`    if (on('burn')) m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * dt;`,
+   `    if (on('burn')) { const bp = CONFIG.burnArmor && m.ap > 0 ? Math.max(0, Math.min(0.95, armorPctOf(m) + (m.aura || 0)) - (on('curse') ? fx.curse.v : 0)) : 0;
+      m.hp -= fx.burn.v * (1 + (on('curse') ? fx.curse.v : 0) + (on('smolder') ? fx.smolder.v : 0)) * (1 - (CONFIG.burnArmor || 0) * bp) * dt; }`]);
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };

@@ -596,3 +596,25 @@ Mechanik: Standardtürme haben keinen Rüstungsschaden, die Punkte bleiben → f
 
 - Rüstung trägt einen großen Teil des Buckels in Tag 13–36 (ohne Rüstung: Schatten 1,02 statt 1,14, Stein 0,97 statt 1,19).
 - **Hohe Prozent mit dünnen Punkten** am Anfang heben Eis und Stein stark (über 1), Feuer aber noch mehr (Brennen geht durch), Schatten kaum (wenige Fluch-Türme). Dicke Punkte dämpfen Eis/Stein, nicht Feuer.
+
+## Code-Prüfung (28.10., Claude)
+- Keine versteckten Upgrade-Zuwächse mehr: Reichweite, Rate, Geschosse, Fläche, Effekt, Dauer, Chance, Licht, Verstärkung, Rüstung ignorieren sind für alle 32 Türme auf S1–S6 gleich. Kraft je Gold folgt der Kurve 1/0,95/1,01/1,08/1,16/1,25.
+- **Gefunden: Aufrunden des Schadens/s auf 0,1** (`ceil1`) verschob T1 je Element unterschiedlich (Feuer +0,7 %, Standard +3,0 %, Eis +3,9 %, Schatten +4,1 %, Stein +3,7 %) und T1 auf S6 um bis zu +2,3 % gegenüber der Kurve. Behoben: `D_GENAU=1` (Standard in `d/bots.js`) rechnet in Zweig D ohne Aufrunden (`basis/patch.js`). Wirkung auf die Element-Werte ≤ 1 %.
+- Kleinigkeit: Rüstungspunkte werden auf ganze Punkte gerundet (Tag 2: 7 % zu viel), Rest < 5 %.
+- Offen gelassen (bewusst): Stein in D noch nicht wetterfest und ohne Baubonus (`weatherproof`/`terrainFree` aus, kommt mit Wetter und Gelände).
+
+## Rüstungsregeln (28.10., L: entscheide)
+- Zerlegung Feuer Tag 1–12 mit +30 % Rüstung/dünne Punkte: normal 0,98 → 1,24; ohne Brennen 0,84 → 1,06; **ohne Rüstungsschaden 0,96 → 0,99**. Feuer hängt über den Rüstungsschaden an der Rüstung, nicht über das Brennen – relativ steigen Feuer (+27 %) und Eis (+29 %) gleich, Stein stärker (+38 %), Schatten kaum (+3 %).
+- **Entscheidung:** Brennen bleibt rüstungsfrei (Option `CONFIG.burnArmor`/`BRENN_RUEST` bleibt, Standard 0). Schatten ohne Rüstungsschaden: mit 0,2 (`RUEST_EL=0.5,0.6,0.2,1.5`) fällt Schatten auf 0,94 (der Verbund-Kurs aus Stein bepreist es zu teuer), gewinnt bei Rüstung am Anfang aber nur +11 %.
+- Folge: Rüstung je Block ist vor allem ein **Stein-Hebel** (und hebt Feuer/Eis gemeinsam). Den Abstand Eis–Feuer am Anfang schließt sie nicht.
+
+## Weitere Drift-Hebel (28.10.)
+| Experiment (Bodentage, Tag 1–12/13–24/25–36/37–48) | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| Ausgang (D_GENAU) | 0,99/1,01/0,99/1,02 | 0,83/1,03/1,08/1,07 | 0,87/1,00/1,14/1,05 | 0,81/1,03/1,18/1,04 |
+| Stapelanteil weiterer Effekte 0,1 statt 0,2 | 0,98/1,00/0,97/0,99 | 0,81/0,97/1,06/1,03 | 0,86/0,97/1,10/1,01 | – |
+| Stapelanteil 0,35 | 0,99/1,04/1,03/1,05 | 0,88/1,13/1,12/1,20 | 0,88/1,05/1,20/1,11 | – |
+| T1 ohne Effekt | – | 0,86/0,97/1,06/1,06 | 0,95/1,04/1,16/1,05 | – |
+| T1 + T2 ohne Effekt | – | 0,90/1,05/1,09/1,12 | 0,95/1,04/1,16/1,06 | – |
+- Stapelanteil: Drift positiv (hinten stärker), für Feuer schwach (+6 % Steigung von 0,1 auf 0,35), für Eis/Schatten stark. Heute ein Wert für alle drei Effekte; je Effekt getrennt wäre ein sauberer Drift-Hebel.
+- Frühe Turmtypen ohne Unterstützungs-Effekt (reiner Schaden) heben den Anfang um 3–8 %.
