@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-28a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-28b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2485,7 +2485,7 @@ function drawEnvoys(c, i, cs, k, top, T, wls){
       if (q.hide) { if (q.pop >= 0 && q.pop < .6) { c.font = `700 ${cs*.17}px sans-serif`; c.textAlign = 'center'; c.fillStyle = `rgba(255,214,90,${1 - q.pop/.6})`; c.strokeStyle = `rgba(60,40,0,${1 - q.pop/.6})`; c.lineWidth = 2; const ty = fy - cs*.25 - q.pop*cs*.4; c.strokeText('+1', fx, ty); c.fillText('+1', fx, ty); } continue; }
       const el = wls[q.lane].el, fr = Math.floor(T * (q.car ? 7 : 4) + e) % 2, im = dorfImg((q.car ? 'gespann-' : 'gesandter-') + VIL_KEY[el] + '-' + fr); if (!im) continue;
       const sc = q.car ? cs * .5 / 304 : cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc, foot = q.car ? 120 : 152, bob = q.trade ? 0 : Math.abs(Math.sin(T * (q.car ? 14 : 9) + e)) * cs * (q.car ? .006 : .015);
-      c.save(); if (el === 2) { c.shadowColor = 'rgba(240,232,255,.95)'; c.shadowBlur = cs*.05; } c.translate(fx, fy - bob); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -foot*sc, ww, hh); c.restore();
+      c.save(); if (el === 2 || el === 1) { c.shadowColor = el === 2 ? 'rgba(240,232,255,.95)' : 'rgba(20,40,90,.95)'; c.shadowBlur = cs*.06; } c.translate(fx, fy - bob); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -foot*sc, ww, hh); c.restore();
       if (q.coin || q.trade) { const cy = fy - (q.car ? cs*.3 : cs*.33) - bob; c.fillStyle = '#ffd35a'; c.strokeStyle = '#8a6a10'; c.lineWidth = Math.max(1, cs*.012); c.beginPath(); c.arc(fx, cy - (q.trade ? Math.sin(q.k*6.28)*cs*.02 : 0), cs*.04, 0, Math.PI*2); c.fill(); c.stroke(); c.fillStyle = '#8a6a10'; c.font = `700 ${cs*.06}px sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('1', fx, cy + 1); c.textBaseline = 'alphabetic'; } } }
 }
 function workerTick(){
@@ -2501,7 +2501,7 @@ function workerTick(){
     drawEnvoys(c, i, cs, k, top, T, wls);
     for (const w of wl.act.slice().sort((a, b) => a.y - b.y)) { const q = workerPoint(w, wl.vc, T); const im = workerImg(wl.el, w.job, q.work ? Math.floor(T*2.5 + w.n) % 2 : Math.floor(T*5 + w.n) % 2); if (!im) continue;
       const sc = cs * .25 / 135, ww = im.naturalWidth * sc, hh = im.naturalHeight * sc, bob = q.work || q.rest ? 0 : Math.abs(Math.sin(T*9 + w.n)) * cs*.015, fx = q.x*cs, fy = top + q.y*cs*k - bob;
-      c.save(); if (wl.el === 2) { c.shadowColor = 'rgba(240,232,255,.95)'; c.shadowBlur = cs*.05; } c.translate(fx, fy); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -152*sc, ww, hh); c.restore(); } }
+      c.save(); if (wl.el === 2 || wl.el === 1) { c.shadowColor = wl.el === 2 ? 'rgba(240,232,255,.95)' : 'rgba(20,40,90,.95)'; c.shadowBlur = cs*.05; } c.translate(fx, fy); if (q.flip) c.scale(-1, 1); c.drawImage(im, -ww/2, -152*sc, ww, hh); c.restore(); } }
 }
 setInterval(workerTick, 100);
 function drawVillage(c, i, cs, wl, gyf){   // Dorf als Bild, steht auf einem Feld in der Ecke

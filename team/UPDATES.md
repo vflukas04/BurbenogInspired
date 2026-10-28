@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 28.10. 09:10 · F · 2026-10-28b – Eis: Arbeiter und Gesandte mit dunklem Rand
+Im weißen Eis-Biom waren sie kaum zu sehen; jetzt dunkler Schimmer um die Figuren. Nur Anzeige, neu laden.
+
 ### 28.10. 09:20 · F · 2026-10-28a – Gesandte wandern über den Monsterweg zur Nachbar-Burg
 Die Gesandten laufen jetzt wie die Monster: Dorf → Monsterweg → Ausgang rechts → Eingang links der nächsten Map → Burg des Nachbarn, handeln, dann zurück (ab Tag 28 mit Gespann, schneller). Läuft durchgehend, nicht nur zu Wellenzeiten. Nur Anzeige, neu laden.
 
