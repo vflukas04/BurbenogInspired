@@ -636,3 +636,18 @@ Werkzeug: `d/exp-form.sh <Varianten>` (Name|d2-Umgebung|elemente6-Umgebung, alle
 - **I absolut** (Bodentage): Feuer 1,05 (1,03/1,04/1,06/1,05) · Eis 1,04 (1,01/1,04/1,03/1,07) · Schatten 1,02 (1,03/1,02/1,01/1,01) · Stein 1,05 (1,05/1,03/1,07/1,04). Die Drift ist im festen Aufbau praktisch weg; die Niveaus (1,02–1,05) stellen die Kurse ein.
 - Stärkste Hebel: **Rüstung je Block** (gemeinsame Drift und Stein), **frühe Turmtypen ohne Effekt** (Eis, Schatten), **Feuer-Wetter je Block**, **ein Nacht-Tausch** (je Tausch ≈ ±8 % in den beiden Blöcken für Schatten; zwei Tausche schießen über). Stapelanteil je Effekt wirkt schwach.
 - Offen: echtes Wetter statt `KRAFT_BLOCK` (Feuer im Mittel −6 % in Block 1, +6 % in Block 3), Prüfung im freien Bau, Kurse neu einstellen, Leben neu kalibrieren (Rüstung geändert), Entscheidungen L (Nacht-Tausch, frühe Türme ohne Effekt).
+
+### Ohne frühe Türme ohne Effekt und ohne halbe Rüstung (L 28.10. 10:46: Bremsen früh bleibt; Rüstung hinten möglichst unverändert)
+Alle mit Stapel 0,35/0,15/0,1, Feuer-Wetter 0,94/1/1,06/1, Nacht-Tausch Füchse ↔ Krieger:
+
+| Variante | Form-Rest | gemeinsam | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|---|---|
+| J Block 1 +15 %/+0,15 | 2,9 % | 0,92/1,00/1,07/1,02 | +4/0/−2/−1 | −4/+1/0/+3 | +4/−1/−3/0 | −4/0/+6/−2 |
+| K Block 1 +30 %/+0,3 | 2,3 % | 0,96/0,98/1,06/1,01 | +2/+1/−2/−1 | −4/+1/0/+3 | 0/0/−2/+2 | +2/−2/+4/−4 |
+| L wie J, Block 3 ×0,75 | 2,5 % | 0,92/1,00/1,05/1,03 | +4/0/−2/−2 | −4/+1/0/+3 | +4/−1/−3/0 | −4/0/+5/−1 |
+| M wie J, Block 4 +10 %/+0,1 | 2,7 % | 0,91/0,98/1,06/1,06 | +4/0/−3/−1 | −3/+1/0/+2 | +5/−1/−3/−1 | −5/−1/+5/0 |
+| **N** = K + Eis-Wetter 1,04/1/1/0,97 | **1,8 %** | 0,97/0,98/1,06/1,00 | +1/+1/−2/0 | −1/+1/0/+1 | −1/0/−2/+2 | +1/−2/+4/−3 |
+
+- Mehr Rüstung hinten (M) hebt **alle** Elemente hinten (gemeinsam 1,02 → 1,06), flacht Eis/Stein nicht ab: Elemente mit Rüstungsschaden gewinnen gegenüber dem Standardturm, je mehr Rüstung.
+- **N** absolut: Feuer 1,05 (1,03/1,04/1,09/1,05) · Eis 1,01 (0,97/1,00/1,07/1,02) · Schatten 0,99 (0,95/0,97/1,02/1,01) · Stein 1,07 (1,05/1,03/1,18/1,04). Die gemeinsame Delle (Block 3 +6 %) tragen die Leben ab.
+- Wetter-Mittel je Block damit: Feuer −6/0/+6/0 %, Eis +4/0/0/−3 % (Winter → Sommer → Herbst).
