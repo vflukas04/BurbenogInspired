@@ -42,6 +42,10 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 28.10. 02:00 · L · Zweig D6T – echte Türme aus Wechselkursen, Elemente an Bodentagen ±8 % (nur Balancing-Werkzeuge)
+- Fehler behoben: Effekt und Dauer wuchsen je Stufe mit, Nova-Kurs hing nicht am Radius. Kurse mit Platzwahl, Verbund-Kurse für Bremsen/Rüstungsschaden, Brennen/Fluch nachgezogen. Nachtaktive im Test neu verteilt (L). Spielcode unverändert.
+- Freier Bau an Bodentagen: Feuer 1,04 · Eis 1,08 · Schatten 1,02 · Stein 1,00. Offen: Fliegertage, Drift am Anfang (≈ 0,85), Irrlicht zu stark, Wetter bis ±28 %. Details `team/ZWEIG-D.md`.
+
 
 ### 27.10. 23:05 · F · 2026-10-27x – Arbeiter arbeiten fast durchgehend
 Holzhacken, Steinbau, Angeln dauern jetzt 30–50 s am Stück, nur noch selten ein kurzer Gang zum Dorf (vorher 7–9 s Arbeit, dann Rückweg). Nur Anzeige, neu laden.
@@ -55,26 +59,3 @@ Ab Tag 12 laufen kleine Gesandte auf den Wegen zum ersten Turm, von dort zur Bur
 ### 28.10. 22:45 · F · 2026-10-27u – Arbeiter laufen um die Biome
 - Arbeiter betreten keine Biomfelder (See, Wald, Fels) mehr und laufen auf freien Feldern um sie herum. Gibt es für ein Feld keinen freien Weg (ringsum Gelände), arbeitet der Arbeiter nur an seinem Platz. Nur Anzeige. Neu laden genügt.
 
-### 28.10. 22:30 · F · 2026-10-27t – Arbeiter laufen und arbeiten dauerhaft
-- Die Arbeiter sind jetzt animiert und laufen ständig, auch in Bau-Pausen und während der Wiedergabe: Sie arbeiten ein paar Sekunden am Gelände (Hacken/Hauen/Angeln, 2 Bilder im Wechsel), laufen auf einem Weg um die Biome zum Dorf, rasten kurz und gehen wieder hinaus. Eigene Ebene über dem Feld (10 Bilder/s, nur sichtbar und aktiv bei geöffneter Seite), nur Anzeige. Neu laden genügt.
-### 27.10. 18:00 · L · Zweig D6 – Standardtürme ohne Reichweiten-Zuwachs, Treppe ×1,08, Leben kalibriert (nur Balancing-Werkzeuge)
-- Standardtürme: Reichweite 3,5 auf allen Stufen, Upgrades ändern nur Schaden je Gold (Kurve 1/0,95/1,01/1,08/1,16/1,25). Bezugs-Bot spart bis 3 Tage. Mensch-Bots 92–98 % des Bezugs, Upgrade-Anteil ≈ 50 %, T7/T8 werden gebaut. Spielcode unverändert.
-
-### 27.10. 13:00 · L · Zweig D4 – Leben auf Bezugs-Bot kalibriert (nur Balancing-Werkzeuge)
-- Treppe ×1,12 je Turmtyp, Upgrade-Kurve 1/0,92/1/1,08/1,16/1,25, Bezugs-Bot mit Vorausschau (≤ 4 × T1, sonst ≤ 3 je Turmtyp). Mensch-Bots 0,91–0,96 des Ziels. Neue Begriffe: **Turmtyp** (T1–T8), **Stufe** (S1–S6). Spielcode unverändert.
-
-### 27.10. 12:00 · L · Zweig D3 – Bot-Vergleich Standardtürme (nur Balancing-Werkzeuge)
-- Preise in D gerafft (10/45/70/120/200/340/580/1000), Stein in D 2 (schwach)/4/6/8 mit T3 Felsbrocken, T4 Katapult. Spielcode unverändert.
-- 15 Bots mit festem Gold (90 % des Kopfgelds, alles frei, ohne Forschung): Am stärksten sind Aufbauten mit 80–94 % Upgrades; Mensch-Bots erreichen 82–90 % des besten. Tabelle in `team/ZWEIG-D.md` (D3).
-
-
-### 27.10. 01:30 · F · 2026-10-27s – Arbeiter, Biom-Abbau, Wege wachsen Stück für Stück
-- Arbeiter sind jetzt im Spiel (nur Anzeige): ab Tag 2 alle 2 Tage ein neuer (Holzfäller am Wald, Bergarbeiter am Felsen, Angler am See), nächstgelegene Felder zuerst, je 8 Tage Arbeit. Wald verliert Bäume (Stümpfe, am Ende Holzstapel), Felsen schrumpfen zu Geröll, Angler graben Kanäle zum nächsten See. Arbeiter ≈ ¼ Feld hoch; Geländebonus bleibt unverändert, auch wenn das Feld abgebaut ist. Bilder `assets/dorf/arbeiter-*`.
-- Dorfwege wachsen Stück für Stück: Weg Nr. q ist am Tag 4 + q/0,6 am Turm fertig und wächst 3 Tage lang. Neu laden genügt.
-
-### 27.10. 00:55 · F · 2026-10-27r – Baumleichen ohne Glut
-- Die verbrannten Bäume im Feuer-Boden haben keine Glutpunkte mehr (war zu unübersichtlich). Nur Anzeige. Neu laden genügt.
-
-### 27.10. 00:40 · F · 2026-10-27q – Dorffeld gesperrt, Feuer-/Stein-Bäume, schwarze Wüste
-- Auf dem Dorffeld gibt es kein Gelände mehr und man kann dort keinen Turm bauen (bestehende Türme bleiben). Das ändert genau ein Feld je Map gegenüber früher gewürfeltem Gelände (Karte unten rechts bzw. oben links, siehe `villageCell`): für laufende Spiele „Neues Spiel + neu laden" empfohlen.
-- Im umgewandelten Boden: Wälder werden bei Feuer zu verbrannten Baumleichen mit Glut, bei Stein zu Kakteen. Schatten-Boden ist jetzt eine schwarze Wüste (Dünen, dunkle Steinchen) statt Violett. Nur Anzeige.
