@@ -904,6 +904,11 @@
   "MONSTERS.Eifersüchtige Geliebte.night": true,
   "MONSTERS.Würfel.night": true,
   "MONSTERS.E-Scooter-Fahrer.night": true,
+  "CONFIG.stackRest": {
+    "burn": 0.2,
+    "slow": 0.2,
+    "curse": 0.2
+  },
   "CONFIG.burnArmor": 0,
   "ELEMENTS.3.splashCenter": 1,
   "ELEMENTS.3.splashEdge": 0.7

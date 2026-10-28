@@ -32,18 +32,18 @@ const ERSETZEN = [
       if (c.L) { for (const i in c.L) { c.L[i][1] -= dec; if (c.L[i][1] <= 0) delete c.L[i]; } c.v = burnSum(c); c.t = Math.max(0, ...Object.values(c.L).map(x => x[1])); } }`],
   [`keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 };`,
    `{ keep[k] = { v:+fx[k].v.toFixed(3), t:Math.round(fx[k].t * 10) / 10 }; if (fx[k].t2 > 0) { keep[k].v2 = +fx[k].v2.toFixed(3); keep[k].t2 = Math.round(fx[k].t2 * 10) / 10; }
-        if (fx[k].L) { keep[k].L = {}; for (const [i, e] of Object.entries(fx[k].L)) if (e[1] > 0) keep[k].L['x' + i] = [+e[0].toFixed(3), Math.round(e[1] * 10) / 10]; } }`],
+        if (fx[k].kind) keep[k].kind = fx[k].kind; if (fx[k].L) { keep[k].L = {}; for (const [i, e] of Object.entries(fx[k].L)) if (e[1] > 0) keep[k].L['x' + i] = [+e[0].toFixed(3), Math.round(e[1] * 10) / 10]; } }`],
   [`function hit(s, m, def, dmg){`,
    `// 21.10. (L, Spiegel): teilweise stapelndes Brennen
 // 23.10. (L, ab C8): stärkster Brand voll, jeder weitere 20 %, höchstens die 6 stärksten (×2,0). Bis C7: 1/0,5/0,25/0,1, Rest 0,05, höchstens 10
 // (alt nachstellen: BURN_W=1,0.5,0.25,0.1 BURN_REST=0.05 BURN_MAX=10)
 const BURN_W = ${process.env.BURN_W ? JSON.stringify(process.env.BURN_W.split(',').map(Number)) : '[1]'}, BURN_REST = ${process.env.BURN_REST || 0.2}, BURN_MAX = ${process.env.BURN_MAX || 6}; let BURN_ID = 0;
-function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : BURN_REST)); return c.cap ? Math.min(c.cap, v) : v; }
+function burnSum(c){ const a = Object.values(c.L).filter(x => x[1] > 0).map(x => x[0]).sort((p, q) => q - p); let v = 0; const R = c.kind && CONFIG.stackRest && CONFIG.stackRest[c.kind] !== undefined ? CONFIG.stackRest[c.kind] : BURN_REST; a.forEach((x, i) => v += x * (i < BURN_W.length ? BURN_W[i] : R));   /* 28.10.: Anteil je Effekt (CONFIG.stackRest) */ return c.cap ? Math.min(c.cap, v) : v; }
 // Zweig D (L, 24.10.): dieselbe Stapelregel für Bremsen und Fluch (STAPEL_ALLE=1), mit Deckel wie im Spiel (Bremsen 0,85, Fluch 1,5)
 function addStack(m, kind, id, val, t, w, cap){
   if (!(val > 0) || !(t > 0)) return;
   let c = m.fx[kind];
-  if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx[kind] = { v:0, t:0, L:{}, cap }; if (alt) c.L.alt = alt; }
+  if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx[kind] = { v:0, t:0, L:{}, cap, kind }; if (alt) c.L.alt = alt; }
   if (w) c.w = true;
   const e = c.L[id]; c.L[id] = e ? [Math.max(e[0], val), Math.max(e[1], t)] : [val, t];
   const ks = Object.keys(c.L); if (ks.length > BURN_MAX) ks.sort((p, q) => c.L[q][0] - c.L[p][0] || c.L[q][1] - c.L[p][1]).slice(BURN_MAX).forEach(k => delete c.L[k]);
@@ -52,7 +52,7 @@ function addStack(m, kind, id, val, t, w, cap){
 function addBurn(m, id, val, t, w){
   if (!(val > 0) || !(t > 0)) return;
   let c = m.fx.burn;
-  if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx.burn = { v:0, t:0, L:{} }; if (alt) c.L.alt = alt; }
+  if (!c || c.t <= 0 || !c.L) { const alt = c && c.t > 0 ? [c.v, c.t] : null; c = m.fx.burn = { v:0, t:0, L:{}, kind:'burn' }; if (alt) c.L.alt = alt; }
   if (w) c.w = true;
   const e = c.L[id]; c.L[id] = e ? [Math.max(e[0], val), Math.max(e[1], t)] : [val, t];
   const ks = Object.keys(c.L); if (ks.length > BURN_MAX) ks.sort((a, b) => c.L[b][0] - c.L[a][0] || c.L[b][1] - c.L[a][1]).slice(BURN_MAX).forEach(k => delete c.L[k]);   // nur die stärksten behalten

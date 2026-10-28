@@ -618,3 +618,21 @@ Mechanik: Standardtürme haben keinen Rüstungsschaden, die Punkte bleiben → f
 | T1 + T2 ohne Effekt | – | 0,90/1,05/1,09/1,12 | 0,95/1,04/1,16/1,06 | – |
 - Stapelanteil: Drift positiv (hinten stärker), für Feuer schwach (+6 % Steigung von 0,1 auf 0,35), für Eis/Schatten stark. Heute ein Wert für alle drei Effekte; je Effekt getrennt wäre ein sauberer Drift-Hebel.
 - Frühe Turmtypen ohne Unterstützungs-Effekt (reiner Schaden) heben den Anfang um 3–8 %.
+
+## Drift-Form angleichen (28.10. vormittags, L: erst Form gleich, dann gemeinsame Drift über die Leben)
+Werkzeug: `d/exp-form.sh <Varianten>` (Name|d2-Umgebung|elemente6-Umgebung, alle 4 Elemente mit Platzwahl) und `d/form.py <log>`: **Form-Rest** = Abweichung je Element und Block, nachdem Niveau je Element und gemeinsame Drift herausgerechnet sind (das, was die Leben nicht abtragen können). Neue Schalter: `STAPEL_EL=Brennen,Bremsen,Fluch` (d2, `CONFIG.stackRest`), `RUEST_BLOCK='p,q,k;…'` und `KRAFT_BLOCK='e:f1,…'` und `NACHT='Tag:0/1,…'` (elemente6).
+
+| Variante (kumulativ) | Form-Rest | gemeinsam (Block 1–4) | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|---|---|
+| A heute | 5,2 % | 0,87/1,01/1,09/1,04 | +14/−1/−9/−2 | −4/+2/−1/+3 | −1/−2/+3/0 | −7/+1/+8/−1 |
+| B Rüstung: Block 1 +30 %/+0,3 Punkte, Block 3 ×0,5 | 4,6 % | 0,97/0,99/1,02/1,02 | +10/0/−7/−2 | −5/+2/+1/+3 | −8/0/+7/+2 | +4/−1/0/−3 |
+| C + Stapelanteil Brennen 0,35, Bremsen/Fluch 0,15 | 4,1 % | 0,97/0,99/1,02/1,02 | +9/0/−7/−2 | −4/+1/+1/+3 | −8/0/+6/+2 | +4/−1/0/−3 |
+| D + Eis T1/T2 und Schatten T1 ohne Effekt | 3,2 % | 0,99/0,99/1,01/1,01 | +6/0/−5/0 | −1/+1/−2/+2 | −6/0/+7/−1 | +1/−1/+1/−1 |
+| E + Feuer-Wetter im Mittel Block 1 −4 %, Block 3 +4 % | 2,5 % | 0,98/0,99/1,02/1,01 | +3/0/−3/0 | −1/+1/−3/+3 | −5/0/+5/−1 | +2/−1/0/−1 |
+| F + Fluch-Stapel 0,1 | 2,2 % | 0,98/0,99/1,02/1,00 | +3/0/−3/0 | −1/+1/−3/+3 | −4/+1/+5/−1 | +2/−1/0/−1 |
+| H wie F, Feuer-Wetter −6 %/+6 % | 2,2 % | 0,97/1,00/1,03/1,01 | +1/0/−1/0 | 0/+1/−3/+2 | −4/0/+5/−1 | +3/−1/0/−1 |
+| **I** = H + Füchse (Tag 11) tagaktiv, Krieger (Tag 31) nachtaktiv | **1,3 %** | **0,99/1,00/1,01/1,01** | −1/0/+1/0 | −2/+1/−1/+3 | +2/+1/−1/−1 | +1/−1/+2/−1 |
+
+- **I absolut** (Bodentage): Feuer 1,05 (1,03/1,04/1,06/1,05) · Eis 1,04 (1,01/1,04/1,03/1,07) · Schatten 1,02 (1,03/1,02/1,01/1,01) · Stein 1,05 (1,05/1,03/1,07/1,04). Die Drift ist im festen Aufbau praktisch weg; die Niveaus (1,02–1,05) stellen die Kurse ein.
+- Stärkste Hebel: **Rüstung je Block** (gemeinsame Drift und Stein), **frühe Turmtypen ohne Effekt** (Eis, Schatten), **Feuer-Wetter je Block**, **ein Nacht-Tausch** (je Tausch ≈ ±8 % in den beiden Blöcken für Schatten; zwei Tausche schießen über). Stapelanteil je Effekt wirkt schwach.
+- Offen: echtes Wetter statt `KRAFT_BLOCK` (Feuer im Mittel −6 % in Block 1, +6 % in Block 3), Prüfung im freien Bau, Kurse neu einstellen, Leben neu kalibrieren (Rüstung geändert), Entscheidungen L (Nacht-Tausch, frühe Türme ohne Effekt).
