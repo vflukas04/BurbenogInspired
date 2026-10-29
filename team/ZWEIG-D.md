@@ -738,3 +738,9 @@ Heute: Spatzen 1,5 · Habichte 1,8 · Uffug-Vorhaut 1,0 · Phönixe 1,4 · Loopi
 - Neu: Luftspezialist Fliegende 140 % (Boden 60 %); **Irrlicht** als echter Lichtturm (Licht 2 Felder, Schatten ×1,10 → ×1,20 auf S1–S6, keine Rüstung ignorieren, Preis 30).
 - Frei: **Eis 1,05** (1,06/1,00/1,04/1,08), Fliegertage 1,43 (vorher 2,00) · **Schatten 1,04** (**0,87**/0,97/1,15/**1,22**), Fliegertage 1,86 (vorher 2,40). Feuer 1,04 / Stein 1,11 (Fliegertage 0,84 / 0,31) aus den letzten Läufen.
 - Das Irrlicht bringt die Drift bei Schatten zurück: Die Verstärkung wirkt auf alle Schatten-Türme im Lichtkreis und wächst mit ihrer Zahl. Am Anfang fehlt dafür der frühe Fluch des alten T2.
+
+## Irrlicht kleiner, Luftspezialist 80/120, Fliegertage (29.10. mittags, L)
+- Luftspezialisten Boden 80 %, Fliegende 120 % (L). Der Bot baute die Nachtaugen bewusst (Vorausschau auf die Fliegertage), nicht aus dem festen Aufbau.
+- Irrlicht: Verstärkung steigt mit den Upgrades, aber kleiner (×1,05 auf S1 bis ×1,15 auf S6); Fluch-Stapel 0,05 statt 0,10 als Gegengewicht.
+- Frei: **Eis 1,04** (1,06/1,01/1,04/1,06), Fliegertage 1,02 · **Schatten 1,00** (0,93/0,95/1,07/1,08), Fliegertage 1,11. Feuer 1,04 (Fliegertage 0,84), Stein 1,11 (0,31) aus den letzten Läufen.
+- **Leben an Fliegertagen** mit dem geometrischen Mittel der vier Elemente (freier Bau) skaliert: Spatzen ×0,74, Habichte ×0,65, Uffug-Vorhaut ×0,66, Phönixe ×0,61, El Schlucko ×0,82, Looping-Louie ×0,80, Fledermäuse ×0,67, Nazgul ×1,05. Damit liegt ein durchschnittliches Element an Fliegertagen bei 1,00; die Verhältnisse zwischen den Elementen bleiben (Feuer 1,13 · Eis 1,38 · Schatten 1,50 · Stein 0,42, grob umgerechnet).
