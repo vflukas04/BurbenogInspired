@@ -846,16 +846,15 @@
     1,
     1,
     1,
-    1,
+    0,
     1,
     0.5,
     {
-      "effect": "stun",
-      "fly": true,
-      "chance": 0.15
+      "effect": "none",
+      "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.5": 0.87575,
+  "ELEMENTS.3.kraftT.5": 1.25056,
   "ELEMENTS.3.towers.6": [
     "Lawine",
     "Schaden",
@@ -863,16 +862,15 @@
     0.4,
     1,
     1,
-    1,
+    0,
     1,
     1,
     {
-      "effect": "stun",
-      "fly": false,
-      "chance": 0.2
+      "effect": "none",
+      "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.6": 0.63478,
+  "ELEMENTS.3.kraftT.6": 0.69826,
   "ELEMENTS.3.towers.7": [
     "Bergkönig",
     "Schaden",
@@ -886,10 +884,10 @@
     {
       "effect": "stun",
       "fly": true,
-      "chance": 0.25
+      "chance": 0.35
     }
   ],
-  "ELEMENTS.3.kraftT.7": 0.7158,
+  "ELEMENTS.3.kraftT.7": 0.65854,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,
