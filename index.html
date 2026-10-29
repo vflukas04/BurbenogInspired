@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-29b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-29c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2512,8 +2512,8 @@ function drawVillage(c, i, cs, wl, gyf){   // Dorf als Bild, steht auf einem Fel
   const sc = cs * 1.3 / 216, w = im.naturalWidth * sc, h = im.naturalHeight * sc, bx = Math.max(w/2, Math.min(COLS*cs - w/2, (wl.vc.x + .5)*cs)), by = gyf(wl.vc.y + .86);
   c.drawImage(im, bx - w/2, by - 198*sc, w, h);   // Fußpunkt des Bildes liegt 198 px (66 Einheiten) unter dem oberen Rand
 }
-// ---- Entwurf „glatt“ (29.10., F): kein Schachbrett mehr sichtbar; das Raster gilt weiter nur für die Türme. Test: Adresse + ?glatt=1 ----
-const GLATT = /[?&]glatt/.test(location.search);
+// ---- „glatt“ (29.10., F): kein Schachbrett mehr sichtbar; das Raster gilt weiter nur für die Türme ----
+const GLATT = !/[?&]kariert/.test(location.search);   // seit 29.10. Standard; ?kariert=1 zeigt noch das alte Schachbrett
 function glattRoadPath(map, cs){ const p = new Path2D(); map.wp.forEach(([x, y], j) => j ? p.lineTo(x*cs, y*cs) : p.moveTo(x*cs, y*cs)); return p; }
 function glattRoad(g, map, cs, v){   // ein durchgehender Pfad statt Kästchen: dunkler Rand, helle Mitte, Kiesel
   const p = glattRoadPath(map, cs), u = cs / 40; g.save(); g.lineJoin = 'round'; g.lineCap = 'butt';
@@ -2584,6 +2584,9 @@ function draw(i, cv){
     if (tw) { const td = tdef(tw, i), r = td.buff ? td.light : td.range;
       c.beginPath(); c.arc((tw.x+.5)*cs, (tw.y+.5)*cs, r*cs, 0, Math.PI*2); c.setLineDash([4,4]); c.stroke(); c.setLineDash([]); }
   }
+  if (GLATT && selTower !== null && mayBuild(i) && !(pending && pending.i === i)) {   // Bauplätze als dezente Punkte, solange ein Turm zum Bauen gewählt ist
+    const vcc = villageCell(map, i), occ = new Set(towers.map(t => t.x + ',' + t.y)); c.fillStyle = 'rgba(255,255,255,.42)';
+    for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y) || occ.has(x+','+y) || (x === vcc.x && y === vcc.y)) continue; c.beginPath(); c.arc((x+.5)*cs, (y+.5)*cs, cs*.065, 0, Math.PI*2); c.fill(); } }
   if (pending && pending.i === i) { const d = tdef({ el:laneOf(i).el, idx:pending.k, lvl:1, x:pending.x, y:pending.y }, i);
     if (!view25) { c.globalAlpha = .55; drawTower(c, { el:laneOf(i).el, idx:pending.k, lvl:1 }, pending.x*cs, pending.y*cs, cs, -Math.PI/2, 0); c.globalAlpha = 1; }
     c.strokeStyle = v('--accent'); c.lineWidth = 1.5; c.setLineDash([4,4]); c.beginPath(); c.arc((pending.x+.5)*cs, (pending.y+.5)*cs, (d.buff ? d.light : d.range)*cs, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
