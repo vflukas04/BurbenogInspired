@@ -732,3 +732,9 @@ Heute: Spatzen 1,5 · Habichte 1,8 · Uffug-Vorhaut 1,0 · Phönixe 1,4 · Loopi
 - **Runde 3 frei** (Nova ×1,2, Bremsen 10,77; Feuer/Schatten aus Runde 2): Feuer 1,04 (1,00/1,02/1,08/1,07) · Eis **1,03** (1,05/1,00/1,03/1,03) · Schatten **0,92** (0,92/0,88/0,89/1,01) · Stein **1,11** (1,17/1,12/1,11/1,04). Fliegertage 0,84 / 2,00 / 2,40 / 0,31 (geometrisches Mittel 1,06 → Leben an Fliegertagen passen im Mittel).
 - Ziele (L): Stein 1,08–1,10, Feuer ≈ 1,02, Eis ≈ 0,98, Schatten ≈ 0,96. Abweichung jetzt +1…+5 %, Schatten −4 %. Der freie Bau streut je Lauf etwa ±3–5 % (2 Maps); feiner einstellen lohnt erst mit mehr Maps (doppelte Laufzeit).
 - Offen (L): Luftspezialisten 180 % (Schatten an Fliegertagen 2,4, Eis 2,0) senken? Schatten Tag 13–36 schwach (0,88/0,89).
+
+## Luftspezialist 140 % und echtes Irrlicht (29.10. morgens, L)
+- Diagnose Schatten frei (Runde 2, `elemente6.js PLAN=<freier Plan> ABL=…`): ohne Nachtregel +14/+14/+27/+24 %, ohne Fluch −9/−16/−18/−18 % – keins von beiden erklärt die Delle Tag 13–36; der Bot baute ab Tag 13 drei Nachtaugen (Luftspezialist, Boden 60 %).
+- Neu: Luftspezialist Fliegende 140 % (Boden 60 %); **Irrlicht** als echter Lichtturm (Licht 2 Felder, Schatten ×1,10 → ×1,20 auf S1–S6, keine Rüstung ignorieren, Preis 30).
+- Frei: **Eis 1,05** (1,06/1,00/1,04/1,08), Fliegertage 1,43 (vorher 2,00) · **Schatten 1,04** (**0,87**/0,97/1,15/**1,22**), Fliegertage 1,86 (vorher 2,40). Feuer 1,04 / Stein 1,11 (Fliegertage 0,84 / 0,31) aus den letzten Läufen.
+- Das Irrlicht bringt die Drift bei Schatten zurück: Die Verstärkung wirkt auf alle Schatten-Türme im Lichtkreis und wächst mit ihrer Zahl. Am Anfang fehlt dafür der frühe Fluch des alten T2.
