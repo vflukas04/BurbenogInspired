@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 29.10. 18:25 · F · 2026-10-29a – Kreativ: Spielerwahl
+Im Kreativ-Modus gibt es oben wieder die Knöpfe „Spieler 1–4“ zum Wechseln (Antippen eines Feldes wechselt weiter auch). Neu laden.
+
 ### 28.10. 15:00 · F · 2026-10-28c – Gesandte nehmen den kürzesten Weg
 Sie verlassen das Dorf dort Richtung Monsterweg, wo Weg + Reststrecke auf der Straße am kürzesten ist (Hinweg Richtung Ausgang, Rückweg ab Eingang getrennt gewählt). Nur Anzeige, neu laden.
 
