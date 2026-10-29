@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
 const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || (process.env.D7 !== '0' ? 'spiegel-D7.json' : 'spiegel-D6.json')))), sp = { ...D0 };
 // D7-Niveaus (28.10., d/fit1.js mit Platzwahl, mit Wetter-Mitteln in kraftBlock): Rüstungsschaden 3,6 (Stein 1,00), Bremsen 10,77, Brennen ×0,834 (Feuer/Eis fest 0,97), Fluch ×1,29
-if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '10.77'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.17'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '23.1'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.303'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
 
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
@@ -45,7 +45,7 @@ const V_D1 = {
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 // SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
 // Verbund-/Element-Kurse (28.10. nachts, mit Platzwahl, d/verbund.js und d/fit1.js): Brennen ×0,59, Fluch ×1,29 auf (Wert − 1); RUEST_K 2,97, SLOW_K 9,47 (Standard unten)
-const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:0.932,fluch:1.29,nacht:0.683' : 'brennen:0.59,fluch:1.29');
+const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:1.08,fluch:1.29,nacht:0.687' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
 const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)

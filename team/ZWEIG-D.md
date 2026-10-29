@@ -719,3 +719,10 @@ Heute: Spatzen 1,5 · Habichte 1,8 · Uffug-Vorhaut 1,0 · Phönixe 1,4 · Loopi
 
 - Langsamere Fliegende helfen Stein am meisten (+25 %, Würfe treffen), Feuer +8 %, Schatten +5 %, Eis +3 % – jeweils gegenüber dem Standardturm, der ebenfalls profitiert. Die Leben je Tag gleicht die Kalibrierung danach wieder aus.
 - Gepanzerte Fliegende helfen den Elementen mit Rüstungsschaden etwas (Stein +6 %, Feuer/Eis +3 %), Schatten kaum.
+
+## D7 mit Fliegenden neu (29.10. nachts)
+- **Fehler gefunden (Claude):** `flyMul` (Luftspezialist Fliegende 180 %, Schleuder 50 %) stand in den Turmwerten, wurde aber in `hit` nie angewandt. Behoben in `basis/patch.js`. Folge: Eis und Schatten an Fliegertagen deutlich stärker, Stein-Schleuder schwächer.
+- Neu: Looping-Louie-Tiefflug (`lowFly`, ⅓ des Wegs tief), Fliegende mit Tempo und Rüstung wie oben, Spatzen ohne Rüstung, Stapel Bremsen 0,05.
+- Runde 1 (fest: Stein 1,03 über „keine Fliegenden“ ×1,17, Feuer 0,96, Schatten 0,96 über Nacht ×0,683, Eis 0,945; Leben neu kalibriert, Standard-Bot 0,99–1,00): **frei** Feuer 1,04 (1,03/1,06/0,97/1,08) · Eis 1,05 (1,05/1,02/1,03/1,12) · Schatten 0,94 (0,97/0,88/0,89/1,00) · Stein 1,01 (1,02/0,99/1,04/0,99). **Fliegertage** 0,90 / **1,80** / **2,05** / 0,36.
+- Abstand fest → frei streut je Element: Feuer +8 %, Eis +10 %, Schatten −2 %, Stein −2 % (mit Baubonus!). Runde 2 mit verschobenen festen Zielen (Stein 1,11 → „keine Fliegenden“ ×1,30; Feuer 0,94 → Brennen ×1,08; Schatten 0,98 → Nacht ×0,687; Eis 0,89 → Bremsen 23,1).
+- Fliegertage nach dem Fehler-Fix: Spanne Schatten 2,05 bis Stein 0,36. Das Mittel der vier liegt bei 1,05 (Leben an Fliegertagen müssen dafür kaum angepasst werden). **Entscheidung L:** Luftspezialisten von 180 % auf etwa 140 % senken?
