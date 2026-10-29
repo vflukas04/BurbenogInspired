@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-29a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-10-29b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2401,7 +2401,7 @@ function drawWorldGround(g, map, i, cs, wl){   // Bodenwandel + Wege in den Hint
     const d = Math.hypot(x - wl.vc.x, y - wl.vc.y), lv = Math.max(0, Math.min(1, (wl.R - d + (wHash(x, y, i) - .5) * 2.4) / 1.5)); if (lv <= 0) continue;
     const px = x*cs, py = y*cs, r = cs * (.35 + .4*lv);
     g.globalAlpha = .35 + .4*lv; g.fillStyle = Wd.base; g.beginPath(); g.ellipse(px + cs/2 + (wHash(x, y, 1) - .5)*6*u, py + cs/2 + (wHash(x, y, 2) - .5)*6*u, r + 4*u, r + 2*u, 0, 0, Math.PI*2); g.fill(); g.globalAlpha = 1;
-    if (lv > .55) { g.globalAlpha = Math.min(1, (lv - .45)*1.9); g.fillStyle = Wd.base; g.fillRect(px, py, cs+.5, cs+.5); g.globalAlpha = 1; }
+    if (lv > .55) { g.globalAlpha = Math.min(1, (lv - .45)*1.9); g.fillStyle = Wd.base; if (GLATT) { g.beginPath(); g.ellipse(px + cs/2, py + cs/2, cs*.78, cs*.78, 0, 0, Math.PI*2); g.fill(); } else g.fillRect(px, py, cs+.5, cs+.5); g.globalAlpha = 1; }
     const n = Math.round(lv*3);
     for (let j = 0; j < n; j++) { const ux = px + 4*u + wHash(x, y, j+3)*(cs - 8*u), uy = py + 4*u + wHash(x, y, j+9)*(cs - 8*u), q = wHash(x, y, j+15);
       g.fillStyle = Wd.acc; g.strokeStyle = Wd.acc; g.lineWidth = Math.max(1, 1.4*u);
@@ -2512,6 +2512,25 @@ function drawVillage(c, i, cs, wl, gyf){   // Dorf als Bild, steht auf einem Fel
   const sc = cs * 1.3 / 216, w = im.naturalWidth * sc, h = im.naturalHeight * sc, bx = Math.max(w/2, Math.min(COLS*cs - w/2, (wl.vc.x + .5)*cs)), by = gyf(wl.vc.y + .86);
   c.drawImage(im, bx - w/2, by - 198*sc, w, h);   // Fußpunkt des Bildes liegt 198 px (66 Einheiten) unter dem oberen Rand
 }
+// ---- Entwurf „glatt“ (29.10., F): kein Schachbrett mehr sichtbar; das Raster gilt weiter nur für die Türme. Test: Adresse + ?glatt=1 ----
+const GLATT = /[?&]glatt/.test(location.search);
+function glattRoadPath(map, cs){ const p = new Path2D(); map.wp.forEach(([x, y], j) => j ? p.lineTo(x*cs, y*cs) : p.moveTo(x*cs, y*cs)); return p; }
+function glattRoad(g, map, cs, v){   // ein durchgehender Pfad statt Kästchen: dunkler Rand, helle Mitte, Kiesel
+  const p = glattRoadPath(map, cs), u = cs / 40; g.save(); g.lineJoin = 'round'; g.lineCap = 'butt';
+  g.strokeStyle = '#3d3224'; g.lineWidth = cs*1.0; g.stroke(p);
+  g.strokeStyle = v('--road'); g.lineWidth = cs*.9; g.stroke(p);
+  g.strokeStyle = v('--road2'); g.lineWidth = cs*.5; g.globalAlpha = .55; g.stroke(p); g.globalAlpha = 1; g.restore();
+  for (const key of map.cells) { const [x, y] = key.split(',').map(Number); for (let j = 0; j < 4; j++) { const px = (x + wHash(x, y, 41 + j))*cs, py = (y + wHash(x, y, 51 + j))*cs, q = wHash(x, y, 61 + j);
+    g.fillStyle = q < .5 ? 'rgba(20,12,4,.28)' : 'rgba(255,235,200,.16)'; g.beginPath(); g.ellipse(px, py, (1.2 + q*1.6)*u, (.9 + q)*u, q*3, 0, Math.PI*2); g.fill(); } }
+}
+function glattGround(g, map, i, cs, v){   // gleichmäßige Wiese mit weichen Flecken statt Karomuster; Wald/See/Fels liegen auf weichen dunklen Flecken
+  const u = cs / 40, W = cs*COLS, H = cs*ROWS;
+  g.fillStyle = TERRAIN[0].col[0]; g.fillRect(0, 0, W, H);
+  const blob = (cx, cy, r, col, a) => { const gr = g.createRadialGradient(cx, cy, 0, cx, cy, r); gr.addColorStop(0, col.replace('A', a)); gr.addColorStop(1, col.replace('A', 0)); g.fillStyle = gr; g.fillRect(cx - r, cy - r, r*2, r*2); };
+  for (let n = 0; n < 150; n++) { const cx = wHash(n, 1, 700 + i)*W, cy = wHash(n, 2, 700 + i)*H, r = (1.6 + wHash(n, 3, 700 + i)*2.6)*cs; blob(cx, cy, r, wHash(n, 4, 700 + i) < .5 ? 'rgba(10,26,8,A)' : 'rgba(80,110,50,A)', .16); }
+  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x]; if (t === 1) blob((x+.5)*cs, (y+.6)*cs, cs*1.15, 'rgba(8,24,10,A)', .75); else if (t === 3) blob((x+.5)*cs, (y+.6)*cs, cs*1.0, 'rgba(30,30,34,A)', .7);
+    for (let j = 0; j < 3; j++) { const px = (x + wHash(x, y, 81 + j))*cs, py = (y + wHash(x, y, 91 + j))*cs; g.strokeStyle = 'rgba(120,160,80,.35)'; g.lineWidth = Math.max(1, u*1.2); g.beginPath(); g.moveTo(px, py); g.lineTo(px - 2*u, py - 5*u); g.moveTo(px, py); g.lineTo(px + 2*u, py - 4*u); g.stroke(); } }
+}
 const BG = [];
 function drawAll(){ if (G) for (let i = 0; i < NP(); i++) draw(i, $('cv'+i)); }
 function draw(i, cv){
@@ -2531,6 +2550,7 @@ function draw(i, cv){
   const bgKey = [W, dpr, Object.keys(SPR).length, view25, wl.key].join('-');
   if (!BG[i] || BG[i].key !== bgKey) {
     const bc = document.createElement('canvas'); bc.width = Math.round(W*dpr); bc.height = Math.round(cs*ROWS*dpr); const g = bc.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
+  if (GLATT) glattGround(g, map, i, cs, v); else
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     const road = map.cells.has(x+','+y), T = TERRAIN[map.terrain[y][x]];
     g.fillStyle = road ? ((x+y)%2 ? v('--road') : v('--road2')) : T.col[(x+y)%2];
@@ -2546,6 +2566,7 @@ function draw(i, cv){
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
   drawWorldPaths(g, map, i, cs, wl);   // Wege Dorf → Türme
+  if (GLATT) glattRoad(g, map, cs, v); else
   for (const key of map.cells) { const [x, y] = key.split(',').map(Number); g.fillStyle = (x+y)%2 ? v('--road') : v('--road2'); g.fillRect(x*cs, y*cs, cs+.5, cs+.5); }   // Monsterweg bleibt immer unverändert (Bodenwandel und Dorfwege laufen nicht darüber)
   const [ex,ey] = posAt(map, 0.6), [ox,oy] = posAt(map, map.len - 0.6);
   g.fillStyle = v('--danger'); g.beginPath(); g.arc(ex*cs, ey*cs, cs*.4, 0, Math.PI*2); g.fill();

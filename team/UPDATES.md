@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 29.10. 18:40 · F · 2026-10-29b – Entwurf „glatt“ (ohne Schachbrett)
+Nur zum Ansehen: Adresse mit `?glatt=1` zeigt die Map ohne Karomuster (weiche Wiese, durchgehender Pfad statt Kästchen). Raster gilt weiter für die Türme. Normales Spiel unverändert. Vergleich: `assets/dorf-entwurf/_glatt-vergleich.png`.
+
 ### 29.10. 18:25 · F · 2026-10-29a – Kreativ: Spielerwahl
 Im Kreativ-Modus gibt es oben wieder die Knöpfe „Spieler 1–4“ zum Wechseln (Antippen eines Feldes wechselt weiter auch). Neu laden.
 
