@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
 const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || (process.env.D7 !== '0' ? 'spiegel-D7.json' : 'spiegel-D6.json')))), sp = { ...D0 };
 // D7-Niveaus (28.10., d/fit1.js mit Platzwahl, mit Wetter-Mitteln in kraftBlock): Rüstungsschaden 3,6 (Stein 1,00), Bremsen 10,77, Brennen ×0,834 (Feuer/Eis fest 0,97), Fluch ×1,29
-if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '23.1'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.303'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '10.77'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.303'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
 
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
@@ -78,6 +78,7 @@ const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   const q = m.q || 1, n = m.n || 1, f = m.f || 0;
   let w = (m.nova && V.novaWert ? V.novaWert(m.r, q) * (m.stun ? V.novaStun(...m.stun) : 1) : V.reichweite(m.r) * V.geschosse(n) * V.rate(q) * (m.nova ? V.nova * (m.stun ? V.betaeuben(...m.stun, true) : 1) : V.flaeche(f))) * V.ruestung(RUEST[e]) * (e === 2 ? V.nacht : 1);   // Nova D6: eigener Kurs nach Radius und Rate (ohne Reichweiten-/Ratenkurs)
+  if (m.nova) w *= +(process.env.NOVA_K || (D7 ? 1.2 : 1));   // 29.10.: Nova als einzelner Turmtyp im gemischten Aufbau mehr wert als gemessen (freier Bau: Frostnova trägt 23 % von Eis, Erdbeben 15 % von Stein)
   if (m.eff) w *= e === 0 ? V.brennen(m.eff, m.dur) : e === 1 ? V.bremsen(m.eff, f) : V.fluch(m.eff);
   if (m.stun && !m.nova) w *= V.betaeuben(...m.stun, false);
   // Luftspezialist (L 26.10.): Boden × luft[0], Fliegende × luft[1]; Wert = geometrisches Mittel über die Tage (Fliegertage ≈ LUFT_ANTEIL)
