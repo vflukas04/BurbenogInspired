@@ -117,10 +117,10 @@ if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] 
   sp['ELEMENTS.2.kraftBlock'] = [1.009, 1.009, 1.018, 1.018, 1.003, 1.003, 1.021, 1.021]; sp['ELEMENTS.3.kraftBlock'] = null; }
 // Irrlicht (29.10., L: echter Lichtturm, etwas günstiger, kleinerer Effekt): T2 Schatten schießt nicht; Schatten-Türme treffen Monster in seinem Lichtkreis
 // (2 Felder) mit ×buff (S1 1,10 … S6 1,20) und sehen dort nachtaktive Monster; keine Rüstung ignorieren. Preis 30. IRRLICHT_D7=0 = alter Fluchturm.
-if (D7 && process.env.IRRLICHT_D7 !== '0') { const L = +(process.env.IRR_LICHT || 2), b0 = +(process.env.IRR_BUFF || 0.10), b6 = +(process.env.IRR_BUFF6 || 0.20);
+if (D7 && process.env.IRRLICHT_D7 !== '0') { const L = +(process.env.IRR_LICHT || 2), b0 = +(process.env.IRR_BUFF || 0.05), b6 = +(process.env.IRR_BUFF6 || 0.15);
   sp['ELEMENTS.2.towers.1'] = ['Irrlicht', 'Licht', L / G0, 1, 1, 0, 0, 0, 0, { effect:'none', fly:true, light:L / G0, buff:[0, 1, 2, 3, 4, 5].map(i => +(1 + b0 + (b6 - b0) * i / 5).toFixed(3)), pierce:[0, 0, 0, 0, 0, 0] }];
   sp['ELEMENTS.2.costOverride'] = { ...(sp['ELEMENTS.2.costOverride'] || {}), 1:+(process.env.IRR_PREIS || 30) }; }
-sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.05,0.1' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
+sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.05,0.05' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
 sp['CONFIG.burnArmor'] = +(process.env.BRENN_RUEST ?? 0);   // 28.10.: Option Brennen durch Rüstung mindern – gemessen unnötig (Feuer hängt über den Rüstungsschaden an der Rüstung, nicht über das Brennen)
 sp['ELEMENTS.3.splashCenter'] = 1; sp['ELEMENTS.3.splashEdge'] = 0.7;   // Stein-Flächenabfall wie alle (Mitte 100 %, Rand 70 %); eigene Stein-Fläche ggf. später als Element-Spezifikation
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;

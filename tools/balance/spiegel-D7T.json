@@ -1,9 +1,9 @@
 {
   "_basis": "044d8c0",
   "MONSTERS.Betty (Boss).hpMul": 0.8874,
-  "MONSTERS.Nazgul.hpMul": 0.1563,
-  "MONSTERS.Fledermäuse.hpMul": 0.4283,
-  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1939,
+  "MONSTERS.Nazgul.hpMul": 0.1638,
+  "MONSTERS.Fledermäuse.hpMul": 0.2863,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1555,
   "MONSTERS.Silberfische.hpMul": 0.6987,
   "MONSTERS.Kellerasseln.hpMul": 0.3521,
   "MONSTERS.Nacktschnecken.hpMul": 0.7654,
@@ -13,10 +13,10 @@
   "MONSTERS.Kleine Hunde.hpMul": 0.4253,
   "MONSTERS.Ratten.hpMul": 0.3576,
   "MONSTERS.Katzen.hpMul": 0.4082,
-  "MONSTERS.Spatzen.hpMul": 0.6891,
+  "MONSTERS.Spatzen.hpMul": 0.5124,
   "MONSTERS.Füchse.hpMul": 0.2871,
   "MONSTERS.Fuchs-Boss.hpMul": 2.0304,
-  "MONSTERS.Habichte.hpMul": 0.7019,
+  "MONSTERS.Habichte.hpMul": 0.4527,
   "MONSTERS.Dachse.hpMul": 0.5655,
   "MONSTERS.Oktopusse.hpMul": 0.8228,
   "MONSTERS.Wildschweine.hpMul": 0.4827,
@@ -26,14 +26,14 @@
   "MONSTERS.Wütende Partnerin.hpMul": 0.3907,
   "MONSTERS.Wütende Nachbarn.hpMul": 0.3171,
   "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.561,
-  "MONSTERS.Uffug-Vorhaut.hpMul": 0.5402,
+  "MONSTERS.Uffug-Vorhaut.hpMul": 0.3562,
   "MONSTERS.Uffug (Boss).hpMul": 3.3413,
   "MONSTERS.Roboter.hpMul": 0.3756,
   "MONSTERS.Sommer-Schneebälle.hpMul": 0.269,
   "MONSTERS.Würfel.hpMul": 0.3596,
-  "MONSTERS.Phönixe.hpMul": 0.5532,
+  "MONSTERS.Phönixe.hpMul": 0.3388,
   "MONSTERS.Fairtrade-Bananen.hpMul": 0.5524,
-  "MONSTERS.El Schlucko.hpMul": 3.0495,
+  "MONSTERS.El Schlucko.hpMul": 2.4892,
   "MONSTERS.Krieger.hpMul": 0.218,
   "MONSTERS.Golems.hpMul": 0.2828,
   "MONSTERS.Albträume.hpMul": 0.3838,
@@ -432,12 +432,12 @@
     {
       "effect": "slow",
       "fly": true,
-      "groundMul": 0.6,
-      "flyMul": 1.4,
+      "groundMul": 0.8,
+      "flyMul": 1.2,
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.18615,
+  "ELEMENTS.1.kraftT.2": 0.96066,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
@@ -594,12 +594,12 @@
       "fly": true,
       "light": 1,
       "buff": [
-        1.1,
-        1.12,
-        1.14,
-        1.16,
-        1.18,
-        1.2
+        1.05,
+        1.07,
+        1.09,
+        1.11,
+        1.13,
+        1.15
       ],
       "pierce": [
         0,
@@ -625,11 +625,11 @@
     {
       "effect": "curse",
       "fly": true,
-      "groundMul": 0.6,
-      "flyMul": 1.4
+      "groundMul": 0.8,
+      "flyMul": 1.2
     }
   ],
-  "ELEMENTS.2.kraftT.2": 1.46764,
+  "ELEMENTS.2.kraftT.2": 1.18864,
   "ELEMENTS.2.towers.3": [
     "Fluchstein",
     "Schaden",
@@ -1191,7 +1191,7 @@
   "CONFIG.stackRest": {
     "burn": 0.35,
     "slow": 0.05,
-    "curse": 0.1
+    "curse": 0.05
   },
   "CONFIG.burnArmor": 0,
   "ELEMENTS.3.splashCenter": 1,
