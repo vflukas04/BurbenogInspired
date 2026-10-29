@@ -744,3 +744,9 @@ Heute: Spatzen 1,5 · Habichte 1,8 · Uffug-Vorhaut 1,0 · Phönixe 1,4 · Loopi
 - Irrlicht: Verstärkung steigt mit den Upgrades, aber kleiner (×1,05 auf S1 bis ×1,15 auf S6); Fluch-Stapel 0,05 statt 0,10 als Gegengewicht.
 - Frei: **Eis 1,04** (1,06/1,01/1,04/1,06), Fliegertage 1,02 · **Schatten 1,00** (0,93/0,95/1,07/1,08), Fliegertage 1,11. Feuer 1,04 (Fliegertage 0,84), Stein 1,11 (0,31) aus den letzten Läufen.
 - **Leben an Fliegertagen** mit dem geometrischen Mittel der vier Elemente (freier Bau) skaliert: Spatzen ×0,74, Habichte ×0,65, Uffug-Vorhaut ×0,66, Phönixe ×0,61, El Schlucko ×0,82, Looping-Louie ×0,80, Fledermäuse ×0,67, Nazgul ×1,05. Damit liegt ein durchschnittliches Element an Fliegertagen bei 1,00; die Verhältnisse zwischen den Elementen bleiben (Feuer 1,13 · Eis 1,38 · Schatten 1,50 · Stein 0,42, grob umgerechnet).
+
+## Stein-Drift und Leben hinten (29.10. nachmittags, L)
+- Stein-Varianten frei (÷ Standard, Bodentage): Kiesel schwach gegen Fliegende 1,01 (1,02/1,00/1,03/0,98), Fliegertage 0,31 → 0,56 · + Betäubung T6–T8 1,06 (…/1,18) · + Fläche T6/T8 ohne Wirkung (selten gebaut).
+- Umgesetzt (L): Kiesel schwach gegen Fliegende, Betäubung nur Bergkönig (35 %), Granitwächter keine Fliegenden, „keine Fliegenden“ ×1,36; Leben an Bodentagen × Mittel der vier Elemente je Block (1,00/0,99/1,06/1,10, weich).
+- **Ergebnis frei, gegen die Ziel-Kurve** (Bodentage Tag 1–12/13–24/25–36/37–48 | Fliegertage): Standard 1,00/1,04/0,96/0,92 | 1,33 · **Feuer** 0,98/1,08/1,06/0,98 = 1,03 | 0,83 · **Eis** 1,06/1,06/1,05/1,05 = 1,05 | 1,32 · **Schatten** 0,93/0,98/1,01/1,01 = 0,98 | 1,53 · **Stein** 1,02/1,04/1,04/1,19 = 1,07 | 0,66.
+- Offen: Bergkönig 35 % hebt Stein in Tag 37–48 zu stark (1,19) → etwa 25 %; Schatten am Anfang 0,93.

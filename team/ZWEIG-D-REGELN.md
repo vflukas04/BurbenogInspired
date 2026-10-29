@@ -1,4 +1,4 @@
-# Zweig D: Regeln für die Übernahme ins Spiel (Stand 29.10.)
+# Zweig D: Regeln für die Übernahme ins Spiel (Stand 29.10. abends)
 
 Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messungen: `ZWEIG-D.md`. Zahlenwerte: `tools/balance/spiegel-D7T.json` (Elementtürme) und `spiegel-D7.json` (Monster, Leben). Alles ist bisher nur im Spiegel (Basis `044d8c0` + `tools/balance/basis/patch.js`), das Live-Spiel ist unverändert.
 
@@ -6,11 +6,14 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - 32 Türme neu: Standardturm (Reichweite 3,5, 1 Schuss/s, 1 Geschoss) plus Merkmale, Schaden aus festen Umrechnungsfaktoren.
 - Preise 10/45/70/120/200/340/580/1000, Turmtyp-Treppe ×1,08.
 - **Upgrades ändern nur den Schaden** (Kraft je Gold 1/0,95/1,01/1,08/1,16/1,25 für S1–S6). Reichweite, Effekt, Dauer bleiben gleich.
-- Stein gegen Fliegende: T2 Schleuder schwach (50 %), T4 Katapult/T6/T8 normal, T1/T3/T5/T7 gar nicht. Türme ohne Fliegende machen am Boden ×1,17 Schaden (Preis-Zuschlag).
-- Luftspezialisten (Eiszapfen, Nachtauge): Boden 60 %, Fliegende 180 %.
+- Stein gegen Fliegende: T1 Kiesel und T2 Schleuder schwach (50 %), T4 Katapult und T8 Bergkönig normal, T3/T5/T6/T7 gar nicht. Türme ohne Fliegende machen am Boden ×1,36 Schaden (Preis-Zuschlag).
+- Betäubung bei Stein: Erdbeben (Nova) und Bergkönig (35 %).
+- Luftspezialisten (Eiszapfen, Nachtauge): Boden 80 %, Fliegende 120 %.
+- **Irrlicht** (Schatten T2): schießt nicht, Lichtkreis 2 Felder; Schatten sieht darin nachts nachtaktive Monster und macht dort ×1,05 (S1) bis ×1,15 (S6) Schaden; keine Rüstung ignorieren; Preis 30.
+- Nova-Türme (Frostnova, Erdbeben) etwas teurer bepreist (×1,2).
 
 ## Effekte
-- Gleiche Effekte stapeln: der stärkste voll, jeder weitere mit **Brennen 35 %, Bremsen 5 %, Fluch 10 %**, höchstens 6.
+- Gleiche Effekte stapeln: der stärkste voll, jeder weitere mit **Brennen 35 %, Bremsen 5 %, Fluch 5 %**, höchstens 6.
 - Bremsen je Turm höchstens 40 % (mit Fläche 30 %).
 - Brennen geht durch Rüstung (wie bisher).
 
@@ -27,9 +30,8 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - **Nachtaktiv:** Tag 5 Mäuse, 9 Katzen, 16 Wildschweine, 19 Besoffene Penner, 27 Würfel, 31 Krieger, 33 Albträume, 37 E-Scooter-Fahrer, 38 Lindner-Spezialisten, 40 Fledermäuse, 44 Heisenbergs (Füchse und Eifersüchtige Geliebte jetzt tagsüber).
 - **Fliegende:** Tempo Spatzen 1,2 · Habichte 1,6 · Uffug-Vorhaut 0,8 · Phönixe 1,1 · Looping-Louie 1,7 · Fledermäuse 1,0 · Nazgul 0,9. Gepanzert: Uffug-Vorhaut, Looping-Louie, Nazgul.
 - **Looping-Louie-Tiefflug:** auf etwa ⅓ des Wegs tief (dort Bodenmonster für alle Türme), in den Übergängen fliegend ohne Malus „schwach gegen Fliegende“, sonst Hochflug. Höhe hängt vom Ort ab, alle fliegen in einer Reihe.
-- Leben je Tag neu kalibriert (`MONSTERS.*.hpMul` in `spiegel-D7.json`).
+- Leben je Tag neu kalibriert (`MONSTERS.*.hpMul` in `spiegel-D7.json`): auf den Bezugs-Bot, dann an Bodentagen hinten angehoben (Tag 25–36 etwa +6 %, Tag 37–48 +10 %), an Fliegertagen auf das Mittel der vier Elemente gesenkt (meist ×0,6–0,8).
 
 ## Noch offen
-- Irrlicht als echter Lichtturm (Lichtkreis 2, Upgrades Licht/Verstärkung) – im Spiegel ist T2 Schatten noch ein normaler Fluchturm.
 - Forschung (Wert je Freischaltung, Preis nach Spielerzahl), Edelsteine.
 - Anzeige: Wettertexte, Wind-Richtung, Tiefflug-Strecken auf der Karte.
