@@ -48,7 +48,7 @@ const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:1.08,fluch:1.29,nacht:0.687' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
-const LUFT = (process.env.LUFT || (process.env.D7 !== '0' ? '0.6,1.4' : '0.6,1.8'))   /* 29.10. (L): Luftspezialist Fliegende 140 % */.split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
+const LUFT = (process.env.LUFT || (process.env.D7 !== '0' ? '0.8,1.2' : '0.6,1.8'))   /* 29.10. (L): Luftspezialist Boden 80 %, Fliegende 120 % */.split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
 // Stein und Fliegende (L 27.10.): 2 (schwach)/4/6/8 – Schleuder (T2) schwach gegen Fliegende (Boden 100 %, Fliegende SCHWACH),
 // Katapult (T4, Namen wie vor dem 17.10.) und T6/T8 treffen Fliegende normal, T1/T3/T5/T7 gar nicht. Kein starker Fliegerturm bei Stein.
 const SCHWACH = +(process.env.SCHWACH || 0.5);
