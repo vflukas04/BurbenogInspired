@@ -1,53 +1,53 @@
 {
   "_basis": "044d8c0",
-  "MONSTERS.Betty (Boss).hpMul": 0.8874,
+  "MONSTERS.Betty (Boss).hpMul": 0.9752,
   "MONSTERS.Nazgul.hpMul": 0.1638,
   "MONSTERS.Fledermäuse.hpMul": 0.2863,
   "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1555,
-  "MONSTERS.Silberfische.hpMul": 0.6987,
-  "MONSTERS.Kellerasseln.hpMul": 0.3521,
-  "MONSTERS.Nacktschnecken.hpMul": 0.7654,
-  "MONSTERS.Ohrenkneifer.hpMul": 0.4703,
-  "MONSTERS.Mäuse.hpMul": 0.5148,
-  "MONSTERS.Maus-Boss.hpMul": 2.8725,
-  "MONSTERS.Kleine Hunde.hpMul": 0.4253,
-  "MONSTERS.Ratten.hpMul": 0.3576,
-  "MONSTERS.Katzen.hpMul": 0.4082,
+  "MONSTERS.Silberfische.hpMul": 0.7002,
+  "MONSTERS.Kellerasseln.hpMul": 0.3529,
+  "MONSTERS.Nacktschnecken.hpMul": 0.7671,
+  "MONSTERS.Ohrenkneifer.hpMul": 0.4713,
+  "MONSTERS.Mäuse.hpMul": 0.5159,
+  "MONSTERS.Maus-Boss.hpMul": 2.8787,
+  "MONSTERS.Kleine Hunde.hpMul": 0.4261,
+  "MONSTERS.Ratten.hpMul": 0.358,
+  "MONSTERS.Katzen.hpMul": 0.4083,
   "MONSTERS.Spatzen.hpMul": 0.5124,
-  "MONSTERS.Füchse.hpMul": 0.2871,
-  "MONSTERS.Fuchs-Boss.hpMul": 2.0304,
+  "MONSTERS.Füchse.hpMul": 0.2868,
+  "MONSTERS.Fuchs-Boss.hpMul": 2.0265,
   "MONSTERS.Habichte.hpMul": 0.4527,
-  "MONSTERS.Dachse.hpMul": 0.5655,
-  "MONSTERS.Oktopusse.hpMul": 0.8228,
-  "MONSTERS.Wildschweine.hpMul": 0.4827,
-  "MONSTERS.Schäferhunde.hpMul": 0.556,
-  "MONSTERS.Schäferhund-Boss.hpMul": 3.194,
-  "MONSTERS.Besoffene Penner.hpMul": 0.6814,
-  "MONSTERS.Wütende Partnerin.hpMul": 0.3907,
-  "MONSTERS.Wütende Nachbarn.hpMul": 0.3171,
-  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.561,
+  "MONSTERS.Dachse.hpMul": 0.5636,
+  "MONSTERS.Oktopusse.hpMul": 0.8194,
+  "MONSTERS.Wildschweine.hpMul": 0.4803,
+  "MONSTERS.Schäferhunde.hpMul": 0.5529,
+  "MONSTERS.Schäferhund-Boss.hpMul": 3.1735,
+  "MONSTERS.Besoffene Penner.hpMul": 0.6786,
+  "MONSTERS.Wütende Partnerin.hpMul": 0.3912,
+  "MONSTERS.Wütende Nachbarn.hpMul": 0.3193,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.5679,
   "MONSTERS.Uffug-Vorhaut.hpMul": 0.3562,
-  "MONSTERS.Uffug (Boss).hpMul": 3.3413,
-  "MONSTERS.Roboter.hpMul": 0.3756,
-  "MONSTERS.Sommer-Schneebälle.hpMul": 0.269,
-  "MONSTERS.Würfel.hpMul": 0.3596,
+  "MONSTERS.Uffug (Boss).hpMul": 3.4192,
+  "MONSTERS.Roboter.hpMul": 0.3865,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.2783,
+  "MONSTERS.Würfel.hpMul": 0.374,
   "MONSTERS.Phönixe.hpMul": 0.3388,
-  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5524,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5808,
   "MONSTERS.El Schlucko.hpMul": 2.4892,
-  "MONSTERS.Krieger.hpMul": 0.218,
-  "MONSTERS.Golems.hpMul": 0.2828,
-  "MONSTERS.Albträume.hpMul": 0.3838,
-  "MONSTERS.Magier-Novizen.hpMul": 0.3958,
-  "MONSTERS.Magiermeister.hpMul": 1.3487,
-  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.2818,
-  "MONSTERS.Lindner-Spezialisten.hpMul": 0.1773,
-  "MONSTERS.Wargreiter.hpMul": 0.26,
-  "MONSTERS.Lehrer.hpMul": 0.2114,
-  "MONSTERS.Schulleiter.hpMul": 1.3736,
-  "MONSTERS.Streichquartett.hpMul": 0.2065,
-  "MONSTERS.Heisenbergs.hpMul": 0.1722,
-  "MONSTERS.Mehlmottenraupen.hpMul": 0.1413,
-  "MONSTERS.GNTModels.hpMul": 0.2567,
+  "MONSTERS.Krieger.hpMul": 0.2314,
+  "MONSTERS.Golems.hpMul": 0.3011,
+  "MONSTERS.Albträume.hpMul": 0.4099,
+  "MONSTERS.Magier-Novizen.hpMul": 0.4253,
+  "MONSTERS.Magiermeister.hpMul": 1.4535,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.3046,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.1922,
+  "MONSTERS.Wargreiter.hpMul": 0.2827,
+  "MONSTERS.Lehrer.hpMul": 0.2313,
+  "MONSTERS.Schulleiter.hpMul": 1.5073,
+  "MONSTERS.Streichquartett.hpMul": 0.2269,
+  "MONSTERS.Heisenbergs.hpMul": 0.1892,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.1553,
+  "MONSTERS.GNTModels.hpMul": 0.2821,
   "MONSTERS.Kellerasseln.weak": [
     0.9,
     1,
@@ -247,7 +247,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.1": 1.50698,
+  "ELEMENTS.0.kraftT.1": 1.5729,
   "ELEMENTS.0.towers.2": [
     "Flammenwerfer",
     "Schaden",
@@ -311,7 +311,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.5": 1.13496,
+  "ELEMENTS.0.kraftT.5": 1.18461,
   "ELEMENTS.0.towers.6": [
     "Sonnenturm",
     "Schaden",
@@ -471,7 +471,7 @@
       "chance": 0.45
     }
   ],
-  "ELEMENTS.1.kraftT.4": 0.93941,
+  "ELEMENTS.1.kraftT.4": 0.98051,
   "ELEMENTS.1.towers.5": [
     "Eisspeer",
     "Schaden",
@@ -519,7 +519,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.31266,
+  "ELEMENTS.1.kraftT.7": 0.32634,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -645,7 +645,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.2.kraftT.3": 1.92139,
+  "ELEMENTS.2.kraftT.3": 2.00545,
   "ELEMENTS.2.towers.4": [
     "Seelenfresser",
     "Schaden",
@@ -765,10 +765,12 @@
     0.25,
     {
       "effect": "none",
-      "fly": false
+      "fly": true,
+      "groundMul": 1,
+      "flyMul": 0.5
     }
   ],
-  "ELEMENTS.3.kraftT.0": 1.16963,
+  "ELEMENTS.3.kraftT.0": 1.01265,
   "ELEMENTS.3.towers.1": [
     "Schleuder",
     "Schaden",
@@ -802,7 +804,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.3.kraftT.2": 0.82281,
+  "ELEMENTS.3.kraftT.2": 0.85881,
   "ELEMENTS.3.towers.3": [
     "Katapult",
     "Schaden",
@@ -836,7 +838,7 @@
       "chance": 0.2
     }
   ],
-  "ELEMENTS.3.kraftT.4": 0.4694,
+  "ELEMENTS.3.kraftT.4": 0.48993,
   "ELEMENTS.3.towers.5": [
     "Granitwächter",
     "Schaden",
@@ -844,15 +846,16 @@
     1,
     1,
     1,
-    0,
+    1,
     1,
     0.5,
     {
-      "effect": "none",
-      "fly": true
+      "effect": "stun",
+      "fly": true,
+      "chance": 0.15
     }
   ],
-  "ELEMENTS.3.kraftT.5": 0.91953,
+  "ELEMENTS.3.kraftT.5": 0.87575,
   "ELEMENTS.3.towers.6": [
     "Lawine",
     "Schaden",
@@ -860,15 +863,16 @@
     0.4,
     1,
     1,
-    0,
+    1,
     1,
     1,
     {
-      "effect": "none",
-      "fly": false
+      "effect": "stun",
+      "fly": false,
+      "chance": 0.2
     }
   ],
-  "ELEMENTS.3.kraftT.6": 0.66899,
+  "ELEMENTS.3.kraftT.6": 0.63478,
   "ELEMENTS.3.towers.7": [
     "Bergkönig",
     "Schaden",
@@ -882,10 +886,10 @@
     {
       "effect": "stun",
       "fly": true,
-      "chance": 0.1
+      "chance": 0.25
     }
   ],
-  "ELEMENTS.3.kraftT.7": 0.82317,
+  "ELEMENTS.3.kraftT.7": 0.7158,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,

@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
 const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || (process.env.D7 !== '0' ? 'spiegel-D7.json' : 'spiegel-D6.json')))), sp = { ...D0 };
 // D7-Niveaus (28.10., d/fit1.js mit Platzwahl, mit Wetter-Mitteln in kraftBlock): Rüstungsschaden 3,6 (Stein 1,00), Bremsen 10,77, Brennen ×0,834 (Feuer/Eis fest 0,97), Fluch ×1,29
-if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '10.77'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.303'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '10.77'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.36'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
 
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
@@ -74,6 +74,8 @@ const STEIN_K = +process.env.STEIN_K || 1;   // 27.10. abends (L): alte Korrektu
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
 const D7 = process.env.D7 !== '0', D7_RUEST = {"Silberfische":[0.3,0.3],"Kellerasseln":[0.5,0.6],"Nacktschnecken":[0.3,0.3],"Ohrenkneifer":[0.45,0.6],"Mäuse":[0.3,0.3],"Maus-Boss":[0.3,0.3],"Kleine Hunde":[0.4,0.5],"Ratten":[0.45,0.6],"Katzen":[0.4,0.5],"Füchse":[0.5,0.7],"Fuchs-Boss":[0.5,0.7]};   // Rüstung Tag 1–12 (D6 + 30 % / + 0,3)
 const EFF = { 0:'burn', 1:'slow', 2:'curse', 3:'stun' }, RUEST = Object.assign({}, (process.env.RUEST_EL || '0.5,0.6,0,1.5').split(',').map(Number))   /* RUEST_EL (28.10.): Rüstungsschaden je Element */, G0 = 2;   // GRID
+// Stein-Drift (29.10. nachmittags, L): Kiesel schwach gegen Fliegende statt „keine Fliegenden“ (kein Zuschlag mehr am Anfang), Betäubung auf Granitwächter/Lawine/Bergkönig (driftet nach hinten)
+if (D7 && process.env.STEIN_D7 !== '0') { T[3][0][1] = { ...T[3][0][1], noFly:0, luft:[1, SCHWACH] }; T[3][5][1] = { ...T[3][5][1], stun:[0.15, 1] }; T[3][6][1] = { ...T[3][6][1], stun:[0.2, 1] }; T[3][7][1] = { ...T[3][7][1], stun:[0.25, 1] }; }
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   const q = m.q || 1, n = m.n || 1, f = m.f || 0;
