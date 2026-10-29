@@ -6,8 +6,8 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - 32 Türme neu: Standardturm (Reichweite 3,5, 1 Schuss/s, 1 Geschoss) plus Merkmale, Schaden aus festen Umrechnungsfaktoren.
 - Preise 10/45/70/120/200/340/580/1000, Turmtyp-Treppe ×1,08.
 - **Upgrades ändern nur den Schaden** (Kraft je Gold 1/0,95/1,01/1,08/1,16/1,25 für S1–S6). Reichweite, Effekt, Dauer bleiben gleich.
-- Stein gegen Fliegende: T1 Kiesel und T2 Schleuder schwach (50 %), T4 Katapult und T8 Bergkönig normal, T3/T5/T6/T7 gar nicht. Türme ohne Fliegende machen am Boden ×1,36 Schaden (Preis-Zuschlag).
-- Betäubung bei Stein: Erdbeben (Nova) und Bergkönig (35 %).
+- Stein gegen Fliegende: T1 Kiesel und T2 Schleuder schwach (50 %), T3 Felsbrocken, T4 Katapult und T8 Bergkönig normal, T5/T6/T7 gar nicht. Türme ohne Fliegende machen am Boden ×1,36 Schaden (Preis-Zuschlag).
+- Betäubung bei Stein: Erdbeben (Nova) und Bergkönig (35 %; Betäubung ist im Umrechnungsfaktor ×3 teurer bepreist, weil sie allen Türmen hilft).
 - Luftspezialisten (Eiszapfen, Nachtauge): Boden 80 %, Fliegende 120 %.
 - **Irrlicht** (Schatten T2): schießt nicht, Lichtkreis 2 Felder; Schatten sieht darin nachts nachtaktive Monster und macht dort ×1,05 (S1) bis ×1,15 (S6) Schaden; keine Rüstung ignorieren; Preis 30.
 - Nova-Türme (Frostnova, Erdbeben) etwas teurer bepreist (×1,2).

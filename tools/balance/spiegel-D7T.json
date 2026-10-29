@@ -801,10 +801,10 @@
     0.75,
     {
       "effect": "none",
-      "fly": false
+      "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.2": 0.85881,
+  "ELEMENTS.3.kraftT.2": 0.63148,
   "ELEMENTS.3.towers.3": [
     "Katapult",
     "Schaden",
@@ -887,7 +887,7 @@
       "chance": 0.35
     }
   ],
-  "ELEMENTS.3.kraftT.7": 0.65854,
+  "ELEMENTS.3.kraftT.7": 0.47038,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,

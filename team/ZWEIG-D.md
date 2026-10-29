@@ -750,3 +750,9 @@ Heute: Spatzen 1,5 · Habichte 1,8 · Uffug-Vorhaut 1,0 · Phönixe 1,4 · Loopi
 - Umgesetzt (L): Kiesel schwach gegen Fliegende, Betäubung nur Bergkönig (35 %), Granitwächter keine Fliegenden, „keine Fliegenden“ ×1,36; Leben an Bodentagen × Mittel der vier Elemente je Block (1,00/0,99/1,06/1,10, weich).
 - **Ergebnis frei, gegen die Ziel-Kurve** (Bodentage Tag 1–12/13–24/25–36/37–48 | Fliegertage): Standard 1,00/1,04/0,96/0,92 | 1,33 · **Feuer** 0,98/1,08/1,06/0,98 = 1,03 | 0,83 · **Eis** 1,06/1,06/1,05/1,05 = 1,05 | 1,32 · **Schatten** 0,93/0,98/1,01/1,01 = 0,98 | 1,53 · **Stein** 1,02/1,04/1,04/1,19 = 1,07 | 0,66.
 - Offen: Bergkönig 35 % hebt Stein in Tag 37–48 zu stark (1,19) → etwa 25 %; Schatten am Anfang 0,93.
+
+## Stein gegen Fliegende und Bergkönig (29.10. abends, L)
+Stein frei gegen die Ziel-Kurve (Bodentage Tag 1–12/13–24/25–36/37–48 = gesamt | Fliegertage, davon Tag 10/13/23):
+- bisher (T1/T2 schwach, T3 keine): 1,02/1,04/1,04/1,19 = 1,07 | 0,66 (0,54)
+- T2 keine Fliegenden, T3 normal (L): 1,17/1,08/1,05/1,31 = 1,15 | 0,58 (0,37) – die Schleuder bekam den Zuschlag, der Bot baute früh drei davon statt Luftabwehr. Betäuben-Faktor ×2: …/1,20, ×3: …/1,14.
+- **Gewählt:** T2 schwach, **T3 Felsbrocken normal**, Betäuben-Faktor ×3: **1,05/1,02/1,00/1,09 = 1,04 | 0,68 (0,62)**.
