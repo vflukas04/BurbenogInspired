@@ -48,7 +48,7 @@ const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:1.08,fluch:1.29,nacht:0.687' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
-const LUFT = (process.env.LUFT || '0.6,1.8').split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
+const LUFT = (process.env.LUFT || (process.env.D7 !== '0' ? '0.6,1.4' : '0.6,1.8'))   /* 29.10. (L): Luftspezialist Fliegende 140 % */.split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
 // Stein und Fliegende (L 27.10.): 2 (schwach)/4/6/8 – Schleuder (T2) schwach gegen Fliegende (Boden 100 %, Fliegende SCHWACH),
 // Katapult (T4, Namen wie vor dem 17.10.) und T6/T8 treffen Fliegende normal, T1/T3/T5/T7 gar nicht. Kein starker Fliegerturm bei Stein.
 const SCHWACH = +(process.env.SCHWACH || 0.5);
@@ -115,6 +115,11 @@ if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] 
   WD7.forEach((w, k) => { sp[`WEATHER.${k}`] = w; });
   sp['ELEMENTS.0.kraftBlock'] = [0.971, 0.971, 1.018, 1.018, 1.053, 1.053, 1.02, 1.02]; sp['ELEMENTS.1.kraftBlock'] = [1.049, 1.049, 1.017, 1.017, 0.996, 0.996, 0.989, 0.989];
   sp['ELEMENTS.2.kraftBlock'] = [1.009, 1.009, 1.018, 1.018, 1.003, 1.003, 1.021, 1.021]; sp['ELEMENTS.3.kraftBlock'] = null; }
+// Irrlicht (29.10., L: echter Lichtturm, etwas günstiger, kleinerer Effekt): T2 Schatten schießt nicht; Schatten-Türme treffen Monster in seinem Lichtkreis
+// (2 Felder) mit ×buff (S1 1,10 … S6 1,20) und sehen dort nachtaktive Monster; keine Rüstung ignorieren. Preis 30. IRRLICHT_D7=0 = alter Fluchturm.
+if (D7 && process.env.IRRLICHT_D7 !== '0') { const L = +(process.env.IRR_LICHT || 2), b0 = +(process.env.IRR_BUFF || 0.10), b6 = +(process.env.IRR_BUFF6 || 0.20);
+  sp['ELEMENTS.2.towers.1'] = ['Irrlicht', 'Licht', L / G0, 1, 1, 0, 0, 0, 0, { effect:'none', fly:true, light:L / G0, buff:[0, 1, 2, 3, 4, 5].map(i => +(1 + b0 + (b6 - b0) * i / 5).toFixed(3)), pierce:[0, 0, 0, 0, 0, 0] }];
+  sp['ELEMENTS.2.costOverride'] = { ...(sp['ELEMENTS.2.costOverride'] || {}), 1:+(process.env.IRR_PREIS || 30) }; }
 sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.05,0.1' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
 sp['CONFIG.burnArmor'] = +(process.env.BRENN_RUEST ?? 0);   // 28.10.: Option Brennen durch Rüstung mindern – gemessen unnötig (Feuer hängt über den Rüstungsschaden an der Rüstung, nicht über das Brennen)
 sp['ELEMENTS.3.splashCenter'] = 1; sp['ELEMENTS.3.splashEdge'] = 0.7;   // Stein-Flächenabfall wie alle (Mitte 100 %, Rand 70 %); eigene Stein-Fläche ggf. später als Element-Spezifikation

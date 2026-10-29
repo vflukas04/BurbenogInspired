@@ -433,11 +433,11 @@
       "effect": "slow",
       "fly": true,
       "groundMul": 0.6,
-      "flyMul": 1.8,
+      "flyMul": 1.4,
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.13542,
+  "ELEMENTS.1.kraftT.2": 1.18615,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
@@ -581,17 +581,34 @@
   "ELEMENTS.2.kraftT.0": 1.14273,
   "ELEMENTS.2.towers.1": [
     "Irrlicht",
-    "Schaden",
-    1.5,
+    "Licht",
     1,
     1,
     1,
-    0.05,
-    4,
+    0,
+    0,
+    0,
     0,
     {
-      "effect": "curse",
-      "fly": true
+      "effect": "none",
+      "fly": true,
+      "light": 1,
+      "buff": [
+        1.1,
+        1.12,
+        1.14,
+        1.16,
+        1.18,
+        1.2
+      ],
+      "pierce": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
     }
   ],
   "ELEMENTS.2.kraftT.1": 1.17539,
@@ -609,10 +626,10 @@
       "effect": "curse",
       "fly": true,
       "groundMul": 0.6,
-      "flyMul": 1.8
+      "flyMul": 1.4
     }
   ],
-  "ELEMENTS.2.kraftT.2": 1.40487,
+  "ELEMENTS.2.kraftT.2": 1.46764,
   "ELEMENTS.2.towers.3": [
     "Fluchstein",
     "Schaden",
@@ -696,7 +713,7 @@
   "ELEMENTS.2.kraft": 1,
   "ELEMENTS.2.costOverride": {
     "0": 10,
-    "1": 45,
+    "1": 30,
     "2": 70,
     "3": 120,
     "4": 200,
