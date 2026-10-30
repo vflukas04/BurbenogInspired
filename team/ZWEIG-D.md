@@ -785,3 +785,19 @@ Schritte: gemessener Rüstungsschaden-Kurs, Zusatzrüstung Tag 1–12 +15 %, Kie
 - **Frei gegen die Ziel-Kurve** (Bodentage Tag 1–12/13–24/25–36/37–48 = gesamt | Fliegertage): Feuer 1,00/1,04/1,04/0,98 = **1,02** | 1,27 · Eis 1,04/1,04/0,99/1,00 = **1,01** | 1,44 · Schatten 0,99/0,96/1,01/1,00 = **0,99** | 1,59 · Stein 1,02/1,13/1,00/1,10 = **1,06** | 0,68. Standard-Bot 0,92 (Leben jetzt auf die Elemente gestellt).
 - Form-Rest vor dem letzten Schritt (d16): alle Elemente je Block innerhalb ±6 %, meist ±4 % – etwa die Bot-Streuung.
 - Danach Leben an Fliegertagen erneut auf das Mittel der Elemente (×1,02–1,36).
+
+## Forschung bewertet (31.10. nachts, fester Aufbau D7, `elemente6.js RES=…`)
+Wert = Reserve mit ÷ ohne Forschung (Bodentage), je Element:
+
+| Forschung | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| Element-Schaden +8 % (Stufe 1) | ×1,08 | ×1,08 | ×1,08 | ×1,08 |
+| Element-Schaden +25 % (Stufe 3) | ×1,25 | ×1,25 | ×1,25 | ×1,25 |
+| Effekte länger +10 % / +30 % | ×1,01 / ×1,02 | ×0,99 / ×0,99 | ×1,00 / ×1,00 | ×1,00 / ×1,00 |
+| Reichweite heute +0,2 / +0,6 Felder | ×1,02 / ×1,04 | ×1,01 / ×1,04 | ×1,03 / ×1,06 | ×1,02 / ×1,04 |
+| Reichweite Vorschlag +1,5 Felder (Stufe 3) | ×1,08 | ×1,09 | ×1,13 | ×1,07 |
+| Vorschlag „Fläche größer“ ×1,3 | ×1,03 | ×1,00 | ×1,01 | **×1,08** |
+
+- **Gold-Gegenwert** (Bezugs-Bot mit Standardtürmen, 9,4 % mehr Gold): Reserve ×1,12 → +1 % Gold ≈ +1,3 % Reserve. Eine Forschung mit Wert ×(1 + b) ist also so viel wert wie b/1,3 des bis dahin verbauten Golds.
+- Verbautes Gold je Spieler (zu zweit, Bezugs-Bot): Tag 12 ≈ 480 · Tag 24 ≈ 1.600 · Tag 36 ≈ 4.200 · Tag 48 ≈ 9.000. Kasse (10 % des Kopfgelds) je Spieler: ≈ 50 / 180 / 470 / 1.000.
+- Beispiel Element-Schaden Stufe 1 (25 Gold): Tag 12 ≈ 30 Gold wert, Tag 24 ≈ 100, Tag 36 ≈ 260 → ab etwa Tag 12 ein sehr gutes Geschäft. „Effekte länger“ ist praktisch wertlos (≤ 2 %).
