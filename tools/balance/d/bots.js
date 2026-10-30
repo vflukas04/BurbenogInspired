@@ -267,6 +267,8 @@ function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage =
   return tage; }
 const aufbauText = tw => { const z = {}; tw.forEach(t => (z[t.idx] = z[t.idx] || []).push(t.lvl));
   return Object.keys(z).sort((a, b) => a - b).map(k => `T${+k + 1}×${z[k].length}(${z[k].sort((a, b) => b - a).join('')})`).join(' '); };
+// BOT_CAP='4,3,3,3,0,0,0,0' (31.10.): Obergrenzen je Turmtyp überschreiben (0 = gesperrt, z. B. Wert der Freischaltungen messen)
+if (process.env.BOT_CAP) for (const b of Object.values(BOTS)) if (b.cap) b.cap = process.env.BOT_CAP.split(',').map(Number);
 function lauf(name){ const t0 = Date.now(), erg = { bot:name, txt:BOTS[name].txt, anteil:ANTEIL, spiegel:process.env.SPIEGEL || '', maps:[] };
   for (const [lane, seed] of MAPS) { C.useMap(lane, seed); const p = plan(name);
     const r = p.map((t, d) => C.reserveDay({ el:EL, towers:t.towers, res:t.res || [] }, { type:d, players:SPIELER }));
