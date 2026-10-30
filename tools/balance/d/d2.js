@@ -29,7 +29,7 @@ const V_D6 = {
   // mit Platzwahl (28.10.): Radius 2 0,79 · 2,5 1,16 · 3 1,53 · 3,5 1,93; Rate ×1/6 → ×0,71, ×0,5 → ×1,26; Betäuben Frostnova ×1,51, Erdbeben ×1,26
   novaWert: (r, q) => tab([[2, 0.79], [2.5, 1.16], [3, 1.53], [3.5, 1.93]])(r) * tab([[Math.log2(1 / 6), 0.71], [-2, 1], [-1, 1.26]])(Math.log2(q)),
   novaStun: (c, t) => 1 + 0.53 * Math.sqrt(c * t),
-  nova: 0.60, ruestung: a => 1 + (+process.env.RUEST_K || 2.97) * 0.12 * a, nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
+  nova: 0.60, ruestung: a => process.env.RUEST_GEMESSEN ? tab([[0, 1], [0.5, 1.10], [0.6, 1.14], [1.5, 1.28], [2, 1.30]])(a) : 1 + (+process.env.RUEST_K || 2.97) * 0.12 * a, /* 30.10.: gemessen (kurse6 ruest, alle Türme, D7-Monster; mit Fläche gleich) statt RUEST_K per Suche */ nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
 };
 const V_D1 = {
   reichweite: r => r < 3.5 ? Math.pow(r / 3.5, 0.3) : Math.pow(r / 3.5, 0.16),

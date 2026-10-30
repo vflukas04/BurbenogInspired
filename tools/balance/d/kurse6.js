@@ -67,6 +67,11 @@ GRUPPEN.kombi = [['Rate ×3', { q:3 }], ['Brennen 6 % 2 s', { effect:'burn', eff
 GRUPPEN.stunF = [['Fläche 2, Rate ×0,4', { f:2, q:0.4 }], ['Fläche 2, Rate ×0,4, Betäuben 10 % 1 s', { f:2, q:0.4, stun:[0.1, 1] }],
   ['Fläche 2, Rate ×0,4, Betäuben 15 % 1 s', { f:2, q:0.4, stun:[0.15, 1] }], ['Fläche 2, Rate ×0,4, Betäuben 25 % 1 s', { f:2, q:0.4, stun:[0.25, 1] }],
   ['Fläche 1, 2 Geschosse', { f:1, n:2 }], ['Fläche 1, 2 Geschosse, Betäuben 15 % 1 s', { f:1, n:2, stun:[0.15, 1] }]];
+// Gruppe ruest (30.10.): Rüstungsschaden für alle Türme (Element-Eigenschaft), ohne und mit Fläche
+GRUPPEN.ruest = [['Rüstungsschaden 0,5', { el:{ armorDmg:0.5 } }], ['Rüstungsschaden 0,6', { el:{ armorDmg:0.6 } }], ['Rüstungsschaden 1,5', { el:{ armorDmg:1.5 } }], ['Rüstungsschaden 2,0', { el:{ armorDmg:2 } }],
+  ['Fläche 1', { f:1 }], ['Fläche 1 + Rüstungsschaden 1,5', { f:1, el:{ armorDmg:1.5 } }], ['Fläche 1 + Rüstungsschaden 2,0', { f:1, el:{ armorDmg:2 } }]];
+GRUPPEN.nova7 = [['Nova 3, Rate ×0,25', { nova:3, q:0.25 }], ['Nova 3, Rate ×0,25, Betäuben 10 % 1 s (Erdbeben D7)', { nova:3, q:0.25, stun:[0.1, 1] }],
+  ['Nova 2,5, Rate ×1/6, Betäuben 45 % 2 s (Frostnova)', { nova:2.5, q:1 / 6, stun:[0.45, 2] }], ['Nova 2,5, Rate ×1/6', { nova:2.5, q:1 / 6 }]];
 if (NUR) for (const g in GRUPPEN) GRUPPEN[g] = GRUPPEN[g].map(([n, m]) => [n + ` (nur T${NUR.map(k => k + 1).join('/')})`, { ...m, nur:NUR }]);
 const w = process.argv[2] || 'alle', t0 = Date.now();
 console.log(`Basis D6, Plan ${PLAN.bot}, ${R0.length} Tage×Maps, Reserve ohne Merkmal ${gm(R0.map(x => x.R)).toFixed(3)}`);

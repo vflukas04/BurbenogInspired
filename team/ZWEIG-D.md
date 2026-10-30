@@ -773,3 +773,9 @@ Version A: T1/T2 schwach, T3 keine, T4 normal, T5 keine, T6 normal, T7 keine, T8
 - Stein-Flächenabfall (Element-Spezifikation aus dem Spiel, unbepreist wie Baubonus): 110/75 % → 1,00 (1,09/1,04/0,95/0,93); **120/80 % → 1,09 (1,15/1,14/1,04/1,04)**, Fliegertage 0,60. Hebt das Niveau, nicht die Form. Übernommen.
 - Mehr Rüstungsschaden für Stein (2,0 / 2,5, bepreist): 0,98 / 0,91, Form unverändert – der Rüstungs-Kurs (3,6) bepreist ihn für Stein zu teuer; kein Form-Hebel.
 - Offen: Stein fällt nach hinten um etwa 10 % (vorne stark).
+
+## Rüstungsschaden gemessen statt gesucht (30.10. mittags)
+- `kurse6.js ruest` (alle Türme, D7-Monster, mit Platzwahl): Rüstungsschaden 0,5 → ×1,10 · 0,6 → ×1,14 · 1,5 → ×1,28 · 2,0 → ×1,30 (mit Fläche 1 gleich). **Drift jetzt negativ** (1,5: 1,44/1,29/1,22/1,22), weil D7 die Rüstung in Tag 1–12 erhöht hat. Der gesuchte Kurs 3,6 bepreiste Stein mit ×1,65 statt ×1,28, Feuer/Eis mit ×1,22/1,26 statt ×1,10/1,14.
+- Mit dem gemessenen Kurs (`RUEST_GEMESSEN=1`): fest Feuer 1,03 · Eis 1,02 · Schatten 0,97 · **Stein 1,43** (Form-Rest 4,5 %).
+- Stein-Diagnose im eigenen freien Plan (`frei6.js AKTUELL=1`): alle Türme Standard 0,661 (Stein ×1,51); je Turmtyp → Standard 0,88–1,00 (Kiesel 0,88, Erdbeben 0,89, Katapult 0,92, Lawine 0,93). Abschalten im festen Aufbau: ohne Rüstungsschaden 1,07, ohne eigenen Flächenabfall 1,21, ohne Betäubung 1,33, ohne Nova 1,23.
+- Deutung: Der gesuchte Rüstungs-Kurs war in Wahrheit ein **Stein-Verbund-Kurs** – er hat die nicht bepreisten Stein-Stärken (Flächenabfall, Verbund von Fläche + Rüstungsschaden + Betäubung) aufgefangen. Standard bleibt vorerst der alte Kurs (3,6); Entscheidung L.
