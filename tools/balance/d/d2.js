@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), S = require('../spiegel');
 // Basis (27.10. abends): Standardtürme D6 (Preise bis 1000, Treppe ×1,08, Kurve 1/0,95/1,01/1,08/1,16/1,25, Reichweite 3,5 auf allen Stufen, Leben auf bezug3 kalibriert); BASIS=spiegel-D0.json = alte Preise
 const D0 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.BASIS || (process.env.D7 !== '0' ? 'spiegel-D7.json' : 'spiegel-D6.json')))), sp = { ...D0 };
 // D7-Niveaus (28.10., d/fit1.js mit Platzwahl, mit Wetter-Mitteln in kraftBlock): Rüstungsschaden 3,6 (Stein 1,00), Bremsen 10,77, Brennen ×0,834 (Feuer/Eis fest 0,97), Fluch ×1,29
-if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '10.77'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || '1.36'; }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
+if (process.env.D7 !== '0') { process.env.RUEST_K ??= '3.6'; process.env.SLOW_K ??= process.env.D7_SLOW || '10.77'; process.env.NOFLY_Z ??= process.env.D7_NOFLY || String(46 / 38); /* 30.10.: „keine Fliegenden“ hergeleitet: an 8 von 46 Tagen nichts → ×46/38 ≈ 1,21 (vorher als Stein-Niveau von Hand hochgesetzt) */ }   // 28.10.: Feuer fest 0,97 (frei ≈ 1,03), Eis fest 0,94 (frei war 10 % über fest)
 
 // ---- Wechselkurse ----
 // D6 (27.10. abends, d/kurse6.js, Bezugs-Plan D6, alle Türme mit dem Merkmal, Stapelregel) – Standard; KURSE=D1 = alte Messungen D1b/D1c
@@ -23,7 +23,7 @@ const V_D6 = {
   fluch: e => 1 + 2.8 * e / (1 + 0.7 * e),                                       // 5 % 1,135 · 10 % 1,265 · 20 % 1,494
   // Bremsen: Einzelziel 10 % 2 s 1,004 · 20 % 2 s 1,02 · 40 % 4 s 1,20; mit Fläche 1: 10 % ×1,15 auf die Fläche. SLOW_K (Standard 1 = wie gemessen)
   bremsen: (s, fl) => { const k = +process.env.SLOW_K || 9.47, ein = tab([[0, 0], [0.1, 0.004], [0.2, 0.02], [0.4, 0.198]])(s); return 1 + k * (fl > 0 ? 1.48 * s : ein); },
-  betaeuben: (c, t) => 1 + Math.max(0, c * t - 0.1),                            // 15 % 1 s 1,05 · 5 % 0,5 s 1,00
+  betaeuben: (c, t, q = 1, n = 1) => process.env.D7 !== '0' ? 1 + 0.33 * c * t * q * n : 1 + Math.max(0, c * t - 0.1),   // 30.10.: hängt an Treffern je s (kurse6 stunF: T8 2 Geschosse 15 % → +7–9 %, Lawine Rate 0,4 → +2–3 %)                            // 15 % 1 s 1,05 · 5 % 0,5 s 1,00
   // Nova (27.10. 22 Uhr): Wert hängt stark am Radius – alle Türme Nova, Rate ×0,25: Radius 2 0,60 · 2,5 1,13 · 3 1,49 · 3,5 1,87;
   // Rate: ×1/6 → ×0,78, ×0,5 → ×1,245 (gegenüber ×0,25). Betäuben in der Nova: Frostnova (45 % 2 s) ×1,47, Erdbeben (20 % 1 s) ×1,22 → 1 + 0,5 × √(Chance × Dauer)
   // mit Platzwahl (28.10.): Radius 2 0,79 · 2,5 1,16 · 3 1,53 · 3,5 1,93; Rate ×1/6 → ×0,71, ×0,5 → ×1,26; Betäuben Frostnova ×1,51, Erdbeben ×1,26
@@ -45,7 +45,7 @@ const V_D1 = {
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 // SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
 // Verbund-/Element-Kurse (28.10. nachts, mit Platzwahl, d/verbund.js und d/fit1.js): Brennen ×0,59, Fluch ×1,29 auf (Wert − 1); RUEST_K 2,97, SLOW_K 9,47 (Standard unten)
-const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:1.08,fluch:1.29,nacht:0.687,betaeuben:3' : 'brennen:0.59,fluch:1.29');
+const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:1.08,fluch:1.29,nacht:0.687' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
 const LUFT = (process.env.LUFT || (process.env.D7 !== '0' ? '0.8,1.2' : '0.6,1.8'))   /* 29.10. (L): Luftspezialist Boden 80 %, Fliegende 120 % */.split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
@@ -79,16 +79,17 @@ if (D7 && process.env.STEIN_D7 !== '0') {   // 30.10. (L): Stein gegen Fliegende
   const SCHW = { noFly:0, luft:[1, SCHWACH] }, NORM = { noFly:0, luft:undefined }, KEIN = { noFly:1, luft:undefined };
   const V = process.env.STEIN_VAR || 'A', F = V === 'B' ? [SCHW, NORM, KEIN, SCHW, KEIN, NORM, KEIN, SCHW] : [SCHW, SCHW, KEIN, NORM, KEIN, NORM, KEIN, SCHW];   // A: T1/T2 schwach, T4 normal · B: T2 normal, T4 schwach
   F.forEach((x, k) => { if (k !== 4) T[3][k][1] = { ...T[3][k][1], ...x }; });
-  if (+(process.env.STUN_FELS || 0)) T[3][2][1] = { ...T[3][2][1], stun:[+process.env.STUN_FELS, 1] }; T[3][4][1] = { ...T[3][4][1], stun:[+(process.env.STUN_ERD || 0.1), 1] };   /* L 30.10. 9:26: Felsbrocken ohne Betäubung, Erdbeben 10 % */ T[3][7][1] = { ...T[3][7][1], stun:[+(process.env.STUN_BERG || 0.15), 1] }; }
+  if (+(process.env.STUN_FELS || 0)) T[3][2][1] = { ...T[3][2][1], stun:[+process.env.STUN_FELS, 1] }; T[3][4][1] = { ...T[3][4][1], stun:[+(process.env.STUN_ERD || 0.1), 1] };   /* L 30.10. 9:26: Felsbrocken ohne Betäubung, Erdbeben 10 % */ if (+(process.env.STUN_BERG || 0)) T[3][7][1] = { ...T[3][7][1], stun:[+process.env.STUN_BERG, 1] }; else { const { stun, ...o } = T[3][7][1]; T[3][7][1] = o; }
+  if (+(process.env.STUN_LAW ?? 0.15)) T[3][6][1] = { ...T[3][6][1], stun:[+(process.env.STUN_LAW ?? 0.15), 1] }; }   // 30.10. (L): Betäubung auf Lawine statt Bergkönig
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   const q = m.q || 1, n = m.n || 1, f = m.f || 0;
   let w = (m.nova && V.novaWert ? V.novaWert(m.r, q) * (m.stun ? V.novaStun(...m.stun) : 1) : V.reichweite(m.r) * V.geschosse(n) * V.rate(q) * (m.nova ? V.nova * (m.stun ? V.betaeuben(...m.stun, true) : 1) : V.flaeche(f))) * V.ruestung(RUEST[e]) * (e === 2 ? V.nacht : 1);   // Nova D6: eigener Kurs nach Radius und Rate (ohne Reichweiten-/Ratenkurs)
   if (m.nova) w *= +(process.env.NOVA_K || (D7 ? 1.2 : 1));   // 29.10.: Nova als einzelner Turmtyp im gemischten Aufbau mehr wert als gemessen (freier Bau: Frostnova trägt 23 % von Eis, Erdbeben 15 % von Stein)
   if (m.eff) w *= e === 0 ? V.brennen(m.eff, m.dur) : e === 1 ? V.bremsen(m.eff, f) : V.fluch(m.eff);
-  if (m.stun && !m.nova) w *= V.betaeuben(...m.stun, false);
+  if (m.stun && !m.nova) w *= process.env.D7 !== '0' ? V.betaeuben(m.stun[0], m.stun[1], q, n) : V.betaeuben(...m.stun, false);
   // Luftspezialist (L 26.10.): Boden × luft[0], Fliegende × luft[1]; Wert = geometrisches Mittel über die Tage (Fliegertage ≈ LUFT_ANTEIL)
-  if (m.luft) w *= Math.exp((1 - LUFT_ANTEIL) * Math.log(m.luft[0]) + LUFT_ANTEIL * Math.log(m.luft[1]));
+  if (m.luft) w *= process.env.D7 !== '0' ? (1 - LUFT_ANTEIL) * m.luft[0] + LUFT_ANTEIL * m.luft[1] : Math.exp((1 - LUFT_ANTEIL) * Math.log(m.luft[0]) + LUFT_ANTEIL * Math.log(m.luft[1]));   // 30.10.: Mittel über die Tage (wie „keine Fliegenden“)
   const zuschlag = m.air ? 1.5 : m.noFly ? NOFLY_Z : 1;
   const opt = { effect:m.stun ? 'stun' : m.eff ? EFF[e] : 'none', fly:!m.noFly };
   if (m.air) opt.air = true; if (m.luft) { opt.groundMul = m.luft[0]; opt.flyMul = m.luft[1]; } if (m.slowFly) opt.slowFly = true; if (m.nova) opt.nova = true; if (m.stun) opt.chance = m.stun[0];

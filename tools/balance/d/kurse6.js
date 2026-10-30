@@ -63,6 +63,10 @@ GRUPPEN.novaR = [['Nova 2,5, Rate ×0,25', { nova:2.5, q:0.25 }], ['Nova 3,5, Ra
 GRUPPEN.kombi = [['Rate ×3', { q:3 }], ['Brennen 6 % 2 s', { effect:'burn', eff:0.06, dur:2 }], ['Rate ×3 + Brennen 6 % 2 s', { q:3, effect:'burn', eff:0.06, dur:2 }],
   ['Reichweite 1,5 + Rate ×3', { r:1.5, q:3 }], ['Reichweite 1,5 + Rate ×3 + Brennen 6 % 2 s (Flammenwerfer)', { r:1.5, q:3, effect:'burn', eff:0.06, dur:2 }],
   ['Brennen 8 % 3 s', { effect:'burn', eff:0.08, dur:3 }], ['Reichweite 6 + Brennen 8 % 3 s (Brandpfeil)', { r:6, effect:'burn', eff:0.08, dur:3 }], ['Rate ×0,5 + Brennen 15 % ganzer Tag (Schwelbrand)', { q:0.5, effect:'burn', eff:0.15, dur:'Tag' }]];
+// Gruppe stunF (30.10., L: Betäubung auf der Lawine): Betäubung mit Fläche, Vergleich gegen dieselbe Fläche/Rate ohne Betäubung (am besten mit NUR=6 = nur Turm 7)
+GRUPPEN.stunF = [['Fläche 2, Rate ×0,4', { f:2, q:0.4 }], ['Fläche 2, Rate ×0,4, Betäuben 10 % 1 s', { f:2, q:0.4, stun:[0.1, 1] }],
+  ['Fläche 2, Rate ×0,4, Betäuben 15 % 1 s', { f:2, q:0.4, stun:[0.15, 1] }], ['Fläche 2, Rate ×0,4, Betäuben 25 % 1 s', { f:2, q:0.4, stun:[0.25, 1] }],
+  ['Fläche 1, 2 Geschosse', { f:1, n:2 }], ['Fläche 1, 2 Geschosse, Betäuben 15 % 1 s', { f:1, n:2, stun:[0.15, 1] }]];
 if (NUR) for (const g in GRUPPEN) GRUPPEN[g] = GRUPPEN[g].map(([n, m]) => [n + ` (nur T${NUR.map(k => k + 1).join('/')})`, { ...m, nur:NUR }]);
 const w = process.argv[2] || 'alle', t0 = Date.now();
 console.log(`Basis D6, Plan ${PLAN.bot}, ${R0.length} Tage×Maps, Reserve ohne Merkmal ${gm(R0.map(x => x.R)).toFixed(3)}`);
