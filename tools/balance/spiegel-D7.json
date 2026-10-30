@@ -893,49 +893,49 @@
   "MONSTERS.Würfel.night": true,
   "MONSTERS.E-Scooter-Fahrer.night": true,
   "MONSTERS.Silberfische.ar": [
-    0.3,
-    0.3
+    0.15,
+    0.15
   ],
   "MONSTERS.Kellerasseln.ar": [
-    0.5,
-    0.6
+    0.35,
+    0.45
   ],
   "MONSTERS.Nacktschnecken.ar": [
-    0.3,
-    0.3
+    0.15,
+    0.15
   ],
   "MONSTERS.Ohrenkneifer.ar": [
-    0.45,
-    0.6
+    0.3,
+    0.45
   ],
   "MONSTERS.Mäuse.ar": [
-    0.3,
-    0.3
+    0.15,
+    0.15
   ],
   "MONSTERS.Maus-Boss.ar": [
-    0.3,
-    0.3
+    0.15,
+    0.15
   ],
   "MONSTERS.Kleine Hunde.ar": [
-    0.4,
-    0.5
+    0.25,
+    0.35
   ],
   "MONSTERS.Ratten.ar": [
-    0.45,
-    0.6
+    0.3,
+    0.45
   ],
   "MONSTERS.Katzen.ar": [
-    0.4,
-    0.5
+    0.25,
+    0.35
   ],
   "MONSTERS.Spatzen.ar": null,
   "MONSTERS.Füchse.ar": [
-    0.5,
-    0.7
+    0.35,
+    0.55
   ],
   "MONSTERS.Fuchs-Boss.ar": [
-    0.5,
-    0.7
+    0.35,
+    0.55
   ],
   "MONSTERS.Krieger.night": true,
   "MONSTERS.Lindner-Spezialisten.night": true,

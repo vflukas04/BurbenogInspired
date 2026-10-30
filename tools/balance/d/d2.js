@@ -29,7 +29,7 @@ const V_D6 = {
   // mit Platzwahl (28.10.): Radius 2 0,79 · 2,5 1,16 · 3 1,53 · 3,5 1,93; Rate ×1/6 → ×0,71, ×0,5 → ×1,26; Betäuben Frostnova ×1,51, Erdbeben ×1,26
   novaWert: (r, q) => tab([[2, 0.79], [2.5, 1.16], [3, 1.53], [3.5, 1.93]])(r) * tab([[Math.log2(1 / 6), 0.71], [-2, 1], [-1, 1.26]])(Math.log2(q)),
   novaStun: (c, t) => 1 + 0.53 * Math.sqrt(c * t),
-  nova: 0.60, ruestung: a => process.env.RUEST_GEMESSEN ? tab([[0, 1], [0.5, 1.10], [0.6, 1.14], [1.5, 1.28], [2, 1.30]])(a) : 1 + (+process.env.RUEST_K || 2.97) * 0.12 * a, /* 30.10.: gemessen (kurse6 ruest, alle Türme, D7-Monster; mit Fläche gleich) statt RUEST_K per Suche */ nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
+  nova: 0.60, ruestung: a => (process.env.RUEST_GEMESSEN ?? (process.env.D7 !== '0' ? '1' : '')) ? tab([[0, 1], [0.5, 1.10], [0.6, 1.14], [1.5, 1.28], [2, 1.30]])(a) : 1 + (+process.env.RUEST_K || 2.97) * 0.12 * a, /* 30.10.: gemessen (kurse6 ruest, alle Türme, D7-Monster; mit Fläche gleich) statt RUEST_K per Suche */ nacht: 0.86,   // RUEST_K: Rüstungsschaden im Verbund des eigenen Elements (27.10.)
 };
 const V_D1 = {
   reichweite: r => r < 3.5 ? Math.pow(r / 3.5, 0.3) : Math.pow(r / 3.5, 0.16),
@@ -72,13 +72,14 @@ const T = {
 if (process.env.AENDERN) for (const a of process.env.AENDERN.split(';').filter(Boolean)) { const [ek, v] = a.split('='), [e, k, f] = ek.split('.'); T[+e][+k][1] = { ...T[+e][+k][1], [f]:(() => { try { return JSON.parse(v); } catch (x) { return v; } })() }; }
 const STEIN_K = +process.env.STEIN_K || 1;   // 27.10. abends (L): alte Korrektur aus (vorher 0,8)   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
 const LUFT_ANTEIL = +process.env.LUFT_ANTEIL || 8 / 46;   // Fliegertage ÷ Tage ohne Bosse (8 von 46)
-const D7 = process.env.D7 !== '0', D7_RUEST = {"Silberfische":[0.3,0.3],"Kellerasseln":[0.5,0.6],"Nacktschnecken":[0.3,0.3],"Ohrenkneifer":[0.45,0.6],"Mäuse":[0.3,0.3],"Maus-Boss":[0.3,0.3],"Kleine Hunde":[0.4,0.5],"Ratten":[0.45,0.6],"Katzen":[0.4,0.5],"Füchse":[0.5,0.7],"Fuchs-Boss":[0.5,0.7]};   // Rüstung Tag 1–12 (D6 + 30 % / + 0,3)
+const D7 = process.env.D7 !== '0', D7_RUEST = {"Silberfische": [0.15, 0.15], "Kellerasseln": [0.35, 0.45], "Nacktschnecken": [0.15, 0.15], "Ohrenkneifer": [0.3, 0.45], "Mäuse": [0.15, 0.15], "Maus-Boss": [0.15, 0.15], "Kleine Hunde": [0.25, 0.35], "Ratten": [0.3, 0.45], "Katzen": [0.25, 0.35], "Füchse": [0.35, 0.55], "Fuchs-Boss": [0.35, 0.55]};   // Rüstung Tag 1–12 (D6 + 15 % / + 0,15; 30.10., vorher +30 %)
 const EFF = { 0:'burn', 1:'slow', 2:'curse', 3:'stun' }, RUEST = Object.assign({}, (process.env.RUEST_EL || '0.5,0.6,0,1.5').split(',').map(Number))   /* RUEST_EL (28.10.): Rüstungsschaden je Element */, G0 = 2;   // GRID
 // Stein-Drift (29.10. nachmittags, L): Kiesel schwach gegen Fliegende statt „keine Fliegenden“ (kein Zuschlag mehr am Anfang), Bergkönig stärker betäubend (driftet nach hinten), Granitwächter keine Fliegenden
 if (D7 && process.env.STEIN_D7 !== '0') {   // 30.10. (L): Stein gegen Fliegende neu, Betäubung klein früh (Felsbrocken) und Bergkönig als Alleskönner (Fläche, etwas Betäubung, schwach gegen Fliegende)
   const SCHW = { noFly:0, luft:[1, SCHWACH] }, NORM = { noFly:0, luft:undefined }, KEIN = { noFly:1, luft:undefined };
   const V = process.env.STEIN_VAR || 'A', F = V === 'B' ? [SCHW, NORM, KEIN, SCHW, KEIN, NORM, KEIN, SCHW] : [SCHW, SCHW, KEIN, NORM, KEIN, NORM, KEIN, SCHW];   // A: T1/T2 schwach, T4 normal · B: T2 normal, T4 schwach
   F.forEach((x, k) => { if (k !== 4) T[3][k][1] = { ...T[3][k][1], ...x }; });
+  if (process.env.KIESEL_FL !== '1') T[3][0][1] = { ...T[3][0][1], f:0 };   // 30.10. (L): Kiesel ohne Fläche, gezieltes Geschoss (trifft immer das anvisierte Monster)
   if (+(process.env.STUN_FELS || 0)) T[3][2][1] = { ...T[3][2][1], stun:[+process.env.STUN_FELS, 1] }; T[3][4][1] = { ...T[3][4][1], stun:[+(process.env.STUN_ERD || 0.1), 1] };   /* L 30.10. 9:26: Felsbrocken ohne Betäubung, Erdbeben 10 % */ if (+(process.env.STUN_BERG || 0)) T[3][7][1] = { ...T[3][7][1], stun:[+process.env.STUN_BERG, 1] }; else { const { stun, ...o } = T[3][7][1]; T[3][7][1] = o; }
   if (+(process.env.STUN_LAW ?? 0.15)) T[3][6][1] = { ...T[3][6][1], stun:[+(process.env.STUN_LAW ?? 0.15), 1] }; }   // 30.10. (L): Betäubung auf Lawine statt Bergkönig
 const zeilen = [];
