@@ -1198,6 +1198,6 @@
     "curse": 0.05
   },
   "CONFIG.burnArmor": 0,
-  "ELEMENTS.3.splashCenter": 1,
-  "ELEMENTS.3.splashEdge": 0.7
+  "ELEMENTS.3.splashCenter": 1.2,
+  "ELEMENTS.3.splashEdge": 0.8
 }

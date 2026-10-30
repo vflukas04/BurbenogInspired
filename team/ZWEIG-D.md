@@ -765,3 +765,11 @@ Version A: T1/T2 schwach, T3 keine, T4 normal, T5 keine, T6 normal, T7 keine, T8
 - … Bergkönig 25 %, Betäuben-Faktor ×1: 1,02/1,02/0,95/1,22 = 1,05 | 0,58 · zusätzlich „keine Fliegenden“ ×1,45: 1,02/1,10/0,96/1,12 = 1,05 | 0,46
 - **Achtung Spielcode:** Betäubungs-Chance 0 bedeutet „betäubt immer“ (`!def.chance || rand < chance`). Beim Übernehmen 0 als „nie“ behandeln.
 - Befund: Der Zuschlag „keine Fliegenden“ liegt bei Version A auf T3/T5/T7 → Stein vorne/Mitte stark, hinten schwach. Begründeter Zuschlag wäre 46/38 ≈ ×1,21 (Fliegertage-Anteil, wie bei „schwach“ und Luftspezialisten); ×1,36 war als Stein-Niveau-Hebel missbraucht.
+
+## Hergeleitete Faktoren und Stein-Niveau (30.10. vormittags)
+- „Keine Fliegenden“ war als Stein-Niveau von Hand hochgesetzt (1,1 → 1,36). Jetzt hergeleitet ×46/38 = 1,21; „schwach“ und Luftspezialisten ebenso als Mittel über die Tage.
+- Betäuben neu gemessen (`kurse6.js stunF`, nur ein Turmtyp): T7 Fläche 2, Rate 0,4: +2–3 % (10–25 %); T8 Fläche 1, 2 Geschosse: 15 % → +7–9 %. Neue Formel 1 + 0,33 × Chance × Dauer × Rate × Geschosse (die alte hing nicht an der Trefferzahl; ×3-Korrektur entfällt). Betäubung: Erdbeben 10 %, Lawine 15 %, Bergkönig keine (L).
+- Frei gegen Ziel danach: Feuer 1,03 (0,99/1,09/1,06/0,99), Fliegertage 1,21 (Bot baut jetzt Sonnentürme statt Glutbecken) · Eis 1,03 (1,06/1,05/1,02/0,98), 1,31 · Schatten 0,98 (0,92/0,98/1,01/1,00), 1,50 · Stein 0,94 (1,01/0,99/0,89/0,88), 0,50.
+- Stein-Flächenabfall (Element-Spezifikation aus dem Spiel, unbepreist wie Baubonus): 110/75 % → 1,00 (1,09/1,04/0,95/0,93); **120/80 % → 1,09 (1,15/1,14/1,04/1,04)**, Fliegertage 0,60. Hebt das Niveau, nicht die Form. Übernommen.
+- Mehr Rüstungsschaden für Stein (2,0 / 2,5, bepreist): 0,98 / 0,91, Form unverändert – der Rüstungs-Kurs (3,6) bepreist ihn für Stein zu teuer; kein Form-Hebel.
+- Offen: Stein fällt nach hinten um etwa 10 % (vorne stark).
