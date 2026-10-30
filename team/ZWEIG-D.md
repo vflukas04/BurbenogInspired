@@ -779,3 +779,9 @@ Version A: T1/T2 schwach, T3 keine, T4 normal, T5 keine, T6 normal, T7 keine, T8
 - Mit dem gemessenen Kurs (`RUEST_GEMESSEN=1`): fest Feuer 1,03 · Eis 1,02 · Schatten 0,97 · **Stein 1,43** (Form-Rest 4,5 %).
 - Stein-Diagnose im eigenen freien Plan (`frei6.js AKTUELL=1`): alle Türme Standard 0,661 (Stein ×1,51); je Turmtyp → Standard 0,88–1,00 (Kiesel 0,88, Erdbeben 0,89, Katapult 0,92, Lawine 0,93). Abschalten im festen Aufbau: ohne Rüstungsschaden 1,07, ohne eigenen Flächenabfall 1,21, ohne Betäubung 1,33, ohne Nova 1,23.
 - Deutung: Der gesuchte Rüstungs-Kurs war in Wahrheit ein **Stein-Verbund-Kurs** – er hat die nicht bepreisten Stein-Stärken (Flächenabfall, Verbund von Fläche + Rüstungsschaden + Betäubung) aufgefangen. Standard bleibt vorerst der alte Kurs (3,6); Entscheidung L.
+
+## Drift abgetragen (30.10. abends)
+Schritte: gemessener Rüstungsschaden-Kurs, Zusatzrüstung Tag 1–12 +15 %, Kiesel gezielt ohne Fläche (L), Winter-Wetter mit mehr Bewölkt/Gewitter, Stein-Flächenabfall 100/70 %, Niveaus (Brennen ×1,54, Bremsen 15,16), Leben je Block × gemeinsame Drift (1,00/1,12/1,06/1,06), Schatten-Niveau über Nachtregel ×1,105.
+- **Frei gegen die Ziel-Kurve** (Bodentage Tag 1–12/13–24/25–36/37–48 = gesamt | Fliegertage): Feuer 1,00/1,04/1,04/0,98 = **1,02** | 1,27 · Eis 1,04/1,04/0,99/1,00 = **1,01** | 1,44 · Schatten 0,99/0,96/1,01/1,00 = **0,99** | 1,59 · Stein 1,02/1,13/1,00/1,10 = **1,06** | 0,68. Standard-Bot 0,92 (Leben jetzt auf die Elemente gestellt).
+- Form-Rest vor dem letzten Schritt (d16): alle Elemente je Block innerhalb ±6 %, meist ±4 % – etwa die Bot-Streuung.
+- Danach Leben an Fliegertagen erneut auf das Mittel der Elemente (×1,02–1,36).
