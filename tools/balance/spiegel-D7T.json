@@ -231,7 +231,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.0": 0.94446,
+  "ELEMENTS.0.kraftT.0": 0.89004,
   "ELEMENTS.0.towers.1": [
     "Glutbecken",
     "Schaden",
@@ -247,7 +247,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.1": 1.54767,
+  "ELEMENTS.0.kraftT.1": 1.4229,
   "ELEMENTS.0.towers.2": [
     "Flammenwerfer",
     "Schaden",
@@ -263,7 +263,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.2": 1.6481,
+  "ELEMENTS.0.kraftT.2": 1.59039,
   "ELEMENTS.0.towers.3": [
     "Brandpfeil",
     "Schaden",
@@ -279,7 +279,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.3": 0.82081,
+  "ELEMENTS.0.kraftT.3": 0.77352,
   "ELEMENTS.0.towers.4": [
     "Schwelbrand",
     "Schaden",
@@ -295,7 +295,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.4": 0.4997,
+  "ELEMENTS.0.kraftT.4": 0.40243,
   "ELEMENTS.0.towers.5": [
     "Lavaturm",
     "Schaden",
@@ -311,7 +311,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.5": 1.16561,
+  "ELEMENTS.0.kraftT.5": 1.09844,
   "ELEMENTS.0.towers.6": [
     "Sonnenturm",
     "Schaden",
@@ -327,7 +327,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.6": 0.95914,
+  "ELEMENTS.0.kraftT.6": 0.89376,
   "ELEMENTS.0.towers.7": [
     "Höllenfeuer",
     "Schaden",
@@ -343,7 +343,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.7": 0.36898,
+  "ELEMENTS.0.kraftT.7": 0.3078,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
     "0": 10,
@@ -402,7 +402,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.0": 1.02012,
+  "ELEMENTS.1.kraftT.0": 1.00324,
   "ELEMENTS.1.towers.1": [
     "Schneeball",
     "Schaden",
@@ -418,7 +418,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.1": 0.65491,
+  "ELEMENTS.1.kraftT.1": 0.55464,
   "ELEMENTS.1.towers.2": [
     "Eiszapfen",
     "Schaden",
@@ -437,7 +437,7 @@
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.04755,
+  "ELEMENTS.1.kraftT.2": 1.03021,
   "ELEMENTS.1.towers.3": [
     "Frosthauch",
     "Schaden",
@@ -453,7 +453,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.3": 0.58919,
+  "ELEMENTS.1.kraftT.3": 0.4829,
   "ELEMENTS.1.towers.4": [
     "Frostnova",
     "Schaden",
@@ -487,7 +487,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 0.91292,
+  "ELEMENTS.1.kraftT.5": 0.89781,
   "ELEMENTS.1.towers.6": [
     "Blizzard",
     "Schaden",
@@ -503,7 +503,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 2.03127,
+  "ELEMENTS.1.kraftT.6": 2.01396,
   "ELEMENTS.1.towers.7": [
     "Ewiges Eis",
     "Schaden",
@@ -519,7 +519,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.32084,
+  "ELEMENTS.1.kraftT.7": 0.25658,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -1198,6 +1198,6 @@
     "curse": 0.05
   },
   "CONFIG.burnArmor": 0,
-  "ELEMENTS.3.splashCenter": 1.2,
-  "ELEMENTS.3.splashEdge": 0.8
+  "ELEMENTS.3.splashCenter": 1,
+  "ELEMENTS.3.splashEdge": 0.7
 }
