@@ -1,53 +1,53 @@
 {
   "_basis": "044d8c0",
-  "MONSTERS.Betty (Boss).hpMul": 0.9752,
+  "MONSTERS.Betty (Boss).hpMul": 1.0385,
   "MONSTERS.Nazgul.hpMul": 0.1638,
   "MONSTERS.Fledermäuse.hpMul": 0.2863,
   "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1555,
-  "MONSTERS.Silberfische.hpMul": 0.8476,
-  "MONSTERS.Kellerasseln.hpMul": 0.459,
-  "MONSTERS.Nacktschnecken.hpMul": 0.9295,
-  "MONSTERS.Ohrenkneifer.hpMul": 0.5985,
-  "MONSTERS.Mäuse.hpMul": 0.6277,
-  "MONSTERS.Maus-Boss.hpMul": 3.4843,
-  "MONSTERS.Kleine Hunde.hpMul": 0.5396,
-  "MONSTERS.Ratten.hpMul": 0.4544,
-  "MONSTERS.Katzen.hpMul": 0.5102,
+  "MONSTERS.Silberfische.hpMul": 0.8436,
+  "MONSTERS.Kellerasseln.hpMul": 0.4568,
+  "MONSTERS.Nacktschnecken.hpMul": 0.9251,
+  "MONSTERS.Ohrenkneifer.hpMul": 0.5957,
+  "MONSTERS.Mäuse.hpMul": 0.6248,
+  "MONSTERS.Maus-Boss.hpMul": 3.468,
+  "MONSTERS.Kleine Hunde.hpMul": 0.5397,
+  "MONSTERS.Ratten.hpMul": 0.459,
+  "MONSTERS.Katzen.hpMul": 0.5204,
   "MONSTERS.Spatzen.hpMul": 0.5124,
-  "MONSTERS.Füchse.hpMul": 0.3739,
-  "MONSTERS.Fuchs-Boss.hpMul": 2.6339,
+  "MONSTERS.Füchse.hpMul": 0.389,
+  "MONSTERS.Fuchs-Boss.hpMul": 2.7671,
   "MONSTERS.Habichte.hpMul": 0.4527,
-  "MONSTERS.Dachse.hpMul": 0.5636,
-  "MONSTERS.Oktopusse.hpMul": 0.8194,
-  "MONSTERS.Wildschweine.hpMul": 0.4803,
-  "MONSTERS.Schäferhunde.hpMul": 0.5529,
-  "MONSTERS.Schäferhund-Boss.hpMul": 3.1735,
-  "MONSTERS.Besoffene Penner.hpMul": 0.6786,
-  "MONSTERS.Wütende Partnerin.hpMul": 0.3912,
-  "MONSTERS.Wütende Nachbarn.hpMul": 0.3193,
-  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.5679,
+  "MONSTERS.Dachse.hpMul": 0.6039,
+  "MONSTERS.Oktopusse.hpMul": 0.8866,
+  "MONSTERS.Wildschweine.hpMul": 0.5248,
+  "MONSTERS.Schäferhunde.hpMul": 0.6101,
+  "MONSTERS.Schäferhund-Boss.hpMul": 3.5365,
+  "MONSTERS.Besoffene Penner.hpMul": 0.7581,
+  "MONSTERS.Wütende Partnerin.hpMul": 0.4348,
+  "MONSTERS.Wütende Nachbarn.hpMul": 0.3532,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.625,
   "MONSTERS.Uffug-Vorhaut.hpMul": 0.3562,
-  "MONSTERS.Uffug (Boss).hpMul": 3.4192,
-  "MONSTERS.Roboter.hpMul": 0.3865,
-  "MONSTERS.Sommer-Schneebälle.hpMul": 0.2783,
-  "MONSTERS.Würfel.hpMul": 0.374,
+  "MONSTERS.Uffug (Boss).hpMul": 3.726,
+  "MONSTERS.Roboter.hpMul": 0.4191,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.3003,
+  "MONSTERS.Würfel.hpMul": 0.4015,
   "MONSTERS.Phönixe.hpMul": 0.3388,
-  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5808,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.6174,
   "MONSTERS.El Schlucko.hpMul": 2.4892,
-  "MONSTERS.Krieger.hpMul": 0.2314,
-  "MONSTERS.Golems.hpMul": 0.3011,
-  "MONSTERS.Albträume.hpMul": 0.4099,
-  "MONSTERS.Magier-Novizen.hpMul": 0.4253,
-  "MONSTERS.Magiermeister.hpMul": 1.4535,
-  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.3046,
-  "MONSTERS.Lindner-Spezialisten.hpMul": 0.1922,
-  "MONSTERS.Wargreiter.hpMul": 0.2827,
-  "MONSTERS.Lehrer.hpMul": 0.2313,
-  "MONSTERS.Schulleiter.hpMul": 1.5073,
-  "MONSTERS.Streichquartett.hpMul": 0.2269,
-  "MONSTERS.Heisenbergs.hpMul": 0.1892,
-  "MONSTERS.Mehlmottenraupen.hpMul": 0.1553,
-  "MONSTERS.GNTModels.hpMul": 0.2821,
+  "MONSTERS.Krieger.hpMul": 0.2443,
+  "MONSTERS.Golems.hpMul": 0.3181,
+  "MONSTERS.Albträume.hpMul": 0.4333,
+  "MONSTERS.Magier-Novizen.hpMul": 0.4503,
+  "MONSTERS.Magiermeister.hpMul": 1.5401,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.323,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.204,
+  "MONSTERS.Wargreiter.hpMul": 0.3002,
+  "MONSTERS.Lehrer.hpMul": 0.246,
+  "MONSTERS.Schulleiter.hpMul": 1.6045,
+  "MONSTERS.Streichquartett.hpMul": 0.2416,
+  "MONSTERS.Heisenbergs.hpMul": 0.2015,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.1654,
+  "MONSTERS.GNTModels.hpMul": 0.3004,
   "MONSTERS.Kellerasseln.weak": [
     0.9,
     1,
@@ -578,7 +578,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.0": 1.14273,
+  "ELEMENTS.2.kraftT.0": 1.22184,
   "ELEMENTS.2.towers.1": [
     "Irrlicht",
     "Licht",
@@ -611,7 +611,7 @@
       ]
     }
   ],
-  "ELEMENTS.2.kraftT.1": 1.17539,
+  "ELEMENTS.2.kraftT.1": 1.25676,
   "ELEMENTS.2.towers.2": [
     "Nachtauge",
     "Schaden",
@@ -629,7 +629,7 @@
       "flyMul": 1.2
     }
   ],
-  "ELEMENTS.2.kraftT.2": 1.17345,
+  "ELEMENTS.2.kraftT.2": 1.25469,
   "ELEMENTS.2.towers.3": [
     "Fluchstein",
     "Schaden",
@@ -645,7 +645,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.2.kraftT.3": 1.78503,
+  "ELEMENTS.2.kraftT.3": 1.90861,
   "ELEMENTS.2.towers.4": [
     "Seelenfresser",
     "Schaden",
@@ -661,7 +661,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.4": 1.39516,
+  "ELEMENTS.2.kraftT.4": 1.49174,
   "ELEMENTS.2.towers.5": [
     "Phantom",
     "Schaden",
@@ -677,7 +677,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.5": 1.91844,
+  "ELEMENTS.2.kraftT.5": 2.05126,
   "ELEMENTS.2.towers.6": [
     "Leerenturm",
     "Schaden",
@@ -693,7 +693,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.6": 0.95693,
+  "ELEMENTS.2.kraftT.6": 1.02317,
   "ELEMENTS.2.towers.7": [
     "Ewige Nacht",
     "Schaden",
@@ -709,7 +709,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.7": 0.88148,
+  "ELEMENTS.2.kraftT.7": 0.94251,
   "ELEMENTS.2.kraft": 1,
   "ELEMENTS.2.costOverride": {
     "0": 10,
