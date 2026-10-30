@@ -756,3 +756,12 @@ Stein frei gegen die Ziel-Kurve (Bodentage Tag 1–12/13–24/25–36/37–48 = 
 - bisher (T1/T2 schwach, T3 keine): 1,02/1,04/1,04/1,19 = 1,07 | 0,66 (0,54)
 - T2 keine Fliegenden, T3 normal (L): 1,17/1,08/1,05/1,31 = 1,15 | 0,58 (0,37) – die Schleuder bekam den Zuschlag, der Bot baute früh drei davon statt Luftabwehr. Betäuben-Faktor ×2: …/1,20, ×3: …/1,14.
 - **Gewählt:** T2 schwach, **T3 Felsbrocken normal**, Betäuben-Faktor ×3: **1,05/1,02/1,00/1,09 = 1,04 | 0,68 (0,62)**.
+
+## Stein gegen Fliegende neu (30.10. vormittags, L)
+Version A: T1/T2 schwach, T3 keine, T4 normal, T5 keine, T6 normal, T7 keine, T8 schwach (Bergkönig als Alleskönner). B: T2 normal, T4 schwach. Stein frei gegen die Ziel-Kurve (Bodentage Tag 1–12/13–24/25–36/37–48 = gesamt | Fliegertage):
+- A, Felsbrocken 10 %, Erdbeben 20 %, Bergkönig 15 %: 1,10/1,09/1,03/0,99 = 1,05 | 0,50 · B: 1,11/1,00/0,99/0,99 = 1,02 | 0,51 (frühe Fliegertage 0,35)
+- A, Felsbrocken 10 %, Bergkönig 25 %: 1,10/1,09/1,03/1,09 = 1,07 | 0,52
+- A, Felsbrocken ohne, Erdbeben 10 % (L), Bergkönig 15 %: 1,02/1,02/0,94/0,91 = 0,97 | 0,52 · Bergkönig 25 %: 1,02/1,02/0,93/0,96 = 0,98 | 0,54
+- … Bergkönig 25 %, Betäuben-Faktor ×1: 1,02/1,02/0,95/1,22 = 1,05 | 0,58 · zusätzlich „keine Fliegenden“ ×1,45: 1,02/1,10/0,96/1,12 = 1,05 | 0,46
+- **Achtung Spielcode:** Betäubungs-Chance 0 bedeutet „betäubt immer“ (`!def.chance || rand < chance`). Beim Übernehmen 0 als „nie“ behandeln.
+- Befund: Der Zuschlag „keine Fliegenden“ liegt bei Version A auf T3/T5/T7 → Stein vorne/Mitte stark, hinten schwach. Begründeter Zuschlag wäre 46/38 ≈ ×1,21 (Fliegertage-Anteil, wie bei „schwach“ und Luftspezialisten); ×1,36 war als Stein-Niveau-Hebel missbraucht.
