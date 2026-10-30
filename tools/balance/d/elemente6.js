@@ -41,6 +41,8 @@ const KB = {}; (process.env.KRAFT_BLOCK || '').split(';').filter(Boolean).forEac
 // MON='Spatzen.speed=1.2;Spatzen.ar=null;Nazgul.ar=[0.4,0.5]' (28.10.): Monster-Werte für die Messung überschreiben (JSON-Werte, null löscht)
 (process.env.MON || '').split(';').filter(Boolean).forEach(x => { const [k, v] = x.split('='), i = k.lastIndexOf('.'), n = k.slice(0, i), f = k.slice(i + 1), m = G.MONSTERS.find(q => q.name === n);
   if (!m) throw new Error('Monster fehlt: ' + n); const w = JSON.parse(v); if (w === null) delete m[f]; else m[f] = w; });
+// RES='elEL:1,dur:1' (31.10.): Forschung für die Element-Türme (EL = Element), Standard-Vergleich ohne
+const RES = (process.env.RES || '').split(',').filter(Boolean);
 const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number);
 // Mit UMPLATZ wird auch der Vergleich (Standardtürme) umgesetzt: Standard-Zeilen aus spiegel-D6.json kurz auf das Element legen
 const D6 = UMPLATZ ? JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'spiegel-D6.json'))) : null;
@@ -62,6 +64,6 @@ for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) { abl(e, p
   for (const mp of PLAN.maps) { C.useMap(mp.lane, mp.seed); CUR_SEED = mp.seed;
     mp.tage.forEach((t, d) => { if (d + 1 < tage[0] || d + 1 > tage[1]) return; const R0 = WREL ? ohneWetter(e, t.towers, d) : UMPLATZ ? standardR(e, t.towers, d) : t.R;
       const kb = KB[e] ? KB[e][Math.min(3, Math.floor(d / 12))] : 1, k0 = G.ELEMENTS[e].kraft; G.ELEMENTS[e].kraft = k0 * kb;
-      const R = C.reserveDay({ el:e, towers:UMPLATZ ? umplatz(t.towers, e) : t.towers.map(x => ({ ...x, el:e })), res:[] }, { type:d, players:2, weather:+(process.env.WETTER || 0) }), q = R / R0; G.ELEMENTS[e].kraft = k0;   // WETTER=Index (mit MIT_WETTER=1)
+      const R = C.reserveDay({ el:e, towers:UMPLATZ ? umplatz(t.towers, e) : t.towers.map(x => ({ ...x, el:e })), res:RES.map(r => r.replace('EL', e)) }, { type:d, players:2, weather:+(process.env.WETTER || 0) }), q = R / R0; G.ELEMENTS[e].kraft = k0;   // WETTER=Index (mit MIT_WETTER=1)
       (G.MONSTERS[d].fly ? f : b).push(q); if (!G.MONSTERS[d].fly) blk[Math.min(3, Math.floor(d / 12))].push(q); }); }
   console.log(`${NAME[e].padEnd(9)}${process.env.ABL ? ' ohne ' + process.env.ABL : ''}${process.env.RUEST ? ' Rüstung ' + process.env.RUEST : ''}${process.env.RUEST_ADD ? ' Rüstung +' + process.env.RUEST_ADD : ''}${process.env.RUEST_MUL ? ' Rüstung ×' + process.env.RUEST_MUL : ''}${process.env.MIT_WETTER ? ' Wetter ' + G.WEATHER[+(process.env.WETTER || 0)].name : ''}${process.env.IRRLICHT ? ` Irrlicht (buff×${process.env.BUFF_K || 1}, Licht ${process.env.LICHT || 4.4}${process.env.FEST ? ', fest' : ''})` : ''} Boden ${gm(b).toFixed(3)} (Tag 1–12 ${gm(blk[0]).toFixed(2)} · 13–24 ${gm(blk[1]).toFixed(2)} · 25–36 ${gm(blk[2]).toFixed(2)} · 37–48 ${gm(blk[3]).toFixed(2)}) | Flieger ${gm(f).toFixed(3)} | ${Math.round((Date.now() - t0) / 1000)} s`); }
