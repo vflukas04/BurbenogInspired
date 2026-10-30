@@ -43,6 +43,9 @@ const KB = {}; (process.env.KRAFT_BLOCK || '').split(';').filter(Boolean).forEac
   if (!m) throw new Error('Monster fehlt: ' + n); const w = JSON.parse(v); if (w === null) delete m[f]; else m[f] = w; });
 // RES='elEL:1,dur:1' (31.10.): Forschung für die Element-Türme (EL = Element), Standard-Vergleich ohne
 const RES = (process.env.RES || '').split(',').filter(Boolean);
+// RNG_STEPS='0.25,0.5,0.75' (Reichweiten-Forschung in alten Feldern je Stufe) · AREA_MUL=1.3 (Fläche der Element-Türme × Wert, Vorschlag Forschung „Fläche größer“)
+if (process.env.RNG_STEPS) G.RESEARCH_GROUPS.find(R => R.grp === 'rng').steps = process.env.RNG_STEPS.split(',').map(Number);
+if (process.env.AREA_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[8] && !r[9].nova) r[8] *= +process.env.AREA_MUL; });
 const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number);
 // Mit UMPLATZ wird auch der Vergleich (Standardtürme) umgesetzt: Standard-Zeilen aus spiegel-D6.json kurz auf das Element legen
 const D6 = UMPLATZ ? JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'spiegel-D6.json'))) : null;
