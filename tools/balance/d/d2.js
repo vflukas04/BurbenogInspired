@@ -109,20 +109,20 @@ if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] 
   sp['MONSTERS.Looping-Louie-Flugzeuge.lowFly'] = { low:[[0.18, 0.34], [0.55, 0.72]], mid:0.04 };
   sp['MONSTERS.Eifersüchtige Geliebte.night'] = false; sp['MONSTERS.Lindner-Spezialisten.night'] = true;   // 2. Tausch (L 28.10. abends)
   sp['ELEMENTS.3.weatherproof'] = true; sp['ELEMENTS.3.terrainFree'] = true;   // Stein wetterfest + Baubonus (L)
-  // Wetter D7 (28.10. nachmittags): eigene Noten, je Wetter höchstens ±10 % je Element (gemessen mit WETTER_REL), Gewichte je Block wB (Tag 1–12 Winter, 13–24 Frühling, 25–36 Sommer, 37–48 Herbst).
+  // Wetter D7 (28.10. nachmittags; 30.10.: Winter mit mehr Bewölkt/Gewitter für Schatten, weniger Regen): eigene Noten, je Wetter höchstens ±10 % je Element (gemessen mit WETTER_REL), Gewichte je Block wB (Tag 1–12 Winter, 13–24 Frühling, 25–36 Sommer, 37–48 Herbst).
   // kraftBlock = gewichtetes Mittel des Wetters je Block (Tests laufen ohne Wetter, das Mittel steht dafür in kraftBlock; im Spiel wirkt das echte Wetter)
   const WD7 = [
-    { name:'Sonnig',   sym:'☀', w:3,   wB:[0.04, 0.04, 0.29, 0.11], el:{ 0:{ dmg:1.075, eff:1.05 }, 2:{ dmg:0.96 } } },
-    { name:'Bewölkt',  sym:'☁', w:3,   wB:[0.04, 0.22, 0.14, 0.04], el:{ 2:{ dmg:1.07 } } },
-    { name:'Regen',    sym:'☂', w:2,   wB:[0.35, 0.33, 0.06, 0.04], el:{ 0:{ dur:0.8 }, 1:{ eff:1.15, dmg:1.045 } } },
-    { name:'Gewitter', sym:'ϟ', w:1,   wB:[0.10, 0.04, 0.04, 0.07], el:{ 0:{ dur:0.8 }, 2:{ dmg:1.06 } }, flySpeed:0.96 },
-    { name:'Nebel',    sym:'≡', w:1.5, wB:[0.04, 0.04, 0.04, 0.35], el:{ 2:{ dmg:1.08 } }, range:0.92 },
-    { name:'Frost',    sym:'❄', w:1,   wB:[0.35, 0.04, 0.04, 0.04], el:{ 0:{ dmg:0.92 }, 1:{ eff:1.15, dur:1.2, dmg:1.05 } } },
-    { name:'Hitze',    sym:'♨', w:1,   wB:[0.04, 0.25, 0.35, 0.17], el:{ 0:{ dmg:1.08, eff:1.1 }, 1:{ dur:0.8, dmg:0.98 } } },
-    { name:'Wind',     sym:'≋', w:1.5, wB:[0.04, 0.04, 0.04, 0.18], el:{ 0:{ eff:1.1 } }, wind:{ ground:[0.05, 0.07], fly:[0.08, 0.1] } } ];   // Wind: Richtung je Tag (Spiel), Tempo × (1 + mit·cos) bzw. (1 − gegen·|cos|)
+    { name:'Sonnig',   sym:'☀', w:3,   wB:[0.02, 0.04, 0.29, 0.11], el:{ 0:{ dmg:1.075, eff:1.05 }, 2:{ dmg:0.96 } } },
+    { name:'Bewölkt',  sym:'☁', w:3,   wB:[0.25, 0.22, 0.14, 0.04], el:{ 2:{ dmg:1.07 } } },
+    { name:'Regen',    sym:'☂', w:2,   wB:[0.10, 0.33, 0.06, 0.04], el:{ 0:{ dur:0.8 }, 1:{ eff:1.15, dmg:1.045 } } },
+    { name:'Gewitter', sym:'ϟ', w:1,   wB:[0.25, 0.04, 0.04, 0.07], el:{ 0:{ dur:0.8 }, 2:{ dmg:1.06 } }, flySpeed:0.96 },
+    { name:'Nebel',    sym:'≡', w:1.5, wB:[0.06, 0.04, 0.04, 0.35], el:{ 2:{ dmg:1.08 } }, range:0.92 },
+    { name:'Frost',    sym:'❄', w:1,   wB:[0.30, 0.04, 0.04, 0.04], el:{ 0:{ dmg:0.92 }, 1:{ eff:1.15, dur:1.2, dmg:1.05 } } },
+    { name:'Hitze',    sym:'♨', w:1,   wB:[0.00, 0.25, 0.35, 0.17], el:{ 0:{ dmg:1.08, eff:1.1 }, 1:{ dur:0.8, dmg:0.98 } } },
+    { name:'Wind',     sym:'≋', w:1.5, wB:[0.02, 0.04, 0.04, 0.18], el:{ 0:{ eff:1.1 } }, wind:{ ground:[0.05, 0.07], fly:[0.08, 0.1] } } ];   // Wind: Richtung je Tag (Spiel), Tempo × (1 + mit·cos) bzw. (1 − gegen·|cos|)
   WD7.forEach((w, k) => { sp[`WEATHER.${k}`] = w; });
-  sp['ELEMENTS.0.kraftBlock'] = [0.971, 0.971, 1.018, 1.018, 1.053, 1.053, 1.02, 1.02]; sp['ELEMENTS.1.kraftBlock'] = [1.049, 1.049, 1.017, 1.017, 0.996, 0.996, 0.989, 0.989];
-  sp['ELEMENTS.2.kraftBlock'] = [1.009, 1.009, 1.018, 1.018, 1.003, 1.003, 1.021, 1.021]; sp['ELEMENTS.3.kraftBlock'] = null; }
+  sp['ELEMENTS.0.kraftBlock'] = [0.971, 0.971, 1.018, 1.018, 1.053, 1.053, 1.02, 1.02]; sp['ELEMENTS.1.kraftBlock'] = [1.028, 1.028, 1.017, 1.017, 0.996, 0.996, 0.989, 0.989];
+  sp['ELEMENTS.2.kraftBlock'] = [1.035, 1.035, 1.018, 1.018, 1.003, 1.003, 1.021, 1.021]; sp['ELEMENTS.3.kraftBlock'] = null; }
 // Irrlicht (29.10., L: echter Lichtturm, etwas günstiger, kleinerer Effekt): T2 Schatten schießt nicht; Schatten-Türme treffen Monster in seinem Lichtkreis
 // (2 Felder) mit ×buff (S1 1,10 … S6 1,20) und sehen dort nachtaktive Monster; keine Rüstung ignorieren. Preis 30. IRRLICHT_D7=0 = alter Fluchturm.
 if (D7 && process.env.IRRLICHT_D7 !== '0') { const L = +(process.env.IRR_LICHT || 2), b0 = +(process.env.IRR_BUFF || 0.05), b6 = +(process.env.IRR_BUFF6 || 0.15);
