@@ -79,7 +79,7 @@ if (D7 && process.env.STEIN_D7 !== '0') {   // 30.10. (L): Stein gegen Fliegende
   const SCHW = { noFly:0, luft:[1, SCHWACH] }, NORM = { noFly:0, luft:undefined }, KEIN = { noFly:1, luft:undefined };
   const V = process.env.STEIN_VAR || 'A', F = V === 'B' ? [SCHW, NORM, KEIN, SCHW, KEIN, NORM, KEIN, SCHW] : [SCHW, SCHW, KEIN, NORM, KEIN, NORM, KEIN, SCHW];   // A: T1/T2 schwach, T4 normal · B: T2 normal, T4 schwach
   F.forEach((x, k) => { if (k !== 4) T[3][k][1] = { ...T[3][k][1], ...x }; });
-  T[3][2][1] = { ...T[3][2][1], stun:[+(process.env.STUN_FELS || 0.1), 1] }; T[3][7][1] = { ...T[3][7][1], stun:[+(process.env.STUN_BERG || 0.15), 1] }; }
+  if (+(process.env.STUN_FELS || 0)) T[3][2][1] = { ...T[3][2][1], stun:[+process.env.STUN_FELS, 1] }; T[3][4][1] = { ...T[3][4][1], stun:[+(process.env.STUN_ERD || 0.1), 1] };   /* L 30.10. 9:26: Felsbrocken ohne Betäubung, Erdbeben 10 % */ T[3][7][1] = { ...T[3][7][1], stun:[+(process.env.STUN_BERG || 0.15), 1] }; }
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   const q = m.q || 1, n = m.n || 1, f = m.f || 0;
