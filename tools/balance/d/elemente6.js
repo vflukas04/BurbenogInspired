@@ -45,6 +45,10 @@ const KB = {}; (process.env.KRAFT_BLOCK || '').split(';').filter(Boolean).forEac
 const RES = (process.env.RES || '').split(',').filter(Boolean);
 // RNG_STEPS='0.25,0.5,0.75' (Reichweiten-Forschung in alten Feldern je Stufe) · AREA_MUL=1.3 (Fläche der Element-Türme × Wert, Vorschlag Forschung „Fläche größer“)
 if (process.env.RNG_STEPS) G.RESEARCH_GROUPS.find(R => R.grp === 'rng').steps = process.env.RNG_STEPS.split(',').map(Number);
+// RATE_MUL=1.3 (Forschung Schussgeschwindigkeit: mehr Schüsse/s bei gleichem Schaden je Schuss) · EFF_MUL=1.25 (Effekte stärker) · DUR_STEPS (Forschung Effektdauer je Stufe)
+if (process.env.RATE_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) { const k = +process.env.RATE_MUL; G.ELEMENTS[e].towers.forEach(r => { r[3] *= k; }); G.ELEMENTS[e].kraft = (G.ELEMENTS[e].kraft || 1) * k; }
+if (process.env.EFF_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[9].effect && r[9].effect !== 'none') { if (r[9].effect === 'stun') r[9].chance = (r[9].chance || 0) * +process.env.EFF_MUL; else r[6] *= +process.env.EFF_MUL; } });
+if (process.env.DUR_STEPS) G.RESEARCH_GROUPS.find(R => R.grp === 'dur').steps = process.env.DUR_STEPS.split(',').map(Number);
 if (process.env.AREA_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[8] && !r[9].nova) r[8] *= +process.env.AREA_MUL; });
 const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number);
 // Mit UMPLATZ wird auch der Vergleich (Standardtürme) umgesetzt: Standard-Zeilen aus spiegel-D6.json kurz auf das Element legen
