@@ -295,7 +295,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.4": 1.34836,
+  "ELEMENTS.0.kraftT.4": 1.55061,
   "ELEMENTS.0.towers.5": [
     "Turm 6",
     "Schaden",
@@ -311,7 +311,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.5": 1.35294,
+  "ELEMENTS.0.kraftT.5": 1.55588,
   "ELEMENTS.0.towers.6": [
     "Turm 7",
     "Schaden",
@@ -327,7 +327,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.6": 1.29134,
+  "ELEMENTS.0.kraftT.6": 1.54961,
   "ELEMENTS.0.towers.7": [
     "Turm 8",
     "Schaden",
@@ -343,7 +343,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.7": 1.25128,
+  "ELEMENTS.0.kraftT.7": 1.50154,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
     "0": 10,
@@ -457,7 +457,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.4": 1.34836,
+  "ELEMENTS.1.kraftT.4": 1.55061,
   "ELEMENTS.1.towers.5": [
     "Turm 6",
     "Schaden",
@@ -473,7 +473,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 1.35294,
+  "ELEMENTS.1.kraftT.5": 1.55588,
   "ELEMENTS.1.towers.6": [
     "Turm 7",
     "Schaden",
@@ -489,7 +489,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 1.29134,
+  "ELEMENTS.1.kraftT.6": 1.54961,
   "ELEMENTS.1.towers.7": [
     "Turm 8",
     "Schaden",
@@ -505,7 +505,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.7": 1.25128,
+  "ELEMENTS.1.kraftT.7": 1.50154,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -619,7 +619,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.4": 1.34836,
+  "ELEMENTS.2.kraftT.4": 1.55061,
   "ELEMENTS.2.towers.5": [
     "Turm 6",
     "Schaden",
@@ -635,7 +635,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.5": 1.35294,
+  "ELEMENTS.2.kraftT.5": 1.55588,
   "ELEMENTS.2.towers.6": [
     "Turm 7",
     "Schaden",
@@ -651,7 +651,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.6": 1.29134,
+  "ELEMENTS.2.kraftT.6": 1.54961,
   "ELEMENTS.2.towers.7": [
     "Turm 8",
     "Schaden",
@@ -667,7 +667,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.7": 1.25128,
+  "ELEMENTS.2.kraftT.7": 1.50154,
   "ELEMENTS.2.kraft": 1,
   "ELEMENTS.2.costOverride": {
     "0": 10,
@@ -781,7 +781,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.4": 1.34836,
+  "ELEMENTS.3.kraftT.4": 1.55061,
   "ELEMENTS.3.towers.5": [
     "Turm 6",
     "Schaden",
@@ -797,7 +797,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.5": 1.35294,
+  "ELEMENTS.3.kraftT.5": 1.55588,
   "ELEMENTS.3.towers.6": [
     "Turm 7",
     "Schaden",
@@ -813,7 +813,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.6": 1.29134,
+  "ELEMENTS.3.kraftT.6": 1.54961,
   "ELEMENTS.3.towers.7": [
     "Turm 8",
     "Schaden",
@@ -829,7 +829,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.7": 1.25128,
+  "ELEMENTS.3.kraftT.7": 1.50154,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,
@@ -869,7 +869,7 @@
   "MONSTERS.Magier-Novizen.blink.dur": 2.5,
   "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
   "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
-  "_stand": "Zweig D6 (L, 27.10.): Standardtürme wie D0 (Reichweite, Effektstärke und Effektdauer auf allen Stufen gleich, Upgrades ändern nur den Schaden je Gold), Preise 10/45/70/120/200/340/580/1000, Upgrade-Kurve 1/0.95/1.01/1.08/1.16/1.25, Treppe ×1.08 je Turmtyp; Monster wie D0 · Leben D4: Bezugs-Bot bezug3 (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve 1.53 × Tag^−0.098 (Tag 1: 12 Kills Menschen-Start, Betty 1.05) · 29.10.: Leben an Fliegertagen × Mittel der vier Elemente (freier Bau) · 29.10.: Leben an Bodentagen × Mittel der vier Elemente je Block (1,00/0,99/1,06/1,10, weich verbunden) · 30.10. abends: Leben an Bodentagen × gemeinsame Drift der Elemente je Block (freier Bau d16) · Fliegertage erneut auf das Mittel der Elemente (d17)",
+  "_stand": "Zweig D6 (L, 27.10.): Standardtürme wie D0 (Reichweite, Effektstärke und Effektdauer auf allen Stufen gleich, Upgrades ändern nur den Schaden je Gold), Preise 10/45/70/120/200/340/580/1000, Upgrade-Kurve 1/0.95/1.01/1.08/1.16/1.25, Treppe ×1.08 je Turmtyp; Monster wie D0 · Leben D4: Bezugs-Bot bezug3 (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve 1.53 × Tag^−0.098 (Tag 1: 12 Kills Menschen-Start, Betty 1.05) · 29.10.: Leben an Fliegertagen × Mittel der vier Elemente (freier Bau) · 29.10.: Leben an Bodentagen × Mittel der vier Elemente je Block (1,00/0,99/1,06/1,10, weich verbunden) · 30.10. abends: Leben an Bodentagen × gemeinsame Drift der Elemente je Block (freier Bau d16) · Fliegertage erneut auf das Mittel der Elemente (d17) · 31.10.: Freischaltung in die Turmtypen eingerechnet (T5/T6 Schaden ×1,15, T7/T8 ×1,2: 250 bzw. 700 Gold auf die typische Zahl gebauter Türme verteilt)",
   "_ziel": {
     "R1": 1.5339,
     "a": 0.0979,

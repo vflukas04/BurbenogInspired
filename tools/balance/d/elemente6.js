@@ -48,6 +48,8 @@ if (process.env.RNG_STEPS) G.RESEARCH_GROUPS.find(R => R.grp === 'rng').steps = 
 // RATE_MUL=1.3 (Forschung Schussgeschwindigkeit: mehr Schüsse/s bei gleichem Schaden je Schuss) · EFF_MUL=1.25 (Effekte stärker) · DUR_STEPS (Forschung Effektdauer je Stufe)
 if (process.env.RATE_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) { const k = +process.env.RATE_MUL; G.ELEMENTS[e].towers.forEach(r => { r[3] *= k; }); G.ELEMENTS[e].kraft = (G.ELEMENTS[e].kraft || 1) * k; }
 if (process.env.EFF_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[9].effect && r[9].effect !== 'none') { if (r[9].effect === 'stun') r[9].chance = (r[9].chance || 0) * +process.env.EFF_MUL; else r[6] *= +process.env.EFF_MUL; } });
+// STACK_ADD=0.1 (Forschung Stapelung: Stapelanteil jedes Effekts + Wert)
+if (process.env.STACK_ADD && G.CONFIG.stackRest) for (const k in G.CONFIG.stackRest) G.CONFIG.stackRest[k] += +process.env.STACK_ADD;
 if (process.env.DUR_STEPS) G.RESEARCH_GROUPS.find(R => R.grp === 'dur').steps = process.env.DUR_STEPS.split(',').map(Number);
 if (process.env.AREA_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[8] && !r[9].nova) r[8] *= +process.env.AREA_MUL; });
 const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number);
