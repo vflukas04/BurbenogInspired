@@ -816,3 +816,21 @@ Fester Aufbau, Wert mit ÷ ohne (Bodentage):
 - Effekte wirken kaum länger, weil die Türme sie bei jedem Treffer erneuern (Rate 1/s, Dauer 2–8 s): die Dauer zählt erst, wenn das Monster die Reichweite verlässt. Eis sogar leicht negativ (Bremsen bleibt länger als Rückfall bestehen? ungeklärt, ≤ 2 %).
 - Beschlüsse L: Zinsen 2 % je Tag **ohne Deckel**, nur für Menschen (Bot ohne); Forschung mit steigendem Goldwert soll an Tag 1 nicht sinnvoll sein; Freischaltungskosten in die Turmpreise der freigeschalteten Typen einrechnen (Schaden je Gold bleibt, Schaden je Schuss steigt); Edelsteine bleiben bei 4 Optionen, zweites Basic darf umverteilt werden.
 - Messfehler behoben: `elemente6.js` setzte beim Standard-Vergleich die Element-Kraft nicht zurück (betraf nur RATE_MUL).
+
+## Forschung: Vorschlag (31.10. mittags)
+Effekt-Leiter (L: erst Dauer, dann Stärke, dann Stapelung; fester Aufbau, kumuliert): Stufe 1 Dauer +50 %: Feuer ×1,04 · Eis ×0,99 · Schatten ×1,01 — Stufe 2 + Stärke +25 %: ×1,10 · ×1,02 · ×1,04 — Stufe 3 + Stapelanteil +0,1: ×1,12 · ×1,07 · ×1,08. Stapelung allein +0,1 / +0,2: Feuer ×1,02/1,03 · Eis ×1,03/1,06 · Schatten ×1,03/1,06 (driftet nach hinten).
+
+| Forschung | Stufen | Wirkung | typ. Kaufzeit | Preis je Spieler |
+|---|---|---|---|---|
+| Element-Schaden (nur das eigene Element, Preis fest) | +8 / +16 / +25 % | ×1,08 / 1,16 / 1,25 | Tag 14 / 22 / 30 | 40 / 90 / 180 |
+| Effekte (Feuer, Eis, Schatten) | Dauer +50 % / Stärke +25 % / Stapel +0,1 | siehe Leiter (bis ×1,07–1,12) | Tag 8 / 20 / 28 | 10 / 35 / 65 × Spieler |
+| Reichweite | +0,5 / +1 / +1,5 Felder | bis ×1,07 (Stein) … ×1,13 (Schatten) | Tag 16 / 24 / 32 | 20 / 40 / 80 × Spieler |
+| Schussgeschwindigkeit | +10 / +20 / +30 % | ≈ ×1,10 / 1,20 / 1,31 | Tag 20 / 28 / 36 | 85 / 180 / 320 × Spieler |
+| Stein (offen, L nicht überzeugt) | Fläche +30 % | Stein ×1,08, Feuer ×1,03 | – | – |
+| Kopfgeld | +7 / +14 / +20 % | Investition | – | 60 / 100 / 140 × Spieler |
+| Upgrades billiger | −7 / −14 / −20 % | Investition | – | 40 / 80 / 130 × Spieler |
+| Freischaltung T5–T6 / T7–T8 | – | in den Turmschaden eingerechnet (×1,1) | – | 125 / 350 × Spieler |
+
+- Preis ≈ Gold-Gegenwert zum typischen Kaufzeitpunkt (b/1,3 × verbautes Gold je Spieler). Früher kaufen ist ein schlechtes Geschäft, später ein gutes.
+- Kasse je Spieler (10 % des Kopfgelds) ≈ 1.000 Gold; die Liste kostet ≈ 2.200 je Spieler → etwa die Hälfte ist kaufbar. Zinsen 2 % je Tag (nur Menschen) erhöhen das.
+- Achtung: Die Leben sind ohne Forschung kalibriert. Mit klug gekaufter Forschung wird das Spiel um etwa den Anteil der Kasse leichter (≈ +10 %). Entweder bewusst so (Belohnung) oder Leben um den erwarteten Forschungswert anheben.
