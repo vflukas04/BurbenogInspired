@@ -802,3 +802,17 @@ Wert = Reserve mit ÷ ohne Forschung (Bodentage), je Element:
 - Verbautes Gold je Spieler (zu zweit, Bezugs-Bot): Tag 12 ≈ 480 · Tag 24 ≈ 1.600 · Tag 36 ≈ 4.200 · Tag 48 ≈ 9.000. Kasse (10 % des Kopfgelds) je Spieler: ≈ 50 / 180 / 470 / 1.000.
 - Beispiel Element-Schaden Stufe 1 (25 Gold): Tag 12 ≈ 30 Gold wert, Tag 24 ≈ 100, Tag 36 ≈ 260 → ab etwa Tag 12 ein sehr gutes Geschäft. „Effekte länger“ ist praktisch wertlos (≤ 2 %).
 - **Freischaltungen** (Bezugs-Bot mit Standardtürmen, `BOT_CAP`): ohne T5–T8 Reserve ×1,04/1,08/0,97/1,00 (Tag 1–12/13–24/25–36/37–48), ohne T7–T8 ×1,00/1,00/1,02/0,97 gegenüber allem frei – im Rahmen der Bot-Streuung. Mit Standardtürmen sind die großen Turmtypen kaum mehr wert (Treppe ×1,08 je Typ, der Bot rüstet stattdessen T1–T4 auf). Der Wert der Freischaltung hängt also an den Merkmalen der Element-Türme T5–T8 (z. B. Frostnova, Erdbeben), nicht an der Kraft je Gold. Preise 250/700 sind dafür eher hoch; Bewertung je Element offen.
+
+## Forschungs-Varianten (31.10. vormittags, L)
+Fester Aufbau, Wert mit ÷ ohne (Bodentage):
+
+| Variante | Feuer | Eis | Schatten | Stein |
+|---|---|---|---|---|
+| Schussgeschwindigkeit +30 % (gleicher Schaden je Schuss) | ×1,34 | ×1,33 | ×1,30 | ×1,31 |
+| Effekte stärker +25 % (Stein: Betäubungs-Chance) | ×1,05 | ×1,02 | ×1,03 | ×1,01 |
+| Effekte länger +50 % | ×1,04 | ×0,99 | ×1,01 | ×1,00 |
+| Effekte länger +75 % | ×1,05 | ×0,98 | ×1,01 | ×1,00 |
+
+- Effekte wirken kaum länger, weil die Türme sie bei jedem Treffer erneuern (Rate 1/s, Dauer 2–8 s): die Dauer zählt erst, wenn das Monster die Reichweite verlässt. Eis sogar leicht negativ (Bremsen bleibt länger als Rückfall bestehen? ungeklärt, ≤ 2 %).
+- Beschlüsse L: Zinsen 2 % je Tag **ohne Deckel**, nur für Menschen (Bot ohne); Forschung mit steigendem Goldwert soll an Tag 1 nicht sinnvoll sein; Freischaltungskosten in die Turmpreise der freigeschalteten Typen einrechnen (Schaden je Gold bleibt, Schaden je Schuss steigt); Edelsteine bleiben bei 4 Optionen, zweites Basic darf umverteilt werden.
+- Messfehler behoben: `elemente6.js` setzte beim Standard-Vergleich die Element-Kraft nicht zurück (betraf nur RATE_MUL).
