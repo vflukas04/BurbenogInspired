@@ -55,7 +55,7 @@ const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number
 const D6 = UMPLATZ ? JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'spiegel-D6.json'))) : null;
 function standardR(e, towers, d){ const E = G.ELEMENTS[e], keep = { towers:E.towers, kraftT:E.kraftT, kraftBlock:E.kraftBlock, armorDmg:E.armorDmg, dayOnly:E.dayOnly, splashCenter:E.splashCenter, splashEdge:E.splashEdge };
   E.towers = E.towers.map((_, k) => JSON.parse(JSON.stringify(D6[`ELEMENTS.0.towers.${k}`]))); E.kraftT = E.kraftT.map((_, k) => D6[`ELEMENTS.0.kraftT.${k}`]);
-  E.armorDmg = 0; E.dayOnly = false; E.splashCenter = undefined; E.splashEdge = undefined; E.kraftBlock = null; C.useMap(C.LANE, CUR_SEED);   // Maske neu (Reichweiten); Standard ohne kraftBlock
+  E.armorDmg = 0; E.dayOnly = false; E.splashCenter = undefined; E.splashEdge = undefined; E.kraftBlock = null; const kr = E.kraft; E.kraft = 1; keep.kraft = kr; /* 31.10.: Standard ohne Element-Kraft (RATE_MUL) */ C.useMap(C.LANE, CUR_SEED);   // Maske neu (Reichweiten); Standard ohne kraftBlock
   const R = C.reserveDay({ el:e, towers:umplatz(towers, e), res:[] }, { type:d, players:2, weather:+(process.env.WETTER || 0) });
   Object.assign(E, keep); C.useMap(C.LANE, CUR_SEED); return R; }
 let CUR_SEED = null;
