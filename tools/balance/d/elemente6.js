@@ -54,6 +54,8 @@ if (process.env.STACK_ADD && G.CONFIG.stackRest) for (const k in G.CONFIG.stackR
 if (process.env.DUR_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[9].effect && r[9].effect !== 'none' && r[9].effect !== 'stun' && typeof r[7] === 'number') r[7] *= +process.env.DUR_MUL; });
 // SPLASH3='1.1,0.8' (Stein-Flächenabfall Mitte/Rand nur für die Element-Türme, Vorschlag Stein-Forschung „Effekte stärker“)
 if (process.env.SPLASH3) { const [a, b] = process.env.SPLASH3.split(',').map(Number); G.ELEMENTS[3].splashCenter = a; G.ELEMENTS[3].splashEdge = b; }
+// STUN_DUR_MUL=1.5 (Betäubungsdauer × Wert, Stein-Variante der Dauer-Forschung) · STUN_ADD=0.05 (Betäubungs-Chance + Wert)
+if (process.env.STUN_DUR_MUL || process.env.STUN_ADD) G.ELEMENTS[3].towers.forEach(r => { if (r[9].effect === 'stun') { r[6] *= +(process.env.STUN_DUR_MUL || 1); r[9].chance = (r[9].chance || 0) + +(process.env.STUN_ADD || 0); } });
 if (process.env.DUR_STEPS) G.RESEARCH_GROUPS.find(R => R.grp === 'dur').steps = process.env.DUR_STEPS.split(',').map(Number);
 if (process.env.AREA_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[8] && !r[9].nova) r[8] *= +process.env.AREA_MUL; });
 const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number);
