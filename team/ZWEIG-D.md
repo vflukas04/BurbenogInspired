@@ -834,3 +834,9 @@ Effekt-Leiter (L: erst Dauer, dann Stärke, dann Stapelung; fester Aufbau, kumul
 - Preis ≈ Gold-Gegenwert zum typischen Kaufzeitpunkt (b/1,3 × verbautes Gold je Spieler). Früher kaufen ist ein schlechtes Geschäft, später ein gutes.
 - Kasse je Spieler (10 % des Kopfgelds) ≈ 1.000 Gold; die Liste kostet ≈ 2.200 je Spieler → etwa die Hälfte ist kaufbar. Zinsen 2 % je Tag (nur Menschen) erhöhen das.
 - Achtung: Die Leben sind ohne Forschung kalibriert. Mit klug gekaufter Forschung wird das Spiel um etwa den Anteil der Kasse leichter (≈ +10 %). Entweder bewusst so (Belohnung) oder Leben um den erwarteten Forschungswert anheben.
+
+## Effektdauer bei Eis geprüft, Stein-Flächenabfall als Forschung (01.11. nachts)
+- Eis, Dauer der Effekte (Forschung): +50 % ×0,99 · +75 % ×0,98 · ×2 **×1,02** · ×4 **×1,05**; Grunddauer halbiert ×1,00 (Feuer ×0,99). Kein Fehler: Die Türme erneuern die Effekte bei jedem Treffer, die Dauer zählt erst nach dem Verlassen der Reichweite. Die kleinen Minuswerte bei +50/75 % liegen an der Messgenauigkeit (Suche auf ±0,5 %, Tag 1–12 jeweils leicht schwächer).
+- Stein-Flächenabfall (Mitte/Rand) als Stein-Variante von „Effekte stärker“: 110/80 % ×1,07 · 100/85 % ×1,06 · 120/90 % ×1,14 (driftet nach hinten).
+- Fläche haben: Feuer Lavaturm (1,5), Höllenfeuer (2) · Eis Schneeball (1), Ewiges Eis (2) · Schatten Leerenturm (1,5) · Stein alle außer Kiesel und Erdbeben (Nova).
+- Messkorrektur: `elemente6.js` vergleicht jetzt mit den Standardtürmen aus `spiegel-D7.json` (mit Freischaltungs-Einrechnung), vorher D6.

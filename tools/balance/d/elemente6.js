@@ -58,7 +58,7 @@ if (process.env.DUR_STEPS) G.RESEARCH_GROUPS.find(R => R.grp === 'dur').steps = 
 if (process.env.AREA_MUL) for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) G.ELEMENTS[e].towers.forEach(r => { if (r[8] && !r[9].nova) r[8] *= +process.env.AREA_MUL; });
 const t0 = Date.now(), tage = (process.env.TAGE || '1-48').split('-').map(Number);
 // Mit UMPLATZ wird auch der Vergleich (Standardtürme) umgesetzt: Standard-Zeilen aus spiegel-D6.json kurz auf das Element legen
-const D6 = UMPLATZ ? JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'spiegel-D6.json'))) : null;
+const D6 = UMPLATZ ? JSON.parse(fs.readFileSync(path.join(__dirname, '..', process.env.STD_SPIEGEL || 'spiegel-D7.json'))) : null;   // 01.11.: Standard aus D7 (mit Freischaltungs-Einrechnung T5–T8), vorher D6
 function standardR(e, towers, d){ const E = G.ELEMENTS[e], keep = { towers:E.towers, kraftT:E.kraftT, kraftBlock:E.kraftBlock, armorDmg:E.armorDmg, dayOnly:E.dayOnly, splashCenter:E.splashCenter, splashEdge:E.splashEdge };
   E.towers = E.towers.map((_, k) => JSON.parse(JSON.stringify(D6[`ELEMENTS.0.towers.${k}`]))); E.kraftT = E.kraftT.map((_, k) => D6[`ELEMENTS.0.kraftT.${k}`]);
   E.armorDmg = 0; E.dayOnly = false; E.splashCenter = undefined; E.splashEdge = undefined; E.kraftBlock = null; const kr = E.kraft; E.kraft = 1; keep.kraft = kr; /* 31.10.: Standard ohne Element-Kraft (RATE_MUL) */ C.useMap(C.LANE, CUR_SEED);   // Maske neu (Reichweiten); Standard ohne kraftBlock
