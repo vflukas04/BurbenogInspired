@@ -856,10 +856,13 @@ Gleiche Umgebung für alle: `d/bots.js` mit `MIT_FAKTOREN=1` (Monster-Faktoren w
 | Live (29c, F) | 0,55 | 1,03 | 1,01 | 1,74 | 1,20 / 6,17 / 4,21 / 3,56 | 3,15 | 0,58/1,62/1,51/0,70 |
 | Optimierer (`spiegel.json`) | 0,65 | 1,04 | 1,06 | 1,40 | 1,20 / 3,40 / 2,66 / 2,45 | 2,17 | 0,66/1,53/1,56/0,64 |
 | C12f (`spiegel-a.html`) | 1,07 | 0,96 | 0,95 | 1,02 | 1,48 / 1,24 / 1,49 / 1,11 | 1,12 | 1,48/1,37/1,41/0,35 |
-| D7 | 0,95 | 0,89 | 1,02 | 1,15 | 1,32 / 1,38 / 1,32 / 1,30 | 1,29 | 0,93/1,20/1,62/0,56 |
+| D7 | 0,93 | 0,90 | 1,02 | 1,17 | 1,32 / 1,41 / 1,30 / 1,30 | 1,29 | 1,03/1,13/1,60/0,54 |
+| D7 neu (Bremsen 25 %, Stein-Rand 60 %) | 0,93 | 0,94 | 1,02 | 1,12 | 1,31 / 1,25 / 1,17 / 1,23 | 1,21 | 1,04/1,14/1,62/0,52 |
 
 - D7 mit neutralen Faktoren: praktisch gleich (Stein 1,17, Eis 0,90) → die Faktoren der Monster verschieben nichts.
 - **D7 mit Menschen-Bots ≠ D7 mit Bezugs-Bot** (bezug3: F 0,98 · E 1,01 · S 0,98 · St 1,04 relativ zum Mittel): Einfache Muster (3 × T1 bis S6, je Turmtyp ein Turm) bevorzugen Stein (+17 %) und benachteiligen Eis (−10 %), vermutlich weil Eis-Türme aufeinander angewiesen sind und mehrere Bremser kaum stapeln (5 %), während Stein-Türme allein stark sind.
 - Drift über die Blöcke: D7 am gleichmäßigsten (Spanne je Block 1,30–1,38), C12f schwankt (1,11–1,49; Stein 0,79 → 1,21).
 - **Gegenprobe mit dem Bezugs-Bot (bezug3, neutrale Faktoren):** C12f F 1,00 · E 1,01 · S 0,90 · St 1,11, Spanne 1,24 (Blöcke 1,24/1,33/1,56/1,25), Fliegertage Spanne 1,83 (Stein 0,76). D7 (Lauf d20) F 0,98 · E 1,01 · S 0,98 · St 1,04, Spanne 1,06 (Blöcke 1,05/1,20/1,09/1,09), Fliegertage 2,48 (gewollt umgekehrt).
 - **Fazit:** Über beide Spielweisen liegen C12f und D7 etwa gleich (C12f 1,12 Menschen / 1,24 Bot, D7 1,29 / 1,06). C12f schwankt stärker zwischen den Blöcken, D7 hängt stärker von der Spielweise ab (Stein profitiert von einfachen Mustern, Eis verliert).
+- **Korrektur (01.11. nachm.):** Die erste D7-Zeile war ohne Stapelregel gerechnet (`STAPEL_ALLE` fehlte bei `bots.js`). Neu gerechnet (neutrale Faktoren) fast gleich, siehe Tabelle. Der Schalter steht jetzt im Spiegel (`_env`, gelesen von `sim.js` und `spiegel-seite.js`).
+- **Mitte-Test (01.11.):** Ziel = Mitte zwischen Menschen-Mustern und Bezugs-Bot. Bremsen-Stapel 5 → 15 → 25 %: Eis +2 / +5 % (Menschen und fester Plan gleich). Stein-Rand 70 → 60 %: Stein −4 %. Brennen-Stapel 35 → 45 / 55 %: Feuer nur +1 / +2,5 % (nicht übernommen). **Übernommen:** Bremsen 25 %, Stein-Rand 60 %. Mitte danach etwa Feuer 0,97 · Eis 1,00 · Schatten 1,00 · Stein 1,06; Feuer bleibt ≈ 3 % schwach (Option: Feuer-`kraftBlock` × 1,03). Leben nicht nachgestellt (Mittel der Elemente ändert sich < 1 %).

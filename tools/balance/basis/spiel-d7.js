@@ -35,7 +35,7 @@ R.push([/const RESEARCH_GROUPS = \[[\s\S]*?\n\];\n/, `const RESEARCH_GROUPS = [ 
   { grp:'el1',   house:'Elementlabor', name:'Eis Schaden',            costs:[80, 180, 360], steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:1 },
   { grp:'el2',   house:'Elementlabor', name:'Schatten Schaden',       costs:[80, 180, 360], steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:2 },
   { grp:'el3',   house:'Elementlabor', name:'Stein Schaden',          costs:[80, 180, 360], steps:[0.08, 0.16, 0.25], fmt:v => '+' + Math.round(v*100) + ' %', el:3 },
-  { grp:'fx',    house:'Akademie',     name:'Effekte',                costs:[20, 70, 130],  steps:[1, 2, 3], fmt:v => ['Dauer +50 % (Stein: Betäubung)', '+ Stärke +25 % (Stein: Fläche 105/78 %)', '+ Stapeln +10 % (Stein: Betäubung +5 %)'][v-1], pp:true },
+  { grp:'fx',    house:'Akademie',     name:'Effekte',                costs:[20, 70, 130],  steps:[1, 2, 3], fmt:v => ['Dauer +50 % (Stein: Betäubung)', '+ Stärke +25 % (Stein: Fläche 105/68 %)', '+ Stapeln +10 % (Stein: Betäubung +5 %)'][v-1], pp:true },
   { grp:'rng',   house:'Akademie',     name:'Reichweite',             costs:[40, 80, 160],  steps:[0.25, 0.5, 0.75], fmt:v => '+' + String(v * GRID_D).replace('.', ',') + ' Felder', pp:true },
   { grp:'rate',  house:'Akademie',     name:'Schussgeschwindigkeit',  costs:[170, 360, 640], steps:[0.1, 0.2, 0.3], fmt:v => '+' + Math.round(v*100) + ' %', pp:true },
   { grp:'gold',  house:'Akademie',     name:'Kopfgeld',               costs:[60, 100, 140], steps:[0.07, 0.14, 0.2],  fmt:v => '+' + Math.round(v*100) + ' %', pp:true }
@@ -51,7 +51,7 @@ R.push([`    if (d.dur !== DAY) d.dur *= 1 + resVal(res, 'dur');`,
     if (fxL && d.effect && d.effect !== 'none') {
       if (d.effect === 'stun') { if (def.el === 3) { d.eff = Math.min(CONFIG.stunMax, d.eff * 1.5); if (fxL >= 3) d.chance = (d.chance || 0) + 0.05; } else if (fxL >= 2) d.chance = (d.chance || 0) * 1.25; }
       else { if (d.dur !== DAY) d.dur *= 1.5; if (fxL >= 2) d.eff *= 1.25; } }
-    if (fxL >= 2 && def.el === 3) { d.splashC = 1.05; d.splashE = 0.78; }`],
+    if (fxL >= 2 && def.el === 3) { d.splashC = 1.05; d.splashE = 0.68; }`],
   [`c = E.splashCenter || 1, e = E.splashEdge ?? CONFIG.splashEdge;`, `c = def.splashC || E.splashCenter || 1, e = def.splashE ?? E.splashEdge ?? CONFIG.splashEdge;`],
   [`const R = c.kind && CONFIG.stackRest && CONFIG.stackRest[c.kind] !== undefined ? CONFIG.stackRest[c.kind] : BURN_REST;`,
    `const R = (c.kind && CONFIG.stackRest && CONFIG.stackRest[c.kind] !== undefined ? CONFIG.stackRest[c.kind] : BURN_REST) + (FX_STACK_NOW && c.kind ? FX_STACK_NOW[c.kind] || 0 : 0);`]);

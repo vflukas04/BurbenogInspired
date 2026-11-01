@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 01.11. 15:00 · L · Zweig D7 – Testseite spiegel-d.html
+- Neue Testseite https://vflukas04.github.io/BurbenogInspired/spiegel-d.html mit dem Zweig-D-Stand (eigenes Spiel `spiegel3`, stört `spiel1` nicht). Das Spiel (index.html) ist unverändert.
+- Neu dort: 32 Türme aus Umrechnungsfaktoren, Wetter nach Jahreszeit, Wind aus einer Richtung je Tag, Forschung neu (Preise je Spieler, Effekt-Leiter, Freischaltung 60/175), 2 % Zinsen je Tag auf die Kasse, Edelstein mit nur einem Basic + 2 Uniques. Regeln: `team/ZWEIG-D-REGELN.md`.
 ### 29.10. 18:50 · F · 2026-10-29c – Kein Schachbrett mehr (Standard)
 Map ohne Karomuster ist jetzt Standard (weiche Wiese, durchgehender Monsterweg). Das Raster gilt weiter für die Türme; ist ein Turm zum Bauen gewählt, zeigen dezente Punkte die freien Bauplätze. Altes Muster: `?kariert=1`. Nur Anzeige, neu laden.
 
@@ -76,4 +79,3 @@ Ab Tag 12 laufen kleine Gesandte auf den Wegen zum ersten Turm, von dort zur Bur
 
 ### 28.10. 22:45 · F · 2026-10-27u – Arbeiter laufen um die Biome
 - Arbeiter betreten keine Biomfelder (See, Wald, Fels) mehr und laufen auf freien Feldern um sie herum. Gibt es für ein Feld keinen freien Weg (ringsum Gelände), arbeitet der Arbeiter nur an seinem Platz. Nur Anzeige. Neu laden genügt.
-

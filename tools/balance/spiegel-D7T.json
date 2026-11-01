@@ -929,7 +929,7 @@
   "MONSTERS.Magier-Novizen.blink.dur": 2.5,
   "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
   "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
-  "_stand": "Zweig D2-Methode (L, 25.10.; 27.10. abends Basis spiegel-D6.json, Kurse D6, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis",
+  "_stand": "Zweig D2-Methode (L, 25.10.; 27.10. abends Basis spiegel-D6.json, Kurse D6, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis · 01.11.: Bremsen-Stapel 0,25, Stein-Rand 60 % (Mitte Menschen/Bezugs-Bot)",
   "_ziel": {
     "R1": 1.5339,
     "a": 0.0979,
@@ -1194,12 +1194,12 @@
   },
   "CONFIG.stackRest": {
     "burn": 0.35,
-    "slow": 0.05,
+    "slow": 0.25,
     "curse": 0.05
   },
   "CONFIG.burnArmor": 0,
   "ELEMENTS.3.splashCenter": 1,
-  "ELEMENTS.3.splashEdge": 0.7,
+  "ELEMENTS.3.splashEdge": 0.6,
   "_env": {
     "STAPEL_ALLE": "1"
   }

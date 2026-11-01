@@ -1,6 +1,6 @@
-# Zweig D: Regeln für die Übernahme ins Spiel (Stand 30.10. abends)
+# Zweig D: Regeln für die Übernahme ins Spiel (Stand 01.11.)
 
-Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messungen: `ZWEIG-D.md`. Zahlenwerte: `tools/balance/spiegel-D7T.json` (Elementtürme) und `spiegel-D7.json` (Monster, Leben). Alles ist bisher nur im Spiegel (Basis `044d8c0` + `tools/balance/basis/patch.js`), das Live-Spiel ist unverändert.
+Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messungen: `ZWEIG-D.md`. Zahlenwerte: `tools/balance/spiegel-D7T.json` (Elementtürme) und `spiegel-D7.json` (Monster, Leben). Alles ist bisher nur im Spiegel (Basis `044d8c0` + `tools/balance/basis/patch.js`), das Live-Spiel ist unverändert. **Testseite:** `spiegel-d.html` (Spiel `spiegel3`), erzeugt mit `SPIEL_D7=1 SPIEGEL=tools/balance/spiegel-D7T.json ZIEL=spiegel-d.html SPIEL=spiegel3 node tools/balance/spiegel-seite.js`; Spielregeln über die Zahlen hinaus in `tools/balance/basis/spiel-d7.js`.
 
 ## Türme
 - 32 Türme neu: Standardturm (Reichweite 3,5, 1 Schuss/s, 1 Geschoss) plus Merkmale, Schaden aus festen Umrechnungsfaktoren.
@@ -15,12 +15,12 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 
 ## Effekte
 - Umrechnungsfaktoren D7 (Stand): Brennen ×1,54, Bremsen 15,16, Fluch ×1,29, Nachtregel ×1,105 (Faktoren auf Wert − 1, siehe `d/d2.js`).
-- Gleiche Effekte stapeln: der stärkste voll, jeder weitere mit **Brennen 35 %, Bremsen 5 %, Fluch 5 %**, höchstens 6.
+- Gleiche Effekte stapeln: der stärkste voll, jeder weitere mit **Brennen 35 %, Bremsen 25 %, Fluch 5 %**, höchstens 6 (Bremsen 01.11. von 5 auf 25 %: einfache Bauweisen mit mehreren Eis-Bremsern lagen sonst 10 % unter dem Mittel).
 - Bremsen je Turm höchstens 40 % (mit Fläche 30 %).
 - Brennen geht durch Rüstung (wie bisher).
 
 ## Stein
-- Flächenabfall wie alle (Mitte 100 %, Rand 70 %); Stein-Niveau kann später über den eigenen Flächenabfall (Spiel: 120/80 %) gestellt werden.
+- Eigener Flächenabfall: Mitte 100 %, **Rand 60 %** (alle anderen 70 %; 01.11.: Stein lag bei einfachen Bauweisen 17 % über dem Mittel).
 - Wetterfest (wirkt nur Wind/Gewitter über das Tempo der Monster) und **Baubonus** (kein Geländeaufschlag, auf Felsen ×1,3).
 
 ## Wetter (Jahreszeiten)
@@ -39,7 +39,7 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 ## Forschung (Stand 01.11., Werte vorläufig)
 - Preise je Spieler; Forschung, die allen hilft, × Spielerzahl; Element-Schaden fest (hilft nur einem Spieler).
 - Element-Schaden +8 / +16 / +25 %: 80 / 180 / 360 (fest).
-- Effekte (Leiter): Dauer +50 % / Stärke +25 % / Stapelanteil +0,1: 20 / 70 / 130 × Spieler. Stein: eigene Varianten (z. B. Flächenabfall 105/78 %).
+- Effekte (Leiter): Dauer +50 % / Stärke +25 % / Stapelanteil +0,1: 20 / 70 / 130 × Spieler. Stein: Betäubung länger +50 % / Flächenabfall 105/68 % / Betäubungs-Chance +5 Punkte (gemessen ×1,01/1,06/1,08 wie Eis und Schatten; Feuer 1,04/1,10/1,12 bleibt, weil Feuer am Boden leicht unter dem Mittel liegt).
 - Reichweite +0,5 / +1 / +1,5 Felder: 40 / 80 / 160 × Spieler.
 - Schussgeschwindigkeit +10 / +20 / +30 %: 170 / 360 / 640 × Spieler.
 - Kopfgeld, Upgrades billiger: wie bisher × Spieler.
@@ -47,6 +47,9 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - Kasse: 2 % Zinsen je Tag, ohne Deckel.
 - Leben enthalten die Wurzel eines Forschungs-Referenzwegs (Kasse 10 %, obige Preise): bis Tag 24 ×1,00, Tag 36 ×1,06, Tag 48 ×1,15 – ein halb so gut forschendes Team liegt im Ziel.
 
+## Edelsteine (01.11.)
+- Nur noch **ein Basic** (Schaden +30 %, Irrlicht: Lichtkreis +30 %) plus die beiden Uniques = 3 Optionen. Das zweite Basic (Reichweite/Effekt/Fläche +30 %) war nur ≈ ×1,05–1,13 wert; Schussrate +30 % wäre fast dasselbe wie Schaden +30 %.
+
 ## Noch offen
-- Edelsteine (4 Optionen bleiben, zweites Basic umverteilen), Stein-Forschungsvarianten.
+- Uniques der Edelsteine an D7 anpassen (Werte noch aus dem alten Spiel).
 - Anzeige: Wettertexte, Wind-Richtung, Tiefflug-Strecken auf der Karte.
