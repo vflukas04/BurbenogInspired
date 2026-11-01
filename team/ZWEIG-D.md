@@ -840,3 +840,9 @@ Effekt-Leiter (L: erst Dauer, dann Stärke, dann Stapelung; fester Aufbau, kumul
 - Stein-Flächenabfall (Mitte/Rand) als Stein-Variante von „Effekte stärker“: 110/80 % ×1,07 · 100/85 % ×1,06 · 120/90 % ×1,14 (driftet nach hinten).
 - Fläche haben: Feuer Lavaturm (1,5), Höllenfeuer (2) · Eis Schneeball (1), Ewiges Eis (2) · Schatten Leerenturm (1,5) · Stein alle außer Kiesel und Erdbeben (Nova).
 - Messkorrektur: `elemente6.js` vergleicht jetzt mit den Standardtürmen aus `spiegel-D7.json` (mit Freischaltungs-Einrechnung), vorher D6.
+
+## Nacht 01.11.: Prüfung, Freischaltungs-Zeitpunkt, Forschungs-Referenzweg
+- **Freier Bau, aktueller Stand** (mit Freischaltungs-Einrechnung ×1,1, gegen Ziel, Bodentage Tag 1–12/13–24/25–36/37–48 = gesamt | Fliegertage): Feuer 0,99/1,05/0,99/0,96 = **1,00** | 0,98 · Eis 1,04/1,04/1,07/0,99 = **1,03** | 1,21 · Schatten 0,99/0,95/1,03/1,03 = **1,00** | 1,34 · Stein 1,02/1,14/1,02/1,05 = **1,06** | 0,54. Standard-Bot 0,93.
+- **Freischaltung erst, wenn die Kasse sie bezahlen kann** (T5–T6 ab Tag 20, T7–T8 ab Tag 36; Standard-Bot, 4 Maps, `FREI_AB`): ÷ alles frei = 1,03/1,02/0,98/0,98 – kaum Unterschied, die Leben müssen dafür nicht angepasst werden. (Der Bot baut T5 ab Tag 16, T7 ab Tag 28.)
+- **Forschungs-Referenzweg** (Kasse 10 % je Spieler, Freischaltungen 125 + 350 zuerst, dann Forschung nach Wert je Gold, Vorschlagsliste): Die Freischaltungen binden die Kasse bis etwa Tag 36; danach Forschung bis Tag 48: ×1,51 (Preise ×1) · ×1,32 (Preise ×2) · ×1,20 (Preise ×3). Ohne Freischaltungen in der Rechnung (früher Weg): Tag 24 ×1,20, Tag 36 ×1,51, Tag 48 ×1,77.
+- Folgerung: Die Forschung ist bei diesen Preisen sehr stark, weil ihr Wert nach dem Kauf weiter wächst. Die Freischaltungen sind dagegen teuer für ihren Wert (gemessen 0–3 %). Entscheidung L offen: Freischaltungen billiger (z. B. 60/175 je Spieler, Einrechnung ×1,05) und Forschung teurer bzw. schwächer, dann Leben um den Referenzweg anheben.
