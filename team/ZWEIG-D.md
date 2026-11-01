@@ -847,3 +847,17 @@ Effekt-Leiter (L: erst Dauer, dann Stärke, dann Stapelung; fester Aufbau, kumul
 - **Forschungs-Referenzweg** (Kasse 10 % je Spieler, Freischaltungen 125 + 350 zuerst, dann Forschung nach Wert je Gold, Vorschlagsliste): Die Freischaltungen binden die Kasse bis etwa Tag 36; danach Forschung bis Tag 48: ×1,51 (Preise ×1) · ×1,32 (Preise ×2) · ×1,20 (Preise ×3). Ohne Freischaltungen in der Rechnung (früher Weg): Tag 24 ×1,20, Tag 36 ×1,51, Tag 48 ×1,77.
 - Folgerung: Die Forschung ist bei diesen Preisen sehr stark, weil ihr Wert nach dem Kauf weiter wächst. Die Freischaltungen sind dagegen teuer für ihren Wert (gemessen 0–3 %). Entscheidung L offen: Freischaltungen billiger (z. B. 60/175 je Spieler, Einrechnung ×1,05) und Forschung teurer bzw. schwächer, dann Leben um den Referenzweg anheben.
 - **Umgesetzt (L 01.11.):** Freischaltung 60/175 je Spieler (Einrechnung ×1,05, Leben deterministisch nachgestellt: ×1,00/0,99/0,98/0,97), Forschungspreise ×2 gegenüber dem Vorschlag (Effekte, Reichweite, Schussgeschwindigkeit; Element-Schaden 80/180/360), Leben × Wurzel des Referenzwegs (bis Tag 24 ×1,00, Tag 36 ×1,06, Tag 48 ×1,15). Referenzweg mit Preisen ×2: Forschung ab etwa Tag 29, ×1,16 an Tag 36, ×1,40 an Tag 48.
+
+## Vergleich mit den anderen Varianten (01.11.)
+Gleiche Umgebung für alle: `d/bots.js` mit `MIT_FAKTOREN=1` (Monster-Faktoren wie im Spiel), ohne Wetter, alle Türme frei, keine Forschung, Maps 0/2. Menschen-Bots kern/breit/sparer (leiter3 und quer verzerren Schatten, weil sie das Irrlicht früh bauen). Wert = Reserve ÷ Ziel, je Block als Element ÷ Mittel der 4 Elemente (das Gesamtniveau ist nicht vergleichbar, jede Variante hat eigene Leben). Spanne = stärkstes ÷ schwächstes Element.
+
+| Variante | Feuer | Eis | Schatten | Stein | Spanne Boden (Blöcke) | Spanne Boden gesamt | Fliegertage (F/E/S/St) |
+|---|---|---|---|---|---|---|---|
+| Live (29c, F) | 0,55 | 1,03 | 1,01 | 1,74 | 1,20 / 6,17 / 4,21 / 3,56 | 3,15 | 0,58/1,62/1,51/0,70 |
+| Optimierer (`spiegel.json`) | 0,65 | 1,04 | 1,06 | 1,40 | 1,20 / 3,40 / 2,66 / 2,45 | 2,17 | 0,66/1,53/1,56/0,64 |
+| C12f (`spiegel-a.html`) | 1,07 | 0,96 | 0,95 | 1,02 | 1,48 / 1,24 / 1,49 / 1,11 | 1,12 | 1,48/1,37/1,41/0,35 |
+| D7 | 0,95 | 0,89 | 1,02 | 1,15 | 1,32 / 1,38 / 1,32 / 1,30 | 1,29 | 0,93/1,20/1,62/0,56 |
+
+- D7 mit neutralen Faktoren: praktisch gleich (Stein 1,17, Eis 0,90) → die Faktoren der Monster verschieben nichts.
+- **D7 mit Menschen-Bots ≠ D7 mit Bezugs-Bot** (bezug3: F 0,98 · E 1,01 · S 0,98 · St 1,04 relativ zum Mittel): Einfache Muster (3 × T1 bis S6, je Turmtyp ein Turm) bevorzugen Stein (+17 %) und benachteiligen Eis (−10 %), vermutlich weil Eis-Türme aufeinander angewiesen sind und mehrere Bremser kaum stapeln (5 %), während Stein-Türme allein stark sind.
+- Drift über die Blöcke: D7 am gleichmäßigsten (Spanne je Block 1,30–1,38), C12f schwankt (1,11–1,49; Stein 0,79 → 1,21).
