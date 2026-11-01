@@ -3,7 +3,7 @@
 const fs = require('fs'), path = require('path');
 const NAMES = ['fxText', 'WEATHER', 'CONFIG', 'ELEMENTS', 'MONSTERS', 'MAPS', 'GRID', 'COLS', 'ROWS', 'TERRAIN', 'TOWER_COST', 'TOWER_POWER', 'RESEARCH', 'RESEARCH_GROUPS',
   'LOCKS', 'ABILITIES', 'GEMS', 'towerBase', 'tdef', 'upgradeCost', 'monsterDef', 'waveSpecs', 'simulate', 'makeSim', 'step', 'simBusy', 'posAt',
-  'buildCost', 'bountyFor', 'DT', 'resVal', 'VERSION', 'genTerrain', 'gemOptions', 'BASICS', 'abilityBlocked', 'waveMix', 'variantDef'];
+  'buildCost', 'bountyFor', 'DT', 'resVal', 'VERSION', 'genTerrain', 'gemOptions', 'BASICS', 'abilityBlocked', 'waveMix', 'variantDef', 'weatherDay', 'windDirOf', 'simulateWorld', 'wdef', 'resLvl', 'weatherText', 'potOf'];
 function stubs(){
   const el = () => new Proxy({ style:{}, dataset:{}, classList:{ toggle(){}, add(){}, remove(){} }, addEventListener(){}, querySelectorAll:() => [], clientWidth:0, value:'10' },
     { get:(t, k) => k in t ? t[k] : undefined, set:(t, k, v) => (t[k] = v, true) });
@@ -20,7 +20,9 @@ function stubs(){
 function datei(){
   if (process.env.INDEX) return process.env.INDEX;
   const sp = process.env.SPIEGEL || path.join(__dirname, 'spiegel.json');
-  if (sp !== 'aus' && fs.existsSync(sp)) { const b = JSON.parse(fs.readFileSync(sp, 'utf8'))._basis;
+  if (sp !== 'aus' && fs.existsSync(sp)) { const J = JSON.parse(fs.readFileSync(sp, 'utf8')), b = J._basis;
+    // 01.11.: _env im Spiegel = Schalter für basis/patch.js, die zur Variante gehören (Zweig D: STAPEL_ALLE=1); gesetzte Umgebung geht vor
+    for (const [k, v] of Object.entries(J._env || {})) if (process.env[k] === undefined) process.env[k] = String(v);
     if (b) { const f = path.join(__dirname, 'basis', `index-${b}.html`); if (!fs.existsSync(f)) throw new Error('Basis fehlt: ' + f); return f; } }
   return path.join(__dirname, '..', '..', 'index.html');
 }

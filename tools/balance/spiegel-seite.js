@@ -8,13 +8,15 @@ const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const S = require('./spiegel'), { datei } = require('./sim');
 const sp = S.lesen(), basis = sp._basis;
 if (!basis) throw new Error('spiegel.json ohne _basis');
+for (const [k, v] of Object.entries(sp._env || {})) if (process.env[k] === undefined) process.env[k] = String(v);   // 01.11.: Schalter für basis/patch.js (vor dem Laden des Patches)
 // Grafik (22.10., L): Basis mit den Grafik-Commits seit 044d8c0 (Monster-Bilder 21a–21e, 22a; keine Spielzahlen, Simulation geprüft gleich).
 // Zwei Monster heißen dort anders – Spiegel-Schlüssel werden umbenannt. GRAFIK=0 nimmt die reine Basis.
 const GRAFIK_DATEI = path.join(__dirname, 'basis', `index-${basis}-grafik.html`), GRAFIK = process.env.GRAFIK !== '0' && fs.existsSync(GRAFIK_DATEI);
 const NAMEN_NEU = GRAFIK ? { 'Sommer-Schneebälle':'Eiswürfel', 'Heisenbergs':'The one who knocks' } : {};
 let html = require('./basis/patch')(fs.readFileSync(GRAFIK ? GRAFIK_DATEI : datei(), 'utf8'));   // Code-Änderungen des Spiegels (basis/patch.js)
+if (process.env.SPIEL_D7 || sp._spielD7) html = require('./basis/spiel-d7')(html);   // 01.11.: Spielregeln Zweig D7 (Wetter je Jahreszeit, Wind, Forschung, Zinsen, Edelstein-Basics)
 const werte = Object.fromEntries(Object.entries(sp).filter(([k]) => !k.startsWith('_')).map(([k, v]) => [k.split('.').map(t => NAMEN_NEU[t] || t).join('.'), v]));
-const kenn = crypto.createHash('md5').update(JSON.stringify(werte) + fs.readFileSync(path.join(__dirname, 'basis', 'patch.js'), 'utf8') + fs.readFileSync(path.join(__dirname, 'basis', 'irrlicht.js'), 'utf8')).digest('hex').slice(0, 6);   // 26.10.: auch Code-Änderungen des Spiegels ändern die Version
+const kenn = crypto.createHash('md5').update(JSON.stringify(werte) + fs.readFileSync(path.join(__dirname, 'basis', 'patch.js'), 'utf8') + fs.readFileSync(path.join(__dirname, 'basis', 'irrlicht.js'), 'utf8') + (process.env.SPIEL_D7 ? fs.readFileSync(path.join(__dirname, 'basis', 'spiel-d7.js'), 'utf8') : '')).digest('hex').slice(0, 6);   // 26.10.: auch Code-Änderungen des Spiegels ändern die Version
 
 function ersetze(alt, neu){ if (!html.includes(alt)) throw new Error('nicht gefunden: ' + alt.slice(0, 60)); html = html.replace(alt, neu); }
 // 1) eigenes Spiel, eigene Version
