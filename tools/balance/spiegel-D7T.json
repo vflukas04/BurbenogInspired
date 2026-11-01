@@ -1,9 +1,9 @@
 {
   "_basis": "044d8c0",
-  "MONSTERS.Betty (Boss).hpMul": 1.104,
-  "MONSTERS.Nazgul.hpMul": 0.1809,
-  "MONSTERS.Fledermäuse.hpMul": 0.3093,
-  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1942,
+  "MONSTERS.Betty (Boss).hpMul": 1.2246,
+  "MONSTERS.Nazgul.hpMul": 0.1996,
+  "MONSTERS.Fledermäuse.hpMul": 0.3309,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1978,
   "MONSTERS.Silberfische.hpMul": 0.8436,
   "MONSTERS.Kellerasseln.hpMul": 0.4568,
   "MONSTERS.Nacktschnecken.hpMul": 0.9251,
@@ -19,35 +19,35 @@
   "MONSTERS.Habichte.hpMul": 0.576,
   "MONSTERS.Dachse.hpMul": 0.6039,
   "MONSTERS.Oktopusse.hpMul": 0.8866,
-  "MONSTERS.Wildschweine.hpMul": 0.5432,
-  "MONSTERS.Schäferhunde.hpMul": 0.6314,
-  "MONSTERS.Schäferhund-Boss.hpMul": 3.6185,
-  "MONSTERS.Besoffene Penner.hpMul": 0.7786,
-  "MONSTERS.Wütende Partnerin.hpMul": 0.4381,
-  "MONSTERS.Wütende Nachbarn.hpMul": 0.3614,
-  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.6518,
-  "MONSTERS.Uffug-Vorhaut.hpMul": 0.5033,
-  "MONSTERS.Uffug (Boss).hpMul": 3.8859,
-  "MONSTERS.Roboter.hpMul": 0.4338,
-  "MONSTERS.Sommer-Schneebälle.hpMul": 0.3108,
-  "MONSTERS.Würfel.hpMul": 0.4171,
-  "MONSTERS.Phönixe.hpMul": 0.4295,
-  "MONSTERS.Fairtrade-Bananen.hpMul": 0.6464,
-  "MONSTERS.El Schlucko.hpMul": 3.0455,
-  "MONSTERS.Krieger.hpMul": 0.2567,
-  "MONSTERS.Golems.hpMul": 0.3318,
-  "MONSTERS.Albträume.hpMul": 0.4571,
-  "MONSTERS.Magier-Novizen.hpMul": 0.4805,
-  "MONSTERS.Magiermeister.hpMul": 1.6372,
-  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.3421,
-  "MONSTERS.Lindner-Spezialisten.hpMul": 0.216,
-  "MONSTERS.Wargreiter.hpMul": 0.3167,
-  "MONSTERS.Lehrer.hpMul": 0.2595,
-  "MONSTERS.Schulleiter.hpMul": 1.6927,
-  "MONSTERS.Streichquartett.hpMul": 0.2549,
-  "MONSTERS.Heisenbergs.hpMul": 0.2118,
-  "MONSTERS.Mehlmottenraupen.hpMul": 0.1732,
-  "MONSTERS.GNTModels.hpMul": 0.3193,
+  "MONSTERS.Wildschweine.hpMul": 0.537,
+  "MONSTERS.Schäferhunde.hpMul": 0.6218,
+  "MONSTERS.Schäferhund-Boss.hpMul": 3.5636,
+  "MONSTERS.Besoffene Penner.hpMul": 0.7668,
+  "MONSTERS.Wütende Partnerin.hpMul": 0.4331,
+  "MONSTERS.Wütende Nachbarn.hpMul": 0.3573,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.6346,
+  "MONSTERS.Uffug-Vorhaut.hpMul": 0.4938,
+  "MONSTERS.Uffug (Boss).hpMul": 3.827,
+  "MONSTERS.Roboter.hpMul": 0.4272,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.3049,
+  "MONSTERS.Würfel.hpMul": 0.4104,
+  "MONSTERS.Phönixe.hpMul": 0.4227,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.6386,
+  "MONSTERS.El Schlucko.hpMul": 3.0325,
+  "MONSTERS.Krieger.hpMul": 0.2555,
+  "MONSTERS.Golems.hpMul": 0.333,
+  "MONSTERS.Albträume.hpMul": 0.4621,
+  "MONSTERS.Magier-Novizen.hpMul": 0.4911,
+  "MONSTERS.Magiermeister.hpMul": 1.6862,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.3575,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.2264,
+  "MONSTERS.Wargreiter.hpMul": 0.3366,
+  "MONSTERS.Lehrer.hpMul": 0.2783,
+  "MONSTERS.Schulleiter.hpMul": 1.8356,
+  "MONSTERS.Streichquartett.hpMul": 0.2771,
+  "MONSTERS.Heisenbergs.hpMul": 0.231,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.1894,
+  "MONSTERS.GNTModels.hpMul": 0.3541,
   "MONSTERS.Kellerasseln.weak": [
     0.9,
     1,
@@ -295,7 +295,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.4": 0.44267,
+  "ELEMENTS.0.kraftT.4": 0.42255,
   "ELEMENTS.0.towers.5": [
     "Lavaturm",
     "Schaden",
@@ -311,7 +311,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.0.kraftT.5": 1.20828,
+  "ELEMENTS.0.kraftT.5": 1.15336,
   "ELEMENTS.0.towers.6": [
     "Sonnenturm",
     "Schaden",
@@ -327,7 +327,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.6": 0.98313,
+  "ELEMENTS.0.kraftT.6": 0.93844,
   "ELEMENTS.0.towers.7": [
     "Höllenfeuer",
     "Schaden",
@@ -343,7 +343,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.7": 0.33859,
+  "ELEMENTS.0.kraftT.7": 0.3232,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
     "0": 10,
@@ -471,7 +471,7 @@
       "chance": 0.45
     }
   ],
-  "ELEMENTS.1.kraftT.4": 1.06039,
+  "ELEMENTS.1.kraftT.4": 1.01219,
   "ELEMENTS.1.towers.5": [
     "Eisspeer",
     "Schaden",
@@ -487,7 +487,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 0.98759,
+  "ELEMENTS.1.kraftT.5": 0.94269,
   "ELEMENTS.1.towers.6": [
     "Blizzard",
     "Schaden",
@@ -503,7 +503,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 2.21536,
+  "ELEMENTS.1.kraftT.6": 2.11466,
   "ELEMENTS.1.towers.7": [
     "Ewiges Eis",
     "Schaden",
@@ -519,7 +519,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.28223,
+  "ELEMENTS.1.kraftT.7": 0.26941,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -661,7 +661,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.4": 1.64091,
+  "ELEMENTS.2.kraftT.4": 1.56632,
   "ELEMENTS.2.towers.5": [
     "Phantom",
     "Schaden",
@@ -677,7 +677,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.5": 2.25638,
+  "ELEMENTS.2.kraftT.5": 2.15381,
   "ELEMENTS.2.towers.6": [
     "Leerenturm",
     "Schaden",
@@ -693,7 +693,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.6": 1.1255,
+  "ELEMENTS.2.kraftT.6": 1.07434,
   "ELEMENTS.2.towers.7": [
     "Ewige Nacht",
     "Schaden",
@@ -709,7 +709,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.7": 1.03676,
+  "ELEMENTS.2.kraftT.7": 0.98964,
   "ELEMENTS.2.kraft": 1,
   "ELEMENTS.2.costOverride": {
     "0": 10,
@@ -838,7 +838,7 @@
       "chance": 0.1
     }
   ],
-  "ELEMENTS.3.kraftT.4": 0.65433,
+  "ELEMENTS.3.kraftT.4": 0.62458,
   "ELEMENTS.3.towers.5": [
     "Granitwächter",
     "Schaden",
@@ -854,7 +854,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.5": 1.30228,
+  "ELEMENTS.3.kraftT.5": 1.24309,
   "ELEMENTS.3.towers.6": [
     "Lawine",
     "Schaden",
@@ -871,7 +871,7 @@
       "chance": 0.15
     }
   ],
-  "ELEMENTS.3.kraftT.6": 0.86313,
+  "ELEMENTS.3.kraftT.6": 0.8239,
   "ELEMENTS.3.towers.7": [
     "Bergkönig",
     "Schaden",
@@ -889,7 +889,7 @@
       "flyMul": 0.5
     }
   ],
-  "ELEMENTS.3.kraftT.7": 1.27685,
+  "ELEMENTS.3.kraftT.7": 1.21881,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,

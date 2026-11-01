@@ -1,9 +1,9 @@
 {
   "_basis": "044d8c0",
-  "MONSTERS.Betty (Boss).hpMul": 1.104,
-  "MONSTERS.Nazgul.hpMul": 0.1809,
-  "MONSTERS.Fledermäuse.hpMul": 0.3093,
-  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1942,
+  "MONSTERS.Betty (Boss).hpMul": 1.2246,
+  "MONSTERS.Nazgul.hpMul": 0.1996,
+  "MONSTERS.Fledermäuse.hpMul": 0.3309,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1978,
   "MONSTERS.Silberfische.hpMul": 0.8436,
   "MONSTERS.Kellerasseln.hpMul": 0.4568,
   "MONSTERS.Nacktschnecken.hpMul": 0.9251,
@@ -19,35 +19,35 @@
   "MONSTERS.Habichte.hpMul": 0.576,
   "MONSTERS.Dachse.hpMul": 0.6039,
   "MONSTERS.Oktopusse.hpMul": 0.8866,
-  "MONSTERS.Wildschweine.hpMul": 0.5432,
-  "MONSTERS.Schäferhunde.hpMul": 0.6314,
-  "MONSTERS.Schäferhund-Boss.hpMul": 3.6185,
-  "MONSTERS.Besoffene Penner.hpMul": 0.7786,
-  "MONSTERS.Wütende Partnerin.hpMul": 0.4381,
-  "MONSTERS.Wütende Nachbarn.hpMul": 0.3614,
-  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.6518,
-  "MONSTERS.Uffug-Vorhaut.hpMul": 0.5033,
-  "MONSTERS.Uffug (Boss).hpMul": 3.8859,
-  "MONSTERS.Roboter.hpMul": 0.4338,
-  "MONSTERS.Sommer-Schneebälle.hpMul": 0.3108,
-  "MONSTERS.Würfel.hpMul": 0.4171,
-  "MONSTERS.Phönixe.hpMul": 0.4295,
-  "MONSTERS.Fairtrade-Bananen.hpMul": 0.6464,
-  "MONSTERS.El Schlucko.hpMul": 3.0455,
-  "MONSTERS.Krieger.hpMul": 0.2567,
-  "MONSTERS.Golems.hpMul": 0.3318,
-  "MONSTERS.Albträume.hpMul": 0.4571,
-  "MONSTERS.Magier-Novizen.hpMul": 0.4805,
-  "MONSTERS.Magiermeister.hpMul": 1.6372,
-  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.3421,
-  "MONSTERS.Lindner-Spezialisten.hpMul": 0.216,
-  "MONSTERS.Wargreiter.hpMul": 0.3167,
-  "MONSTERS.Lehrer.hpMul": 0.2595,
-  "MONSTERS.Schulleiter.hpMul": 1.6927,
-  "MONSTERS.Streichquartett.hpMul": 0.2549,
-  "MONSTERS.Heisenbergs.hpMul": 0.2118,
-  "MONSTERS.Mehlmottenraupen.hpMul": 0.1732,
-  "MONSTERS.GNTModels.hpMul": 0.3193,
+  "MONSTERS.Wildschweine.hpMul": 0.537,
+  "MONSTERS.Schäferhunde.hpMul": 0.6218,
+  "MONSTERS.Schäferhund-Boss.hpMul": 3.5636,
+  "MONSTERS.Besoffene Penner.hpMul": 0.7668,
+  "MONSTERS.Wütende Partnerin.hpMul": 0.4331,
+  "MONSTERS.Wütende Nachbarn.hpMul": 0.3573,
+  "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.6346,
+  "MONSTERS.Uffug-Vorhaut.hpMul": 0.4938,
+  "MONSTERS.Uffug (Boss).hpMul": 3.827,
+  "MONSTERS.Roboter.hpMul": 0.4272,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.3049,
+  "MONSTERS.Würfel.hpMul": 0.4104,
+  "MONSTERS.Phönixe.hpMul": 0.4227,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.6386,
+  "MONSTERS.El Schlucko.hpMul": 3.0325,
+  "MONSTERS.Krieger.hpMul": 0.2555,
+  "MONSTERS.Golems.hpMul": 0.333,
+  "MONSTERS.Albträume.hpMul": 0.4621,
+  "MONSTERS.Magier-Novizen.hpMul": 0.4911,
+  "MONSTERS.Magiermeister.hpMul": 1.6862,
+  "MONSTERS.E-Scooter-Fahrer.hpMul": 0.3575,
+  "MONSTERS.Lindner-Spezialisten.hpMul": 0.2264,
+  "MONSTERS.Wargreiter.hpMul": 0.3366,
+  "MONSTERS.Lehrer.hpMul": 0.2783,
+  "MONSTERS.Schulleiter.hpMul": 1.8356,
+  "MONSTERS.Streichquartett.hpMul": 0.2771,
+  "MONSTERS.Heisenbergs.hpMul": 0.231,
+  "MONSTERS.Mehlmottenraupen.hpMul": 0.1894,
+  "MONSTERS.GNTModels.hpMul": 0.3541,
   "MONSTERS.Kellerasseln.weak": [
     0.9,
     1,
@@ -295,7 +295,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.4": 1.48319,
+  "ELEMENTS.0.kraftT.4": 1.41577,
   "ELEMENTS.0.towers.5": [
     "Turm 6",
     "Schaden",
@@ -311,7 +311,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.5": 1.48823,
+  "ELEMENTS.0.kraftT.5": 1.42058,
   "ELEMENTS.0.towers.6": [
     "Turm 7",
     "Schaden",
@@ -327,7 +327,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.6": 1.42048,
+  "ELEMENTS.0.kraftT.6": 1.35591,
   "ELEMENTS.0.towers.7": [
     "Turm 8",
     "Schaden",
@@ -343,7 +343,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.7": 1.37641,
+  "ELEMENTS.0.kraftT.7": 1.31385,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
     "0": 10,
@@ -457,7 +457,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.4": 1.48319,
+  "ELEMENTS.1.kraftT.4": 1.41577,
   "ELEMENTS.1.towers.5": [
     "Turm 6",
     "Schaden",
@@ -473,7 +473,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.5": 1.48823,
+  "ELEMENTS.1.kraftT.5": 1.42058,
   "ELEMENTS.1.towers.6": [
     "Turm 7",
     "Schaden",
@@ -489,7 +489,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 1.42048,
+  "ELEMENTS.1.kraftT.6": 1.35591,
   "ELEMENTS.1.towers.7": [
     "Turm 8",
     "Schaden",
@@ -505,7 +505,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.7": 1.37641,
+  "ELEMENTS.1.kraftT.7": 1.31385,
   "ELEMENTS.1.kraft": 1,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -619,7 +619,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.4": 1.48319,
+  "ELEMENTS.2.kraftT.4": 1.41577,
   "ELEMENTS.2.towers.5": [
     "Turm 6",
     "Schaden",
@@ -635,7 +635,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.5": 1.48823,
+  "ELEMENTS.2.kraftT.5": 1.42058,
   "ELEMENTS.2.towers.6": [
     "Turm 7",
     "Schaden",
@@ -651,7 +651,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.6": 1.42048,
+  "ELEMENTS.2.kraftT.6": 1.35591,
   "ELEMENTS.2.towers.7": [
     "Turm 8",
     "Schaden",
@@ -667,7 +667,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.7": 1.37641,
+  "ELEMENTS.2.kraftT.7": 1.31385,
   "ELEMENTS.2.kraft": 1,
   "ELEMENTS.2.costOverride": {
     "0": 10,
@@ -781,7 +781,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.4": 1.48319,
+  "ELEMENTS.3.kraftT.4": 1.41577,
   "ELEMENTS.3.towers.5": [
     "Turm 6",
     "Schaden",
@@ -797,7 +797,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.5": 1.48823,
+  "ELEMENTS.3.kraftT.5": 1.42058,
   "ELEMENTS.3.towers.6": [
     "Turm 7",
     "Schaden",
@@ -813,7 +813,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.6": 1.42048,
+  "ELEMENTS.3.kraftT.6": 1.35591,
   "ELEMENTS.3.towers.7": [
     "Turm 8",
     "Schaden",
@@ -829,7 +829,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.3.kraftT.7": 1.37641,
+  "ELEMENTS.3.kraftT.7": 1.31385,
   "ELEMENTS.3.kraft": 1,
   "ELEMENTS.3.costOverride": {
     "0": 10,
@@ -869,7 +869,7 @@
   "MONSTERS.Magier-Novizen.blink.dur": 2.5,
   "MONSTERS.Mehlmottenraupen.cocoon.fly": 2.4,
   "MONSTERS.Mehlmottenraupen.cocoon.ground": 6,
-  "_stand": "Zweig D6 (L, 27.10.): Standardtürme wie D0 (Reichweite, Effektstärke und Effektdauer auf allen Stufen gleich, Upgrades ändern nur den Schaden je Gold), Preise 10/45/70/120/200/340/580/1000, Upgrade-Kurve 1/0.95/1.01/1.08/1.16/1.25, Treppe ×1.08 je Turmtyp; Monster wie D0 · Leben D4: Bezugs-Bot bezug3 (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve 1.53 × Tag^−0.098 (Tag 1: 12 Kills Menschen-Start, Betty 1.05) · 29.10.: Leben an Fliegertagen × Mittel der vier Elemente (freier Bau) · 29.10.: Leben an Bodentagen × Mittel der vier Elemente je Block (1,00/0,99/1,06/1,10, weich verbunden) · 30.10. abends: Leben an Bodentagen × gemeinsame Drift der Elemente je Block (freier Bau d16) · Fliegertage erneut auf das Mittel der Elemente (d17) · 31.10.: Freischaltung in die Turmtypen eingerechnet (T5–T8 Schaden ×1,1: Preis je Spieler 125 bzw. 350 Gold auf die typische Zahl gebauter Türme verteilt, gerundet) · Leben × Wirkung der Freischaltungs-Einrechnung (fester Aufbau, Standardtürme, deterministisch)",
+  "_stand": "Zweig D6 (L, 27.10.): Standardtürme wie D0 (Reichweite, Effektstärke und Effektdauer auf allen Stufen gleich, Upgrades ändern nur den Schaden je Gold), Preise 10/45/70/120/200/340/580/1000, Upgrade-Kurve 1/0.95/1.01/1.08/1.16/1.25, Treppe ×1.08 je Turmtyp; Monster wie D0 · Leben D4: Bezugs-Bot bezug3 (T1 ≤ 4, sonst ≤ 3 je Turmtyp), Reserve 1.53 × Tag^−0.098 (Tag 1: 12 Kills Menschen-Start, Betty 1.05) · 29.10.: Leben an Fliegertagen × Mittel der vier Elemente (freier Bau) · 29.10.: Leben an Bodentagen × Mittel der vier Elemente je Block (1,00/0,99/1,06/1,10, weich verbunden) · 30.10. abends: Leben an Bodentagen × gemeinsame Drift der Elemente je Block (freier Bau d16) · Fliegertage erneut auf das Mittel der Elemente (d17) · 31.10.: Freischaltung in die Turmtypen eingerechnet (T5–T8 Schaden ×1,05: Preis je Spieler 60 bzw. 175 Gold auf die typische Zahl gebauter Türme verteilt, gerundet) · Leben × Wirkung der Freischaltungs-Einrechnung (fester Aufbau, Standardtürme, deterministisch) · 01.11.: Leben × Wurzel des Forschungs-Referenzwegs (Kasse 10 %, Freischaltung 60/175, Forschungspreise ×2; halb so gut forschendes Team = Ziel)",
   "_ziel": {
     "R1": 1.5339,
     "a": 0.0979,
