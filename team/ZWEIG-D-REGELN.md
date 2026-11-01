@@ -36,6 +36,17 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - **Looping-Louie-Tiefflug:** auf etwa ⅓ des Wegs tief (dort Bodenmonster für alle Türme), in den Übergängen fliegend ohne Malus „schwach gegen Fliegende“, sonst Hochflug. Höhe hängt vom Ort ab, alle fliegen in einer Reihe.
 - Leben je Tag (`MONSTERS.*.hpMul` in `spiegel-D7.json`): auf den Bezugs-Bot kalibriert, dann an Bodentagen mit der gemeinsamen Drift der vier Elemente angehoben, an Fliegertagen auf das Mittel der vier Elemente gestellt.
 
+## Forschung (Stand 01.11., Werte vorläufig)
+- Preise je Spieler; Forschung, die allen hilft, × Spielerzahl; Element-Schaden fest (hilft nur einem Spieler).
+- Element-Schaden +8 / +16 / +25 %: 80 / 180 / 360 (fest).
+- Effekte (Leiter): Dauer +50 % / Stärke +25 % / Stapelanteil +0,1: 20 / 70 / 130 × Spieler. Stein: eigene Varianten (z. B. Flächenabfall 105/78 %).
+- Reichweite +0,5 / +1 / +1,5 Felder: 40 / 80 / 160 × Spieler.
+- Schussgeschwindigkeit +10 / +20 / +30 %: 170 / 360 / 640 × Spieler.
+- Kopfgeld, Upgrades billiger: wie bisher × Spieler.
+- Freischaltung T5–T6 / T7–T8: 60 / 175 × Spieler; in den Schaden von T5–T8 eingerechnet (×1,05).
+- Kasse: 2 % Zinsen je Tag, ohne Deckel.
+- Leben enthalten die Wurzel eines Forschungs-Referenzwegs (Kasse 10 %, obige Preise): bis Tag 24 ×1,00, Tag 36 ×1,06, Tag 48 ×1,15 – ein halb so gut forschendes Team liegt im Ziel.
+
 ## Noch offen
-- Forschung (Wert je Freischaltung, Preis nach Spielerzahl), Edelsteine.
+- Edelsteine (4 Optionen bleiben, zweites Basic umverteilen), Stein-Forschungsvarianten.
 - Anzeige: Wettertexte, Wind-Richtung, Tiefflug-Strecken auf der Karte.
