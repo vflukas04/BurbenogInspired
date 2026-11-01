@@ -40,7 +40,10 @@ const wirk = t => { const d = G.tdef(t, C.LANE); return d.dps * C.coverage(t.x, 
 function proxyWert(st, a){ if (a.kind === 'bau') return wirk({ x:a.c.x, y:a.c.y, el:EL, idx:a.k, lvl:1 }) / a.cost;
   return (wirk({ ...a.t, lvl:a.t.lvl + 1 }) - wirk(a.t)) / a.cost; }
 // Rest-Ausgabe der Sim-Bots: beste Wirkung je Gold, mit Obergrenze je Turmtyp
-const capVon = (cap, k) => cap === undefined ? 1e9 : Array.isArray(cap) ? cap[k] : cap;   // Obergrenze je Turmtyp: Zahl oder Liste [T1 … T8]
+// FREI_AB='4:20,6:36' (01.11.): Turmtypen ab Index k erst ab Tag d (1-basiert) baubar – Freischaltung aus der Kasse realistisch nachstellen
+const FREI_AB = (process.env.FREI_AB || '').split(',').filter(Boolean).map(x => x.split(':').map(Number)); let CUR_DAY = 0;
+const gesperrt = k => FREI_AB.some(([ab, tag]) => k >= ab && CUR_DAY + 1 < tag);
+const capVon = (cap, k) => gesperrt(k) ? 0 : cap === undefined ? 1e9 : Array.isArray(cap) ? cap[k] : cap;   // Obergrenze je Turmtyp: Zahl oder Liste [T1 … T8]
 const rest = (st, frei, cap) => { const a = alleAktionen(st).filter(a => a.cost <= frei && (a.kind !== 'bau' || vom(st, a.k).length < capVon(cap, a.k))); if (!a.length) return null;
   return a.map(x => ({ x, v:proxyWert(st, x) })).sort((p, q) => q.v - p.v)[0].x; };
 const alleAktionen = st => [...[...Array(8).keys()].map(k => bau(st, k)), ...st.towers.map(up)].filter(Boolean);
@@ -251,7 +254,7 @@ function plan(name){ const bot = BOTS[name], st = { towers:[], spent:0 }, tage =
     return P.tage.map((t, d) => ({ gold:t.gold, spent:B.spent(t.setup), res:t.setup.res || [], towers:t.setup.towers })); }
   const RP = bot.rueck ? rueckPlan() : null; RESERVIERT = new Set(RP && process.env.RESERV ? RP[N - 1].map(z => z.x + ',' + z.y) : []);   // RESERV=1: Zielfelder für Notkäufe sperren (27.10.: führt zu Einbruch am Anfang, Standard aus) VERLEGT = new Map();
   if (RP && process.env.NUR_RUECK) return RP.map((S, d) => ({ gold:budget(d), spent:S.reduce((a, t) => a + kostenBis(t, t.lvl), 0), towers:S.map(t => ({ ...t, inv:kostenBis(t, t.lvl) })) }));
-  for (let d = 0; d < N; d++) {
+  for (let d = 0; d < N; d++) { CUR_DAY = d;
     if (RP) rueckVorwaerts(st, d, RP[d]); else
     if (bot.sim) { const start = { el:EL, towers:st.towers.map(t => ({ ...t })), res:[] };
       const g = bot.cap || bot.verkauf ? greedyCap(budget(d), bot.sim(d), start, bot.cap, bot.spar * einkommen(d), bot.verkauf) : B.greedy(EL, budget(d), bot.sim(d), { cells:3, keep:0.8, spar:bot.spar * einkommen(d) }, start);
