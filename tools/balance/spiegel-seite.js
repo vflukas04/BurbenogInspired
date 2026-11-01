@@ -27,7 +27,7 @@ const m = html.match(/\nconst MONSTERS = \[[\s\S]*?\n\];\n/); if (!m) throw new 
 const anwenden = `
 /* SPIEGEL (L, Makrobalancing): Werte aus tools/balance/spiegel.json, Basis ${basis}, Stand ${sp._stand || '?'} – erzeugt von tools/balance/spiegel-seite.js, nicht von Hand ändern */
 (function(){ const SP = ${JSON.stringify(werte)};
-  const W = { CONFIG, ELEMENTS, MONSTERS, RESEARCH };
+  const W = { CONFIG, ELEMENTS, MONSTERS, RESEARCH, WEATHER };   /* 01.11.: WEATHER für Zweig D */
   for (const [p, v] of Object.entries(SP)) { const t = p.split('.'); let o = W[t[0]];
     for (let i = 1; i < t.length - 1; i++) { let k = t[i]; if (Array.isArray(o) && isNaN(+k)) k = o.findIndex(x => x && x.name === k); o = o[k]; }
     o[t[t.length - 1]] = v; } })();
