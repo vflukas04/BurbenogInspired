@@ -5,7 +5,7 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 ## Türme
 - 32 Türme neu: Standardturm (Reichweite 3,5, 1 Schuss/s, 1 Geschoss) plus Merkmale, Schaden aus festen Umrechnungsfaktoren.
 - Preise 10/45/70/120/200/340/580/1000, Turmtyp-Treppe ×1,08. **Feuer T1 (Funke) 8 Gold** wie im alten Spiel (02.11., eigenes Gefühl: mehr, kleinere Türme), Schaden × 0,8, Wert je Gold gleich. Irrlicht 30.
-- Feuer-Schaden × 1,03 (`kraftBlock`, 02.11.: Feuer lag ≈ 3 % unter dem Mittel).
+- **Feinabstimmung 02.11. abends** (ganze Spiele, Duos: Kills im ersten Durchlauf und Gold): Element-Schaden (`kraft`) Feuer ×1,06 · Eis ×1,03 · Schatten ×1,03 · Stein ×0,97; T1 zusätzlich Funke ×1,10 · Schemen ×0,97 · Kiesel ×0,92. Ergebnis: Gold je Spieler 47–53 % in allen Duos, Reserve (Menschen-Bots) Feuer 1,02 · Eis 0,98 · Schatten 0,97 · Stein 1,04 (Spanne 1,24 → 1,07). Zwischenbosse unverändert (L: „darf auch mal einer durchrutschen“).
 - **Upgrades ändern nur den Schaden** (Kraft je Gold 1/0,95/1,01/1,08/1,16/1,25 für S1–S6). Reichweite, Effekt, Dauer bleiben gleich.
 - Stein gegen Fliegende: T1 Kiesel, T2 Schleuder und T8 Bergkönig schwach (**70 %**, 02.11.; vorher 50 %), T4 Katapult und T6 Granitwächter normal, T3 Felsbrocken, T5 Erdbeben und T7 Lawine gar nicht. Türme ohne Fliegende machen am Boden ×46/38 ≈ ×1,21 Schaden (hergeleitet: an 8 von 46 Tagen nutzlos).
 - Kiesel ohne Fläche, gezieltes Geschoss (trifft immer das anvisierte Monster).

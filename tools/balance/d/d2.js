@@ -144,6 +144,10 @@ if (D7) sp['CONFIG.playerHp'] = { 2:1, 3:+(process.env.HP3 || 1.51), 4:+(process
 if (D7) { sp['CONFIG.slotPlan'] = { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 17, 20] }; sp['CONFIG.darkFrom'] = 17; }
 if (D7) sp['CONFIG.nightDim'] = NACHT_DIM;
 if (D7) sp['ELEMENTS.2.note'] = `Fluch (mehr Schaden, Rüstung bröckelt für alle) · nachts treffen Schatten-Türme nachtaktive Monster außerhalb des Irrlichts nur mit ${Math.round(NACHT_DIM * 100)} % · Irrlicht: im Lichtkreis voller Schaden und etwas mehr`;
+// 02.11. abends (L: „alle Elemente sollen sich ähnlich anfühlen“): Feinabstimmung nach ganzen Spielen (d/spiel4.js, Duos, Kills im ersten Durchlauf und Gold).
+// Erster Durchlauf Block 1 war Feuer 7 % · Eis 17 % · Schatten 21 % · Stein 28 %, Gold Feuer 45–49 %, Stein 51–55 % → T1-Faktoren und Element-Stärke.
+const FEIN = JSON.parse(process.env.FEIN || '{"t1":[1.10,1,0.97,0.92],"kraft":[1.06,1.03,1.03,0.97]}');
+if (D7 && FEIN) { for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.kraftT.0`] = +(sp[`ELEMENTS.${e}.kraftT.0`] * FEIN.t1[e]).toFixed(5); sp[`ELEMENTS.${e}.kraft`] = FEIN.kraft[e]; } }
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
 S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));
