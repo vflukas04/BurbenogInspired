@@ -135,6 +135,8 @@ const SPL = (process.env.STEIN_SPLASH || (D7 ? '1,0.6' : '1,0.7')).split(',').ma
 if (D7 && process.env.FUNKE_8 !== '0') { sp['ELEMENTS.0.costOverride'] = { ...(sp['ELEMENTS.0.costOverride'] || {}), 0:8 }; sp['ELEMENTS.0.kraftT.0'] = +(sp['ELEMENTS.0.kraftT.0'] * 0.8).toFixed(5); }
 // 02.11. (L): Feuer lag am Boden ≈ 3 % unter dem Mittel (Mitte Menschen-Bots/Bezugs-Bot) → kraftBlock × FEUER_K (1,03)
 if (D7 && sp['ELEMENTS.0.kraftBlock']) sp['ELEMENTS.0.kraftBlock'] = sp['ELEMENTS.0.kraftBlock'].map(x => +(x * +(process.env.FEUER_K || 1.03)).toFixed(4));
+// 02.11. (L): Leben je Spielerzahl neu (Tag mit so vielen Durchläufen wie Spieler, Menschen-Bots: Reserve 3 Spieler ×1,21, 4 Spieler ×1,36 gegenüber 2)
+if (D7) sp['CONFIG.playerHp'] = { 2:1, 3:+(process.env.HP3 || 1.51), 4:+(process.env.HP4 || 2.03) };
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
 S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));

@@ -37,7 +37,9 @@ Regeln im Detail: `team/ZWEIG-D-REGELN.md`, Herleitung: `team/ZWEIG-D.md`.
 | B6 | Kreativ-Modus, Verbindungswächter, Grafik | unabhängig | behalten (schon in den Testseiten) |
 
 ## C. Vor dem Einbau noch offen (Zweig D)
-- C1 **3 und 4 Spieler:** Messungen bisher mit 2 Spielern. Erster Befund (`d/spiel4.js`): mit 4 Spielern viel leichter (Durchbrüche 4–19 statt 350–590 bei den Menschen-Bots) und Schatten zu stark (Gold 26–33 % statt 25 %; vermutlich Nachtregel: nur 1 von 4 Wellen dunkel). Umrechnung je Spielerzahl folgt.
+- C1 **3 und 4 Spieler:** Elemente zueinander bleiben gleich, aber die Schwierigkeit nicht → Leben je Spielerzahl 1 / **1,51 / 2,03** (vorher 1 / 1,25 / 1,5). Damit sind 2, 3 und 4 Spieler gleich schwer (Bot-Spiele).
+- C1b **Schatten bekommt ≈ +6–9 % Gold** (alle Spielerzahlen): stark tagsüber im ersten Durchlauf, schwach nur im letzten (nachts). Zu klären: so lassen (Schatten-Gefühl) oder Nachtregel milder und Schatten tagsüber schwächer.
+- C1c **Maps ungleich lang:** Map 2/3 (64 Felder) ≈ 8 % leichter als Map 0/1 (62). Zu klären (F, Karten): Wege angleichen oder Leben je Map.
 - C2 Edelstein-Uniques an D7 anpassen.
 - C3 Anzeige: Windhose, Tiefflug-Strecken.
 - C4 Testspiele mit anderen Paaren (Eis/Schatten …) und mit 3–4 Spielern.

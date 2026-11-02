@@ -880,3 +880,10 @@ Echte Auswertung (`resolveSlot` der Testseite), Türme aus Menschen-Bot-Plänen 
 - **Duos:** Gold je Spieler 45–55 % (alle 6 Paare). Kills im Block 1 ungleich (Schatten 59–73 % in seinen Duos), wiegt beim Gold wenig (Kopfgeld 2).
 - **4 Spieler:** Gold Feuer 21–24 % · Eis 20–22 % · **Schatten 26–33 %** · Stein 23–31 %. Vermutete Ursache: Die Nachtregel ist für 2 Spieler bepreist (1 von 2 Wellen dunkel), mit 4 Spielern ist nur 1 von 4 dunkel → Schatten zu stark.
 - **4 Spieler viel leichter als 2:** Durchbrüche (Bots) 4–19 statt 350–590. Der Spielerfaktor der Leben (×1,5) gleicht die vier Durchläufe nicht aus → Teil der Umrechnung für 3/4 Spieler.
+
+## 3 und 4 Spieler (02.11.)
+- Messung: Tag mit so vielen Durchläufen wie Spieler (`core.runDay`, nur der letzte dunkel), `SPIELER=3/4` in `bots.js`/`elemente6.js`.
+- **Elemente zueinander fast unverändert** (Menschen-Bots, Element ÷ Mittel, Boden): 2 Sp. F 0,95 · E 0,94 · S 1,02 · St 1,09; 3 Sp. 0,96/0,93/1,02/1,09; 4 Sp. 0,96/0,93/1,02/1,09; Fliegertage ebenso. Fester Plan (÷ Standard): Schatten +5–7 % bei 3–4 Spielern (Nachtregel), sonst ±2 %. Einfache Faktoren halten also in diesem Modell.
+- **Schwierigkeit stark abhängig:** Reserve ÷ Ziel 0,87 / 1,06 / 1,18 (2/3/4 Sp.), über die Blöcke gleichmäßig (×1,21 bzw. ×1,36). → `CONFIG.playerHp` 2:1 · **3:1,51 · 4:2,03** (vorher 1,25/1,5). Ganze Spiele danach: Durchbrüche (Bots) 2 Sp. 350–590, 3 Sp. 355–583, 4 Sp. 373–516 – gleich schwer.
+- **Gold je Spieler (ganze Spiele):** 4 Sp. Feuer ≈ 24 %, Eis ≈ 24 %, **Schatten ≈ 27 %**, Stein ≈ 25 %. Duos mit Schatten 53 %. Schatten bekommt in allen Spielerzahlen ≈ +6–9 % Gold: Gold entsteht vor allem im ersten Durchlauf (tagsüber), die Nachtschwäche trifft nur den letzten. Die Reserve (ganzer Tag) ist dagegen gleich. → Designfrage (siehe Merge-Liste).
+- **Maps ungleich:** Map 2 und 3 (Weg 64 Felder) sind ≈ 8 % leichter als Map 0 und 1 (62 Felder): Reserve je Map 0,92 / 0,97 / 1,08 / 1,03. Bei 3 Spielern bekommt der Spieler auf Map 2 deshalb 35–42 % des Golds.

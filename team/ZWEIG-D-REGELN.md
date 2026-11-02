@@ -37,6 +37,8 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - **Looping-Louie-Tiefflug:** auf etwa ⅓ des Wegs tief (dort Bodenmonster für alle Türme), in den Übergängen fliegend ohne Malus „schwach gegen Fliegende“, sonst Hochflug. Höhe hängt vom Ort ab, alle fliegen in einer Reihe.
 - Leben je Tag (`MONSTERS.*.hpMul` in `spiegel-D7.json`): auf den Bezugs-Bot kalibriert, dann an Bodentagen mit der gemeinsamen Drift der vier Elemente angehoben, an Fliegertagen auf das Mittel der vier Elemente gestellt. **02.11.:** zusätzlich jeder Tag auf das Mittel der vier Elemente (Mitte aus Menschen-Bots und Bezugs-Bot, Grenzen ×0,75–1,35). Grund: Die Leben waren an Standardtürmen eingestellt, die keine Rüstung abtragen; alle Elementtürme tun das, daher waren gepanzerte Tage zu leicht (Tag 2, 8, 11: ×1,18–1,30) und Bosse zu schwer (×0,8). Streuung je Tag (Menschen-Bots) ±22 % → ±7 %.
 
+- **Leben je Spielerzahl** (`CONFIG.playerHp`): 2 Sp. ×1 · 3 Sp. ×1,51 · 4 Sp. ×2,03 (02.11.; vorher 1,25/1,5 – mit 4 Spielern war es viel zu leicht).
+
 ## Forschung (Stand 01.11., Werte vorläufig)
 - Preise je Spieler; Forschung, die allen hilft, × Spielerzahl; Element-Schaden fest (hilft nur einem Spieler).
 - Element-Schaden +8 / +16 / +25 %: 80 / 180 / 360 (fest).

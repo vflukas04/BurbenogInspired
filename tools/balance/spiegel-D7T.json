@@ -1202,5 +1202,10 @@
   },
   "CONFIG.burnArmor": 0,
   "ELEMENTS.3.splashCenter": 1,
-  "ELEMENTS.3.splashEdge": 0.6
+  "ELEMENTS.3.splashEdge": 0.6,
+  "CONFIG.playerHp": {
+    "2": 1,
+    "3": 1.51,
+    "4": 2.03
+  }
 }
