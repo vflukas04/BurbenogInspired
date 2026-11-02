@@ -1549,7 +1549,7 @@ function giftDialog(){
 // Menü ⋯: seltene Knöpfe (Neues Spiel mit Rückfrage, Wetter-Animation)
 let wxAnim = lsGet('ww23-wxanim') !== false;
 // 2,5D-Ansicht (26.10., F): Boden um VK gestaucht, Türme/Monster/Bäume stehen aufrecht und werden nach Tiefe sortiert. Nur Anzeige.
-let view25 = lsGet('ww23-view25') === true;
+let view25 = lsGet('ww23-view25') !== false;
 const VK = 0.68, CUR = { k:1, top:0 };
 const gyOf = (y, cs) => CUR.top + y * cs * CUR.k;
 function menuDialog(){

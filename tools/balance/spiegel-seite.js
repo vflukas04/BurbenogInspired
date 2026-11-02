@@ -45,6 +45,8 @@ ersetze(`const archDoc = (g, arch) => JSON.parse(JSON.stringify({ cfg:g.cfg, ver
     gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...a })); };`);
 // 3b) eigene Browser-Speicher-Schlüssel (Platz, gesehene Welle, lokales Spiel), damit das normale Spiel nicht durcheinanderkommt
 html = html.replace(/'ww2-(?!holder)/g, `'ww2${SPIEL === 'spiegel1' ? 's' : SPIEL.slice(-1)}-`);
+// 3c) 02.11. (L): Schräg-Ansicht mit F's Turm-Bildern als Standard (eigener Speicher-Schlüssel je Seite, sonst sah man auf den Testseiten die alten Sprites)
+html = html.replace(/let view25 = lsGet\('(ww2[^']*-view25)'\) === true;/, "let view25 = lsGet('$1') !== false;");
 // 4) sichtbarer Hinweis, damit niemand die Seiten verwechselt
 ersetze('<body>', '<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel ' + SPIEL + '</div>');
 
