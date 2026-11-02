@@ -892,3 +892,8 @@ Echte Auswertung (`resolveSlot` der Testseite), Türme aus Menschen-Bot-Plänen 
 - Frühe Forschung: bis Tag 6–9 gingen 40–55 % des Golds in die Kasse (für +7–8 %), das fehlte bei den Türmen.
 - Wer im ersten Durchlauf schwach ist, bekommt weniger Gold (Partner tötet die Durchgelassenen). **Entscheidung L: kein geteiltes Kopfgeld** – das regelt das Balancing, der Rest über Schenken.
 - **Fehler auf der Testseite (behoben 02.11.):** „Auswertung: process is not defined“ – die Bremsen-Stapelregel aus `basis/patch.js` las `process.env` zur Laufzeit; im Browser gibt es das nicht, sobald Eis bremste, brach die Auswertung ab. Jetzt beim Patchen eingesetzt, `spiegel-seite.js` bricht ab, wenn Laufzeit-Code `process.env` enthält. Browser-Prüfung künftig mit allen vier Elementen.
+
+## Testspiel L 02.11. 16 Uhr (Schatten+Eis, verloren Tag 16)
+- Schatten zu Beginn viel zu stark (erster Durchlauf Tag 1–4: 20/20/13/20, Eis 5/1/5/3). Nachgerechnet: 3 × Schemen S1 schaffen bei Bewölkt 20, bei Sonne 7, die anderen T1 2–5. Ursachen: (1) Schemen hatte +22 % Schaden/s gegenüber Kiesel/Frostsplitter, vor allem als Ausgleich für die Nacht; (2) **Fehler:** `kraftBlock` (Wetter-Mittel) galt im Spiel zusätzlich zum echten Wetter → Winter für Schatten doppelt (+7 %).
+- Irrlicht-Reichweite zu klein, Tag/Nacht für Schatten zu krass (L).
+- **Umgesetzt:** Nacht milder (`CONFIG.nightDim` 0,7: außerhalb des Lichts 70 % statt nicht anvisierbar), Irrlicht 3 Felder, Schatten × 1,03, im Spiel ohne `kraftBlock`. Schemen jetzt +12 % statt +22 % Schaden/s über Kiesel. Menschen-Bots: Schatten 0,97 → ≈ 1,0 (Block 1 ≈ 0,97), Tag/Nacht-Spanne 1,46 → 1,26.

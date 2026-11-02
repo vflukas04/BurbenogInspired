@@ -126,4 +126,10 @@ ERSETZEN.push([`  if (def.groundMul && !flying(m)) dmg *= def.groundMul;      //
    `const flier = m => !!(m.def.fly || (m.coc && m.coc.fly)) && m.alt !== 0;
 function altOf(z, f){ for (const [a, b] of z.low) if (f >= a && f <= b) return 0; for (const [a, b] of z.low) if (f >= a - z.mid && f <= b + z.mid) return 1; return 2; }`],
   [`    m.age += dt; const D = m.def;`, `    m.age += dt; const D = m.def; if (D.lowFly) m.alt = altOf(D.lowFly, m.d / s.map.len);`]);
+// Zweig D7 (L 02.11.): Nacht milder – Schatten trifft nachtaktive Monster im Dunkeln auch außerhalb des Irrlichts, aber nur mit CONFIG.nightDim (z. B. 0,5) des Schadens.
+// Ohne CONFIG.nightDim wie bisher (außerhalb des Lichts gar nicht anvisierbar).
+ERSETZEN.push([`(!night || !m.def.night || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));`,
+  `(!night || !m.def.night || CONFIG.nightDim > 0 || s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)));`],
+  [`    dmg *= mul; }`, `    dmg *= mul; }
+  if (CONFIG.nightDim > 0 && def.dayOnly && s.dark && !def.nightSight && m.def.night && !s.lights.some(L => Math.hypot(m.x - L.x, m.y - L.y) <= L.r)) dmg *= CONFIG.nightDim;   // Zweig D7: Nacht milder`]);
 module.exports = html => { for (const [a, b] of ERSETZEN) { if (!html.includes(a)) throw new Error('Patch passt nicht: ' + a.slice(0, 60)); html = html.replace(a, b); } return html; };

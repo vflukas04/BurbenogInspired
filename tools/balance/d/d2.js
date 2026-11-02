@@ -45,6 +45,8 @@ const V_D1 = {
 const V = process.env.KURSE === 'D1' ? V_D1 : V_D6;
 // SENS=name:k (27.10., Empfindlichkeit): Merkmalswert (V − 1) des Kurses name mit k multiplizieren, z. B. SENS=fluch:1.1
 // Verbund-/Element-Kurse (28.10. nachts, mit Platzwahl, d/verbund.js und d/fit1.js): Brennen ×0,59, Fluch ×1,29 auf (Wert − 1); RUEST_K 2,97, SLOW_K 9,47 (Standard unten)
+// 02.11. (L): Nacht milder – Schatten macht nachts außerhalb des Irrlichts NACHT_DIM des Schadens gegen nachtaktive (statt 0); Nachtabschlag im Preis entsprechend kleiner
+const NACHT_DIM = +(process.env.NACHT_DIM ?? (process.env.D7 !== '0' ? 0.7 : 0));
 const SENS = process.env.SENS ?? (process.env.KURSE === 'D1' ? '' : process.env.D7 !== '0' ? 'brennen:1.54,fluch:1.29,nacht:1.105' : 'brennen:0.59,fluch:1.29');
 if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const o = V[n];
   V[n] = typeof o === 'function' ? (...a) => 1 + (o(...a) - 1) * +k : 1 + (o - 1) * +k; }
@@ -85,7 +87,7 @@ if (D7 && process.env.STEIN_D7 !== '0') {   // 30.10. (L): Stein gegen Fliegende
 const zeilen = [];
 for (let e = 0; e < 4; e++) T[e].forEach(([name, m], k) => {
   const q = m.q || 1, n = m.n || 1, f = m.f || 0;
-  let w = (m.nova && V.novaWert ? V.novaWert(m.r, q) * (m.stun ? V.novaStun(...m.stun) : 1) : V.reichweite(m.r) * V.geschosse(n) * V.rate(q) * (m.nova ? V.nova * (m.stun ? V.betaeuben(...m.stun, true) : 1) : V.flaeche(f))) * V.ruestung(RUEST[e]) * (e === 2 ? V.nacht : 1);   // Nova D6: eigener Kurs nach Radius und Rate (ohne Reichweiten-/Ratenkurs)
+  let w = (m.nova && V.novaWert ? V.novaWert(m.r, q) * (m.stun ? V.novaStun(...m.stun) : 1) : V.reichweite(m.r) * V.geschosse(n) * V.rate(q) * (m.nova ? V.nova * (m.stun ? V.betaeuben(...m.stun, true) : 1) : V.flaeche(f))) * V.ruestung(RUEST[e]) * (e === 2 ? 1 - (1 - V.nacht) * (1 - NACHT_DIM) : 1);   // Nova D6: eigener Kurs nach Radius und Rate (ohne Reichweiten-/Ratenkurs)
   if (m.nova) w *= +(process.env.NOVA_K || (D7 ? 1.2 : 1));   // 29.10.: Nova als einzelner Turmtyp im gemischten Aufbau mehr wert als gemessen (freier Bau: Frostnova trägt 23 % von Eis, Erdbeben 15 % von Stein)
   if (m.eff) w *= e === 0 ? V.brennen(m.eff, m.dur) : e === 1 ? V.bremsen(m.eff, f) : V.fluch(m.eff);
   if (m.stun && !m.nova) w *= process.env.D7 !== '0' ? V.betaeuben(m.stun[0], m.stun[1], q, n) : V.betaeuben(...m.stun, false);
@@ -125,7 +127,7 @@ if (D7) { Object.entries(D7_RUEST).forEach(([n, a]) => { sp[`MONSTERS.${n}.ar`] 
   sp['ELEMENTS.2.kraftBlock'] = [1.035, 1.035, 1.018, 1.018, 1.003, 1.003, 1.021, 1.021]; sp['ELEMENTS.3.kraftBlock'] = null; }
 // Irrlicht (29.10., L: echter Lichtturm, etwas günstiger, kleinerer Effekt): T2 Schatten schießt nicht; Schatten-Türme treffen Monster in seinem Lichtkreis
 // (2 Felder) mit ×buff (S1 1,10 … S6 1,20) und sehen dort nachtaktive Monster; keine Rüstung ignorieren. Preis 30. IRRLICHT_D7=0 = alter Fluchturm.
-if (D7 && process.env.IRRLICHT_D7 !== '0') { const L = +(process.env.IRR_LICHT || 2), b0 = +(process.env.IRR_BUFF || 0.05), b6 = +(process.env.IRR_BUFF6 || 0.15);
+if (D7 && process.env.IRRLICHT_D7 !== '0') { const L = +(process.env.IRR_LICHT || 3), b0 = +(process.env.IRR_BUFF || 0.05), b6 = +(process.env.IRR_BUFF6 || 0.15);
   sp['ELEMENTS.2.towers.1'] = ['Irrlicht', 'Licht', L / G0, 1, 1, 0, 0, 0, 0, { effect:'none', fly:true, light:L / G0, buff:[0, 1, 2, 3, 4, 5].map(i => +(1 + b0 + (b6 - b0) * i / 5).toFixed(3)), pierce:[0, 0, 0, 0, 0, 0] }];
   sp['ELEMENTS.2.costOverride'] = { ...(sp['ELEMENTS.2.costOverride'] || {}), 1:+(process.env.IRR_PREIS || 30) }; }
 sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.25,0.05' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
@@ -133,12 +135,15 @@ sp['CONFIG.burnArmor'] = +(process.env.BRENN_RUEST ?? 0);   // 28.10.: Option Br
 const SPL = (process.env.STEIN_SPLASH || (D7 ? '1,0.6' : '1,0.7')).split(',').map(Number); sp['ELEMENTS.3.splashCenter'] = SPL[0]; sp['ELEMENTS.3.splashEdge'] = SPL[1];   // Stein-Flächenabfall (Standard wie alle: Mitte 100 %, Rand 70 %; im Spiel 120 / 80 % als Element-Spezifikation, STEIN_SPLASH=1.2,0.8)
 // 02.11. (L): Feuer T1 (Funke) günstiger wie im alten Spiel (8 statt 10 Gold) – eigenes Gefühl (mehr, kleinere Türme); Schaden × 8/10, Wert je Gold bleibt
 if (D7 && process.env.FUNKE_8 !== '0') { sp['ELEMENTS.0.costOverride'] = { ...(sp['ELEMENTS.0.costOverride'] || {}), 0:8 }; sp['ELEMENTS.0.kraftT.0'] = +(sp['ELEMENTS.0.kraftT.0'] * 0.8).toFixed(5); }
-// 02.11. (L): Feuer lag am Boden ≈ 3 % unter dem Mittel (Mitte Menschen-Bots/Bezugs-Bot) → kraftBlock × FEUER_K (1,03)
-if (D7 && sp['ELEMENTS.0.kraftBlock']) sp['ELEMENTS.0.kraftBlock'] = sp['ELEMENTS.0.kraftBlock'].map(x => +(x * +(process.env.FEUER_K || 1.03)).toFixed(4));
+// 02.11. (L): Feuer lag am Boden ≈ 3 % unter dem Mittel (Mitte Menschen-Bots/Bezugs-Bot) → Schaden × FEUER_K (1,03)
+if (D7) sp['ELEMENTS.0.kraft'] = +(process.env.FEUER_K || 1.03);
+if (D7) sp['ELEMENTS.2.kraft'] = +(process.env.SCHATTEN_K || 1.03);   // 02.11. abends: mit milderer Nacht (nightDim 0,7) lag Schatten 5 % unter dem Mittel (Preisformel zu optimistisch) → +3 %, Block 1 bleibt knapp unter dem Mittel   // 02.11. abends: in kraft statt kraftBlock – kraftBlock ist das Wetter-Mittel und gilt nur in den Messungen ohne Wetter
 // 02.11. (L): Leben je Spielerzahl neu (Tag mit so vielen Durchläufen wie Spieler, Menschen-Bots: Reserve 3 Spieler ×1,21, 4 Spieler ×1,36 gegenüber 2)
 if (D7) sp['CONFIG.playerHp'] = { 2:1, 3:+(process.env.HP3 || 1.51), 4:+(process.env.HP4 || 2.03) };
 // 02.11. (L): mit 4 Spielern zwei Nachtwellen (vorher nur 19 Uhr dunkel → Schatten bei 4 Spielern zu stark): Wellen 10/13/17/20 Uhr, dunkel ab 17 Uhr (2 Sp. 19, 3 Sp. 19 unverändert dunkel)
 if (D7) { sp['CONFIG.slotPlan'] = { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 17, 20] }; sp['CONFIG.darkFrom'] = 17; }
+if (D7) sp['CONFIG.nightDim'] = NACHT_DIM;
+if (D7) sp['ELEMENTS.2.note'] = `Fluch (mehr Schaden, Rüstung bröckelt für alle) · nachts treffen Schatten-Türme nachtaktive Monster außerhalb des Irrlichts nur mit ${Math.round(NACHT_DIM * 100)} % · Irrlicht: im Lichtkreis voller Schaden und etwas mehr`;
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
 S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));

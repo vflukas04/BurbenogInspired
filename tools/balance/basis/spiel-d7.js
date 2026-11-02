@@ -84,4 +84,7 @@ R.push(["  c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'cen
     for (let k = 0; k < 4; k++) { const x0 = k * L / 4, x1 = (k + 1) * L / 4, h0 = r * .17 * (1 - k * .15), h1 = r * .17 * (1 - (k + 1) * .15), w0 = Math.sin(t * 9 - k * 1.3) * r * .02 * k, w1 = Math.sin(t * 9 - (k + 1) * 1.3) * r * .02 * (k + 1);
       c.fillStyle = k % 2 ? '#f4f4f4' : '#ff5a2a'; c.beginPath(); c.moveTo(x0, -h0 + w0); c.lineTo(x1, -h1 + w1); c.lineTo(x1, h1 + w1); c.lineTo(x0, h0 + w0); c.closePath(); c.fill(); }
     c.restore(); }`]);
+// 7) FEHLER behoben (02.11. abends): kraftBlock ist in Zweig D das Wetter-Mittel je Block für die Messungen ohne Wetter. Im Spiel wirkt das echte Wetter –
+//    kraftBlock darf dort nicht zusätzlich gelten (sonst zählte das Wetter doppelt: z. B. Schatten im Winter +7 % statt +3,5 %, Feuer −6 % statt −3 %).
+R.push([`const kbOf = el => { const a = ELEMENTS[el].kraftBlock;`, `const kbOf = el => 1, kbOfMess = el => { const a = ELEMENTS[el].kraftBlock;   /* Zweig D7: im Spiel ohne kraftBlock (echtes Wetter) */`]);
 module.exports = html => { for (const [a, b] of R) { if (typeof a === 'string' ? !html.includes(a) : !a.test(html)) throw new Error('Spiel-D7 passt nicht: ' + String(a).slice(0, 70)); html = html.replace(a, b); } return html; };

@@ -11,7 +11,9 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - Kiesel ohne Fläche, gezieltes Geschoss (trifft immer das anvisierte Monster).
 - Betäubung bei Stein: Erdbeben (Nova, 10 %) und Lawine (15 %), je 1 s. Bergkönig ohne Betäubung (Alleskönner: Fläche, 2 Geschosse, schwach gegen Fliegende). Bepreist nach Treffern je s (1 + 0,33 × Chance × Dauer × Rate × Geschosse). **Spielcode: Chance 0 heißt dort „immer“ – beim Übernehmen 0 als „nie“ behandeln.**
 - Luftspezialisten (Eiszapfen, Nachtauge): Boden 80 %, Fliegende 120 %.
-- **Irrlicht** (Schatten T2): schießt nicht, Lichtkreis 2 Felder; Schatten sieht darin nachts nachtaktive Monster und macht dort ×1,05 (S1) bis ×1,15 (S6) Schaden; keine Rüstung ignorieren; Preis 30.
+- **Irrlicht** (Schatten T2): schießt nicht, **Lichtkreis 3 Felder** (02.11.; vorher 2); im Licht treffen Schatten-Türme nachts nachtaktive Monster voll und machen dort ×1,05 (S1) bis ×1,15 (S6) Schaden; keine Rüstung ignorieren; Preis 30.
+- **Nacht milder** (02.11.): Außerhalb des Lichts treffen Schatten-Türme nachtaktive Monster nachts mit **70 %** des Schadens (vorher gar nicht). Nachtabschlag im Preis entsprechend kleiner, Schatten-Schaden × 1,03. Tag/Nacht-Unterschied (Menschen-Bots) 1,46 → 1,26.
+- **Fehler behoben (Testseite):** `kraftBlock` (Wetter-Mittel für Messungen ohne Wetter) galt im Spiel zusätzlich zum echten Wetter – Wetter zählte doppelt. Im Spiel jetzt ohne `kraftBlock`; Feuer ×1,03 steht in `kraft`.
 - Nova-Türme (Frostnova, Erdbeben) etwas teurer bepreist (×1,2).
 
 ## Effekte

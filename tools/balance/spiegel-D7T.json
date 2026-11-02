@@ -344,7 +344,7 @@
     }
   ],
   "ELEMENTS.0.kraftT.7": 0.3232,
-  "ELEMENTS.0.kraft": 1,
+  "ELEMENTS.0.kraft": 1.03,
   "ELEMENTS.0.costOverride": {
     "0": 8,
     "1": 45,
@@ -378,14 +378,14 @@
   "ELEMENTS.0.weatherproof": false,
   "ELEMENTS.0.terrainFree": false,
   "ELEMENTS.0.kraftBlock": [
-    1.0001,
-    1.0001,
-    1.0485,
-    1.0485,
-    1.0846,
-    1.0846,
-    1.0506,
-    1.0506
+    0.971,
+    0.971,
+    1.018,
+    1.018,
+    1.053,
+    1.053,
+    1.02,
+    1.02
   ],
   "ELEMENTS.1.towers.0": [
     "Frostsplitter",
@@ -578,11 +578,11 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.0": 1.22184,
+  "ELEMENTS.2.kraftT.0": 1.08309,
   "ELEMENTS.2.towers.1": [
     "Irrlicht",
     "Licht",
-    1,
+    1.5,
     1,
     1,
     0,
@@ -592,7 +592,7 @@
     {
       "effect": "none",
       "fly": true,
-      "light": 1,
+      "light": 1.5,
       "buff": [
         1.05,
         1.07,
@@ -611,7 +611,7 @@
       ]
     }
   ],
-  "ELEMENTS.2.kraftT.1": 1.25676,
+  "ELEMENTS.2.kraftT.1": 1.11404,
   "ELEMENTS.2.towers.2": [
     "Nachtauge",
     "Schaden",
@@ -629,7 +629,7 @@
       "flyMul": 1.2
     }
   ],
-  "ELEMENTS.2.kraftT.2": 1.25469,
+  "ELEMENTS.2.kraftT.2": 1.1122,
   "ELEMENTS.2.towers.3": [
     "Fluchstein",
     "Schaden",
@@ -645,7 +645,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.2.kraftT.3": 1.90861,
+  "ELEMENTS.2.kraftT.3": 1.69187,
   "ELEMENTS.2.towers.4": [
     "Seelenfresser",
     "Schaden",
@@ -661,7 +661,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.4": 1.56632,
+  "ELEMENTS.2.kraftT.4": 1.38845,
   "ELEMENTS.2.towers.5": [
     "Phantom",
     "Schaden",
@@ -677,7 +677,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.5": 2.15381,
+  "ELEMENTS.2.kraftT.5": 1.90922,
   "ELEMENTS.2.towers.6": [
     "Leerenturm",
     "Schaden",
@@ -693,7 +693,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.6": 1.07434,
+  "ELEMENTS.2.kraftT.6": 0.95233,
   "ELEMENTS.2.towers.7": [
     "Ewige Nacht",
     "Schaden",
@@ -709,8 +709,8 @@
       "fly": true
     }
   ],
-  "ELEMENTS.2.kraftT.7": 0.98964,
-  "ELEMENTS.2.kraft": 1,
+  "ELEMENTS.2.kraftT.7": 0.87725,
+  "ELEMENTS.2.kraft": 1.03,
   "ELEMENTS.2.costOverride": {
     "0": 10,
     "1": 30,
@@ -1225,5 +1225,7 @@
       20
     ]
   },
-  "CONFIG.darkFrom": 17
+  "CONFIG.darkFrom": 17,
+  "CONFIG.nightDim": 0.7,
+  "ELEMENTS.2.note": "Fluch (mehr Schaden, Rüstung bröckelt für alle) · nachts treffen Schatten-Türme nachtaktive Monster außerhalb des Irrlichts nur mit 70 % · Irrlicht: im Lichtkreis voller Schaden und etwas mehr"
 }
