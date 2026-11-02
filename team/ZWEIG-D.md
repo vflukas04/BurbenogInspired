@@ -897,3 +897,9 @@ Echte Auswertung (`resolveSlot` der Testseite), Türme aus Menschen-Bot-Plänen 
 - Schatten zu Beginn viel zu stark (erster Durchlauf Tag 1–4: 20/20/13/20, Eis 5/1/5/3). Nachgerechnet: 3 × Schemen S1 schaffen bei Bewölkt 20, bei Sonne 7, die anderen T1 2–5. Ursachen: (1) Schemen hatte +22 % Schaden/s gegenüber Kiesel/Frostsplitter, vor allem als Ausgleich für die Nacht; (2) **Fehler:** `kraftBlock` (Wetter-Mittel) galt im Spiel zusätzlich zum echten Wetter → Winter für Schatten doppelt (+7 %).
 - Irrlicht-Reichweite zu klein, Tag/Nacht für Schatten zu krass (L).
 - **Umgesetzt:** Nacht milder (`CONFIG.nightDim` 0,7: außerhalb des Lichts 70 % statt nicht anvisierbar), Irrlicht 3 Felder, Schatten × 1,03, im Spiel ohne `kraftBlock`. Schemen jetzt +12 % statt +22 % Schaden/s über Kiesel. Menschen-Bots: Schatten 0,97 → ≈ 1,0 (Block 1 ≈ 0,97), Tag/Nacht-Spanne 1,46 → 1,26.
+
+## Testspiel L 02.11. 16:30 (Feuer+Schatten, verloren Tag 24 mit 33)
+- Deutlich besser als vorher (verloren an Tag 7–16). Durchbrüche bis Tag 23: 23, davon 12 von den Zwischenbossen.
+- **Zwischenbosse in allen 5 Testspielen nie besiegt** (Tag 6/12/18 je +4), dadurch auch nie ein Edelstein. Reserve von L's Aufbauten an Bosstagen ≈ 0,5–0,9 gegenüber ≈ 1,3–2 an den Tagen davor. **Umgesetzt:** Zwischenbosse Leben ×0,65, Endbosse ×0,55 → L's Aufbauten jetzt meist 1,15–2,3 (über zwei Durchläufe).
+- Ab Tag 13 schafft jeder allein im ersten Durchlauf nur 0–6 von 20, der Partner räumt ab (Folge der Kalibrierung auf 97 % über den ganzen Tag).
+- Tag 5–9: Schatten im ersten Durchlauf 1–2, Feuer 12–17 (Reserve 1,0–1,4 gegenüber 1,8–2,1). Gleiche T1-Aufbauten auf den besten Feldern liegen ±15 % beieinander; Unterschied kommt vom Aufbau (Feuer 2 große Türme S6/S4, Schatten 3 kleinere + Irrlicht), Plätzen und Faktoren (Ratten Feuer 1,15). Konzentrieren lohnt: S6 hat 25 % mehr Kraft je Gold als S1.
