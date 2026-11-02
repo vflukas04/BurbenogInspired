@@ -51,7 +51,7 @@ if (SENS) for (const t of SENS.split(',')) { const [n, k] = t.split(':'); const 
 const LUFT = (process.env.LUFT || (process.env.D7 !== '0' ? '0.8,1.2' : '0.6,1.8'))   /* 29.10. (L): Luftspezialist Boden 80 %, Fliegende 120 % */.split(',').map(Number);   // Luftspezialist Boden/Fliegende (L 26.10.: 60 % / 180 %)
 // Stein und Fliegende (L 27.10.): 2 (schwach)/4/6/8 – Schleuder (T2) schwach gegen Fliegende (Boden 100 %, Fliegende SCHWACH),
 // Katapult (T4, Namen wie vor dem 17.10.) und T6/T8 treffen Fliegende normal, T1/T3/T5/T7 gar nicht. Kein starker Fliegerturm bei Stein.
-const SCHWACH = +(process.env.SCHWACH || 0.5);
+const SCHWACH = +(process.env.SCHWACH || (process.env.D7 !== '0' ? 0.7 : 0.5));   // 02.11. (L): D7 „schwach gegen Fliegende“ 70 % statt 50 % (Stein an Fliegertagen bei einfachen Bauweisen nur 0,3)
 const NOFLY_Z = +(process.env.NOFLY_Z || 1.1);
 const SCHL_DEF = { r:3.5, n:2, f:0.5, luft:[1, SCHWACH] };
 // ---- Türme: r Reichweite, q Rate, n Geschosse, f Fläche, eff/dur Effekt, nova, noFly, air ----

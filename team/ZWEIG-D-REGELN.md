@@ -6,7 +6,7 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - 32 Türme neu: Standardturm (Reichweite 3,5, 1 Schuss/s, 1 Geschoss) plus Merkmale, Schaden aus festen Umrechnungsfaktoren.
 - Preise 10/45/70/120/200/340/580/1000, Turmtyp-Treppe ×1,08.
 - **Upgrades ändern nur den Schaden** (Kraft je Gold 1/0,95/1,01/1,08/1,16/1,25 für S1–S6). Reichweite, Effekt, Dauer bleiben gleich.
-- Stein gegen Fliegende: T1 Kiesel, T2 Schleuder und T8 Bergkönig schwach (50 %), T4 Katapult und T6 Granitwächter normal, T3 Felsbrocken, T5 Erdbeben und T7 Lawine gar nicht. Türme ohne Fliegende machen am Boden ×46/38 ≈ ×1,21 Schaden (hergeleitet: an 8 von 46 Tagen nutzlos).
+- Stein gegen Fliegende: T1 Kiesel, T2 Schleuder und T8 Bergkönig schwach (**70 %**, 02.11.; vorher 50 %), T4 Katapult und T6 Granitwächter normal, T3 Felsbrocken, T5 Erdbeben und T7 Lawine gar nicht. Türme ohne Fliegende machen am Boden ×46/38 ≈ ×1,21 Schaden (hergeleitet: an 8 von 46 Tagen nutzlos).
 - Kiesel ohne Fläche, gezieltes Geschoss (trifft immer das anvisierte Monster).
 - Betäubung bei Stein: Erdbeben (Nova, 10 %) und Lawine (15 %), je 1 s. Bergkönig ohne Betäubung (Alleskönner: Fläche, 2 Geschosse, schwach gegen Fliegende). Bepreist nach Treffern je s (1 + 0,33 × Chance × Dauer × Rate × Geschosse). **Spielcode: Chance 0 heißt dort „immer“ – beim Übernehmen 0 als „nie“ behandeln.**
 - Luftspezialisten (Eiszapfen, Nachtauge): Boden 80 %, Fliegende 120 %.
@@ -34,7 +34,7 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - **Nachtaktiv:** Tag 5 Mäuse, 9 Katzen, 16 Wildschweine, 19 Besoffene Penner, 27 Würfel, 31 Krieger, 33 Albträume, 37 E-Scooter-Fahrer, 38 Lindner-Spezialisten, 40 Fledermäuse, 44 Heisenbergs (Füchse und Eifersüchtige Geliebte jetzt tagsüber).
 - **Fliegende:** Tempo Spatzen 1,2 · Habichte 1,6 · Uffug-Vorhaut 0,8 · Phönixe 1,1 · Looping-Louie 1,7 · Fledermäuse 1,0 · Nazgul 0,9. Gepanzert: Uffug-Vorhaut, Looping-Louie, Nazgul.
 - **Looping-Louie-Tiefflug:** auf etwa ⅓ des Wegs tief (dort Bodenmonster für alle Türme), in den Übergängen fliegend ohne Malus „schwach gegen Fliegende“, sonst Hochflug. Höhe hängt vom Ort ab, alle fliegen in einer Reihe.
-- Leben je Tag (`MONSTERS.*.hpMul` in `spiegel-D7.json`): auf den Bezugs-Bot kalibriert, dann an Bodentagen mit der gemeinsamen Drift der vier Elemente angehoben, an Fliegertagen auf das Mittel der vier Elemente gestellt.
+- Leben je Tag (`MONSTERS.*.hpMul` in `spiegel-D7.json`): auf den Bezugs-Bot kalibriert, dann an Bodentagen mit der gemeinsamen Drift der vier Elemente angehoben, an Fliegertagen auf das Mittel der vier Elemente gestellt. **02.11.:** zusätzlich jeder Tag auf das Mittel der vier Elemente (Mitte aus Menschen-Bots und Bezugs-Bot, Grenzen ×0,75–1,35). Grund: Die Leben waren an Standardtürmen eingestellt, die keine Rüstung abtragen; alle Elementtürme tun das, daher waren gepanzerte Tage zu leicht (Tag 2, 8, 11: ×1,18–1,30) und Bosse zu schwer (×0,8). Streuung je Tag (Menschen-Bots) ±22 % → ±7 %.
 
 ## Forschung (Stand 01.11., Werte vorläufig)
 - Preise je Spieler; Forschung, die allen hilft, × Spielerzahl; Element-Schaden fest (hilft nur einem Spieler).
