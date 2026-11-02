@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-10-29c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-11-02a";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -539,11 +539,27 @@ function genTerrain(map, seed){
   const road = [...map.cells].map(q => q.split(',').map(Number));
   const shuffle = a => { for (let j = a.length - 1; j > 0; j--) { const q = Math.floor(r() * (j + 1)); [a[j], a[q]] = [a[q], a[j]]; } return a; };
   shuffle(free);
+  // Entwurf: wenige große Seen (je 5–8 zusammenhängende Felder) statt vieler Einzelfelder
+  const vc0 = villageCell(map, map.k), isRoadN = (x, y) => [[0,0],[1,0],[-1,0],[0,1],[0,-1]].some(([a,b]) => map.cells.has((x+a)+','+(y+b)));
+  const lake = new Set(), halo = new Set(), nb4 = [[1,0],[-1,0],[0,1],[0,-1]];
+  const okC = (x, y) => x >= 0 && y >= 0 && x < COLS && y < ROWS && !isRoadN(x, y) && Math.hypot(x - vc0.x, y - vc0.y) > 2.5 && !lake.has(x+','+y) && !halo.has(x+','+y);
+  for (let L = 0; L < 3; L++) { const size = 5 + Math.floor(r() * 4); let cells = null;
+    for (let tries = 0; tries < 60 && !cells; tries++) { const st = free[Math.floor(r() * free.length)]; if (!okC(st[0], st[1])) continue; const cur = [[st[0], st[1]]], inC = new Set([st[0]+','+st[1]]);
+      while (cur.length < size) { const fr = []; for (const [x, y] of cur) for (const [dx, dy] of nb4) { const nx = x + dx, ny = y + dy; if (okC(nx, ny) && !inC.has(nx+','+ny)) fr.push([nx, ny, nb4.reduce((n, [a, b]) => n + (inC.has((nx+a)+','+(ny+b)) ? 1 : 0), 0)]); } if (!fr.length) break;
+        const w = fr.map(q => q[2] * q[2]), tot = w.reduce((a, b) => a + b, 0); let pk = r() * tot, q = fr[0]; for (let j = 0; j < fr.length; j++) { pk -= w[j]; if (pk <= 0) { q = fr[j]; break; } } cur.push([q[0], q[1]]); inC.add(q[0]+','+q[1]); }
+      if (cur.length >= 5) cells = cur; }
+    if (cells) for (const [x, y] of cells) { lake.add(x+','+y); map.terrain[y][x] = 2; for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) halo.add((x+dx)+','+(y+dy)); } }
   const rocks = ROCK.min + Math.floor(r() * (ROCK.max - ROCK.min + 1)), isNear = ([x,y]) => road.some(([a,b]) => Math.abs(a-x) <= 2 && Math.abs(b-y) <= 2);
-  const fels = free.filter(isNear).slice(0, rocks); fels.forEach(([x,y]) => map.terrain[y][x] = 3);
-  const rest = free.filter(([x,y]) => !map.terrain[y][x]);
-  rest.slice(0, cnt).forEach(([x,y]) => map.terrain[y][x] = 1);
-  rest.slice(cnt, 2 * cnt).forEach(([x,y]) => map.terrain[y][x] = 2);
+  const fels = free.filter(q => !lake.has(q[0]+','+q[1])).filter(isNear).slice(0, rocks); fels.forEach(([x,y]) => map.terrain[y][x] = 3);
+  // Wälder: wenige zusammenhängende Haine (je 3–6 Felder) statt Einzelbäumen
+  const fh = new Set(); let placed = 0;
+  for (let G2 = 0; G2 < 6 && placed < cnt - 4; G2++) { const size = 5 + Math.floor(r() * 5);
+    for (let tries = 0; tries < 60; tries++) { const st = free[Math.floor(r() * free.length)];
+      const okF = (x, y) => x >= 0 && y >= 0 && x < COLS && y < ROWS && !map.cells.has(x+','+y) && !map.terrain[y][x] && !fh.has(x+','+y) && !(x === vc0.x && y === vc0.y);
+      if (!okF(st[0], st[1])) continue; const cur = [[st[0], st[1]]], inC = new Set([st[0]+','+st[1]]);
+      while (cur.length < size) { const fr = []; for (const [x, y] of cur) for (const [dx, dy] of nb4) { const nx = x + dx, ny = y + dy; if (okF(nx, ny) && !inC.has(nx+','+ny)) fr.push([nx, ny, nb4.reduce((n, [a, b]) => n + (inC.has((nx+a)+','+(ny+b)) ? 1 : 0), 0)]); } if (!fr.length) break;
+        const w = fr.map(q => q[2] * q[2]), tot = w.reduce((a, b) => a + b, 0); let pk = r() * tot, q = fr[0]; for (let j = 0; j < fr.length; j++) { pk -= w[j]; if (pk <= 0) { q = fr[j]; break; } } cur.push([q[0], q[1]]); inC.add(q[0]+','+q[1]); }
+      if (cur.length >= 4) { for (const [x, y] of cur) { map.terrain[y][x] = 1; placed++; for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) fh.add((x+dx)+','+(y+dy)); } break; } } }
   const vc = villageCell(map, map.k); map.terrain[vc.y][vc.x] = 0;   // 27.10. (F): auf dem Dorffeld liegt kein Gelände (die übrigen Felder bleiben, wie sie gewürfelt wurden)
 }
 function ensureTerrain(startAt){
@@ -2099,6 +2115,50 @@ function drawForest(g, cx, fy, cs, h, kind, dep){
       g.fillStyle = col; g.beginPath(); g.moveTo(x + x1*k, y + y1*k); g.lineTo(x, y + ty2*k); g.lineTo(x + x2*k, y + y1*k); g.closePath(); g.fill();
       g.fillStyle = '#00000026'; g.beginPath(); g.moveTo(x, y + ty2*k); g.lineTo(x + x2*k, y + y1*k); g.lineTo(x, y + y1*k); g.closePath(); g.fill(); }); });
 }
+function forestComp(map, x, y){ const out = [], seen = new Set([x+','+y]), st = [[x, y]]; while (st.length) { const [a, b] = st.pop(); out.push([a, b]); for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const nx = a + dx, ny = b + dy, k = nx+','+ny; if (nx >= 0 && ny >= 0 && nx < COLS && ny < ROWS && !seen.has(k) && !map.cells.has(k) && map.terrain[ny][nx] === 1) { seen.add(k); st.push([nx, ny]); } } } return out; }
+function forestN(map, x, y){ return forestComp(map, x, y).length; }
+function drawGrove(g, comp, cs, i, wl, map){   // ein Wald aus einem Guss: dichte, überlappende Bäume über dem ganzen Hain, nach Fußpunkt sortiert
+  const trees = []; for (const [x, y] of comp) { const dep = wl.dep[x+','+y]; for (let j = 0; j < 5; j++) { const px = x + .1 + wHash(x, y, 300 + j)*.8, py = y + .3 + wHash(x, y, 310 + j)*.7;
+      // am Rand des Hains Bäume nach außen nicht über die Nachbarfelder hinaus
+      trees.push({ px, py, h:Math.floor(wHash(x, y, 320 + j)*4), sz:.66 + wHash(x, y, 330 + j)*.24, dep, kind:treeKind(i, wl, x, y) }); } }
+  trees.sort((a, b) => a.py - b.py);
+  for (const t of trees) drawTree(g, t.px*cs, t.py*cs, cs*t.sz, t.h, false, t.kind, t.dep);
+}
+function lakeComp(map, x, y){   // alle zusammenhängenden Seefelder (ohne Weg) ab (x,y)
+  const out = [], seen = new Set([x+','+y]), st = [[x, y]];
+  while (st.length) { const [a, b] = st.pop(); out.push([a, b]); for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const nx = a + dx, ny = b + dy, k = nx+','+ny; if (nx >= 0 && ny >= 0 && nx < COLS && ny < ROWS && !seen.has(k) && !map.cells.has(k) && map.terrain[ny][nx] === 2) { seen.add(k); st.push([nx, ny]); } } }
+  return out;
+}
+function lakeOutline(cells, seed){   // Umriss der Seefelder als geglättete, leicht unregelmäßige Kurve (Gitterkoordinaten)
+  const set = new Set(cells.map(q => q[0]+','+q[1])), edges = new Map();
+  const add = (ax, ay, bx, by) => { const k = ax+','+ay; if (!edges.has(k)) edges.set(k, []); edges.get(k).push([bx, by]); };
+  for (const [x, y] of cells) { if (!set.has(x+','+(y-1))) add(x, y, x+1, y); if (!set.has((x+1)+','+y)) add(x+1, y, x+1, y+1); if (!set.has(x+','+(y+1))) add(x+1, y+1, x, y+1); if (!set.has((x-1)+','+y)) add(x, y+1, x, y); }
+  const loops = []; while (edges.size) { const k0 = edges.keys().next().value; let [cx, cy] = k0.split(',').map(Number); const loop = [[cx, cy]]; let guard = 0;
+    for (;;) { const k = cx+','+cy, lst = edges.get(k); if (!lst || !lst.length || guard++ > 500) break; const [nx, ny] = lst.pop(); if (!lst.length) edges.delete(k); cx = nx; cy = ny; if (cx+','+cy === k0) break; loop.push([cx, cy]); }
+    edges.delete(k0); if (loop.length > 3) loops.push(loop); }
+  loops.sort((p, q) => q.length - p.length); let P = loops[0] || [];
+  P = P.map(([x, y], j) => [x + (wHash(x, y, seed + 1) - .5)*.34, y + (wHash(x, y, seed + 2) - .5)*.34]);
+  for (let it = 0; it < 2; it++) P = P.map((p, j) => { const a = P[(j + P.length - 1) % P.length], b = P[(j + 1) % P.length]; return [(p[0]*2 + a[0] + b[0]) / 4, (p[1]*2 + a[1] + b[1]) / 4]; });
+  for (let it = 0; it < 3; it++) { const Q = []; for (let j = 0; j < P.length; j++) { const a = P[j], b = P[(j + 1) % P.length]; Q.push([a[0]*.75 + b[0]*.25, a[1]*.75 + b[1]*.25], [a[0]*.25 + b[0]*.75, a[1]*.25 + b[1]*.75]); } P = Q; }
+  return P;
+}
+function drawBigLake(g, cells, cs, ice){   // ein großer See aus einem Guss: weicher Umriss, dunkler Rand innen, tiefere Mitte, Glanzlichter, Seerosen (Entwurf)
+  const seed = cells[0][0]*7 + cells[0][1]*13, P = lakeOutline(cells, seed); if (P.length < 4) return;
+  const path = new Path2D(); P.forEach(([x, y], j) => j ? path.lineTo(x*cs, y*cs) : path.moveTo(x*cs, y*cs)); path.closePath();
+  let mx = 0, my = 0; for (const [x, y] of cells) { mx += x + .5; my += y + .5; } mx = mx / cells.length * cs; my = my / cells.length * cs;
+  const ext = Math.max(...cells.map(([x, y]) => Math.hypot((x + .5)*cs - mx, (y + .5)*cs - my))) + cs*.7;
+  g.save(); g.fillStyle = ice ? '#8fbfd8' : '#2a6a96'; g.fill(path);
+  g.save(); g.clip(path);
+  const gr = g.createRadialGradient(mx, my, 0, mx, my, ext); gr.addColorStop(0, ice ? '#e4f5fc' : '#2a76a9'); gr.addColorStop(.8, ice ? '#cfeaf5' : '#3484b8'); gr.addColorStop(1, ice ? '#bfe0ee' : '#3d8fc2'); g.fillStyle = gr; g.fill(path);
+  g.strokeStyle = ice ? '#8fbfd8' : '#2a6a96'; g.lineWidth = cs*.26; g.lineJoin = 'round'; g.stroke(path);   // dunkler Rand innen (zählt nur im Clip)
+  g.strokeStyle = ice ? 'rgba(143,191,216,.5)' : 'rgba(42,106,150,.5)'; g.lineWidth = cs*.5; g.stroke(path);
+  for (let j = 0; j < Math.max(3, cells.length); j++) { const c = cells[(j*3 + seed) % cells.length], px = (c[0] + .2 + wHash(c[0], c[1], 200 + j)*.6)*cs, py = (c[1] + .25 + wHash(c[0], c[1], 210 + j)*.5)*cs;
+    if (ice) { g.strokeStyle = '#7fb0cc'; g.lineWidth = Math.max(1, cs*.025); g.beginPath(); g.moveTo(px, py); g.lineTo(px - .12*cs, py + .12*cs); g.lineTo(px + .02*cs, py + .26*cs); g.stroke(); }
+    else { g.strokeStyle = 'rgba(223,246,255,.5)'; g.lineWidth = Math.max(1, cs*.03); g.beginPath(); g.moveTo(px, py); g.quadraticCurveTo(px + cs*.08, py - cs*.06, px + cs*.18, py); g.stroke(); } }
+  const c0 = cells[(seed + 1) % cells.length]; g.fillStyle = ice ? '#f2fbff' : 'rgba(109,189,230,.85)'; g.beginPath(); g.ellipse((c0[0] + .4)*cs, (c0[1] + .35)*cs, cs*.3, cs*.1, -.2, 0, Math.PI*2); g.fill();
+  if (!ice) for (let j = 0; j < Math.floor(cells.length / 3); j++) { const c = cells[(j*5 + seed + 2) % cells.length], px = (c[0] + .3 + wHash(c[0], c[1], 230 + j)*.4)*cs, py = (c[1] + .4 + wHash(c[0], c[1], 240 + j)*.3)*cs; g.fillStyle = '#3f9a4a'; g.beginPath(); g.ellipse(px, py, cs*.1, cs*.05, 0, 0, Math.PI*2); g.fill(); }
+  g.restore(); g.restore();
+}
 function drawLake(g, map, x, y, cs, h, ice){   // Wasserfläche im Boden (gilt für flach und schräg), ohne Strand
   const isL = (a, b) => a >= 0 && b >= 0 && a < COLS && b < ROWS && !map.cells.has(a + ',' + b) && map.terrain[b][a] === 2, cx = (x + .5)*cs, cy = (y + .5)*cs;
   const water = (col, rx, ry, dx = 0, dy = 0) => { g.fillStyle = col; g.beginPath(); g.ellipse(cx + dx*cs, cy + dy*cs, rx*cs, ry*cs, 0, 0, Math.PI*2); g.fill();
@@ -2528,7 +2588,7 @@ function glattGround(g, map, i, cs, v){   // gleichmäßige Wiese mit weichen Fl
   g.fillStyle = TERRAIN[0].col[0]; g.fillRect(0, 0, W, H);
   const blob = (cx, cy, r, col, a) => { const gr = g.createRadialGradient(cx, cy, 0, cx, cy, r); gr.addColorStop(0, col.replace('A', a)); gr.addColorStop(1, col.replace('A', 0)); g.fillStyle = gr; g.fillRect(cx - r, cy - r, r*2, r*2); };
   for (let n = 0; n < 150; n++) { const cx = wHash(n, 1, 700 + i)*W, cy = wHash(n, 2, 700 + i)*H, r = (1.6 + wHash(n, 3, 700 + i)*2.6)*cs; blob(cx, cy, r, wHash(n, 4, 700 + i) < .5 ? 'rgba(10,26,8,A)' : 'rgba(80,110,50,A)', .16); }
-  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x]; if (t === 1) blob((x+.5)*cs, (y+.6)*cs, cs*1.15, 'rgba(8,24,10,A)', .75); else if (t === 3) blob((x+.5)*cs, (y+.6)*cs, cs*1.0, 'rgba(30,30,34,A)', .7);
+  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x]; if (t === 1) {} else if (t === 3) blob((x+.5)*cs, (y+.6)*cs, cs*1.0, 'rgba(30,30,34,A)', .7);
     for (let j = 0; j < 3; j++) { const px = (x + wHash(x, y, 81 + j))*cs, py = (y + wHash(x, y, 91 + j))*cs; g.strokeStyle = 'rgba(120,160,80,.35)'; g.lineWidth = Math.max(1, u*1.2); g.beginPath(); g.moveTo(px, py); g.lineTo(px - 2*u, py - 5*u); g.moveTo(px, py); g.lineTo(px + 2*u, py - 4*u); g.stroke(); } }
 }
 const BG = [];
@@ -2558,10 +2618,12 @@ function draw(i, cv){
   }
   drawWorldGround(g, map, i, cs, wl);   // 27.10. (F): Boden um das Dorf wandelt sich (nur Anzeige)
   drawWorldChannels(g, cs, wl);
+  { const seenF = new Set(); for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.terrain[y][x] !== 1 || map.cells.has(x+','+y) || seenF.has(x+','+y)) continue; const comp = forestComp(map, x, y); comp.forEach(q => seenF.add(q[0]+','+q[1]));
+    if (comp.length >= 4) { const P = lakeOutline(comp, 900 + x*3 + y), p = new Path2D(); P.forEach(([px, py], j) => j ? p.lineTo(px*cs, py*cs) : p.moveTo(px*cs, py*cs)); p.closePath(); g.save(); g.filter = 'none'; g.fillStyle = 'rgba(16,50,24,.92)'; g.fill(p); g.lineJoin = 'round'; g.strokeStyle = 'rgba(8,28,12,.6)'; g.lineWidth = cs*.4; g.stroke(p); g.restore(); } } }
   for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) {
     if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
-    if (t === 1 && !view25) drawTree(g, (x+.5)*cs, (y+.92)*cs, cs, h, false, treeKind(i, wl, x, y), wl.dep[x+','+y]);
-    if (t === 2) drawLake(g, map, x, y, cs, h, wl.el === 1 && lakeFrozen(map, i, wl, x, y));   // 27.10. (F): kleiner See statt Sumpf (ohne Strand), benachbarte Seefelder fließen zusammen
+    if (t === 1 && !view25) { const comp = forestComp(map, x, y), first = comp.reduce((m, q) => (q[1] < m[1] || q[1] === m[1] && q[0] < m[0]) ? q : m, comp[0]); if (first[0] === x && first[1] === y) drawGrove(g, comp, cs, i, wl, map); }
+    if (t === 2) { const comp = lakeComp(map, x, y); if (comp.length >= 4) { const first = comp.reduce((m, q) => (q[1] < m[1] || q[1] === m[1] && q[0] < m[0]) ? q : m, comp[0]); if (first[0] === x && first[1] === y) drawBigLake(g, comp, cs, wl.el === 1 && lakeFrozen(map, i, wl, x, y)); } else drawLake(g, map, x, y, cs, h, wl.el === 1 && lakeFrozen(map, i, wl, x, y)); }   // 27.10. (F): kleiner See statt Sumpf (ohne Strand), benachbarte Seefelder fließen zusammen
     if (t === 3 && !view25) drawMountain(g, x, y, cs, wl.dep[x+','+y]);
     if (t === 0 && h === 0 && (x + y) % 3 === 0) spr(g, SPR[['rock1','rock2','rock3'][(x+y)%3]], (x+.3)*cs, (y+.7)*cs, cs*.22, x, .35);
   }
@@ -2677,7 +2739,7 @@ function draw(i, cv){
     const objs = [{ y:wl.vc.y + .86, f:() => drawVillage(c, i, cs, wl, gy) }];
     for (const tw of towers) objs.push({ y:tw.y + 1, f:() => drawTw(tw) });
     for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { if (map.cells.has(x+','+y)) continue; const t = map.terrain[y][x], h = (x*7 + y*13 + i*5) % 4;
-      if (t === 1) objs.push({ y:y + .9, f:() => drawTree(c, (x+.5)*cs, gy(y+.9), cs, h, false, treeKind(i, wl, x, y), wl.dep[x+','+y]) });
+      if (t === 1) for (let j = 0; j < 5; j++) { const px = x + .1 + wHash(x, y, 300 + j)*.8, py = y + .3 + wHash(x, y, 310 + j)*.7, hh = Math.floor(wHash(x, y, 320 + j)*4), sz = .66 + wHash(x, y, 330 + j)*.24; objs.push({ y:py, f:() => drawTree(c, px*cs, gy(py), cs*sz, hh, false, treeKind(i, wl, x, y), wl.dep[x+','+y]) }); }   // Wald: dichte Baumdecke wie im flachen Bild
       if (t === 3) objs.push({ y:y + .88, f:() => { c.save(); c.translate(0, gy(y+1) - (y+1)*cs); drawMountain(c, x, y, cs, wl.dep[x+','+y]); c.restore(); } }); }
     if (s) for (const m of s.monsters) objs.push({ y:m.y + (flying(m) ? 1.5 : .05), f:() => drawMon(m) });
     objs.sort((a, b) => a.y - b.y); for (const o of objs) o.f();

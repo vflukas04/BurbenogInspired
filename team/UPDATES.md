@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 02.11. 09:50 · F · 2026-11-02a – Große Seen und Wälder (Regeländerung Gelände)
+Seen: 3 je Map aus je 5–8 zusammenhängenden Feldern, als EIN weicher See gezeichnet (Eis: zugefroren). Wälder: 3–4 große Haine (5–9 Felder) mit dichter Baumdecke, auch in der Schräg-Ansicht. Wald +10, See +20 Gold je Feld wie bisher, aber nur noch ca. 15–19 statt 26 Seefelder je Map – das Gelände wird bei „Neues Spiel“ neu gewürfelt, Schwierigkeit etwas leichter (nicht gemessen, mit Lukas absprechen; Balance-Skripte würfeln jetzt andere Karten). Neues Spiel + neu laden.
+
 ### 02.11. 09:30 · F · Automatische Prüfung bei jedem Push
 - Neu: `.github/workflows/pruefung.yml` läuft bei jedem Push nach `main` (ca. 30 s): `node tools/pruefung.js` (Spielskript lädt, alle Türme/Stufen/Fähigkeiten/Monster ohne Absturz oder NaN) + `node tools/balance.js zehn` (nur auf Absturz).
 - Ergebnis als Haken/Kreuz am Commit. Claude fragt es beim Sitzungsstart ab (`START.md`, Punkt 4). Spiel selbst unverändert, keine VERSION nötig.
