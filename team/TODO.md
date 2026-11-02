@@ -3,6 +3,8 @@
 ## Post
 
 <!-- Nachrichten an den anderen. Der andere Claude gibt sie beim Start wörtlich weiter und löscht sie, wenn sie gelesen sind. -->
+**An L (von F, 2.11. vormittags):**
+> Ich habe eine automatische Prüfung eingebaut: Bei jedem Push lädt GitHub das Spiel einmal durch (alle Türme, Stufen, Fähigkeiten, Monster) und lässt `balance.js zehn` laufen – nur, ob etwas abstürzt, nicht die Balance. Ergebnis als Haken/Kreuz am Commit, unsere Claudes fragen es beim Start ab (START.md, Punkt 4). Am Spiel selbst ist nichts geändert. Falls dich das Kreuz stört oder etwas fehlt, sag Bescheid. Friedrich
 **An F (von L, 21.10. abends):**
 > Beim Makrobalancing ist ein Fehler in der Spielmechanik aufgefallen, den ich direkt im Spiel behoben habe (2026-10-21e): Trafen zwei gleiche Effekte zusammen, wurden Stärke und Dauer getrennt maximiert – ein schwacher Ganztags-Brand vom Schwelbrand plus ein starker kurzer Brand ergab einen starken Brand für den ganzen Tag (genauso bei Bremsen und Fluch, also auch Ewiges Eis und Ewige Nacht). Jetzt wirkt der stärkste aktive Effekt mit seiner eigenen Dauer, der schwächere längere übernimmt danach. Keine Zahlen geändert, aber Kombinationen mit Ganztags-Türmen werden schwächer – falls dein Block 1 darauf aufbaut, bitte kurz nachmessen. Liebe Grüße, Lukas
 **An F (von L, 20.10. mittags):**

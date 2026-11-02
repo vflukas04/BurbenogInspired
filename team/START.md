@@ -1,9 +1,10 @@
 # Start hier – für beide Claudes
 
-**Bei jeder Sitzung zuerst lesen, in dieser Reihenfolge (zusammen < 200 Zeilen):**
+**Bei jeder Sitzung zuerst, in dieser Reihenfolge (zusammen < 200 Zeilen):**
 1. `team/START.md` (diese Datei)
 2. `team/TODO.md` – vor allem „Gerade dran“
 3. `team/UPDATES.md` – nur die obersten 5 Einträge
+4. **Prüfung:** Ergebnis des letzten Laufs abfragen: `gh run list -R vflukas04/BurbenogInspired -w Prüfung -L 1` (ohne `gh`: `https://api.github.com/repos/vflukas04/BurbenogInspired/actions/workflows/pruefung.yml/runs?per_page=1`). Steht dort `failure`, das deinem Menschen **als Erstes** sagen (vor der Post) und zuerst reparieren. Vor jedem eigenen Push `node tools/pruefung.js` laufen lassen (1 s).
 
 **Post:** Steht in `TODO.md` unter „Post“ etwas für deinen Menschen (an L oder an F), gib es ihm **als Erstes und wörtlich** weiter, vor allem anderen. Erst wenn er es gelesen hat, den Eintrag löschen.
 
@@ -44,4 +45,4 @@ Mehr nur bei Bedarf: `CLAUDE.md` (Technik, alle Regeldetails), `team/PLANUNG.md`
 - Jede neue Sitzung mit dem Startprompt unten beginnen.
 
 ## Startprompt für einen neuen Chat
-> Wir arbeiten an BurbenogInspired. Hol den neuesten Stand und lies team/START.md, team/TODO.md und die obersten 5 Einträge von team/UPDATES.md. Gib mir zuerst wörtlich, was in TODO.md unter „Post“ an mich steht. Dann sag mir in 3 Zeilen, was zuletzt passiert ist, wer gerade woran arbeitet und was als Nächstes ansteht. Dann warte auf meinen Wunsch.
+> Wir arbeiten an BurbenogInspired. Hol den neuesten Stand und lies team/START.md, team/TODO.md und die obersten 5 Einträge von team/UPDATES.md. Prüf den Status der letzten automatischen Prüfung (START.md, Punkt 4) und sag mir sofort, wenn sie rot ist. Gib mir dann wörtlich, was in TODO.md unter „Post“ an mich steht. Dann sag mir in 3 Zeilen, was zuletzt passiert ist, wer gerade woran arbeitet und was als Nächstes ansteht. Dann warte auf meinen Wunsch.

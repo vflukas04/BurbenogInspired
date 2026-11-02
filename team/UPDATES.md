@@ -42,6 +42,10 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 02.11. 09:30 · F · Automatische Prüfung bei jedem Push
+- Neu: `.github/workflows/pruefung.yml` läuft bei jedem Push nach `main` (ca. 30 s): `node tools/pruefung.js` (Spielskript lädt, alle Türme/Stufen/Fähigkeiten/Monster ohne Absturz oder NaN) + `node tools/balance.js zehn` (nur auf Absturz).
+- Ergebnis als Haken/Kreuz am Commit. Claude fragt es beim Sitzungsstart ab (`START.md`, Punkt 4). Spiel selbst unverändert, keine VERSION nötig.
+- Lokal: `node tools/pruefung.js` (1 s) – gern vor jedem Push. Fehlermeldungen nennen Monster nur mit Nummer/Tag.
 ### 01.11. 15:00 · L · Zweig D7 – Testseite spiegel-d.html
 - Neue Testseite https://vflukas04.github.io/BurbenogInspired/spiegel-d.html mit dem Zweig-D-Stand (eigenes Spiel `spiegel3`, stört `spiel1` nicht). Das Spiel (index.html) ist unverändert.
 - Neu dort: 32 Türme aus Umrechnungsfaktoren, Wetter nach Jahreszeit, Wind aus einer Richtung je Tag, Forschung neu (Preise je Spieler, Effekt-Leiter, Freischaltung 60/175), 2 % Zinsen je Tag auf die Kasse, Edelstein mit nur einem Basic + 2 Uniques. Regeln: `team/ZWEIG-D-REGELN.md`.

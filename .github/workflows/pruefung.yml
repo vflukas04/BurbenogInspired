@@ -1,0 +1,23 @@
+# Automatische Prüfung bei jedem Push (2.11., F): Geht das Spiel kaputt?
+# Prüft nur Abstürze, nicht die Balance. Ergebnis: grüner Haken / rotes Kreuz am Commit auf GitHub.
+# Claude fragt den Status beim Sitzungsstart ab (siehe team/START.md).
+name: Prüfung
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pruefung:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Türme, Stufen, Fähigkeiten, Monster
+        run: node tools/pruefung.js
+      - name: 10 Testspiele (nur auf Absturz)
+        run: node tools/balance.js zehn > /dev/null
