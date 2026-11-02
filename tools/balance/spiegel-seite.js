@@ -48,6 +48,8 @@ html = html.replace(/'ww2-(?!holder)/g, `'ww2${SPIEL === 'spiegel1' ? 's' : SPIE
 // 4) sichtbarer Hinweis, damit niemand die Seiten verwechselt
 ersetze('<body>', '<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel ' + SPIEL + '</div>');
 
+// 02.11.: Laufzeit-Code darf kein process.env enthalten (gibt es im Browser nicht; nur „typeof process“-Abfragen sind erlaubt)
+{ const bad = html.split('\n').filter(z => /process\.env/.test(z) && !/typeof process === 'object' && process\.env/.test(z)); if (bad.length) throw new Error('process.env im Seiten-Code: ' + bad[0].trim().slice(0, 120)); }
 const ziel = path.join(__dirname, '..', '..', process.env.ZIEL || 'spiegel.html');
 fs.writeFileSync(ziel, html);
 // Prüfen: Seite lädt in der Simulation, Werte sind angekommen

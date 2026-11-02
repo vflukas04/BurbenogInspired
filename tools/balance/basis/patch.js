@@ -82,8 +82,9 @@ if (process.env.D_PRIMAER) ERSETZEN.push(
    `if (def.splash) { splashAt(s, def, p.tx, p.ty, def.splash, p.tgt);`]);
 if (process.env.STAPEL_ALLE) ERSETZEN.push(
   [`if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addFx(m, 'slow', Math.min(0.85, def.eff * f), t);`,
+   // 02.11.: Grenzen beim Patchen einsetzen (im Browser gibt es kein process – Fehler „process is not defined“ auf der Testseite)
    // Bremsen (L 24.10.): Prozent wie bisher, je Turm höchstens 40 % ohne Fläche (BREMS_MAX) bzw. 30 % mit Fläche/Nova (BREMS_MAX_FL) → gestapelt höchstens 80 % bzw. 60 % (kein eigener Deckel)
-   `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), Math.min(def.splash || def.nova ? +(process.env.BREMS_MAX_FL || 0.3) : +(process.env.BREMS_MAX || 0.4), def.eff * f), t, false, 0);`],
+   `if (def.effect === 'slow' && (!flying(m) || def.slowFly)) addStack(m, 'slow', (def._bid || (def._bid = ++BURN_ID)) + ':s' + (def._bc = (def._bc || 0) + 1), Math.min(def.splash || def.nova ? ${+(process.env.BREMS_MAX_FL || 0.3)} : ${+(process.env.BREMS_MAX || 0.4)}, def.eff * f), t, false, 0);`],
   [`    else addFx(m, 'curse', def.eff * f, t, def.curseWave);`,
    `    else addStack(m, 'curse', (def._bid || (def._bid = ++BURN_ID)) + ':c' + (def._bc = (def._bc || 0) + 1), def.eff * f, t, def.curseWave, 0);`]);   // Fluch ohne Deckel: Stapelregel begrenzt auf 2 × stärksten
 ERSETZEN.push(...require('./irrlicht'));

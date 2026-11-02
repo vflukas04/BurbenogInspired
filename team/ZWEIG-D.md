@@ -887,3 +887,8 @@ Echte Auswertung (`resolveSlot` der Testseite), Türme aus Menschen-Bot-Plänen 
 - **Schwierigkeit stark abhängig:** Reserve ÷ Ziel 0,87 / 1,06 / 1,18 (2/3/4 Sp.), über die Blöcke gleichmäßig (×1,21 bzw. ×1,36). → `CONFIG.playerHp` 2:1 · **3:1,51 · 4:2,03** (vorher 1,25/1,5). Ganze Spiele danach: Durchbrüche (Bots) 2 Sp. 350–590, 3 Sp. 355–583, 4 Sp. 373–516 – gleich schwer.
 - **Gold je Spieler (ganze Spiele):** 4 Sp. Feuer ≈ 24 %, Eis ≈ 24 %, **Schatten ≈ 27 %**, Stein ≈ 25 %. Duos mit Schatten 53 %. Schatten bekommt in allen Spielerzahlen ≈ +6–9 % Gold: Gold entsteht vor allem im ersten Durchlauf (tagsüber), die Nachtschwäche trifft nur den letzten. Die Reserve (ganzer Tag) ist dagegen gleich. → Designfrage (siehe Merge-Liste).
 - **Maps ungleich:** Map 2 und 3 (Weg 64 Felder) sind ≈ 8 % leichter als Map 0 und 1 (62 Felder): Reserve je Map 0,92 / 0,97 / 1,08 / 1,03. Bei 3 Spielern bekommt der Spieler auf Map 2 deshalb 35–42 % des Golds.
+
+## Testspiele L 02.11. nachmittags (Feuer+Stein, spiegel3, verloren Tag 7 und 10)
+- Frühe Forschung: bis Tag 6–9 gingen 40–55 % des Golds in die Kasse (für +7–8 %), das fehlte bei den Türmen.
+- Wer im ersten Durchlauf schwach ist, bekommt weniger Gold (Partner tötet die Durchgelassenen). **Entscheidung L: kein geteiltes Kopfgeld** – das regelt das Balancing, der Rest über Schenken.
+- **Fehler auf der Testseite (behoben 02.11.):** „Auswertung: process is not defined“ – die Bremsen-Stapelregel aus `basis/patch.js` las `process.env` zur Laufzeit; im Browser gibt es das nicht, sobald Eis bremste, brach die Auswertung ab. Jetzt beim Patchen eingesetzt, `spiegel-seite.js` bricht ab, wenn Laufzeit-Code `process.env` enthält. Browser-Prüfung künftig mit allen vier Elementen.
