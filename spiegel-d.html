@@ -222,7 +222,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiegel3";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-11-02g-S1282db";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-11-02g-S0cade9";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -2838,6 +2838,14 @@ function drawWeather(c, i, s, W, H, cs, time){
   const r = cs * .85, x = W - r - 4, y = 4;
   c.fillStyle = '#000a'; c.beginPath(); c.roundRect(x, y, r, r, r*.25); c.fill();
   c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(Wx.sym, x + r/2, y + r/2 + 1);
+  if (Wx.wind) { const inp = replay && replay.run && replay.run.inputs[i], dir = (inp && inp.wind) || (G ? windDirOf(G, Math.min(G.day, CONFIG.days)) : [1, 0]), t = time || 0;   /* Zweig D7: Windhose */
+    const bx = x - r * 1.15, L = r * .62, a = Math.atan2(dir[1], dir[0]) + Math.sin(t * 5) * .1;
+    c.fillStyle = '#000a'; c.beginPath(); c.roundRect(bx, y, r, r, r * .25); c.fill();
+    c.save(); c.translate(bx + r / 2 - Math.cos(a) * L * .5, y + r / 2 - Math.sin(a) * L * .5);
+    c.fillStyle = '#cfcfcf'; c.beginPath(); c.arc(0, 0, r * .07, 0, 7); c.fill(); c.rotate(a);
+    for (let k = 0; k < 4; k++) { const x0 = k * L / 4, x1 = (k + 1) * L / 4, h0 = r * .17 * (1 - k * .15), h1 = r * .17 * (1 - (k + 1) * .15), w0 = Math.sin(t * 9 - k * 1.3) * r * .02 * k, w1 = Math.sin(t * 9 - (k + 1) * 1.3) * r * .02 * (k + 1);
+      c.fillStyle = k % 2 ? '#f4f4f4' : '#ff5a2a'; c.beginPath(); c.moveTo(x0, -h0 + w0); c.lineTo(x1, -h1 + w1); c.lineTo(x1, h1 + w1); c.lineTo(x0, h0 + w0); c.closePath(); c.fill(); }
+    c.restore(); }
 }
 // Turm-Symbol für die Bauleiste
 const ICONS = {};

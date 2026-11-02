@@ -73,4 +73,15 @@ R.push([`function potOf(){ const lanes = L.map((_,k) => laneOf(k)), r = research
 //    Das zweite Basic (Reichweite/Effekt/Fläche +30 %) war gemessen nur ≈ ×1,05–1,13 wert und damit klar schwächer als Schaden +30 %.
 R.push([`const gemOptions = (el, idx) => [...BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]], uniqOf(el, idx), 8 + idx];`,
   `const gemOptions = (el, idx) => [BASIC_BY_ROLE[ELEMENTS[el].towers[idx][1]][0], uniqOf(el, idx), 8 + idx];   /* Zweig D7: ein Basic */`]);
+// 6) Windhose (L 02.11.): bei Wind neben dem Wettersymbol eine rot-weiße Windhose, die in die Windrichtung des Tages zeigt und flattert (nur Anzeige)
+R.push(["  c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(Wx.sym, x + r/2, y + r/2 + 1);",
+  "  c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(Wx.sym, x + r/2, y + r/2 + 1);" + `
+  if (Wx.wind) { const inp = replay && replay.run && replay.run.inputs[i], dir = (inp && inp.wind) || (G ? windDirOf(G, Math.min(G.day, CONFIG.days)) : [1, 0]), t = time || 0;   /* Zweig D7: Windhose */
+    const bx = x - r * 1.15, L = r * .62, a = Math.atan2(dir[1], dir[0]) + Math.sin(t * 5) * .1;
+    c.fillStyle = '#000a'; c.beginPath(); c.roundRect(bx, y, r, r, r * .25); c.fill();
+    c.save(); c.translate(bx + r / 2 - Math.cos(a) * L * .5, y + r / 2 - Math.sin(a) * L * .5);
+    c.fillStyle = '#cfcfcf'; c.beginPath(); c.arc(0, 0, r * .07, 0, 7); c.fill(); c.rotate(a);
+    for (let k = 0; k < 4; k++) { const x0 = k * L / 4, x1 = (k + 1) * L / 4, h0 = r * .17 * (1 - k * .15), h1 = r * .17 * (1 - (k + 1) * .15), w0 = Math.sin(t * 9 - k * 1.3) * r * .02 * k, w1 = Math.sin(t * 9 - (k + 1) * 1.3) * r * .02 * (k + 1);
+      c.fillStyle = k % 2 ? '#f4f4f4' : '#ff5a2a'; c.beginPath(); c.moveTo(x0, -h0 + w0); c.lineTo(x1, -h1 + w1); c.lineTo(x1, h1 + w1); c.lineTo(x0, h0 + w0); c.closePath(); c.fill(); }
+    c.restore(); }`]);
 module.exports = html => { for (const [a, b] of R) { if (typeof a === 'string' ? !html.includes(a) : !a.test(html)) throw new Error('Spiel-D7 passt nicht: ' + String(a).slice(0, 70)); html = html.replace(a, b); } return html; };
