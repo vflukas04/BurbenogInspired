@@ -131,6 +131,10 @@ if (D7 && process.env.IRRLICHT_D7 !== '0') { const L = +(process.env.IRR_LICHT |
 sp['CONFIG.stackRest'] = Object.fromEntries(['burn', 'slow', 'curse'].map((k, i) => [k, +((process.env.STAPEL_EL || (D7 ? '0.35,0.25,0.05' : '0.2,0.2,0.2')).split(',')[i])]));   // 28.10.: Stapelanteil je Effekt (Brennen, Bremsen, Fluch)
 sp['CONFIG.burnArmor'] = +(process.env.BRENN_RUEST ?? 0);   // 28.10.: Option Brennen durch Rüstung mindern – gemessen unnötig (Feuer hängt über den Rüstungsschaden an der Rüstung, nicht über das Brennen)
 const SPL = (process.env.STEIN_SPLASH || (D7 ? '1,0.6' : '1,0.7')).split(',').map(Number); sp['ELEMENTS.3.splashCenter'] = SPL[0]; sp['ELEMENTS.3.splashEdge'] = SPL[1];   // Stein-Flächenabfall (Standard wie alle: Mitte 100 %, Rand 70 %; im Spiel 120 / 80 % als Element-Spezifikation, STEIN_SPLASH=1.2,0.8)
+// 02.11. (L): Feuer T1 (Funke) günstiger wie im alten Spiel (8 statt 10 Gold) – eigenes Gefühl (mehr, kleinere Türme); Schaden × 8/10, Wert je Gold bleibt
+if (D7 && process.env.FUNKE_8 !== '0') { sp['ELEMENTS.0.costOverride'] = { ...(sp['ELEMENTS.0.costOverride'] || {}), 0:8 }; sp['ELEMENTS.0.kraftT.0'] = +(sp['ELEMENTS.0.kraftT.0'] * 0.8).toFixed(5); }
+// 02.11. (L): Feuer lag am Boden ≈ 3 % unter dem Mittel (Mitte Menschen-Bots/Bezugs-Bot) → kraftBlock × FEUER_K (1,03)
+if (D7 && sp['ELEMENTS.0.kraftBlock']) sp['ELEMENTS.0.kraftBlock'] = sp['ELEMENTS.0.kraftBlock'].map(x => +(x * +(process.env.FEUER_K || 1.03)).toFixed(4));
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
 S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));

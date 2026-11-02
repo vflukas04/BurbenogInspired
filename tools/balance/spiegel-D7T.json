@@ -231,7 +231,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.0.kraftT.0": 0.89004,
+  "ELEMENTS.0.kraftT.0": 0.71203,
   "ELEMENTS.0.towers.1": [
     "Glutbecken",
     "Schaden",
@@ -346,7 +346,7 @@
   "ELEMENTS.0.kraftT.7": 0.3232,
   "ELEMENTS.0.kraft": 1,
   "ELEMENTS.0.costOverride": {
-    "0": 10,
+    "0": 8,
     "1": 45,
     "2": 70,
     "3": 120,
@@ -378,14 +378,14 @@
   "ELEMENTS.0.weatherproof": false,
   "ELEMENTS.0.terrainFree": false,
   "ELEMENTS.0.kraftBlock": [
-    0.971,
-    0.971,
-    1.018,
-    1.018,
-    1.053,
-    1.053,
-    1.02,
-    1.02
+    1.0001,
+    1.0001,
+    1.0485,
+    1.0485,
+    1.0846,
+    1.0846,
+    1.0506,
+    1.0506
   ],
   "ELEMENTS.1.towers.0": [
     "Frostsplitter",

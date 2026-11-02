@@ -872,3 +872,11 @@ Gleiche Umgebung für alle: `d/bots.js` mit `MIT_FAKTOREN=1` (Monster-Faktoren w
 - **Ursache:** Die Umrechnungsfaktoren stimmen im Mittel über alle Tage, nicht je Tag. Rüstungsabtrag ist ein Vorteil, der an gepanzerten Tagen groß und an ungepanzerten null ist; die Leben waren je Tag an Standardtürmen ohne Rüstungsabtrag eingestellt. Abweichung des Element-Mittels je Tag (Menschen-Bots / Bezugs-Bot): Tag 2 1,28/1,08, Tag 8 1,18/1,18, Tag 11 1,30/1,29, Tag 12 (Boss) 0,71/0,97.
 - **Umgesetzt:** Leben je Tag × Wurzel(Menschen × Bezugs-Bot), begrenzt 0,75–1,35 (`spiegel-D7.json`, dann `d/d2.js`). „Schwach gegen Fliegende“ 50 → 70 % (Kiesel, Schleuder, Bergkönig; `SCHWACH`, Preis über das Tagesmittel neu): Stein an Fliegertagen (Menschen-Bots) 0,52 → 0,64 des Mittels, am Boden −2 %.
 - **Ergebnis (Menschen-Bots):** Streuung je Tag ±22 % → ±7 % (0,85–1,12). Übrig sind gewollte Element-Muster: Stein an Tag 2 1,28, an Fliegertagen 0,40–0,51; Schatten in Nächten 0,75–0,80. Bezugs-Bot-Prüflauf `ergebnisse/d21-e*`.
+- **Bezugs-Bot-Prüflauf (`d21`):** Streuung je Tag ±19 % → ±10 %. Boden Feuer 1,01 · Eis 1,05 · Schatten 0,97 · Stein 0,97 (Menschen-Bots 0,93/0,95/1,02/1,10 → Mitte ≈ 0,97/1,00/1,00/1,03). Fliegertage für den Bezugs-Bot jetzt eher leicht (1,18–1,61, Stein 0,66).
+- Danach (02.11.): Funke 8 Gold (Schaden × 0,8), Feuer × 1,03.
+
+## Ganze Spiele: Kills und Gold je Spieler (02.11., `d/spiel4.js`)
+Echte Auswertung (`resolveSlot` der Testseite), Türme aus Menschen-Bot-Plänen (kern, sparer) je Element und Map, Gold fest, Verlieren aus, je 2 Spiele (Gelände/Wetter-Seeds).
+- **Duos:** Gold je Spieler 45–55 % (alle 6 Paare). Kills im Block 1 ungleich (Schatten 59–73 % in seinen Duos), wiegt beim Gold wenig (Kopfgeld 2).
+- **4 Spieler:** Gold Feuer 21–24 % · Eis 20–22 % · **Schatten 26–33 %** · Stein 23–31 %. Vermutete Ursache: Die Nachtregel ist für 2 Spieler bepreist (1 von 2 Wellen dunkel), mit 4 Spielern ist nur 1 von 4 dunkel → Schatten zu stark.
+- **4 Spieler viel leichter als 2:** Durchbrüche (Bots) 4–19 statt 350–590. Der Spielerfaktor der Leben (×1,5) gleicht die vier Durchläufe nicht aus → Teil der Umrechnung für 3/4 Spieler.
