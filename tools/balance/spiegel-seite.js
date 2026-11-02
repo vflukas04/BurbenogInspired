@@ -10,6 +10,8 @@ const sp = S.lesen(), basis = sp._basis;
 if (!basis) throw new Error('spiegel.json ohne _basis');
 for (const [k, v] of Object.entries(sp._env || {})) if (process.env[k] === undefined) process.env[k] = String(v);   // 01.11.: Schalter für basis/patch.js (vor dem Laden des Patches)
 // Grafik (22.10., L): Basis mit den Grafik-Commits seit 044d8c0 (Monster-Bilder 21a–21e, 22a; keine Spielzahlen, Simulation geprüft gleich).
+// 02.11. (L): dazu F's Anzeige-Commits 23a/b, 26b–26w, 27a–27x, 28a–c, 29a–c, 02.11a (2,5D, Turm-Bilder, Animationen, Dorf, Arbeiter, Gesandte, Seen/Wälder,
+//   Kreativ-Modus, Verbindungswächter) per 3-Wege-Merge; ohne Balance-/Regel-Commits (22b, 23c/d, 24a–d, 26a). Simulation geprüft gleich; anders: Geländeverteilung (02.11a), Dorffeld nicht bebaubar (27q).
 // Zwei Monster heißen dort anders – Spiegel-Schlüssel werden umbenannt. GRAFIK=0 nimmt die reine Basis.
 const GRAFIK_DATEI = path.join(__dirname, 'basis', `index-${basis}-grafik.html`), GRAFIK = process.env.GRAFIK !== '0' && fs.existsSync(GRAFIK_DATEI);
 const NAMEN_NEU = GRAFIK ? { 'Sommer-Schneebälle':'Eiswürfel', 'Heisenbergs':'The one who knocks' } : {};
