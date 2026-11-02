@@ -38,11 +38,12 @@ function runWave(setup, wave, f = 1){
    und Effekten. Beide Spieler symmetrisch (gleiche Aufstellung), daher laufen die eigenen Leaks noch einmal durch dieselbe Aufstellung.
    durch = ganz durchgebrochen (Bosse zählen mehrfach), kills = beide Wellen, hpShare = Anteil vernichteter Leben am Tagesende. */
 function runDay(setup, wave, f = 1){
-  const a = runWave(setup, wave, f), hpIn = a.hpIn;
-  if (!a.out.length) return { kills:a.kills, n:a.n, durch:0, hpShare:1, gems:a.gems };
-  const b = runWave(setup, { ...wave, incoming:a.out, dark:wave.dark2 !== false, hpIn }, 1);
-  const lives = G.MONSTERS[wave.type].lives || 1;
-  return { kills:a.kills + b.kills, n:a.n, durch:b.leaked * lives, hpShare:b.hpShare, gems:a.gems.map((g, i) => g + b.gems[i]) };
+  // 02.11. (L): so viele Durchläufe wie Spieler (2: 10 + 19 Uhr; 3: 10/16/19; 4: 10/13/16/19), nur der letzte im Dunkeln; für 2 Spieler wie bisher
+  const P = Math.max(2, wave.players || 2), a = runWave(setup, wave, f), hpIn = a.hpIn, lives = G.MONSTERS[wave.type].lives || 1;
+  let kills = a.kills, gems = a.gems, out = a.out, last = a;
+  for (let k = 1; k < P && out.length; k++) { last = runWave(setup, { ...wave, incoming:out, dark:k === P - 1 ? wave.dark2 !== false : false, hpIn }, 1);
+    kills += last.kills; gems = gems.map((g, i) => g + last.gems[i]); out = last.out; }
+  return { kills, n:a.n, durch:out.length * lives, hpShare:out.length ? last.hpShare : 1, gems };
 }
 function reserveDay(setup, wave, q = 0.97, lo = 0.02, hi = 50){
   const ok = f => runDay(setup, wave, f).hpShare >= q;

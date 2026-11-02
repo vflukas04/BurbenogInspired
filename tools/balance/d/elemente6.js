@@ -64,7 +64,7 @@ const D6 = UMPLATZ ? JSON.parse(fs.readFileSync(path.join(__dirname, '..', proce
 function standardR(e, towers, d){ const E = G.ELEMENTS[e], keep = { towers:E.towers, kraftT:E.kraftT, kraftBlock:E.kraftBlock, armorDmg:E.armorDmg, dayOnly:E.dayOnly, splashCenter:E.splashCenter, splashEdge:E.splashEdge };
   E.towers = E.towers.map((_, k) => JSON.parse(JSON.stringify(D6[`ELEMENTS.0.towers.${k}`]))); E.kraftT = E.kraftT.map((_, k) => D6[`ELEMENTS.0.kraftT.${k}`]);
   E.armorDmg = 0; E.dayOnly = false; E.splashCenter = undefined; E.splashEdge = undefined; E.kraftBlock = null; const kr = E.kraft; E.kraft = 1; keep.kraft = kr; /* 31.10.: Standard ohne Element-Kraft (RATE_MUL) */ C.useMap(C.LANE, CUR_SEED);   // Maske neu (Reichweiten); Standard ohne kraftBlock
-  const R = C.reserveDay({ el:e, towers:umplatz(towers, e), res:[] }, { type:d, players:2, weather:+(process.env.WETTER || 0) });
+  const R = C.reserveDay({ el:e, towers:umplatz(towers, e), res:[] }, { type:d, players:+(process.env.SPIELER || 2), weather:+(process.env.WETTER || 0) });
   Object.assign(E, keep); C.useMap(C.LANE, CUR_SEED); return R; }
 let CUR_SEED = null;
 // WETTER_REL=1 (mit MIT_WETTER=1, WETTER=i): Vergleich derselben Element-Türme mit und ohne dieses Wetter (Wirkung des Wetters je Element)
@@ -74,11 +74,11 @@ if (process.env.WETTER_DEF) { const w = +(process.env.WETTER || 0); G.WEATHER[w]
 // WIND=dx,dy,mitBoden,gegenBoden,mitFlug,gegenFlug (28.10.): Wind (Index 7) mit Richtung statt flySpeed, ohne Element-Wirkung
 if (process.env.WIND) { const [dx, dy, a, b, c, d] = process.env.WIND.split(',').map(Number); G.WEATHER[7] = { ...G.WEATHER[7], el:{}, flySpeed:undefined, wind:{ dir:[dx, dy], ground:[a, b], fly:[c, d] } }; }
 function ohneWetter(e, towers, d){ const w = +(process.env.WETTER || 0), W = G.WEATHER[w]; G.WEATHER[w] = { ...W, el:{}, burnDecay:undefined, range:undefined, flySpeed:undefined, wind:undefined };
-  const R = C.reserveDay({ el:e, towers:UMPLATZ ? umplatz(towers, e) : towers.map(x => ({ ...x, el:e })), res:[] }, { type:d, players:2, weather:w }); G.WEATHER[w] = W; return R; }
+  const R = C.reserveDay({ el:e, towers:UMPLATZ ? umplatz(towers, e) : towers.map(x => ({ ...x, el:e })), res:[] }, { type:d, players:+(process.env.SPIELER || 2), weather:w }); G.WEATHER[w] = W; return R; }
 for (const e of (process.env.EL || '0,1,2,3').split(',').map(Number)) { abl(e, process.env.ABL); const b = [], f = [], blk = [[], [], [], []];
   for (const mp of PLAN.maps) { C.useMap(mp.lane, mp.seed); CUR_SEED = mp.seed;
     mp.tage.forEach((t, d) => { if (d + 1 < tage[0] || d + 1 > tage[1]) return; const R0 = WREL ? ohneWetter(e, t.towers, d) : UMPLATZ ? standardR(e, t.towers, d) : t.R;
       const kb = KB[e] ? KB[e][Math.min(3, Math.floor(d / 12))] : 1, k0 = G.ELEMENTS[e].kraft; G.ELEMENTS[e].kraft = k0 * kb;
-      const R = C.reserveDay({ el:e, towers:UMPLATZ ? umplatz(t.towers, e) : t.towers.map(x => ({ ...x, el:e })), res:RES.map(r => r.replace('EL', e)) }, { type:d, players:2, weather:+(process.env.WETTER || 0) }), q = R / R0; G.ELEMENTS[e].kraft = k0;   // WETTER=Index (mit MIT_WETTER=1)
+      const R = C.reserveDay({ el:e, towers:UMPLATZ ? umplatz(t.towers, e) : t.towers.map(x => ({ ...x, el:e })), res:RES.map(r => r.replace('EL', e)) }, { type:d, players:+(process.env.SPIELER || 2), weather:+(process.env.WETTER || 0) }), q = R / R0; G.ELEMENTS[e].kraft = k0;   // WETTER=Index (mit MIT_WETTER=1)
       (G.MONSTERS[d].fly ? f : b).push(q); if (!G.MONSTERS[d].fly) blk[Math.min(3, Math.floor(d / 12))].push(q); }); }
   console.log(`${NAME[e].padEnd(9)}${process.env.ABL ? ' ohne ' + process.env.ABL : ''}${process.env.RUEST ? ' Rüstung ' + process.env.RUEST : ''}${process.env.RUEST_ADD ? ' Rüstung +' + process.env.RUEST_ADD : ''}${process.env.RUEST_MUL ? ' Rüstung ×' + process.env.RUEST_MUL : ''}${process.env.MIT_WETTER ? ' Wetter ' + G.WEATHER[+(process.env.WETTER || 0)].name : ''}${process.env.IRRLICHT ? ` Irrlicht (buff×${process.env.BUFF_K || 1}, Licht ${process.env.LICHT || 4.4}${process.env.FEST ? ', fest' : ''})` : ''} Boden ${gm(b).toFixed(3)} (Tag 1–12 ${gm(blk[0]).toFixed(2)} · 13–24 ${gm(blk[1]).toFixed(2)} · 25–36 ${gm(blk[2]).toFixed(2)} · 37–48 ${gm(blk[3]).toFixed(2)}) | Flieger ${gm(f).toFixed(3)} | ${Math.round((Date.now() - t0) / 1000)} s`); }
