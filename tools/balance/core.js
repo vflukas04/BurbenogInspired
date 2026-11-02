@@ -37,11 +37,12 @@ function runWave(setup, wave, f = 1){
 /* Ein Tag zu zweit (Spielart Uhrzeiten, 16.10.): 10 Uhr frische Welle, 19 Uhr (dunkel) kommen die Leaks des Nachbarn mit Restleben
    und Effekten. Beide Spieler symmetrisch (gleiche Aufstellung), daher laufen die eigenen Leaks noch einmal durch dieselbe Aufstellung.
    durch = ganz durchgebrochen (Bosse zählen mehrfach), kills = beide Wellen, hpShare = Anteil vernichteter Leben am Tagesende. */
+const SL = P => G.CONFIG.slotPlan && G.CONFIG.slotPlan[P];   // Uhrzeiten der Wellen je Spielerzahl (dunkel ab CONFIG.darkFrom)
 function runDay(setup, wave, f = 1){
-  // 02.11. (L): so viele Durchläufe wie Spieler (2: 10 + 19 Uhr; 3: 10/16/19; 4: 10/13/16/19), nur der letzte im Dunkeln; für 2 Spieler wie bisher
+  // 02.11. (L): so viele Durchläufe wie Spieler (2: 10 + 19 Uhr; 3: 10/16/19; 4: 10/13/16/19), dunkel nach den Uhrzeiten (CONFIG.slotPlan/darkFrom); für 2 Spieler wie bisher
   const P = Math.max(2, wave.players || 2), a = runWave(setup, wave, f), hpIn = a.hpIn, lives = G.MONSTERS[wave.type].lives || 1;
   let kills = a.kills, gems = a.gems, out = a.out, last = a;
-  for (let k = 1; k < P && out.length; k++) { last = runWave(setup, { ...wave, incoming:out, dark:k === P - 1 ? wave.dark2 !== false : false, hpIn }, 1);
+  for (let k = 1; k < P && out.length; k++) { last = runWave(setup, { ...wave, incoming:out, dark:wave.dark2 !== false && (SL(P) ? SL(P)[k] >= G.CONFIG.darkFrom : k === P - 1), hpIn }, 1);
     kills += last.kills; gems = gems.map((g, i) => g + last.gems[i]); out = last.out; }
   return { kills, n:a.n, durch:out.length * lives, hpShare:out.length ? last.hpShare : 1, gems };
 }

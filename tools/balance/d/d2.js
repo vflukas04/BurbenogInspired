@@ -137,6 +137,8 @@ if (D7 && process.env.FUNKE_8 !== '0') { sp['ELEMENTS.0.costOverride'] = { ...(s
 if (D7 && sp['ELEMENTS.0.kraftBlock']) sp['ELEMENTS.0.kraftBlock'] = sp['ELEMENTS.0.kraftBlock'].map(x => +(x * +(process.env.FEUER_K || 1.03)).toFixed(4));
 // 02.11. (L): Leben je Spielerzahl neu (Tag mit so vielen Durchläufen wie Spieler, Menschen-Bots: Reserve 3 Spieler ×1,21, 4 Spieler ×1,36 gegenüber 2)
 if (D7) sp['CONFIG.playerHp'] = { 2:1, 3:+(process.env.HP3 || 1.51), 4:+(process.env.HP4 || 2.03) };
+// 02.11. (L): mit 4 Spielern zwei Nachtwellen (vorher nur 19 Uhr dunkel → Schatten bei 4 Spielern zu stark): Wellen 10/13/17/20 Uhr, dunkel ab 17 Uhr (2 Sp. 19, 3 Sp. 19 unverändert dunkel)
+if (D7) { sp['CONFIG.slotPlan'] = { 2:[10, 19], 3:[10, 16, 19], 4:[10, 13, 17, 20] }; sp['CONFIG.darkFrom'] = 17; }
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
 S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));
