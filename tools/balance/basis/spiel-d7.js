@@ -87,4 +87,50 @@ R.push(["  c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'cen
 // 7) FEHLER behoben (02.11. abends): kraftBlock ist in Zweig D das Wetter-Mittel je Block für die Messungen ohne Wetter. Im Spiel wirkt das echte Wetter –
 //    kraftBlock darf dort nicht zusätzlich gelten (sonst zählte das Wetter doppelt: z. B. Schatten im Winter +7 % statt +3,5 %, Feuer −6 % statt −3 %).
 R.push([`const kbOf = el => { const a = ELEMENTS[el].kraftBlock;`, `const kbOf = el => 1, kbOfMess = el => { const a = ELEMENTS[el].kraftBlock;   /* Zweig D7: im Spiel ohne kraftBlock (echtes Wetter) */`]);
+// 8) L 03.11.: Stein-Bilder T3/T4 getauscht (D7-T3 Onyx ohne Fliegende, D7-T4 Katapult; F's Bild 3 ist das Katapult, Bild 4 der Onyx) – nur Anzeige
+R.push([`function drawTower25(c, tw, x, y, cs, aim, glow){`, `function drawTower25(c, tw, x, y, cs, aim, glow){
+  if (tw.el === 3 && (tw.idx === 2 || tw.idx === 3)) tw = { ...tw, idx:5 - tw.idx };   /* Zweig D7: Bilder Onyx/Katapult */`],
+  [`function drawShot(c, p, cs, time){`, `function drawShot(c, p, cs, time){
+  if (p.el === 3 && (p.idx === 2 || p.idx === 3)) p = { ...p, idx:5 - p.idx };   /* Zweig D7: Geschosse Onyx/Katapult */`],
+  [`function towerIcon(el, k){
+  if (view25) {`, `function towerIcon(el, k){
+  if (view25) { if (el === 3 && (k === 2 || k === 3)) k = 5 - k;   /* Zweig D7: Bilder Onyx/Katapult */`]);
+// 9) L 03.11.: Spielernamen (Feld name im eigenen Lane-Dokument, im Menü eingeben) und Kill-Tabelle oben rechts (gesamt, heute; antippen: alle Tage)
+R.push([`  g.leaked = leaked; g.passed += broke;`, `  g.leaked = leaked; g.passed += broke;
+  g.killsByDay = g.killsByDay || {}; g.killsByDay[g.day] = (g.killsByDay[g.day] || Array(n).fill(0)).map((v, i) => v + ((res[i] && res[i].kills) || 0));   /* Zweig D7: Kills je Tag */`],
+  ["log.push(`Spieler ${i+1}: ", "log.push(`${String((lanes[i] && lanes[i].name) || '').replace(/[<>&\"'\\x60]/g, '') || 'Spieler ' + (i+1)}: "],
+  ["` → Spieler ${(i+1)%n+1}", "` → ${String((lanes[(i+1)%n] && lanes[(i+1)%n].name) || '').replace(/[<>&\"'\\x60]/g, '') || 'Spieler ' + ((i+1)%n+1)}"],
+  [`<span class="name">Spieler \${i+1}</span>`, `<span class="name">\${esc(pname(i))}</span>`],
+  ['data-seat="${i}">Spieler ${i+1}</button>', 'data-seat="${i}">${esc(pname(i))}</button>'],
+  ['Bauen für <b>Spieler ${seat+1}</b>', 'Bauen für <b>${esc(pname(seat))}</b>'],
+  ['data-to="${k}">Spieler ${k+1}</button>', 'data-to="${k}">${esc(pname(k))}</button>'],
+  ['an Spieler ${to+1} geschenkt', 'an ${esc(pname(to))} geschenkt'],
+  ['Spieler ${to+1} bekommt', '${esc(pname(to))} bekommt'],
+  [`  if (lanesBuilt !== NP()) buildLanes();
+  const n = NP();`, `  if (lanesBuilt !== NP()) buildLanes();
+  const n = NP(); renderKillTab(n);`],
+  [`    <button class="btn" id="mNew">Neues Spiel …</button>`, `    \${G ? '<button class="btn" id="mName">Mein Name: ' + esc(pname(seat)) + '</button>' : ''}
+    <button class="btn" id="mNew">Neues Spiel …</button>`],
+  [`  $('mWx').onclick = () => { wxAnim = !wxAnim;`, `  const mn = $('mName'); if (mn) mn.onclick = () => { openDlg(\`<h2>Name</h2><p class="muted" style="margin:0">Wird allen in der Kill-Tabelle und auf der Karte angezeigt.</p>
+    <input id="nmIn" maxlength="16" value="\${esc(laneOf(seat).name || '')}" style="width:100%;font-size:16px;margin:8px 0">
+    <div class="acts"><button class="btn" id="nmNo">Abbrechen</button><button class="btn primary" id="nmOk">Speichern</button></div>\`);
+    $('nmNo').onclick = closeDlg; $('nmOk').onclick = () => { const v = ($('nmIn').value || '').replace(/[<>&"'\\x60]/g, '').trim().slice(0, 16); L[seat] = { ...laneOf(seat), name:v }; lanesBuilt = 0; closeDlg(); render(); saveLane(seat); }; };
+  $('mWx').onclick = () => { wxAnim = !wxAnim;`],
+  [`<header class="top">`, `<header class="top"><div id="killtab" hidden></div>`],
+  [`</head>`, `<style>#killtab{position:fixed;top:6px;right:6px;z-index:60;background:#000c;color:#fff;font:11px/1.3 system-ui,sans-serif;border-radius:8px;padding:4px 7px;max-height:70vh;overflow:auto;cursor:pointer}
+#killtab table{border-collapse:collapse}#killtab td,#killtab th{padding:1px 4px;text-align:right;white-space:nowrap}#killtab th{font-weight:600;opacity:.75}
+#killtab td:first-child,#killtab th:first-child{text-align:left}#killtab tr.sum td{border-top:1px solid #fff4;font-weight:600}</style>
+</head>`]);
+R.push([`function render(){`, `const esc = v => String(v).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+const pname = i => { const l = laneOf(i); return (l && l.name && String(l.name).trim()) || 'Spieler ' + (i + 1); };
+let killTabOpen = false;
+function renderKillTab(n){ const t = $('killtab'); if (!t) return; if (!G) { t.hidden = true; return; } t.hidden = false;
+  const kd = G.killsByDay || {}, today = Math.min(G.day, CONFIG.days), pend = i => pendingOf(i, 'kills');
+  const dayK = (d, i) => ((kd[d] || [])[i] || 0) - (d === today ? pend(i) : 0);
+  const head = '<tr><th></th>' + [...Array(n)].map((_, i) => '<th>' + esc(pname(i)) + '</th>').join('') + '</tr>';
+  const row = (lab, f, cls) => '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + lab + '</td>' + [...Array(n)].map((_, i) => '<td>' + Math.max(0, f(i)) + '</td>').join('') + '</tr>';
+  const days = killTabOpen ? Object.keys(kd).map(Number).filter(d => d <= today).sort((a, b) => b - a) : [];
+  t.innerHTML = '<table>' + head + row('⚔ Tag ' + today, i => dayK(today, i)) + days.filter(d => d !== today).map(d => row('Tag ' + d, i => dayK(d, i))).join('') + row('Gesamt', i => killsOf(i), 'sum') + '</table>' + (killTabOpen ? '' : '<div style="opacity:.6;font-size:10px">antippen: alle Tage</div>');
+  t.onclick = () => { killTabOpen = !killTabOpen; renderKillTab(n); }; }
+function render(){`]);
 module.exports = html => { for (const [a, b] of R) { if (typeof a === 'string' ? !html.includes(a) : !a.test(html)) throw new Error('Spiel-D7 passt nicht: ' + String(a).slice(0, 70)); html = html.replace(a, b); } return html; };

@@ -148,6 +148,13 @@ if (D7) sp['ELEMENTS.2.note'] = `Fluch (mehr Schaden, Rüstung bröckelt für al
 // Erster Durchlauf Block 1 war Feuer 7 % · Eis 17 % · Schatten 21 % · Stein 28 %, Gold Feuer 45–49 %, Stein 51–55 % → T1-Faktoren und Element-Stärke.
 const FEIN = JSON.parse(process.env.FEIN || '{"t1":[1.10,1,0.97,0.92],"kraft":[1.06,1.03,1.03,0.97]}');
 if (D7 && FEIN) { for (let e = 0; e < 4; e++) { sp[`ELEMENTS.${e}.kraftT.0`] = +(sp[`ELEMENTS.${e}.kraftT.0`] * FEIN.t1[e]).toFixed(5); sp[`ELEMENTS.${e}.kraft`] = FEIN.kraft[e]; } }
+// 03.11. (L): Turmnamen wie im Spiel von F (Bilder gehören zu diesen Namen). Stein: D7-T3 (keine Fliegenden, Wurf) heißt Onyx, D7-T4 (trifft Fliegende) Katapult –
+// die Bilder von T3/T4 tauscht die Testseite dafür (basis/spiel-d7.js), weil F's Bild 3 das Katapult und Bild 4 der Onyx ist.
+const NAMEN_F = [['Funke', 'Glumanda', 'Flammenwerfer', 'Brandpfeil', 'Feuerteufel', 'Lavaturm', 'Sonnenturm', 'Höllenfeuer'],
+  ['Frostsplitter', 'Schneeball', 'Eiszapfen', 'Schneekönig', 'Frostnova', 'Eisspeer', 'Blizzard', 'Eisdrache'],
+  ['Schemen', 'Irrlicht', 'Nachtauge', 'Schattenturm', 'Seelenfresser', 'Phantom', 'Leerenturm', 'Schattendrache'],
+  ['Kiesel', 'Schleuder', 'Onyx', 'Katapult', 'Erdbeben', 'Granitwächter', 'Lawine', 'Bergkönig']];
+if (D7) for (let e = 0; e < 4; e++) for (let k = 0; k < 8; k++) { const t = sp[`ELEMENTS.${e}.towers.${k}`]; if (t) sp[`ELEMENTS.${e}.towers.${k}`] = [NAMEN_F[e][k], ...t.slice(1)]; }
 sp._stand = `Zweig D2-Methode (L, 25.10.; 27.10. abends Basis ${process.env.BASIS || 'spiegel-D6.json'}, Kurse ${process.env.KURSE || 'D6'}, Stein 2s/4/6/8): 32 Türme aus Standardturm + Merkmale, Schaden nur aus Wechselkursen (d/d2.js); Monster wie Basis`;
 S.speichern(sp, path.join(__dirname, '..', process.env.AUS || 'spiegel-D2.json'));
 console.log(zeilen.join('\n'));

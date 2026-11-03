@@ -906,3 +906,8 @@ Echte Auswertung (`resolveSlot` der Testseite), Türme aus Menschen-Bot-Plänen 
 - **Korrektur (L):** Zwischenbosse nicht zu stark, Senkung zurückgenommen.
 - **Feinabstimmung 02.11. abends:** `d/spiel4.js ERST=1` misst je Element den Anteil der eigenen Welle, der im ersten Durchlauf stirbt (Duos, Bots kern/sparer, Bodentage ohne Bosse). Vorher Block 1: Feuer 7 % · Eis 17 % · Schatten 21 % · Stein 28 %, Gold Feuer 45–49 %, Stein 51–55 %. Feuer tötet viel über Brennen erst beim Partner. Nach `kraft` 1,06/1,03/1,03/0,97 und T1 ×1,10/1/0,97/0,92: Block 1 12/18/15/20 %, Gold 47–53 %, Reserve-Spanne (Menschen-Bots) 1,24 → 1,07.
 - Gegencheck Bezugs-Bot (`d22`): Boden Feuer 1,08 · Eis 1,05 · Schatten 0,98 · Stein 0,91 (Menschen-Bots 1,02/0,98/0,97/1,04 → Mitte ≈ 1,05/1,02/0,98/0,98). Feuer für gut planende Spieler leicht stark, im ersten Durchlauf aber weiter am schwächsten → so gelassen bis zum nächsten Testspiel.
+
+## 4-Spieler-Testspiel 02.–03.11. (Feuer, Eis, Stein, Schatten – gewonnen, 15 Durchbrüche)
+- Gold am Ende Feuer 23 % · Eis 25 % · Stein 26 % · Schatten 26 % (Mitte des Spiels Eis 18 %, über Geschenke ausgeglichen). Schattenspieler zufrieden.
+- Ende zu leicht (L): ab Tag 37 alles nach dem 2.–3. Durchlauf tot, ab Tag 41 im letzten Durchlauf 0. Reserve der echten Aufbauten (mit Forschung) ÷ Ziel: Tag 8–20 1,15–1,41, Tag 26–35 0,91–1,12, Tag 41–47 1,27–1,36 (ohne Forschung 1,13–1,16). Das Team hatte 23 Forschungsstufen und am Ende 1200–2100 Gold je Spieler in der Kasse. → Leben Tag 37–40 ×1,1, 41–48 ×1,2.
+- Wünsche: Kill-Tabelle, Spielernamen (umgesetzt); Stein-Bilder T3/T4 getauscht und F's Turmnamen (umgesetzt); Dauereffekte und Animationen größer (an F).

@@ -39,6 +39,7 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 - **Looping-Louie-Tiefflug:** auf etwa ⅓ des Wegs tief (dort Bodenmonster für alle Türme), in den Übergängen fliegend ohne Malus „schwach gegen Fliegende“, sonst Hochflug. Höhe hängt vom Ort ab, alle fliegen in einer Reihe.
 - Leben je Tag (`MONSTERS.*.hpMul` in `spiegel-D7.json`): auf den Bezugs-Bot kalibriert, dann an Bodentagen mit der gemeinsamen Drift der vier Elemente angehoben, an Fliegertagen auf das Mittel der vier Elemente gestellt. **02.11.:** zusätzlich jeder Tag auf das Mittel der vier Elemente (Mitte aus Menschen-Bots und Bezugs-Bot, Grenzen ×0,75–1,35). Grund: Die Leben waren an Standardtürmen eingestellt, die keine Rüstung abtragen; alle Elementtürme tun das, daher waren gepanzerte Tage zu leicht (Tag 2, 8, 11: ×1,18–1,30) und Bosse zu schwer (×0,8). Streuung je Tag (Menschen-Bots) ±22 % → ±7 %.
 
+- **Leben Tag 37–40 ×1,1, Tag 41–48 ×1,2** (03.11.: im 4-Spieler-Testspiel war das Ende zu leicht, Reserve der Aufbauten 1,3 statt ≈ 1,05 in der Mitte; das Team hat mehr geforscht als der Referenzweg).
 - **Leben je Spielerzahl** (`CONFIG.playerHp`): 2 Sp. ×1 · 3 Sp. ×1,51 · 4 Sp. ×2,03 (02.11.; vorher 1,25/1,5 – mit 4 Spielern war es viel zu leicht).
 
 ## Forschung (Stand 01.11., Werte vorläufig)
@@ -58,3 +59,8 @@ Nur die Regeln, die man im Spiel spürt oder einbauen muss. Herleitung und Messu
 ## Noch offen
 - Uniques der Edelsteine an D7 anpassen (Werte noch aus dem alten Spiel).
 - Anzeige: Wettertexte, Wind-Richtung, Tiefflug-Strecken auf der Karte.
+
+## Anzeige (Testseite, 03.11.)
+- Turmnamen wie im Spiel von F (Glumanda, Schneekönig, Eisdrache, Schattenturm, Schattendrache, Feuerteufel …). Stein T3 heißt Onyx (keine Fliegenden), T4 Katapult (trifft Fliegende); die Bilder von T3/T4 sind dafür getauscht.
+- Spielernamen: Menü ⋯ → „Mein Name“ (Feld `name` im eigenen Lane-Dokument), erscheinen auf der Karte, beim Schenken, in der Chronik und in der Kill-Tabelle.
+- Kill-Tabelle oben rechts: je Spieler Kills heute und gesamt, antippen zeigt alle Tage (`G.killsByDay`).

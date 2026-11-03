@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 03.11. 23:00 · L · Testseite spiegel-d: Kill-Tabelle, Namen, Turmnamen
+- Nur `spiegel-d.html` (Spiel unverändert): Kill-Tabelle oben rechts (heute/gesamt, antippen: alle Tage), Spielernamen im Menü ⋯, Turmnamen wie im Spiel (Stein T3 Onyx, T4 Katapult, Bilder getauscht), Leben am Ende höher (Tag 37–48 ×1,1–1,2).
+- Merge-Vorbereitung mit Bewertung aller Balancing-Stände: `team/ZWEIG-D-MERGE.md`.
 ### 02.11. 12:00 · L · Testseiten mit F's Grafik
 - spiegel.html, spiegel-a.html und spiegel-d.html haben jetzt F's Anzeige-Stand bis 02.11a (2,5D, Turm-Bilder und Animationen, Dorf, Arbeiter, Gesandte, Seen/Wälder, kein Schachbrett, Kreativ-Modus, Verbindungswächter). F's Balance-Änderungen sind dort bewusst nicht drin. Simulation geprüft gleich; neu wirken nur die Geländeverteilung (große Seen/Wälder) und das gesperrte Dorffeld.
 ### 02.11. 09:50 · F · 2026-11-02a – Große Seen und Wälder (Regeländerung Gelände)
