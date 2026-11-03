@@ -61,6 +61,7 @@ Gleiche Umgebung für alle (Bots auf den echten Seiten, ohne Forschung). Zahlen:
 | 3.7 | **Edelstein-Uniques** sind noch die Werte vom 18.10. | jede Fähigkeit messen und an D7 anpassen (aufwendig) oder erst im Testspiel beobachten | messen, aber nach dem Einbau |
 | 3.8 | **Upgrades:** S6 hat 25 % mehr Kraft je Gold als S1, wenige große Türme lohnen sich | flacher machen oder so lassen | so lassen (Belohnung fürs Sparen) |
 | 3.9 | **Ringregel (Faktoren je Monster):** D7 nutzt die Faktoren von C12, F hat seitdem Block 1–2 geändert (22b–24c) | C12-Faktoren behalten oder F's Werte übernehmen (dann Leben je Tag nachmessen) | C12-Faktoren, F's Tage im Testspiel prüfen |
+| 3.9b | **Sitzreihenfolge** entscheidet stark über das Gold (Testspiel nachgespielt: max ÷ min 1,28 bis 1,99 je nach Reihenfolge) | (a) so lassen, Ausgleich übers Schenken; (b) Reihenfolge je Tag wechseln (Ring dreht sich); (c) Archiv speichert Türme je Welle, dann genauer messen | (c), danach entscheiden |
 | 3.10 | Anzeige | Tiefflug-Strecken (Looping-Louie), Wettertexte, Windhose (gezeichnet, KI-Bild möglich) | nach dem Einbau |
 
 ## 4. Was D7 gegenüber dem Spiel ändert (Kurzliste)

@@ -911,3 +911,17 @@ Echte Auswertung (`resolveSlot` der Testseite), Türme aus Menschen-Bot-Plänen 
 - Gold am Ende Feuer 23 % · Eis 25 % · Stein 26 % · Schatten 26 % (Mitte des Spiels Eis 18 %, über Geschenke ausgeglichen). Schattenspieler zufrieden.
 - Ende zu leicht (L): ab Tag 37 alles nach dem 2.–3. Durchlauf tot, ab Tag 41 im letzten Durchlauf 0. Reserve der echten Aufbauten (mit Forschung) ÷ Ziel: Tag 8–20 1,15–1,41, Tag 26–35 0,91–1,12, Tag 41–47 1,27–1,36 (ohne Forschung 1,13–1,16). Das Team hatte 23 Forschungsstufen und am Ende 1200–2100 Gold je Spieler in der Kasse. → Leben Tag 37–40 ×1,1, 41–48 ×1,2.
 - Wünsche: Kill-Tabelle, Spielernamen (umgesetzt); Stein-Bilder T3/T4 getauscht und F's Turmnamen (umgesetzt); Dauereffekte und Animationen größer (an F).
+
+## Sitzreihenfolge (04.11., `d/reihe.js`)
+4-Spieler-Testspiel mit den echten Türmen (Archiv, Stand Tagesende) in allen 6 Reihenfolgen nachgespielt; jeder behält seine Map. Gold-Anteil Feuer/Eis/Stein/Schatten:
+| Reihenfolge | Gold % | max ÷ min | durch |
+|---|---|---|---|
+| Feuer → Eis → Stein → Schatten (gespielt) | 26 / 27 / 21 / 26 | 1,28 | 11 |
+| Feuer → Eis → Schatten → Stein | 29 / 29 / 15 / 27 | 1,87 | 12 |
+| Feuer → Stein → Eis → Schatten | 23 / 34 / 18 / 26 | 1,92 | 13 |
+| Feuer → Stein → Schatten → Eis | 26 / 29 / 15 / 30 | 1,99 | 12 |
+| Feuer → Schatten → Eis → Stein | 27 / 28 / 19 / 26 | 1,52 | 9 |
+| Feuer → Schatten → Stein → Eis | 26 / 33 / 18 / 23 | 1,85 | 27 |
+- Wer direkt hinter Stein sitzt, bekommt viel (Eis 33–34 %). Stein selbst bekommt am meisten, wenn Eis vor ihm sitzt.
+- Die gespielte Reihenfolge war die ausgeglichenste.
+- **Unsicher:** Das Nachspielen trifft das echte Spiel nur grob (Stein nachgespielt 9.495 statt 11.841 Gold), weil die Türme nur am Tagesende gespeichert sind und Kills je Tag empfindlich sind. Die Unterschiede zwischen den Reihenfolgen (bis Faktor 2) sind aber deutlich größer als dieser Fehler.
