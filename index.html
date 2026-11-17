@@ -226,7 +226,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-11-17d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-11-17e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -1646,16 +1646,16 @@ function closeDlg(){ $('dlgback').hidden = true; $('dlg').innerHTML = ''; }
 // Kurzinfo zu einem Monster
 function showMonster(r){
   const M = MONSTERS[r-1], MD = monsterDef(r-1, NP());
-  const strong = ELEMENTS.filter((E,k) => effOf(M,k) > 0).map(E => E.name), weak = ELEMENTS.filter((E,k) => effOf(M,k) < 0).map(E => E.name);
+  const strong = ELEMENTS.filter((E,k) => M.weak[k] > 1).map(E => E.name), weak = ELEMENTS.filter((E,k) => M.weak[k] < 1).map(E => E.name);   // 17.11. (L): wieder mit Zahlen statt effektiv/neutral/ineffektiv
   const tempo = M.speed >= 1.4 ? 'schnell' : M.speed <= 0.8 ? 'langsam' : 'normal';
   openDlg(`<h2><span class="big">${M.emo}</span>${M.name}</h2>
     <div class="muted">Tag ${r}${r === Math.min(G.day, CONFIG.days) ? ' (heute)' : r === G.day + 1 ? ' (morgen)' : ''} · ${M.count || CONFIG.perWave} Stück</div>
     <dl><dt>Leben</dt><dd>${num(MD.hp)}</dd><dt>Rüstung</dt><dd>${armorText(MD)}</dd>
     <dt>Tempo</dt><dd>${tempo} (${String(M.speed).replace('.', ',')})</dd><dt>Fliegt</dt><dd>${M.fly ? 'ja – nicht jeder Turm trifft' : M.cocoon ? 'zeitweise (als Motte)' : 'nein'}</dd><dt>Nachtaktiv</dt><dd>${M.night ? 'ja – um 19 Uhr trifft Schatten sie nur im Irrlicht' : 'nein'}</dd>
     <dt>Kopfgeld</dt><dd>${M.mini ? 'kein Gold, dafür 💎 Edelstein' : MD.bounty + ' Gold' + (M.boss ? ' + 💎 Edelstein' : '')}</dd>${M.lives > 1 ? `<dt>Durchbruch</dt><dd>zählt ${M.lives}×</dd>` : ''}</dl>
-    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.mixed ? '' : effCls(effOf(M,k))}">${E.name} ${M.mixed ? '?' : effText(effOf(M,k))}</span>`).join('')}</div>
+    <div>${ELEMENTS.map((E,k) => `<span class="chip ${M.mixed ? '' : M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${M.mixed ? '?' : fmtFactor(M.weak[k])}</span>`).join('')}</div>
     ${M.info ? `<div><b>Besonderheit:</b> ${M.info}</div>` : ''}
-    <div class="muted">${M.mixed ? 'Faktoren je Lehrer verschieden.' : (strong.length ? 'Effektiv: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Ineffektiv: ' + weak.join(', ') + '.' : '')}</div>
+    <div class="muted">${M.mixed ? 'Faktoren je Lehrer verschieden.' : (strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : '')}</div>
     <div class="acts"><button class="btn primary" id="mOk">OK</button></div>`);
   $('mOk').onclick = closeDlg; $('mOk').focus();
 }
@@ -1775,7 +1775,7 @@ const esc = v => String(v).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;',
 const pname = i => { const l = laneOf(i); return (l && l.name && String(l.name).trim()) || 'Spieler ' + (i + 1); };
 let killTabOpen = false;
 function renderKillTab(n){ const t = $('killtab'); if (!t) return; if (!G) { t.hidden = true; return; } t.hidden = false;
-  const kd = G.killsByDay || {}, today = Math.min(G.day, CONFIG.days), pend = i => pendingOf(i, 'kills');
+  const kd = G.killsByDay || {}, today = G.lastRun && G.lastRun.day < G.day ? G.lastRun.day : Math.min(G.day, CONFIG.days), pend = i => pendingOf(i, 'kills');   // 17.11. (L): der neue Tag erscheint erst, wenn seine erste Welle läuft
   const dayK = (d, i) => ((kd[d] || [])[i] || 0) - (d === today ? pend(i) : 0);
   const head = '<tr><th></th>' + [...Array(n)].map((_, i) => '<th>' + esc(pname(i)) + '</th>').join('') + '</tr>';
   const row = (lab, f, cls) => '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + lab + '</td>' + [...Array(n)].map((_, i) => '<td>' + Math.max(0, f(i)) + '</td>').join('') + '</tr>';
@@ -1825,7 +1825,7 @@ function render(){
   const M = MONSTERS[Math.min(G.day, CONFIG.days) - 1], MD = monsterDef(M.day-1, n);
   const NX = MONSTERS[G.day];   // nächster Tag
   $('today').innerHTML = overShown() ? '' : `Heute: <b>${M.emo} ${M.name}</b>${M.fly ? ' (fliegen)' : ''}${M.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${M.day}" aria-label="Info zu ${M.name}">i</button> · Leben ${num(MD.hp)} · Rüstung ${armorText(MD)} · ${M.mini ? '<b>💎 Edelstein</b> für den, der ihn besiegt (kein Gold)' : `Kopfgeld ${MD.bounty}${M.boss ? ' + 💎 Edelstein' : ''}`} &nbsp;` +
-    ELEMENTS.map((E,k) => `<span class="chip ${effCls(effOf(M,k))}">${E.name} ${effText(effOf(M,k))}</span>`).join('') +
+    ELEMENTS.map((E,k) => `<span class="chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +
     (M.lives > 1 ? ` <span class="chip bad">zählt ${M.lives}× beim Durchbruch</span>` : '') +
     (NX ? `<br>Nächstes Monster (Tag ${NX.day}): <b>${NX.emo} ${NX.name}</b>${NX.fly ? ' (fliegen)' : ''}${NX.night ? ' (nachtaktiv)' : ''}<button class="ibtn" data-mon="${NX.day}" aria-label="Info zu ${NX.name}">i</button>` : '') +
     `<br>Wetter ${hh(SL[G.slot])}: <b>${WEATHER[wd[G.slot]].sym} ${WEATHER[wd[G.slot]].name}</b> · ${weatherText(WEATHER[wd[G.slot]])} · Stein ist wetterfest`;

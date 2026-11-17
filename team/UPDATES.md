@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 17.11. 22:55 · L · 2026-11-17e – Faktoren wieder als Zahl, Kill-Tabelle bis zur neuen Welle
+- Monster-Faktoren je Element wieder als Zahl (×0,9 / ×1,1 …) statt effektiv/neutral/ineffektiv (F's 18j-Anzeige zurückgenommen, Wunsch L).
+- Kill-Tabelle zeigt nach der letzten Welle des Tages weiter diesen Tag; der neue Tag erscheint erst, wenn seine 10-Uhr-Welle läuft.
 ### 17.11. 22:25 · L · 2026-11-17d – Zwischenboss wieder sofort weiter, Feuerregen für alle Feuertürme
 - Zwischenboss-Tage wieder wie Live (F's 24d): ein durchgebrochener Zwischenboss erscheint sofort beim Nächsten. Die Rücknahme in 17c war ein Missverständnis.
 - Feuerregen (Rubin-Fähigkeit) war bei allen Feuertürmen außer Glumanda und Lavaturm gesperrt, weil sie in D7 schon Boden und Luft treffen. Jetzt bekommen solche Türme **Glutregen**: jeder Schuss trifft eine kleine Fläche (1 Feld Umkreis, mit Fläche +30 %), alle darin brennen. Startwert, wird mit den anderen Fähigkeiten gemessen.
