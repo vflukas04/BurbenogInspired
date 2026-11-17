@@ -42,12 +42,12 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
-### 17.11. 23:45 · L · 2026-11-17b – Eis mehr Schaden, Tag 25–35 leichter, Baumodus
+### 17.11. 22:10 · L · 2026-11-17b – Eis mehr Schaden, Tag 25–35 leichter, Baumodus
 - Eis: Bremsen aller Türme halbiert (Frosthauch etwa ×0,67, Frostnova unverändert), dafür mehr Schaden nach den Umrechnungsfaktoren (z. B. Schneekönig ×2, Eisdrache ×1,5, Schneeball ×1,35). Grund: Bremsen hilft vor allem dem nächsten Spieler, das Gold bekommt er; im Testspiel hatte Eis halb so viel Gold wie die anderen.
 - Leben Tag 25–35 (ohne Zwischenboss) ×0,92: In beiden Testspielen war dieser Abschnitt am schwersten (Tag 25: 26 Durchbrüche).
 - Baumodus: Tipp auf den Weg oder fertig gebaut → Bauplatz-Punkte verschwinden.
 - **„Neues Spiel“ starten und neu laden.**
-### 17.11. 23:00 · L · Zweig D7 ist jetzt das Hauptspiel (2026-11-17a)
+### 17.11. 22:00 · L · Zweig D7 ist jetzt das Hauptspiel (2026-11-17a)
 - `index.html` = Stand der Testseite `spiegel-d.html` (mit F abgesprochen): 32 Türme aus Standardturm + Umrechnungsfaktoren, Stapelregel für Effekte, Leben je Tag gemessen, Wetter mit Jahreszeiten und Wind, neue Forschung mit Zinsen, ein Edelstein-Basic, Kill-Tabelle, Spielernamen. Regeln: `team/ZWEIG-D-REGELN.md`, Entscheidungen offen: `team/ZWEIG-D-MERGE.md` Teil 3.
 - Von F übernommen: gesamte Grafik bis 02.11a, Zwischenboss-Tage wie Live (24d), Anzeige effektiv/neutral/ineffektiv (18j), Geschenk-Zeitpunkte im Archiv (18f). F's Balance-Änderungen 18h–24c und 26a entfallen (durch D7 ersetzt).
 - Neu im Archiv: Türme je Welle (`slots[…].tw`).
