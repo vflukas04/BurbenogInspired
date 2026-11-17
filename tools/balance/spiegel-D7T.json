@@ -3,7 +3,7 @@
   "MONSTERS.Betty (Boss).hpMul": 1.2546,
   "MONSTERS.Nazgul.hpMul": 0.2044,
   "MONSTERS.Fledermäuse.hpMul": 0.3185,
-  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1828,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1682,
   "MONSTERS.Silberfische.hpMul": 0.8511,
   "MONSTERS.Kellerasseln.hpMul": 0.5397,
   "MONSTERS.Nacktschnecken.hpMul": 0.8194,
@@ -28,16 +28,16 @@
   "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.4826,
   "MONSTERS.Uffug-Vorhaut.hpMul": 0.4283,
   "MONSTERS.Uffug (Boss).hpMul": 4.4476,
-  "MONSTERS.Roboter.hpMul": 0.4668,
-  "MONSTERS.Sommer-Schneebälle.hpMul": 0.3652,
-  "MONSTERS.Würfel.hpMul": 0.4479,
-  "MONSTERS.Phönixe.hpMul": 0.3645,
-  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5696,
+  "MONSTERS.Roboter.hpMul": 0.4295,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.336,
+  "MONSTERS.Würfel.hpMul": 0.4121,
+  "MONSTERS.Phönixe.hpMul": 0.3353,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.524,
   "MONSTERS.El Schlucko.hpMul": 2.4363,
-  "MONSTERS.Krieger.hpMul": 0.2717,
-  "MONSTERS.Golems.hpMul": 0.4344,
-  "MONSTERS.Albträume.hpMul": 0.356,
-  "MONSTERS.Magier-Novizen.hpMul": 0.4035,
+  "MONSTERS.Krieger.hpMul": 0.25,
+  "MONSTERS.Golems.hpMul": 0.3996,
+  "MONSTERS.Albträume.hpMul": 0.3275,
+  "MONSTERS.Magier-Novizen.hpMul": 0.3712,
   "MONSTERS.Magiermeister.hpMul": 1.5072,
   "MONSTERS.E-Scooter-Fahrer.hpMul": 0.2949,
   "MONSTERS.Lindner-Spezialisten.hpMul": 0.2943,
@@ -394,7 +394,7 @@
     1,
     1,
     1,
-    0.1,
+    0.05,
     2,
     0,
     {
@@ -402,7 +402,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.0": 1.00324,
+  "ELEMENTS.1.kraftT.0": 1.03276,
   "ELEMENTS.1.towers.1": [
     "Schneeball",
     "Schaden",
@@ -410,7 +410,7 @@
     1,
     1,
     1,
-    0.05,
+    0.025,
     2,
     0.5,
     {
@@ -418,7 +418,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.1": 0.55464,
+  "ELEMENTS.1.kraftT.1": 0.75395,
   "ELEMENTS.1.towers.2": [
     "Eiszapfen",
     "Schaden",
@@ -426,7 +426,7 @@
     1,
     1,
     1,
-    0.1,
+    0.05,
     2,
     0,
     {
@@ -437,7 +437,7 @@
       "slowFly": true
     }
   ],
-  "ELEMENTS.1.kraftT.2": 1.03021,
+  "ELEMENTS.1.kraftT.2": 1.06052,
   "ELEMENTS.1.towers.3": [
     "Schneekönig",
     "Schaden",
@@ -445,7 +445,7 @@
     2,
     1,
     1,
-    0.3,
+    0.201,
     3,
     0,
     {
@@ -453,7 +453,7 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.3": 0.4829,
+  "ELEMENTS.1.kraftT.3": 0.97279,
   "ELEMENTS.1.towers.4": [
     "Frostnova",
     "Schaden",
@@ -479,22 +479,6 @@
     0.5,
     1,
     1,
-    0.1,
-    2,
-    0,
-    {
-      "effect": "slow",
-      "fly": true
-    }
-  ],
-  "ELEMENTS.1.kraftT.5": 0.94269,
-  "ELEMENTS.1.towers.6": [
-    "Blizzard",
-    "Schaden",
-    2,
-    1,
-    5,
-    1,
     0.05,
     2,
     0,
@@ -503,7 +487,23 @@
       "fly": true
     }
   ],
-  "ELEMENTS.1.kraftT.6": 2.11466,
+  "ELEMENTS.1.kraftT.5": 0.97043,
+  "ELEMENTS.1.towers.6": [
+    "Blizzard",
+    "Schaden",
+    2,
+    1,
+    5,
+    1,
+    0.025,
+    2,
+    0,
+    {
+      "effect": "slow",
+      "fly": true
+    }
+  ],
+  "ELEMENTS.1.kraftT.6": 2.14624,
   "ELEMENTS.1.towers.7": [
     "Eisdrache",
     "Schaden",
@@ -511,7 +511,7 @@
     1,
     1,
     1,
-    0.1,
+    0.05,
     4,
     1,
     {
@@ -519,7 +519,7 @@
       "fly": false
     }
   ],
-  "ELEMENTS.1.kraftT.7": 0.26941,
+  "ELEMENTS.1.kraftT.7": 0.41184,
   "ELEMENTS.1.kraft": 1.03,
   "ELEMENTS.1.costOverride": {
     "0": 10,
@@ -1034,6 +1034,7 @@
   "_env": {
     "STAPEL_ALLE": "1"
   },
+  "_lebenBlock3": "17.11. (L): Tag 25–35 ohne Zwischenboss ×0,92 (Testspiele: Tag 25–35 am schwersten)",
   "WEATHER.0": {
     "name": "Sonnig",
     "sym": "☀",

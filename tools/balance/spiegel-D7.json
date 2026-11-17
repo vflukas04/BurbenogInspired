@@ -3,7 +3,7 @@
   "MONSTERS.Betty (Boss).hpMul": 1.2546,
   "MONSTERS.Nazgul.hpMul": 0.2044,
   "MONSTERS.Fledermäuse.hpMul": 0.3185,
-  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1828,
+  "MONSTERS.Looping-Louie-Flugzeuge.hpMul": 0.1682,
   "MONSTERS.Silberfische.hpMul": 0.8511,
   "MONSTERS.Kellerasseln.hpMul": 0.5397,
   "MONSTERS.Nacktschnecken.hpMul": 0.8194,
@@ -28,16 +28,16 @@
   "MONSTERS.Eifersüchtige Geliebte.hpMul": 0.4826,
   "MONSTERS.Uffug-Vorhaut.hpMul": 0.4283,
   "MONSTERS.Uffug (Boss).hpMul": 4.4476,
-  "MONSTERS.Roboter.hpMul": 0.4668,
-  "MONSTERS.Sommer-Schneebälle.hpMul": 0.3652,
-  "MONSTERS.Würfel.hpMul": 0.4479,
-  "MONSTERS.Phönixe.hpMul": 0.3645,
-  "MONSTERS.Fairtrade-Bananen.hpMul": 0.5696,
+  "MONSTERS.Roboter.hpMul": 0.4295,
+  "MONSTERS.Sommer-Schneebälle.hpMul": 0.336,
+  "MONSTERS.Würfel.hpMul": 0.4121,
+  "MONSTERS.Phönixe.hpMul": 0.3353,
+  "MONSTERS.Fairtrade-Bananen.hpMul": 0.524,
   "MONSTERS.El Schlucko.hpMul": 2.4363,
-  "MONSTERS.Krieger.hpMul": 0.2717,
-  "MONSTERS.Golems.hpMul": 0.4344,
-  "MONSTERS.Albträume.hpMul": 0.356,
-  "MONSTERS.Magier-Novizen.hpMul": 0.4035,
+  "MONSTERS.Krieger.hpMul": 0.25,
+  "MONSTERS.Golems.hpMul": 0.3996,
+  "MONSTERS.Albträume.hpMul": 0.3275,
+  "MONSTERS.Magier-Novizen.hpMul": 0.3712,
   "MONSTERS.Magiermeister.hpMul": 1.5072,
   "MONSTERS.E-Scooter-Fahrer.hpMul": 0.2949,
   "MONSTERS.Lindner-Spezialisten.hpMul": 0.2943,
@@ -973,5 +973,6 @@
   },
   "_env": {
     "STAPEL_ALLE": "1"
-  }
+  },
+  "_lebenBlock3": "17.11. (L): Tag 25–35 ohne Zwischenboss ×0,92 (Testspiele: Tag 25–35 am schwersten)"
 }

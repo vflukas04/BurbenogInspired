@@ -70,6 +70,9 @@ const T = {
   3: [ ['Kiesel', { r:3, f:0.5, noFly:1 }], ['Schleuder', SCHL_DEF], ['Felsbrocken', { r:3, q:0.5, f:1.5, noFly:1 }],
        ['Katapult', { r:5, f:1 }], ['Erdbeben', { r:3, q:0.25, nova:1, stun:[0.2, 1], noFly:1 }], ['Granitwächter', { r:3, f:1 }],
        ['Lawine', { r:4, q:0.4, f:2, noFly:1 }], ['Bergkönig', { r:5, n:2, f:1, stun:[0.1, 1] }] ] };
+// 17.11. (L): Eis bekam in den Testspielen wenig Gold/Kills (Bremsen hilft vor allem dem nächsten Spieler, der die gebremsten Durchgelassenen tötet) →
+// weniger Effekt, mehr Schaden: Bremsen der Eis-Türme × EIS_EFF (0,5), Schneekönig (starker Bremser) × 0,67; der Preis rechnet den Schaden automatisch hoch. Frostnova bleibt.
+if (process.env.D7 !== '0') { const f = +(process.env.EIS_EFF || 0.5); T[1].forEach(([nm, m]) => { if (m.eff && !m.nova) m.eff = +(m.eff * (nm === 'Frosthauch' ? Math.min(1, f + 0.17) : f)).toFixed(3); }); }
 // AENDERN (28.10., Experimente): 'e.k.feld=wert;…' ändert Turm-Merkmale vor dem Zusammensetzen, z. B. '1.0.r=2;2.0.r=2' (Eis- und Schatten-T1 Reichweite 2)
 if (process.env.AENDERN) for (const a of process.env.AENDERN.split(';').filter(Boolean)) { const [ek, v] = a.split('='), [e, k, f] = ek.split('.'); T[+e][+k][1] = { ...T[+e][+k][1], [f]:(() => { try { return JSON.parse(v); } catch (x) { return v; } })() }; }
 const STEIN_K = +process.env.STEIN_K || 1;   // 27.10. abends (L): alte Korrektur aus (vorher 0,8)   // 26.10.: Korrektur aus dem Komplettversuch (Bodentage Stein 1,26 bei neutralem Flächenabfall)
