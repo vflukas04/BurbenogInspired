@@ -42,8 +42,10 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 17.11. 22:25 · L · 2026-11-17d – Zwischenboss wieder sofort weiter, Feuerregen für alle Feuertürme
+- Zwischenboss-Tage wieder wie Live (F's 24d): ein durchgebrochener Zwischenboss erscheint sofort beim Nächsten. Die Rücknahme in 17c war ein Missverständnis.
+- Feuerregen (Rubin-Fähigkeit) war bei allen Feuertürmen außer Glumanda und Lavaturm gesperrt, weil sie in D7 schon Boden und Luft treffen. Jetzt bekommen solche Türme **Glutregen**: jeder Schuss trifft eine kleine Fläche (1 Feld Umkreis, mit Fläche +30 %), alle darin brennen. Startwert, wird mit den anderen Fähigkeiten gemessen.
 ### 17.11. 22:30 · L · 2026-11-17c – Entscheidungen zum Merge umgesetzt
-- Zwischenboss-Tage wieder wie normale Tage (wie auf spiegel-d): ein durchgebrochener Zwischenboss kommt um 19 Uhr beim Nächsten an, nicht sofort (F's 24d zurückgenommen).
 - Alle Wege 62 Felder lang (Map 3 und 4 waren 64, also leichter).
 - Forschung zeigt, ab wann sie sich lohnt (z. B. Element-Schaden +8 %: ab ca. 1000 Gold in Türmen des Elements).
 - Alle Entscheidungen: `team/ZWEIG-D-MERGE.md` vor Teil 4. **„Neues Spiel“ starten und neu laden.**

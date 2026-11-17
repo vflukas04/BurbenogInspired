@@ -18,7 +18,7 @@
 | Was | Wer | Notiz |
 | --- | --- | --- |
 | Neues Element Sturm (danach Licht, Natur, Technik) | L | Vorschlag T1–T8 steht (Kegel-Richtung legt der Erbauer fest). Mit neuen Elementen Ringregel/Faktoren umplanen und Edelstein-Uniques messen (Designfrage 3.7) |
-| Mess-Werkzeuge auf index.html umstellen | L | nutzen noch `tools/balance/basis/` (alte Wege 62/64, Zwischenboss wie Live) |
+| Mess-Werkzeuge auf index.html umstellen | L | nutzen noch `tools/balance/basis/` (alte Wege 62/64) |
 | Testspiel mit Edelsteinen, Fähigkeiten, Forschungsstufen (VERSION 2026-10-15d) | L + F | Fähigkeiten-Zahlen sind Startwerte. Auffällig im Kurztest: Glutnest, Eisspeer (Durchbohren), Katapult (Weitwurf), Haut vereist sehr stark – beobachten. Danach Kurve 1,38 und Endboss bestätigen |
 | Feuer im Mittelspiel abschwächen? (Feuer+Stein jetzt stark: Bot 13/20 Siege) | F | nach Testspiel mit „Stein bremst“ (VERSION 2026-10-15a) entscheiden; vorher mit L absprechen |
 | Endboss gegen Schatten beobachten | L + F | seit 13.10. neutral; am 12.10. mit Irrlicht „zu einfach“ |

@@ -226,7 +226,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-11-17c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-11-17d";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -384,7 +384,7 @@ const ABILITIES = [
   [ ['Zündschnur', 'Stirbt ein Monster durch einen Schuss, explodiert es: Schaden im Umkreis 1,6 und setzt in Brand'],
     ['Glutnest', 'Brand stapelt sich bis doppelt so stark'],
     ['Weite Flamme', 'Reichweite +50 %'],
-    ['Feuerregen', 'trifft auch die andere Zielart mit halbem Schaden (Luftabwehr den Boden, Bodenturm die Fliegenden); nicht bei Türmen, die schon beides treffen'],
+    ['Feuerregen', 'trifft auch die andere Zielart mit halbem Schaden (Luftabwehr den Boden, Bodenturm die Fliegenden); trifft der Turm schon beides: Glutregen – jeder Schuss trifft eine kleine Fläche (ohne Fläche 1 Feld Umkreis, sonst +30 %), alle darin brennen'],
     ['Schwelglut', 'Monster, die durch diesen Turm brennen, nehmen +15 % Schaden von allen Türmen'],
     ['Lavapfütze', 'Einschlagstelle bleibt 4 s Lava: Schaden und Brennen (eine Pfütze je Schuss, auch bei mehreren Geschossen; Pfützen zählen nicht doppelt; ohne Fläche kleiner Kreis)'],
     ['Sonnenfeuer', 'Geschoss springt nach dem Treffer aufs nächste Monster (60 % Schaden)'],
@@ -681,7 +681,7 @@ function gemMods(d, ab){
   }
   const F = [
     [ () => d.explode = { r:0.8*R, mul:1 },  () => d.burnStack = 2,  () => d.range *= 1.5,
-      () => { if (d.air) { d.air = false; d.groundHalf = true; } else if (!d.hitsFly) { d.hitsFly = true; d.flyHalf = true; } },
+      () => { if (d.air) { d.air = false; d.groundHalf = true; } else if (!d.hitsFly) { d.hitsFly = true; d.flyHalf = true; } else { d.splash = d.splash ? d.splash * 1.3 : 0.5*R; } },   // 17.11. (L): trifft der Turm schon beides → Glutregen (Fläche wie Großer Ball)
       () => d.smolder = 0.15,  () => d.pool = { r:Math.max(d.splash, 0.9*R), t:4, dpsMul:0.2 },  () => d.bounce = { r:1.5*R, mul:0.6 },  () => d.burnImmune = true ],
     [ () => d.explode = { r:0.8*R, mul:1 },  () => { d.splash = d.splash ? d.splash * 1.3 : 0.5*R; d.slowFly = true; },  () => { d.groundHit = 2; d.hitsFly = true; },  () => d.brittle = 3,
       () => { d.eff *= 1.5; d.hitsFly = true; },  () => { d.lance = true; if (d.nova) { d.nova = false; d.splash = 0; } },
@@ -716,7 +716,6 @@ const abIdx = tw => tw.ab !== undefined ? tw.ab : uniqOf(tw.el, tw.idx);
 function abilityBlocked(tw, k){
   const b = towerBase(tw.el, tw.idx);
   if (tw.el === 2 && b.buff) return k === 1 || k === 9 ? '' : 'Irrlicht schießt nicht – nur Mottenplage und Geisterlicht wirken';
-  if (tw.el === 0 && k === 3 && !b.air && b.hitsFly) return 'trifft schon Boden und Luft';
   if (tw.el === 3 && k === 1 && b.hitsFly) return 'trifft schon Fliegende';
   return '';
 }
@@ -1207,8 +1206,8 @@ function resolveSlot(g, lanes){
   const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : { el:i % ELEMENTS.length, towers:[] };
     return { lane:i, players:n, res:[...resAll], el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:isDark(SL[g.slot]), weather, wind:windDirOf(g, g.day),
       tseed: g.cfg.startAt || 0, seed: (Math.floor((g.cfg.startAt || 1) / 1000) * 31 + g.day * 977 + g.slot * 131 + i * 17) >>> 0 }; });
-  const liveMode = !!g.cfg.live;   // 17.11. (L): Zwischenboss-Tage wieder wie normale Tage (F's 24d „wie Live“ zurückgenommen, wie auf spiegel-d)
-  const live = liveMode, res = simulateWorld({ inputs, live }).sims;
+  const liveMode = !!g.cfg.live, bossLive = !liveMode && g.slot === 0 && !!(MONSTERS[g.day-1] && MONSTERS[g.day-1].mini);   // 24.10. (F): Zwischenboss-Tage laufen wie Live – ein durchgebrochener Boss erscheint sofort beim nächsten Spieler (ohne Kopfgeld gibt es in der Pause nichts zu bauen); 17.11. (L): bleibt
+  const live = liveMode || bossLive, res = simulateWorld({ inputs, live }).sims;
   const leaked = {}; let broke = 0; const log = [];
   res.forEach((r,i) => {
     g.earned[i] = (g.earned[i]||0) + r.earned;
