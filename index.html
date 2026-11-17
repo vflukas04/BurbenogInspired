@@ -60,6 +60,7 @@ h1 small{font-family:var(--body);font-size:.78rem;color:var(--muted);letter-spac
 .house b{font-family:var(--display);font-weight:600;font-size:1.05rem}
 .ritem{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.85rem}
 .ritem .btn{padding:4px 10px;font-size:.8rem;white-space:nowrap}
+.rhint{font-size:.72rem;opacity:.7}
 .done-r{color:var(--ok);font-size:.8rem}
 .today{margin-bottom:12px;font-size:.9rem;color:var(--muted)}
 .today b{color:var(--fg)}
@@ -225,7 +226,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-11-17b";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-11-17c";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -530,11 +531,11 @@ const MONSTERS = [
 const GRID = 2, COLS = 8 * GRID, ROWS = 8 * GRID;   // 16 × 16, quadratisch (12.10.)
 /* Jeder Spieler hat eine eigene Karte: Eingang links, eine Runde (Schleife mit Kreuzung), Ausgang rechts.
    16 × 16, Wege 62–64 Felder, mind. 2 Bauplätze zwischen parallelen Stücken. Geprüft per Skript (Länge, genau 1 Kreuzung, Abstände). */
-const MAP_WPS = [
+const MAP_WPS = [   // 17.11. (L, Designfrage 3.5): alle Wege 62 Felder (Map 2/3 vorher 64)
   [[-0.5,7.5],[13.5,7.5],[13.5,0.5],[3.5,0.5],[3.5,14.5],[10.5,14.5],[10.5,10.5],[16.5,10.5]],
   [[-0.5,7.5],[13.5,7.5],[13.5,14.5],[3.5,14.5],[3.5,0.5],[10.5,0.5],[10.5,4.5],[16.5,4.5]],
-  [[-0.5,3.5],[11.5,3.5],[11.5,7.5],[14.5,7.5],[14.5,14.5],[3.5,14.5],[3.5,0.5],[16.5,0.5]],
-  [[-0.5,11.5],[11.5,11.5],[11.5,7.5],[14.5,7.5],[14.5,0.5],[3.5,0.5],[3.5,14.5],[16.5,14.5]]
+  [[-0.5,3.5],[11.5,3.5],[11.5,7.5],[13.5,7.5],[13.5,14.5],[3.5,14.5],[3.5,0.5],[16.5,0.5]],
+  [[-0.5,11.5],[11.5,11.5],[11.5,7.5],[13.5,7.5],[13.5,0.5],[3.5,0.5],[3.5,14.5],[16.5,14.5]]
 ];
 
 /* BALANCE (Zweig D7, seit 17.11. im Spiel): Diese Werte überschreiben die Tabellen oben (Türme, Monster-Leben, Wetter, CONFIG). Herkunft: tools/balance/spiegel-D7T.json
@@ -1206,8 +1207,8 @@ function resolveSlot(g, lanes){
   const inputs = [...Array(n)].map((_,i) => { const l = lanes[i] && lanes[i].gid === gidOf(g) ? lanes[i] : { el:i % ELEMENTS.length, towers:[] };
     return { lane:i, players:n, res:[...resAll], el:l.el, towers:l.towers || [], incoming:incomingFor(g, i), dark:isDark(SL[g.slot]), weather, wind:windDirOf(g, g.day),
       tseed: g.cfg.startAt || 0, seed: (Math.floor((g.cfg.startAt || 1) / 1000) * 31 + g.day * 977 + g.slot * 131 + i * 17) >>> 0 }; });
-  const liveMode = !!g.cfg.live, bossLive = !liveMode && g.slot === 0 && !!(MONSTERS[g.day-1] && MONSTERS[g.day-1].mini);   // 24.10. (F): Zwischenboss-Tage laufen wie Live – ein durchgebrochener Boss erscheint sofort beim nächsten Spieler (ohne Kopfgeld gibt es in der Pause nichts zu bauen)
-  const live = liveMode || bossLive, res = simulateWorld({ inputs, live }).sims;
+  const liveMode = !!g.cfg.live;   // 17.11. (L): Zwischenboss-Tage wieder wie normale Tage (F's 24d „wie Live“ zurückgenommen, wie auf spiegel-d)
+  const live = liveMode, res = simulateWorld({ inputs, live }).sims;
   const leaked = {}; let broke = 0; const log = [];
   res.forEach((r,i) => {
     g.earned[i] = (g.earned[i]||0) + r.earned;
@@ -1884,6 +1885,20 @@ function renderPalette(){
       <span class="d">${d.role}${d.buff ? '' : ` · ${num(d.dps)} Schaden/s · ${num(d.range)} weit`}${fxText(d) ? '<br>' + fxText(d) : ''}</span></button>`; }).join('');
   $('prow').querySelectorAll('.tw').forEach(x => x.onclick = () => { const k = +x.dataset.k; selTower = selTower === k ? null : k; render(); });
 }
+/* 17.11. (L, Designfrage 3.6): Hinweis, ab wann sich eine Forschung lohnt – Preis ÷ Zuwachs = so viel Gold müsste in Türmen stecken (bzw. noch verdient/ausgegeben werden) */
+function resHint(R, n){
+  if (!R.steps || !G || !G.cfg) return '';
+  const old = n ? R.steps[n-1] : 0, neu = R.steps[n], base = R.costs[n], np = G.cfg.players || 1;
+  const gain = R.grp === 'cheap' ? (neu - old) / (1 - old) : (1 + neu) / (1 + old) - 1;
+  if (!(gain > 0) || R.grp === 'fx' || R.grp === 'rng') return '';
+  const x = Math.round(base / gain / 50) * 50, inv = l => (l && l.towers || []).filter(t => R.el === undefined || (t.el ?? l.el) === R.el).reduce((a, t) => a + (t.inv || 0), 0);
+  const lanes = [...Array(np)].map((_, i) => laneOf(i));
+  if (R.el !== undefined) return `lohnt ab ca. ${x} Gold in ${ELEMENTS[R.el].name}-Türmen (jetzt ${lanes.reduce((a, l) => a + inv(l), 0)})`;
+  if (R.grp === 'rate') return `lohnt ab ca. ${x} Gold in Türmen je Spieler (jetzt ⌀ ${Math.round(lanes.reduce((a, l) => a + inv(l), 0) / np)})`;
+  if (R.grp === 'cheap') return `lohnt, wenn je Spieler noch über ca. ${x} Gold in Upgrades fließen`;
+  if (R.grp === 'gold') return `lohnt, wenn je Spieler noch über ca. ${x} Gold Kopfgeld kommt`;
+  return '';
+}
 function renderResearch(){
   const RS = curRes(), pot = potOf(), can = mayBuild(seat);
   const houses = [...new Set(RESEARCH_GROUPS.map(r => r.house))];
@@ -1893,7 +1908,8 @@ function renderResearch(){
     <div class="rgrid">${houses.map(h => `<div class="house"><b>${h}</b>${RESEARCH_GROUPS.filter(R => R.house === h).map(R => {
       const n = resLvl(RS, R.grp), max = R.costs.length, next = RESEARCH.find(r => r.grp === R.grp && r.lvl === n + 1), blocked = next && next.need && !RS.has(next.need);
       const label = R.steps ? `${R.name} <span class="rlvl">${n ? R.fmt(R.steps[n-1]) : '–'}${max > 1 ? ` · ${n}/${max}` : ''}</span>` : R.name;
-      return `<div class="ritem"><span>${label}</span>${!next ? '<span class="done-r">erforscht</span>' :
+      const hint = next ? resHint(R, n) : '';
+      return `<div class="ritem"><span>${label}${hint ? `<br><span class="rhint">${hint}</span>` : ''}</span>${!next ? '<span class="done-r">erforscht</span>' :
         `<button class="btn" data-r="${next.id}" ${!can||blocked||pot<next.cost?'disabled':''}>${blocked ? 'erst ' + RESEARCH.find(x => x.id === next.need).name.split(' ')[1] : (R.steps ? R.fmt(R.steps[n]) + ' · ' : '') + next.cost + ' Gold'}</button>`}</div>`; }).join('')}</div>`).join('')}</div>`;
   $('potGo').onclick = () => deposit(seat, Math.floor(+$('potAmt').value || 0));
   $('research').querySelectorAll('[data-r]').forEach(x => x.onclick = () => buyResearch(seat, x.dataset.r));

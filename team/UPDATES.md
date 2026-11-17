@@ -42,6 +42,11 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 17.11. 22:30 · L · 2026-11-17c – Entscheidungen zum Merge umgesetzt
+- Zwischenboss-Tage wieder wie normale Tage (wie auf spiegel-d): ein durchgebrochener Zwischenboss kommt um 19 Uhr beim Nächsten an, nicht sofort (F's 24d zurückgenommen).
+- Alle Wege 62 Felder lang (Map 3 und 4 waren 64, also leichter).
+- Forschung zeigt, ab wann sie sich lohnt (z. B. Element-Schaden +8 %: ab ca. 1000 Gold in Türmen des Elements).
+- Alle Entscheidungen: `team/ZWEIG-D-MERGE.md` vor Teil 4. **„Neues Spiel“ starten und neu laden.**
 ### 17.11. 22:10 · L · 2026-11-17b – Eis mehr Schaden, Tag 25–35 leichter, Baumodus
 - Eis: Bremsen aller Türme halbiert (Frosthauch etwa ×0,67, Frostnova unverändert), dafür mehr Schaden nach den Umrechnungsfaktoren (z. B. Schneekönig ×2, Eisdrache ×1,5, Schneeball ×1,35). Grund: Bremsen hilft vor allem dem nächsten Spieler, das Gold bekommt er; im Testspiel hatte Eis halb so viel Gold wie die anderen.
 - Leben Tag 25–35 (ohne Zwischenboss) ×0,92: In beiden Testspielen war dieser Abschnitt am schwersten (Tag 25: 26 Durchbrüche).

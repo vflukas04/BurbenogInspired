@@ -64,6 +64,8 @@ Gleiche Umgebung für alle (Bots auf den echten Seiten, ohne Forschung). Zahlen:
 | 3.9b | **Sitzreihenfolge** entscheidet stark über das Gold (Testspiel nachgespielt: max ÷ min 1,28 bis 1,99 je nach Reihenfolge) | (a) so lassen, Ausgleich übers Schenken; (b) Reihenfolge je Tag wechseln (Ring dreht sich); (c) Archiv speichert Türme je Welle, dann genauer messen | (c), danach entscheiden |
 | 3.10 | Anzeige | Tiefflug-Strecken (Looping-Louie), Wettertexte, Windhose (gezeichnet, KI-Bild möglich) | nach dem Einbau |
 
+**Entscheidungen (L, 17.11.):** Zwischenboss-Tage wie auf spiegel-d, also ohne F's 24d „wie Live“ (zurückgenommen in 2026-11-17c) · 3.1 (a) so lassen, 0–6 von 20 in der eigenen Welle ist okay · 3.2 so lassen · 3.3 so lassen · 3.4 (a) so lassen · 3.5 (a) Wege angleichen: alle Maps 62 Felder (17c) · 3.6 (a) Hinweis in der Forschung „lohnt ab ca. X Gold“ (17c) · 3.7 Uniques messen, zusammen mit der Umplanung für neue Elemente · 3.8 so lassen · 3.9 C12-Faktoren (D7) bleiben · 3.10 so lassen.
+
 ## 4. Was D7 gegenüber dem Spiel ändert (Kurzliste)
 
 | # | Bereich | Spiel heute (F) | D7 | Hinweis beim Einbau |
