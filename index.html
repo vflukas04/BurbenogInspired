@@ -226,7 +226,7 @@ const FIREBASE_CONFIG = {
   appId: "1:45840879921:web:f4f4f8bb60e49a091ae010"
 };
 const GAME_ID = "spiel1";   // anderer Name = eigenes, getrenntes Spiel
-const VERSION = "2026-11-17e";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
+const VERSION = "2026-11-17f";  // bei JEDER Änderung hochzählen: alte Handys merken so, dass sie neu laden müssen
 
 /* =====================================================================
    SPIELDATEN – Regeln und Zahlen. Alles hier darf geändert werden.
@@ -359,7 +359,7 @@ const ELEMENTS = [
     ['Phantom',      'Reichweite',3.2, 1.5, 4, 1.0, 0.2, 8],
     ['Leerenturm',   'Schaden',   3.0, 0.8, 3, 1.3, 0.25, 10],
     ['Schattendrache','Effekt',    3.5, 0.5, 6, 0.4, 0.5, DAY] ]},
-  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · Fliegende nur Turm 3, 6, 8', kraft:2.256, kraftT:[0.4, 1.0, 1.3, 1.3, 1, 1, 1, 1], costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
+  { name:'Stein', emo:'🪨', color:'#c2a878', note:'Fläche · wetterfest · kein Geländeaufschlag · keine Fliegenden: Turm 3, 5, 7', kraft:2.256, kraftT:[0.4, 1.0, 1.3, 1.3, 1, 1, 1, 1], costOverride:{}, uniq:[0, 1, 3, 2, 4, 5, 6, 7], effect:'stun', armorDmg:1.5, noFly:true, lobSpeed:4.5, splashCenter:1.2, splashEdge:0.8, weatherproof:true, terrainFree:true, towers:[   // 17.10. (L): Katapult (Luft) ist Turm 3, Felsbrocken Turm 4; die Fähigkeiten bleiben beim Turm (uniq)
     ['Kiesel',       'Fläche',    2.0, 0.33,1, 0.55, 0,   0, 0.7],
     ['Schleuder',    'Fläche',    2.5, 0.33,2, 0.89, 0,   0, 0.9],
     ['Katapult',     'Reichweite',3.8, 0.25,2, 0.72, 0,   0, 1.0, {fly:true}],
@@ -2103,7 +2103,7 @@ function drawFlame(c, mx, my, hx, hy, cs, now, a, ice){   // 26o (F): Flamme von
 }
 const FIRE_T = {};   // letzter Schuss je Turm (Simulationszeit), damit die Animation etwas länger läuft als der kurze Blitz
 function drawTower25(c, tw, x, y, cs, aim, glow){
-  if (tw.el === 3 && (tw.idx === 2 || tw.idx === 3)) tw = { ...tw, idx:5 - tw.idx };   /* Zweig D7: Bilder Onyx/Katapult */
+  const tw0 = tw; if (tw.el === 3 && (tw.idx === 2 || tw.idx === 3)) tw = { ...tw, idx:5 - tw.idx };   /* Zweig D7: Bilder Onyx/Katapult – nur fürs Bild; Zahl/Stein/Stufen mit dem echten Turm (tw0, 17.11.) */
   const sp = towerImg(tw.el, tw.idx);
   if (sp) {                                 // freistehendes Bild ohne Sockel: Bodenschatten, Bild (Fußpunkt unten in der Feldmitte), Zahl/Stein/Stufen flach auf dem Feld
     const k = CUR.k, gx = x*cs, gyy = gyOf(y, cs), u = cs * Math.min(1.5, Math.max(.5, TOWER_H[TOWER_NAME[tw.el]][tw.idx] * (1 + tw.idx * .03) / 44)) / TOWER_H[TOWER_NAME[tw.el]][tw.idx], fx = gx + cs/2, fy = gyy + k*cs*.82;
@@ -2181,7 +2181,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
         gr.addColorStop(0, '#ffe08af0'); gr.addColorStop(.5, '#ff8a3dcc'); gr.addColorStop(1, '#ff8a3d00'); c.fillStyle = gr; c.beginPath(); c.arc(mx2, my2, r, 0, 7); c.fill(); }
       else if (nm !== 'schatten1') fl(cs*.3*g, col);
     }
-    c.save(); c.translate(gx, gyy); c.scale(1, k); drawTower(c, tw, 0, 0, cs, aim, 0, true); c.restore();
+    c.save(); c.translate(gx, gyy); c.scale(1, k); drawTower(c, tw0, 0, 0, cs, aim, 0, true); c.restore();
     return;
   }   // Turm als Block: Schatten, Seitenwand, Oberseite (die flache Turm-Zeichnung, gestaucht)
   const k = CUR.k, hg = cs*.26, gx = x*cs, gyy = gyOf(y, cs), E = ELEMENTS[tw.el], fh = cs*k;
@@ -2191,7 +2191,7 @@ function drawTower25(c, tw, x, y, cs, aim, glow){
   const gr = c.createLinearGradient(0, sy, 0, sy + hg + fh*.18); gr.addColorStop(0, '#00000033'); gr.addColorStop(1, '#000000aa');
   c.fillStyle = gr; c.fillRect(sx, sy, sw, hg + fh*.18);
   c.fillStyle = '#ffffff22'; c.fillRect(sx, sy, cs*.05, hg + fh*.18);
-  c.save(); c.translate(gx, gyy - hg); c.scale(1, k); drawTower(c, tw, 0, 0, cs, aim, glow); c.restore();
+  c.save(); c.translate(gx, gyy - hg); c.scale(1, k); drawTower(c, tw0, 0, 0, cs, aim, glow); c.restore();
 }
 // 27.10. (F): Wald = kleine Gruppe Tannen (Entwurf aus tools/dorf), ohne Wiesenfleck am Boden
 function drawForest(g, cx, fy, cs, h, kind, dep){

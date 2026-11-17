@@ -89,7 +89,8 @@ R.push(["  c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'cen
 R.push([`const kbOf = el => { const a = ELEMENTS[el].kraftBlock;`, `const kbOf = el => CONFIG.kbMess ? kbOfMess(el) : 1, kbOfMess = el => { const a = ELEMENTS[el].kraftBlock;   /* Zweig D7: im Spiel ohne kraftBlock (echtes Wetter); Messwerkzeuge ohne Wetter setzen CONFIG.kbMess = true */`]);
 // 8) L 03.11.: Stein-Bilder T3/T4 getauscht (D7-T3 Onyx ohne Fliegende, D7-T4 Katapult; F's Bild 3 ist das Katapult, Bild 4 der Onyx) – nur Anzeige
 R.push([`function drawTower25(c, tw, x, y, cs, aim, glow){`, `function drawTower25(c, tw, x, y, cs, aim, glow){
-  if (tw.el === 3 && (tw.idx === 2 || tw.idx === 3)) tw = { ...tw, idx:5 - tw.idx };   /* Zweig D7: Bilder Onyx/Katapult */`],
+  const tw0 = tw; if (tw.el === 3 && (tw.idx === 2 || tw.idx === 3)) tw = { ...tw, idx:5 - tw.idx };   /* Zweig D7: Bilder Onyx/Katapult – nur fürs Bild; Zahl/Stein/Stufen mit dem echten Turm (tw0, 17.11.) */`],
+  [`drawTower(c, tw, 0, 0, cs, aim, 0, true)`, `drawTower(c, tw0, 0, 0, cs, aim, 0, true)`], [`drawTower(c, tw, 0, 0, cs, aim, glow)`, `drawTower(c, tw0, 0, 0, cs, aim, glow)`],
   [`function drawShot(c, p, cs, time){`, `function drawShot(c, p, cs, time){
   if (p.el === 3 && (p.idx === 2 || p.idx === 3)) p = { ...p, idx:5 - p.idx };   /* Zweig D7: Geschosse Onyx/Katapult */`],
   [`function towerIcon(el, k){

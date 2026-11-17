@@ -42,6 +42,9 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 17.11. 23:10 · L · 2026-11-17f – Stein: Turmnummer auf der Karte richtig
+- Schräg-Ansicht: Onyx trug auf der Karte die Zahl 4 und Katapult die 3 (Folge des Bildertauschs). Jetzt stimmt die Zahl mit der Bauleiste überein (Onyx 3, Katapult 4). Auch auf `spiegel-d.html` behoben (nur Anzeige, laufendes Spiel unberührt).
+- Stein-Beschreibung stimmte nicht für D7: jetzt „keine Fliegenden: Turm 3, 5, 7“ (vorher „Fliegende nur Turm 3, 6, 8“).
 ### 17.11. 22:55 · L · 2026-11-17e – Faktoren wieder als Zahl, Kill-Tabelle bis zur neuen Welle
 - Monster-Faktoren je Element wieder als Zahl (×0,9 / ×1,1 …) statt effektiv/neutral/ineffektiv (F's 18j-Anzeige zurückgenommen, Wunsch L).
 - Kill-Tabelle zeigt nach der letzten Welle des Tages weiter diesen Tag; der neue Tag erscheint erst, wenn seine 10-Uhr-Welle läuft.
