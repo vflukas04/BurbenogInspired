@@ -22,14 +22,18 @@ const kenn = crypto.createHash('md5').update(JSON.stringify(werte) + fs.readFile
 
 function ersetze(alt, neu){ if (!html.includes(alt)) throw new Error('nicht gefunden: ' + alt.slice(0, 60)); html = html.replace(alt, neu); }
 // 1) eigenes Spiel, eigene Version
-const SPIEL = process.env.SPIEL || 'spiegel1';
+const HAUPT = process.env.HAUPT === '1';   // 17.11. (L): Hauptspiel erzeugen (index.html, Spiel spiel1, eigene VERSION, keine lila Leiste, normale Speicher-Schlüssel) – einmalig beim Übernehmen von Zweig D7
+const SPIEL = HAUPT ? 'spiel1' : (process.env.SPIEL || 'spiegel1');
 html = html.replace(/const GAME_ID = "[^"]*";/, `const GAME_ID = "${SPIEL}";`);
-html = html.replace(/const VERSION = "([^"]*)";/, (m, v) => `const VERSION = "${v}-S${kenn}";`);
-html = html.replace(/<title>([^<]*)<\/title>/, '<title>$1 · Spiegel-Test</title>');
+if (HAUPT) { if (!process.env.VERSION_NEU) throw new Error('HAUPT=1 braucht VERSION_NEU'); html = html.replace(/const VERSION = "([^"]*)";/, `const VERSION = "${process.env.VERSION_NEU}";`); }
+else { html = html.replace(/const VERSION = "([^"]*)";/, (m, v) => `const VERSION = "${v}-S${kenn}";`);
+  html = html.replace(/<title>([^<]*)<\/title>/, '<title>$1 · Spiegel-Test</title>'); }
 // 2) Spiegel-Werte direkt nach den Monsterdaten anwenden (vor allem, was daraus berechnet wird)
 const m = html.match(/\nconst MONSTERS = \[[\s\S]*?\n\];\n/); if (!m) throw new Error('MONSTERS-Block nicht gefunden');
 const anwenden = `
-/* SPIEGEL (L, Makrobalancing): Werte aus tools/balance/spiegel.json, Basis ${basis}, Stand ${sp._stand || '?'} – erzeugt von tools/balance/spiegel-seite.js, nicht von Hand ändern */
+${HAUPT ? `/* BALANCE (Zweig D7, seit 17.11. im Spiel): Diese Werte überschreiben die Tabellen oben (Türme, Monster-Leben, Wetter, CONFIG). Herkunft: tools/balance/spiegel-D7T.json
+   (erzeugt von tools/balance/d/d2.js aus Standardturm + Umrechnungsfaktoren). Zahlen ändern: dort ändern und mit node tools/balance/einspielen.js hierher übernehmen,
+   oder für Kleinigkeiten direkt hier im JSON (dann auch in spiegel-D7T.json nachziehen). Regeln: team/ZWEIG-D-REGELN.md */` : `/* SPIEGEL (L, Makrobalancing): Werte aus tools/balance/spiegel.json, Basis ${basis}, Stand ${sp._stand || '?'} – erzeugt von tools/balance/spiegel-seite.js, nicht von Hand ändern */`}
 (function(){ const SP = ${JSON.stringify(werte)};
   const W = { CONFIG, ELEMENTS, MONSTERS, RESEARCH, WEATHER };   /* 01.11.: WEATHER für Zweig D */
   for (const [p, v] of Object.entries(SP)) { const t = p.split('.'); let o = W[t[0]];
@@ -44,15 +48,15 @@ ersetze(`const archDoc = (g, arch) => JSON.parse(JSON.stringify({ cfg:g.cfg, ver
   return JSON.parse(JSON.stringify({ cfg:g.cfg, version:VERSION, updated:Date.now(), day:g.day, slot:g.slot, over:g.over || null,
     gaveUp:!!g.gaveUp, passed:g.passed, earned:g.earned, kills:g.kills, ...a })); };`);
 // 3b) eigene Browser-Speicher-Schlüssel (Platz, gesehene Welle, lokales Spiel), damit das normale Spiel nicht durcheinanderkommt
-html = html.replace(/'ww2-(?!holder)/g, `'ww2${SPIEL === 'spiegel1' ? 's' : SPIEL.slice(-1)}-`);
+if (!HAUPT) html = html.replace(/'ww2-(?!holder)/g, `'ww2${SPIEL === 'spiegel1' ? 's' : SPIEL.slice(-1)}-`);
 // 3c) 02.11. (L): Schräg-Ansicht mit F's Turm-Bildern als Standard (eigener Speicher-Schlüssel je Seite, sonst sah man auf den Testseiten die alten Sprites)
 html = html.replace(/let view25 = lsGet\('(ww2[^']*-view25)'\) === true;/, "let view25 = lsGet('$1') !== false;");
-// 4) sichtbarer Hinweis, damit niemand die Seiten verwechselt
-ersetze('<body>', '<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel ' + SPIEL + '</div>');
+// 4) sichtbarer Hinweis, damit niemand die Seiten verwechselt (nicht im Hauptspiel)
+if (!HAUPT) ersetze('<body>', '<body><div style="position:fixed;left:0;right:0;bottom:0;z-index:99;background:#7a3cff;color:#fff;font:12px sans-serif;text-align:center;padding:2px;pointer-events:none">Spiegel-Test (Makrobalancing L) · eigenes Spiel ' + SPIEL + '</div>');
 
 // 02.11.: Laufzeit-Code darf kein process.env enthalten (gibt es im Browser nicht; nur „typeof process“-Abfragen sind erlaubt)
 { const bad = html.split('\n').filter(z => /process\.env/.test(z) && !/typeof process === 'object' && process\.env/.test(z)); if (bad.length) throw new Error('process.env im Seiten-Code: ' + bad[0].trim().slice(0, 120)); }
-const ziel = path.join(__dirname, '..', '..', process.env.ZIEL || 'spiegel.html');
+const ziel = path.join(__dirname, '..', '..', HAUPT ? 'index.html' : (process.env.ZIEL || 'spiegel.html'));
 fs.writeFileSync(ziel, html);
 // Prüfen: Seite lädt in der Simulation, Werte sind angekommen
 const G = require('./sim').load(ziel), bad = Object.entries(werte).filter(([p, v]) => {

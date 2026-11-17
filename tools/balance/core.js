@@ -3,6 +3,7 @@
 //  – Reservefaktor: mit welchem Faktor auf Leben UND Rüstung eine Aufstellung eine Welle gerade noch schafft
 //  – Bauplatz-Maske: Wegstrecke in Reichweite je Feld und Turmtyp
 const G = require('./sim').load();
+if (G.CONFIG && !process.env.MIT_WETTER) G.CONFIG.kbMess = true;   // 17.11.: Messungen ohne Wetter rechnen mit dem Wetter-Mittel (kraftBlock); im Spiel wirkt das echte Wetter
 const SPIEGEL = require('./spiegel').lesen(); require('./spiegel').anwenden(G, SPIEGEL);   // Änderungen aus spiegel.json (nur im Speicher); SPIEGEL = die angewandten Werte (Prüfung der Zwischenstände)
 const { MAPS, COLS, ROWS, GRID, ELEMENTS } = G;
 

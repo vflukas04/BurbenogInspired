@@ -86,7 +86,7 @@ R.push(["  c.fillStyle = '#fff'; c.font = `${r*.62}px serif`; c.textAlign = 'cen
     c.restore(); }`]);
 // 7) FEHLER behoben (02.11. abends): kraftBlock ist in Zweig D das Wetter-Mittel je Block für die Messungen ohne Wetter. Im Spiel wirkt das echte Wetter –
 //    kraftBlock darf dort nicht zusätzlich gelten (sonst zählte das Wetter doppelt: z. B. Schatten im Winter +7 % statt +3,5 %, Feuer −6 % statt −3 %).
-R.push([`const kbOf = el => { const a = ELEMENTS[el].kraftBlock;`, `const kbOf = el => 1, kbOfMess = el => { const a = ELEMENTS[el].kraftBlock;   /* Zweig D7: im Spiel ohne kraftBlock (echtes Wetter) */`]);
+R.push([`const kbOf = el => { const a = ELEMENTS[el].kraftBlock;`, `const kbOf = el => CONFIG.kbMess ? kbOfMess(el) : 1, kbOfMess = el => { const a = ELEMENTS[el].kraftBlock;   /* Zweig D7: im Spiel ohne kraftBlock (echtes Wetter); Messwerkzeuge ohne Wetter setzen CONFIG.kbMess = true */`]);
 // 8) L 03.11.: Stein-Bilder T3/T4 getauscht (D7-T3 Onyx ohne Fliegende, D7-T4 Katapult; F's Bild 3 ist das Katapult, Bild 4 der Onyx) – nur Anzeige
 R.push([`function drawTower25(c, tw, x, y, cs, aim, glow){`, `function drawTower25(c, tw, x, y, cs, aim, glow){
   if (tw.el === 3 && (tw.idx === 2 || tw.idx === 3)) tw = { ...tw, idx:5 - tw.idx };   /* Zweig D7: Bilder Onyx/Katapult */`],
@@ -132,5 +132,30 @@ function renderKillTab(n){ const t = $('killtab'); if (!t) return; if (!G) { t.h
   const days = killTabOpen ? Object.keys(kd).map(Number).filter(d => d <= today).sort((a, b) => b - a) : [];
   t.innerHTML = '<table>' + head + row('⚔ Tag ' + today, i => dayK(today, i)) + days.filter(d => d !== today).map(d => row('Tag ' + d, i => dayK(d, i))).join('') + row('Gesamt', i => killsOf(i), 'sum') + '</table>' + (killTabOpen ? '' : '<div style="opacity:.6;font-size:10px">antippen: alle Tage</div>');
   t.onclick = () => { killTabOpen = !killTabOpen; renderKillTab(n); }; }
+function render(){`]);
+// 10) 17.11. (L, Übernahme ins Hauptspiel): F's Änderungen seit 18.10., die keine Balance sind
+//  a) 18f (F): Geschenke mit Tag/Welle/Zeit, im Archiv als giftLog/gemGiftLog
+R.push([`  const l = laneOf(from); L[from] = { ...l, gemGifts:[...(l.gemGifts || []), { to, el:e }] };`,
+  `  const l = laneOf(from); L[from] = { ...l, gemGifts:[...(l.gemGifts || []), { to, el:e, d:G ? G.day : 0, s:G ? G.slot : 0, at:Date.now() }] };`],
+  [`  L[from] = { ...l, gifts:[...(l.gifts || []), { to, amt }] };`, `  L[from] = { ...l, gifts:[...(l.gifts || []), { to, amt, d:G ? G.day : 0, s:G ? G.slot : 0, at:Date.now() }] };   // 18.10. (F): Tag, Welle und Zeit fürs Archiv`],
+  [`    gifts:(l.gifts || []).reduce((a, x) => a + x.amt, 0),`, `    gifts:(l.gifts || []).reduce((a, x) => a + x.amt, 0),
+    giftLog:(l.gifts || []).map(x => ({ to:x.to, amt:x.amt, d:x.d ?? null, s:x.s ?? null, at:x.at ?? null })),   // 18.10. (F): wann wie viel an wen
+    gemGiftLog:(l.gemGifts || []).map(x => ({ to:x.to, el:x.el, d:x.d ?? null, s:x.s ?? null, at:x.at ?? null })),`],
+//  b) Archiv: Türme je Welle (17.11., L: für die Fehlersuche „Türme schießen nicht“ und genauere Auswertungen); je Spieler ein Text „Turm.Stufe.x.y …“ (Firestore: keine Listen in Listen)
+  [`    leaked:[...Array(n)].map((_, i) => ((g.leaked || {})[i] || []).length) };`, `    leaked:[...Array(n)].map((_, i) => ((g.leaked || {})[i] || []).length),
+    tw:[...Array(n)].map((_, i) => { const l = lanes[i]; return l && l.gid === gidOf(g) ? (l.towers || []).map(t => [t.idx, t.lvl || 1, t.x, t.y].join('.') + (t.gem ? '*' : '')).join(' ') : ''; }) };`],
+//  c) 18j (F): Anzeige effektiv / neutral / ineffektiv statt Zahlen (ohne F's Faktor-Werte; `eff` am Monster legt fest, sonst ≥ 1,2 / ≤ 0,8)
+  [`  const strong = ELEMENTS.filter((E,k) => M.weak[k] > 1).map(E => E.name), weak = ELEMENTS.filter((E,k) => M.weak[k] < 1).map(E => E.name);`,
+   `  const strong = ELEMENTS.filter((E,k) => effOf(M,k) > 0).map(E => E.name), weak = ELEMENTS.filter((E,k) => effOf(M,k) < 0).map(E => E.name);`],
+  ["    <div>${ELEMENTS.map((E,k) => `<span class=\"chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}\">${E.name} ${M.mixed ? '?' : fmtFactor(M.weak[k])}</span>`).join('')}</div>",
+   "    <div>${ELEMENTS.map((E,k) => `<span class=\"chip ${M.mixed ? '' : effCls(effOf(M,k))}\">${E.name} ${M.mixed ? '?' : effText(effOf(M,k))}</span>`).join('')}</div>"],
+  ["(strong.length ? 'Gut dagegen: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Schwach dagegen: ' + weak.join(', ') + '.' : '')",
+   "(strong.length ? 'Effektiv: ' + strong.join(', ') + '. ' : '') + (weak.length ? 'Ineffektiv: ' + weak.join(', ') + '.' : '')"],
+  ["    ELEMENTS.map((E,k) => `<span class=\"chip ${M.weak[k] > 1 ? 'good' : M.weak[k] < 1 ? 'bad' : ''}\">${E.name} ${fmtFactor(M.weak[k])}</span>`).join('') +",
+   "    ELEMENTS.map((E,k) => `<span class=\"chip ${effCls(effOf(M,k))}\">${E.name} ${effText(effOf(M,k))}</span>`).join('') +"],
+  [`function render(){`, `// 18.10. (F): Anzeige ohne Zahlen: effektiv / neutral / ineffektiv (Rolle des Elements an dem Tag). \`eff\` am Monster legt sie fest (1 / 0 / -1), sonst aus dem Faktor (≥ 1,2 / ≤ 0,8).
+const effOf = (M, k) => M.weak[k] === 0 ? -2 : M.eff ? M.eff[k] : M.weak[k] >= 1.2 ? 1 : M.weak[k] <= 0.8 ? -1 : 0;
+const effText = e => e === -2 ? 'immun · kein Effekt' : e > 0 ? 'effektiv' : e < 0 ? 'ineffektiv' : 'neutral';
+const effCls = e => e > 0 ? 'good' : e < 0 ? 'bad' : '';
 function render(){`]);
 module.exports = html => { for (const [a, b] of R) { if (typeof a === 'string' ? !html.includes(a) : !a.test(html)) throw new Error('Spiel-D7 passt nicht: ' + String(a).slice(0, 70)); html = html.replace(a, b); } return html; };

@@ -42,6 +42,11 @@
 Überschrift: drei Rauten, Datum Uhrzeit · L oder F · VERSION – Titel; darunter höchstens 5 Zeilen: was, warum, worauf achten.
 Mehr als 15 Einträge → die ältesten oben in team/archiv/updates-archiv.md einfügen. -->
 <!-- NEUE EINTRÄGE HIER -->
+### 17.11. 23:00 · L · Zweig D7 ist jetzt das Hauptspiel (2026-11-17a)
+- `index.html` = Stand der Testseite `spiegel-d.html` (mit F abgesprochen): 32 Türme aus Standardturm + Umrechnungsfaktoren, Stapelregel für Effekte, Leben je Tag gemessen, Wetter mit Jahreszeiten und Wind, neue Forschung mit Zinsen, ein Edelstein-Basic, Kill-Tabelle, Spielernamen. Regeln: `team/ZWEIG-D-REGELN.md`, Entscheidungen offen: `team/ZWEIG-D-MERGE.md` Teil 3.
+- Von F übernommen: gesamte Grafik bis 02.11a, Zwischenboss-Tage wie Live (24d), Anzeige effektiv/neutral/ineffektiv (18j), Geschenk-Zeitpunkte im Archiv (18f). F's Balance-Änderungen 18h–24c und 26a entfallen (durch D7 ersetzt).
+- Neu im Archiv: Türme je Welle (`slots[…].tw`).
+- Balance-Werte stehen im BALANCE-Block nach den Monstern; ändern über `tools/balance/d/d2.js` → `node tools/balance/einspielen.js` oder direkt dort. **Alle: „Neues Spiel“ starten und neu laden.**
 ### 03.11. 23:00 · L · Testseite spiegel-d: Kill-Tabelle, Namen, Turmnamen
 - Nur `spiegel-d.html` (Spiel unverändert): Kill-Tabelle oben rechts (heute/gesamt, antippen: alle Tage), Spielernamen im Menü ⋯, Turmnamen wie im Spiel (Stein T3 Onyx, T4 Katapult, Bilder getauscht), Leben am Ende höher (Tag 37–48 ×1,1–1,2).
 - Merge-Vorbereitung mit Bewertung aller Balancing-Stände: `team/ZWEIG-D-MERGE.md`.
@@ -85,9 +90,3 @@ Holzhacken, Steinbau, Angeln dauern jetzt 30–50 s am Stück, nur noch selten e
 
 ### 27.10. 22:55 · F · 2026-10-27w – Gesandte auch ohne Turm, Schatten-Arbeiter heller
 Gesandte brauchten einen Turm auf beiden Maps (im Kreativ-Modus oft keiner) – ohne Turm übergeben sie jetzt am nächsten Feld am Monsterweg. Arbeiter und Gesandte im Schatten-Biom bekommen einen hellen Schimmer. Nur Anzeige, neu laden.
-
-### 27.10. 02:10 · F · 2026-10-27v – Gesandte zwischen den Dörfern
-Ab Tag 12 laufen kleine Gesandte auf den Wegen zum ersten Turm, von dort zur Burg des nächsten Spielers, handeln und kehren mit einer Münze („+1“) zurück; ab Tag 24 zwei, ab Tag 28 mit Pferdegespann. Nur Anzeige, kein echtes Gold. Neu laden genügt.
-
-### 28.10. 22:45 · F · 2026-10-27u – Arbeiter laufen um die Biome
-- Arbeiter betreten keine Biomfelder (See, Wald, Fels) mehr und laufen auf freien Feldern um sie herum. Gibt es für ein Feld keinen freien Weg (ringsum Gelände), arbeitet der Arbeiter nur an seinem Platz. Nur Anzeige. Neu laden genügt.
